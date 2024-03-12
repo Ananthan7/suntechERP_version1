@@ -15,21 +15,21 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class=" row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label">Code*:</label>
+                                <label for="inputPassword" class="col-sm-3 col-form-label">Code * :</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="code" maxlength="6"
+                                        <input #codeInput type="text" matInput formControlName="code" maxlength="6"
                                             oninput="this.value = this.value.toUpperCase()"
-                                            (focusout)="checkCodeExists($event)" [readonly]="viewMode" />
+                                            (focusout)="checkCodeExists($event)" [readonly]="editableMode"/>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class=" row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label">Description*:</label>
+                                <label for="inputPassword" class="col-sm-3 col-form-label">Description * :</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="description"
-                                            oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
+                                            oninput="this.value = this.value.toUpperCase()" [readonly]="editableMode" [disabled]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -38,27 +38,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <!-- <div class="col-3 d-flex">
-                                    <div class="p-2 bd-highlight">
-                                        <button type="button" class="btn btn-primary apporoval-add-btn"
-                                            (click)="adddata()">
-                                            Add
-                                        </button>
-                                    </div>
-                                    <div class="p-2 bd-highlight">
-                                        <button type="button" class="btn btn-outline-primary apporoval-del-btn"
-                                            (click)="removedata()">
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div> -->
-
                                 <div class="col-md-3 d-flex mb-2" >
                                     <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
                                         (addClick)="adddata()" (deleteClick)="removedata()" [isDisabled]="isDisabled">
                                     </menu-buttons>
                                 </div>
-
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -111,7 +95,6 @@
                                             <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
                                             <div>
                                                 <select (change)="typedataselected($event,data)" [value]="data.value" [disabled]="viewMode">
-                                                    <option value></option>
                                                     <option value="1">Initial</option>
                                                     <option value="2">Intermediate</option>
                                                     <option value="3">Final</option>

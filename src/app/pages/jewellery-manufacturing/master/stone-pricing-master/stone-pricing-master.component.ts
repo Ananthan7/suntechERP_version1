@@ -286,29 +286,64 @@ export class StonePricingMasterComponent implements OnInit {
 
   }
 
-  salesChange() {
-    this.salesRate = this.stonePrizeMasterForm.value.selling_rate;
-    this.salesRatePercentage = this.stonePrizeMasterForm.value.selling;
+  // salesChange() {
+  //   this.salesRate = this.stonePrizeMasterForm.value.selling_rate;
+  //   this.salesRatePercentage = this.stonePrizeMasterForm.value.selling;
 
-    if(this.salesRate === '')
-    {
-      this.stonePrizeMasterForm.controls.selling_rate.disable();
-      this.stonePrizeMasterForm.controls.selling.enable();
-      this.stonePrizeMasterForm.controls.selling_rate.setValue('');
-    }
-    else if (this.salesRatePercentage === '')
-    {
+  //   if(this.salesRate == '')
+  //   {
+  //     this.stonePrizeMasterForm.controls.selling_rate.disable();
+  //     this.stonePrizeMasterForm.controls.selling.enable();
+  //     this.stonePrizeMasterForm.controls.selling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentage == '')
+  //   {
+  //     this.stonePrizeMasterForm.controls.selling.disable();
+  //     this.stonePrizeMasterForm.controls.selling_rate.enable();
+  //     this.stonePrizeMasterForm.controls.selling.setValue('');
+
+  //   }
+  //   else if (this.stonePrizeMasterForm.value.selling == '' && this.stonePrizeMasterForm.value.selling_rate == '') {
+  //     this.stonePrizeMasterForm.controls.selling.enable();
+  //     this.stonePrizeMasterForm.controls.selling.setValue('');
+
+  //     this.stonePrizeMasterForm.controls.selling_rate.enable();
+  //     this.stonePrizeMasterForm.controls.selling_rate.setValue('');
+
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+      
+  //   }
+  // }
+
+  salesChange(e: any) {
+    const sellingRate = this.stonePrizeMasterForm.value.selling_rate;
+    const sellingRatePercentage = this.stonePrizeMasterForm.value.selling;
+  
+    console.log(e.selling_rate);
+    console.log(e.selling);
+  
+    if (sellingRate !== '') {
       this.stonePrizeMasterForm.controls.selling.disable();
-      this.stonePrizeMasterForm.controls.selling_rate.enable();
-      this.stonePrizeMasterForm.controls.selling.setValue('');
-
+    } else {
+      this.stonePrizeMasterForm.controls.selling.enable();
     }
-    else if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
-      return;
+  
+    if (sellingRatePercentage !== '') {
+      this.stonePrizeMasterForm.controls.selling_rate.disable();
+    } else {
+      this.stonePrizeMasterForm.controls.selling_rate.enable();
+    }
+  
+    if (sellingRatePercentage === '' && sellingRate === '') {
+      this.stonePrizeMasterForm.controls.selling.enable();
+      this.stonePrizeMasterForm.controls.selling_rate.enable();
+      // Remove the error message when both fields are empty
+      // this.toastr.error('Enter values either Selling % or Selling Rate');
     }
   }
-
+  
+  
 
 
   keyupvalue(e: any) {
