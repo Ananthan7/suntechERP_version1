@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Input, OnInit, Component} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,6 +16,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./approval-master.component.scss']
 })
 export class ApprovalMasterComponent implements OnInit {
+ 
 
   @Input() content!: any;
   tableData: any[] = [];
@@ -28,7 +29,9 @@ export class ApprovalMasterComponent implements OnInit {
   isDisabled: boolean = false;
   controlName : any;
   orgMessageCheckbox: any;
- userCodeEnable: boolean = false;
+  userCodeEnable: boolean = false;
+  editableMode: boolean = false;
+
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -77,9 +80,11 @@ export class ApprovalMasterComponent implements OnInit {
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
+      this.editableMode = true;
     }
     console.log(this.content);
   }
+
 
   setFormValues() {
     if (!this.content) return
@@ -328,7 +333,7 @@ export class ApprovalMasterComponent implements OnInit {
       console.log('mobileNo:', mobileNo);
       console.log('emailId:', emailId);
     
-      if ((orgMessageChecked  == true  && emailChecked  == true )  && (!mobileNo.trim() || !emailId.trim())) {
+      if ((orgMessageChecked  == true  || emailChecked  == true )  && (!mobileNo.trim() || !emailId.trim())) {
         console.log("Condition met: selected fields cannot be empty");
         this.toastr.error("selected fields cannot be empty")
         conditionMet = true;

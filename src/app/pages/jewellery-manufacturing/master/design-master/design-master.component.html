@@ -449,31 +449,39 @@
 
                       <div class="col-md-7">
                         <div class="container">
-                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="margin-left: 26px;">
-                            <div class="carousel-inner">
-                              <div class="carousel-item active" *ngFor="let img of images; let i = index" [class.active]="i === 0">
-                                <div class="upload-btn-wrapper">
-                                  <button class="btn btnnew border-dark">
-                                    <img src={{img}} style="width:126px;height:124px">
-                                  </button>
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
+                            style="margin-left: 26px;" data-bs-pause="hover" data-bs-interval="false">
+                            <div class="box-wrap">
+                            <div class="carousel-inner ">
+                              <div class="carousel-item active" *ngFor="let img of images; let i = index"
+                                [class.active]="i === 0">
+                               
+                                  <div class="upload-btn-wrapper ">
+                                    <button class="btn btnnew border-dark">
+                                      <img src={{img}} style="width:126px;height:124px">
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <button class="carousel-control-prev" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                               <span class="visually-hidden">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <button class="carousel-control-next" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="next">
                               <span class="carousel-control-next-icon" aria-hidden="true"></span>
                               <span class="visually-hidden">Next</span>
                             </button>
                           </div>
-                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple>
+                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                            (change)="onFileChangedimage($event)" multiple>
                         </div>
                       </div>
-                      
-                      
-                      
+
+
+
 
                       <!-- <div class="row mt-3">
                         <div class="col-md-7">
@@ -622,11 +630,12 @@
           <div class="col-md-12">
             <mat-tab-group [(selectedIndex)]="selectedTabIndex">
               <mat-tab label="BOM Details">
-                <dx-data-grid #dataGrid  id="gridContainer" [dataSource]="tableData"  [showBorders]="true"
-                [allowColumnReordering]="true" [allowColumnResizing]="true"
-                class="mt-3" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true"  keyExpr="SRNO"    (onSelectionChanged)="onSelectionChanged($event)">
+                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                  [allowColumnReordering]="true" [allowColumnResizing]="true" class="mt-3" [columnAutoWidth]="true"
+                  [showColumnLines]="true" [showRowLines]="true" keyExpr="SRNO"
+                  (onSelectionChanged)="onSelectionChanged($event)">
                   <dxo-selection mode="multiple"></dxo-selection>
-      
+
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                   <dxi-column dataField="SRNO" caption="Srno"> </dxi-column>
@@ -656,9 +665,11 @@
                   </dxi-column>
                   <dxi-column dataField="Sieve_To" caption="Sieve To" cellTemplate="Sieve_Totemp">
                   </dxi-column>
-                  <dxi-column dataField="Description_detail" caption="Description Detail" cellTemplate="Description_detailtemp">
+                  <dxi-column dataField="Description_detail" caption="Description Detail"
+                    cellTemplate="Description_detailtemp">
                   </dxi-column>
-                  <dxi-column dataField="Description_detail2" caption="Description_detail2" cellTemplate="Description_detail2temp">
+                  <dxi-column dataField="Description_detail2" caption="Description_detail2"
+                    cellTemplate="Description_detail2temp">
                   </dxi-column>
                   <dxi-column dataField="Size" caption="Size" cellTemplate="Sizetemp">
                   </dxi-column>
@@ -708,126 +719,105 @@
                   </div> -->
 
                   <div *dxTemplate="let data of 'karattemp'">
-                    <input type="text" (change)="shapetemp($event,data)" [disabled]="FieldEnable"  [value]="data.value"
-                      style="width: 100%;" required
-                     />
+                    <input type="text" (change)="shapetemp($event,data)" [disabled]="FieldEnable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
 
 
 
                   <div *dxTemplate="let data of 'shapetemp'">
-                    <input type="text" (change)="shapetemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                      style="width: 100%;" required
-                     />
+                    <input type="text" (change)="shapetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'colortemp'">
-                    <input type="text" (change)="colortemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="colortemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'extColortemp'">
-                    <input type="text" (change)="extColortemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                      />
+                    <input type="text" (change)="extColortemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'claritytemp'">
-                    <input type="text" (change)="claritytemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                      style="width: 100%;" required
-                    />
+                    <input type="text" (change)="claritytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'extClaritytemp'">
-                    <input type="text" (change)="extClaritytemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                      style="width: 100%;" required
-                   />
+                    <input type="text" (change)="extClaritytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'sieveStdtemp'">
-                    <input type="text" (change)="sieveStdtemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="sieveStdtemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'descriptiontemp'">
-                    <input type="text" (change)="descriptiontemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                     style="width: 100%;" required
-                     />
+                    <input type="text" (change)="descriptiontemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'sieveFromtemp'">
-                    <input type="text" (change)="sieveFromtemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                     style="width: 100%;" required
-                      />
+                    <input type="text" (change)="sieveFromtemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Sieve_Totemp'">
-                    <input type="text" (change)="SieveTotemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="SieveTotemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Description_detailtemp'">
-                    <input type="text" (change)="Description_detailtemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Description_detailtemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Description_detail2temp'">
-                    <input type="text" (change)="Description_detail2temp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Description_detail2temp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Sizetemp'">
-                    <input type="text" (change)="Sizetemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Sizetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'WtCttemp'">
-                    <input type="text" (change)="WtCttemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="WtCttemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'ProcessTypetemp'">
-                    <input type="text" (change)="ProcessTypetemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="ProcessTypetemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'PointerWttemp'">
-                    <input type="text" (change)="PointerWttemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="PointerWttemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Remarktemp'">
-                    <input type="text" (change)="Remarktemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Remarktemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'currencytemp'">
-                    <input type="text" (change)="currencytemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="currencytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Design_currencytemp'">
-                    <input type="text" (change)="Design_currencytemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Design_currencytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Purity'">
-                    <input type="text" (change)="Puritytemp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Puritytemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Pcstemp'">
-                    <input type="text" (change)="Pcstempp($event,data)"  [disabled]="fieldDisable"  [value]="data.value"
-                       style="width: 100%;" required
-                     />
+                    <input type="text" (change)="Pcstempp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
 
                 </dx-data-grid>
 
               </mat-tab>
               <mat-tab label="Component Set">
-                <dx-data-grid  id="gridContainer" [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
+                <dx-data-grid id="gridContainer" [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
                   [showRowLines]="true" class="mt-3">
                   <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
 
@@ -903,8 +893,8 @@
               </mat-tab>
               <mat-tab label="Design Parts Details">
                 <dx-data-grid id="gridContainer" [dataSource]="designPartDetails" [showBorders]="true"
-                  [allowColumnReordering]="true" [allowColumnResizing]="true"
-                  class="mt-3" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true"   >
+                  [allowColumnReordering]="true" [allowColumnResizing]="true" class="mt-3" [columnAutoWidth]="true"
+                  [showColumnLines]="true" [showRowLines]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
@@ -982,11 +972,10 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributes()"
-                          (deleteClick)="removedataAttributes()">
+                          (addClick)="adddataAttributes()" (deleteClick)="removedataAttributes()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataCutRange" [showBorders]="true"
                         [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
@@ -1008,11 +997,10 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributesCountry()"
-                          (deleteClick)="removedataAttributesCountry()">
+                          (addClick)="adddataAttributesCountry()" (deleteClick)="removedataAttributesCountry()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataCountryRange" [showBorders]="true"
                         [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
@@ -1037,7 +1025,7 @@
                           (deleteClick)="removedataAttributesDyeCodeRange()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataDyeCodeRange" [showBorders]="true"
                         [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
@@ -1058,13 +1046,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributesWeightRange()"
-                          (deleteClick)="removedataAttributesWeightRange()">
+                          (addClick)="adddataAttributesWeightRange()" (deleteClick)="removedataAttributesWeightRange()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataWeightRange" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataWeightRange" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1083,13 +1071,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributesWaxModels()"
-                          (deleteClick)="removedataAttributesWaxModels()">
+                          (addClick)="adddataAttributesWaxModels()" (deleteClick)="removedataAttributesWaxModels()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer"  [dataSource]="tableDataWaxModels" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataWaxModels" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1112,9 +1100,10 @@
                           (deleteClick)="removedataAttributesApprovedVendors()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataApprovedVendors" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataApprovedVendors" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1133,7 +1122,7 @@
                         </dxi-column>
                         <dxi-column dataField="Mode Of Payment" caption="Mode Of Payment">
                         </dxi-column>
-                    
+
                       </dx-data-grid>
                     </div>
                   </mat-tab>
@@ -1141,13 +1130,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeEnamelColor()"
-                          (deleteClick)="removedataAttributesEnamelColor()">
+                          (addClick)="adddataAttributeEnamelColor()" (deleteClick)="removedataAttributesEnamelColor()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid [dataSource]="tableDataEnamelColor" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataEnamelColor" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1165,13 +1154,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeComponents()"
-                          (deleteClick)="removedataAttributesComponents()">
+                          (addClick)="adddataAttributeComponents()" (deleteClick)="removedataAttributesComponents()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid  [dataSource]="tableDataComponents" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataComponents" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1189,13 +1178,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeSizeRange()"
-                          (deleteClick)="removedataAttributesSizeRange()">
+                          (addClick)="adddataAttributeSizeRange()" (deleteClick)="removedataAttributesSizeRange()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid [dataSource]="tableDataSizeRange" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataSizeRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1216,13 +1205,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeWidthRange()"
-                          (deleteClick)="removedataAttributesWidthRange()">
+                          (addClick)="adddataAttributeWidthRange()" (deleteClick)="removedataAttributesWidthRange()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid  [dataSource]="tableDataWidthRange" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataWidthRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1243,13 +1232,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeLength()"
-                          (deleteClick)="removedataAttributesLength()">
+                          (addClick)="adddataAttributeLength()" (deleteClick)="removedataAttributesLength()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid [dataSource]="tableDataLength"  id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataLength" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1267,13 +1256,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeHeight()"
-                          (deleteClick)="removedataAttributesHeight()">
+                          (addClick)="adddataAttributeHeight()" (deleteClick)="removedataAttributesHeight()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid  [dataSource]="tableDataHeight" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataHeight" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1292,14 +1281,14 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeKaratRange()"
-                          (deleteClick)="removedataAttributesKaratRange()">
+                          (addClick)="adddataAttributeKaratRange()" (deleteClick)="removedataAttributesKaratRange()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                     
-                      <dx-data-grid #dataGrid [dataSource]="tableDataKaratRange" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+
+                      <dx-data-grid #dataGrid [dataSource]="tableDataKaratRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1320,20 +1309,20 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeColorRange()"
-                          (deleteClick)="removedataAttributesColorRange()">
+                          (addClick)="adddataAttributeColorRange()" (deleteClick)="removedataAttributesColorRange()">
                         </menu-buttons>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid [dataSource]="tableDataColorRange" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataColorRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      
+
                         <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
                         <dxi-column dataField="Color Code" caption="Color Code">
                         </dxi-column>
@@ -1348,13 +1337,13 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeStockCode()"
-                          (deleteClick)="removedataAttributesStockCode()">
+                          (addClick)="adddataAttributeStockCode()" (deleteClick)="removedataAttributesStockCode()">
                         </menu-buttons>
                       </div>
                     </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid [dataSource]="tableDataStockCode" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataStockCode" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -1373,20 +1362,20 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                          (addClick)="adddataAttributeFinishingRange()"
-                          (deleteClick)="removedataAttributesStockCode()">
+                          (addClick)="adddataAttributeFinishingRange()" (deleteClick)="removedataAttributesStockCode()">
                         </menu-buttons>
                       </div>
                     </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid [dataSource]="tableDataFinishingRange" id="gridContainer" keyExpr="SINO" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataFinishingRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                        
+
                         <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
                         <dxi-column dataField="Finishing Code" caption="Billing Code">
                         </dxi-column>

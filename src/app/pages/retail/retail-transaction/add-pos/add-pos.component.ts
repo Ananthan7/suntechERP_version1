@@ -167,11 +167,16 @@ export class AddPosComponent implements OnInit {
     _metalPurchase: {},
   };
 
-  vocTypesinExchange: VocTypesEx[] = [
+  vocTypesinSalesReturn: any = [
     // { value: 'POS', viewValue: 'POS' },
-    { value: 'POS', viewValue: 'POS' },
-    { value: 'PS1', viewValue: 'PS1' },
+    // { value: 'POS', viewValue: 'POS' },
+    // { value: 'PS1', viewValue: 'PS1' },
   ];
+  // vocTypesinSalesReturn: VocTypesEx[] = [
+  //   // { value: 'POS', viewValue: 'POS' },
+  //   { value: 'POS', viewValue: 'POS' },
+  //   { value: 'PS1', viewValue: 'PS1' },
+  // ];
 
   modalReference: any;
   modalReferenceSalesReturn: any;
@@ -738,7 +743,7 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm = this.formBuilder.group({
       fcn_voc_no: ['',],
       // fcn_voc_no: ['', Validators.required],
-      voc_type: ['POS'],
+      voc_type: [this.vocType],
       voc_no: [1],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
@@ -1105,7 +1110,6 @@ export class AddPosComponent implements OnInit {
     console.log('======content==============================');
     console.log(this.content);
     console.log('====================================');
-
     // need to enable
     // this.vocType = this.comFunc.getqueryParamVocType()
     if (this.content != undefined)
@@ -1128,14 +1132,18 @@ export class AddPosComponent implements OnInit {
         this.viewOnly = true;
       }
 
-      if (!this.viewOnly && !this.editOnly)
-        this.open(this.mymodal);
+      console.log('!this.viewOnly && !this.editOnly', this.viewOnly, this.editOnly);
+
+
 
     } else {
       this.getFinancialYear();
       this.generateVocNo();
 
     }
+
+    if (!this.viewOnly && !this.editOnly)
+      this.open(this.mymodal);
 
     // this.vocDataForm.get('vocdate')?.valueChanges.subscribe((val) => {
     //   this.getFinancialYear();
@@ -1547,6 +1555,10 @@ export class AddPosComponent implements OnInit {
           startWith(''),
           map((value: any) => this._filter(value))
         );
+
+      this.salesReturnForm.controls.fcn_returns_branch.setValue(this.strBranchcode);
+      this.advanceReceiptForm.controls.advanceBranch.setValue(this.strBranchcode);
+      this.giftReceiptForm.controls.giftBranch.setValue(this.strBranchcode);
     });
   }
   changeRtlLayout(flag: any) {
@@ -1716,6 +1728,7 @@ export class AddPosComponent implements OnInit {
 
     this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
 
+    this.getSalesReturnVocTypes();
   }
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
@@ -2028,18 +2041,18 @@ export class AddPosComponent implements OnInit {
         receiptSrNO = itemsLengths;
       }
 
-      AMOUNT_FC =   this.comFunc.transformDecimalVB(
+      AMOUNT_FC = this.comFunc.transformDecimalVB(
         this.comFunc.amtDecimals,
         AMOUNT_FC
       )
-      AMOUNT_CC =   this.comFunc.transformDecimalVB(
+      AMOUNT_CC = this.comFunc.transformDecimalVB(
         this.comFunc.amtDecimals,
         AMOUNT_CC
       )
       var receiptDetails = {
         "SRNO": receiptSrNO,
         "REFMID": this.retailSalesMID || receiptSrNO,
-        "VOCTYPE": "POS",
+        "VOCTYPE": this.vocType,
         "VOCNO": this.retailSaleDataVocNo ?? receiptSrNO,
         "VOCDATE": new Date().toISOString(),
         "BRANCH_CODE": this.strBranchcode,
@@ -2209,6 +2222,11 @@ export class AddPosComponent implements OnInit {
     this.exchangeForm.reset();
     this.divisionMS = '';
     this.sales_returns_total_amt = 0;
+
+    if (!this.viewOnly && !this.editOnly) {
+      this.salesReturnForm.controls.fcn_returns_branch.setValue(this.strBranchcode);
+      this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
+    }
 
     this.modalReference = this.modalService.open(content, {
       size: 'lg',
@@ -4839,7 +4857,7 @@ export class AddPosComponent implements OnInit {
       BARCODEDPCS: '0',
       DT_BRANCH_CODE: this.strBranchcode,
       DT_VOCNO: 0, // to 0
-      DT_VOCTYPE: 'POS', // change
+      DT_VOCTYPE: this.vocType, // change
       DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
       SUPPLIERDISC: '',
       DTKarat: 0,
@@ -5709,7 +5727,7 @@ export class AddPosComponent implements OnInit {
 
       DT_BRANCH_CODE: this.strBranchcode,
       DT_VOCNO: '0', // to 0
-      DT_VOCTYPE: 'POS', // change
+      DT_VOCTYPE: this.vocType, // change
       // "DT_VOCTYPE":  this.vocType, // change
       DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
       DT_BLOCKPSRIMPORT: false,
@@ -6558,7 +6576,7 @@ export class AddPosComponent implements OnInit {
 
       let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
         '&strBranchCode=' + this.strBranchcode +
-        '&strVocType=POS' + '&strUserName=' + this.strUser +
+        '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
         '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
       this.suntechApi.getDynamicAPI(API)
         .subscribe((resp) => {
@@ -7150,8 +7168,8 @@ export class AddPosComponent implements OnInit {
     this.karatRateDetails.map((data: any, i: any) => {
       data.RefMID = i + 1; //need_input
       data.SrNo = i + 1;
-      data.VOCTYPE = 'POS';
-      data.DT_VOCTYPE = 'POS';
+      data.VOCTYPE = this.vocType;
+      data.DT_VOCTYPE = this.vocType;
       data.DT_BRANCH_CODE = this.strBranchcode;
       data.DT_VOCNO = 0;
       data.DT_YEARMONTH = this.baseYear || localStorage.getItem('YEAR');
@@ -9607,7 +9625,7 @@ export class AddPosComponent implements OnInit {
     this.retailSalesDataPost = {
       MID: this.retailSalesMID,
       BRANCH_CODE: this.strBranchcode,
-      VOCTYPE: 'POS',
+      VOCTYPE: this.vocType,
       // VOCTYPE: this.vocType,
       VOCNO: this.retailSaleDataVocNo,
       VOCDATE: this.convertDateWithTimeZero(
@@ -10745,30 +10763,36 @@ export class AddPosComponent implements OnInit {
 
   setTabByIndex(index: any, data?: any) {
 
-    this.order_items_total_net_amount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.order_items_total_net_amount);
-    this.balanceAmount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.balanceAmount);
-    
+    // this.order_items_total_net_amount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.order_items_total_net_amount);
+    // this.balanceAmount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.balanceAmount);
+
     this.selectedTabIndex = index;
+
+    // if (data != null && data != undefined && data != undefined) {
+    //   data['AMOUNT_FC'] = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, data['AMOUNT_FC'] );
+    // }
+
+
     if (this.receiptModesList?.BTN_CASH == true && this.selectedTabIndex == 0) {
       if (data != null && data != undefined && data != undefined) {
         this.cashreceiptForm.controls.paymentsCash.setValue(
           data['RECEIPT_MODE'].toString());
         this.cashreceiptForm.controls.cashAmtFC.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
         this.cashreceiptForm.controls.cashAmtLC.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_CC']).toString());
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
       }
       else {
         if (this.balanceAmount != null) {
           this.cashreceiptForm.controls.cashAmtFC.setValue(
-            this.comFunc.emptyToZero(this.balanceAmount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.balanceAmount).toString()));
           this.cashreceiptForm.controls.cashAmtLC.setValue(
-            this.comFunc.emptyToZero(this.balanceAmount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.balanceAmount).toString()));
         } else {
           this.cashreceiptForm.controls.cashAmtFC.setValue(
-            this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
           this.cashreceiptForm.controls.cashAmtLC.setValue(
-            this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
 
       }
@@ -10782,17 +10806,17 @@ export class AddPosComponent implements OnInit {
         this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
           data['RECEIPT_MODE'].toString());
         this.creditCardReceiptForm.controls.cardCCNo.setValue(
-          this.comFunc.emptyToZero(data['CARD_NO'].toString()));
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['CARD_NO'].toString())));
         this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
       }
       else {
         if (this.balanceAmount != null) {
           this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-            this.comFunc.emptyToZero(this.balanceAmount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.balanceAmount).toString()));
         } else {
           this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-            this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
       }
       this.renderer.selectRootElement('#cardCCNo').focus();
@@ -10811,7 +10835,7 @@ export class AddPosComponent implements OnInit {
           this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
 
         this.advanceReceiptForm.controls.advanceAmount.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_FC'].toString()));
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
 
         this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
           data['IGST_AMOUNTFC']);
@@ -10834,15 +10858,15 @@ export class AddPosComponent implements OnInit {
         this.othersReceiptForm.controls.paymentsOthers.setValue(
           data['RECEIPT_MODE'].toString());
         this.othersReceiptForm.controls.othersAmtFC.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
       }
       else {
         if (this.balanceAmount != null) {
           this.othersReceiptForm.controls.othersAmtFC.setValue(
-            this.comFunc.emptyToZero(this.balanceAmount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.balanceAmount).toString()));
         } else {
           this.othersReceiptForm.controls.othersAmtFC.setValue(
-            this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
 
       }
@@ -10859,7 +10883,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
 
       this.giftReceiptForm.controls.giftAmtFC.setValue(
-        this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
+        this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
 
     }
     if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
@@ -10867,21 +10891,22 @@ export class AddPosComponent implements OnInit {
         this.customerReceiptForm.controls.customAcCodeList.setValue(
           data['RECEIPT_MODE'].toString());
         this.customerReceiptForm.controls.customerAmtFC.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
         this.customerReceiptForm.controls.customerAmtLC.setValue(
-          this.comFunc.emptyToZero(data['AMOUNT_CC']).toString());
+          this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
       }
       else {
+
         if (this.balanceAmount != null) {
           this.customerReceiptForm.controls.customerAmtFC.setValue(
-            this.comFunc.emptyToZero(this.balanceAmount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.balanceAmount).toString()));
           this.customerReceiptForm.controls.customerAmtLC.setValue(
-            this.comFunc.emptyToZero(this.balanceAmount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.balanceAmount).toString()));
         } else {
           this.customerReceiptForm.controls.customerAmtFC.setValue(
-            this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
           this.customerReceiptForm.controls.customerAmtLC.setValue(
-            this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
 
       }
@@ -10998,13 +11023,13 @@ export class AddPosComponent implements OnInit {
   }
   changeReceiptAmtFC(event: any, formName: keyof AddPosComponent, fieldName?: any) {
     const value = event.target.value;
-    const upValue =  this.comFunc.transformDecimalVB(
+    const upValue = this.comFunc.transformDecimalVB(
       this.comFunc.amtDecimals, value);
 
-      event.target.value = upValue;
-      this[formName].controls[fieldName].setValue(
-        upValue
-       );
+    event.target.value = upValue;
+    this[formName].controls[fieldName].setValue(
+      upValue
+    );
 
 
   }
@@ -11525,6 +11550,27 @@ export class AddPosComponent implements OnInit {
     this.suntechApi.postDynamicAPI(API, {})
       .subscribe((res: any) => {
         if (res.status == "Success") {
+        }
+      });
+  }
+
+  getSalesReturnVocTypes() {
+    //     http://94.200.156.234:85/api/UspGetSubVouchers
+    // {
+
+    // }
+    const API = `UspGetSubVouchers`;
+    const postData = {
+      "strBranchCode": this.strBranchcode,
+      "strMainVocType": this.mainVocType
+    };
+
+    this.suntechApi.postDynamicAPI(API, postData)
+      .subscribe((res: any) => {      
+        if (res.status == "Success") {
+          this.vocTypesinSalesReturn = res.dynamicData[0];
+          console.log('this.vocTypesinSalesReturn', this.vocTypesinSalesReturn);
+          
         }
       });
   }

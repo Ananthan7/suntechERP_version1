@@ -28,6 +28,7 @@ export class MouldMakingComponent implements OnInit {
   selectedIndexes: any = [];
   vocMaxDate = new Date();
   currentDate = new Date();
+  jobNumberDetailData: any[] = [];
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -157,6 +158,7 @@ stockCodeData: MasterSearchModel = {
   jobnoCodeSelected(e:any){
     console.log(e);
     this.mouldMakingForm.controls.jobNo.setValue(e.job_number);
+    this.jobNumberValidate({ target: { value: e.job_number } })
   }
 
   mouldCodeSelected(e:any){
@@ -381,7 +383,7 @@ stockCodeData: MasterSearchModel = {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if(result.status.trim() == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -595,7 +597,80 @@ stockCodeData: MasterSearchModel = {
       }
     });
   }
-  
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.mouldMakingForm.value.jobNo,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        console.log(postData, 'uuu')
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.mouldMakingForm.controls.mouldNo.setValue(data[0].MOULD_NUMBER)
+          this.mouldMakingForm.controls.mouldType.setValue(data[0].MOULD_TYPE)
+          this.mouldMakingForm.controls.toProcess.setValue(data[0].PROCESS)
+          this.mouldMakingForm.controls.toWorker.setValue(data[0].WORKER)
+          this.mouldMakingForm.controls.job.setValue(data[0].JOB_NUMBER)
+          this.mouldMakingForm.controls.uniq.setValue(data[0].UNQ_JOB_ID)
+          this.mouldMakingForm.controls.uniqNo.setValue(data[0].UNQ_DESIGN_ID)
+          this.mouldMakingForm.controls.designCode.setValue(data[0].DESIGN_CODE)
+      
+
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            console.log(data, 'pppp')
+            this.jobNumberDetailData = data
+            this.mouldMakingForm.controls.jobNo.setValue(data[0].UNQ_JOB_ID)
+          
+
+
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

@@ -113,14 +113,16 @@
                             <label for="input" class="col-sm-2 col-form-label">Height :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="height" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                        formControlName="height" />
                                 </mat-form-field>
 
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Length :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="length" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                        formControlName="length" />
                                 </mat-form-field>
 
                             </div>
@@ -130,14 +132,16 @@
                             <label for="input" class="col-sm-2 col-form-label">Width :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="width" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                        formControlName="width" />
                                 </mat-form-field>
 
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Radius :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="radius" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                        formControlName="radius" />
                                 </mat-form-field>
 
                             </div>
@@ -172,30 +176,36 @@
                     </div>
                     <div class="col-md-2">
                         <div class="container">
-                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="false">
-                            <div class="carousel-inner">
-                              <div class="carousel-item active" *ngFor="let img of images; let i = index" [class.active]="i === 0">
-                                <div class="upload-btn-wrapper">
-                                  <button class="btn btnnew border-dark">
-                                    <img src={{img}} style="width:126px;height:124px">
-                                  </button>
+                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
+                             data-bs-pause="hover" data-bs-interval="false">
+                              <div class="box-wrap">
+                              <div class="carousel-inner ">
+                                <div class="carousel-item active" *ngFor="let img of images; let i = index"
+                                  [class.active]="i === 0">
+                                 
+                                    <div class="upload-btn-wrapper ">
+                                      <button class="btn btnnew border-dark">
+                                        <img src={{img}} style="width:126px;height:124px">
+                                      </button>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
+                              <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                              </button>
+                              <button class="carousel-control-next" type="button"
+                                data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                              </button>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Previous</span>
-                            </button>
-                            <!-- <div class="upload-btn-wrapper">
-                            <button class="btn btnnew border-dark"></button></div> -->
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Next</span>
-                            </button>
+                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                              (change)="onFileChangedimage($event)" multiple>
                           </div>
-                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple>
-                        </div>
-                      </div>
+                    </div>
 
                 </div>
             </div>
@@ -232,7 +242,8 @@
                                     </dxi-column>
                                     <dxi-column dataField="CARAT" caption="Karat" cellTemplate="karattemp">
                                     </dxi-column>
-                                    <dxi-column dataField="STOCK_FCCOST" caption="Stock Type" cellTemplate="stockTypetemp">
+                                    <dxi-column dataField="STOCK_FCCOST" caption="Stock Type"
+                                        cellTemplate="stockTypetemp">
                                     </dxi-column>
                                     <dxi-column dataField="PCS" caption="Pcs" cellTemplate="pcstemp">
                                     </dxi-column>
@@ -246,21 +257,26 @@
                                     </dxi-column>
                                     <dxi-column dataField="SIEVE" caption="Sieve Std" cellTemplate="sievetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="DESCRIPTION" caption="Description" cellTemplate="descriptiontemp">
+                                    <dxi-column dataField="DESCRIPTION" caption="Description"
+                                        cellTemplate="descriptiontemp">
                                     </dxi-column>
                                     <dxi-column dataField="DSIZE" caption="Size" cellTemplate="sizetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="PROCESS_TYPE" caption="Process Type" cellTemplate="processTypetemp">
+                                    <dxi-column dataField="PROCESS_TYPE" caption="Process Type"
+                                        cellTemplate="processTypetemp">
                                     </dxi-column>
                                     <dxi-column dataField="D_REMARKS" caption="Remarks" cellTemplate="remarktemp">
                                     </dxi-column>
-                                    <dxi-column dataField="POINTER_WT" caption="pointer Wt" cellTemplate="pointerWttemp">
+                                    <dxi-column dataField="POINTER_WT" caption="pointer Wt"
+                                        cellTemplate="pointerWttemp">
                                     </dxi-column>
                                     <dxi-column dataField="EXT_Color" caption="Ext.Color" cellTemplate="extColortemp">
                                     </dxi-column>
-                                    <dxi-column dataField="EXT_CLARITY" caption="Ext.Clarity" cellTemplate="extClaritytemp">
+                                    <dxi-column dataField="EXT_CLARITY" caption="Ext.Clarity"
+                                        cellTemplate="extClaritytemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SIEVE_FROM" caption="Sieve from" cellTemplate="sieveFromtemp">
+                                    <dxi-column dataField="SIEVE_FROM" caption="Sieve from"
+                                        cellTemplate="sieveFromtemp">
                                     </dxi-column>
                                     <dxi-column dataField="SIEVE_TO" caption="Sieve To" cellTemplate="sieveTotemp">
                                     </dxi-column>
@@ -289,83 +305,83 @@
 
                                     <div *dxTemplate="let data of 'stockTypetemp'">
                                         <input type="text" (change)="stockType($event,data)" [value]="data.value"
-                                      style="width: 100%;" required />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">
                                         <input type="text" (change)="pcstemp($event,data)" [value]="data.value"
-                                           style="width: 100%;" required   />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'wtCttemp'">
                                         <input type="text" (change)="wtCtt($event,data)" [value]="data.value"
-                                           style="width: 100%;" required  />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'colortemp'">
                                         <input type="text" (change)="color($event,data)" [value]="data.value"
-                                           style="width: 100%;" required   />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'claritytemp'">
                                         <input type="text" (change)="clarity($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'shapetemp'">
                                         <input type="text" (change)="shape($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'sievetemp'">
                                         <input type="text" (change)="sieve($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'descriptiontemp'">
                                         <input type="text" (change)="description($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'sizetemp'">
                                         <input type="text" (change)="size($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'processTypetemp'">
                                         <input type="text" (change)="processType($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'remarktemp'">
                                         <input type="text" (change)="remark($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'pointerWttemp'">
                                         <input type="text" (change)="pointerWt($event,data)" [value]="data.value"
-                                           style="width: 100%;" required    />
+                                            style="width: 100%;" required />
                                     </div>
 
-                                  
+
                                     <div *dxTemplate="let data of 'extColortemp'">
                                         <input type="text" (change)="extColor($event,data)" [value]="data.value"
-                                           style="width: 100%;" required   />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'extClaritytemp'">
                                         <input type="text" (change)="extClarity($event,data)" [value]="data.value"
-                                           style="width: 100%;" required   />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'sieveFromtemp'">
                                         <input type="email" (change)="sieveFrom($event,data)" [value]="data.value"
-                                           style="width: 100%;" required   />
+                                            style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'sieveTotemp'">
                                         <input type="email" (change)="sieveTo($event,data)" [value]="data.value"
-                                           style="width: 100%;" required   />
+                                            style="width: 100%;" required />
                                     </div>
 
                                 </dx-data-grid>
@@ -401,7 +417,8 @@
                         <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                             Image
                         </button>
-                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple>
+                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                            (change)="onFileChangedimage($event)" multiple>
                     </div>
                 </div>
             </div>
