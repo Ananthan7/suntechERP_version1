@@ -13,32 +13,32 @@
             [allowColumnResizing]="true">
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-selection mode="single"></dxo-selection>
-            <dxi-column dataField="BRANCH" caption="Branch"
+            <dxi-column dataField="BRANCH_CODE" caption="Branch"
                 alignment="center">
             </dxi-column>
             <dxi-column dataField="ACCODE"
                 caption="A/C Code"
                 alignment="center">
             </dxi-column>
-            <dxi-column dataField="AccountHead"
+            <dxi-column dataField="ACCOUNT_HEAD"
                 caption="Account Head"
                 alignment="center">
             </dxi-column>
-            <dxi-column dataField="AMOUNT_DR"
+            <dxi-column dataField="AMOUNTCC_DEBIT"
                 displayFormat="{0}"
                 caption="Amount Dr"
                 alignment="right">
             </dxi-column>
-            <dxi-column dataField="AMOUNT_CR" caption="Amount Cr"
+            <dxi-column dataField="AMOUNTCC_CREDIT" caption="Amount Cr"
                 displayFormat="{0}"
                 alignment="center">
             </dxi-column>
             <dxo-summary>
-                <dxi-total-item column="AMOUNT_DR"
+                <dxi-total-item column="AMOUNTCC_DEBIT"
                     summaryType="sum"
                     displayFormat="{0}">
                 </dxi-total-item>
-                <dxi-total-item column="AMOUNT_CR"
+                <dxi-total-item column="AMOUNTCC_CREDIT"
                     summaryType="sum"
                     displayFormat="{0}">
                 </dxi-total-item>

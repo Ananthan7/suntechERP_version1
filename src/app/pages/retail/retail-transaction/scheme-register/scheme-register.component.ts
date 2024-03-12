@@ -23,6 +23,7 @@ export class SchemeRegisterComponent implements OnInit {
   formdata = new FormData();
   isLoading: boolean = false
   viewMode: boolean = false;
+  processMode: boolean = false;
   editMode: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
 
@@ -451,6 +452,7 @@ export class SchemeRegisterComponent implements OnInit {
     let sub: Subscription = this.dataService.getDynamicAPIwithParams(API, params)
       .subscribe((resp: any) => {
         if (resp) {
+          this.processMode = true
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item: any) => {
             // item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch

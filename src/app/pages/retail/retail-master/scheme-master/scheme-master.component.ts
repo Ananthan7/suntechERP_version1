@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
@@ -10,6 +10,7 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 
 @Component({
@@ -18,6 +19,7 @@ import Swal from 'sweetalert2';
   styleUrls: ["./scheme-master.component.scss"],
 })
 export class SchemeMasterComponent implements OnInit {
+  @ViewChild(MasterSearchComponent) masterSearchComponent?: MasterSearchComponent;
   @Input() content!: any;
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
@@ -256,6 +258,14 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
     this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
     this.getSchemeMasterList()
+  }
+  handleKeyPress(event:any) {
+    // Check if the key pressed is Enter (key code 13)
+    if (event.keyCode === 13) {
+      this.masterSearchComponent?.showOverlayPanel()
+    } else   if (event.keyCode === 9) {
+      this.masterSearchComponent?.showOverlayPanel()
+    }
   }
   schemeRegistrationWithParameter() {
     let API = 'SchemeRegistration/GetSchemeWithParameter'

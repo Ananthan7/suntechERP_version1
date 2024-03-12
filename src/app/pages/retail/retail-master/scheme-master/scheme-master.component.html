@@ -51,6 +51,7 @@
                         <mat-form-field style="width: 70%;">
                             <input [readonly]="viewMode" type="text" matInput
                                 oninput="this.value = this.value.toUpperCase()"
+                                (onkeypress)="handleKeyPress($event)"
                                 formControlName="description" maxlength="40"/>
                         </mat-form-field>
                     </div>

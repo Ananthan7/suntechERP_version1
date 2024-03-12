@@ -23,6 +23,7 @@ export class AuditTrailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getPostedData()
   }
 
   showDialog() {
@@ -45,13 +46,16 @@ export class AuditTrailComponent implements OnInit {
     );
   }
 
-  currencyCodeChange(value: string) {
-    if (value == '') return
-    let API = `CurrencyMaster/GetCurrencyMasterDetail/${value}`
+  getPostedData() {
+    let API = `/api/SchemeCurrencyReceipt/GetAuditTrial`+
+    `/${this.dataToEditrow.BRANCH_CODE}`+
+    `/${this.dataToEditrow.VOCTYPE}/${this.dataToEditrow.VOCNO}`+
+    `/${this.dataToEditrow.MID}/${this.dataToEditrow.YEARMONTH}`+
+    `/${this.dataToEditrow.SHOWMETAL}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        if (result.response) {
-        
+        if (result.dynamicData) {
+          this.gridData = result.dynamicData[0]
         } else {
           this.commonService.toastErrorByMsgId('Currency rate not Found')
         }
