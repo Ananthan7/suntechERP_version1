@@ -8,7 +8,9 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
     (auditTrailClick)="auditTrailClick()"
-    [isViewDelete]="false" [isViewPost]="true" [isViewAuditTrail]="true"
+    (postClick)="AccountPosting()"
+    [isViewDelete]="false" [isViewPost]="true"
+    [isViewAuditTrail]="true" [disablePostBtn]="disablePostBtn"
     [disableSaveBtn]="viewMode"></modal-header>
 <audit-trail></audit-trail>
 <!-- content section starts -->
@@ -30,7 +32,8 @@
                                             <span class="matlabels">Voc Type*
                                             </span>
                                             <span style="width: 65%">
-                                                <mat-form-field style="width: 25%">
+                                                <mat-form-field
+                                                    style="width: 25%">
                                                     <input type="text" matInput
                                                         readonly
                                                         formControlName="VocType" />
@@ -53,15 +56,18 @@
                                                 Voc Date*
                                             </span>
                                             <span style="width: 65%">
-                                                <mat-form-field >
+                                                <mat-form-field>
                                                     <!-- <mat-label>Date Of Birth</mat-label> -->
-                                                    <input matInput DateValidation
+                                                    <input matInput
+                                                        DateValidation
                                                         [matDatepicker]="dob"
                                                         formControlName="VocDate"
                                                         placeholder="DD/MM/YYYY" />
-                                                    <mat-datepicker-toggle matSuffix
+                                                    <mat-datepicker-toggle
+                                                        matSuffix
                                                         [for]="dob"></mat-datepicker-toggle>
-                                                    <mat-datepicker #dob></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #dob></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -219,7 +225,8 @@
                                                 Scheme Code*
                                             </span>
                                             <span style="width: 70%">
-                                                <mat-form-field style="width: 60%">
+                                                <mat-form-field
+                                                    style="width: 60%">
                                                     <input type="text" readonly
                                                         matInput
                                                         formControlName="SchemeCode"

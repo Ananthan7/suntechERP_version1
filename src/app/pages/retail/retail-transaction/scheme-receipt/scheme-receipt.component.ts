@@ -31,6 +31,7 @@ export class SchemeReceiptComponent implements OnInit {
   currentDate = this.commonService.currentDate;
   dataToEditrow: any;
   disableAddBtn: boolean = true;
+  disablePostBtn: boolean = false;
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
   rightSideHeader: string = "";
@@ -102,6 +103,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   receiptDetailsForm: FormGroup = this.formBuilder.group({
     Branch: [""],
+    YEARMONTH: [""],
     Salesman: [""],
     SalesmanName: [""],
     PartyCode: [""],
@@ -138,6 +140,7 @@ export class SchemeReceiptComponent implements OnInit {
     CGST_ACCODE: [''],
     TotalAmount: [0],
     TotalTax: [0],
+    SchemeBalance: [0],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -174,13 +177,13 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.Branch.setValue(this.commonService.branchCode);
       this.receiptDetailsForm.controls.VocType.setValue(this.commonService.getqueryParamVocType());
       this.receiptDetailsForm.controls.VocDate.setValue(this.currentDate);
+      this.receiptDetailsForm.controls.YEARMONTH.setValue(this.commonService.yearSelected);
       this.receiptDetailsForm.controls.PostedDate.setValue(this.currentDate);
       this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
       return
     }
     this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
     this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
-
     this.receiptDetailsForm.controls.VocDate.setValue(new Date(this.content.VOCDATE));
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
@@ -205,13 +208,47 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.IGST_ACCODE.setValue(this.content.IGST_ACCODE);
-    this.receiptDetailsForm.controls.TotalTax.setValue(this.content.IGST_AMOUNTFC);
+    this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
+    this.receiptDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH);
+    this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
+    this.disablePostBtn = this.content.AUTOPOSTING == 'Y' ? true : false ;
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
- 
+  AccountPosting(){
+    if(!this.content) return
+    let params = {
+      BRANCH_CODE: this.receiptDetailsForm.value.Branch,
+      VOCTYPE: this.receiptDetailsForm.value.VocType,
+      VOCNO: this.receiptDetailsForm.value.VocNo,
+      YEARMONTH: this.receiptDetailsForm.value.YEARMONTH,
+      MID: this.commonService.nullToString(this.content.MID),
+      ACCUPDATEYN: 'Y',
+      USERNAME: this.commonService.userName,
+      MAINVOCTYPE: this.commonService.getqueryParamMainVocType(),
+      HEADER_TABLE: this.commonService.getqueryParamTable(),
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting',params)
+    .subscribe((result) => {
+        if (result.status == "Success") {
+          this.commonService.toastSuccessByMsgId(result.message)
+        }else{
+          this.commonService.toastErrorByMsgId(result.message)
+        }
+      },
+      (err) => this.commonService.toastErrorByMsgId("Server Error")
+    );
+    this.subscriptions.push(Sub);
+  }
   auditTrailClick(){
-    this.auditTrailComponent?.showDialog()
+    let params = {
+      BRANCH_CODE: this.receiptDetailsForm.value.Branch,
+      VOCTYPE: this.receiptDetailsForm.value.VocType,
+      VOCNO: this.receiptDetailsForm.value.VocNo,
+      MID: this.receiptDetailsForm.value.MID,
+      YEARMONTH: this.receiptDetailsForm.value.YEARMONTH,
+    }
+    this.auditTrailComponent?.showDialog(params)
   }
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
@@ -893,7 +930,7 @@ export class SchemeReceiptComponent implements OnInit {
         "DT_BRANCH_CODE": this.commonService.branchCode,
         "DT_VOCTYPE": this.receiptDetailsForm.value.VocType,
         "DT_VOCNO": 0,
-        "DT_YEARMONTH": this.commonService.yearSelected,
+        "DT_YEARMONTH": this.receiptDetailsForm.value.YEARMONTH,
         "CARD_NO": "",
         "CARD_HOLDER": "",
         "CARD_EXPIRY": this.commonService.formatDateTime(this.currentDate),
@@ -960,7 +997,7 @@ export class SchemeReceiptComponent implements OnInit {
       "VOCNO": this.receiptDetailsForm.value.VocNo || 0,
       "VOCDATE": this.commonService.formatDateTime(this.receiptDetailsForm.value.VocDate),
       "VALUE_DATE": this.commonService.formatDateTime(this.currentDate),
-      "YEARMONTH": this.commonService.yearSelected,
+      "YEARMONTH": this.receiptDetailsForm.value.YEARMONTH,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.receiptDetailsForm.value.CurrCode || "",
       "PARTY_CURR_RATE": this.commonService.emptyToZero(this.receiptDetailsForm.value.CurrRate),
@@ -977,8 +1014,8 @@ export class SchemeReceiptComponent implements OnInit {
       "SUPINVDATE": this.commonService.formatDateTime(this.currentDate),
       "HHACCOUNT_HEAD": this.rightSideHeader || "Advance From Retail Customers By Scheme",
       "SALESPERSON_CODE": this.receiptDetailsForm.value.Salesman || "",
-      "BALANCE_FC": this.commonService.emptyToZero(this.totalValue_FC),
-      "BALANCE_CC": this.commonService.emptyToZero(this.totalValue),
+      "BALANCE_FC": this.commonService.emptyToZero(this.receiptDetailsForm.value.SchemeBalance),
+      "BALANCE_CC": this.commonService.emptyToZero(this.receiptDetailsForm.value.SchemeBalance),
       "AUTHORIZEDPOSTING": false,
       "AUTOGENREF": "",
       "AUTOGENMID": 0,
@@ -1168,8 +1205,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.totalValue_FC = 0;
       this.totalValueInText = "";
       let vatTotal = 0
-
+      let SchemeBalance = 0
       this.orderedItems.forEach((item: any) => {
+        item.SchemeBalance = this.commonService.emptyToZero(item.SchemeBalance)
         item.Amount_FC = this.commonService.emptyToZero(item.Amount_FC)
         item.Amount_LC = this.commonService.emptyToZero(item.Amount_LC)
         item.AMOUNT_VAT = ((parseInt(item.Amount_FC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
@@ -1182,6 +1220,7 @@ export class SchemeReceiptComponent implements OnInit {
         this.TOTAL_AMOUNTFC += parseInt(item.Amount_FC);
         this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
       });
+      this.receiptDetailsForm.controls.SchemeBalance.setValue(SchemeBalance)
       this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
       this.receiptDetailsForm.controls.TotalAmount.setValue(
         this.commonService.commaSeperation(this.totalAmount_FC.toFixed(2))

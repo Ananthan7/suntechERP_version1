@@ -60,6 +60,7 @@
             </div>
             <div class="p-1" *ngIf="isViewPost">
                 <button type="button" class="btn btn-danger text-center"
+                    [disabled]="disablePostBtn"
                     (click)="PostClicked()">
                     Post
                 </button>
