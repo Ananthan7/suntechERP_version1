@@ -324,18 +324,17 @@ export class StonePricingMasterComponent implements OnInit {
     console.log(e.selling);
   
     if (sellingRate !== '') {
+      this.stonePrizeMasterForm.controls.selling_rate.enable();
       this.stonePrizeMasterForm.controls.selling.disable();
-    } else {
-      this.stonePrizeMasterForm.controls.selling.enable();
     }
+    
   
     if (sellingRatePercentage !== '') {
+      this.stonePrizeMasterForm.controls.selling.enable();
       this.stonePrizeMasterForm.controls.selling_rate.disable();
-    } else {
-      this.stonePrizeMasterForm.controls.selling_rate.enable();
-    }
+     }
   
-    if (sellingRatePercentage === '' && sellingRate === '') {
+    if (sellingRatePercentage !== '' && sellingRate !== '') {
       this.stonePrizeMasterForm.controls.selling.enable();
       this.stonePrizeMasterForm.controls.selling_rate.enable();
       // Remove the error message when both fields are empty

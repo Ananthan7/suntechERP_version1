@@ -29,6 +29,7 @@ export class MouldMakingComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   jobNumberDetailData: any[] = [];
+  viewMode: boolean = false;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -117,6 +118,7 @@ stockCodeData: MasterSearchModel = {
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { 
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
@@ -127,6 +129,11 @@ stockCodeData: MasterSearchModel = {
     this.yearMonth = this.comService.yearSelected;
     console.log(this.comService);
     this.setvalues()
+    this.setAllInitialValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
+  
   }
 
   setvalues(){
@@ -274,6 +281,54 @@ stockCodeData: MasterSearchModel = {
     location :[''],
 
   });
+  setAllInitialValues() {
+    if (!this.content) return
+    let API = `JobMouldHeaderDj/GetJobMouldHeaderDJWithMid/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+            data.Details.forEach((element: any) => {
+            this.tableData.push({
+              SN: element.SRNO,
+              stock_code: element.STOCK_CODE,
+              description: element.DISCPER,
+              Psc: element.PCS,
+              gross_weight: element.GRWT,
+              rate: element.RATEFC,
+              amount: element.VALUEFC,
+              location: element.LOCTYPE_CODE,
+
+            })
+          });
+      
+          this.mouldMakingForm.controls.vocherNo.setValue(data.VOCNO)
+          this.mouldMakingForm.controls.vocDate.setValue(data.VOCDATE)
+          this.mouldMakingForm.controls.vocher.setValue(data.VOCTYPE)
+          this.mouldMakingForm.controls.uniq.setValue(data.UNQ_JOB_ID)
+          this.mouldMakingForm.controls.uniqNo.setValue(data.UNQ_DESIGN_ID)
+          this.mouldMakingForm.controls.fromProcess.setValue(data.FROM_PROCESS_CODE)
+          this.mouldMakingForm.controls.fromWorker.setValue(data.FROM_WORKER_CODE)
+          this.mouldMakingForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
+          this.mouldMakingForm.controls.toWorker.setValue(data.TO_WORKER_CODE)
+          this.mouldMakingForm.controls.job.setValue(data.JOB_DESCRIPTION)
+          this.mouldMakingForm.controls.enteredBy.setValue(data.TREE_NO)
+          this.mouldMakingForm.controls.jobNo.setValue(data.UNQ_JOB_ID)
+          this.mouldMakingForm.controls.mouldType.setValue(data.MOULD_TYPE)
+          this.mouldMakingForm.controls.mouldNo.setValue(data.MOULD_NUMBER)
+          this.mouldMakingForm.controls.noOfParts.setValue(data.CONV_FACT)
+          this.mouldMakingForm.controls.narration.setValue(data.PROCESS_CODE)
+          this.mouldMakingForm.controls.designCode.setValue(data.DESIGN_CODE)
+          this.mouldMakingForm.controls.location.setValue(data.RCVD_MET_WT)
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -412,13 +467,13 @@ stockCodeData: MasterSearchModel = {
       return
     }
   
-    let API = 'JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/'+ this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.yearMonth
+    let API = `JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/${this.branchCode}/${this.mouldMakingForm.value.vocher}/${this.mouldMakingForm.value.vocherNo}/${this.commonService.yearSelected}`;
     let postData = {
       "MID": 0,
      "BRANCH_CODE":  this.branchCode,
-     "VOCTYPE":this.mouldMakingForm.value.voctype || "",
+     "VOCTYPE":this.mouldMakingForm.value.vocher || "",
       "VOCNO": 0,
-      "VOCDATE": this.mouldMakingForm.value.vocdate || "",
+      "VOCDATE": this.mouldMakingForm.value.vocDate || "",
       "YEARMONTH": this.yearMonth,
       "JOB_NUMBER": this.mouldMakingForm.value.jobno || "",
       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
@@ -433,8 +488,8 @@ stockCodeData: MasterSearchModel = {
       "PARTYCODE":this.mouldMakingForm.value.noofparts || "",
       "PARTY_CURRENCY": "",
       "PARTY_CURR_RATE": 0,
-      "ITEM_CURRENCY": this.mouldMakingForm.value.itemcurrency || "",
-      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemcurrencyrate || "",
+      "ITEM_CURRENCY": this.mouldMakingForm.value.itemCurrency || "",
+      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemCurrencyRate || "",
       "VALUE_DATE": "2023-10-19T08:59:58.514Z",
       "SALESPERSON_CODE": "",
       "TOTAL_PCS": 0,

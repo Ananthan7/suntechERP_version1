@@ -29,6 +29,8 @@ export class WorkerMasterComponent implements OnInit {
   selectedKey: number[] = []
   private subscriptions: Subscription[] = [];
   readonlyMode: boolean = false;
+  editMode: boolean = false;
+  codeEnable :  boolean = true;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -93,6 +95,12 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    //  this.workerMasterForm.controls.WorkerDESCRIPTION.disable();
+    // if (this.workerMasterForm.value.WorkerCode == '') {
+    // this.codeEnable = true;
+    // }
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.isViewMode = true;
@@ -100,13 +108,31 @@ export class WorkerMasterComponent implements OnInit {
       this.selectProcessWithSP()
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
+      this.editMode = true;
       this.setFormValues();
       this.selectProcessWithSP()
     }
 
   }
 
+  checkCode(): boolean {
+    if (this.workerMasterForm.value.WorkerCode == '') {
+      this.commonService.toastErrorByMsgId('please enter stockcode')
+      return true
+    }
+    return false
+  }
 
+  codeEnabled(){
+    if (this.workerMasterForm.value.WorkerCode == '') {
+    this.codeEnable = true;
+    //this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
+    }
+    else{
+      this.codeEnable = false;
+    }
+   
+  }
 
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
@@ -472,13 +498,16 @@ export class WorkerMasterComponent implements OnInit {
   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
+    if (this.checkCode()) return
     console.log(data);
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
   supervisorSelected(data: any) {
+    if (this.checkCode()) return
     this.workerMasterForm.controls.NameOfSupervisor.setValue(data.WORKER_CODE)
   }
   defaultProcessSelected(data: any) {
+    if (this.checkCode()) return
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
   }
 

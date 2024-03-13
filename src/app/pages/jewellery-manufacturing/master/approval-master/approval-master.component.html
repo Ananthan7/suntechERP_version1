@@ -14,17 +14,17 @@
                 <div class="check_radio_btn">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class=" row">
+                            <div class="row">
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Code * :</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
                                         <input #codeInput type="text" matInput formControlName="code" maxlength="6"
                                             oninput="this.value = this.value.toUpperCase()"
-                                            (focusout)="checkCodeExists($event)" [readonly]="editableMode"/>
+                                            (focusout)="checkCodeExists($event)" [readonly]="editableMode" [disabled]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class=" row">
+                            <div class="row">
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Description * :</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
@@ -33,6 +33,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div class="row">
@@ -40,7 +41,7 @@
                             <div class="row">
                                 <div class="col-md-3 d-flex mb-2" >
                                     <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                                        (addClick)="adddata()" (deleteClick)="removedata()" [isDisabled]="isDisabled">
+                                        (addClick)="adddata()" (deleteClick)="removedata()">
                                     </menu-buttons>
                                 </div>
                             </div>

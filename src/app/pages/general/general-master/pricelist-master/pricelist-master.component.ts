@@ -69,11 +69,11 @@ export class PricelistMasterComponent implements OnInit {
       priceCode: ['', [Validators.required]],
       description: ['', [Validators.required]],
       priceMethod: [0, [Validators.required]],
-      priceSign: [''],
+      priceSign: ['+'],
       priceValue: [''],
-      finalPriceSign: [''],
+      finalPriceSign: ['+'],
       finalPriceValue: [''],
-      addlValueSign: [''],
+      addlValueSign: ['+'],
       addlValue: [''],
       priceRoundoff: [false],
       dontCalculate: [false],
@@ -328,12 +328,18 @@ export class PricelistMasterComponent implements OnInit {
          this.viewMode = false;
 
         this.priceListMasterForm.controls.priceSign.disable();
-        this.priceListMasterForm.controls.priceSign.disable();
         //  this.priceListMasterForm.controls.priceValue.disable();
         this.priceListMasterForm.controls.finalPriceSign.disable();
         this.priceListMasterForm.controls.finalPriceValue.disable();
         this.priceListMasterForm.controls.addlValueSign.disable();
         this.priceListMasterForm.controls.addlValue.disable();
+
+        this.priceListMasterForm.controls.priceSign.setValue('');
+        this.priceListMasterForm.controls.finalPriceSign.setValue('');
+        this.priceListMasterForm.controls.finalPriceValue.setValue('');
+        this.priceListMasterForm.controls.addlValueSign.setValue('');
+        this.priceListMasterForm.controls.addlValue.setValue('');
+        this.priceListMasterForm.controls.priceValue.setValue('');
 
         // this.isDisabled = true;
       } else {

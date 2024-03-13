@@ -94,6 +94,8 @@ export class RetailTransactionComponent implements OnInit {
   reasonMaster: any = [];
   reasonMasterOptions!: Observable<any[]>;
 
+  showAuditTrail: boolean = false;
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -108,6 +110,12 @@ export class RetailTransactionComponent implements OnInit {
     this.getMasterGridData()
     this.menuTitle = this.CommonService.getModuleName()
     this.componentName = this.CommonService.getFormComponentName()
+    // need to change - if query params change to run again.
+    if(this.componentName == 'AddPosComponent'){
+      this.showAuditTrail = true;
+    }else{
+      // this.showAuditTrail = false;
+    }
   }
 
   ngOnInit(): void {
@@ -120,6 +128,7 @@ export class RetailTransactionComponent implements OnInit {
 
     this.getReasonMasters();
 
+   
   }
 
 
@@ -191,6 +200,7 @@ export class RetailTransactionComponent implements OnInit {
     }
     if (this.componentDbList[this.componentName]) {
       this.componentSelected = this.componentDbList[this.componentName]
+      
     } else {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }

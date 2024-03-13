@@ -31,12 +31,12 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput  maxlength="15"  formControlName="labour_code" #code (input)="code.value = code.value.toUpperCase()" />
+                  <input type="text" matInput  maxlength="15" [readonly]="editMode || viewMode"  formControlName="labour_code" #code (input)="code.value = code.value.toUpperCase()" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
                 <mat-form-field>
-                  <input type="text" matInput  maxlength="75"  formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
+                  <input type="text" matInput  maxlength="75" [readonly]="editMode || viewMode"  formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -170,7 +170,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Ct Wt From * :</label>
+              <label for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
               <div class="col-sm-3">
                   <mat-form-field>
                       <input type="text" matInput  [(ngModel)]="displayDiaCtWtFrom"  matInput NumberOnly  #DiaCtWtFrom 
@@ -191,11 +191,11 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Ct Wt to * :</label>
+              <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput   [(ngModel)]="displayDiaCtWtTo"  matInput NumberOnly  #DiaCtWtTo 
-                  (keyup)="DiaCtWtTokeyupvalue(DiaCtWtTo.value)"   style="text-align: right;" formControlName="ctWtTo" />
+                  (keyup)="DiaCtWtTokeyupvalue(DiaCtWtTo.value)" (change)="onCtweighttto($event)"  style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
@@ -235,12 +235,12 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput  maxlength="15" formControlName="metallabour_code" #code1 (input)="code1.value = code1.value.toUpperCase()"/>
+                  <input type="text" matInput  maxlength="15" [readonly]="editMode || viewMode" formControlName="metallabour_code" #code1 (input)="code1.value = code1.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput  maxlength="75" formControlName="metallabour_description" #description1 (input)="description1.value = description1.value.toUpperCase()"/>
+                  <input type="text" matInput  maxlength="75" [readonly]="editMode || viewMode" formControlName="metallabour_description" #description1 (input)="description1.value = description1.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -341,7 +341,7 @@
                 <master-search [MasterSearchData]="subcategoryCodeData"
                   (newRowClick)="subcategorySelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Wastage % * :</label>
+              <label for="input" class="col-sm-2 col-form-label">Wastage % :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="number" formControlName="wastage"  style="text-align: right;" />
@@ -390,7 +390,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
                   <input matInput type="text"  [(ngModel)]="displayMetalWtTo"  matInput NumberOnly  #MetalWtTo 
-                  (keyup)="MetalWtTokeyupvalue(MetalWtTo.value)"   formControlName="wtTo"  style="text-align: right;" />
+                  (keyup)="MetalWtTokeyupvalue(MetalWtTo.value)"  (change)="onweighttto($event)" formControlName="wtTo"  style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">

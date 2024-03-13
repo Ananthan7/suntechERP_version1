@@ -493,6 +493,7 @@ export class AddPosComponent implements OnInit {
   order_items_total_amount: any;
   order_items_total_tax: any;
   order_items_total_net_amount: any;
+  order_items_total_net_amount_org: any;
   order_items_total_gross_amount: any;
   order_items_total_discount_amount: any;
   // order_total_sales_returns: any = 0.0;
@@ -727,6 +728,7 @@ export class AddPosComponent implements OnInit {
 
     this.orders = [];
     this.order_items_total_net_amount = 0.0;
+    this.order_items_total_net_amount_org = 0.0;
 
 
     this.customerDataForm = this.formBuilder.group({
@@ -931,6 +933,7 @@ export class AddPosComponent implements OnInit {
 
     this.receiptTotalNetAmt = '0.00';
     this.order_items_total_net_amount = '0.00';
+    this.order_items_total_net_amount_org = '0.00';
 
     // let randomvocno = Math.floor(Math.random() * 100000000 + 1);
     let randomvocno = Math.floor(Math.random() * 1000000 + 1);
@@ -6308,6 +6311,7 @@ export class AddPosComponent implements OnInit {
       this.invReturnSalesTotalNetTotal -
       total_exchange
     );
+    this.order_items_total_net_amount_org = this.order_items_total_net_amount;
     // alert('this.order_items_total_net_amount ' + this.order_items_total_net_amount);
 
 
@@ -6573,175 +6577,181 @@ export class AddPosComponent implements OnInit {
         if (stockExist)
           return;
       }
-
-      let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
-        '&strBranchCode=' + this.strBranchcode +
-        '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
-        '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
-      this.suntechApi.getDynamicAPI(API)
-        .subscribe((resp) => {
-          this.snackBar.dismiss();
-          if (resp != null) {
-            const stockInfoResult = resp.resultStatus;
-            const stockInfos = resp.stockInfo;
-            const stockInfoPrice = resp.priceInfo;
-            let stockInfoTaxes = resp.taxInfo;
-            if (stockInfoTaxes.length == 0 || stockInfoTaxes === null) {
-              stockInfoTaxes = [{
-                HSN_COD: 0,
-                GST_CODE: 0,
-                IGST_PER: 0,
-                IGST_ACCODE: 0,
-              }];
-            }
-            // if (resp.status == 'Success') {
-            if (stockInfoResult.RESULT_TYPE == 'Success') {
-              this.newLineItem = stockInfos;
-              this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
-              this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
-              this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
-              this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
-
-              this.divisionMS = stockInfos.DIVISIONMS;
-              this.lineItemForm.controls['fcn_li_item_code'].setValue(
-                stockInfos.STOCK_CODE
-              );
-              this.lineItemForm.controls['fcn_li_item_desc'].setValue(
-                stockInfos.DESCRIPTION
-              );
-              this.lineItemForm.controls['fcn_li_location'].setValue(
-                stockInfos.LOCATION_CODE
-              );
-              this.lineItemForm.controls['fcn_li_division'].setValue(
-                stockInfos.DIVISION
-              );
-              // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(stockInfos.MKG_STOCKVALUE);
-              this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                stockInfos.BALANCE_PCS
-              );
-              this.lineItemPcs = stockInfos.BALANCE_PCS;
-              this.lineItemGrossWt = this.comFunc.transformDecimalVB(
-                this.comFunc.mQtyDecimals,
-                this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
-              );
-              this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                stockInfos.BALANCE_QTY
-              );
-              this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
-                stockInfos.STONE_WT || 0
-              ); // need field
-              this.lineItemForm.controls['fcn_li_net_wt'].setValue(
-                stockInfos.NET_WT
-              ); // need field
-              // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(stockInfoPrice.STONE_WT); // need field
-              this.lineItemForm.controls.fcn_li_rate.enable();
-              // this.lineItemForm.controls.fcn_li_pcs.enable();
-              this.lineItemForm.controls['fcn_li_tax_percentage'].setValue(
-                stockInfoTaxes[0].IGST_PER
-              );
-              this.lineItemForm.controls['fcn_li_purity'].setValue(
-                stockInfos.PURITY
-              );
-
-              this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
-              this.blockNegativeStockValue = stockInfos.BALANCE_QTY;
-              this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
-              this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                stockInfoPrice.MIN_SAL_PRICE
-              );
-              this.validatePCS = stockInfos.VALIDATE_PCS;
-              this.managePcsGrossWt();
-
-              // this.lineItemForm.controls['fcn_li_rate'].setValue(stockInfos.RATE); // got value =0
-              this.lineItemForm.controls['fcn_li_rate'].setValue(
-                parseFloat(stockInfos.RATE).toFixed(2)
-              );
-              this.lineItemForm.controls['fcn_ad_rate'].setValue(
-                parseFloat(stockInfos.RATE).toFixed(2)
-              );
-
-              this.renderer.selectRootElement('#fcn_li_total_amount').focus();
-
-              this.curr_line_item_images = stockInfos.PICTURE_NAME;
+      try {
 
 
-              if (this.divisionMS == 'M') {
-                this.lineItemForm.controls['fcn_ad_making_rate'].setValue(
-                  parseFloat(stockInfoPrice.SELLING_PRICE).toFixed(2)
-                ); //calculation
-
-                // this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(0); //calculation
-                this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(0); //need field
-                this.lineItemForm.controls['fcn_ad_rate_type'].setValue(
-                  stockInfos.RATE_TYPE != 'NULL' ? stockInfos.RATE_TYPE : ''
-                );
-
-                this.lineItemForm.controls['fcn_tab_details'].setValue(
-                  stockInfos.TAGLINES
-                );
-                this.li_tag_val = stockInfos.TAGLINES;
-                // this.lineItemForm.controls['fcn_ad_making_amount'].setValue(stockInfos.MKG_STOCKVALUE);
-                // this.lineItemForm.controls['fcn_li_total_amount'].setValue(stockInfoPrice.SELLING_PRICE);
-                // need
-                // this.lineItemForm.controls['fcn_li_rate'].setValue(this.setRate()); // need
-                this.lineItemForm.controls['fcn_li_rate'].setValue(
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.amtDecimals,
-                    stockInfoPrice.SELLING_PRICE
-                  )
-                );
-                // this.lineItemForm.controls['fcn_ad_amount'].setValue(stockInfoPrice.SELLING_PRICE);
-
-                this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
-                  this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
-                );
-
-                this.setMetalRate(stockInfos.KARAT_CODE);
-
-                this.manageCalculations();
-              } else {
-                this.lineItemForm.controls['fcn_li_rate'].setValue(
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.amtDecimals,
-                    stockInfoPrice.SELLING_PRICE
-                  )
-                );
-                this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.amtDecimals,
-                    stockInfoPrice.SELLING_PRICE
-                  )
-                );
-
-                this.manageCalculations();
+        let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
+          '&strBranchCode=' + this.strBranchcode +
+          '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
+          '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+        this.suntechApi.getDynamicAPI(API)
+          .subscribe((resp) => {
+            this.snackBar.dismiss();
+            if (resp != null) {
+              const stockInfoResult = resp.resultStatus;
+              const stockInfos = resp.stockInfo;
+              const stockInfoPrice = resp.priceInfo;
+              let stockInfoTaxes = resp.taxInfo;
+              if (stockInfoTaxes.length == 0 || stockInfoTaxes === null) {
+                stockInfoTaxes = [{
+                  HSN_COD: 0,
+                  GST_CODE: 0,
+                  IGST_PER: 0,
+                  IGST_ACCODE: 0,
+                }];
               }
+              // if (resp.status == 'Success') {
+              if (stockInfoResult.RESULT_TYPE == 'Success') {
+                this.newLineItem = stockInfos;
+                this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
+                this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
+                this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
+                this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
 
-              this.li_tax_amount_val =
-                this.lineItemForm.value.fcn_li_tax_amount;
-              this.li_net_amount_val =
-                this.lineItemForm.value.fcn_li_net_amount;
-              // this.li_tag_val = this.newLineItem.TAG_LINES;
+                this.divisionMS = stockInfos.DIVISIONMS;
+                this.lineItemForm.controls['fcn_li_item_code'].setValue(
+                  stockInfos.STOCK_CODE
+                );
+                this.lineItemForm.controls['fcn_li_item_desc'].setValue(
+                  stockInfos.DESCRIPTION
+                );
+                this.lineItemForm.controls['fcn_li_location'].setValue(
+                  stockInfos.LOCATION_CODE
+                );
+                this.lineItemForm.controls['fcn_li_division'].setValue(
+                  stockInfos.DIVISION
+                );
+                // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(stockInfos.MKG_STOCKVALUE);
+                this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                  stockInfos.BALANCE_PCS
+                );
+                this.lineItemPcs = stockInfos.BALANCE_PCS;
+                this.lineItemGrossWt = this.comFunc.transformDecimalVB(
+                  this.comFunc.mQtyDecimals,
+                  this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
+                );
+                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                  stockInfos.BALANCE_QTY
+                );
+                this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
+                  stockInfos.STONE_WT || 0
+                ); // need field
+                this.lineItemForm.controls['fcn_li_net_wt'].setValue(
+                  stockInfos.NET_WT
+                ); // need field
+                // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(stockInfoPrice.STONE_WT); // need field
+                this.lineItemForm.controls.fcn_li_rate.enable();
+                // this.lineItemForm.controls.fcn_li_pcs.enable();
+                this.lineItemForm.controls['fcn_li_tax_percentage'].setValue(
+                  stockInfoTaxes[0].IGST_PER
+                );
+                this.lineItemForm.controls['fcn_li_purity'].setValue(
+                  stockInfos.PURITY
+                );
+
+                this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
+                this.blockNegativeStockValue = stockInfos.BALANCE_QTY;
+                this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
+                this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                  this.comFunc.amtDecimals,
+                  stockInfoPrice.MIN_SAL_PRICE
+                );
+                this.validatePCS = stockInfos.VALIDATE_PCS;
+                this.managePcsGrossWt();
+
+                // this.lineItemForm.controls['fcn_li_rate'].setValue(stockInfos.RATE); // got value =0
+                this.lineItemForm.controls['fcn_li_rate'].setValue(
+                  parseFloat(stockInfos.RATE).toFixed(2)
+                );
+                this.lineItemForm.controls['fcn_ad_rate'].setValue(
+                  parseFloat(stockInfos.RATE).toFixed(2)
+                );
+
+                this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+
+                this.curr_line_item_images = stockInfos.PICTURE_NAME;
 
 
-              if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM))
-                this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-              else
-                this.setMakingValidation();
+                if (this.divisionMS == 'M') {
+                  this.lineItemForm.controls['fcn_ad_making_rate'].setValue(
+                    parseFloat(stockInfoPrice.SELLING_PRICE).toFixed(2)
+                  ); //calculation
+
+                  // this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(0); //calculation
+                  this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(0); //need field
+                  this.lineItemForm.controls['fcn_ad_rate_type'].setValue(
+                    stockInfos.RATE_TYPE != 'NULL' ? stockInfos.RATE_TYPE : ''
+                  );
+
+                  this.lineItemForm.controls['fcn_tab_details'].setValue(
+                    stockInfos.TAGLINES
+                  );
+                  this.li_tag_val = stockInfos.TAGLINES;
+                  // this.lineItemForm.controls['fcn_ad_making_amount'].setValue(stockInfos.MKG_STOCKVALUE);
+                  // this.lineItemForm.controls['fcn_li_total_amount'].setValue(stockInfoPrice.SELLING_PRICE);
+                  // need
+                  // this.lineItemForm.controls['fcn_li_rate'].setValue(this.setRate()); // need
+                  this.lineItemForm.controls['fcn_li_rate'].setValue(
+                    this.comFunc.transformDecimalVB(
+                      this.comFunc.amtDecimals,
+                      stockInfoPrice.SELLING_PRICE
+                    )
+                  );
+                  // this.lineItemForm.controls['fcn_ad_amount'].setValue(stockInfoPrice.SELLING_PRICE);
+
+                  this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
+                    this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
+                  );
+
+                  this.setMetalRate(stockInfos.KARAT_CODE);
+
+                  this.manageCalculations();
+                } else {
+                  this.lineItemForm.controls['fcn_li_rate'].setValue(
+                    this.comFunc.transformDecimalVB(
+                      this.comFunc.amtDecimals,
+                      stockInfoPrice.SELLING_PRICE
+                    )
+                  );
+                  this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+                    this.comFunc.transformDecimalVB(
+                      this.comFunc.amtDecimals,
+                      stockInfoPrice.SELLING_PRICE
+                    )
+                  );
+
+                  this.manageCalculations();
+                }
+
+                this.li_tax_amount_val =
+                  this.lineItemForm.value.fcn_li_tax_amount;
+                this.li_net_amount_val =
+                  this.lineItemForm.value.fcn_li_net_amount;
+                // this.li_tag_val = this.newLineItem.TAG_LINES;
 
 
-            } else {
-              // this.snackBar.open('Invalid Stock Code', 'OK');
-              this.openDialog(
-                'Failed',
-                // this.comFunc.getMsgByID(stockInfoResult.MESSAGE_ID.toString()),
-                this.comFunc.getMsgByID('MSG1464'),
-                true
-              );
+                if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM))
+                  this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+                else
+                  this.setMakingValidation();
+
+
+              } else {
+                // this.snackBar.open('Invalid Stock Code', 'OK');
+                this.openDialog(
+                  'Failed',
+                  // this.comFunc.getMsgByID(stockInfoResult.MESSAGE_ID.toString()),
+                  this.comFunc.getMsgByID('MSG1464'),
+                  true
+                );
+              }
             }
-          }
-        });
-
+          });
+      } catch (error) {
+        console.log('========error============================');
+        console.log(error);
+        console.log('====================================');
+      }
       // this.suntechApi
       //   .getPOS_RetailSalesItemImage(event.target.value)
       //   .subscribe((resp) => {
@@ -7667,7 +7677,7 @@ export class AddPosComponent implements OnInit {
 
                 this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
-                if (this.posPlanetIssuing)
+                if (this.posPlanetIssuing) // check tourist vat refund checkbox && trno should empty
                   this.posPlanetFileInsert();
 
                 this.submitAttachment();
@@ -8218,7 +8228,6 @@ export class AddPosComponent implements OnInit {
       // Math.round(parseFloat(value)).toFixed(2)
       disAmt
     );
-
 
     this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
       this.comFunc.transformDecimalVB(
@@ -9279,6 +9288,7 @@ export class AddPosComponent implements OnInit {
           )
         );
       } else {
+
         /* divisionMS == s, set total amount to gross amt */
         this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
           // Math.round(
@@ -9287,9 +9297,14 @@ export class AddPosComponent implements OnInit {
           // ).toFixed(2)
           this.comFunc.transformDecimalVB(
             this.comFunc.amtDecimals,
-            this.lineItemForm.value.fcn_li_total_amount -
-            this.lineItemForm.value.fcn_li_discount_amount
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
           )
+          // this.comFunc.transformDecimalVB(
+          //   this.comFunc.amtDecimals,
+          //   this.lineItemForm.value.fcn_li_total_amount -
+          //   this.lineItemForm.value.fcn_li_discount_amount
+          // )
         );
       }
     }
@@ -11527,7 +11542,10 @@ export class AddPosComponent implements OnInit {
     this.suntechApi.postDynamicAPI(API, postData)
       .subscribe((resp) => {
         if (resp.status == "Success") {
-
+          // In retail sales
+          // update trno value to field
+          // planeturl - 
+          // /PLANETRESPONEFLG = true    
         }
       });
   }
@@ -11566,13 +11584,29 @@ export class AddPosComponent implements OnInit {
     };
 
     this.suntechApi.postDynamicAPI(API, postData)
-      .subscribe((res: any) => {      
+      .subscribe((res: any) => {
         if (res.status == "Success") {
           this.vocTypesinSalesReturn = res.dynamicData[0];
           console.log('this.vocTypesinSalesReturn', this.vocTypesinSalesReturn);
-          
+
         }
       });
   }
 
+  changeFinalDiscount(event: any) {
+    const value = event.target.value;
+
+    if (value != '') {
+
+      let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals,  this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
+        this.comFunc.emptyToZero(this.order_items_total_discount_amount) );
+      this.order_items_total_net_amount = res;
+
+
+    } else {
+      this.order_items_total_net_amount = this.order_items_total_net_amount_org 
+
+
+    }
+  }
 }
