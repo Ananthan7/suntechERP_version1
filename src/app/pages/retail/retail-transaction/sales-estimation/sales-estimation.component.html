@@ -361,7 +361,7 @@
           <div class="col-md-2 m-t-10">
             <mat-form-field>
               <mat-label>Voucher</mat-label>
-              <input type="text" matInput formControlName="vocType" id="voc_type" [readonly]="viewOnly" />
+              <input type="text" matInput formControlName="vocType" id="voc_type" [readonly]="true" />
             </mat-form-field>
 
           </div>
@@ -2563,15 +2563,16 @@
                         /> -->
                       <mat-form-field style="width: 100%;">
                         <mat-label>Item Code </mat-label>
-                        <input type="text" matInput formControlName="design" />
+                        <!-- <input type="text" matInput formControlName="design" /> -->
+                        <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code
+                            id="fcn_li_item_code" value="{{ li_item_code_val }}" autofocus
+                            (focusout)="getStockDesc($event)" />
 
-                      </mat-form-field>
+                      </mat-form-field> 
                       <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)">
                       </master-search> -->
 
-                      <!-- <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code
-                            id="fcn_li_item_code" value="{{ li_item_code_val }}" autofocus
-                            (focusout)="getStockDesc($event)" /> -->
+                      
 
                       <!-- <button><i class="feather icon-camera" (click)="scannerFunc()"></i></button> -->
                     </div>
