@@ -24,6 +24,9 @@
       font-weight: 700;
     }
   }
+  .ng-select .ng-select-container {
+    border-radius: none !important;
+  }
   ::ng-deep {
     .cdk-overlay-container {
       position: fixed;

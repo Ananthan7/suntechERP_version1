@@ -1214,9 +1214,9 @@ export class SchemeReceiptComponent implements OnInit {
         item.VAT_AMT = parseInt(item.Amount_FC) - item.AMOUNT_VAT
         vatTotal += item.VAT_AMT;
         this.totalAmount_LC += parseInt(item.Amount_LC);
-        this.VATAmount += parseInt(item.TRN_Amount_LC);
+        this.VATAmount += parseInt(item.VAT_AMT);
         this.totalAmount_FC += parseInt(item.Amount_FC);
-        this.VATAmount_FC += parseInt(item.TRN_Amount_FC);
+        this.VATAmount_FC += parseInt(item.VAT_AMT);
         this.TOTAL_AMOUNTFC += parseInt(item.Amount_FC);
         this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
       });
@@ -1328,6 +1328,7 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   deleteTableData() {
+    if(this.orderedItems.length == 0) return
     if (!this.content && this.receiptDetailsForm.value.SchemeID != '') {
       Swal.fire({
         title: "Are you sure?",

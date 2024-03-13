@@ -399,6 +399,7 @@ export class SchemeRegisterComponent implements OnInit {
           }
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
+          this.schemeRegistrationForm.controls.Remarks.setValue(data.SCHEME_REMARKS)
           // this.schemeRegistrationForm.controls.Units.setValue(data.SCHEME_UNIT)
           // this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.START_DATE)
           // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
