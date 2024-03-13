@@ -105,7 +105,7 @@ export class DesignMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.images = ['src/assets/images/transparentImg.png'] ;
+   // this.images = ['assets/images/transparentImg.png'] ;
 
     this.setAllInitialValues()
   }

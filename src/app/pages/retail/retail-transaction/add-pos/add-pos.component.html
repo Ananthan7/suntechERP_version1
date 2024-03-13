@@ -2037,8 +2037,8 @@
               <mat-form-field>
                 <mat-label>Voc Type</mat-label>
                 <mat-select formControlName="fcn_returns_voc_type" [disabled]="viewOnly">
-                  <mat-option *ngFor="let voctype of vocTypesinExchange" [value]="voctype.value">
-                    {{ voctype.viewValue }}
+                  <mat-option *ngFor="let voctype of vocTypesinSalesReturn" [value]="voctype.VOCTYPE">
+                    {{ voctype.VOCTYPE }}
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="

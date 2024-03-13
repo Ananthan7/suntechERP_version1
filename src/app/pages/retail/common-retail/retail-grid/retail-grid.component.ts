@@ -207,6 +207,9 @@ export class RetailGridComponent implements OnInit {
               data.FORMAT = 'dd-MM-yyyy';
               data.DATATYPE = 'date';
             }
+            if (data.DATA_TYPE == 'bit') {
+              data.DATATYPE = 'boolean';
+            }
 
             const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);
             const isVisible = data.VISIBLE == true;

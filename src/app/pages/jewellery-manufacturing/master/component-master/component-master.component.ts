@@ -28,7 +28,7 @@ export class ComponentMasterComponent implements OnInit {
   image: string | ArrayBuffer | null | undefined;
   
 
-  images: string[] = [];
+  images: any[] = [];
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -41,7 +41,7 @@ export class ComponentMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.images = ['src/assets/images/transparentImg.png'];
+   // this.images = ['assets/images/transparentImg.png'];
 
     if (this.content.FLAG == 'VIEW') {
 
@@ -1060,6 +1060,8 @@ export class ComponentMasterComponent implements OnInit {
       }
     });
   }
+  
+
 
   onFileChangedimage(event: any) {
 
