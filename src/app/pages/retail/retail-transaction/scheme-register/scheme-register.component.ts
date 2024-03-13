@@ -26,6 +26,7 @@ export class SchemeRegisterComponent implements OnInit {
   processMode: boolean = false;
   editMode: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
+  disableCancelBtn: boolean = true;
 
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
@@ -169,6 +170,7 @@ export class SchemeRegisterComponent implements OnInit {
     }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editMode = true
+      this.disableCancelBtn = false
     }
     this.schemeRegistrationForm.controls.SchemeType.setValue('AMOUNT');
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
@@ -383,6 +385,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   fetchSchemeWithCustCode() {
     if (this.schemeRegistrationForm.value.SchemeId == '' || this.content?.FLAG == 'VIEW') return
+    this.SchemeMasterDetails = []
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -680,6 +683,8 @@ export class SchemeRegisterComponent implements OnInit {
   setFormData() {
     this.setPostData();
     let formValue = this.schemeRegistrationForm.value
+    console.log(this.detailArray,'this.detailArray');
+    
     this.detailArray.forEach((item: any, i: any) => {
       // delete item.schemeData['ID'];
       this.formdata.append(`Model.model[${i}].schemeData.MID`, this.content ? this.content.MID : '0');
@@ -773,7 +778,6 @@ export class SchemeRegisterComponent implements OnInit {
   /**USE: save button click */
   formSubmitWithAttachment() {
     if (this.content && this.content.FLAG == 'VIEW') return
-
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editSchemeDetail()
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)

@@ -312,25 +312,27 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 col-md-12 col-sm-12">
-                        <div class="d-flex align-items-center">
-                            <button mat-raised-button style="color: #1d5592;"
-                                (click)="addrowsWithAPI()" [disabled]="viewMode || processMode">
-                                Process
-                            </button>
-                            <button mat-raised-button style="color: #1d5592;"
-                                (click)="cancelScheme()" [disabled]="viewMode || processMode">
-                                Cancel Scheme
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                         <label style="width: 20%;">Remarks:
                         </label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode || processMode"
                                 formControlName="Remarks" />
                         </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="d-flex align-items-center">
+                            <button mat-raised-button style="color: #1d5592;"
+                                (click)="addrowsWithAPI()" [disabled]="viewMode || processMode">
+                                Process
+                            </button>
+                            <button mat-raised-button style="color: #1d5592;margin-left: 6px;"
+                                (click)="cancelScheme()" [disabled]="viewMode || disableCancelBtn">
+                                Cancel Scheme
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>

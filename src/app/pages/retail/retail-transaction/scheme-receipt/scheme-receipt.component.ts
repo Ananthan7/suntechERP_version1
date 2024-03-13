@@ -211,12 +211,12 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
     this.receiptDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH);
     this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
-    this.disablePostBtn = this.content.AUTOPOSTING == 'Y' ? true : false ;
+    this.disablePostBtn = this.content.AUTOPOSTING == 'Y' ? true : false;
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
-  AccountPosting(){
-    if(!this.content) return
+  AccountPosting() {
+    if (!this.content) return
     let params = {
       BRANCH_CODE: this.receiptDetailsForm.value.Branch,
       VOCTYPE: this.receiptDetailsForm.value.VocType,
@@ -228,19 +228,19 @@ export class SchemeReceiptComponent implements OnInit {
       MAINVOCTYPE: this.commonService.getqueryParamMainVocType(),
       HEADER_TABLE: this.commonService.getqueryParamTable(),
     }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting',params)
-    .subscribe((result) => {
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting', params)
+      .subscribe((result) => {
         if (result.status == "Success") {
-          this.commonService.toastSuccessByMsgId(result.message)
-        }else{
+          this.commonService.toastSuccessByMsgId(result.message || 'Posting Done')
+        } else {
           this.commonService.toastErrorByMsgId(result.message)
         }
       },
-      (err) => this.commonService.toastErrorByMsgId("Server Error")
-    );
+        (err) => this.commonService.toastErrorByMsgId("Server Error")
+      );
     this.subscriptions.push(Sub);
   }
-  auditTrailClick(){
+  auditTrailClick() {
     let params = {
       BRANCH_CODE: this.receiptDetailsForm.value.Branch,
       VOCTYPE: this.receiptDetailsForm.value.VocType,
@@ -445,9 +445,9 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
-          if(data.SCH_CANCEL){
+          if (data.SCH_CANCEL) {
             this.disableAddBtnGrid = true;
-          }else{
+          } else {
             this.disableAddBtnGrid = false;
           }
           this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
@@ -534,7 +534,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   selectedParty(data: any) {
     this.receiptDetailsForm.controls.PartyCode.setValue(data.ACCODE);
-    this.receiptDetailsForm.controls.PartyDescription.setValue(data['ACCOUNT HEAD']);
+    this.receiptDetailsForm.controls.PartyDescription.setValue(data.ACCOUNT_HEAD || data['ACCOUNT HEAD'] );
     this.newReceiptData.PARTY_CODE = data.ACCODE;
     if (data.CURRENCY_CODE) {
       this.receiptDetailsForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
@@ -576,7 +576,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.CustomerCodeSearch = data.CODE;
     this.mainGridCodeChange(data.CODE);
   }
-  resetSchemeDetails(){
+  resetSchemeDetails() {
     this.receiptDetailsForm.controls.SchemeCode.setValue('');
     this.receiptDetailsForm.controls.SchemeID.setValue('');
     this.receiptDetailsForm.controls.PartyAmtCode.setValue('');
@@ -903,7 +903,7 @@ export class SchemeReceiptComponent implements OnInit {
     let datas: any = {};
     let branchData = this.commonService.allbranchMaster
     console.log(branchData);
-    
+
     this.orderedItems.forEach((item: any) => {
       datas = {
         "UNIQUEID": 0,
