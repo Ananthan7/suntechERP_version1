@@ -11595,16 +11595,16 @@ export class AddPosComponent implements OnInit {
 
   changeFinalDiscount(event: any) {
     const value = event.target.value;
-
     if (value != '') {
 
       let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals,  this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
-        this.comFunc.emptyToZero(this.order_items_total_discount_amount) );
-      this.order_items_total_net_amount = res;
+        this.comFunc.emptyToZero(value) );
+        this.order_items_total_net_amount = res;
+this.receiptTotalNetAmt = res;
 
-
-    } else {
-      this.order_items_total_net_amount = this.order_items_total_net_amount_org 
+} else {
+  this.order_items_total_net_amount = this.order_items_total_net_amount_org 
+  this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
 
 
     }
