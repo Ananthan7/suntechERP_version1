@@ -13,7 +13,7 @@ export class MenuButtonsComponent implements OnInit {
   @Input() viewDeleteBtn: boolean = true;
   @Input() viewImportBtn: boolean = true;
   @Input() isDisabled: boolean = false;
-  
+  @Input() disableAddBtn: boolean = false;
   constructor() { }
 
   ngOnInit(): void {
