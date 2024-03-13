@@ -280,6 +280,8 @@ export class AddReceiptComponent implements OnInit {
           }
           if (this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency) {
             this.disableAmountFC = true
+          }else{
+            this.disableAmountFC = false
           }
           this.currencyCodeChange(this.receiptEntryForm.value.CurrCode);
          
@@ -399,9 +401,12 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
+    let amount = this.commonService.emptyToZero(form.Amount_FC)/this.commonService.emptyToZero(form.CurrRate)
+
+    this.setFormControlValue('Amount_FC', amount.toFixed(2))
     this.setFormControlValue('Amount_LC', form.Amount_LC)
     this.setFormControlValue('Header_Amount', form.Amount_LC)
-    this.setFormControlValue('Amount_FC', form.Amount_LC)
+    // this.setFormControlValue('Amount_FC', form.Amount_LC)
     this.setGridData()
   }
   calculateAmountFC() {
@@ -415,9 +420,11 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
+    let amount = this.commonService.emptyToZero(form.Amount_FC)*this.commonService.emptyToZero(form.CurrRate)
+    this.setFormControlValue('Amount_LC', amount.toFixed(2))
+    this.setFormControlValue('Header_Amount', amount.toFixed(2))
     this.setFormControlValue('Amount_FC', form.Amount_FC)
-    this.setFormControlValue('Header_Amount', form.Amount_FC)
-    this.setFormControlValue('Amount_LC', form.Amount_FC)
+    // this.setFormControlValue('Amount_LC', form.Amount_FC)
     this.setGridData()
   }
   /**calculate amount and split to rows */

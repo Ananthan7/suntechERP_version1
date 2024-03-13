@@ -27,7 +27,7 @@ export class SchemeRegisterComponent implements OnInit {
   editMode: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
   disableCancelBtn: boolean = true;
-
+  viewPorcessBtn: boolean = true;
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
 
@@ -185,6 +185,24 @@ export class SchemeRegisterComponent implements OnInit {
   SalesmanSelected(event: any) {
     this.schemeRegistrationForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
     this.schemeRegistrationForm.controls.SalesmanName.setValue(event.DESCRIPTION)
+  }
+  salesmanChange(event: any) {
+    if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
+    let inputValue = event.target.value;
+    inputValue = inputValue.toUpperCase();
+    let data = this.commonService.SalespersonMasterData.filter((item: any) => item.SALESPERSON_CODE == inputValue);
+    if (data.length > 0) {
+      this.schemeRegistrationForm.controls.Salesman.setValue(
+        data[0].SALESPERSON_CODE
+      );
+      this.schemeRegistrationForm.controls.SalesmanName.setValue(
+        data[0].DESCRIPTION
+      );
+    } else {
+      this.commonService.toastErrorByMsgId("Invalid Salesperson Code!");
+      this.schemeRegistrationForm.controls.Salesman.setValue("");
+      this.schemeRegistrationForm.controls.SalesmanName.setValue("");
+    }
   }
   BranchMasterChange(event: any) {
     this.schemeRegistrationForm.controls.Branch.setValue(event.BRANCH_CODE)
@@ -397,6 +415,7 @@ export class SchemeRegisterComponent implements OnInit {
             this.schemeRegistrationForm.controls.SchemeId.setValue('')
             return
           }
+          this.viewPorcessBtn = false
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
           this.schemeRegistrationForm.controls.Remarks.setValue(data.SCHEME_REMARKS)
