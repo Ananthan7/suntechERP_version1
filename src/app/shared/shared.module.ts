@@ -89,6 +89,7 @@ import { AuditTrailComponent } from './common/audit-trail/audit-trail.component'
     CardboxComponent,
     MasterFindIconComponent,
     MasterSearchComponent,
+    AuditTrailComponent,
     NumericInputDirective,
     DecimalInputDirective,
     DateValidationDirective,
