@@ -126,7 +126,7 @@
                                     Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 80%">
-                                        <input type="text" matInput maxlength="6" formControlName="recStockCode"
+                                        <input type="text" matInput  formControlName="recStockCode"
                                             [readonly]="viewMode" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="StockProcessData" *ngIf="viewMode == false"
@@ -242,8 +242,8 @@
                                         <input type="text" matInput  formControlName="accountStart"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
-                                        (newRowClick)="accountStartSelected($event)">
+                                    <master-search [MasterSearchData]="accountStartData" *ngIf="searchModeLoss == false" 
+                                        (newRowClick)="accountStartSelected($event)" >
                                     </master-search>
                                 </div>
                                 <div class="col-sm-12">
@@ -251,7 +251,7 @@
                                         <input type="text" matInput  formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountMiddleData" *ngIf="viewMode == false"
+                                    <master-search [MasterSearchData]="accountMiddleData"  *ngIf="searchModeRecov == false" 
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
                                 </div>
@@ -260,7 +260,7 @@
                                         <input type="text" matInput  formControlName="accountEnd"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountEndData" *ngIf="viewMode == false"
+                                    <master-search [MasterSearchData]="accountEndData"  *ngIf="searchModeAllow == false" 
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>
                                 </div>

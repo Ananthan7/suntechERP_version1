@@ -36,6 +36,7 @@ export class LabourChargeMasterComponent implements OnInit {
   salesRatePercentage: any;
   salesRateMetal : any;
   salesRatePercentageMetal: any;
+  editMode: boolean = false;
 
    displayDiaCostRate: any;
    displayDiaSellingRate: any;
@@ -66,8 +67,8 @@ export class LabourChargeMasterComponent implements OnInit {
     selling_rate: ['', [Validators.required]],
     sieve_desc: [''],
     selling: ['', [Validators.required]],
-    ctWtFrom: ['.000', [Validators.required]],
-    ctWtTo: ['.000', [Validators.required]],
+    ctWtFrom: ['.000'],
+    ctWtTo: ['.000'],
     settingType: [''],
     labourType: ['', [Validators.required]],
     unitList: [''],
@@ -96,7 +97,7 @@ export class LabourChargeMasterComponent implements OnInit {
     category: ['', [Validators.required]],
     metalSelling: ['', [Validators.required]],
     subCategory: [''],
-    wastage: ['', [Validators.required]],
+    wastage: [''],
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
@@ -330,6 +331,7 @@ export class LabourChargeMasterComponent implements OnInit {
     }
     else (this.content.FLAG == 'EDIT')
     {
+      this.editMode = true;
       this.setFormValues()
       this.setInitialValues()
     }
@@ -966,5 +968,31 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log(e);
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+
+  onweighttto(event: any) {
+    if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
+      Swal.fire({
+        title: event.message || 'Weight From should be lesser than Weight To',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
+    }
+  }
+
+
+  onCtweighttto(event: any) {
+    if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
+      Swal.fire({
+        title: event.message || 'Weight From should be lesser than Weight To',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
+    }
+  }
+
 
 }
