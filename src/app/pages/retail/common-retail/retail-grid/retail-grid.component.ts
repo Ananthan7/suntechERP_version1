@@ -129,15 +129,13 @@ export class RetailGridComponent implements OnInit {
         duration: 3000,
       });
     }
-    console.log(this.vocType, 'this.vocType');
+    console.log(this.yearSelected, 'this.yearSelected');
 
     if (this.vocType == 'GEN') {
       this.getSchemeMaturedAPI()
       return
     }
-    let params
-    // if (this.vocType != 'SCR') {
-      params = {
+    let params = {
         "PAGENO": this.pageIndex,
         "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
         "TABLE_NAME": this.checkVocTypeTable(this.tableName),
@@ -145,7 +143,7 @@ export class RetailGridComponent implements OnInit {
           "FILTER": {
             "YEARMONTH": this.yearSelected,
             "BRANCH_CODE": this.branchCode,
-            "VOCTYPE": this.vocType
+            "VOCTYPE": this.CommonService.nullToString(this.vocType)
           },
           "TRANSACTION": {
             "VOCTYPE": this.CommonService.nullToString(this.vocType),
@@ -153,20 +151,6 @@ export class RetailGridComponent implements OnInit {
           }
         }
       }
-    // } 
-    //  else {
-    //   params = {
-    //     "PAGENO": this.pageIndex,
-    //     "RECORDS": this.pageSize,
-    //     "TABLE_NAME": this.tableName,
-    //     "CUSTOM_PARAM": {
-    //       "FILTER": {
-    //         "PAY_BRANCH_CODE": this.branchCode,
-    //       } 
-    //     }
-    //   }
-    // }
-
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
