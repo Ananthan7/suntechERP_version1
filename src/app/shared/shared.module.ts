@@ -48,16 +48,16 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { CardboxComponent } from './common/cardbox/cardbox.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MasterFindIconComponent } from './common/master-find-icon/master-find-icon.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MasterSearchComponent } from './common/master-search/master-search.component';
 import { NumericInputDirective } from './directives/number-only.directive';
 import { DecimalInputDirective } from './directives/number-with-decimal.directive';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {MatTableModule} from '@angular/material/table';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTableModule } from '@angular/material/table';
 import { DateValidationDirective } from './directives/date-validation.directive';
-import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
+import { MatRadioButton, MatRadioModule } from '@angular/material/radio';
 
 import { MatCardModule } from '@angular/material/card';
 import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
@@ -74,6 +74,7 @@ import { UppercaseDirective } from './directives/uppercase.directive';
 import { DurationPickerComponent } from './common/duration-picker/duration-picker.component';
 import { FormatThreeDecimalDirective } from './directives/format-three-decimal.directive';
 import { CommaSeparatedNumberDirective } from './directives/comma-separated-number.directive';
+import { AuditTrailComponent } from './common/audit-trail/audit-trail.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -88,6 +89,7 @@ import { CommaSeparatedNumberDirective } from './directives/comma-separated-numb
     CardboxComponent,
     MasterFindIconComponent,
     MasterSearchComponent,
+    AuditTrailComponent,
     NumericInputDirective,
     DecimalInputDirective,
     DateValidationDirective,
@@ -138,19 +140,19 @@ import { CommaSeparatedNumberDirective } from './directives/comma-separated-numb
     InputSwitchModule,
     MatTabsModule,
     FontPickerModule,
-    SkeletonModule,CalendarModule,
-    MatFormFieldModule, MatInputModule, 
+    SkeletonModule, CalendarModule,
+    MatFormFieldModule, MatInputModule,
     MatAutocompleteModule,
-    MatExpansionModule, MatButtonModule, 
+    MatExpansionModule, MatButtonModule,
     MatSelectModule,
-    MatDatepickerModule, MatNativeDateModule, 
+    MatDatepickerModule, MatNativeDateModule,
     MatRippleModule,
-    MatTooltipModule, MatProgressBarModule, 
+    MatTooltipModule, MatProgressBarModule,
     MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule,DragDropModule,
+    OverlayPanelModule, DragDropModule,
     MatTableModule,
-    MatRadioModule,MatCardModule
+    MatRadioModule, MatCardModule
   ],
   exports: [
     //component exports
@@ -163,7 +165,8 @@ import { CommaSeparatedNumberDirective } from './directives/comma-separated-numb
     MasterSearchComponent,
     MasterGridComponent,
     MenuButtonsComponent,
-     DurationPickerComponent,
+    DurationPickerComponent,
+    AuditTrailComponent,
 
     //pipes && Directives exports
     NumberFormatterPipe,
@@ -211,17 +214,17 @@ import { CommaSeparatedNumberDirective } from './directives/comma-separated-numb
     MatTabsModule,
     FontPickerModule,
     SkeletonModule,
-    MatFormFieldModule, MatInputModule, MatAutocompleteModule, 
-    MatExpansionModule, MatButtonModule, 
-    MatSelectModule, 
-    MatDatepickerModule, MatNativeDateModule, 
-    MatRippleModule, 
-    MatTooltipModule, MatProgressBarModule, 
-    MatDialogModule, 
+    MatFormFieldModule, MatInputModule, MatAutocompleteModule,
+    MatExpansionModule, MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule, MatNativeDateModule,
+    MatRippleModule,
+    MatTooltipModule, MatProgressBarModule,
+    MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
-    MatRadioModule,MatCardModule,
-    OverlayPanelModule,DragDropModule,
-    MatTableModule,CalendarModule 
+    MatRadioModule, MatCardModule,
+    OverlayPanelModule, DragDropModule,
+    MatTableModule, CalendarModule
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })
@@ -230,4 +233,3 @@ export class SharedModule {
     dateAdapter.setLocale('en-in'); // DD/MM/YYYY
   }
 }
-​

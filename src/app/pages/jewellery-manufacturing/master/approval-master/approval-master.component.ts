@@ -31,6 +31,7 @@ export class ApprovalMasterComponent implements OnInit {
   orgMessageCheckbox: any;
   userCodeEnable: boolean = false;
   editableMode: boolean = false;
+  disable: boolean = false;
 
 
   user: MasterSearchModel = {
@@ -113,10 +114,10 @@ export class ApprovalMasterComponent implements OnInit {
             if (result.value) {
             }
           });
-          this.approvalMasterForm.controls.code.setValue('')
+        //  this.approvalMasterForm.controls.code.setValue('')
         }
       }, err => {
-        this.approvalMasterForm.controls.code.setValue('')
+      //  this.approvalMasterForm.controls.code.setValue('')
       })
     this.subscriptions.push(Sub)
   }
