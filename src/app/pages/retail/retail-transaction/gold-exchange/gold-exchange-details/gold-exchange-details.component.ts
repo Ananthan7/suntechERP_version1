@@ -383,15 +383,14 @@ export class GoldExchangeDetailsComponent implements OnInit {
         }
         this.close(postData);
       }
+      
       update(){
 
         if (this.goldExchangeDetailsForm.invalid) {
           this.toastr.error('select all required fields')
           return
         }
-    
         const updateApi = 'OldGoldPurchase/UpdateMetalPurchase/'+this.branchCode+'/'+this.content.VOCTYPE+'/'+this.yearMonth
-    
         let postData = {
           "UNIQUEID": 0,
           "SRNO": 0,
