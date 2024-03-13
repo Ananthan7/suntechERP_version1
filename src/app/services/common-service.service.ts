@@ -990,4 +990,13 @@ export class CommonServiceService {
     }
     return null;
   }
+  dataSplitPop(data:any){
+    const result = data.split('');
+    result.shift();
+    result.pop();
+
+    let heightValue = result.join("");
+    return heightValue;
+
+  }
 }
