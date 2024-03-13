@@ -19,6 +19,11 @@ export class ProcessMasterComponent implements OnInit {
 
   @Input() content!: any;
   viewMode: boolean = false;
+  searchModeLoss: boolean = true;
+  searchModeRecov: boolean = true;
+  searchModeAllow: boolean = true;
+
+
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
@@ -714,6 +719,9 @@ checkCodeExists(event: any) {
   onlossChange(event: any) {
     this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
+    this.searchModeLoss =  !this.searchModeLoss;
+    this.processMasterForm.controls.accountStart.setValue('');
+    
     // if(event.checked === true){
     //   this.processMasterForm.controls['loss_max'].enable();
     //   this.processMasterForm.controls['loss_min'].enable();
@@ -734,7 +742,8 @@ checkCodeExists(event: any) {
 
   onRecovery(event: any) {
     this.isRecovReadOnly = !this.isRecovReadOnly;
-
+    this.searchModeRecov = !this.searchModeRecov;
+    this.processMasterForm.controls.accountMiddle.setValue('');
     console.log(event);
     // if(event.checked === true){
     //   this.processMasterForm.controls['standard_end'].enable();
@@ -753,8 +762,9 @@ checkCodeExists(event: any) {
 
   onAllowGain(event: any) {
     this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
-
+    this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
+    this.processMasterForm.controls.accountEnd.setValue('');
     // if(event.checked == true){
     //   this.processMasterForm.controls['accountEnd'].enable();
     //  }
