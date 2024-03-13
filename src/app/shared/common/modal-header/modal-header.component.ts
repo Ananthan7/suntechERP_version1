@@ -14,7 +14,7 @@ export class ModalHeaderComponent implements OnInit {
   @Output() SaveGridDataClick = new EventEmitter();
   @Output() changeJobClick = new EventEmitter();
   @Output() auditTrailClick = new EventEmitter();
-  @Output() PostClick = new EventEmitter();
+  @Output() postClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
@@ -28,6 +28,9 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+  @Input() disableSaveBtn: boolean = false;
+  @Input() disableDeleteBtn: boolean = false;
+  @Input() disablePostBtn: boolean = false;
   @Input() isSelectAll: boolean = false;
   @Input() isSelectNone: boolean = false;
   @Input() isInvert: boolean = false;
@@ -66,29 +69,19 @@ export class ModalHeaderComponent implements OnInit {
     this.auditTrailClick.emit();
   }
   PostClicked() {
-    this.PostClick.emit();
+    this.postClick.emit();
   }
-  ExportClicked(){
-    this.PostClick.emit();
+  ExportClicked() {
   }
-  PreviewClicked(){
-    this.PostClick.emit();
+  PreviewClicked() {
 
   }
-  selectallClicked(){
-    this.PostClick.emit();
-
+  selectallClicked() {
   }
-  selectnoneClicked(){
-    this.PostClick.emit();
-
+  selectnoneClicked() {
   }
-  invertClicked(){
-    this.PostClick.emit();
-
+  invertClicked() {
   }
-  lockClicked(){
-    this.PostClick.emit();
-
+  lockClicked() {
   }
 }

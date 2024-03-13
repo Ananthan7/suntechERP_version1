@@ -1,0 +1,52 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Audit Trail</h4>
+        <button type="button" class="btn-close" aria-label="Close"
+            (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div>
+        <dx-data-grid id="gridContainer"
+            [dataSource]="gridData"
+            [showRowLines]="true"
+            height="300" [columnAutoWidth]="true"
+            [showBorders]="true"
+            [allowColumnResizing]="true">
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-selection mode="single"></dxo-selection>
+            <dxi-column dataField="BRANCH_CODE" caption="Branch"
+                alignment="center">
+            </dxi-column>
+            <dxi-column dataField="ACCODE"
+                caption="A/C Code"
+                alignment="center">
+            </dxi-column>
+            <dxi-column dataField="ACCOUNT_HEAD"
+                caption="Account Head"
+                alignment="center">
+            </dxi-column>
+            <dxi-column dataField="AMOUNTCC_DEBIT"
+                displayFormat="{0}"
+                caption="Amount Dr"
+                alignment="right">
+            </dxi-column>
+            <dxi-column dataField="AMOUNTCC_CREDIT" caption="Amount Cr"
+                displayFormat="{0}"
+                alignment="center">
+            </dxi-column>
+            <dxo-summary>
+                <dxi-total-item column="AMOUNTCC_DEBIT"
+                    summaryType="sum"
+                    displayFormat="{0}">
+                </dxi-total-item>
+                <dxi-total-item column="AMOUNTCC_CREDIT"
+                    summaryType="sum"
+                    displayFormat="{0}">
+                </dxi-total-item>
+            </dxo-summary>
+        </dx-data-grid>
+    </div>
+    <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary"
+            (click)="modal.close('Close click')">Close</button> -->
+    </div>
+</ng-template>
