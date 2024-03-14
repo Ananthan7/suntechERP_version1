@@ -531,7 +531,7 @@ export class CommonServiceService {
   }
 
   emptyToZero(value: any) {
-    value = value.toString().replace(/,/g, '');
+    // value = value.toString().replace(/,/g, '');
     value = typeof (value) == 'number' || !value  ? value : value.toString().trim();
     // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
     if (value == '' || !value) {
