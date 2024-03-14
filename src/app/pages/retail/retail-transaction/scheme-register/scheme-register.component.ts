@@ -9,6 +9,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
+import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
 
 @Component({
   selector: 'app-scheme-register',
@@ -19,6 +20,7 @@ export class SchemeRegisterComponent implements OnInit {
   @Input() content!: any;
   @ViewChild('add_scheme') add_scheme: any;
   @ViewChild('pos_customer_search') pos_customer_search: any;
+  @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
 
   formdata = new FormData();
   isLoading: boolean = false
@@ -381,7 +383,12 @@ export class SchemeRegisterComponent implements OnInit {
         })
     }
   }
-  cancelScheme() {
+  cancelSchemeClick(){
+    this.authCheckerComponent?.openAuthModal()
+  }
+  cancelScheme(event:any) {
+    console.log(event,'event');
+    
     if (!this.content?.SCH_CUSTOMER_ID) {
       this.commonService.toastErrorByMsgId('customer id not available')
       return
@@ -883,7 +890,7 @@ export class SchemeRegisterComponent implements OnInit {
 
     this.subscriptions.push(Sub)
   }
-
+  
   editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'

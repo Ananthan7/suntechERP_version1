@@ -99,9 +99,7 @@ export class RetailTransactionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-public dialog: MatDialog,
-
-
+    public dialog: MatDialog,
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
     this.getMasterGridData()

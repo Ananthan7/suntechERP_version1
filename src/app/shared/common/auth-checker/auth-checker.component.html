@@ -1,0 +1,88 @@
+<ng-template #userAuthModal let-modal modal-md>
+    <div class="modal-header" style="padding: 10px 20px">
+      <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="authForm">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field style="width: 100%">
+              <mat-label>Password</mat-label>
+              <input
+                type="password"
+                matInput
+                formControlName="password"
+                appNoEmptySpace />
+              <mat-error *ngIf="authForm.controls.password.hasError('required')">
+                Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field style="width: 100%">
+              <mat-label>Reason</mat-label>
+              <input
+                type="text"
+                matInput
+                [matAutocomplete]="reason"
+                formControlName="reason"
+                appNoEmptySpace />
+  
+              <mat-autocomplete #reason="matAutocomplete" autoActiveFirstOption
+                (optionSelected)="changeReason($event.option)">
+                <mat-option *ngFor="let option of reasonMasterOptions | async"
+                  [value]="option.CODE">
+                  {{ option.CODE }}
+                </mat-option>
+              </mat-autocomplete>
+  
+              <mat-error *ngIf="authForm.controls.reason.hasError('required')">
+                Reason is <strong>required</strong>
+              </mat-error>
+              <mat-error
+                *ngIf="authForm.controls.reason.hasError('notInOptions')">
+                Invalid value
+              </mat-error>
+            </mat-form-field>
+            <!-- <master-search [MasterSearchData]="reasonLookup" (newRowClick)="reasonSelected($event)"></master-search> -->
+  
+          </div>
+        </div>
+        <div class="row">
+  
+          <div class="col-md-12">
+            <mat-form-field style="width: 100%">
+              <mat-label>Description</mat-label>
+              <textarea
+                matInput
+                formControlName="description"
+                appNoEmptySpace
+                rows="1"></textarea>
+              <mat-error
+                *ngIf="authForm.controls.description.hasError('required')">
+                Description is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="text-right">
+          <button
+            type="submit"
+            mat-flat-button
+            color="primary"
+            class="btn-m-r-10"
+            (click)="submitAuth()">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>

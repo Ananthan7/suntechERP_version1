@@ -231,7 +231,8 @@ export class SchemeReceiptComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting', params)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.commonService.toastSuccessByMsgId(result.message || 'Posting Done')
+          this.disablePostBtn = true
+          this.commonService.toastSuccessByMsgId('Posting Done')
         } else {
           this.commonService.toastErrorByMsgId(result.message)
         }
