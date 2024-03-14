@@ -216,9 +216,9 @@ checkCodeExists(event: any) {
       approvalProcess: [''],
       recStockCode: [''],
       labour_charge: [''],
-      accountStart: ['', [Validators.required]],
-      accountMiddle: ['', [Validators.required]],
-      accountEnd: ['', [Validators.required]],
+      accountStart: [''],
+      accountMiddle: [''],
+      accountEnd: [''],
       loss: [false],
       recovery: [false],
       allowGain: [false],
@@ -765,6 +765,7 @@ checkCodeExists(event: any) {
     this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
     this.processMasterForm.controls.accountEnd.setValue('');
+    // this.processMasterForm.controls.accountStart()
     // if(event.checked == true){
     //   this.processMasterForm.controls['accountEnd'].enable();
     //  }
