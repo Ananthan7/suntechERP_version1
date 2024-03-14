@@ -96,11 +96,6 @@ export class WorkerMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //  this.workerMasterForm.controls.WorkerDESCRIPTION.disable();
-    // if (this.workerMasterForm.value.WorkerCode == '') {
-    // this.codeEnable = true;
-    // }
-
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.isViewMode = true;
@@ -109,6 +104,7 @@ export class WorkerMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.editMode = true;
+      this.codeEnable = false;
       this.setFormValues();
       this.selectProcessWithSP()
     }
@@ -126,7 +122,6 @@ export class WorkerMasterComponent implements OnInit {
   codeEnabled(){
     if (this.workerMasterForm.value.WorkerCode == '') {
     this.codeEnable = true;
-    //this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
     }
     else{
       this.codeEnable = false;
@@ -457,13 +452,14 @@ export class WorkerMasterComponent implements OnInit {
             if (result.value) {
             }
           });
-          this.workerMasterForm.controls.WorkerCode.setValue('')
+         // this.workerMasterForm.controls.WorkerCode.setValue('')
         }
       }, err => {
         this.workerMasterForm.reset()
       })
     this.subscriptions.push(Sub)
   }
+  
   /**use: to check worker exists in db */
   workerCodeChange(event: any, flag: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value
@@ -477,6 +473,7 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   setwithFormControl(status: any, code: any) {
     if (status == "Failed") {
       this.commonService.toastErrorByMsgId('MSG1531')
