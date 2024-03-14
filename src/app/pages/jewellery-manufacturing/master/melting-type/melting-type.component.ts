@@ -33,6 +33,8 @@ export class MeltingTypeComponent implements OnInit {
   viewModeField: boolean = true;
   SearchDisable: boolean = false;
   editCode: boolean = false;
+  allStockCodes: any;
+  filteredStockCodes: any[] | undefined;
 
 
 
@@ -56,6 +58,8 @@ export class MeltingTypeComponent implements OnInit {
       this.viewMode = false;
       this.setFormValues();
     }
+
+
   }
 
   onSelectionChanged(event: any) {
@@ -209,8 +213,10 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.metal.setValue(parseFloat(metalPercentage));
     this.meltingTypeForm.controls.alloy.setValue(parseFloat(alloyPercentage));
 
-
   }
+
+  
+
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -460,14 +466,30 @@ export class MeltingTypeComponent implements OnInit {
 
 
   deleteTableData() {
-    console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
-    //  this.tableData.push(data);
-    console.log(this.selectedIndexes);
     if (this.selectedIndexes.length > 0) {
-      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Simulate deletion without using an actual API call
+          if (this.tableData.length > 0) {
+            this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
+        }
+      });
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
     }
+    
 
   }
 
