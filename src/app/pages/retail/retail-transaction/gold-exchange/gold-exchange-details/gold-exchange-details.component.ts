@@ -6,6 +6,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-gold-exchange-details',
@@ -14,9 +15,12 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 })
 export class GoldExchangeDetailsComponent implements OnInit {
   @Input() content!: any; 
-  
+  userName = localStorage.getItem('username');
+  userbranch = localStorage.getItem('userbranch');
   branchCode?: String;
   yearMonth?: String;
+  selected = 'gms';
+
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -29,25 +33,53 @@ export class GoldExchangeDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  clarityCodeData: MasterSearchModel = {
+  outSideGoldCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 37,
+    LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Supplier type',
+    SEARCH_HEADING: 'Outside Gold',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CLARITY MASTER'",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+  SupplierData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Supplier",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "BRANCH_CODE = '"+ this.userbranch+"' AND AC_OnHold = 0",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+
+  locCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    SEARCH_FIELD: "LOCATION",
+    SEARCH_HEADING: "Loc Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "@Strbranch='"+ this.userbranch+"',@strUsercode='"+this.userName+"',@stravoidforsales= 0",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+
   goldExchangeDetailsForm: FormGroup = this.formBuilder.group({
     stockCode: [""],
     stockType: [""],
     outsideGold: [false],
     goldType: [""],
-    description: [""],
+    stockCodeDescription: [""],
     supplier: [""],
     locCode: [""],
+    fixMetalRate:[''],
     pieces: [""],
     grossWeight: [""],
     stoneWeight: [""],
@@ -78,11 +110,36 @@ export class GoldExchangeDetailsComponent implements OnInit {
     cashExchangeSelect: [""],
     remarks: [""],
   });
-  toastr: any;
+
+  
+  stockCodeSelected(e:any){
+    console.log(e);    
+    this.goldExchangeDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
+    this.goldExchangeDetailsForm.controls.stockType.setValue(e.STOCK_CODE);
+    this.goldExchangeDetailsForm.controls.stockCodeDescription.setValue(e.DESCRIPTION);
+  }
+
+  outSideGoldSelected(e:any){
+    console.log(e);
+    this.goldExchangeDetailsForm.controls.goldType.setValue(e.CODE);
+    
+  }
+
+  supplierSelected(e:any){
+    console.log(e);
+    this.goldExchangeDetailsForm.controls.supplier.setValue(e.ACCODE);
+
+  }
+
+  locCodeSelected(e:any){
+    console.log(e);
+    this.goldExchangeDetailsForm.controls.locCode.setValue(e);
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private toastr: ToastrService,
     private modalService: NgbModal
   ) {}
 
@@ -118,7 +175,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
     this.goldExchangeDetailsForm.controls.locCode.setValue(this.content.LOCTYPE_CODE);
     this.goldExchangeDetailsForm.controls.ozWeight.setValue(this.content.OZWT);
     this.goldExchangeDetailsForm.controls.supplier.setValue(this.content.SUPPLIER);
-    this.goldExchangeDetailsForm.controls.description.setValue(this.content.STOCK_DOCDESC);
+    this.goldExchangeDetailsForm.controls.stockCodeDescription.setValue(this.content.STOCK_DOCDESC);
     this.goldExchangeDetailsForm.controls.wastagePercent.setValue(this.content.WASTAGEPER);
     this.goldExchangeDetailsForm.controls.wastageQuantity.setValue(this.content.WASTAGEQTY);
     this.goldExchangeDetailsForm.controls.wastageAmount.setValue(this.content.WASTAGEAMOUNTFC);
@@ -176,7 +233,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
           "OZWT": this.goldExchangeDetailsForm.value.ozWeight,
           "SUPPLIER": this.goldExchangeDetailsForm.value.supplier,
           "BATCHSRNO": 0,
-          "STOCK_DOCDESC": this.goldExchangeDetailsForm.value.description,
+          "STOCK_DOCDESC": this.goldExchangeDetailsForm.value.stockCodeDescription,
           "BAGNO": "string",
           "BAGREMARKS": "string",
           "WASTAGEPER": this.goldExchangeDetailsForm.value.wastagePercent,
@@ -426,7 +483,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
           "OZWT": this.goldExchangeDetailsForm.value.ozWeight,
           "SUPPLIER": this.goldExchangeDetailsForm.value.supplier,
           "BATCHSRNO": 0,
-          "STOCK_DOCDESC": this.goldExchangeDetailsForm.value.description,
+          "STOCK_DOCDESC": this.goldExchangeDetailsForm.value.stockCodeDescription,
           "BAGNO": "string",
           "BAGREMARKS": "string",
           "WASTAGEPER": this.goldExchangeDetailsForm.value.wastagePercent,
