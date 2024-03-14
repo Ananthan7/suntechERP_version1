@@ -117,7 +117,7 @@ export class SchemeRegisterComponent implements OnInit {
     Code: ['', Validators.required],
     Name: ['', Validators.required],
     MobileNo: [''],
-    Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+    Email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     PanNo: [''],
     Branch: [''],
     DateOfJoining: [''],
@@ -794,6 +794,22 @@ export class SchemeRegisterComponent implements OnInit {
       }
     })
   }
+  submitValidation(){
+    let flag = false
+    if (this.schemeRegistrationForm.invalid) {
+      this.commonService.toastErrorByMsgId('select all required details!')
+      flag = true
+    }
+    if (this.SchemeMasterDetails.length == 0) {
+      this.commonService.toastErrorByMsgId('Process Scheme Before saving')
+      flag = true
+    }
+    if (this.schemeRegistrationForm.value.SendAlert && this.schemeRegistrationForm.value.Email == '' ) {
+      this.commonService.toastErrorByMsgId('Mail Id required')
+      flag = true
+    }
+    return flag
+  }
 
   /**USE: save button click */
   formSubmitWithAttachment() {
@@ -803,14 +819,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
       return
     }
-    if (this.schemeRegistrationForm.invalid) {
-      this.commonService.toastErrorByMsgId('select all required details!')
-      return
-    }
-    if (this.SchemeMasterDetails.length == 0) {
-      this.commonService.toastErrorByMsgId('Process Scheme Before saving')
-      return
-    }
+    if(this.submitValidation()) return
     this.setFormData();
     //save API
     this.isLoading = true;

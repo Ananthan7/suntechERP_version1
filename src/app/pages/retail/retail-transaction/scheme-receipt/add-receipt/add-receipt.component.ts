@@ -212,7 +212,7 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
       this.getAccountMaster(data.ACCODE)
     }
-    if(data.CURRENCY_CODE){
+    if (data.CURRENCY_CODE) {
       this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE)
     }
   }
@@ -265,6 +265,11 @@ export class AddReceiptComponent implements OnInit {
       this.close(this.receiptEntryForm.value)
     }
   }
+  currencyRateChange() {
+    this.setFormControlValue('Header_Amount', this.commonService.decimalQuantityFormat(0,'AMOUNT'))
+    this.setFormControlValue('Amount_LC', this.commonService.decimalQuantityFormat(0,'AMOUNT'))
+    this.setFormControlValue('Amount_FC', this.commonService.decimalQuantityFormat(0,'AMOUNT'))
+  }
   disableAmountFC: boolean = false;
   //Account master
   getAccountMaster(accountCode: string) {
@@ -280,11 +285,11 @@ export class AddReceiptComponent implements OnInit {
           }
           if (this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency) {
             this.disableAmountFC = true
-          }else{
+          } else {
             this.disableAmountFC = false
           }
           this.currencyCodeChange(this.receiptEntryForm.value.CurrCode);
-         
+
         } else {
           this.commonService.toastErrorByMsgId('PartyCode not found in credit master')
         }
@@ -340,13 +345,13 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Party Code Not Found')
       return
     }
-    let param ={
+    let param = {
       Accode: accountCode,
       strdate: this.commonService.formatDate(new Date()),
       branch_code: this.commonService.branchCode,
       mainvoctype: this.commonService.getqueryParamMainVocType()
     }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(`TaxDetails`,param)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(`TaxDetails`, param)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -359,20 +364,8 @@ export class AddReceiptComponent implements OnInit {
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
-        
+
           // let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
-
-          // amount_LC = Number(amount_LC.toFixed(2))
-          // let amount_FC: number = Number(this.currencyRate) * amount_LC
-          // amount_FC = Number(amount_FC.toFixed(2))
-
-          // let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
-          // trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
-          // this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
-
-          // let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
-          // trn_amount_lc = Number(trn_amount_lc.toFixed(2))
-          // this.receiptEntryForm.controls.TRN_Amount_LC.setValue(trn_amount_lc)
         } else {
           this.commonService.toastErrorByMsgId('Accode not found in credit master')
         }
@@ -401,7 +394,7 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
-    let amount = this.commonService.emptyToZero(form.Amount_FC)/this.commonService.emptyToZero(form.CurrRate)
+    let amount = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.CurrRate)
 
     this.setFormControlValue('Amount_FC', amount.toFixed(2))
     this.setFormControlValue('Amount_LC', form.Amount_LC)
@@ -420,7 +413,7 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
-    let amount = this.commonService.emptyToZero(form.Amount_FC)*this.commonService.emptyToZero(form.CurrRate)
+    let amount = this.commonService.emptyToZero(form.Amount_FC) * this.commonService.emptyToZero(form.CurrRate)
     this.setFormControlValue('Amount_LC', amount.toFixed(2))
     this.setFormControlValue('Header_Amount', amount.toFixed(2))
     this.setFormControlValue('Amount_FC', form.Amount_FC)
@@ -507,8 +500,8 @@ export class AddReceiptComponent implements OnInit {
               this.commonService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
             )
             let val = this.receiptEntryForm.value
-            let amount = this.commonService.emptyToZero(val.Amount_FC)*this.commonService.emptyToZero(val.CurrRate)
-  
+            let amount = this.commonService.emptyToZero(val.Amount_FC) * this.commonService.emptyToZero(val.CurrRate)
+
             this.setFormControlValue('Header_Amount', amount.toFixed(2))
             this.setFormControlValue('Amount_LC', amount.toFixed(2))
             this.getTaxDetails()
