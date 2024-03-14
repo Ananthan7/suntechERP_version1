@@ -33,6 +33,8 @@ export class MeltingTypeComponent implements OnInit {
   viewModeField: boolean = true;
   SearchDisable: boolean = false;
   editCode: boolean = false;
+  allStockCodes: any;
+  filteredStockCodes: any[] | undefined;
 
   karatval:any;
   purityval:any;
@@ -59,6 +61,8 @@ export class MeltingTypeComponent implements OnInit {
       this.viewMode = false;
       this.setFormValues();
     }
+
+
   }
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
@@ -269,7 +273,12 @@ export class MeltingTypeComponent implements OnInit {
   // }
 
   
-  stockCodeData: MasterSearchModel = { 
+ 
+
+  
+
+
+  stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 23,

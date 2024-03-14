@@ -29,6 +29,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   checkboxvalue:boolean = true
   public isChecked = true;
 
+  disableSelect = false;
   groups = [
     { type: 'None', value: 'None' },
     { type: 'Category', value: 'Category' },
