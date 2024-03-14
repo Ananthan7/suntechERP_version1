@@ -22,9 +22,9 @@
                                 <input type="text" matInput placeholder="CODE"
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode"
-                                    [readonly]="viewMode" #code
+                                    [readonly]="editMode || viewMode" #code
                                     (input)="code.value = code.value.toUpperCase()"
-                                    (focusout)="checkWorkerExists($event)" />
+                                    (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()"/>
                                 <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
@@ -36,7 +36,7 @@
                                 <input type="text" matInput
                                     placeholder="DESCRIPTION"
                                     formControlName="WorkerDESCRIPTION"
-                                    #WorkerDESCRIPTION [readonly]="viewMode"
+                                    #WorkerDESCRIPTION      [readonly]="viewMode || codeEnable" 
                                     (input)="WorkerDESCRIPTION.value = WorkerDESCRIPTION.value.toUpperCase()" />
                             </mat-form-field>
                         </div>
@@ -47,7 +47,7 @@
                                 Worker A/c Code :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    [readonly]="viewMode" maxlength="6"
+                                [readonly]="viewMode || codeEnable"  maxlength="6"
                                     (focusout)="workerCodeChange($event,'WorkerAcCode')"
                                     formControlName="WorkerAcCode" />
                             </mat-form-field>
@@ -65,7 +65,7 @@
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
                                     (focusout)="workerCodeChange($event,'NameOfSupervisor')"
-                                    [readonly]="viewMode"
+                                    [readonly]="viewMode || codeEnable" 
                                     formControlName="NameOfSupervisor" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="supervisorData"
@@ -80,7 +80,7 @@
                                 Default Process :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
-                                    [readonly]="viewMode"
+                                [readonly]="viewMode || codeEnable" 
                                     (focusout)="processCodeChange($event,'DefaultProcess')"
                                     formControlName="DefaultProcess" />
                             </mat-form-field>
@@ -99,7 +99,7 @@
                                     class="text-right"
                                     autocomplete="LossAllowed"
                                     formControlName="LossAllowed" maxlength="12"
-                                    [readonly]="viewMode" />
+                                    [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Password
@@ -108,7 +108,7 @@
                             <mat-form-field style="width: 100px">
                                 <input type="password" matInput
                                     autocomplete="Password"
-                                    [readonly]="viewMode"
+                                    [readonly]="viewMode || codeEnable" 
                                     formControlName="Password" />
                             </mat-form-field>
                         </div>
@@ -119,7 +119,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" MetalDecimalInput matInput
-                                    maxlength="12" [readonly]="viewMode"
+                                    maxlength="12"    [readonly]="viewMode || codeEnable" 
                                     class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
@@ -128,8 +128,9 @@
                             :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="number" class="text-right" matInput
-                                    maxlength="12" [readonly]="viewMode"
+                                <input type="text" class="text-right" matInput
+                                    maxlength="12"    [readonly]="viewMode || codeEnable" 
+                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                                     NumberOnly formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
@@ -141,7 +142,7 @@
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput MetalDecimalInput
                                     maxlength="12" class="text-right"
-                                    [readonly]="viewMode"
+                                    [readonly]="viewMode || codeEnable" 
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -151,7 +152,7 @@
                             <mat-form-field style="width: 100px">
                                 <input type="number" class="text-right"
                                     maxlength="12" matInput MetalDecimalInput
-                                    [readonly]="viewMode"
+                                    [readonly]="viewMode || codeEnable" 
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -162,7 +163,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput maxlength="12"
-                                    [readonly]="viewMode" class="text-right"
+                                [readonly]="viewMode || codeEnable"  class="text-right"
                                     MetalDecimalInput
                                     formControlName="TargetWeight" />
                             </mat-form-field>

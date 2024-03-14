@@ -18,16 +18,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pos-purchase-direct.component.scss']
 })
 export class PosPurchaseDirectComponent implements OnInit {
-
   @Input() content!: any; 
-
   branchCode?: String;
   yearMonth?: String;
-
   private subscriptions: Subscription[] = [];
-
-  
-
   currentDate = new Date();
   tableData: any[] = [];
   strBranchcode:any= '';
