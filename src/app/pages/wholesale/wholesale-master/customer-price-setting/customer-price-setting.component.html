@@ -115,10 +115,10 @@
           <div class="col-md-7 pt-3">
             <div class="row d-flex">
               <div class="col-2">
-                <mat-checkbox class="example-margin" formControlName="stockCode" [formControl]="disableSelect" (click)="selectstock($event)">Stock Code * </mat-checkbox>
+                <mat-checkbox class="example-margin" formControlName="stockCode" [(ngModel)]="disableSelect" (click)="selectstock($event)">Stock Code * </mat-checkbox>
               </div>
               <div class="col-2">
-                <mat-checkbox class="example-margin"  formControlName="designCode" >Design Code * </mat-checkbox>
+                <mat-checkbox class="example-margin"  formControlName="designCode"  >Design Code * </mat-checkbox>
               </div>
 
             </div>
@@ -133,7 +133,7 @@
             <div class="row">
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group1" [disabled]="disableSelect.value">
+                  <mat-select formControlName="group1" [disabled]="disableSelect">
                     <mat-option value="None">None</mat-option>
                     <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>
@@ -151,7 +151,7 @@
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group2" [disabled]="disableSelect.value">
+                  <mat-select formControlName="group2" [disabled]="disableSelect">
                     <mat-option value="None" selected>None</mat-option>
                     <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>
@@ -169,7 +169,7 @@
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group3" [disabled]="disableSelect.value">
+                  <mat-select formControlName="group3" [disabled]="disableSelect">
                     <mat-option value="None">None</mat-option>
                     <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>
@@ -187,7 +187,7 @@
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group4" [disabled]="disableSelect.value">
+                  <mat-select formControlName="group4" [disabled]="disableSelect">
                     <mat-option value="None">None</mat-option>
                     <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>
@@ -205,7 +205,7 @@
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group5" [disabled]="disableSelect.value">
+                  <mat-select formControlName="group5" [disabled]="disableSelect">
                     <mat-option value="None">None</mat-option>
                     <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>
@@ -223,7 +223,7 @@
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group6" [disabled]="disableSelect.value">
+                  <mat-select formControlName="group6" [disabled]="disableSelect">
                     <mat-option value="None">None</mat-option>
                     <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>

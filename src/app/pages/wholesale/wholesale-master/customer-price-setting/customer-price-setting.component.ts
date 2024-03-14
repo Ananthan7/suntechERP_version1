@@ -29,7 +29,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   checkboxvalue:boolean = true
   public isChecked = true;
 
-  disableSelect = new FormControl(false);
+  disableSelect = false;
 
   constructor(
     private activeModal: NgbActiveModal,
