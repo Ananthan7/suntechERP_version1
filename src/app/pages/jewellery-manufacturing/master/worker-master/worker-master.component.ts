@@ -437,7 +437,8 @@ export class WorkerMasterComponent implements OnInit {
 
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    if (event.target.value == '' || this.viewMode == true) return
+    if (this.content && this.content.FLAG == 'EDIT') {}else{
+    if (event.target.value == '' || this.viewMode == true ) return
     let API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -457,9 +458,11 @@ export class WorkerMasterComponent implements OnInit {
       }, err => {
         this.workerMasterForm.reset()
       })
+    
     this.subscriptions.push(Sub)
   }
-  
+  }
+
   /**use: to check worker exists in db */
   workerCodeChange(event: any, flag: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value
