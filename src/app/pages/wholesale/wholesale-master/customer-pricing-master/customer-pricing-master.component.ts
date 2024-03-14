@@ -126,7 +126,7 @@ export class CustomerPricingMasterComponent implements OnInit {
   }
   divisionCodeSelected(e:any){
     console.log(e); 
-    this.customerpricemasterForm.controls.division.setValue(e.DIVISION);
+    this.customerpricemasterForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
   custsuppCodeData: MasterSearchModel = {

@@ -765,6 +765,7 @@ checkCodeExists(event: any) {
     this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
     this.processMasterForm.controls.accountEnd.setValue('');
+    // this.processMasterForm.controls.accountStart()
     // if(event.checked == true){
     //   this.processMasterForm.controls['accountEnd'].enable();
     //  }

@@ -17,12 +17,12 @@
                             <label for="input" class="col-sm-2 col-form-label">Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="codedes" />
+                                    <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="codeCodeData"
                                     (newRowClick)="codeCodeSelected($event)">

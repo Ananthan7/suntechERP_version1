@@ -399,7 +399,7 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
       return
     }
   
-    let API = 'MetalTransfer/UpdateMetalTransfer/'+ this.diamondbranchtransoutfrom.value.branchCode + this.diamondbranchtransoutfrom.value.voctype + this.diamondbranchtransoutfrom.value.vocno + this.diamondbranchtransoutfrom.value.yearMonth
+    let API = 'MetalTransfer/UpdateMetalTransfer/'+ this.branchCode + this.diamondbranchtransoutfrom.value.voctype + this.diamondbranchtransoutfrom.value.vocno + this.yearMonth
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -705,7 +705,7 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'MetalTransfer/DeleteMetalTransfer/' + this.diamondbranchtransoutfrom.value.branchCode + this.diamondbranchtransoutfrom.value.voctype + this.diamondbranchtransoutfrom.value.vocno + this.diamondbranchtransoutfrom.value.yearMonth
+        let API = 'MetalTransfer/DeleteMetalTransfer/' + this.branchCode + this.diamondbranchtransoutfrom.value.voctype + this.diamondbranchtransoutfrom.value.vocno + this.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
