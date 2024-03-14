@@ -80,10 +80,7 @@ export class RetailGridComponent implements OnInit {
       this.getMasterGridData();
     }
   }
-  checkVocTypeTable(value: any) {
-    if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT'; 
-    return value
-  }
+
   getSchemeMaturedAPI() {
     let API = 'SchemeMatured/' + this.CommonService.branchCode
     let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
@@ -99,9 +96,6 @@ export class RetailGridComponent implements OnInit {
         }
 
         this.orderedItemsHead = Object.keys(this.orderedItems[0]);
-        // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
-        // this.ChangeDetector.detectChanges()
-        // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);
       } else {
         this.snackBar.open('Data not available!', 'Close', {
           duration: 3000,
@@ -129,28 +123,28 @@ export class RetailGridComponent implements OnInit {
         duration: 3000,
       });
     }
-    console.log(this.yearSelected, 'this.yearSelected');
 
     if (this.vocType == 'GEN') {
       this.getSchemeMaturedAPI()
       return
     }
     let params = {
-        "PAGENO": this.pageIndex,
-        "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
-        "TABLE_NAME": this.checkVocTypeTable(this.tableName),
-        "CUSTOM_PARAM": {
-          "FILTER": {
-            "YEARMONTH": this.yearSelected,
-            "BRANCH_CODE": this.branchCode,
-            "VOCTYPE": this.CommonService.nullToString(this.vocType)
-          },
-          "TRANSACTION": {
-            "VOCTYPE": this.CommonService.nullToString(this.vocType),
-            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          }
+      "PAGENO": this.pageIndex,
+      "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
+      "TABLE_NAME": this.tableName || '',
+      "CUSTOM_PARAM": {
+        "FILTER": {
+          "YEARMONTH": this.CommonService.nullToString(this.yearSelected),
+          "BRANCH_CODE": this.branchCode,
+          "VOCTYPE": this.CommonService.nullToString(this.vocType)
+        },
+        "TRANSACTION": {
+          "VOCTYPE": this.CommonService.nullToString(this.vocType),
+          "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
         }
       }
+    }
+    console.log(params, ';params');
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {

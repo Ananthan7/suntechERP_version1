@@ -1,73 +1,77 @@
 <!-- menu section -->
-<app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData($event)"></app-menubar>
+<app-menubar [menuTitle]="menuTitle"
+  (subMenuChange)="getMasterGridData($event)"></app-menubar>
 <!-- content section starts -->
-<div class="row d-flex justify-content-between" style="min-height: 100vh !important;">
-    <div class="col-md-2 col-sm-12">
-        <app-cardbox [header]="'Cycle Time'" [content]="'32'"></app-cardbox>
-        <app-cardbox [header]="'Yield %'" [content]="'22'"></app-cardbox>
-        <app-cardbox [header]="'Through Out'" [content]="'44M'"></app-cardbox>
-        <div class="card p-3">
-            <div class="card_wrap h-100">
-                <h5>Defect Analysis</h5>
-                <img src="../../assets/images/chats/chat-7.png" alt="chat" width="100%" />
-            </div>
-        </div>
+<div class="row d-flex justify-content-between"
+  style="min-height: 100vh !important;">
+  <div class="col-md-2 col-sm-12">
+    <app-cardbox [header]="'Cycle Time'" [content]="'32'"></app-cardbox>
+    <app-cardbox [header]="'Yield %'" [content]="'22'"></app-cardbox>
+    <app-cardbox [header]="'Through Out'" [content]="'44M'"></app-cardbox>
+    <div class="card p-3">
+      <div class="card_wrap h-100">
+        <h5>Defect Analysis</h5>
+        <img src="../../assets/images/chats/chat-7.png" alt="chat"
+          width="100%" />
+      </div>
     </div>
-    <div class="col-md-8 col-sm-12">
-        <div class="card p-3">
-            <div class="col-md-12">
-                <div class="card_wrap">
-                    <h5 class="favItems">{{menuTitle}}</h5>
-                    <div class="module_form">
-                        <div class="row">
-                            <div class="col-md-12" style="min-height: 30vh;">
-                                <app-retail-grid (AddBtnClick)="openModalView()" (editRowClick)="editRowDetails($event)"
-                                    (viewRowClick)="viewRowDetails($event)">
-                                </app-retail-grid>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  </div>
+  <div class="col-md-8 col-sm-12">
+    <div class="card p-3">
+      <div class="col-md-12">
+        <div class="card_wrap">
+          <h5 class="favItems">{{menuTitle}}</h5>
+          <div class="module_form">
+            <div class="row">
+              <div class="col-md-12" style="min-height: 30vh;">
+                <app-retail-grid (AddBtnClick)="openModalView()"
+                  (editRowClick)="editRowDetails($event)"
+                  (viewRowClick)="viewRowDetails($event)">
+                </app-retail-grid>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="card p-3">
-            <div class="col-md-6">
-                <div class="card_wrap">
-                    <h5>Avg Working Hours</h5>
-                    <img src="../../assets/images/chats/chat-5.png" alt="chat" width="100%" height=" 165px" />
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    <div class="col-md-2 col-sm-12">
-        <app-cardbox [header]="'Quantity Produced'" [content]="'44M'"></app-cardbox>
-        <div class="card p-3">
-            <div class="card_wrap">
-                <h5>Overall</h5>
-                <img src="../../assets/images/chats/chat-2.png" alt="chat" width="100%" />
-            </div>
+    <div class="card p-3">
+      <div class="col-md-6">
+        <div class="card_wrap">
+          <h5>Avg Working Hours</h5>
+          <img src="../../assets/images/chats/chat-5.png" alt="chat"
+            width="100%" height=" 165px" />
         </div>
-        <app-cardbox [header]="'Quantity'" [content]="'4M'"></app-cardbox>
+      </div>
     </div>
+  </div>
+  <div class="col-md-2 col-sm-12">
+    <app-cardbox [header]="'Quantity Produced'" [content]="'44M'"></app-cardbox>
+    <div class="card p-3">
+      <div class="card_wrap">
+        <h5>Overall</h5>
+        <img src="../../assets/images/chats/chat-2.png" alt="chat"
+          width="100%" />
+      </div>
+    </div>
+    <app-cardbox [header]="'Quantity'" [content]="'4M'"></app-cardbox>
+  </div>
 </div>
 
-
 <ng-template #userAuthModal let-modal modal-md>
-    <div class="modal-header" style="padding: 10px 20px">
-      <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
-      <button
-        type="button"
-        class="close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="authForm">
-        <div class="row">
-          <!-- <div class="col-md-6">
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="authForm">
+      <div class="row">
+        <!-- <div class="col-md-6">
             <mat-form-field style="width: 100%">
               <mat-label>Username</mat-label>
               <input
@@ -82,78 +86,77 @@
               </mat-error>
             </mat-form-field>
           </div> -->
-          <div class="col-md-6">
-            <mat-form-field style="width: 100%">
-              <mat-label>Password</mat-label>
-              <input
-                type="password"
-                matInput
-                formControlName="password"
-                 appNoEmptySpace
-              />
-              <mat-error *ngIf="authForm.controls.password.hasError('required')">
-                Password is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field style="width: 100%">  
-              <mat-label>Reason</mat-label>
-              <input
-                type="text"
-                matInput
-                [matAutocomplete]="reason"
-                formControlName="reason"
-                 appNoEmptySpace
-              />
+        <div class="col-md-6">
+          <mat-form-field style="width: 100%">
+            <mat-label>Password</mat-label>
+            <input
+              type="password"
+              matInput
+              formControlName="password"
+              appNoEmptySpace />
+            <mat-error *ngIf="authForm.controls.password.hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field style="width: 100%">
+            <mat-label>Reason</mat-label>
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="reason"
+              formControlName="reason"
+              appNoEmptySpace />
 
-              
-              <mat-autocomplete #reason="matAutocomplete" autoActiveFirstOption (optionSelected)="changeReason($event.option)">
-                <mat-option *ngFor="let option of reasonMasterOptions | async" [value]="option.CODE">
-                  {{ option.CODE }}
-                </mat-option>
-              </mat-autocomplete>
-              
-              <mat-error *ngIf="authForm.controls.reason.hasError('required')">
-                Reason is <strong>required</strong>
-              </mat-error>
-              <mat-error *ngIf="authForm.controls.reason.hasError('notInOptions')">
-                Invalid value
-              </mat-error>
-            </mat-form-field>
+            <mat-autocomplete #reason="matAutocomplete" autoActiveFirstOption
+              (optionSelected)="changeReason($event.option)">
+              <mat-option *ngFor="let option of reasonMasterOptions | async"
+                [value]="option.CODE">
+                {{ option.CODE }}
+              </mat-option>
+            </mat-autocomplete>
+
+            <mat-error *ngIf="authForm.controls.reason.hasError('required')">
+              Reason is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="authForm.controls.reason.hasError('notInOptions')">
+              Invalid value
+            </mat-error>
+          </mat-form-field>
           <!-- <master-search [MasterSearchData]="reasonLookup" (newRowClick)="reasonSelected($event)"></master-search> -->
 
-          </div>
         </div>
-        <div class="row">
-          
-          <div class="col-md-12">
-            <mat-form-field style="width: 100%">
-              <mat-label>Description</mat-label>
-              <textarea 
-                matInput
-                formControlName="description"
-                 appNoEmptySpace
-                 rows="1"
-                 ></textarea>
-              <mat-error *ngIf="authForm.controls.description.hasError('required')">
-                Description is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
+      </div>
+      <div class="row">
+
+        <div class="col-md-12">
+          <mat-form-field style="width: 100%">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              appNoEmptySpace
+              rows="1"></textarea>
+            <mat-error
+              *ngIf="authForm.controls.description.hasError('required')">
+              Description is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
         </div>
-        
-        <div class="text-right">
-          <button
-            type="submit"
-            mat-flat-button
-            color="primary"
-            class="btn-m-r-10"
-             (click)="submitAuth()"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
-  </ng-template>
+      </div>
+
+      <div class="text-right">
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="btn-m-r-10"
+          (click)="submitAuth()">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -8,13 +8,14 @@ import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-gr
 import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
 import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
+import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 @Component({
   selector: 'app-retail-master',
   templateUrl: './retail-master.component.html',
   styleUrls: ['./retail-master.component.scss']
 })
 export class RetailMasterComponent implements OnInit {
-  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(RetailGridComponent) masterGridComponent?: RetailGridComponent;
   //variables
   menuTitle: string = '';
   apiCtrl: any;
