@@ -112,10 +112,8 @@ export class MasterSearchComponent implements OnInit {
     })
 
   }
-  /**use: load datas on scroll */
-  loadMoreData(currentPage?:number) {
-    if(this.totalItems >= this.dataSource.length+1 && this.currentPage != currentPage) return
-    let param = {
+  setPostdata(){
+    return {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
@@ -124,6 +122,11 @@ export class MasterSearchComponent implements OnInit {
       "searchField": this.MasterSearchData.SEARCH_FIELD,
       "searchValue": this.MasterSearchData.SEARCH_VALUE,
     }
+  }
+  /**use: load datas on scroll */
+  loadMoreData(currentPage?:number) {
+    if(this.totalItems >= this.dataSource.length+1 && this.currentPage != currentPage) return
+    let param = this.setPostdata()
     let APIS = 'MasterLookUp'
     this.isLoading = true;
     this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
@@ -172,21 +175,14 @@ export class MasterSearchComponent implements OnInit {
     this.newRowClick.emit(event)
     this.closeOverlayPanel()
   }
-  //PAGINATION
 
   //search Value Change
   searchValueChange(event: any) {
     if (event.target.value == '') return
-    let param = {
-      "PAGENO": this.MasterSearchData.PAGENO,
-      "RECORDS": this.MasterSearchData.RECORDS,
-      "LOOKUPID": this.MasterSearchData.LOOKUPID,
-      "searchField": this.MasterSearchData.SEARCH_FIELD || "",
-      "searchValue": this.MasterSearchData.SEARCH_VALUE || ""
-    }
-    let APIS = 'MasterLookUp'
+    this.currentPage = 1
+    let param = this.setPostdata()
     this.isLoading = true;
-    this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
+    this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param).subscribe((result) => {
       this.isLoading = false;
       if (result.dynamicData[0]) {
         this.dataSource = result.dynamicData[0]
