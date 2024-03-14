@@ -71,6 +71,8 @@ export class AuthCheckerComponent implements OnInit {
 
 
   getReasonMasters() {
+    console.log('fired');
+    
     let API = `GeneralMaster/GetGeneralMasterList/reason%20master`
     this.dataService.getDynamicAPI(API).
       subscribe(data => {

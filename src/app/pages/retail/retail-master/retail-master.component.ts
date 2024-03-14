@@ -9,6 +9,7 @@ import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-c
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
 import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
+import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
 @Component({
   selector: 'app-retail-master',
   templateUrl: './retail-master.component.html',
@@ -16,6 +17,7 @@ import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.co
 })
 export class RetailMasterComponent implements OnInit {
   @ViewChild(RetailGridComponent) masterGridComponent?: RetailGridComponent;
+  @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
   //variables
   menuTitle: string = '';
   apiCtrl: any;
@@ -26,7 +28,7 @@ export class RetailMasterComponent implements OnInit {
   componentName: any;
   private componentDbList: any = {}
   componentSelected: any;
-
+  dataToEdit: any;
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -64,9 +66,12 @@ export class RetailMasterComponent implements OnInit {
     this.openModalView(str)
   }
   editRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'EDIT'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'EDIT'
+    this.authCheckerComponent?.openAuthModal();
+  }
+  authSubmit(){
+    this.openModalView(this.dataToEdit)
   }
   //  open Jobcard in modal
   openModalView(data?: any) {
