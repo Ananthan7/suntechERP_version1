@@ -72,6 +72,11 @@ export class AddPosComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
 
+  amountDecimalFormat: any;
+  weightDecimalFormat: any;
+  gridAmountDecimalFormat: any;
+  gridWeghtDecimalFormat: any;
+
   posMode: string = 'ADD';
 
   // baseImgUrl = baseImgUrl;
@@ -745,7 +750,7 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm = this.formBuilder.group({
       fcn_voc_no: ['',],
       // fcn_voc_no: ['', Validators.required],
-      voc_type: [this.vocType],
+      voc_type: [''],
       voc_no: [1],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
@@ -1126,6 +1131,7 @@ export class AddPosComponent implements OnInit {
 
       this.strBranchcode = this.content.BRANCH_CODE;
       this.vocType = this.content.VOCTYPE;
+      this.vocDataForm.controls.voc_type.setValue(this.vocType);
       // this.baseYear = this.content.YEARMONTH;
       this.getRetailSalesMaster(this.content);
       if (this.content.FLAG == "EDIT") {
@@ -1663,6 +1669,7 @@ export class AddPosComponent implements OnInit {
     this.vocType = this.comFunc.getqueryParamVocType();
     this.mainVocType = this.comFunc.getqueryParamVocType();
     // this.baseYear = this.content.YEARMONTH;
+    this.vocDataForm.controls.voc_type.setValue(this.vocType);
 
     let isLayoutRTL = false;
     this.page_language = 'ENGLISH';
@@ -1732,6 +1739,21 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
 
     this.getSalesReturnVocTypes();
+
+    this.amountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comFunc.amtDecimals,
+    };
+    this.weightDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comFunc.mQtyDecimals,
+    };
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comFunc.amtDecimals,
+      currency: 'AED'
+    };
+   
   }
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
@@ -6278,7 +6300,7 @@ export class AddPosComponent implements OnInit {
     let intVocCCRoundoff = 2;
 
     this.order_items_total_gross_amount = net_sum;
-    this.order_items_total_discount_amount = 0.0;
+    this.order_items_total_discount_amount = this.zeroAmtVal;
     // sales return items
     this.sales_returns_items.forEach(function (item: any) {
       total_sales_return_sum =
@@ -6568,14 +6590,17 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_item_code.setValue(this.currentStockCode);
     console.log('called', event.target.value);
 
-    this.snackBar.open('Loading...');
 
 
     if (event.target.value != '') {
+      this.snackBar.open('Loading...');
+
       if (this.comFunc.compAcCode == 'JHO001') {
         const stockExist = await this.checkStockCodeForParticularDate(event.target.value);
-        if (stockExist)
+        if (stockExist) {
+          this.snackBar.dismiss();
           return;
+        }
       }
       try {
 
@@ -6735,6 +6760,22 @@ export class AddPosComponent implements OnInit {
                 else
                   this.setMakingValidation();
 
+                if (this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString()) == false) {
+
+                  this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
+                  this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
+                  this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
+                } else {
+
+                  this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
+                  this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
+                  this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
+                    Validators.required,
+                  ]);
+                  this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [
+                    Validators.required,
+                  ]);
+                }
 
               } else {
                 // this.snackBar.open('Invalid Stock Code', 'OK');
@@ -7643,7 +7684,7 @@ export class AddPosComponent implements OnInit {
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
-                  if (this.posPlanetIssuing) {
+                  if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && this.customerDataForm.value.tourVatRefundNo == '') {
                     this.posPlanetFileInsert();
                     this.createPlanetPOSVoidFile(); // need to check
                   }
@@ -7677,8 +7718,15 @@ export class AddPosComponent implements OnInit {
 
                 this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
-                if (this.posPlanetIssuing) // check tourist vat refund checkbox && trno should empty
+                console.log('==================tourVatRefuncYN==================');
+                const traNo = this.customerDataForm.value.tourVatRefundNo || '';
+                console.log(this.posPlanetIssuing, this.customerDataForm.value.tourVatRefuncYN, traNo);
+                console.log('====================================');
+                if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && traNo == '') { // check tourist vat refund checkbox && trno should empty
+
                   this.posPlanetFileInsert();
+
+                }
 
                 this.submitAttachment();
 
@@ -9753,7 +9801,7 @@ export class AddPosComponent implements OnInit {
       REMARKS: '', //need_input
       POSCUSTCODE: this.customerDetails?.CODE || '',
       ITEM_CURRENCY: this.comFunc.compCurrency,
-      ITEM_CURR_RATE: 1,
+      ITEM_CURR_RATE: this.vocDataForm.value.txtCurRate || 1,
       ADJUST_ADVANCECC: 0,
       DISCOUNTCC: this.comFunc.CCToFC(
         this.comFunc.compCurrency,
@@ -9933,7 +9981,7 @@ export class AddPosComponent implements OnInit {
       PARTY_CURRENCY: this.comFunc.compCurrency,
       PARTY_CURR_RATE: 1,
       ITEM_CURRENCY: this.comFunc.compCurrency,
-      ITEM_CURR_RATE: 1,
+      ITEM_CURR_RATE: this.vocDataForm.value.txtCurRate || 1,
       VALUE_DATE: this.vocDataForm.value.vocdate,
       SALESPERSON_CODE: this.vocDataForm.value.sales_person, //need
       RATE_TYPE: this._exchangeItemchange?.METAL_RATE_TYPE || '', //need_input
@@ -10434,7 +10482,7 @@ export class AddPosComponent implements OnInit {
       EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
       POSCUSTCODE: this.customerDetails?.CODE || '',
       ITEM_CURRENCY: this.comFunc.compCurrency,
-      ITEM_CURR_RATE: 1,
+      ITEM_CURR_RATE: this.vocDataForm.value.txtCurRate || 1,
       ADJUST_ADVANCECC: 0, //need_input
 
       DISCOUNTCC: 0, //need_input
@@ -11545,7 +11593,9 @@ export class AddPosComponent implements OnInit {
           // In retail sales
           // update trno value to field
           // planeturl - 
-          // /PLANETRESPONEFLG = true    
+          // /PLANETRESPONEFLG = true  
+          this.getPlanetPOSUpdateTag();
+
         }
       });
   }
@@ -11566,6 +11616,15 @@ export class AddPosComponent implements OnInit {
   createPlanetPOSVoidFile() {
     const API = `POSPlanetFile/CreatePlanetPOSVoidFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
     this.suntechApi.postDynamicAPI(API, {})
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+        }
+      });
+  }
+
+  getPlanetPOSUpdateTag() {
+    const API = `POSPlanetFile/GetPlanetPOSUpdateTag/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+    this.suntechApi.getDynamicAPI(API)
       .subscribe((res: any) => {
         if (res.status == "Success") {
         }
@@ -11594,17 +11653,19 @@ export class AddPosComponent implements OnInit {
   }
 
   changeFinalDiscount(event: any) {
+    event.target.value = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(event.target.value))
     const value = event.target.value;
+
     if (value != '') {
 
-      let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals,  this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
-        this.comFunc.emptyToZero(value) );
-        this.order_items_total_net_amount = res;
-this.receiptTotalNetAmt = res;
+      let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
+        this.comFunc.emptyToZero(value));
+      this.order_items_total_net_amount = res;
+      this.receiptTotalNetAmt = res;
 
-} else {
-  this.order_items_total_net_amount = this.order_items_total_net_amount_org 
-  this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
+    } else {
+      this.order_items_total_net_amount = this.order_items_total_net_amount_org
+      this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
 
 
     }
