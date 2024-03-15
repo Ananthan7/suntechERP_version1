@@ -18,8 +18,8 @@
                             <label for="input" class="col-sm-3 col-form-label">Code * :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" maxlength="15" [readonly]="editCode" matInput
-                                        formControlName="code" oninput="this.value = this.value.toUpperCase()" />
+                                    <input type="text" #codeInput maxlength="15" [readonly]="editCode" matInput
+                                        formControlName="code" oninput="this.value = this.value.toUpperCase()"  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -62,7 +62,8 @@
                     <label for="input" class="col-sm-1 col-form-label">Karat :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="karat" [readonly]="viewModeField" />
+                            <input type="text" matInput formControlName="karat" 
+                             />
                         </mat-form-field>
                         <master-search [MasterSearchData]="karatCodeData" (newRowClick)="KaratCodeSelected($event)"
                             *ngIf="SearchDisable == viewMode">

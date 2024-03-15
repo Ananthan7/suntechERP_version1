@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -24,6 +24,7 @@ export class AlloyMasterComponent implements OnInit {
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   numericValue!: number;
+  branchCode:any = localStorage.getItem('userbranch');
 
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -83,7 +84,7 @@ export class AlloyMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) {
-
+    this.branchCode = this.commonService.branchCode
   }
 
   close(data?: any) {
@@ -92,10 +93,12 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.content.FLAG);
+    
     if (this.content.FLAG == 'EDIT') {
       this.setInitialValues()
     } else if (this.content.FLAG == 'VIEW') {
-      this.alloyMastereForm.disable()
+      // this.alloyMastereForm.disable()
       this.viewMode = true
       this.setInitialValues()
     }
@@ -247,7 +250,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -311,8 +314,8 @@ export class AlloyMasterComponent implements OnInit {
   currencyDataSelected(e: any) {
     console.log(e);
     if (this.checkStockCode()) return
-    this.alloyMastereForm.controls.currency.setValue(e.CURRENCY_CODE);
-    this.alloyMastereForm.controls.currencyRate.setValue(e.CONV_RATE);
+    this.alloyMastereForm.controls['currency'].setValue(e.CURRENCY_CODE);
+    this.alloyMastereForm.controls['currencyRate'].setValue(e.CONV_RATE);
      
   }
 
@@ -334,8 +337,10 @@ export class AlloyMasterComponent implements OnInit {
 
 
   vendorCodeSelected(e: any) {
+    console.log(e);    
     if (this.checkStockCode()) return
-    this.alloyMastereForm.controls.vendor.setValue(e.COUNT);
+    this.alloyMastereForm.controls.vendor.setValue(e['ACCOUNT HEAD']);
+    this.alloyMastereForm.controls.vendorRef.setValue(e.ACCODE);
   }
 
   typeCodeSelected(e: any) {
@@ -377,12 +382,16 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   checkStockCode(): boolean {
+    // if(this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT'){
+    //   return true;
+    // }else{
     if (this.alloyMastereForm.value.code == '') {
       this.commonService.toastErrorByMsgId('please enter stockcode')
       return true
     }
     return false
-  }
+  // }
+}
   priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
