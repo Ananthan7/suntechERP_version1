@@ -91,7 +91,9 @@ export class SchemeMasterComponent implements OnInit {
   }
   //number validation
   isNumeric(event: any) {
-    return this.comService.isNumeric(event);
+    var keyCode = event.which ? event.which : event.keyCode;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8;
+    return isValid;
   }
  
   getAllSelectOptions() {

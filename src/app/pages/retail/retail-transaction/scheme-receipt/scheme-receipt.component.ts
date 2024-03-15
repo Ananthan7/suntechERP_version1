@@ -138,6 +138,7 @@ export class SchemeReceiptComponent implements OnInit {
     IGST_ACCODE: [''],
     SGST_ACCODE: [''],
     CGST_ACCODE: [''],
+    POS_TAX_CRACCODE: [''],
     TotalAmount: [0],
     TotalTax: [0],
     SchemeBalance: [0],
@@ -163,7 +164,9 @@ export class SchemeReceiptComponent implements OnInit {
     } else {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT') {
         this.viewMode = true;
-        this.disablePostBtn = true;
+      }
+      if(this.content.FLAG == 'EDIT'){
+        this.disablePostBtn = false;
       }
     }
     this.setInitialValues()
@@ -212,7 +215,8 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
     this.receiptDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH);
     this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
-    this.disablePostBtn = this.content.AUTOPOSTING == 'Y' ? true : false;
+    this.receiptDetailsForm.controls.POS_TAX_CRACCODE.setValue(this.content.POS_TAX_CRACCODE);
+    this.disablePostBtn = (this.content.AUTOPOSTING || this.content.AUTOPOSTING == 'Y') ? true : false;
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
@@ -828,19 +832,11 @@ export class SchemeReceiptComponent implements OnInit {
             this.newReceiptData.CONV_RATE = data.CONV_RATE;
           }
         } else {
-          this.toastr.error(
-            "Customer not found",
-            result.Message ? result.Message : "",
-            {
-              timeOut: 3000,
-            }
-          );
+          this.commonService.toastErrorByMsgId("Customer not found");
         }
       },
       (err) =>
-        this.toastr.error("Server Error", "", {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId("Server Error")
     );
     this.subscriptions.push(Sub);
   }
@@ -953,11 +949,11 @@ export class SchemeReceiptComponent implements OnInit {
         "IGST_AMOUNTCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CGST_ACCODE": this.commonService.nullToString(item.CGST_ACCODE),
         "SGST_ACCODE": this.commonService.nullToString(item.SGST_ACCODE),
-        "IGST_ACCODE": this.commonService.nullToString(item.IGST_ACCODE),
+        "IGST_ACCODE": this.commonService.nullToString(item.POS_TAX_CRACCODE),
         "GST_HEADER_AMOUNT": this.commonService.emptyToZero(this.TOTAL_AMOUNTLC),
         "GST_NUMBER": "",
         "INVOICE_NUMBER": item.TRN_No,
-        "INVOICE_DATE": this.receiptDetailsForm.value.VocDate,
+        "INVOICE_DATE": this.commonService.formatDate(this.receiptDetailsForm.value.VocDate),
         "MIDPCR": 0,
         "CGST_CTRLACCODE": "",
         "SGST_CTRLACCODE": "",
@@ -999,7 +995,7 @@ export class SchemeReceiptComponent implements OnInit {
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
       "VOCTYPE": this.receiptDetailsForm.value.VocType || "PCR",
       "VOCNO": this.receiptDetailsForm.value.VocNo || 0,
-      "VOCDATE": this.commonService.formatDateTime(this.receiptDetailsForm.value.VocDate),
+      "VOCDATE": this.commonService.formatDate(this.receiptDetailsForm.value.VocDate),
       "VALUE_DATE": this.commonService.formatDateTime(this.currentDate),
       "YEARMONTH": this.receiptDetailsForm.value.YEARMONTH,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",

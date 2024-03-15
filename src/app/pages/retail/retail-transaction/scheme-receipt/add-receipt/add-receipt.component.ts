@@ -106,6 +106,9 @@ export class AddReceiptComponent implements OnInit {
     CGST_ACCODE: [''],
     SGST_ACCODE: [''],
     GST_GROUP: [''],
+    POS_TAX_CRACCODE: [''],
+    MIN_CONV_RATE: [''],
+    MAX_CONV_RATE: [''],
   })
   private subscriptions: Subscription[] = [];
   constructor(
@@ -375,6 +378,7 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.SGST_ACCODE.setValue(data.SGST_ACCODE);
           this.receiptEntryForm.controls.CGST_ACCODE.setValue(data.CGST_ACCODE);
           this.receiptEntryForm.controls.GST_GROUP.setValue(data.GST_GROUP);
+          this.receiptEntryForm.controls.POS_TAX_CRACCODE.setValue(data.POS_TAX_CRACCODE);
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
