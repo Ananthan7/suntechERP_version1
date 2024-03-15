@@ -211,8 +211,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput
-                                class="text-right"
-                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
+                                class="text-right" readonly
                                 formControlName="TenurePeriod" 
                                 (change)="updateMaturingDate()"/>
                         </mat-form-field>
@@ -269,8 +268,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput class="text-right"
-                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
-                                formControlName="TotalAmountToPay" />
+                                readonly formControlName="TotalAmountToPay" />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -306,8 +304,7 @@
                         <label class="matlabels">Sum Assured:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput
-                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
+                            <input type="text" matInput readonly
                                 formControlName="SumAssured"
                                 class="text-right" />
                         </mat-form-field>

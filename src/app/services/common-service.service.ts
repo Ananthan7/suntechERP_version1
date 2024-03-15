@@ -240,6 +240,11 @@ export class CommonServiceService {
       timeOut: 3000,
     })
   }
+  toastSuccessByText(Msg: string, Description?: string) {
+    this.toastr.success(Msg, Description ? Description : '', {
+      timeOut: 3000,
+    })
+  }
   toastSuccessByMsgId(MsgId: string, Description?: string) {
     this.toastr.success(this.getMsgByID(MsgId), Description ? Description : '', {
       timeOut: 3000,

@@ -31,7 +31,7 @@ export class SchemeReceiptComponent implements OnInit {
   currentDate = this.commonService.currentDate;
   dataToEditrow: any;
   disableAddBtn: boolean = true;
-  disablePostBtn: boolean = false;
+  disablePostBtn: boolean = true;
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
   rightSideHeader: string = "";
@@ -162,8 +162,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.fetchPartyCode();
       this.setCompanyCurrency();
     } else {
-      if (this.content.FLAG == 'VIEW') {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT') {
         this.viewMode = true;
+        this.disablePostBtn = false;
       }
     }
     if (this.inputElement) {
@@ -215,6 +216,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
+  //USE: account posting click fn 
   AccountPosting() {
     if (!this.content) return
     let params = {
@@ -232,7 +234,7 @@ export class SchemeReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.disablePostBtn = true
-          this.commonService.toastSuccessByMsgId('Posting Done')
+          this.commonService.toastSuccessByText('Posting Done')
         } else {
           this.commonService.toastErrorByMsgId(result.message)
         }
@@ -406,7 +408,7 @@ export class SchemeReceiptComponent implements OnInit {
     if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
     let inputValue = event.target.value;
     inputValue = inputValue.toUpperCase();
-    let data = this.salesmanArray.filter((item: any) => item.SALESPERSON_CODE == inputValue);
+    let data = this.commonService.SalespersonMasterData.filter((item: any) => item.SALESPERSON_CODE == inputValue);
     if (data.length > 0) {
       this.receiptDetailsForm.controls.Salesman.setValue(
         data[0].SALESPERSON_CODE
@@ -586,7 +588,8 @@ export class SchemeReceiptComponent implements OnInit {
   }
   //party Code Change
   customerChange(event: any, searchFlag: string) {
-    if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
+    if (event.target.value == "" ) return;
+    if (this.content?.FLAG == 'VIEW' || this.content?.FLAG == 'EDIT') return;
     this.VocNumberMain = "";
     this.resetSchemeDetails()
     this.commonService.showSnackBarMsg('Loading ...')
