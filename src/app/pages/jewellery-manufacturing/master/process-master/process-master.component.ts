@@ -133,23 +133,6 @@ export class ProcessMasterComponent implements OnInit {
   })
 
 
-  onchangeCheckBox(e: any) {
-    if (e == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  onchangeCheckBoxNUm(e:any){
-    if (e == true) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
-
 
 
   /**use: to check code exists in db */
@@ -395,7 +378,22 @@ export class ProcessMasterComponent implements OnInit {
 
   }
 
- 
+  onchangeCheckBox(e: any) {
+    if (e == true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  onchangeCheckBoxNUm(e:any){
+    if (e == true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
   // final save
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -441,7 +439,7 @@ export class ProcessMasterComponent implements OnInit {
           "UNIT_RATE": 0,
           "LAB_ACCODE": "",
           "LAST_NO": "",
-          "REPAIR_PROCESS": this.onchangeCheckBoxNUm(this.processMasterForm.value.RepairProcess),
+          "REPAIR_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RepairProcess),
           "FINAL_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.FinalProcess),
           "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
           "TRAY_WT": this.processMasterForm.value.trayWeight || 0,
@@ -459,7 +457,7 @@ export class ProcessMasterComponent implements OnInit {
           "RECOV_ACCODE": this.processMasterForm.value.accountMiddle,
           "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || "",
           "RECOV_VAR1": this.processMasterForm.value.min_end || 0,
-          "RECOV_VAR2": 0,
+          "RECOV_VAR2":this.processMasterForm.value.recovery,
           "DEDUCT_PURE_WT": this.onchangeCheckBox(this.processMasterForm.value.DeductPureWeight),
           "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
           "APPR_CODE": this.processMasterForm.value.approvalCode || "",
@@ -643,7 +641,7 @@ export class ProcessMasterComponent implements OnInit {
       "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
       "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
       "ALLOW_METAL": this.processMasterForm.value.Metal,
-      "ALLOW_STONE":  this.onchangeCheckBox( this.processMasterForm.value.Stone),
+      "ALLOW_STONE": this.processMasterForm.value.Stone,
       "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
       "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
       "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
