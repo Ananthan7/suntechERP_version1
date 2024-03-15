@@ -59,21 +59,11 @@ export class CustomerPriceSettingComponent implements OnInit {
    
   }
 
-  selectstock(event:any){
-    if(this.customerpricesettingForm.value.stockCode == true){
-    this.isdisabled = false
+  selectStock() {
+    this.checkboxvalue = !this.checkboxvalue;
   }
-  else{
-    this.isdisabled = true
-    this.customerpricesettingForm.controls.group1.setValue('');
-    this.customerpricesettingForm.controls.group2.setValue('');
-    this.customerpricesettingForm.controls.group3.setValue('');
-    this.customerpricesettingForm.controls.group4.setValue('');
-    this.customerpricesettingForm.controls.group5.setValue('');
-    this.customerpricesettingForm.controls.group6.setValue('');
-
-  }
-}
+  
+  
   customerpricesettingForm: FormGroup = this.formBuilder.group({
     pricecode:['',[Validators.required]],
     date:[new Date(),''],

@@ -1,0 +1,128 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Job Work Allocation</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header  (cancelClick)="close()"  [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+<div class="container-fluid pt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <form>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <div class="row mb-1 ">
+                            <h5>{{branchCode}}</h5>
+                        </div>
+                        <div class="row mb-1 ">
+                            <label for="inputPassword" class="col-sm-2">Date :</label>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput [matDatepicker]="vocDate" [max]="vocDate" 
+                                        placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-2">Voc :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="number" matInput  [dir]="'rtl'"
+                                        style="text-align: right;" />
+                                </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-3">Entered By :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput   />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                       
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-6 offset-2">
+                               <h5>Posted</h5>            
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 py-4">
+                        <div class="row">
+                            <div class="col-md-8 offset-2">
+                                <button type="button" class="btn btn-outline-primary  add-btn">
+                                Select Sales Orders
+                            </button>
+                            </div>                
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="row mt-3 pt-4">
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-12 d-flex">
+                              <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                [viewImportBtn]="false">
+                              </menu-buttons>
+                              <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                  <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search>
+                                </master-search>
+                              </div>
+                            </div>
+                          </div>
+            
+                                <div class="row pt-2">
+                                    <div class="col-md-12">
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                            [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                            </dxo-editing>
+                                            <dxo-selection mode="multiple"></dxo-selection>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                            <dxi-column *ngFor="let data of columnheadItemDetails"
+                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                                alignment="center" backgroundcolor="#000">
+                                            </dxi-column>
+                                        </dx-data-grid>
+                                    </div>
+                                </div>
+                                
+                        
+                    </div>
+                </div>
+                <div class="row align-items-center pt-2">
+                    <div class="col-md-6">
+                        <div class="row my-2">
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Remarks :</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="remarks" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

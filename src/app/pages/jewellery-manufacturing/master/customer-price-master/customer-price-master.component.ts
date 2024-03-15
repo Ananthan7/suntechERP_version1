@@ -21,7 +21,7 @@ export class CustomerPriceMasterComponent implements OnInit {
 
   divisionMS: any = 'ID';
   columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
-  columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'LABOUR_CODE'},
+  columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'CODE'},
    { title:'DIVISION_CODE', field: 'DIVISION_CODE'},
    { title:'SHAPE', field: 'SHAPE'},
    { title:'DIVISION', field: 'DIVISION'},
