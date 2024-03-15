@@ -285,7 +285,7 @@ export class MeltingTypeComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: `KARAT_CODE ='${this.meltingTypeForm.value.karat}'and PURITY='${this.meltingTypeForm.value.purity}'and SUBCODE='0'`,
+    WHERECONDITION: `KARAT_CODE =${this.meltingTypeForm.value.karat} PURITY =${this.meltingTypeForm.value.purity} SUBCODE =0`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
