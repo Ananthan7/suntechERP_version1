@@ -114,10 +114,10 @@ export class SchemeRegisterComponent implements OnInit {
   Attachedfile: any[] = [];
 
   schemeRegistrationForm: FormGroup = this.formBuilder.group({
-    SchemeId: [''],
+    SchemeId: ['', Validators.required],
     SCHEME_CODE: [''],
     Code: ['', Validators.required],
-    Name: ['', Validators.required],
+    Name: [''],
     MobileNo: [''],
     Email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     PanNo: [''],
@@ -137,7 +137,7 @@ export class SchemeRegisterComponent implements OnInit {
     SalesmanName: [''],
     SumAssured: [''],
     Remarks: [''],
-    SendAlert: [false],
+    SendAlert: [true],
     VOCTYPE: [''],
     VOCDATE: [''],
     SCH_REMINDER_MODE: [0],
@@ -710,7 +710,6 @@ export class SchemeRegisterComponent implements OnInit {
   setFormData() {
     this.setPostData();
     let formValue = this.schemeRegistrationForm.value
-    console.log(this.detailArray,'this.detailArray');
     
     this.detailArray.forEach((item: any, i: any) => {
       // delete item.schemeData['ID'];
@@ -803,18 +802,27 @@ export class SchemeRegisterComponent implements OnInit {
   }
   submitValidation(){
     let flag = false
-    if (this.schemeRegistrationForm.invalid) {
-      this.commonService.toastErrorByMsgId('select all required details!')
+    // /Code Name Salesman
+    if (this.schemeRegistrationForm.value.Code == '') {
+      this.commonService.toastErrorByMsgId('Customer Code Required')
+      flag = true
+    }
+    if (this.schemeRegistrationForm.value.SchemeId == '') {
+      this.commonService.toastErrorByMsgId('Scheme Code Required')
+      flag = true
+    }
+    if (this.schemeRegistrationForm.value.Salesman == '') {
+      this.commonService.toastErrorByMsgId('Salesman Required')
       flag = true
     }
     if (this.SchemeMasterDetails.length == 0) {
       this.commonService.toastErrorByMsgId('Process Scheme Before saving')
       flag = true
     }
-    if (this.schemeRegistrationForm.value.SendAlert && this.schemeRegistrationForm.value.Email == '' ) {
-      this.commonService.toastErrorByMsgId('Mail Id required')
-      flag = true
-    }
+    // if (this.schemeRegistrationForm.value.SendAlert && this.schemeRegistrationForm.value.Email == '' ) {
+    //   this.commonService.toastErrorByMsgId('Mail Id required for Send Alert')
+    //   flag = true
+    // }
     return flag
   }
 

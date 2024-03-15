@@ -156,7 +156,7 @@
                         <input type="text" matInput [readonly]="disableAmountFC"
                             class="text-right"
                             formControlName="CurrRate"
-                            (change)="currencyRateChange()"
+                            (change)="currencyRateChange($event)"
                             (keypress)="isNumeric($event)" />
                     </mat-form-field>
                 </div>

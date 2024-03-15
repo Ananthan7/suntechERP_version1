@@ -263,16 +263,24 @@ export class AddReceiptComponent implements OnInit {
       this.close(this.receiptEntryForm.value)
     }
   }
-  currencyRateChange() {
-    if(this.receiptEntryForm.value.CurrRate < this.receiptEntryForm.value.MIN_CONV_RATE){
-      this.commonService.toastErrorByMsgId('Rate should not be less than '+this.receiptEntryForm.value.MIN_CONV_RATE)
+  currencyRateChange(event:any) {
+    let form = this.receiptEntryForm.value
+    console.log(form.MIN_CONV_RATE,'form.MIN_CONV_RATE');
+    console.log(form.MAX_CONV_RATE,'form.MAX_CONV_RATE');
+    
+    if(this.commonService.emptyToZero(event.target.value) < this.commonService.emptyToZero(form.MIN_CONV_RATE)){
+      this.commonService.toastErrorByMsgId('Rate should not be less than '+form.MIN_CONV_RATE)
       this.receiptEntryForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(this.receiptEntryForm.value.MIN_CONV_RATE,'RATE')
+        this.commonService.decimalQuantityFormat(form.MIN_CONV_RATE,'RATE')
       )
-    }else if(this.receiptEntryForm.value.CurrRate > this.receiptEntryForm.value.MAX_CONV_RATE){
-      this.commonService.toastErrorByMsgId('Rate should not be greater than '+ this.receiptEntryForm.value.MIN_CONV_RATE)
+    }else if(this.commonService.emptyToZero(event.target.value) > this.commonService.emptyToZero(form.MAX_CONV_RATE)){
+      this.commonService.toastErrorByMsgId('Rate should not be greater than '+ form.MAX_CONV_RATE)
       this.receiptEntryForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(this.receiptEntryForm.value.MAX_CONV_RATE,'RATE')
+        this.commonService.decimalQuantityFormat(form.MAX_CONV_RATE,'RATE')
+      )
+    }else{
+      this.receiptEntryForm.controls.CurrRate.setValue(
+        this.commonService.decimalQuantityFormat(event.target.value,'RATE')
       )
     }
     this.setFormControlAmount('Header_Amount', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
@@ -509,11 +517,7 @@ export class AddReceiptComponent implements OnInit {
             this.receiptEntryForm.controls.CurrRate.setValue(
               this.commonService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
             )
-            let val = this.receiptEntryForm.value
-            let amount = this.commonService.emptyToZero(val.Amount_FC) * this.commonService.emptyToZero(val.CurrRate)
-
-            this.setFormControlAmount('Header_Amount', amount.toFixed(2))
-            this.setFormControlAmount('Amount_LC', amount.toFixed(2))
+            this.calculateAmountFC()
             this.getTaxDetails()
             this.getCurrencyMasterDetail()
             this.currencyRate = data.CONV_RATE
