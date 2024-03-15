@@ -3,6 +3,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { JobVerificationComponent } from './favorites/job-verification/job-verification.component';
+import { JobWorkAllocationComponent } from './favorites/job-work-allocation/job-work-allocation.component';
+import { SalesOrderAmendmentComponent } from './favorites/sales-order-amendment/sales-order-amendment.component';
 
 @Component({
   selector: 'app-jewellery-manufacturing',
@@ -34,6 +36,27 @@ export class JewelleryManufacturingComponent implements OnInit {
   openJobVerification() {
     // let i = 0;
     const modalRef: NgbModalRef = this.modalService.open(JobVerificationComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openJobworkallocation() {
+    // let i = 0;
+    const modalRef: NgbModalRef = this.modalService.open(JobWorkAllocationComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  
+  opensalesorderamendment() {
+    // let i = 0;
+    const modalRef: NgbModalRef = this.modalService.open(SalesOrderAmendmentComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,

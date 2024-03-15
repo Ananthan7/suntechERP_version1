@@ -6,12 +6,16 @@ import { JewelleryManufacturingComponent } from './jewellery-manufacturing.compo
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UtilitiesComponent } from './utilities/utilities.component';
 import { JobVerificationComponent } from './favorites/job-verification/job-verification.component';
+import { JobWorkAllocationComponent } from './favorites/job-work-allocation/job-work-allocation.component';
+import { SalesOrderAmendmentComponent } from './favorites/sales-order-amendment/sales-order-amendment.component';
 
 @NgModule({
   declarations: [
     JewelleryManufacturingComponent,
     UtilitiesComponent,
-    JobVerificationComponent
+    JobVerificationComponent,
+    JobWorkAllocationComponent,
+    SalesOrderAmendmentComponent
   ],
   imports: [
     CommonModule,
