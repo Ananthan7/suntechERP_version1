@@ -86,45 +86,42 @@ export class StoneReturnComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.userName = this.comService.userName;
-
+    this.setAllInitialValues()
     this.setvalues()
   }
   setAllInitialValues() {
     console.log(this.content)
     if (!this.content) return
-    let API = `JobMetalReturnMasterDJ/GetJobMetalReturnMasterDJWithMID/${this.content.MID}`
+    let API = `JobStoneReturnMasterDJ/GetJobStoneReturnMasterDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          this.stoneReturnData = data.Details
-          console.log(this.tableData, 'table')
-          data.Details.forEach((element: any) => {
-            this.tableData.push({
+    .subscribe((result) => {
+      if (result.response) {
+        let data = result.response
+        console.log(data, 'll')
+        this.stoneReturnData = data.Details
+        data.Details.forEach((element: any) => {
+          this.tableData.push({
               SRNO: element.SRNO,
-              Job_id: element.JOB_NUMBER,
-              Unq_job_id: element.UNQ_JOB_ID,
-              Process: element.PROCESS_CODE,
-              Design: element.DESIGN_CODE,
-              Stock_Code: element.STOCK_CODE,
-              Worker: element.WORKER_CODE,
-              Description: element.JOB_DESCRIPTION,
-              Carat: element.KARAT_CODE,
-              Rate: element.RATE_TYPE,
-              Division: element.DIVCODE,
-              Amount: element.NET_WT,
-
+              VOCNO: element.VOCNO,
+              VOCTYPE: element.VOCTYPE,
+              VOCDATE: element.VOCDATE,
+              JOB_NO: element.JOB_NUMBER,
+              JOB_DATE: element.JOB_DATE,
+              UNQ_JOB: element.UNQ_JOB_ID                       ,
+              JOB_DE: element.JOB_DESCRIPTION,
+              BRANCH: element.BRANCH_CODE,
 
             })
           });
-          this.stonereturnFrom.controls.vocType.setValue(data.VOCTYPE)
-          this.stonereturnFrom.controls.vocNo.setValue(data.VOCNO)
-          this.stonereturnFrom.controls.vocDate.setValue(data.VOCDATE)
-          this.stonereturnFrom.controls.process.setValue(data.Details[0].PROCESS_CODE)
-          this.stonereturnFrom.controls.worker.setValue(data.Details[0].WORKER_CODE)
-          this.stonereturnFrom.controls.enteredBy.setValue(data.Details[0].SMAN)
-          this.stonereturnFrom.controls.location.setValue(data.Details[0].LOCTYPE_CODE)
-          this.stonereturnFrom.controls.remarks.setValue(data.Details[0].REMARKS)
+         
+          this.stonereturnFrom.controls.basecurrency.setValue(data.Details.BASE_CURRENCY)
+          this.stonereturnFrom.controls.basecurrencyrate.setValue(data.Details.BASE_CURR_RATE)
+          this.stonereturnFrom.controls.currency.setValue(data.Details.CURRENCY_CODE)
+          this.stonereturnFrom.controls.currencyrate.setValue(data.Details.CURRENCY_RATE)
+          this.stonereturnFrom.controls.worker.setValue(data.Details.WORKER)
+          this.stonereturnFrom.controls.workername.setValue(data.Details.WORKER_NAME)
+          this.stonereturnFrom.controls.enterdBy.setValue(data.Details.HTUSERNAME)
+          this.stonereturnFrom.controls.enteredByName.setValue(data.Details.REMARKS)
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')

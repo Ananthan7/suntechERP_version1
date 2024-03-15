@@ -49,6 +49,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.setFormValues()
   }
   subJobNoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -106,7 +107,33 @@ export class StoneReturnDetailsComponent implements OnInit {
     amount: [''],
     pointerwt: [''],
   });
-
+  setFormValues() {
+    if (!this.content) return
+    this.stonereturndetailsFrom.controls.jobDesc.setValue(this.content.JOB_NUMBER)
+    this.stonereturndetailsFrom.controls.subjobno.setValue(this.content.JOB_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.subjobDesc.setValue(this.content.GROSS_WT)
+    this.stonereturndetailsFrom.controls.designcode.setValue(this.content.PROCESS_CODE)
+    this.stonereturndetailsFrom.controls.salesorderno.setValue(this.content.PROCESS_NAME)
+    this.stonereturndetailsFrom.controls.process.setValue(this.content.WORKER_CODE)
+    this.stonereturndetailsFrom.controls.processname.setValue(this.content.WORKER_NAME)
+    this.stonereturndetailsFrom.controls.worker.setValue(this.content.DIVCODE)
+    this.stonereturndetailsFrom.controls.workername.setValue(this.content.STONE_WT)
+    this.stonereturndetailsFrom.controls.stock.setValue(this.content.PURE_WT)
+    this.stonereturndetailsFrom.controls.stockdes.setValue(this.content.PCS)
+    this.stonereturndetailsFrom.controls.batchid.setValue(this.content.PURITY)
+    this.stonereturndetailsFrom.controls.broken.setValue(this.content.JOB_SO_NUMBER)
+    this.stonereturndetailsFrom.controls.pieces.setValue(this.content.JOB_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.size.setValue(this.content.NET_WT)
+    this.stonereturndetailsFrom.controls.sieve.setValue(this.content.STOCK_CODE)
+    this.stonereturndetailsFrom.controls.carat.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.color.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.carat.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.clarity.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.unitrate.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.shape.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.amount.setValue(this.content.STOCK_DESCRIPTION)
+   
+  };
 
 
   removedata() {
