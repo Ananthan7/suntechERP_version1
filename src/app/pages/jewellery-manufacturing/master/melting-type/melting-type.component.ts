@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -36,9 +36,15 @@ export class MeltingTypeComponent implements OnInit {
   allStockCodes: any;
   filteredStockCodes: any[] | undefined;
 
-  karatval:any;
-  purityval:any;
+  karatval: any;
+  purityval: any;
 
+  @ViewChild('codeInput')
+  codeInput!: ElementRef;
+
+  ngAfterViewInit(): void {
+      this.codeInput.nativeElement.focus();
+  }
 
 
   constructor(
@@ -247,10 +253,13 @@ export class MeltingTypeComponent implements OnInit {
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+
   }
 
   KaratCodeSelected(e: any) {
     console.log(e);
+   
+
     this.meltingTypeForm.controls.karat.setValue(e['Karat Code']);
     this.meltingTypeForm.controls.purity.setValue(e.STD_PURITY);
 
@@ -265,18 +274,12 @@ export class MeltingTypeComponent implements OnInit {
     // Set the calculated values in the form controls
     this.meltingTypeForm.controls.metal.setValue(parseFloat(metalPercentage));
     this.meltingTypeForm.controls.alloy.setValue(parseFloat(alloyPercentage));
+
+    this.meltingTypeForm.controls.stockCode.setValue('');
+
+    this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.meltingTypeForm.value.karat}' AND PURITY = '${this.meltingTypeForm.value.purity}' AND SUBCODE = 0`;
+
   }
-
-  // setInitialval(){
-  //   this.purityval = parseFloat(this.meltingTypeForm.value.purity);
-  //   this.karatval = parseFloat(this.meltingTypeForm.value.karat);
-  // }
-
-  
- 
-
-  
-
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -285,14 +288,14 @@ export class MeltingTypeComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: `KARAT_CODE ='${this.meltingTypeForm.value.karat}'and PURITY='${this.meltingTypeForm.value.purity}'and SUBCODE='0'`,
+    WHERECONDITION: 'SUBCODE = 0',
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
 
   StockCodeSelected(e: any) {
-    
+
     console.log(e);
     this.meltingTypeForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.meltingTypeForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
@@ -486,7 +489,7 @@ export class MeltingTypeComponent implements OnInit {
   }
 
 
-  
+
   // deleteTableData() {
 
 
@@ -498,13 +501,13 @@ export class MeltingTypeComponent implements OnInit {
   //   } else {
   //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
   //   }
-    
+
   // }
 
   deleteTableData() {
     console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
     console.log(this.selectedIndexes);
-    
+
     if (this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
@@ -526,10 +529,10 @@ export class MeltingTypeComponent implements OnInit {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-  
 
 
-  
+
+
 
   defaultAlloy: MasterSearchModel = {
     PAGENO: 1,
@@ -568,6 +571,9 @@ export class MeltingTypeComponent implements OnInit {
     this.tableData[value.data.SRNO - 1].ALLOY_PER = data.target.value;
   }
 
+  karatCodSearch(data: any) {
+
+  }
 
 
 }
