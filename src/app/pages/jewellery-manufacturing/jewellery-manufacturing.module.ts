@@ -5,11 +5,13 @@ import { JewelleryManufacturingRoutingModule } from './jewellery-manufacturing.r
 import { JewelleryManufacturingComponent } from './jewellery-manufacturing.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UtilitiesComponent } from './utilities/utilities.component';
+import { JobVerificationComponent } from './favorites/job-verification/job-verification.component';
 
 @NgModule({
   declarations: [
     JewelleryManufacturingComponent,
-    UtilitiesComponent
+    UtilitiesComponent,
+    JobVerificationComponent
   ],
   imports: [
     CommonModule,
