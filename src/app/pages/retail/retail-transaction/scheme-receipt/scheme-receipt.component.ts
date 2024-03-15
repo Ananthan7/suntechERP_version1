@@ -108,7 +108,7 @@ export class SchemeReceiptComponent implements OnInit {
     SalesmanName: [""],
     PartyCode: [""],
     PartyDescription: [""],
-    VocType: ["PCR"],
+    VocType: [""],
     VocDate: [""],
     VocNo: [""],
     CurrCode: [""],
