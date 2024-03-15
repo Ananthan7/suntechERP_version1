@@ -29,6 +29,23 @@ export class CustomerPriceSettingComponent implements OnInit {
   checkboxvalue:boolean = true
   public isChecked = true;
 
+  disableSelect = false;
+  groups = [
+    { type: 'None', value: 'None' },
+    { type: 'Category', value: 'Category' },
+    { type: 'Sub Category', value: 'Sub Category' },
+    { type: 'Brand Code', value: 'Brand Code' },
+    { type: 'Type', value: 'Type' },
+    { type: 'Collection', value: 'Collection' },
+    { type: 'Sub-Collection', value: 'Sub-Collection' },
+    { type: 'Stone Type/Look', value: 'Stone Type/Look' },
+    { type: 'Setting', value: 'Setting' },
+    { type: 'Shape', value: 'Shape' },
+    { type: 'Inc Cat', value: 'Inc Cat' },
+    { type: 'Order Ref', value: 'Order Ref' }
+  ];
+  
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -39,13 +56,24 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
-    // this.customerpricesettingForm.controls['designCode'].disable();
+   
   }
 
   selectstock(event:any){
-    this.isdisabled = true
+    if(this.customerpricesettingForm.value.stockCode == true){
+    this.isdisabled = false
   }
+  else{
+    this.isdisabled = true
+    this.customerpricesettingForm.controls.group1.setValue('');
+    this.customerpricesettingForm.controls.group2.setValue('');
+    this.customerpricesettingForm.controls.group3.setValue('');
+    this.customerpricesettingForm.controls.group4.setValue('');
+    this.customerpricesettingForm.controls.group5.setValue('');
+    this.customerpricesettingForm.controls.group6.setValue('');
 
+  }
+}
   customerpricesettingForm: FormGroup = this.formBuilder.group({
     pricecode:['',[Validators.required]],
     date:[new Date(),''],
@@ -53,7 +81,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     division:['',[Validators.required]],
     currency:['',[Validators.required]],
     approvedby:[''],
-    enteredBy:[''],
+    enteredBy:['',[Validators.required]],
     stockCode:[''],
     designCode:[''],
     group1:['',[Validators.required]],
@@ -138,6 +166,10 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   formSubmit(){
 
+    if(this.customerpricesettingForm.value.enteredBy == ''){
+      this.toastr.error('Entered By Cannot be empty ')
+    }
+
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -150,11 +182,11 @@ export class CustomerPriceSettingComponent implements OnInit {
     let API = 'CustomerVendorPricingMaster/InsertCustomerVendorPricingMaster'
     let postData = {
       "MID": 0,
-      "CUSTOMER_CODE":"string",
-      "CUSTOMER_NAME": "string",
+      "CUSTOMER_CODE":"",
+      "CUSTOMER_NAME": "",
       "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
       "PRICE_DESCRIPTION": this.customerpricesettingForm.value.description || "",
-      "LABOUR_TYPE": "string",
+      "LABOUR_TYPE": "",
       "DIVISION": this.customerpricesettingForm.value.division || "",
       "CREATED_DATE": this.customerpricesettingForm.value.date || "",
       "ENTERED_BY":this.customerpricesettingForm.value.enteredby || "",
@@ -164,7 +196,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
       "GROUP3": this.customerpricesettingForm.value.group3 || "",
       "IS_ACTIVE": true,
-      "BRANCH_CODE": "string",
+      "BRANCH_CODE": "",
       "DEFAULT_CUST": true,
       "DEFAULT_SUPP": true,
       "GROUP4": this.customerpricesettingForm.value.group4 || "",
@@ -480,4 +512,25 @@ export class CustomerPriceSettingComponent implements OnInit {
       }
     });
   }
+
+
+  onSelectionChange(selectedValue: any, groupName: string) {
+    const formValue = this.customerpricesettingForm.value;
+  
+    
+    for (let groupKey in formValue) {
+      if (groupKey !== groupName && formValue[groupKey] === selectedValue) {
+       
+        if (selectedValue !== null) {
+          this.toastr.error('The same value cannot be repeated in different groups.');
+     
+          this.customerpricesettingForm.get(groupName)?.setValue(null);
+          return; 
+        }
+      }
+    }
+  }
+  
+  
+  
 }

@@ -349,6 +349,7 @@
               matInput
               id="voc_type"
               formControlName="voc_type"
+              readonly
             />
           </mat-form-field>
         </div>
@@ -816,6 +817,7 @@
                             dataField="weight"
                             caption="Weight"
                             [width]="100"
+                            [format]="weightDecimalFormat"
                             [allowEditing]="false"
                           >
                           </dxi-column>
@@ -831,16 +833,15 @@
                             caption="Metal Value"
                             [width]="100"
                             [allowEditing]="false"
+                            [format]="amountDecimalFormat"
                           ></dxi-column>
 
                           <dxi-column
                             dataField="total_amount"
                             caption="Mkg amount"
                             alignment="right"
-                            format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
                             [allowEditing]="false"
-                            precision="2"
+                            [format]="amountDecimalFormat"
                             [width]="150"
                           ></dxi-column>
                           <dxi-column
@@ -877,8 +878,10 @@
                               column="weight"
                               summaryType="sum"
                               caption="Weight"
-                              [customizeText]="customizeWeight"
-                            >
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+                              >
+                              <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
                               column="pcs"
@@ -892,7 +895,7 @@
                               displayFormat="AED {0}"
                               type="fixedPoint"
                               precision="2"
-                              [valueFormat]="{ currency: 'AED' }"
+                              [valueFormat]="gridAmountDecimalFormat"
                             >
                             </dxi-total-item>
                             <dxi-total-item
@@ -900,7 +903,8 @@
                               summaryType="sum"
                               displayFormat="AED {0}"
                               precision="2"
-                              [valueFormat]="{ currency: 'AED' }"
+                              [valueFormat]="gridAmountDecimalFormat"
+                              
                             >
                             </dxi-total-item>
                             <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
@@ -988,8 +992,11 @@
                           <dxi-column
                             dataField="weight"
                             caption="Weight"
-                            [width]="70"
+                            [width]="100"
                             [allowEditing]="false"
+                            displayFormat="Wt: {0}"
+
+                            [format]="weightDecimalFormat"
                           >
                           </dxi-column>
                           <dxi-column
@@ -1002,16 +1009,18 @@
                             dataField="mkg_amount"
                             alignment="right"
                             format="currency"
-                            [width]="200"
-                            [format]="{ style: 'currency', currency: 'AED' }"
+                            [width]="150"
                             [allowEditing]="false"
+                            [format]="amountDecimalFormat"
                           ></dxi-column>
                           <dxi-column
                             dataField="total_amount"
                             alignment="right"
                             format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
                             [allowEditing]="false"
+                            [format]="amountDecimalFormat"
+                            [width]="150"
+
                           >
                           </dxi-column>
                           <!-- <dxi-column type="buttons" >
@@ -1035,8 +1044,11 @@
                               column="weight"
                               summaryType="sum"
                               caption="Total Wt"
-                              [customizeText]="customizeWeight"
-                            >
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+
+                              >
+                              <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
                               column="pcs"
@@ -1047,15 +1059,15 @@
                             <dxi-total-item
                               column="mkg_amount"
                               summaryType="sum"
+                              [valueFormat]="gridAmountDecimalFormat"
                               displayFormat="AED {0}"
-                              [valueFormat]="{ currency: 'AED' }"
                             >
                             </dxi-total-item>
                             <dxi-total-item
                               column="total_amount"
                               summaryType="sum"
+                              [valueFormat]="gridAmountDecimalFormat"
                               displayFormat="AED {0}"
-                              [valueFormat]="{ currency: 'AED' }"
                             >
                               <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxi-total-item>
@@ -1140,6 +1152,8 @@
                             caption="Weight"
                             [width]="100"
                             [allowEditing]="false"
+                           [format]="weightDecimalFormat"
+
                           >
                           </dxi-column>
                           <dxi-column
@@ -1151,8 +1165,7 @@
                           <dxi-column
                             dataField="net_amount"
                             alignment="right"
-                            format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
+                           [format]="amountDecimalFormat"
                             [allowEditing]="false"
                           >
                           </dxi-column>
@@ -1177,8 +1190,11 @@
                               column="weight"
                               summaryType="sum"
                               caption="Total Wt"
-                              [customizeText]="customizeWeight"
-                            >
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+
+                              >
+                              <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
                               column="pcs"
@@ -1189,8 +1205,8 @@
                             <dxi-total-item
                               column="net_amount"
                               summaryType="sum"
+                              [valueFormat]="gridAmountDecimalFormat"
                               displayFormat="AED {0}"
-                              [valueFormat]="{ currency: 'AED' }"
                             >
                               <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxi-total-item>
@@ -1581,7 +1597,7 @@
                     }}"
                     (change)="changeFinalDiscount($event)"
                     aria-describedby
-                    placeholder="0"
+                    placeholder="0.00"
                     [readonly]="viewOnly"
                   />
                 </td>

@@ -32,7 +32,7 @@ export class ProcessMasterComponent implements OnInit {
   islossReadOnly = true;
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
-  processMasterForm !: FormGroup;
+ // processMasterForm !: FormGroup;
 
   lossData: any;
 
@@ -55,30 +55,127 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-/**use: to check code exists in db */
-checkCodeExists(event: any) {
-  if (event.target.value == '' || this.viewMode == true) return
-  let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
-  let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.checkifExists) {
-        Swal.fire({
-          title: '',
-          text: result.message || 'Process Code Already Exists!',
-          icon: 'warning',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        }).then((result: any) => {
-          if (result.value) {
-          }
-        });
+
+  ngOnInit(): void {
+
+
+    // this.islossReadOnly = true;
+    // this.isRecovReadOnly = true;
+    // this.isAlloWGainReadOnly = true;
+
+    this.setInitialValues()
+    this.getProcessTypeOptions()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setFormValues();
+      // this.processMasterForm();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.setFormValues();
+
+    }
+  }
+  
+  
+   processMasterForm: FormGroup = this.formBuilder.group({
+    mid: [''],
+    processCode: ['', [Validators.required]],
+    processDesc: ['', [Validators.required]],
+    processType: [null],
+    stand_time: [''],
+    WIPaccount: ['', [Validators.required]],
+    max_time: [''],
+    Position: [''],
+    trayWeight: [''],
+    approvalCode: [''],
+    approvalProcess: [''],
+    recStockCode: [''],
+    labour_charge: [''],
+    accountStart: [''],
+    accountMiddle: [''],
+    accountEnd: [''],
+    loss: [false],
+    recovery: [false],
+    allowGain: [false],
+    accode_start: [''],
+    accode_end: [''],
+    accode_middle: [''],
+    loss_on_gross: [false],
+    FinalProcess: [false],
+    Setting: [false],
+    LabProcess: [false],
+    WaxProcess: [false],
+    Stone: [false],
+    MergePices: [false],
+    LockWeight: [false],
+    HaveTreeNo: [false],
+    NonQuantity: [false],
+    Consumable: [false],
+    RefineryAutoProcess: [false],
+    ApplyAutoLossToRefinery: [false],
+    RepairProcess: [false],
+    Metal: [false],
+    ApprovalRequired: [false],
+    DeductPureWeight: [false],
+    StoneIncluded: [false],
+    TimeCalculateonProcess: [false],
+    RecoveryProcess: [false],
+    AutoTransfer: [false],
+    ApplySetting: [false],
+    loss_standard: [''],
+    loss_min: ['', [Validators.min(0)]],
+    loss_max: [''],
+    standard_start: [''],
+    standard_end: [''],
+    min_start: [''],
+    min_end: ['', [Validators.min(0)]],
+    max: [''],
+
+  })
+
+
+  onchangeCheckBox(e: any) {
+    if (e == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onchangeCheckBoxNUm(e:any){
+    if (e == true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+
+
+
+  /**use: to check code exists in db */
+  checkCodeExists(event: any) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Process Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.processMasterForm.controls.processCode.setValue('')
+        }
+      }, err => {
         this.processMasterForm.controls.processCode.setValue('')
-      }
-    }, err => {
-      this.processMasterForm.controls.processCode.setValue('')
-    })
-  this.subscriptions.push(Sub)
-}
+      })
+    this.subscriptions.push(Sub)
+  }
 
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;
@@ -200,80 +297,7 @@ checkCodeExists(event: any) {
     // this.setInitialValues()
   }
 
-  ngOnInit(): void {
-
-    this.processMasterForm = this.formBuilder.group({
-      mid: [''],
-      processCode: ['', [Validators.required]],
-      processDesc: ['', [Validators.required]],
-      processType: [null],
-      stand_time: [''],
-      WIPaccount: ['', [Validators.required]],
-      max_time: [''],
-      Position: [''],
-      trayWeight: [''],
-      approvalCode: [''],
-      approvalProcess: [''],
-      recStockCode: [''],
-      labour_charge: [''],
-      accountStart: [''],
-      accountMiddle: [''],
-      accountEnd: [''],
-      loss: [false],
-      recovery: [false],
-      allowGain: [false],
-      accode_start: [''],
-      accode_end: [''],
-      accode_middle: [''],
-      loss_on_gross: [false],
-      FinalProcess: [false],
-      Setting: [false],
-      LabProcess: [false],
-      WaxProcess: [false],
-      Stone: [false],
-      MergePices: [false],
-      LockWeight: [false],
-      HaveTreeNo: [false],
-      NonQuantity: [false],
-      Consumable: [false],
-      RefineryAutoProcess: [false],
-      ApplyAutoLossToRefinery: [false],
-      RepairProcess: [false],
-      Metal: [false],
-      ApprovalRequired: [false],
-      DeductPureWeight: [false],
-      StoneIncluded: [false],
-      TimeCalculateonProcess: [false],
-      RecoveryProcess: [false],
-      AutoTransfer: [false],
-      ApplySetting: [false],
-      loss_standard: [''],
-      loss_min: ['', [Validators.min(0)]],
-      loss_max: [''],
-      standard_start: [''],
-      standard_end: [''],
-      min_start: [''],
-      min_end: ['', [Validators.min(0)]],
-      max: [''],
-
-    })
-
-    this.islossReadOnly = true;
-    this.isRecovReadOnly = true;
-    this.isAlloWGainReadOnly = true;
-
-    this.setInitialValues()
-    this.getProcessTypeOptions()
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.setFormValues();
-      // this.processMasterForm();
-    } else if (this.content.FLAG == 'EDIT') {
-      this.setFormValues();
-
-    }
-  }
-
+ 
   validateLossRange() {
     console.log(this.processMasterForm.value.loss_standard)
     console.log(this.processMasterForm.value.loss_min)
@@ -370,14 +394,8 @@ checkCodeExists(event: any) {
 
 
   }
-  onchangeCheckBox(e: any) {
-    if (e == true) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
 
+ 
   // final save
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -423,7 +441,7 @@ checkCodeExists(event: any) {
           "UNIT_RATE": 0,
           "LAB_ACCODE": "",
           "LAST_NO": "",
-          "REPAIR_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RepairProcess),
+          "REPAIR_PROCESS": this.onchangeCheckBoxNUm(this.processMasterForm.value.RepairProcess),
           "FINAL_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.FinalProcess),
           "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
           "TRAY_WT": this.processMasterForm.value.trayWeight || 0,
@@ -461,7 +479,7 @@ checkCodeExists(event: any) {
           "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
           "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
           "ALLOW_METAL": this.processMasterForm.value.Metal,
-          "ALLOW_STONE": this.processMasterForm.value.Stone,
+          "ALLOW_STONE":  this.onchangeCheckBox( this.processMasterForm.value.Stone),
           "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
           "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
           "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
@@ -625,7 +643,7 @@ checkCodeExists(event: any) {
       "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
       "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
       "ALLOW_METAL": this.processMasterForm.value.Metal,
-      "ALLOW_STONE": this.processMasterForm.value.Stone,
+      "ALLOW_STONE":  this.onchangeCheckBox( this.processMasterForm.value.Stone),
       "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
       "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
       "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
@@ -717,76 +735,63 @@ checkCodeExists(event: any) {
   }
 
   onlossChange(event: any) {
+    if(this.processMasterForm.value.loss == true){
+      this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
+     }
+     else{
+      this.processMasterForm.get('accountStart')?.clearValidators();
+     }
+
     this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
-    this.searchModeLoss =  !this.searchModeLoss;
+    this.searchModeLoss = !this.searchModeLoss;
     this.processMasterForm.controls.accountStart.setValue('');
+    this.processMasterForm.controls.loss_standard.setValue('');
+    this.processMasterForm.controls.loss_min.setValue('');
+    this.processMasterForm.controls.loss_max.setValue('');
     
-    // if(event.checked === true){
-    //   this.processMasterForm.controls['loss_max'].enable();
-    //   this.processMasterForm.controls['loss_min'].enable();
-    //   this.processMasterForm.controls['accountStart'].enable();
-    //   this.processMasterForm.controls['loss_standard'].enable();
-    // }
-    // else{
-    //   this.processMasterForm.controls['loss_min'].disable();
-    //   this.processMasterForm.controls['loss_max'].disable();
-    //   this.processMasterForm.controls['accountStart'].disable();
-    //   this.processMasterForm.controls['loss_standard'].disable();
-    //   this.processMasterForm.controls['loss_min'].disable();
-    //   this.processMasterForm.controls['loss_max'].disable();
-    //   this.processMasterForm.controls['accountStart'].disable();
-    //   this.processMasterForm.controls['loss_standard'].disable();
-    // }
-  }
+    // Update the validation status after setting or clearing validators
+   //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
+  
+ }
+
+  
 
   onRecovery(event: any) {
+    if(this.processMasterForm.value.recovery == true){
+      this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
+     }
+     else{
+      this.processMasterForm.get('accountMiddle')?.clearValidators();
+     }
+
     this.isRecovReadOnly = !this.isRecovReadOnly;
     this.searchModeRecov = !this.searchModeRecov;
     this.processMasterForm.controls.accountMiddle.setValue('');
+    this.processMasterForm.controls.standard_end.setValue('');
+    this.processMasterForm.controls.min_end.setValue('');
+
     console.log(event);
-    // if(event.checked === true){
-    //   this.processMasterForm.controls['standard_end'].enable();
-    //   this.processMasterForm.controls['min_end'].enable();
-    //   this.processMasterForm.controls['accountMiddle'].enable();
-    // }
-    // else{
-    //   this.processMasterForm.controls['standard_end'].disable();
-    //   this.processMasterForm.controls['min_end'].disable();
-    //   this.processMasterForm.controls['accountMiddle'].disable();
-    //   this.processMasterForm.controls['standard_end'].disable();
-    //   this.processMasterForm.controls['min_end'].disable();
-    //   this.processMasterForm.controls['accountMiddle'].disable();
-    // }
+
   }
 
   onAllowGain(event: any) {
+
+    if(this.processMasterForm.value.allowGain == true){
+      this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
+     }
+     else{
+      this.processMasterForm.get('accountEnd')?.clearValidators();
+     }
+
     this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
     this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
     this.processMasterForm.controls.accountEnd.setValue('');
-    // if(event.checked == true){
-    //   this.processMasterForm.controls['accountEnd'].enable();
-    //  }
-    //else{
-    //   this.processMasterForm.controls['accountEnd'].disable();
-    //   this.processMasterForm.controls['accountEnd'].disable();
-    // }
+
+
+
   }
-
-
-
-  // onInput(event: Event): void {
-  //   const inputValue = (event.target as HTMLInputElement).value;
-
-  //   // Trim the input to 3 letters
-  //   const limitedValue = inputValue.slice(0, 3);
-
-  //   // Update the input value
-  //   (event.target as HTMLInputElement).value = limitedValue;
-  //   }
-
-
 
 
   onInput(event: Event): void {
@@ -806,23 +811,6 @@ checkCodeExists(event: any) {
     // Update the input value
     (event.target as HTMLInputElement).value = formattedValue;
   }
-
-  // onInput(event: Event): void {
-  //   const inputValue = (event.target as HTMLInputElement).value;
-
-  //   // Remove any non-digit characters
-  //   const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-  //   // Extract up to 3 digits before and after the decimal point
-  //   const match = numericValue.match(/^(\d{0,3})(\.\d{0,3})?/);
-
-  //   // Combine the digits with a dot
-  //   const formattedValue = match ? match[1] + (match[2] || '') : '';
-
-  //   // Update the input value
-  //   (event.target as HTMLInputElement).value = formattedValue;
-  // }
-
 
 
 

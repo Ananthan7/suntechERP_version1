@@ -22,7 +22,7 @@
                                 <input type="text" matInput placeholder="CODE"
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode"
-                                    [readonly]="editMode || viewMode" #code
+                                    [readonly]="viewMode || editMode" #code
                                     (input)="code.value = code.value.toUpperCase()"
                                     (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()"/>
                                 <mat-error
