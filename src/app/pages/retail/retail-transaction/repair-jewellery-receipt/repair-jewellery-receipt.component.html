@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
-        <form >
+        <form [formGroup]="repairjewelleryreceiptFrom">
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="col-md-4">
@@ -51,7 +51,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="vocNo"
+                                        <input class="text-right" type="number" matInput formControlName="vocno"
                                              />
                                     </mat-form-field>
                                 </div>
@@ -72,7 +72,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">SalesMan : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="salesMan"  />
+                                    <input type="text" matInput formControlName="salesman"  />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -128,7 +128,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label ">Remarks : </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"  />
+                                    <input type="text" matInput formControlName="remark"  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currencyDesc"  />
+                                    <input type="number" matInput class="text-right" formControlName="currency_rate"  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
                                     <!-- <input type="text" matInput formControlName="address"  /> -->
-                                    <textarea matInput formControlName="address"></textarea>
+                                    <textarea matInput formControlName="repair_narration"></textarea>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -182,10 +182,10 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Customer Delivery Date : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 72%;">
-                                    <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                    <input matInput [matDatepicker]="customer_delivery_date" formControlName="customer_delivery_date"
                                          placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker  #vocDate></mat-datepicker>
+                                    <mat-datepicker-toggle matSuffix [for]="customer_delivery_date"></mat-datepicker-toggle>
+                                    <mat-datepicker  #customer_delivery_date></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                 <div class="row mt-3">
                     <div class="col-md-3 d-flex ">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                            (addClick)="adddata()" (deleteClick)="removedata()">
+                            (addClick)="openrepairdetails()" (deleteClick)="removedata()">
                         </menu-buttons>
                     </div>
                     <div class="col-md-12">

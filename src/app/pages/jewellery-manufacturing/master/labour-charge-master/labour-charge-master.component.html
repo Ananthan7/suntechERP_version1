@@ -36,7 +36,7 @@
               </div>
               <div class="col-sm-5">
                 <mat-form-field>
-                  <input type="text" matInput  maxlength="75" [readonly]="editMode || viewMode"  formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
+                  <input type="text" matInput  maxlength="75" [readonly]="viewMode"  formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -240,7 +240,7 @@
               </div>
               <div class="col-sm-5">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput  maxlength="75" [readonly]="editMode || viewMode" formControlName="metallabour_description" #description1 (input)="description1.value = description1.value.toUpperCase()"/>
+                  <input type="text" matInput  maxlength="75" [readonly]="viewMode" formControlName="metallabour_description" #description1 (input)="description1.value = description1.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
