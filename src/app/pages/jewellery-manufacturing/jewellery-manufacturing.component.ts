@@ -5,6 +5,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { JobVerificationComponent } from './favorites/job-verification/job-verification.component';
 import { JobWorkAllocationComponent } from './favorites/job-work-allocation/job-work-allocation.component';
 import { SalesOrderAmendmentComponent } from './favorites/sales-order-amendment/sales-order-amendment.component';
+import { ProducationLossRecoveryComponent } from './favorites/producation-loss-recovery/producation-loss-recovery.component';
 
 @Component({
   selector: 'app-jewellery-manufacturing',
@@ -36,6 +37,15 @@ export class JewelleryManufacturingComponent implements OnInit {
   openJobVerification() {
     // let i = 0;
     const modalRef: NgbModalRef = this.modalService.open(JobVerificationComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openProducationLossRecovery(){
+    const modalRef: NgbModalRef = this.modalService.open(ProducationLossRecoveryComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
