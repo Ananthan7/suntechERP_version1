@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -34,13 +34,13 @@ export class LabourChargeMasterComponent implements OnInit {
   divisionMS: any = 'ID';
   salesRate: any;
   salesRatePercentage: any;
-  salesRateMetal : any;
+  salesRateMetal: any;
   salesRatePercentageMetal: any;
   editMode: boolean = false;
 
-   displayDiaCostRate: any;
-   displayDiaSellingRate: any;
-   displayDiaCtWtFrom: any;
+  displayDiaCostRate: any;
+  displayDiaSellingRate: any;
+  displayDiaCtWtFrom: any;
   displayDiaCtWtTo: any;
   displayMetalCostRate: any;
   displayMetalSellingRate: any;
@@ -49,6 +49,29 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
 
+  //   @ViewChild('codeInput')
+  //   codeInput!: ElementRef;
+
+  //   ngAfterViewInit(): void {
+  //     this.codeInput.nativeElement.focus();
+  // }
+
+  //   @ViewChild('codeInput1')
+  //   codeInput1!: ElementRef;
+
+  //   ngAfterViewInit1(): void {
+  //     this.codeInput1.nativeElement.focus();
+  // }
+
+
+  // @ViewChild('codeInput') codeInput!: ElementRef;
+  // @ViewChild('codeInput1') codeInput1!: ElementRef;
+
+
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
+  //   this.codeInput1.nativeElement.focus();
+  // }
 
 
 
@@ -336,9 +359,9 @@ export class LabourChargeMasterComponent implements OnInit {
       this.setInitialValues()
     }
 
-    
-   
-   
+
+
+
 
     // this.diamondlabourMasterForm = this.formBuilder.group({
     //   labourType: new FormControl(''),
@@ -358,6 +381,7 @@ export class LabourChargeMasterComponent implements OnInit {
         settingTypeControl?.disable();
         methodControl?.disable();
       }
+      console.log(this.settingTypeList);
     });
 
 
@@ -478,7 +502,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
 
-  
+
   setFormValues() {
     if (!this.content) return
     this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
@@ -722,7 +746,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision ,
+      "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
       "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling,
       "ACCESSORIES": 0,
@@ -731,7 +755,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "SIEVE": this.diamondlabourMasterForm.value.sieve,
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
       "WASTAGE_AMT": 0,
-      "TYPE_CODE":  this.metallabourMasterForm.controls.typecode  || "",
+      "TYPE_CODE": this.metallabourMasterForm.controls.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category,
       "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
@@ -800,7 +824,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "SIEVE": this.diamondlabourMasterForm.value.sieve || "",
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage || "",
       "WASTAGE_AMT": 0,
-      "TYPE_CODE":  this.metallabourMasterForm.controls.typecode  || "",
+      "TYPE_CODE": this.metallabourMasterForm.controls.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category || "",
       "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory || "",
       "BRAND_CODE": this.metallabourMasterForm.value.brand || "",
@@ -934,7 +958,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.displayDiaCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  DiaSellingRatekeyupvalue(e: any){
+  DiaSellingRatekeyupvalue(e: any) {
     console.log(e)
     this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
@@ -985,7 +1009,7 @@ export class LabourChargeMasterComponent implements OnInit {
   onCtweighttto(event: any) {
     if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
       Swal.fire({
-        title: event.message || 'Weight From should be lesser than Weight To',
+        title: event.message || 'Ct Weight From should be lesser than Weight To',
         text: '',
         icon: 'error',
         confirmButtonColor: '#336699',

@@ -28,6 +28,9 @@ export class CustomerPriceSettingComponent implements OnInit {
   isdisabled:boolean = false;
   checkboxvalue:boolean = true
   public isChecked = true;
+  userbranch = localStorage.getItem('userbranch');
+  disableSelect = false;
+  codeEnable :  boolean = true;
 
   groups = [
     { type: 'None', value: 'None' },
@@ -55,24 +58,19 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
-   
+    if (this.content.FLAG == 'VIEW') {
+    
+    } else if (this.content.FLAG == 'EDIT') {
+      this.codeEnable = false;
+    }
   }
 
-  selectstock(event:any){
-    if(this.customerpricesettingForm.value.stockCode == true){
-    this.isdisabled = false
+  selectStock() {
+    this.checkboxvalue = !this.checkboxvalue;
   }
-  else{
-    this.isdisabled = true
-    this.customerpricesettingForm.controls.group1.setValue('');
-    this.customerpricesettingForm.controls.group2.setValue('');
-    this.customerpricesettingForm.controls.group3.setValue('');
-    this.customerpricesettingForm.controls.group4.setValue('');
-    this.customerpricesettingForm.controls.group5.setValue('');
-    this.customerpricesettingForm.controls.group6.setValue('');
+  
 
-  }
-}
+  
   customerpricesettingForm: FormGroup = this.formBuilder.group({
     pricecode:['',[Validators.required]],
     date:[new Date(),''],
@@ -91,7 +89,15 @@ export class CustomerPriceSettingComponent implements OnInit {
     group6:['',[Validators.required]],
   })
 
-
+  codeEnabled(){
+    if (this.customerpricesettingForm.value.pricecode == '') {
+    this.codeEnable = true;
+    }
+    else{
+      this.codeEnable = false;
+    }
+   
+  }
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -133,7 +139,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

@@ -196,10 +196,10 @@
         <div class="col-md-12 pt-3">
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="Stone Pricing">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDatastone" >
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDatastone" [showRowLines]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-editing mode="cell" [allowUpdating]="true">
-                </dxo-editing>
+                <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing> -->
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
@@ -208,10 +208,10 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO"  [showBorders]="true" [dataSource]="tableDatalabour" [height]="200">
+              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO"  [showBorders]="true" [dataSource]="tableDatalabour" [height]="200" [showRowLines]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-editing mode="cell" [allowUpdating]="true">
-                </dxo-editing>
+                <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing> -->
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column *ngFor="let data of columnheader1" dataField="{{ data.field }}" caption="{{ data.title }}"
@@ -220,10 +220,10 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Design Wise Labour">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"  [showRowLines]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-editing mode="cell" [allowUpdating]="true">
-                </dxo-editing>
+                <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing> -->
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}" caption="{{ data }}"

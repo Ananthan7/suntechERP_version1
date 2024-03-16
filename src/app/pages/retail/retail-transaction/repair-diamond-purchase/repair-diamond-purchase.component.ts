@@ -17,31 +17,12 @@ import { RepairDiamondPurchaseDetailComponent } from './repair-diamond-purchase-
   styleUrls: ['./repair-diamond-purchase.component.scss']
 })
 export class RepairDiamondPurchaseComponent implements OnInit {
-  @Input() content!: any;
-  @Input()
-  selectedIndex!: number | null;
-  tableData: any[] = [];  
-  tableDatas: any[] = [];  
-  firstTableWidth : any;
-  secondTableWidth : any;
-  columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
-  columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
-  divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['SI.No' , 'GST_Type%' , 'GST_Type', 'Total GST'];
-  branchCode?: String;
-  yearMonth?: String;
-  currentDate = new FormControl(new Date());
-  isdisabled:boolean=true;
-  private subscriptions: Subscription[] = [];
-  table: any;
-  status: boolean= true;
-  viewMode: boolean = false;
   selectedTabIndex = 0;
-  urls: string | ArrayBuffer | null | undefined;
-  url: any;
-  formattedTime: any;
-  maxTime: any;
-  standTime: any;
+  selectedTabIndexLineItem=0;
+  currentDate = new Date();
+  tableData: any[] = []; 
+  viewMode: boolean = false; 
+  columnheadItemDetails:any[] = ['Sr#','Stock Code','Description','Pcs','Purity','Gross Wt','Stone Wt','Net Wt','Pure Wt','Making Value','Metal Value','Net Value'];
   // setAllInitialValues: any;
   constructor(
     private activeModal: NgbActiveModal,
@@ -80,9 +61,7 @@ removedata(){
   this.tableData.pop();
 }
 
-removedatas(){
-  this.tableDatas.pop();
-}
+
 
   formSubmit() {
    

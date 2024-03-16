@@ -5,11 +5,19 @@ import { JewelleryManufacturingRoutingModule } from './jewellery-manufacturing.r
 import { JewelleryManufacturingComponent } from './jewellery-manufacturing.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UtilitiesComponent } from './utilities/utilities.component';
+import { JobVerificationComponent } from './favorites/job-verification/job-verification.component';
+import { JobWorkAllocationComponent } from './favorites/job-work-allocation/job-work-allocation.component';
+import { SalesOrderAmendmentComponent } from './favorites/sales-order-amendment/sales-order-amendment.component';
+import { ProducationLossRecoveryComponent } from './favorites/producation-loss-recovery/producation-loss-recovery.component';
 
 @NgModule({
   declarations: [
     JewelleryManufacturingComponent,
-    UtilitiesComponent
+    UtilitiesComponent,
+    JobVerificationComponent,
+    JobWorkAllocationComponent,
+    SalesOrderAmendmentComponent,
+    ProducationLossRecoveryComponent
   ],
   imports: [
     CommonModule,

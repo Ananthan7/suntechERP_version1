@@ -349,6 +349,7 @@
               matInput
               id="voc_type"
               formControlName="voc_type"
+              readonly
             />
           </mat-form-field>
         </div>
@@ -373,7 +374,20 @@
               id="txtCurrency"
               formControlName="txtCurrency"
               [readonly]="viewOnly"
+              [matAutocomplete]="currencyList"
             />
+            <mat-autocomplete
+            #currencyList="matAutocomplete"
+            autoActiveFirstOption
+            (optionSelected)="changeCurrency($event)"
+          >
+            <mat-option
+              *ngFor="let option of currencyMasterOptions | async"
+              [value]="option.CURRENCY_CODE"
+            >
+              {{ option.CURRENCY_CODE }}
+            </mat-option>
+          </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="col-md-1 m-t-10 pt-2">
@@ -388,7 +402,9 @@
                 viewOnly ||
                 this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
               "
+              (change)="changeCurRate($event)"
             />
+            
           </mat-form-field>
         </div>
 
@@ -816,6 +832,7 @@
                             dataField="weight"
                             caption="Weight"
                             [width]="100"
+                            [format]="weightDecimalFormat"
                             [allowEditing]="false"
                           >
                           </dxi-column>
@@ -831,16 +848,15 @@
                             caption="Metal Value"
                             [width]="100"
                             [allowEditing]="false"
+                            [format]="amountDecimalFormat"
                           ></dxi-column>
 
                           <dxi-column
                             dataField="total_amount"
                             caption="Mkg amount"
                             alignment="right"
-                            format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
                             [allowEditing]="false"
-                            precision="2"
+                            [format]="amountDecimalFormat"
                             [width]="150"
                           ></dxi-column>
                           <dxi-column
@@ -877,8 +893,10 @@
                               column="weight"
                               summaryType="sum"
                               caption="Weight"
-                              [customizeText]="customizeWeight"
-                            >
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+                              >
+                              <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
                               column="pcs"
@@ -892,7 +910,7 @@
                               displayFormat="AED {0}"
                               type="fixedPoint"
                               precision="2"
-                              [valueFormat]="{ currency: 'AED' }"
+                              [valueFormat]="gridAmountDecimalFormat"
                             >
                             </dxi-total-item>
                             <dxi-total-item
@@ -900,7 +918,8 @@
                               summaryType="sum"
                               displayFormat="AED {0}"
                               precision="2"
-                              [valueFormat]="{ currency: 'AED' }"
+                              [valueFormat]="gridAmountDecimalFormat"
+                              
                             >
                             </dxi-total-item>
                             <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
@@ -988,8 +1007,11 @@
                           <dxi-column
                             dataField="weight"
                             caption="Weight"
-                            [width]="70"
+                            [width]="100"
                             [allowEditing]="false"
+                            displayFormat="Wt: {0}"
+
+                            [format]="weightDecimalFormat"
                           >
                           </dxi-column>
                           <dxi-column
@@ -1002,16 +1024,18 @@
                             dataField="mkg_amount"
                             alignment="right"
                             format="currency"
-                            [width]="200"
-                            [format]="{ style: 'currency', currency: 'AED' }"
+                            [width]="150"
                             [allowEditing]="false"
+                            [format]="amountDecimalFormat"
                           ></dxi-column>
                           <dxi-column
                             dataField="total_amount"
                             alignment="right"
                             format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
                             [allowEditing]="false"
+                            [format]="amountDecimalFormat"
+                            [width]="150"
+
                           >
                           </dxi-column>
                           <!-- <dxi-column type="buttons" >
@@ -1035,8 +1059,11 @@
                               column="weight"
                               summaryType="sum"
                               caption="Total Wt"
-                              [customizeText]="customizeWeight"
-                            >
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+
+                              >
+                              <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
                               column="pcs"
@@ -1047,15 +1074,15 @@
                             <dxi-total-item
                               column="mkg_amount"
                               summaryType="sum"
+                              [valueFormat]="gridAmountDecimalFormat"
                               displayFormat="AED {0}"
-                              [valueFormat]="{ currency: 'AED' }"
                             >
                             </dxi-total-item>
                             <dxi-total-item
                               column="total_amount"
                               summaryType="sum"
+                              [valueFormat]="gridAmountDecimalFormat"
                               displayFormat="AED {0}"
-                              [valueFormat]="{ currency: 'AED' }"
                             >
                               <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxi-total-item>
@@ -1140,6 +1167,8 @@
                             caption="Weight"
                             [width]="100"
                             [allowEditing]="false"
+                           [format]="weightDecimalFormat"
+
                           >
                           </dxi-column>
                           <dxi-column
@@ -1151,8 +1180,7 @@
                           <dxi-column
                             dataField="net_amount"
                             alignment="right"
-                            format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
+                           [format]="amountDecimalFormat"
                             [allowEditing]="false"
                           >
                           </dxi-column>
@@ -1177,8 +1205,11 @@
                               column="weight"
                               summaryType="sum"
                               caption="Total Wt"
-                              [customizeText]="customizeWeight"
-                            >
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+
+                              >
+                              <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
                               column="pcs"
@@ -1189,8 +1220,8 @@
                             <dxi-total-item
                               column="net_amount"
                               summaryType="sum"
+                              [valueFormat]="gridAmountDecimalFormat"
                               displayFormat="AED {0}"
-                              [valueFormat]="{ currency: 'AED' }"
                             >
                               <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxi-total-item>
@@ -1496,9 +1527,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ prnt_inv_total_gross_amt | number : '1.2' }}"
+                    value="{{ prnt_inv_total_gross_amt | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </td>
@@ -1510,9 +1541,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ this.order_items_total_tax | number : '1.2' }}"
+                    value="{{ this.order_items_total_tax | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </td>
@@ -1526,10 +1557,10 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_gross_amount | number : '1.2'
+                      order_items_total_gross_amount | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS
                     }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </td>
@@ -1543,9 +1574,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ invReturnSalesTotalNetTotal | number : '1.2' }}"
+                    value="{{ invReturnSalesTotalNetTotal | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </td>
@@ -1557,9 +1588,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_total_exchange | number : '1.2' }}"
+                    value="{{ order_total_exchange | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </td>
@@ -1577,11 +1608,11 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_discount_amount | number : '1.2'
+                      order_items_total_discount_amount | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS
                     }}"
                     (change)="changeFinalDiscount($event)"
                     aria-describedby
-                    placeholder="0"
+                    [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
                   />
                 </td>
@@ -1602,9 +1633,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_items_total_net_amount | number : '1.2' }}"
+                    value="{{ order_items_total_net_amount | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </td>
@@ -1626,11 +1657,11 @@
                     [(ngModel)]="receiptTotalNetAmt"
                     value="{{ receiptTotalNetAmt }}"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                   <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
-                      value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
+                      value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
                 </td>
               </tr>
 
@@ -1648,11 +1679,11 @@
                     id="vatroundoff"
                     [(ngModel)]="vatRoundOffAmt"
                     aria-describedby
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                   <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
-                      value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
+                      value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
                 </td>
               </tr>
             </table>
@@ -1805,7 +1836,7 @@
                     matInput
                     formControlName="cashAmtLC"
                     id="cashAmtLC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </mat-form-field>
@@ -1822,7 +1853,7 @@
                     (focusout)="
                       changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
                     "
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
                   />
                   <mat-error
@@ -1921,7 +1952,7 @@
                     matInput
                     formControlName="cardAmtFC"
                     id="cardAmtFC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
                   />
                   <mat-error
@@ -2154,7 +2185,7 @@
                     matInput
                     formControlName="advanceVatAmountLC"
                     id="advanceVatAmountLC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </mat-form-field>
@@ -2168,7 +2199,7 @@
                     matInput
                     formControlName="advanceVatAmountFC"
                     id="advanceVatAmountFC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                   <!-- (focusout)="changeReceiptAmtFC($event)" -->
@@ -2228,7 +2259,7 @@
                     matInput
                     formControlName="othersAmtFC"
                     id="othersAmtFC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
                   />
                   <mat-error
@@ -2361,7 +2392,7 @@
                     matInput
                     formControlName="giftAmtFC"
                     id="giftAmtFC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
                   />
                   <mat-error
@@ -2434,7 +2465,7 @@
                     matInput
                     formControlName="customerAmtLC"
                     id="customerAmtLC"
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     readonly
                   />
                 </mat-form-field>
@@ -2455,7 +2486,7 @@
                         'customerAmtLC'
                       )
                     "
-                    placeholder="0.00"
+                    [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
                   />
 
@@ -4120,6 +4151,7 @@
                             id="fcn_li_gross_wt"
                             (change)="changeGrossWt($event)"
                             [readonly]="viewOnly"
+                            MetalDecimalInput
                           />
                           <mat-error
                             *ngIf="
@@ -4160,6 +4192,7 @@
                             id="fcn_li_stone_wt"
                             (change)="changeStoneWt($event)"
                             [readonly]="viewOnly"
+                            MetalDecimalInput
                           />
                         </mat-form-field>
                       </div>
@@ -4181,6 +4214,7 @@
                             id="fcn_li_net_wt"
                             (focusout)="changeNettWt($event)"
                             readonly
+                            MetalDecimalInput
                           />
                         </mat-form-field>
                       </div>
@@ -4236,6 +4270,7 @@
                             matInput
                             formControlName="fcn_ad_metal_rate"
                             id="fcn_ad_metal_rate"
+                            
                             readonly
                           />
                         </mat-form-field>
@@ -4252,6 +4287,7 @@
                             matInput
                             formControlName="fcn_ad_metal_amount"
                             id="fcn_ad_metal_amount"
+                            AmountDecimalInput
                             readonly
                           />
                         </mat-form-field>
@@ -4279,6 +4315,7 @@
                             (focus)="
                               setValToLocalStorage($event, 'fcn_li_rate')
                             "
+                            AmountDecimalInput
                           />
                           <mat-error
                             *ngIf="
@@ -4325,6 +4362,7 @@
                             readonly="{{
                               viewOnly || divisionMS == 'S' ? true : false
                             }}"
+                            AmountDecimalInput
                           />
                           <mat-error
                             *ngIf="
@@ -4438,6 +4476,7 @@
                         <input
                           class="st_txt_right"
                           type="number"
+                          AmountDecimalInput
                           [min]="0"
                           [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)"

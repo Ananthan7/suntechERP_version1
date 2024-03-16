@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -30,6 +30,17 @@ export class StonePricingMasterComponent implements OnInit {
   deal: any;
   displayDeal: string = '';
   userbranch = localStorage.getItem('userbranch');
+
+  viewselling: boolean = false;
+  viewsellingrate: boolean = false;
+
+  @ViewChild('codeInput')
+  codeInput!: ElementRef;
+
+  ngAfterViewInit(): void {
+    this.codeInput.nativeElement.focus();
+  }
+
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -152,17 +163,17 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   currencyData: MasterSearchModel = {
-    
+
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 8,
+    LOOKUPID: 176,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
     WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
 
 
@@ -171,8 +182,8 @@ export class StonePricingMasterComponent implements OnInit {
     price_code: ['', [Validators.required]],
     sieve_set: [''],
     shape: ['', [Validators.required]],
-    sieve_form: ['', [Validators.required]],
-    sieve_to: ['', [Validators.required]],
+    sieve_form: [''],
+    sieve_to: [''],
     color: [''],
     clarity: ['', [Validators.required]],
     sieve_from: [''],
@@ -196,7 +207,7 @@ export class StonePricingMasterComponent implements OnInit {
     private commonService: CommonServiceService,
   ) {
     this.branchCode = this.commonService.branchCode;
-   }
+  }
 
   ngOnInit(): void {
 
@@ -229,6 +240,18 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
 
+  onSievetto(event: any) {
+    if (this.stonePrizeMasterForm.value.sieve_form < this.stonePrizeMasterForm.value.sieve_to) {
+      Swal.fire({
+        title: event.message || ' Sieve To Should be greater than the Sieve From',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
+    }
+  }
+
 
   setFormValues() {
     if (!this.content) return
@@ -247,20 +270,42 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(this.content.SIEVETO_DESC)
     this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
     this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
-    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
+    // this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
-    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+    //this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
 
 
+    // this.stonePrizeMasterForm.controls.carat_wt.setValue(this.content.CARAT_WT)
+    //  this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
+    // this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
+
+    this.stonePrizeMasterForm.controls.wt_to.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.WEIGHT_TO));
+
+    this.stonePrizeMasterForm.controls.wt_from.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.WEIGHT_FROM));
+
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARAT_WT));
+
+
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.ISSUE_RATE));
+
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_RATE));
   }
-  // private initializeForm() {
-  //   try {
-  //     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.commaSeperation(this.content.SELLING_RATE))
 
-  //   } catch (error) {
-  //     console.error('Error in initializeForm:', error);
-  //   }
-  // }
 
   viewFormValues() {
     if (!this.content) return
@@ -279,77 +324,72 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(this.content.SIEVETO_DESC)
     this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
     this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
-    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
+    // this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
-    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+    //this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+
+
+    // this.stonePrizeMasterForm.controls.carat_wt.setValue(this.content.CARAT_WT)
+    //  this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
+    // this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
+
+
+
+    this.stonePrizeMasterForm.controls.wt_to.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.WEIGHT_TO));
+
+    this.stonePrizeMasterForm.controls.wt_from.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.WEIGHT_FROM));
+
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARAT_WT));
+
+
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.ISSUE_RATE));
+
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_RATE));
 
 
   }
 
-  // salesChange() {
-  //   this.salesRate = this.stonePrizeMasterForm.value.selling_rate;
-  //   this.salesRatePercentage = this.stonePrizeMasterForm.value.selling;
+  salesChange(data: any) {
+    console.log(data);
 
-  //   if(this.salesRate == '')
-  //   {
-  //     this.stonePrizeMasterForm.controls.selling_rate.disable();
-  //     this.stonePrizeMasterForm.controls.selling.enable();
-  //     this.stonePrizeMasterForm.controls.selling_rate.setValue('');
-  //   }
-  //   else if (this.salesRatePercentage == '')
-  //   {
-  //     this.stonePrizeMasterForm.controls.selling.disable();
-  //     this.stonePrizeMasterForm.controls.selling_rate.enable();
-  //     this.stonePrizeMasterForm.controls.selling.setValue('');
-
-  //   }
-  //   else if (this.stonePrizeMasterForm.value.selling == '' && this.stonePrizeMasterForm.value.selling_rate == '') {
-  //     this.stonePrizeMasterForm.controls.selling.enable();
-  //     this.stonePrizeMasterForm.controls.selling.setValue('');
-
-  //     this.stonePrizeMasterForm.controls.selling_rate.enable();
-  //     this.stonePrizeMasterForm.controls.selling_rate.setValue('');
-
-  //     this.toastr.error('Enter values either Selling % or Selling Rate');
-  //     return;
-      
-  //   }
-  // }
-
-  salesChange(e: any) {
-    const sellingRate = this.stonePrizeMasterForm.value.selling_rate;
-    const sellingRatePercentage = this.stonePrizeMasterForm.value.selling;
-  
-    console.log(e.selling_rate);
-    console.log(e.selling);
-  
-    if (sellingRate !== '') {
-      this.stonePrizeMasterForm.controls.selling_rate.enable();
-      this.stonePrizeMasterForm.controls.selling.disable();
+    if (data == 'selling') {
+      this.viewsellingrate = true;
+      this.viewselling = false;
+      this.stonePrizeMasterForm.controls.selling_rate.setValue('');
+    } else if (data == 'selling_rate') {
+      this.viewselling = true;
+      this.viewsellingrate = false;
+      this.stonePrizeMasterForm.controls.selling.setValue('');
+    } else {
+      this.viewselling = false;
+      this.viewsellingrate = false;
     }
-    
-  
-    if (sellingRatePercentage !== '') {
-      this.stonePrizeMasterForm.controls.selling.enable();
-      this.stonePrizeMasterForm.controls.selling_rate.disable();
-     }
-  
-    if (sellingRatePercentage !== '' && sellingRate !== '') {
-      this.stonePrizeMasterForm.controls.selling.enable();
-      this.stonePrizeMasterForm.controls.selling_rate.enable();
-      // Remove the error message when both fields are empty
-      // this.toastr.error('Enter values either Selling % or Selling Rate');
-    }
+
   }
-  
-  
+
 
 
   keyupvalue(e: any) {
     console.log(e);
-    this.displayDeal = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    this.displayDeal = e.replace(/\D/g, "").replace(/\B(?=(\d{12})+(?!\d))/g, ",");
   }
-  
+
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -612,10 +652,10 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-    commaSeperation(data: any) {
-      console.log(data);
-      if (!Number(data)) return data; // Use data directly
-      return Number(data).toLocaleString('en-US', { style: 'decimal' });
+  commaSeperation(data: any) {
+    console.log(data);
+    if (!Number(data)) return data; // Use data directly
+    return Number(data).toLocaleString('en-US', { style: 'decimal' });
   }
 
   ngOnDestroy() {

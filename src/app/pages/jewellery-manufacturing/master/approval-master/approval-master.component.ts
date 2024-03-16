@@ -1,4 +1,4 @@
-import { Input, OnInit, Component} from '@angular/core';
+import { Input, OnInit, Component, ViewChild, ElementRef} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -34,6 +34,16 @@ export class ApprovalMasterComponent implements OnInit {
   disable: boolean = false;
 
 
+
+  @ViewChild('codeInput')
+  codeInput!: ElementRef;
+
+  ngAfterViewInit(): void {
+      this.codeInput.nativeElement.focus();
+  }
+
+
+  
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,

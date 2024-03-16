@@ -210,15 +210,17 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMP_PREFIX = 1",
+    WHERECONDITION: "COMP_PREFIX = '1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
   codeCodeSelected(e: any) {
     console.log(e);
-    this.componentmasterForm.controls.code.setValue(e.PREFIX_CODE);
-    this.componentmasterForm.controls.codedes.setValue(e.DESCRIPTION);
+    const prefixCode = e.PREFIX_CODE.toUpperCase();
+    const des = e.DESCRIPTION.toUpperCase();
+    this.componentmasterForm.controls.code.setValue(prefixCode);
+    this.componentmasterForm.controls.codedes.setValue(des);
   }
 
   typeCodeData: MasterSearchModel = {
@@ -278,8 +280,8 @@ export class ComponentMasterComponent implements OnInit {
 
 
     height = descriptionArray[0];
-    width = descriptionArray[1];
-    length = descriptionArray[2];
+    width = descriptionArray[2];
+    length = descriptionArray[1];
     radius = descriptionArray[3];
 
 

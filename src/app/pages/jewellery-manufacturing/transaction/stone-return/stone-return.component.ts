@@ -17,7 +17,7 @@ import { StoneReturnDetailsComponent } from './stone-return-details/stone-return
 export class StoneReturnComponent implements OnInit {
   
 
-  columnhead:any[] = ['Sl No','VOCNO','VOCTYPE','VOCDATE','JOB_NO','JOB_DATE','JOB_SO','UNQ_JOB','JOB_DE','BRANCH' ];
+  columnhead:any[] = ['SRNO','VOCNO','VOCTYPE','VOCDATE','JOB_NO','JOB_DATE','JOB_SO','UNQ_JOB','JOB_DE','BRANCH' ];
   @Input() content!: any; 
   tableData: any[] = [];
   stoneReturnData : any[] = [];
@@ -26,6 +26,12 @@ export class StoneReturnComponent implements OnInit {
   yearMonth?: String;
   currentDate = new FormControl(new Date());
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
+  tableRowCount: number = 0;
+  detailData: any[] = [];
+  selectRowIndex: any;
+  selectedKey: number[] = [];
+  selectedIndexes: any = [];
+  viewMode: boolean = false;
 
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
@@ -73,14 +79,58 @@ export class StoneReturnComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.userName = this.comService.userName;
-
+    this.setAllInitialValues()
     this.setvalues()
+  }
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobStoneReturnMasterDJ/GetJobStoneReturnMasterDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      if (result.response) {
+        let data = result.response
+        console.log(data, 'll')
+        this.stoneReturnData = data.Details
+        data.Details.forEach((element: any) => {
+          this.tableData.push({
+              SRNO: element.SRNO,
+              VOCNO: element.VOCNO,
+              VOCTYPE: element.VOCTYPE,
+              VOCDATE: element.VOCDATE,
+              JOB_NO: element.JOB_NUMBER,
+              JOB_DATE: element.JOB_DATE,
+              UNQ_JOB: element.UNQ_JOB_ID                       ,
+              JOB_DE: element.JOB_DESCRIPTION,
+              BRANCH: element.BRANCH_CODE,
+
+            })
+          });
+         
+          this.stonereturnFrom.controls.basecurrency.setValue(data.Details.BASE_CURRENCY)
+          this.stonereturnFrom.controls.basecurrencyrate.setValue(data.Details.BASE_CURR_RATE)
+          this.stonereturnFrom.controls.currency.setValue(data.Details.CURRENCY_CODE)
+          this.stonereturnFrom.controls.currencyrate.setValue(data.Details.CURRENCY_RATE)
+          this.stonereturnFrom.controls.worker.setValue(data.Details.WORKER)
+          this.stonereturnFrom.controls.workername.setValue(data.Details.WORKER_NAME)
+          this.stonereturnFrom.controls.enterdBy.setValue(data.Details.HTUSERNAME)
+          this.stonereturnFrom.controls.enteredByName.setValue(data.Details.REMARKS)
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+
   }
 
   close(data?: any) {
@@ -105,25 +155,74 @@ export class StoneReturnComponent implements OnInit {
     this.stonereturnFrom.controls.basecurrencyrate.setValue(e.CONV_RATE);
   }
 
-  openaddstonereturndetails() {
+  openaddstonereturndetails(data?: any) {
+    console.log(data)
+    if (data) {
+      data[0] = this.stonereturnFrom.value;
+    } else {
+      data = [{ HEADERDETAILS: this.stonereturnFrom.value }]
+    }
     const modalRef: NgbModalRef = this.modalService.open(StoneReturnDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    console.log(data, 'data')
+    modalRef.componentInstance.content = data
     modalRef.result.then((postData) => {
-      console.log(postData);      
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);
         this.stoneReturnData.push(postData);
+        console.log(this.stoneReturnData);
+        this.setValuesToHeaderGrid(postData);
+
       }
+
     });
   }
+  onRowClickHandler(event: any) {
 
-  deleteTableData(){
-   
+    this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    this.openaddstonereturndetails(selectedData)
+
+
   }
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    console.log(detailDataToParent, 'detailDataToParent');
+    if (detailDataToParent.SRNO) {
+      console.log(this.stoneReturnData);
+
+      this.swapObjects(this.stoneReturnData, [detailDataToParent], (detailDataToParent.SRNO - 1))
+    } else {
+      this.tableRowCount += 1
+      detailDataToParent.SRNO = this.tableRowCount
+      // this.tableRowCount += 1
+      // this.content.SRNO = this.tableRowCount
+    }
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+  }
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
+    }
+  }
+
+  deleteTableData(): void {
+    console.log(this.selectedKey, 'data')
+    this.selectedKey.forEach((element: any) => {
+      this.stoneReturnData.splice(element.SRNO - 1, 1)
+    })
+  
+  }
+
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
