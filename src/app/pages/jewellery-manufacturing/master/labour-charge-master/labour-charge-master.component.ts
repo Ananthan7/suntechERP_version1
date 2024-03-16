@@ -64,14 +64,14 @@ export class LabourChargeMasterComponent implements OnInit {
   // }
 
 
-  @ViewChild('codeInput') codeInput!: ElementRef;
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
+  // @ViewChild('codeInput') codeInput!: ElementRef;
+  // @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
-    this.codeInput1.nativeElement.focus();
-  }
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
+  //   this.codeInput1.nativeElement.focus();
+  // }
 
 
 
@@ -381,6 +381,7 @@ export class LabourChargeMasterComponent implements OnInit {
         settingTypeControl?.disable();
         methodControl?.disable();
       }
+      console.log(this.settingTypeList);
     });
 
 
@@ -1008,7 +1009,7 @@ export class LabourChargeMasterComponent implements OnInit {
   onCtweighttto(event: any) {
     if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
       Swal.fire({
-        title: event.message || 'Weight From should be lesser than Weight To',
+        title: event.message || 'Ct Weight From should be lesser than Weight To',
         text: '',
         icon: 'error',
         confirmButtonColor: '#336699',
