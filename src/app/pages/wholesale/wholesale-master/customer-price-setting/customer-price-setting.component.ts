@@ -121,16 +121,16 @@ export class CustomerPriceSettingComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 176,
-    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_FIELD: 'CURRENCYCODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.commonService.branchCode + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   currencyCodeSelected(e:any){
     console.log(e); 
-    this.customerpricesettingForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.customerpricesettingForm.controls.currency.setValue(e.CURRENCYCODE);
   }
 
   approvedbyCodeData: MasterSearchModel = {
