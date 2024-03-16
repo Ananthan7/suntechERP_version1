@@ -186,9 +186,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
       return
     }
-    this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
-    this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
-    this.receiptDetailsForm.controls.VocDate.setValue(new Date(this.content.VOCDATE));
+    this.receiptDetailsForm.controls.Branch.setValue(this.content.BRANCH_CODE);
+    this.receiptDetailsForm.controls.VocType.setValue(this.content.VOCTYPE);
+    
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);
@@ -293,7 +293,7 @@ export class SchemeReceiptComponent implements OnInit {
         if (resp.response) {
           if (resp.response) {
             let result = resp.response;
-            // this.receiptDetailsForm.controls.SchemeID.setValue( result.POSSCHEMEID );
+            this.receiptDetailsForm.controls.VocDate.setValue(result.VOCDATE);
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
               item.SRNO = i + 1;

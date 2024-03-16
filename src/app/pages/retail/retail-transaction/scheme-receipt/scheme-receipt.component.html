@@ -58,7 +58,7 @@
                                             <span style="width: 65%">
                                                 <mat-form-field>
                                                     <!-- <mat-label>Date Of Birth</mat-label> -->
-                                                    <input matInput
+                                                    <input matInput readonly
                                                         DateValidation
                                                         [matDatepicker]="dob"
                                                         formControlName="VocDate"
@@ -66,7 +66,7 @@
                                                     <mat-datepicker-toggle
                                                         matSuffix
                                                         [for]="dob"></mat-datepicker-toggle>
-                                                    <mat-datepicker
+                                                    <mat-datepicker [disabled]="true"
                                                         #dob></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
