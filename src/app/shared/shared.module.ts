@@ -75,10 +75,12 @@ import { DurationPickerComponent } from './common/duration-picker/duration-picke
 import { FormatThreeDecimalDirective } from './directives/format-three-decimal.directive';
 import { CommaSeparatedNumberDirective } from './directives/comma-separated-number.directive';
 import { AuditTrailComponent } from './common/audit-trail/audit-trail.component';
+import { DecimalFormatPipe } from './pipes/decimal-format.pipe';
 @NgModule({
   declarations: [
     //pipes declarations
     NumberFormatterPipe,
+    DecimalFormatPipe,
     CamelCasePipe,
     CamelCasePipe,
     //components declarations
@@ -170,6 +172,7 @@ import { AuditTrailComponent } from './common/audit-trail/audit-trail.component'
 
     //pipes && Directives exports
     NumberFormatterPipe,
+    DecimalFormatPipe,
     CamelCasePipe,
     NumericInputDirective,
     DateValidationDirective,
