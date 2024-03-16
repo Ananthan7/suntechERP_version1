@@ -210,7 +210,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMP_PREFIX = 1",
+    WHERECONDITION: "COMP_PREFIX = '1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,

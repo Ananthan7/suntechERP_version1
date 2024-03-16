@@ -145,7 +145,7 @@
                             <div *dxTemplate="let data of 'alloyper'">
                                 <input type="number" style="text-align: right;" AmountDecimalInput
                                     (change)="alloyPer($event,data)" [value]="data.value" required
-                                    [readonly]="viewMode" />
+                                    [readonly]="viewMode" /><span>%</span>
                             </div>
 
                         </dx-data-grid>
