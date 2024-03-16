@@ -466,8 +466,8 @@ export class AddReceiptComponent implements OnInit {
     })
     this.setFormControlAmount('SchemeBalance', payAmountSum)
     //checking given amount is more that scheme balance
-    if (Amount_LC > payAmountSum || Amount_FC > payAmountSum) {
-      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + formData.SchemeBalance)
+    if (Header_Amount > payAmountSum) {
+      this.commonService.toastErrorByMsgId('Allocating Header Amount cannot allow more than ' + formData.SchemeBalance)
       this.setFormControlAmount('Amount_LC', 0)
       this.setFormControlAmount('Amount_FC', 0)
       this.setFormControlAmount('Header_Amount', 0)
