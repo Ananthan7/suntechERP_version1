@@ -567,7 +567,6 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   alloyPer(data: any, value: any) {
-
     this.tableData[value.data.SRNO - 1].ALLOY_PER = data.target.value;
   }
 

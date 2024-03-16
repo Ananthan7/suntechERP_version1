@@ -28,8 +28,10 @@ export class CustomerPriceSettingComponent implements OnInit {
   isdisabled:boolean = false;
   checkboxvalue:boolean = true
   public isChecked = true;
-
+  userbranch = localStorage.getItem('userbranch');
   disableSelect = false;
+  codeEnable :  boolean = true;
+
   groups = [
     { type: 'None', value: 'None' },
     { type: 'Category', value: 'Category' },
@@ -56,13 +58,18 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
-   
+    if (this.content.FLAG == 'VIEW') {
+    
+    } else if (this.content.FLAG == 'EDIT') {
+      this.codeEnable = false;
+    }
   }
 
   selectStock() {
     this.checkboxvalue = !this.checkboxvalue;
   }
   
+
   
   customerpricesettingForm: FormGroup = this.formBuilder.group({
     pricecode:['',[Validators.required]],
@@ -82,7 +89,15 @@ export class CustomerPriceSettingComponent implements OnInit {
     group6:['',[Validators.required]],
   })
 
-
+  codeEnabled(){
+    if (this.customerpricesettingForm.value.pricecode == '') {
+    this.codeEnable = true;
+    }
+    else{
+      this.codeEnable = false;
+    }
+   
+  }
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -124,7 +139,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

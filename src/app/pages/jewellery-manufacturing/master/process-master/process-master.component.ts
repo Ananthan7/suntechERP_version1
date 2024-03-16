@@ -775,7 +775,7 @@ export class ProcessMasterComponent implements OnInit {
 
   onAllowGain(event: any) {
 
-    if(this.processMasterForm.value.allowGain == true){
+    if(this.processMasterForm.value.RecoveryProcess == true){
       this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
      }
      else{
@@ -789,6 +789,19 @@ export class ProcessMasterComponent implements OnInit {
 
 
 
+  }
+
+  onRecovStockCode(event:any){
+    if(this.processMasterForm.value.allowGain == true){
+      this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
+     }
+     else{
+      this.processMasterForm.get('recStockCode')?.clearValidators();
+     }
+     this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
+     this.searchModeAllow = !this.searchModeAllow;
+     console.log(event);
+     this.processMasterForm.controls.recStockCode.setValue('');
   }
 
 

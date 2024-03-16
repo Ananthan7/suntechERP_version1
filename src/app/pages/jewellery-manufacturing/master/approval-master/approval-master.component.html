@@ -20,7 +20,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input #codeInput type="text" matInput formControlName="code" maxlength="6"
                                             oninput="this.value = this.value.toUpperCase()"
-                                            (focusout)="checkCodeExists($event)" [readonly]="editableMode" [disabled]="viewMode" />
+                                            (focusout)="checkCodeExists($event)" [readonly]="editableMode || viewMode" [disabled]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="description"
-                                            oninput="this.value = this.value.toUpperCase()" [readonly]="editableMode" [disabled]="viewMode" />
+                                            oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" [disabled]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
