@@ -21,6 +21,13 @@ import { RepairMetalPurchaseDetailsComponent } from './repair-metal-purchase-det
 })
 export class RepairMetalPurchaseComponent implements OnInit {
 
+  selectedTabIndex = 0;
+  selectedTabIndexLineItem=0;
+  currentDate = new Date();
+  tableData: any[] = []; 
+  viewMode: boolean = false; 
+  columnheadItemDetails:any[] = ['Sr#','Stock Code','Description','Pcs','Purity','Gross Wt','Stone Wt','Net Wt','Pure Wt','Making Value','Metal Value','Net Value'];
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -53,6 +60,10 @@ export class RepairMetalPurchaseComponent implements OnInit {
 
    
    
+}
+
+formSubmit(){
+
 }
 
 adddatas() {

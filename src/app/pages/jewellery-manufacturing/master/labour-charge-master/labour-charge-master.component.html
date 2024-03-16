@@ -21,7 +21,7 @@
               <label for="input" class="col-sm-2 col-form-label">Division * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput maxlength="6" formControlName="divisions" />
+                  <input type="text"  matInput maxlength="6" formControlName="divisions" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="diaDivisionCodeData"
                   (newRowClick)="divisionCodeSelected($event)"></master-search>
@@ -31,7 +31,7 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput  maxlength="15" [readonly]="editMode || viewMode"  formControlName="labour_code" #code (input)="code.value = code.value.toUpperCase()" />
+                  <input type="text" matInput   maxlength="15" [readonly]="editMode || viewMode"  formControlName="labour_code" #codeInput1 oninput="this.value = this.value.toUpperCase()"  />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
@@ -235,7 +235,7 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput  maxlength="15" [readonly]="editMode || viewMode" formControlName="metallabour_code" #code1 (input)="code1.value = code1.value.toUpperCase()"/>
+                  <input type="text" matInput #codeInput maxlength="15" [readonly]="editMode || viewMode" formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
