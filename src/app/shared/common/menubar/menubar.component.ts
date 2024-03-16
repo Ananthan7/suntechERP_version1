@@ -46,6 +46,8 @@ export class MenubarComponent implements OnInit {
       this.skeltonLoading = false;
       if (response.status == 'Success') {
         let menuData = response.response
+        menuData = menuData.filter((item:any) => item.VISIBLE_IN_WEB == true || item.VISIBLE_IN_CLIENT == true)
+
         const groupedData: { [key: string]: any[] } = {};
 
         for (const item of menuData) {
