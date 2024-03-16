@@ -1527,7 +1527,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ prnt_inv_total_gross_amt | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ prnt_inv_total_gross_amt | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1541,7 +1541,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ this.order_items_total_tax | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ this.order_items_total_tax | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1557,7 +1557,7 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_gross_amount | number : '1.'+this.comFunc.amtDecimals
+                      order_items_total_gross_amount | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS
                     }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
@@ -1574,7 +1574,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ invReturnSalesTotalNetTotal | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ invReturnSalesTotalNetTotal | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1588,7 +1588,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_total_exchange | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ order_total_exchange | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1608,7 +1608,7 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_discount_amount | number : '1.'+this.comFunc.amtDecimals
+                      order_items_total_discount_amount | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS
                     }}"
                     (change)="changeFinalDiscount($event)"
                     aria-describedby
@@ -1633,7 +1633,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_items_total_net_amount | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ order_items_total_net_amount | number : '1.'+this.comFunc.allbranchMaster?.BAMTDECIMALS }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
