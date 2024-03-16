@@ -158,6 +158,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setInitialValues()
     if (!this.content) {
       this.fetchPartyCode();
       this.setCompanyCurrency();
@@ -169,7 +170,6 @@ export class SchemeReceiptComponent implements OnInit {
         this.disablePostBtn = false;
       }
     }
-    this.setInitialValues()
     if (this.inputElement) {
       this.renderer.selectRootElement(this.inputElement.nativeElement).focus();
     }
