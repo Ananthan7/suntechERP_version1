@@ -112,7 +112,8 @@ export class SalesEstimationComponent implements OnInit {
     blockMinimumPrice: any;
     blockMinimumPriceValue: any;
     validatePCS: any;
-
+    validateGrossWt: boolean = false;
+    validateStoneWt: boolean = false;
     receiptModesTypes: any;
     receiptModesList: any;
     metalPurchaseDataPost: any = null;
@@ -120,6 +121,11 @@ export class SalesEstimationComponent implements OnInit {
     retailSReturnDataPost: any = null;
 
     lineItemPcs: any;
+    makingRate: any;
+    totalGrossAmount: any;
+    totalTaxAmount: any;
+    totalMakingAmount: any;
+    totalNetAmount: any;
     lineItemGrossWt: any;
 
     // Dialog box
@@ -159,15 +165,15 @@ export class SalesEstimationComponent implements OnInit {
         WHERECONDITION: "PREFIX_CODE<> ''",
         VIEW_INPUT: true,
         VIEW_TABLE: true,
-      };
+    };
 
-      itemcodeSelected(value: any) {
+    itemcodeSelected(value: any) {
         console.log(value);
         this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
         this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
-      }
+    }
 
-      divisionCodeData: MasterSearchModel = {
+    divisionCodeData: MasterSearchModel = {
         PAGENO: 1,
         RECORDS: 10,
         LOOKUPID: 18,
@@ -177,12 +183,12 @@ export class SalesEstimationComponent implements OnInit {
         WHERECONDITION: "DIVISION_CODE<> ''",
         VIEW_INPUT: true,
         VIEW_TABLE: true,
-      }
-      divisionCodeSelected(e:any){
+    }
+    divisionCodeSelected(e: any) {
         console.log(e);
         this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
-      
-      }
+
+    }
     modalReference: any;
     modalReferenceSalesReturn: any;
     closeResult!: string;
@@ -192,9 +198,14 @@ export class SalesEstimationComponent implements OnInit {
 
     receiptTotalNetAmt: any;
     balanceAmount: any;
-
+    fcn_returns_cust_code_val: any;
+    fcn_exchange_division_val: any
+    fcn_exchange_item_desc_val: any
+    fcn_returns_voc_date_val: any
+    fcn_returns_sales_man_val: any
+    fcn_returns_cust_mobile_val: any
     dataForm = new FormGroup({
-      
+
         vocdate: new FormControl(new Date(new Date())),
         sales_person: new FormControl('', Validators.required),
         branch: new FormControl('', Validators.required),
@@ -406,12 +417,13 @@ export class SalesEstimationComponent implements OnInit {
     order_items_total_amount: any;
     order_items_total_tax: any;
     order_items_total_net_amount: any;
+    order_items_total_net_amount_org: any;
     order_items_total_gross_amount: any;
     order_items_total_discount_amount: any;
     // order_total_sales_returns: any = 0.0;
     order_total_exchange: any;
     // order_received_amount: any;
-
+    vatRoundOffAmt: any;
     receipt_items_slno_length: any;
 
     sales_returns_items: any = [];
@@ -481,8 +493,8 @@ export class SalesEstimationComponent implements OnInit {
     sourceOfFundList: any[] = [];
     sourceOfFundListOptions!: Observable<any[]>;
     genderList: any = [];
-
-
+    mainVocType: any = '';
+    vocTypesinSalesReturn: any = [];
     _exchangeItemchange: any;
     // quaggaConfig: any = Quagga.init({
     //   inputStream: {
@@ -535,7 +547,7 @@ export class SalesEstimationComponent implements OnInit {
         // this.comFunc.comboFilter = JSON.parse(sessionStorage.getItem('comboFilterList'));
 
         this.amlNameValidation = this.comFunc.allbranchMaster.AMLNAMEVALIDATION;
-
+        this.order_items_total_net_amount_org = 0.0;
 
         this.getBranchList();
 
@@ -590,14 +602,15 @@ export class SalesEstimationComponent implements OnInit {
             fcn_customer_code: ['',],
             fcn_customer_id_number: ['', Validators.required],
             fcn_customer_id_type: ['', Validators.required],
+            fcn_customer_exp_date: ['',],
         });
 
         this.vocDataForm = this.formBuilder.group({
             fcn_voc_no: ['', Validators.required],
             sales_person: ['', Validators.required],
             vocdate: ['', Validators.required],
-            vocType:['EST', Validators.required],
-            vocCode:['1', Validators.required],
+            vocType: ['EST', Validators.required],
+            vocCode: ['1', Validators.required],
         });
 
         this.vocDataForm.controls['vocdate'].setValue(this.currentDate);
@@ -673,10 +686,11 @@ export class SalesEstimationComponent implements OnInit {
             fcn_returns_branch: ['', Validators.required],
             fcn_returns_voc_type: ['', Validators.required],
             fcn_returns_voc_no: ['', Validators.required],
-            fcn_returns_voc_date: ['', Validators.required],
-            fcn_returns_sales_man: ['', Validators.required],
-            fcn_returns_cust_code: ['', Validators.required],
-            fcn_returns_cust_mobile: ['', Validators.required],
+            fcn_returns_voc_date: ['',],
+            fcn_returns_sales_man: ['',],
+            fcn_returns_cust_code: ['',],
+            fcn_returns_cust_mobile: ['',],
+
         });
 
         this.exchangeForm = this.formBuilder.group({
@@ -725,7 +739,7 @@ export class SalesEstimationComponent implements OnInit {
             fcn_cust_type: [''],
             fcn_cust_desg: ['', Validators.required],
             fcn_mob_code: ['', Validators.required],
-         
+
             fcn_source_of_fund: [''],
 
         });
@@ -966,7 +980,11 @@ export class SalesEstimationComponent implements OnInit {
             this.getFinancialYear();
             this.generateVocNo();
 
+
         }
+        
+        if (!this.viewOnly && !this.editOnly)
+            this.open(this.mymodal);
     }
 
 
@@ -1501,6 +1519,9 @@ export class SalesEstimationComponent implements OnInit {
         //   let temp_tax_percentage = resp.Result[0];
         //   this.branch_tax_percentage = parseFloat(temp_tax_percentage.TAX_PER);
         // });
+
+        // this.vocType = this.comFunc.getqueryParamVocType();
+        this.mainVocType = this.comFunc.getqueryParamVocType();
         this.getYearList();
         this.getKaratDetails();
         this.getSalesPersonMaster();
@@ -1511,7 +1532,7 @@ export class SalesEstimationComponent implements OnInit {
         this.getMaritalStatus();
         this.getAccountLookup();
         this.getCustomerTypeMaster();
-
+        this.getSalesReturnVocTypes()
         // this.getComboFilters();
     }
     getKaratDetails() {
@@ -1985,8 +2006,14 @@ export class SalesEstimationComponent implements OnInit {
         console.log('====================================');
         // this.sales_returns_items = [];
         // enable
+        this.salesReturnForm.reset();
+        this.lineItemForm.reset();
+        this.exchangeForm.reset();
         if (!this.viewOnly && !this.editOnly) {
             this.salesReturnsItems_forVoc = [];
+            this.salesReturnForm.controls.fcn_returns_branch.setValue(this.strBranchcode);
+            this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
+            this.salesReturnForm.controls.fcn_returns_fin_year.setValue(this.baseYear);
             // this.salesReturnEditCode = '';
             // this.salesReturnEditAmt = '';
         }
@@ -1999,9 +2026,7 @@ export class SalesEstimationComponent implements OnInit {
             this.salesReturnEditAmt = 0;
         } else {
         }
-        this.salesReturnForm.reset();
-        this.lineItemForm.reset();
-        this.exchangeForm.reset();
+
         this.divisionMS = '';
         this.sales_returns_total_amt = 0;
 
@@ -2625,7 +2650,7 @@ export class SalesEstimationComponent implements OnInit {
             });
 
             console.log(this.customerDetailForm.errors);
-            
+
             if (!this.customerDetailForm.invalid) {
 
                 const posCustomer = {
@@ -2910,7 +2935,7 @@ export class SalesEstimationComponent implements OnInit {
                     // "GOOD_QUALITY_A_K_A": "",
                     // "LOW_QUALITY_A_K_A": "",
                     // "POSKNOWNABOUT": 0
-                     // new values - poscustomer
+                    // new values - poscustomer
                     'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
                     'COUNTRY_DESC': this.customerDetails?.COUNTRY_DESC || '',
                     'STATE_DESC': this.customerDetails?.STATE_DESC || '',
@@ -3078,7 +3103,7 @@ export class SalesEstimationComponent implements OnInit {
                         // this.snackBar.dismiss();
                         this.snackBar.open('Customer details saved successfully', '', {
                             duration: 1000 // time in milliseconds
-                            
+
                         });
 
                         // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
@@ -3249,8 +3274,8 @@ export class SalesEstimationComponent implements OnInit {
                                         // }
                                     } else {
                                         this.openDialog('Success', JSON.stringify(data.response), true);
-                                        this.dialogBox.afterClosed().subscribe((data: any) => { 
-                                                this.modalReference.close();
+                                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                                            this.modalReference.close();
                                         });
                                         //proceed
                                         this.amlNameValidationData = false;
@@ -3289,7 +3314,7 @@ export class SalesEstimationComponent implements OnInit {
         }
     }
 
-    
+
     onCustomerNameFocus(value: any = null) {
         console.log(value);
         let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
@@ -6273,7 +6298,7 @@ export class SalesEstimationComponent implements OnInit {
                             }];
                         }
                         // if (resp.status == 'Success') {
-                        if (stockInfoResult.RESULT_TYPE == 'Success') {
+                        if (stockInfoResult.RESULT_TYPE == "" || stockInfoResult.RESULT_TYPE == "Success") {
                             this.newLineItem = stockInfos;
                             this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
                             this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
@@ -6284,6 +6309,12 @@ export class SalesEstimationComponent implements OnInit {
                             this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
 
                             this.divisionMS = stockInfos.DIVISIONMS;
+
+                            const isBalanceZero = parseFloat(this.newLineItem.BALANCE_QTY) === 0;
+                            const allowNegative = this.comFunc.stringToBoolean(stockInfos.ALLOW_NEGATIVE);
+                            this.validateGrossWt = !(isBalanceZero || allowNegative);
+
+                            this.validateStoneWt = this.comFunc.stringToBoolean(stockInfos.STONE);
                             this.lineItemForm.controls['fcn_li_item_code'].setValue(
                                 stockInfos.STOCK_CODE
                             );
@@ -6338,9 +6369,12 @@ export class SalesEstimationComponent implements OnInit {
                             this.lineItemForm.controls['fcn_li_rate'].setValue(
                                 parseFloat(stockInfos.RATE).toFixed(2)
                             );
+
+                            this.makingRate = parseFloat(stockInfos.RATE).toFixed(2);
                             this.lineItemForm.controls['fcn_ad_rate'].setValue(
                                 parseFloat(stockInfos.RATE).toFixed(2)
                             );
+
 
                             this.renderer.selectRootElement('#fcn_li_total_amount').focus();
 
@@ -6352,7 +6386,10 @@ export class SalesEstimationComponent implements OnInit {
                                 ); //calculation
 
                                 // this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(0); //calculation
-                                this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(0); //need field
+                                this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
+                                    stockInfoPrice.METAL_RATE
+
+                                ); //need field
                                 this.lineItemForm.controls['fcn_ad_rate_type'].setValue(
                                     stockInfos.RATE_TYPE != 'NULL' ? stockInfos.RATE_TYPE : ''
                                 );
@@ -6372,9 +6409,12 @@ export class SalesEstimationComponent implements OnInit {
                                     )
                                 );
                                 // this.lineItemForm.controls['fcn_ad_amount'].setValue(stockInfoPrice.SELLING_PRICE);
-
+                                this.makingRate = this.comFunc.transformDecimalVB(
+                                    this.comFunc.amtDecimals,
+                                    stockInfoPrice.SELLING_PRICE
+                                )
                                 this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
-                                    this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
+                                    this.comFunc.decimalQuantityFormat(this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE), 'AMOUNT')
                                 );
 
                                 this.setMetalRate(stockInfos.KARAT_CODE);
@@ -6744,19 +6784,22 @@ export class SalesEstimationComponent implements OnInit {
     managePcsGrossWt() {
         if (this.validatePCS == true) {
             this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
-            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+
             this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
                 Validators.required,
                 Validators.min(1),
             ]);
         } else {
             this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
-            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+
             this.removeValidationsForForms(this.lineItemForm, ['fcn_li_pcs']);
 
             if (this.newLineItem.BLOCK_GRWT == true)
-                this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-            else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+                this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+            else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+
         }
         //   if (stockInfos.BLOCK_GRWT == true)
         //   this.lineItemForm.controls.fcn_li_gross_wt.disable();
@@ -6792,7 +6835,7 @@ export class SalesEstimationComponent implements OnInit {
         return _status;
     }
 
-    saveOrder() {
+    saveOrder(type?: any) {
         // this.postRetailSalesMaster();
 
         /*********** Need to enable this validation ****** */
@@ -7177,7 +7220,7 @@ export class SalesEstimationComponent implements OnInit {
                         }
                     );
             } else {
-                this.suntechApi.postDynamicAPI('RetailSalesDataInDotnet/InsertRetailSalesData', postData).subscribe(
+                this.suntechApi.postDynamicAPI('RetailEstimationNet', postData).subscribe(
                     (res) => {
                         this.snackBar.dismiss();
                         // try {
@@ -7526,12 +7569,28 @@ export class SalesEstimationComponent implements OnInit {
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
                         this.lineItemForm.controls.fcn_li_rate.setValue(
-                            ''
+                            this.makingRate
                             // this.comFunc.transformDecimalVB(
                             //   this.comFunc.amtDecimals,
                             //   this.zeroAmtVal
                             // )
                         );
+                        this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                            this.totalNetAmount
+                        );
+
+                        this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                            this.totalMakingAmount
+                        );
+
+                        this.lineItemForm.controls.fcn_li_tax_amount.setValue(
+                            this.totalTaxAmount
+                        ); 
+
+                        this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+                            this.totalGrossAmount
+                        );
+
                         this.renderer.selectRootElement('#fcn_li_rate').focus();
                     }
                 });
@@ -7738,7 +7797,8 @@ export class SalesEstimationComponent implements OnInit {
                         //   this.blockMinimumPriceValue
                         // );
                         this.lineItemForm.controls.fcn_li_rate.setValue(
-                            this.zeroAmtVal
+                            this.makingRate
+                            // this.zeroAmtVal
                         );
                         this.manageCalculations();
                     }
@@ -7796,6 +7856,8 @@ export class SalesEstimationComponent implements OnInit {
                     this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
                     this.dialogBox.afterClosed().subscribe((data: any) => {
                         if (data == 'OK') {
+
+
                             this.lineItemForm.controls.fcn_li_rate.setValue(
                                 ''
                                 // this.comFunc.transformDecimalVB(
@@ -8562,6 +8624,12 @@ export class SalesEstimationComponent implements OnInit {
                 parseFloat(mkgvalue)
             )
         );
+        
+        this.totalMakingAmount=  this.comFunc.transformDecimalVB(
+            this.comFunc.amtDecimals,
+            parseFloat(mkgvalue)
+        );
+
 
         // set localstorage for get value
         localStorage.setItem(
@@ -8621,6 +8689,10 @@ export class SalesEstimationComponent implements OnInit {
                         this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
                     )
                 );
+                this.totalGrossAmount=  this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
+                );
             } else {
                 /* divisionMS == s, set total amount to gross amt */
                 this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
@@ -8651,6 +8723,9 @@ export class SalesEstimationComponent implements OnInit {
                 // Math.round(parseFloat(value)).toFixed(2)
                 this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, taxAmount)
             );
+
+            this.totalTaxAmount=this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, taxAmount);
+
             this.li_tax_amount_val = this.comFunc.transformDecimalVB(
                 this.comFunc.amtDecimals,
                 taxAmount
@@ -8670,6 +8745,8 @@ export class SalesEstimationComponent implements OnInit {
             this.lineItemForm.controls['fcn_li_net_amount'].setValue(
                 this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, netAmtValue)
             );
+
+            this.totalNetAmount=this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, netAmtValue);
 
         } else {
 
@@ -8819,7 +8896,7 @@ export class SalesEstimationComponent implements OnInit {
         const value = this.karatRateDetails.filter(
             (data: any) => data.KARAT_CODE == karatCode
         )[0].KARAT_RATE;
-        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(value);
+        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(this.comFunc.decimalQuantityFormat(value, 'AMOUNT'));
     }
     changeStoneWt(event: any) {
         const value = event.target.value;
@@ -10251,7 +10328,7 @@ export class SalesEstimationComponent implements OnInit {
     close(data?: any) {
         //TODO reset forms and data before closing
         this.activeModal.close(data);
-      }
+    }
 
     generateVocNo() {
         const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
@@ -10275,4 +10352,48 @@ export class SalesEstimationComponent implements OnInit {
         // });
 
     }
+
+    changeFinalDiscount(event: any) {
+        const value = event.target.value;
+        if (value != '') {
+
+            let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
+                this.comFunc.emptyToZero(value));
+            this.order_items_total_net_amount = res;
+            this.receiptTotalNetAmt = res;
+
+        } else {
+            this.order_items_total_net_amount = this.order_items_total_net_amount_org
+            this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
+
+
+        }
+    }
+
+    sendToEmail() { }
+
+    cancelBill() { }
+
+    getSalesReturnVocTypes() {
+        //     http://94.200.156.234:85/api/UspGetSubVouchers
+        // {
+
+        // }
+        const API = `UspGetSubVouchers`;
+        const postData = {
+            "strBranchCode": this.strBranchcode,
+            "strMainVocType": "POS"
+            //    this.mainVocType
+        };
+
+        this.suntechApi.postDynamicAPI(API, postData)
+            .subscribe((res: any) => {
+                if (res.status == "Success") {
+                    this.vocTypesinSalesReturn = res.dynamicData[0];
+                    console.log('this.vocTypesinSalesReturn', this.vocTypesinSalesReturn);
+
+                }
+            });
+    }
+
 }

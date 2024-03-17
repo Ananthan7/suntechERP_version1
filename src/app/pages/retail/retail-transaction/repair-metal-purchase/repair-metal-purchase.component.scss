@@ -1,0 +1,36 @@
+.icons_wrap {
+    display: flex;
+   
+  
+    .icons {
+      font-size: 24px;
+      margin-right: 10px;
+      color: #fff;
+    }
+    .custom-control-label {
+      font-size: 16px;
+      font-weight: 400;
+      margin-top: 2px;
+      color: #fff;
+    }
+  }
+
+
+  .block{
+    border:1px solid #ddd;
+    text-align: center;
+    background-color: #f1f1f1;
+    font-weight:600;
+  }
+
+  .light{
+    border:1px solid #ddd;
+    text-align: center;
+    background-color: #f1f1f1;
+  }
+
+  .add-btn {
+    font-size: 12px;
+    padding: 3px 12px !important;
+    border-radius: 5px !important;
+  }
