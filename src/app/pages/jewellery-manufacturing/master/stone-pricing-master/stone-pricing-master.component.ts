@@ -411,7 +411,6 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
 
-
     else {
 
       let API = 'StonePriceMasterDJ/InsertStonePriceMaster'

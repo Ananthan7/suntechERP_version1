@@ -74,7 +74,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="salesman"  />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="salesManCodeData"
+                                (newRowClick)="salesManCodeSelected($event)"></master-search>
                             </div>
                         </div>
 
@@ -86,7 +87,8 @@
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="customer"  />
                                 </mat-form-field>
-                                <master-search ></master-search>
+                                <master-search [MasterSearchData]="customerCodeData"
+                                (newRowClick)="customerCodeSelected($event)"></master-search>
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="customerDesc"  />
                                 </mat-form-field>

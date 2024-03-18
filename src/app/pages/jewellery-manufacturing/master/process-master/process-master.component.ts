@@ -57,8 +57,6 @@ export class ProcessMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-
     // this.islossReadOnly = true;
     // this.isRecovReadOnly = true;
     // this.isAlloWGainReadOnly = true;
@@ -321,7 +319,6 @@ export class ProcessMasterComponent implements OnInit {
   private setFormValues() {
     console.log(this.content);
     if (!this.content) return
-
 
     
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
