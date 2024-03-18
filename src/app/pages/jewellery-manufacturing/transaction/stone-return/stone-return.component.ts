@@ -86,8 +86,19 @@ export class StoneReturnComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.userName = this.comService.userName;
-    this.setAllInitialValues()
+    this.setCompanyCurrency()
+    this.basesetCompanyCurrency()
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.setAllInitialValues()
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setAllInitialValues()
+      return
+    }
     this.setvalues()
+
   }
   setAllInitialValues() {
     console.log(this.content)
@@ -97,31 +108,33 @@ export class StoneReturnComponent implements OnInit {
     .subscribe((result) => {
       if (result.response) {
         let data = result.response
-        console.log(data, 'll')
-        this.stoneReturnData = data.Details
+        this.detailData= data.Details
+        console.log(data,'collection')
         data.Details.forEach((element: any) => {
-          this.tableData.push({
+          this.stoneReturnData.push({
               SRNO: element.SRNO,
               VOCNO: element.VOCNO,
               VOCTYPE: element.VOCTYPE,
               VOCDATE: element.VOCDATE,
-              JOB_NO: element.JOB_NUMBER,
-              JOB_DATE: element.JOB_DATE,
+              JOB_NO: element.JOB_SO_NUMBER,
+              JOB_DATE: element.JOB_DATE              ,
               UNQ_JOB: element.UNQ_JOB_ID                       ,
               JOB_DE: element.JOB_DESCRIPTION,
               BRANCH: element.BRANCH_CODE,
 
             })
           });
-         
-          this.stonereturnFrom.controls.basecurrency.setValue(data.Details.BASE_CURRENCY)
-          this.stonereturnFrom.controls.basecurrencyrate.setValue(data.Details.BASE_CURR_RATE)
-          this.stonereturnFrom.controls.currency.setValue(data.Details.CURRENCY_CODE)
-          this.stonereturnFrom.controls.currencyrate.setValue(data.Details.CURRENCY_RATE)
-          this.stonereturnFrom.controls.worker.setValue(data.Details.WORKER)
-          this.stonereturnFrom.controls.workername.setValue(data.Details.WORKER_NAME)
-          this.stonereturnFrom.controls.enterdBy.setValue(data.Details.HTUSERNAME)
-          this.stonereturnFrom.controls.enteredByName.setValue(data.Details.REMARKS)
+          this.stonereturnFrom.controls.voctype.setValue(data.VOCTYPE)
+          this.stonereturnFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
+          this.stonereturnFrom.controls.basecurrencyrate.setValue(data.BASE_CURR_RATE)
+          this.stonereturnFrom.controls.currency.setValue(data.CURRENCY_CODE)
+          this.stonereturnFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
+          this.stonereturnFrom.controls.worker.setValue(data.WORKER)
+          this.stonereturnFrom.controls.workername.setValue(data.WORKER_NAME)
+          this.stonereturnFrom.controls.enterdBy.setValue(data.HTUSERNAME)
+          this.stonereturnFrom.controls.enteredByName.setValue(data.REMARKS)
+          this.stonereturnFrom.controls.enteredByName.setValue(data.REMARKS)
+        
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -157,11 +170,11 @@ export class StoneReturnComponent implements OnInit {
 
   openaddstonereturndetails(data?: any) {
     console.log(data)
-    if (data) {
-      data[0] = this.stonereturnFrom.value;
-    } else {
-      data = [{ HEADERDETAILS: this.stonereturnFrom.value }]
-    }
+    // if (data) {
+    //   data[0] = this.stonereturnFrom.value;
+    // } else {
+    //   data = [{ HEADERDETAILS: this.stonereturnFrom.value }]
+    // }
     const modalRef: NgbModalRef = this.modalService.open(StoneReturnDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -185,8 +198,11 @@ export class StoneReturnComponent implements OnInit {
 
     this.selectRowIndex = (event.dataIndex)
     let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    this.openaddstonereturndetails(selectedData)
+    console.log(this.detailData,'det')
+    let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
+    console.log(detailRow,'det')
+    this.openaddstonereturndetails(detailRow)
+   
 
 
   }
@@ -220,13 +236,23 @@ export class StoneReturnComponent implements OnInit {
     this.selectedKey.forEach((element: any) => {
       this.stoneReturnData.splice(element.SRNO - 1, 1)
     })
-  
   }
-
+  onSelectionChanged(event: any) {
+    this.selectedKey = event.selectedRowKeys;
+    console.log(this.selectedKey, 'srno')
+    let indexes: Number[] = [];
+    this.stoneReturnData.reduce((acc, value, index) => {
+      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+  }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
-    vocno:[''],
+    vocno:[1],
     vocdate:[''],
     basecurrency:[''],
     basecurrencyrate:[''],
@@ -237,14 +263,73 @@ export class StoneReturnComponent implements OnInit {
     remark:[''],
     enterdBy : [''],
     enteredByName :[''],
+    process:[''],
+    jobDesc:['']
   });
-
+ 
   setvalues(){
+    console.log('ss')
     this.stonereturnFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.stonereturnFrom.controls.vocdate.setValue(this.comService.currentDate)
-    this.stonereturnFrom.controls.vocno.setValue('1')
+    
+  }
+   /**USE: to set currency on selected change*/
+   currencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.stonereturnFrom.controls.currency.setValue((event.target.value).toUpperCase())
+    } else {
+      this.stonereturnFrom.controls.currency.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.stonereturnFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonereturnFrom.value.currency);
+    if (CURRENCY_RATE.length > 0) {
+      this.stonereturnFrom.controls.currencyrate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.stonereturnFrom.controls.currency.setValue('')
+      this.stonereturnFrom.controls.currencyrate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
   }
 
+ /**USE: to set currency on selected change*/
+   basecurrencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.stonereturnFrom.controls.basecurrency.setValue((event.target.value).toUpperCase())
+    } else {
+      this.stonereturnFrom.controls.basecurrency.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  basesetCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.stonereturnFrom.controls.basecurrency.setValue(CURRENCY_CODE);
+    this.basesetCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  basesetCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonereturnFrom.value.basecurrency);
+    if (CURRENCY_RATE.length > 0) {
+      this.stonereturnFrom.controls.basecurrencyrate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.stonereturnFrom.controls.basecurrency.setValue('')
+      this.stonereturnFrom.controls.basecurrencyrate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
+  }
 
 
 
@@ -261,13 +346,13 @@ removedata(){
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = {
       "MID": 0,
       "VOCTYPE": this.stonereturnFrom.value.voctype || "",
       "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.stonereturnFrom.value.vocno || "",
+      "VOCNO":this.stonereturnFrom.value.vocno || "",
       "VOCDATE": this.stonereturnFrom.value.vocdate || "",
       "YEARMONTH": this.yearMonth,
       "DOCTIME": "2023-10-19T06:15:23.037Z",
@@ -277,7 +362,7 @@ removedata(){
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "SMAN": "",
+      "SMAN": '',
       "REMARKS": this.stonereturnFrom.value.remark || "",
       "NAVSEQNO": 0,
       "BASE_CURRENCY": this.stonereturnFrom.value.basecurrency || "",
@@ -406,13 +491,13 @@ removedata(){
       return
     }
   
-    let API = 'JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/'+ this.stonereturnFrom.value.branchCode + this.stonereturnFrom.value.voctype + this.stonereturnFrom.value.vocno + this.stonereturnFrom.value.yearMonth
+    let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${this.branchCode}/${this.stonereturnFrom.value.voctype}/${this.stonereturnFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
       "MID": 0,
       "VOCTYPE": this.stonereturnFrom.value.voctype || "",
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.stonereturnFrom.value.vocno || "",
-      "VOCDATE": this.stonereturnFrom.value.vocdate || "",
+      "VOCDATE": "2023-10-19T06:15:23.037Z" || "",
       "YEARMONTH": this.yearMonth,
       "DOCTIME": "2023-10-19T06:15:23.037Z",
       "CURRENCY_CODE": this.stonereturnFrom.value.currency || "",
@@ -486,16 +571,16 @@ removedata(){
           "TOTAL_AMOUNTLC": 0,
           "ISBROCKEN": 0,
           "BASE_CONV_RATE": 0,
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "str",
           "DT_VOCNO": 0,
-          "DT_YEARMONTH": "",
+          "DT_YEARMONTH": "string",
           "RET_TO_DESC": "",
           "PICTURE_NAME": "",
           "RET_TO": "",
           "ISMISSING": 0,
-          "SIEVE_SET": "",
-          "SUB_STOCK_CODE": ""
+          "SIEVE_SET": "string",
+          "SUB_STOCK_CODE": "string"
         }
       ]
     }
