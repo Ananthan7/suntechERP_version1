@@ -127,10 +127,9 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 80%">
                                         <input type="text" matInput  formControlName="recStockCode"
-                                            [readonly]="viewMode" />
+                                            [readonly]="islossReadOnly" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="StockProcessData" *ngIf="viewMode == false"
-                                        (newRowClick)="StockProcesSelected($event)">
+                                    <master-search [MasterSearchData]="StockProcessData"   (newRowClick)="StockProcesSelected($event)"  *ngIf="searchModeAllow == false">
                                     </master-search>
                                 </div>
                                 <div class="col-sm-3">
@@ -313,7 +312,7 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="MergePices" [disabled]="viewMode"
                                             class="example-margin">
-                                            Merge Pices</mat-checkbox>
+                                            Merge Pieces</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="LockWeight" [disabled]="viewMode"
@@ -389,7 +388,7 @@
                                             Process</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
-                                        <mat-checkbox formControlName="RecoveryProcess" [disabled]="viewMode"
+                                        <mat-checkbox formControlName="RecoveryProcess" (change)="onRecovStockCode($event)" [disabled]="viewMode"
                                             class="example-margin">
                                             Recovery Process</mat-checkbox>
                                     </div>

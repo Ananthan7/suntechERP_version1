@@ -186,7 +186,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" [readonly]="viewModeAll" matInput maxlength="15"
-                                                class="text-right" formControlName="wt_from" FourDecimalInput
+                                                class="text-right" formControlName="wt_from" MetalDecimalInput
                                                 (input)="onInputChange($event,'wt_from', 12)" />
                                         </mat-form-field>
                                     </div>
@@ -198,7 +198,7 @@
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" [readonly]="viewModeAll" matInput maxlength="15"
                                                 class="text-right" formControlName="wt_to"
-                                                (change)="onweighttto($event)" FourDecimalInput
+                                                (change)="onweighttto($event)" MetalDecimalInput
                                                 (input)="onInputChange($event,'wt_to', 12)" />
                                         </mat-form-field>
                                     </div>
@@ -220,7 +220,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" [readonly]="viewModeAll || viewselling" matInput maxlength="15"
-                                                class="text-right" formControlName="selling"
+                                                class="text-right" formControlName="selling" MetalDecimalInput
                                                 (input)="onInputChange($event,'selling', 12)"
                                                 (keypress)="salesChange('selling')"
                                                 
@@ -235,7 +235,7 @@
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number"  [readonly]="viewModeAll || viewsellingrate"
                                                 matInput class="text-right" formControlName="selling_rate"
-                                                 
+                                                AmountDecimalInput
                                                  (keypress)="salesChange('selling_rate')"
                                                  />
                                         </mat-form-field>

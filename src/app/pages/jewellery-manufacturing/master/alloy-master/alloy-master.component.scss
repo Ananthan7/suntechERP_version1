@@ -57,3 +57,9 @@
     font-size: 100px;
     cursor: pointer;
 }
+
+.flexbox { display: flex; }
+.flexbox .stretch { flex: 1; }
+.flexbox .normal { flex: 0; margin: 15px 0px 0px 0rem; }
+.flexbox div input { padding: .5em 1em; width: 80%; }
+.flexbox div button { padding: .5em 1em; white-space: nowrap; }

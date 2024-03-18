@@ -87,6 +87,8 @@ export class CustomerPriceMasterComponent implements OnInit {
   
     this.renderer.selectRootElement('#customercode')?.focus();
 
+    this.renderer.selectRootElement('#customercode')?.focus();
+
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
