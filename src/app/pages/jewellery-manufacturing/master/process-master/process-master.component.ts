@@ -321,6 +321,9 @@ export class ProcessMasterComponent implements OnInit {
   private setFormValues() {
     console.log(this.content);
     if (!this.content) return
+
+
+    
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
     this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
 

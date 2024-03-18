@@ -455,7 +455,7 @@ DialabourTypeList = [
 
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#metallabour_code')?.focus();
+   // this.renderer.selectRootElement('#metallabour_code')?.focus();
     // this.renderer.selectRootElement('#labour_code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
