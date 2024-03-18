@@ -423,6 +423,8 @@ export class SchemeRegisterComponent implements OnInit {
             return
           }
           this.viewPorcessBtn = false
+          this.processMode = false
+          this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCHEME_CODE)
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
           this.schemeRegistrationForm.controls.Remarks.setValue(data.SCHEME_REMARKS)
