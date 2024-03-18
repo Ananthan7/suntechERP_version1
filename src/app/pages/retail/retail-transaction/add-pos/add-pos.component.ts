@@ -1783,7 +1783,17 @@ export class AddPosComponent implements OnInit {
               // let karat_codes = ['14', '18', '20', '21', '22', '24'];
               // if (karat_codes.includes(temp_karatrate[i].KARAT_CODE)) {
               if (temp_karatrate[i]['KARAT_RATE'].toString() != '0') {
+                temp_karatrate[i]['POPKARAT_RATE'] =
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                 temp_karatrate[i]['POPKARAT_RATE'] )
+                temp_karatrate[i]['KARAT_RATE'] =
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                 temp_karatrate[i]['KARAT_RATE'] )
+
                 this.karatRateDetails.push(temp_karatrate[i]);
+                
               }
             }
             this.karatRateDetails.sort((a: any, b: any) =>
@@ -2501,16 +2511,17 @@ export class AddPosComponent implements OnInit {
     this.newLineItem = value;
 
 
-    if (this.editOnly == true || this.viewOnly == true) {
-      this.snackBar.open('Loading...');
+    // if (this.editOnly == true || this.viewOnly == true) {
+    this.snackBar.open('Loading...');
 
-      this.disableSaveBtn = true;
+    this.disableSaveBtn = true;
 
-      let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
+    let API = 'RetailSalesStockValidation?strStockCode=' + value.STOCK_CODE
+      +
       '&strBranchCode=' + this.strBranchcode +
       '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
       '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
-      await 
+    await
       this.suntechApi.getDynamicAPI(API)
         .subscribe(async (resp: any) => {
           this.snackBar.dismiss();
@@ -2520,37 +2531,42 @@ export class AddPosComponent implements OnInit {
           if (resp != null) {
             if (resp.resultStatus.RESULT_TYPE == 'Success') {
               let stockInfos = resp.stockInfo;
+              console.log(stockInfos);
+
               this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
               this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
               this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
               this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
               this.disableSaveBtn = false;
               this.validatePCS = stockInfos.VALIDATE_PCS;
-              this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(this.stockInfos.BLOCK_GRWT?.toString());
+              this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
               this.newLineItem.DIVISION = stockInfos.DIVISION;
+              this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
 
 
+              if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
 
-              if (!this.newLineItem.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM.toString()))
-                this.removeValidationsForforms('lineItemForm', ['fcn_li_rate', 'fcn_li_total_amount']);
-              else
-                /* need to check this for diamond item */
-                this.setMakingValidation();
+                if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
+                  this.removeValidationsForforms('lineItemForm', ['fcn_li_rate', 'fcn_li_total_amount']);
+                else
+                  /* need to check this for diamond item */
+                  this.setMakingValidation();
+              }
 
             }
           }
 
         })
-    }
+    // }
 
-    
+
     this.newLineItem.STOCK_CODE = value.STOCK_CODE;
     this.newLineItem.DIVISION = value.DIVISION_CODE;
     this.newLineItem.HSN_CODE = value.HSNCODE;
     this.newLineItem.GST_CODE = value.VATCODE;
     this.newLineItem.MAIN_STOCK_CODE = value.MAINSTOCKCODE;// changed at 16/3/2024
     // this.newLineItem.MAIN_STOCK_CODE = value.MainStockCode;
-    console.log('edit af data',value)
+    console.log('edit af data', value)
     this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
     // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
     // this.divisionMS = value.divisionMS;
@@ -2562,16 +2578,16 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_gross_wt.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-      value.GROSSWT));
+        value.GROSSWT));
     this.lineItemForm.controls.fcn_li_stone_wt.setValue(
-      
+
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        value.STONEWT) );
+        value.STONEWT));
     this.lineItemForm.controls.fcn_li_net_wt.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        value.NETWT ));
+        value.NETWT));
     this.lineItemForm.controls.fcn_li_rate.setValue(value.MKG_RATEFC);
     this.lineItemForm.controls.fcn_li_total_amount.setValue(
       this.comFunc.transformDecimalVB(
@@ -2604,10 +2620,10 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_ad_amount.setValue(
       // value.TOTALWITHVATFC
 
-      value.MkgMtlNetRate
+      value.MKGMTLNETRATE // changed at 18/3/2024
     );
     this.lineItemForm.controls.fcn_ad_rate_type.setValue(value.RATE_TYPE);
-    this.lineItemForm.controls.fcn_ad_rate.setValue(value.MkgMtlNetRate);
+    this.lineItemForm.controls.fcn_ad_rate.setValue(value.MKGMTLNETRATE); // changed at 18/3/2024
     this.lineItemForm.controls.fcn_tab_details.setValue(value.SJEW_TAGLINES);
     // this.lineItemForm.controls.fcn_ad_making_rate.setValue(value.PUREWT);
     // this.lineItemForm.controls.fcn_ad_making_amount.setValue(value.PUREWT);
@@ -8542,8 +8558,7 @@ export class AddPosComponent implements OnInit {
         let karatCode = this.newLineItem.KARAT_CODE;
 
         if (this.comFunc.compCurrency == this.vocDataForm.value.txtCurrency.toString().trim()) {
-        // if (this.comFunc.compCurrency == 'AED') {
-
+          // if (this.comFunc.compCurrency == 'AED') {
           if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
             if (karatCode.toString() == "24") {
               dblStockFcCost = dblStockCost + 1;
@@ -8557,6 +8572,7 @@ export class AddPosComponent implements OnInit {
               dblStockCost = dblStockCost + .5;
             }
             else {
+              console.log('minbranch ', dblStockCost * minBranchProfitPercentMetal / 100.00, 'dblStockCost', dblStockCost);
               dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
             }
         }
@@ -8577,7 +8593,7 @@ export class AddPosComponent implements OnInit {
               this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00)), this.vocDataForm.value.txtCurRate);
           }
         }
-alert(dblStockFcCost);
+        // alert(dblStockFcCost);
         this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
         this.manageCalculations();
 
@@ -9132,7 +9148,7 @@ alert(dblStockFcCost);
     // ).toFixed(2);
     // alert('totalAmt ' + totalAmt);
     console.log(grossAmt, totalAmt, taxAmt);
-    const discountAmt = this.comFunc.transformDecimalVB(
+    let discountAmt = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       parseFloat(totalAmt) - parseFloat(grossAmt)
     );
@@ -9156,6 +9172,8 @@ alert(dblStockFcCost);
         this.lineItemForm.value.fcn_li_net_amount
       );
     } else {
+      if (parseFloat(discountAmt.toString()) < 0)
+        discountAmt = this.zeroAmtVal;
       this.lineItemForm.controls.fcn_li_discount_amount.setValue(
         discountAmt
       );
@@ -9163,6 +9181,14 @@ alert(dblStockFcCost);
         { target: { value: discountAmt } },
         this.lineItemForm.value.fcn_li_net_amount
       );
+
+      // this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+      //   discountAmt
+      // );
+      // this.changeDisAmount(
+      //   { target: { value: discountAmt } },
+      //   this.lineItemForm.value.fcn_li_net_amount
+      // );
     }
 
   }
@@ -9312,7 +9338,8 @@ alert(dblStockFcCost);
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate) *
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt)
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt) // pure weight changed at 18/3/2024
+        // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) // pure weight
       )
     );
 
@@ -9326,6 +9353,7 @@ alert(dblStockFcCost);
       //   this.lineItemForm.value.fcn_li_rate *
       //   this.lineItemForm.value.fcn_li_gross_wt;
 
+    
       // new calculation added 30/12/2023
       if (this.divisionMS == 'M') {
         switch (this.newLineItem?.MAKING_ON) {
@@ -9337,9 +9365,15 @@ alert(dblStockFcCost);
             break;
 
           case 'GROSS':
+            console.log('GROSS',
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+            );
+
             mkgvalue =
               this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
               this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+          
             break;
 
           case 'NET':
@@ -9351,11 +9385,10 @@ alert(dblStockFcCost);
         }
       } else {
         mkgvalue =
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) *
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) *
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
       }
     }
-
     // const mkgvalue = (
     //   this.lineItemForm.value.fcn_li_rate *
     //   this.lineItemForm.value.fcn_li_gross_wt
