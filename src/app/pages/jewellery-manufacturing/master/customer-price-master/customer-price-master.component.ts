@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -10,6 +10,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import themes from 'devextreme/ui/themes';
+
 
 
 @Component({
@@ -19,23 +21,22 @@ import { FormsModule } from '@angular/forms';
 })
 export class CustomerPriceMasterComponent implements OnInit {
 
+  checkBoxesMode: string;
   divisionMS: any = 'ID';
-  columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
+  columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO',,'WEIGHT_FROM','WEIGHT_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER'];
   columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'CODE'},
    { title:'DIVISION_CODE', field: 'DIVISION_CODE'},
    { title:'SHAPE', field: 'SHAPE'},
    { title:'DIVISION', field: 'DIVISION'},
    { title:'METHOD', field: 'METHOD'},
    { title:'UNITCODE', field: 'UNITCODE'},
+   { title:'CARATWT_FROM', field: 'CARATWT_FROM'},
+   { title:'CARATWT_TO', field: 'CARATWT_TO'},
    { title:'CURRENCY_CODE', field: 'CURRENCYCODE'},
    { title:'CRACCODE', field: 'CRACCODE'},
    { title:'COST_RATE', field: 'COST_RATE'},
-   { title:'SELLING_RATE', field: 'SELLING_RATE'},
-   { title:'CARATWT_FROM', field: 'CARATWT_FROM'},
-   { title:'CARATWT_TO', field: 'CARATWT_TO'},
-   { title:'CUSTOMER_CODE', field: 'CUSTOMER_CODE'},
-   { title:'REFMID', field: 'REFMID'},
-   { title:'DT_VALID_FROM', field: 'DT_VALID_FROM'},];
+   { title:'SELLING_RATE', field: 'SELLING_RATE'},   
+];
   columnheader2:any[] = ['DESIGN_CODE','LABOUR_CODE','LABTYPE','METHOD','DIVISION','CURRENCY_CODE','UNITCODE','COST_RATE','SELLING_PER','CRACCODE','DIVISION_CODE','SELLING_RATE','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
   subscriptions: any;
   @Input() content!: any; 
@@ -49,7 +50,8 @@ export class CustomerPriceMasterComponent implements OnInit {
   rateInput: any; 
   text="Deduct";
   myNumber: any;
-
+  allMode: string;
+  selectedKeys: any[] = [];
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -62,6 +64,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   
   
 
@@ -74,9 +77,15 @@ export class CustomerPriceMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+    private renderer: Renderer2,
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
  
   ngOnInit(): void {
+  
+    this.renderer.selectRootElement('#customercode')?.focus();
 
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
@@ -155,6 +164,12 @@ export class CustomerPriceMasterComponent implements OnInit {
     
   }
 
+  selectRow(rowKey: any) {
+    if (!this.selectedKeys.includes(rowKey)) {
+      this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
+    }
+  }
+
 
 
   customerpricemasterForm: FormGroup = this.formBuilder.group({
@@ -182,16 +197,39 @@ export class CustomerPriceMasterComponent implements OnInit {
   onInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
 
-    // Trim the input to 3 letters
-    const limitedValue = inputValue.slice(0, 3);
+    // Remove any non-digit characters except for the first decimal point
+    const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
+
+    // Extract the integer part and the decimal part
+    const parts = sanitizedValue.split('.');
+    let integerPart = parts[0];
+    const decimalPart = parts[1] || '';
+
+    // Take only the first 3 characters for the integer part
+    integerPart = integerPart.slice(0, 3);
+
+    // Combine integer part and decimal part
+    let limitedValue = integerPart;
+    if (decimalPart.length > 0) {
+        limitedValue += '.' + decimalPart.slice(0, 3 - integerPart.length);
+    }
 
     // Update the input value
     (event.target as HTMLInputElement).value = limitedValue;
-  }
+}
 
 formatNumber(): void {
-  let formattedValue = parseFloat(this.myNumber.toString().replace(/,/g, '')).toLocaleString();
-  this.myNumber = formattedValue;
+  let numericValue = parseFloat(this.myNumber.replace(/,/g, '.'));
+
+  // Check if the parsed numeric value is not NaN
+  if (!isNaN(numericValue)) {
+    // Format the numeric value with commas as thousands separators
+    let formattedValue = numericValue.toLocaleString();
+    this.myNumber = formattedValue;
+  } else {
+    // If the parsed value is NaN, set the input value to an empty string
+    this.myNumber = '';
+  }
 }
 
   change(event: any) {
