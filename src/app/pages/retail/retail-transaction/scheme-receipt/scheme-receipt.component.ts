@@ -55,6 +55,7 @@ export class SchemeReceiptComponent implements OnInit {
   totalValueInText: string = "";
   CustomerNameSearch: string = "";
   CustomerCodeSearch: string = "";
+  currencySelected: string = "";
   VocNumberMain: string = "";
   schemeIdEdit: string = "";
   branchName: any = localStorage.getItem("BRANCH_PARAMETER");
@@ -166,9 +167,6 @@ export class SchemeReceiptComponent implements OnInit {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT') {
         this.viewMode = true;
       }
-      if(this.content.FLAG == 'EDIT'){
-        this.disablePostBtn = false;
-      }
     }
     if (this.inputElement) {
       this.renderer.selectRootElement(this.inputElement.nativeElement).focus();
@@ -188,7 +186,7 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.receiptDetailsForm.controls.Branch.setValue(this.content.BRANCH_CODE);
     this.receiptDetailsForm.controls.VocType.setValue(this.content.VOCTYPE);
-    
+
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);
@@ -216,7 +214,6 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH);
     this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
     this.receiptDetailsForm.controls.POS_TAX_CRACCODE.setValue(this.content.POS_TAX_CRACCODE);
-    this.disablePostBtn = (this.content.AUTOPOSTING || this.content.AUTOPOSTING == 'Y') ? true : false;
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
@@ -293,6 +290,7 @@ export class SchemeReceiptComponent implements OnInit {
         if (resp.response) {
           if (resp.response) {
             let result = resp.response;
+            this.disablePostBtn = result.AUTOPOSTING == true ? true : false;
             this.receiptDetailsForm.controls.VocDate.setValue(result.VOCDATE);
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
@@ -541,7 +539,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   selectedParty(data: any) {
     this.receiptDetailsForm.controls.PartyCode.setValue(data.ACCODE);
-    this.receiptDetailsForm.controls.PartyDescription.setValue(data.ACCOUNT_HEAD || data['ACCOUNT HEAD'] );
+    this.receiptDetailsForm.controls.PartyDescription.setValue(data.ACCOUNT_HEAD || data['ACCOUNT HEAD']);
     this.newReceiptData.PARTY_CODE = data.ACCODE;
     if (data.CURRENCY_CODE) {
       this.receiptDetailsForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
@@ -576,13 +574,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.resetSchemeDetails()
     this.fetchSchemeWithCustCode(this.receiptDetailsForm.value.POSCustomerCode);
   }
-  //customer selection from selectedCustomer MainGrid
-  selectedCustomerMainGrid(data: any) {
-    this.VocNumberMain = "";
-    this.CustomerNameSearch = data.NAME;
-    this.CustomerCodeSearch = data.CODE;
-    this.mainGridCodeChange(data.CODE);
-  }
+  
   resetSchemeDetails() {
     this.receiptDetailsForm.controls.SchemeCode.setValue('');
     this.receiptDetailsForm.controls.SchemeID.setValue('');
@@ -592,7 +584,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   //party Code Change
   customerChange(event: any, searchFlag: string) {
-    if (event.target.value == "" ) return;
+    if (event.target.value == "") return;
     if (this.content?.FLAG == 'VIEW' || this.content?.FLAG == 'EDIT') return;
     this.VocNumberMain = "";
     this.resetSchemeDetails()
@@ -619,175 +611,7 @@ export class SchemeReceiptComponent implements OnInit {
     );
     this.subscriptions.push(Sub);
   }
-  //party Code Change
-  mainGridCustomerChange(event: any, searchFlag: string) {
-    if (event.target.value == "") return;
-    this.snackBar.open("Loading ...");
-    let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
-      (result) => {
-        this.snackBar.dismiss();
-        if (result.response) {
-          let data = result.response;
-          if (data.CODE) {
-            this.mainGridCodeChange(data.CODE);
-          }
-        } else {
-          this.toastr.error(
-            "Customer not found",
-            result.Message ? result.Message : "",
-            {
-              timeOut: 3000,
-            }
-          );
-        }
-      },
-      (err) =>
-        this.toastr.error("Server Error", "", {
-          timeOut: 3000,
-        })
-    );
-    this.subscriptions.push(Sub);
-  }
-  mainGridVocChange(event: any) {
-    if (event.target.value == "") return;
-    this.CustomerCodeSearch = "";
-    this.CustomerNameSearch = "";
-    let data = {
-      FILTER: {
-        YEARMONTH: this.commonService.yearSelected,
-        BRANCH_CODE: this.commonService.branchCode,
-        VOCTYPE: "PCR",
-        VOCNO: event.target.value || "",
-      },
-      TRANSACTION: {
-        VOCTYPE: "PCR",
-        MAINVOCTYPE: "",
-      },
-    };
-    const options = { compact: true, ignoreComment: true, spaces: 4 };
-    let xmlData = convert.js2xml({ root: data }, options);
 
-    let param = {
-      PAGENO: 1,
-      RECORDS: 10000,
-      TABLE_NAME: "CURRENCY_RECEIPT",
-      CUSTOM_PARAM: xmlData || "",
-    };
-    this.schemeReceiptList = [];
-    let API = `Scheme/CommonLookUps`;
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, param)
-      .subscribe(
-        (resp: any) => {
-          if (resp.dynamicData) {
-            if (this.schemeReceiptList.length > 0) {
-              resp.dynamicData[0].forEach((item: any, i: any) => {
-                item.Id = i + 1;
-              });
-              this.schemeReceiptList = [
-                ...this.schemeReceiptList,
-                ...resp.dynamicData[0],
-              ];
-            } else {
-              resp.dynamicData[0].forEach((item: any, i: any) => {
-                item.Id = i + 1;
-              });
-              this.schemeReceiptList = resp.dynamicData[0];
-              // this.nextPage()
-            }
-            this.schemeReceiptListHead = Object.keys(this.schemeReceiptList[0]);
-            this.schemeReceiptListHead.unshift(
-              this.schemeReceiptListHead.pop()
-            );
-            //change detector code
-            // this.ChangeDetector.detectChanges()
-          } else {
-            this.toastr.error(
-              "No Response Found",
-              resp.Message ? resp.Message : "",
-              {
-                timeOut: 2000,
-              }
-            );
-          }
-        },
-        (err) => {
-          this.toastr.error("Server Error", "", {
-            timeOut: 3000,
-          });
-        }
-      );
-    this.subscriptions.push(Sub);
-  }
-  mainGridCodeChange(CODE: any) {
-    let data = {
-      FILTER: {
-        YEARMONTH: this.commonService.yearSelected,
-        BRANCH_CODE: this.commonService.branchCode,
-        VOCTYPE: "PCR",
-        POSCustomerCode: CODE || "",
-      },
-      TRANSACTION: {
-        VOCTYPE: "PCR",
-        MAINVOCTYPE: "",
-      },
-    };
-    const options = { compact: true, ignoreComment: true, spaces: 4 };
-    let xmlData = convert.js2xml({ root: data }, options);
-
-    let param = {
-      PAGENO: 1,
-      RECORDS: 10000,
-      TABLE_NAME: "CURRENCY_RECEIPT",
-      CUSTOM_PARAM: xmlData || "",
-    };
-    this.schemeReceiptList = [];
-    let API = `Scheme/CommonLookUps`;
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, param)
-      .subscribe(
-        (resp: any) => {
-          if (resp.dynamicData) {
-            if (this.schemeReceiptList.length > 0) {
-              resp.dynamicData[0].forEach((item: any, i: any) => {
-                item.Id = i + 1;
-              });
-              this.schemeReceiptList = [
-                ...this.schemeReceiptList,
-                ...resp.dynamicData[0],
-              ];
-            } else {
-              resp.dynamicData[0].forEach((item: any, i: any) => {
-                item.Id = i + 1;
-              });
-              this.schemeReceiptList = resp.dynamicData[0];
-              // this.nextPage()
-            }
-            this.schemeReceiptListHead = Object.keys(this.schemeReceiptList[0]);
-            this.schemeReceiptListHead.unshift(
-              this.schemeReceiptListHead.pop()
-            );
-            //change detector code
-            // this.ChangeDetector.detectChanges()
-          } else {
-            this.toastr.error(
-              "No Response Found",
-              resp.Message ? resp.Message : "",
-              {
-                timeOut: 2000,
-              }
-            );
-          }
-        },
-        (err) => {
-          this.toastr.error("Server Error", "", {
-            timeOut: 3000,
-          });
-        }
-      );
-    this.subscriptions.push(Sub);
-  }
   //party Code Change
   partyCodeChange(event: any, searchFlag: string) {
     if (event.target.value == "") return;
@@ -902,7 +726,6 @@ export class SchemeReceiptComponent implements OnInit {
     let detailsArray: any = [];
     let datas: any = {};
     let branchData = this.commonService.allbranchMaster
-    console.log(branchData);
 
     this.orderedItems.forEach((item: any) => {
       datas = {
@@ -1154,25 +977,13 @@ export class SchemeReceiptComponent implements OnInit {
         }
       });
   }
-  cancel() {
-    // location.reload()
-    this.VocNumberMain = "";
-    this.CustomerCodeSearch = "";
-    this.CustomerNameSearch = "";
-    this.receiptDetailsForm.reset();
-    this.orderedItems = [];
-    this.receiptDetailsForm.controls.VocType.setValue("PCR");
 
-    this.isViewSchemeMasterGrid = true;
-    this.isSaved = false;
-  }
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
   }
   /**use: add new row to grid */
   addNewRow(data: any) {
-    console.log(data, 'data');
     this.disableAddBtnGrid = true;
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
@@ -1182,6 +993,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.orderedItems.push(data);
     this.orderedItems.map((s: any, i: any) => (s.id = i + 1));
     this.orderedItems.forEach((item: any, i: any) => {
+      this.currencySelected = item.CurrCode
       item.VAT_AMT = parseInt(item.TRN_Per)
       item.Id = i + 1;
       item.SRNO = i + 1;
@@ -1210,12 +1022,12 @@ export class SchemeReceiptComponent implements OnInit {
         item.SchemeBalance = this.commonService.emptyToZero(item.SchemeBalance)
         item.Amount_FC = this.commonService.emptyToZero(item.Amount_FC)
         item.Amount_LC = this.commonService.emptyToZero(item.Amount_LC)
-        item.AMOUNT_VAT = ((parseInt(item.Amount_FC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
-        item.VAT_AMT = parseInt(item.Amount_FC) - item.AMOUNT_VAT
+        item.AMOUNT_VAT = ((parseInt(item.Amount_LC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
+        item.VAT_AMT = parseInt(item.Amount_LC) - item.AMOUNT_VAT
         vatTotal += item.VAT_AMT;
         this.totalAmount_LC += parseInt(item.Amount_LC);
-        this.VATAmount += parseInt(item.VAT_AMT);
         this.totalAmount_FC += parseInt(item.Amount_FC);
+        this.VATAmount += parseInt(item.VAT_AMT);
         this.VATAmount_FC += parseInt(item.VAT_AMT);
         this.TOTAL_AMOUNTFC += parseInt(item.Amount_FC);
         this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
@@ -1223,13 +1035,11 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.SchemeBalance.setValue(SchemeBalance)
       this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
       this.receiptDetailsForm.controls.TotalAmount.setValue(
-        this.commonService.commaSeperation(this.totalAmount_FC.toFixed(2))
+        this.commonService.commaSeperation(this.totalAmount_LC.toFixed(2))
       )
-      let PartyAmount = (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_FC).toFixed(2)
+      let PartyAmount = (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_LC).toFixed(2)
       this.receiptDetailsForm.controls.PartyAmount.setValue(
         this.commonService.commaSeperation(PartyAmount))
-      console.log(this.receiptDetailsForm.value.PartyAmount, 'party');
-
       this.receiptDetailsForm.controls.PartyAmtCode.setValue(
         this.receiptDetailsForm.value.CurrCode
       )
@@ -1328,7 +1138,7 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   deleteTableData() {
-    if(this.orderedItems.length == 0) return
+    if (this.orderedItems.length == 0) return
     if (!this.content && this.receiptDetailsForm.value.SchemeID != '') {
       Swal.fire({
         title: "Are you sure?",

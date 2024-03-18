@@ -57,6 +57,12 @@ export class AuditTrailComponent implements OnInit {
       .subscribe((result) => {
         if (result.dynamicData) {
           this.gridData = result.dynamicData[0]
+          if(this.gridData.length>0){
+            this.gridData.forEach((item:any)=>{
+              item.AMOUNTCC_DEBIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_DEBIT,'AMOUNT')
+              item.AMOUNTCC_CREDIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_CREDIT,'AMOUNT')
+            })
+          }
         } else {
           this.commonService.toastErrorByMsgId('not found')
         }

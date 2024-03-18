@@ -121,7 +121,7 @@ export class SchemeRegisterComponent implements OnInit {
     MobileNo: [''],
     Email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     PanNo: [''],
-    Branch: [''],
+    Branch: ['', Validators.required],
     DateOfJoining: [''],
     AlertBeforeDays: [''],
     CancellationCharge: [''],
@@ -393,13 +393,15 @@ export class SchemeRegisterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('customer id not available')
       return
     }
+    this.commonService.showSnackBarMsg('MSG81447')
     let API = `SchemeRegistration/DeleteSchemeRegistration/` + this.content?.SCH_CUSTOMER_ID
     let param = { SCH_CUSTOMER_ID: this.content?.SCH_CUSTOMER_ID || '' }
     let Sub: Subscription = this.dataService.deleteDynamicAPI(API, param)
       .subscribe((result: any) => {
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
           this.viewMode = true
-          this.commonService.toastSuccessByMsgId(result.message)
+          this.commonService.toastSuccessByText('Scheme Cancelled')
         } else {
           this.commonService.toastErrorByMsgId(result.message)
         }
@@ -811,6 +813,10 @@ export class SchemeRegisterComponent implements OnInit {
     }
     if (this.schemeRegistrationForm.value.SchemeId == '') {
       this.commonService.toastErrorByMsgId('Scheme Code Required')
+      flag = true
+    }
+    if (this.schemeRegistrationForm.value.Branch == '') {
+      this.commonService.toastErrorByMsgId('Branch Code Required')
       flag = true
     }
     if (this.schemeRegistrationForm.value.Salesman == '') {
