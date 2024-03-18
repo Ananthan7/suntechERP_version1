@@ -234,26 +234,33 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
           this.schemeRegistrationForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
           this.schemeRegistrationForm.controls.SalesmanName.setValue(data.SALESMAN_NAME)
-          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
-            this.commonService.commaSeperation(data.SCH_INST_AMOUNT_FC * data.SCH_SCHEME_PERIOD)
-          )
+          // this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
+          //   this.commonService.commaSeperation(data.SCH_INST_AMOUNT_FC * data.SCH_SCHEME_PERIOD)
+          // )
+          let totalAMT = data.SCH_INST_AMOUNT_FC * data.SCH_SCHEME_PERIOD
+          this.setFormControlAmount('TotalAmountToPay',totalAMT)
           this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.Units.setValue(data.SCH_UNITS)
           this.schemeRegistrationForm.controls.SendAlert.setValue(data.SCH_SEND_ALERT)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCH_SCHEME_PERIOD)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCH_FREQUENCY)
-          this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
-            this.commonService.commaSeperation(data.SCH_INST_AMOUNT_CC)
-          )
-          this.schemeRegistrationForm.controls.CancellationCharge.setValue(
-            this.commonService.commaSeperation(data.SCH_CANCEL_AMT))
-          this.schemeRegistrationForm.controls.SumAssured.setValue(
-            this.commonService.commaSeperation(data.SCH_ASSURED_AMT_FC))
+          // this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
+          //   this.commonService.commaSeperation(data.SCH_INST_AMOUNT_CC)
+          // )
+          // this.schemeRegistrationForm.controls.CancellationCharge.setValue(
+          //   this.commonService.commaSeperation(data.SCH_CANCEL_AMT))
+          // this.schemeRegistrationForm.controls.SumAssured.setValue(
+          //   this.commonService.commaSeperation(data.SCH_ASSURED_AMT_FC))
           this.schemeRegistrationForm.controls.MobileNo.setValue(data.SCH_ALERT_MOBILE)
           this.schemeRegistrationForm.controls.Email.setValue(data.SCH_ALERT_EMAIL)
           this.schemeRegistrationForm.controls.BonusInstallment.setValue(
             this.commonService.commaSeperation(data.SCHEME_BONUS))
+
+          this.setFormControlAmount('InstallmentAmount',data.SCH_INST_AMOUNT_CC)
+          this.setFormControlAmount('CancellationCharge',data.SCH_CANCEL_AMT)
+          this.setFormControlAmount('SumAssured',data.SCH_ASSURED_AMT_FC)
+
           this.schemeRegistrationForm.controls.Remarks.setValue(data.REMARKS)
           this.schemeRegistrationForm.controls.PanNo.setValue(data.PAN_NUMBER)
           this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.SCH_JOIN_DATE)
@@ -310,7 +317,13 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  setFormControlAmount(controlName: string, amount: any) {
+    amount = this.commonService.emptyToZero(amount)
+    amount = this.commonService.decimalQuantityFormat(amount, 'AMOUNT')
+    this.schemeRegistrationForm.controls[controlName].setValue(
+      this.commonService.commaSeperation(amount)
+    )
+  }
   /**schemeID change function */
   schemeIDChange(event: any) {
     if (event.target.value == "") return;
@@ -437,18 +450,23 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.BonusInstallment.setValue(
             this.commonService.commaSeperation(data.SCHEME_BONUS)
           )
-          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
-            this.commonService.commaSeperation(data.SCHEME_AMOUNT * data.SCHEME_PERIOD)
-          )
-          this.schemeRegistrationForm.controls.SumAssured.setValue(
-            this.commonService.commaSeperation((data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS)
-          )
-          this.schemeRegistrationForm.controls.CancellationCharge.setValue(
-            this.commonService.commaSeperation(data.CANCEL_CHARGE)
-          )
-          this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
-            this.commonService.commaSeperation(data.SCHEME_AMOUNT)
-          )
+          let total = data.SCHEME_AMOUNT * data.SCHEME_PERIOD
+          this.setFormControlAmount('TotalAmountToPay',total)
+          this.setFormControlAmount('InstallmentAmount',data.SCHEME_AMOUNT)
+          this.setFormControlAmount('CancellationCharge',data.CANCEL_CHARGE)
+          this.setFormControlAmount('SumAssured',(total + data.SCHEME_BONUS))
+          // this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
+          //   this.commonService.commaSeperation(data.SCHEME_AMOUNT * data.SCHEME_PERIOD)
+          // )
+          // this.schemeRegistrationForm.controls.SumAssured.setValue(
+          //   this.commonService.commaSeperation((data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS)
+          // )
+          // this.schemeRegistrationForm.controls.CancellationCharge.setValue(
+          //   this.commonService.commaSeperation(data.CANCEL_CHARGE)
+          // )
+          // this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
+          //   this.commonService.commaSeperation(data.SCHEME_AMOUNT)
+          // )
           let maturingdate
           if (data.SCHEME_FREQUENCY.toUpperCase() == 'WEEKLY') {
             maturingdate = this.commonService.addWeeksToDate(this.schemeRegistrationForm.value.DateOfJoining, this.schemeRegistrationForm.value.TenurePeriod)
@@ -499,6 +517,8 @@ export class SchemeRegisterComponent implements OnInit {
               item.REMAINDER_SEND = true
             }
           })
+          this.SchemeMasterDetails.sort((a: any, b: any) => a.SRNO - b.SRNO)
+
         } else {
           this.commonService.toastErrorByMsgId('Server Error')
         }

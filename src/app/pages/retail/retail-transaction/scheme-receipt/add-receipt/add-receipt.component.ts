@@ -184,6 +184,8 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.gridDataSource = result.response
+          this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
+
           this.calculateGridAmount()
         } else {
           this.disableAmountFC = true;
@@ -268,8 +270,7 @@ export class AddReceiptComponent implements OnInit {
   }
   currencyRateChange(event:any) {
     let form = this.receiptEntryForm.value
-    console.log(form.MIN_CONV_RATE,'form.MIN_CONV_RATE');
-    console.log(form.MAX_CONV_RATE,'form.MAX_CONV_RATE');
+
     
     if(this.commonService.emptyToZero(event.target.value) < this.commonService.emptyToZero(form.MIN_CONV_RATE)){
       this.commonService.toastErrorByMsgId('Rate should not be less than '+form.MIN_CONV_RATE)
@@ -320,6 +321,9 @@ export class AddReceiptComponent implements OnInit {
             this.disableAmountFC = true
           } else {
             this.disableAmountFC = false
+            this.setFormControlAmount('Amount_LC', 0)
+            this.setFormControlAmount('Amount_FC', 0)
+            this.setFormControlAmount('Header_Amount', 0)
           }
           this.currencyCodeChange(this.receiptEntryForm.value.CurrCode);
 
@@ -414,8 +418,11 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
+  
     let amount = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.CurrRate)
-
+    // console.log(form.MIN_CONV_RATE,'form.MIN_CONV_RATE');
+    // console.log(form.MAX_CONV_RATE,'form.MAX_CONV_RATE');
+    
     this.setFormControlAmount('Amount_FC', amount.toFixed(2))
     this.setFormControlAmount('Amount_LC', form.Amount_LC)
     this.setFormControlAmount('Header_Amount', form.Amount_LC)
@@ -423,6 +430,21 @@ export class AddReceiptComponent implements OnInit {
       this.calculateGridAmount()
     } else {
       this.setGridData()
+    }
+
+    if(form.Amount_FC>0){
+      let currencyRate = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.Amount_FC)
+      if(currencyRate > form.MAX_CONV_RATE){
+        this.commonService.toastErrorByMsgId('Currency Rate cannot be more than '+ form.MAX_CONV_RATE)
+        return
+      }
+      if(currencyRate < form.MIN_CONV_RATE){
+        this.commonService.toastErrorByMsgId('Currency Rate cannot be less than '+ form.MIN_CONV_RATE)
+        return
+      }
+      this.receiptEntryForm.controls.CurrRate.setValue(
+        this.commonService.decimalQuantityFormat(currencyRate,'RATE')
+      )
     }
   }
   calculateAmountFC() {
