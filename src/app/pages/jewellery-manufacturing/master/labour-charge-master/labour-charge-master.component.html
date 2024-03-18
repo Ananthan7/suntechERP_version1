@@ -40,6 +40,9 @@
                 </mat-form-field>
               </div>
             </div>
+
+          
+
             <div class="row mb-2">
               <label for="input" class="col-sm-2 col-form-label">Labour Type * :</label>
               <div class="col-sm-3">
@@ -225,7 +228,7 @@
               <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput maxlength="6" formControlName="stock_code" />
+                  <input type="text" matInput  maxlength="6" formControlName="stock_code" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="stockCodeData"
                   (newRowClick)="stockCodeSelected($event)"  *ngIf="stockcodeDisable == false"></master-search>
@@ -235,7 +238,7 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput maxlength="15" [readonly]="editMode || viewMode" formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
+                  <input type="text" matInput maxlength="15" #codeInput [readonly]="editMode || viewMode" formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">

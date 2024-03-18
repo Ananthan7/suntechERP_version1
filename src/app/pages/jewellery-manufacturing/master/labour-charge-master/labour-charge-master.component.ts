@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -25,12 +25,12 @@ export class LabourChargeMasterComponent implements OnInit {
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
   stockcodeDisable: boolean = false;
-  methodList: any[] = [];
-  labourTypeList: any[] = [];
-  DialabourTypeList: any[] = [];
-  unitList: any[] = [];
-  currencyList: any[] = [];
-  settingTypeList: any[] = [];
+  // methodList: any[] = [];
+  // labourTypeList: any[] = [];
+  // DialabourTypeList: any[] = [];
+  // unitList: any[] = [];
+   currencyList: any[] = [];
+  // settingTypeList: any[] = [];
   divisionMS: any = 'ID';
   salesRate: any;
   salesRatePercentage: any;
@@ -64,14 +64,14 @@ export class LabourChargeMasterComponent implements OnInit {
   // }
 
 
-  // @ViewChild('codeInput') codeInput!: ElementRef;
-  // @ViewChild('codeInput1') codeInput1!: ElementRef;
+  @ViewChild('codeInput') codeInput!: ElementRef;
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
-  // ngAfterViewInit(): void {
-  //   this.codeInput.nativeElement.focus();
-  //   this.codeInput1.nativeElement.focus();
-  // }
+  ngAfterViewInit(): void {
+    this.codeInput.nativeElement.focus();
+    this.codeInput1.nativeElement.focus();
+  }
 
 
 
@@ -335,6 +335,112 @@ export class LabourChargeMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
+DialabourTypeList = [
+    {
+      name: 'SETTING',
+      value: 'SETTING'
+    },
+    {
+      name: 'HANDLING',
+      value: 'HANDLING'
+    },
+    {
+      name: 'CERTIFICATE',
+      value: 'CERTIFICATE'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+  ];
+
+ settingTypeList = [
+    {
+      name: 'GEN',
+      value: 'GEN'
+    },
+    {
+      name: 'PRESSURE',
+      value: 'PRESSURE'
+    },
+  ];
+
+ labourTypeList = [
+    {
+      name: 'MAKING',
+      value: 'MAKING'
+    },
+    {
+      name: 'POLISH',
+      value: 'POLISH'
+    },
+    {
+      name: 'FINISHING',
+      value: 'FINISHING'
+    },
+    {
+      name: 'CASTING',
+      value: 'CASTING'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+    {
+      name: 'RHODIUM',
+      value: 'RHODIUM'
+    },
+    {
+      name: 'STAMPING',
+      value: 'STAMPING'
+    },
+    {
+      name: 'WASTAGE',
+      value: 'WASTAGE'
+    },
+  ];
+ unitList = [
+    {
+      name: 'Lumpsum ',
+      value: 'Lumpsum '
+    },
+    {
+      name: 'PCS',
+      value: 'PCS'
+    },
+    {
+      name: 'Grams',
+      value: 'Grams'
+    },
+    {
+      name: 'Carat',
+      value: 'Carat'
+    },
+    {
+      name: 'Hours',
+      value: 'Hours'
+    }
+  ];
+
+ methodList = [
+    {
+      name: 'Hand Setting ',
+      value: 'Hand Setting '
+    },
+    {
+      name: 'Wax Setting',
+      value: 'Wax Setting'
+    },
+    {
+      name: 'Other Setting',
+      value: 'Other Setting'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+
+  ];
 
 
   constructor(
@@ -343,11 +449,15 @@ export class LabourChargeMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
 
 
   ngOnInit(): void {
+   // this.renderer.selectRootElement('#metallabour_code')?.focus();
+    // this.renderer.selectRootElement('#labour_code')?.focus();
+
     if (this.content.FLAG == 'VIEW') {
       this.setFormValues()
       this.setInitialValues()
@@ -393,111 +503,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
 
-    this.DialabourTypeList = [
-      {
-        'name': 'SETTING',
-        'value': 'SETTING'
-      },
-      {
-        'name': 'HANDLING',
-        'value': 'HANDLING'
-      },
-      {
-        'name': 'CERTIFICATE',
-        'value': 'CERTIFICATE'
-      },
-      {
-        'name': 'GENERAL',
-        'value': 'GENERAL'
-      },
-    ]
 
-    this.settingTypeList = [
-      {
-        'name': 'GEN',
-        'value': 'GEN'
-      },
-      {
-        'name': 'PRESSURE',
-        'value': 'PRESSURE'
-      },
-    ]
-
-    this.labourTypeList = [
-      {
-        'name': 'MAKING',
-        'value': 'MAKING'
-      },
-      {
-        'name': 'POLISH',
-        'value': 'POLISH'
-      },
-      {
-        'name': 'FINISHING',
-        'value': 'FINISHING'
-      },
-      {
-        'name': 'CASTING',
-        'value': 'CASTING'
-      },
-      {
-        'name': 'GENERAL',
-        'value': 'GENERAL'
-      },
-      {
-        'name': 'RHODIUM',
-        'value': 'RHODIUM'
-      },
-      {
-        'name': 'STAMPING',
-        'value': 'STAMPING'
-      },
-      {
-        'name': 'WASTAGE',
-        'value': 'WASTAGE'
-      },
-    ]
-    this.unitList = [
-      {
-        'name': 'Lumpsum ',
-        'value': 'Lumpsum '
-      },
-      {
-        'name': 'PCS',
-        'value': 'PCS'
-      },
-      {
-        'name': 'Grams',
-        'value': 'Grams'
-      },
-      {
-        'name': 'Carat',
-        'value': 'Carat'
-      },
-      {
-        'name': 'Hours',
-        'value': 'Hours'
-      }
-    ]
-    this.methodList = [
-      {
-        'name': 'Hand Setting ',
-        'value': 'Hand Setting '
-      },
-      {
-        'name': 'Wax Setting',
-        'value': 'Wax Setting'
-      },
-      {
-        'name': 'Other Setting',
-        'value': 'Other Setting'
-      },
-      {
-        'name': 'GENERAL',
-        'value': 'GENERAL'
-      },
-
-    ]
 
   }
 

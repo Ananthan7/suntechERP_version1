@@ -30,6 +30,9 @@ export class StonePricingMasterComponent implements OnInit {
   deal: any;
   displayDeal: string = '';
   userbranch = localStorage.getItem('userbranch');
+  sieveSet: any;
+
+
 
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
@@ -210,6 +213,7 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
 
     this.viewMode = true;
     console.log(this.content.FLAG);
@@ -600,14 +604,38 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
 
+
   priceCodeSelected(data: any) {
     // console.log(data);
     this.stonePrizeMasterForm.controls.price_code.setValue(data.CODE)
   }
 
+
   sieve_setDataSelected(data: any) {
     console.log(data);
-    this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE)
+    
+    this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
+    
+    // Construct the API URL with the selected sieve_set value
+    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + encodeURIComponent(this.stonePrizeMasterForm.value.sieve_set);
+
+    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
+      if (result.response) {
+        console.log(result.response);
+        
+        const responseData = result.response[0]; 
+        
+        this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
+        this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
+        this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
+        this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
+        this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
+        this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC);
+        this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
+      }
+    });
+    
+    this.subscriptions.push(Sub);
   }
 
   shapeDataSelected(data: any) {
@@ -624,7 +652,9 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_to.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
+   
   }
+  
 
   colorDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.color.setValue(data.CODE)
