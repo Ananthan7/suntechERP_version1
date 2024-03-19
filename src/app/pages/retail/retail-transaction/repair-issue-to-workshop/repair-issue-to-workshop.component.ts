@@ -56,6 +56,54 @@ export class RepairIssueToWorkshopComponent implements OnInit {
 
   });
 
+  salesManCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  salesManCodeSelected(e: any) {
+    console.log(e);
+    this.repairTransferForm.controls.salesMan.setValue(e.UsersName);
+  }
+
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 5,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'BRANCH CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  branchCodeSelected(e: any) {
+    console.log(e);
+    this.repairTransferForm.controls.branch.setValue(e.BRANCH_CODE);
+  }
+
+  partyCodeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 6,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'PARTY CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  partyCodeSelected(e: any) {
+    console.log(e);
+    this.repairTransferForm.controls.partyCode.setValue(e.ACCODE);
+  }
+
 
   formSubmit() {
 

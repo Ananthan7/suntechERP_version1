@@ -76,6 +76,38 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     remark:[''],
    });
 
+   salesManCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  salesManCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptFrom.controls.salesman.setValue(e.UsersName);
+  }
+
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  customerCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptFrom.controls.customer.setValue(e.UsersName);
+  }
+
   
 
   close(data?: any) {

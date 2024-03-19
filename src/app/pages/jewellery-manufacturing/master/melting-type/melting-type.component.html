@@ -129,7 +129,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'division'">
-                                <input type="text" (change)="division($event,data)" [value]="data.value"
+                                <input type="text"  [value]="data.value"
                                     [disabled]="data.value == ''" style="width: 100%;" required readonly
                                     oninput="this.value = this.value.toUpperCase()"/>
                             </div>
