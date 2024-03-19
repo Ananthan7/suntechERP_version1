@@ -134,7 +134,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  style="text-align: right;" formControlName="cost_rate" />
+                  <input type="text" matInput maxlength="6"  class="text-right" formControlName="cost_rate" SixDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -149,7 +149,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  style="text-align: right;" formControlName="selling_rate" />
+                  <input type="text" matInput maxlength="6"  style="text-align: right;" formControlName="selling_rate" SixDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -163,7 +163,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  style="text-align: right;" formControlName="selling" />
+                  <input type="text" matInput maxlength="6"  style="text-align: right;" formControlName="selling" (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -290,7 +290,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="metalcost_rate"  style="text-align: right;" />
+                  <input matInput type="text" formControlName="metalcost_rate"  class="text-right" SixDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -306,7 +306,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="metalselling_rate"  style="text-align: right;"  />
+                  <input matInput type="text" formControlName="metalselling_rate"  class="text-right"  SixDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -322,7 +322,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="number" matInput formControlName="metalSelling"  style="text-align: right;" />
+                  <input type="text" matInput formControlName="metalSelling"  style="text-align: right;" (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -338,7 +338,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wastage % * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="wastage"  style="text-align: right;" />
+                  <input matInput type="text" formControlName="wastage"  class="text-right" AmountDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -374,7 +374,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="number"  formControlName="wtFrom" AmountDecimalInput   style="text-align: right;" />
+                  <input matInput type="text"  formControlName="wtFrom"    class="text-right" MetalDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -382,7 +382,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="number"   formControlName="wtTo" AmountDecimalInput style="text-align: right;" />
+                  <input matInput type="text"   formControlName="wtTo"  class="text-right" MetalDecimalInput (keypress)="isNumeric($event)"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">

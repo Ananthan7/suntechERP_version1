@@ -69,7 +69,18 @@ export class DesignMasterComponent implements OnInit {
   designPartDetails: any[] = [];
   selectedIndexes: any = [];
   userbranch = localStorage.getItem('userbranch');
-
+ 
+  currencyMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -201,6 +212,10 @@ export class DesignMasterComponent implements OnInit {
 
 
   });
+  //number validation
+  isNumeric(event: any) {
+    return this.commonService.isNumeric(event);
+  }
 
   openaddDesignSequence() {
     const modalRef: NgbModalRef = this.modalService.open(DesignSequenceComponent, {
@@ -671,17 +686,6 @@ removedatas(){
     this.designmasterForm.controls.range.setValue(e.CODE);
   }
 
-  currencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'Currency Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   currencyCodeSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.currency.setValue(e.CURRENCY_CODE);

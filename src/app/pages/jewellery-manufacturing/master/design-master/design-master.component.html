@@ -215,7 +215,7 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Purity :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="number" style="text-align: right;" matInput />
+                        <input type="number" class="text-right" matInput SixDecimalInput (keypress)="isNumeric($event)"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
@@ -239,7 +239,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" style="text-align: right;" matInput />
+                                <input type="number" style="text-align: right;" matInput (keypress)="isNumeric($event)"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -253,7 +253,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Thickness:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" style="text-align: right;" matInput />
+                                <input type="text" style="text-align: right;" matInput (keypress)="isNumeric($event)"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -267,7 +267,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Metal Wt :</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" style="text-align: right;" matInput />
+                                <input type="text" class="text-right" matInput (keypress)="isNumeric($event)" MetalDecimalInput/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -283,7 +283,7 @@
                               <mat-form-field style="width: 70%;">
                                 <input type="text" matInput formControlName="currency" />
                               </mat-form-field>
-                              <master-search [MasterSearchData]="currencyCodeData"
+                              <master-search [MasterSearchData]="currencyMasterData"
                                 (newRowClick)="currencyCodeSelected($event)"></master-search>
                             </div>
                           </div>
@@ -313,7 +313,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Req Metal:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" style="text-align: right;" matInput />
+                                <input type="test" class="text-right" matInput ThreeDecimalInput (keypress)="isNumeric($event)"/>
                               </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -540,7 +540,7 @@
                 <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" style="text-align: right;" matInput formControlName="width" />
+                    <input type="text" style="text-align: right;" matInput formControlName="width" (keypress)="isNumeric($event)"/>
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>

@@ -133,7 +133,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="karat" />
+                                    <input type="text" class="text-right" matInput formControlName="karat" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="karatCodeData"
                                 (newRowClick)="karatCodeSelected($event)"></master-search>
@@ -315,6 +315,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="currency" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="currencyMasterData"
+                                (newRowClick)="currencyCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-2">
@@ -483,15 +485,15 @@
                           </div>
 
                           <div *dxTemplate="let data of 'metal_wttemp'">
-                            <input  type="text" (change)="metal_wttemp($event,data)" style="width: 100%;" [value]="data.value" />
+                            <input  type="text" (change)="metal_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput/>
                           </div>
 
                           <div *dxTemplate="let data of 'stone_wttemp'">
-                            <input  type="text" (change)="stone_wttemp($event,data)" style="width: 100%;" [value]="data.value" />
+                            <input  type="text" (change)="stone_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput/>
                           </div>
 
                           <div *dxTemplate="let data of 'gross_wttemp'">
-                            <input  type="text" (change)="gross_wttemp($event,data)" style="width: 100%;" [value]="data.value" />
+                            <input  type="text" (change)="gross_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput/>
                           </div>
 
                       </dx-data-grid>

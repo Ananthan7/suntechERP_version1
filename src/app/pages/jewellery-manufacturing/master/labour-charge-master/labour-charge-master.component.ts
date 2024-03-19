@@ -87,7 +87,10 @@ export class LabourChargeMasterComponent implements OnInit {
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
-
+  //number validation
+  isNumeric(event: any) {
+    return this.commonService.isNumeric(event);
+  }
   diaDivisionCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
