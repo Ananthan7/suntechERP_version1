@@ -6,11 +6,7 @@ import { Subscription } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import Swal from 'sweetalert2';
-import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
-import { RepairDetailsComponent } from '../repair-jewellery-receipt/repair-details/repair-details.component';
-import { DiamondBranchTransferInAutoRepairDetailsComponent } from './diamond-branch-transfer-in-auto-repair-details/diamond-branch-transfer-in-auto-repair-details.component';
 
 @Component({
   selector: 'app-diamond-branch-transfer-in-auto-repair',
@@ -57,6 +53,87 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
   ngOnInit(): void {
    
   }
+
+  diamondBranchTransferinAutoRepairForm: FormGroup = this.formBuilder.group({
+
+    voctype:[''],
+    vocNo:[''],
+    Branch:[''],
+    enteredBy:[''],
+    Currency:[''],
+    CurrencyDesc:[''],
+    vocDate1:[''],
+    status:[''],
+    CreditDays:[''],
+    vocDate2:[''],
+    location:[''],
+    narration:[''],
+    stateCode:[''],
+    taxCode:[''],
+    type:[''],
+    RefNo:[''],
+    FullChecked:[''],
+    FullChecked1:[''],
+    Total:[''],
+    Total1:[''],
+    TotalFC:[''],
+    TotalCC:[''],
+    TotalGST:[''],
+    zerothAmtFC:[''],
+    Gross:[''],
+    Gross1:[''],
+
+  });
+
+
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'BRANCH CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  branchCodeSelected(e: any) {
+    console.log(e);
+    this.diamondBranchTransferinAutoRepairForm.controls.Branch.setValue(e.BRANCH_CODE);
+  }
+
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  enteredByCodeSelected(e: any) {
+    console.log(e);
+    this.diamondBranchTransferinAutoRepairForm.controls.enteredBy.setValue(e.UsersName);
+  }
+
+  stateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 48,
+    SEARCH_FIELD: 'STATE_CODE',
+    SEARCH_HEADING: 'STATE CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STATE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stateCodeSelected(e: any) {
+    console.log(e);
+    this.diamondBranchTransferinAutoRepairForm.controls.stateCode.setValue(e.STATE_CODE);
+  }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
