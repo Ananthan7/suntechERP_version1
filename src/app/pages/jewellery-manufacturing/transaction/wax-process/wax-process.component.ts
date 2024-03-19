@@ -196,7 +196,7 @@ export class WaxProcessComponent implements OnInit {
     processcode: ['',[Validators.required]],
     workercode: ['',[Validators.required]],
     enteredBy: [''],
-    remarks: ['',[Validators.required]],
+    remarks: [''],
   });
 
 

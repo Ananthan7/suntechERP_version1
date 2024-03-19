@@ -7,7 +7,6 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
-import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
 import { MetalBranchTransferOutRepairDetailComponent } from './metal-branch-transfer-out-repair-detail/metal-branch-transfer-out-repair-detail.component';
 
 
@@ -19,31 +18,18 @@ import { MetalBranchTransferOutRepairDetailComponent } from './metal-branch-tran
 })
 export class MetalBranchTransferOutRepairComponent implements OnInit {
   @Input() content!: any;
-  @Input()
-  selectedIndex!: number | null;
   tableData: any[] = [];  
-  tableDatas: any[] = [];  
-  firstTableWidth : any;
-  secondTableWidth : any;
-  columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
-  columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
-  divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['Repair Narration']
+  metalBranchTransferOutRepairDetailsData: any[]  =[];
+  columnheadItemDetails:any[] = ['Sr.Code','Stock Desc','Pcs','GrWt','St.Wt','Kun.Wt','Net.Wt','Purity','Pure Wt','Mkq.Rate','Tax%'];
   branchCode?: String;
   yearMonth?: String;
-  currentDate = new FormControl(new Date());
-  isdisabled:boolean=true;
+  currentDate = new Date();
   private subscriptions: Subscription[] = [];
-  table: any;
-  status: boolean= true;
   viewMode: boolean = false;
   selectedTabIndex = 0;
-  urls: string | ArrayBuffer | null | undefined;
-  url: any;
-  formattedTime: any;
-  maxTime: any;
-  standTime: any;
+  selectedTabIndexLineItem=0;
   // setAllInitialValues: any;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -54,579 +40,262 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
   ) { }
 
 
+
+
+  metalBranchTransferOutRepairForm: FormGroup = this.formBuilder.group({
+    vocType:[''],
+    vocNo:[''],
+    vocDate:[''],
+    enteredBy:[''],
+    itemCurrency:[''],
+    itemCurrencyAmt:[''],
+    BaseCurrency:[''],
+    BaseCurrencyAmt:[''],
+    transferStatus:[''],
+    metalRate:[''],
+    metalRateAmt:[''],
+    branchToCode:[''],
+    branchtoDesc:[''],
+    locationTo:[''],
+    returnLocation:[''],
+    deliveryOn:[''],
+    creditDate:[''],
+    reference:[''],
+    posVocNo:[''],
+    posVocType:[''],
+    batchSino:[''],
+    batchSICode:[''],
+    batchSiDes:[''],
+    salesReturn:[''],
+    salesTransfer:[''],
+    inclusiveTax:[''],
+    applyTcs:[''],
+    transport:[''],
+    lrNo:[''],
+    vehicle:[''],
+    DocReference:[''],
+    stateCode:[''],
+    stateDesc:[''],
+    taxCode:[''],
+    type:[''],
+    importMBCYear:[''],
+    mbcVocNo:[''],
+    purityDiff:[''],
+    stoneDiff:[''],
+    stoneDiffNum:[''],
+    narration:[''],
+    totalAmount:[''],
+    otherAmount:[''],
+    tcsAmount:[''],
+    totalGst:[''],
+    roundTo:[''],
+    netAmount:[''],
+    netAmountLc:[''],
+    driveCode:[''],
+    driveCodeDes:[''],
+    fixed:[''],
+    creditDays:[''],
+    Document:[''],
+  }); 
+  
   ngOnInit(): void {
-    this.setvaluesdata()
-    if (this.content) {
-      // this.setFormValues()  
-      this.setAllInitialValues()
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true;
-      }
-    }
-    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    if (this.content) {
-      this.setFormValues()
-    }
-    this.repairCustomerDeliveryForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
-  
+    this.metalBranchTransferOutRepairForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
   }
-
-  private handleResize(): void {
-    // Access screen size here using window.innerWidth and window.innerHeight
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    if (screenWidth > 1200) {
-      this.firstTableWidth = 800
-      this.secondTableWidth = 450
-    } else if (screenWidth >= 768 && screenWidth < 1200) {
-      this.firstTableWidth = 700
-      this.secondTableWidth = 350
-    }
-  }
-
-
-  repairCustomerDeliveryForm: FormGroup = this.formBuilder.group({
-    voctype: [,''],
-    vocNo: [''],
-    vocDate: [''],
-    salesMan: [''],
-    customer: [''],
-    customerDesc: [''],
-    tel: [''],
-    mobile: [''],
-    nationality: [''],
-    type:['IGST'],
-    remarks:[''],
-    currency:[''],
-    currencyDesc:[''],
-    email:[''],
-    address:[''],
-    check1:[''],
-    check2:[''],
-    vocType:[''],
-    repairAmt:[''],
-    subTotal:[''],
-    roundOffAmount:[''],
-    netTotal:[''],
-    taxCode: ['TAXCODE'],
-    process: ['',''],
-    worker: ['PARIMA',''],
-    narration: [''],
-    soNumber: [''],    //no
-    design:['', [Validators.required]],
-    completed:[''], //no
-    toWorker:['', [Validators.required]],
-    toProcess:['', [Validators.required]],
-    job:[''],
-    subJobId:[''],
-    timeTaken:[new Date().getDay()+':'+new Date().getHours()+':'+new Date().getMinutes()],
-    userId:[''], // No
-    date:[''],
-    copy:[''], // no
-    reason:[''], //no
-    attachments:[''], //no
-    deliveryOn:[''],
-    deliveryOnDays:[''],
-    deliveryOnDate:[{disabled: true,value:''}],
-    salesPersonCode:[''],
-    StockCode: ['', [Validators.required]],
-  });
-
-  setvaluesdata(){
-    console.log(this.comService);
-    this.repairCustomerDeliveryForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.repairCustomerDeliveryForm.controls.vocNo.setValue('1')
-    this.repairCustomerDeliveryForm.controls.vocDate.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.completed.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.date.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
-  }
-
-  
-  
-  setAllInitialValues() {
-    if (!this.content) return
-    let API = `JobCadProcessDJ/GetJobCadProcessDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          data.Details.forEach((element:any) => {
-            this.tableData.push({
-              Srno: element.SRNO,
-              Division:element.DIVCODE,
-              StoneType:element.METALSTONE,
-              Karat:element.KARAT_CODE,
-              Sieve:element.SIEVE,
-              Color:element.COLOR,
-              Shape:element.SHAPE,
-              Size:element.SIZE,
-              Pcs:element.PCS,
-              Remarks:element.D_REMARKS,
-              PointerWt:element.POINTER_WT,
-              StockCode: element.STOCK_CODE
-              
-             
-
-            })
-          });
-          console.log(this.tableDatas)
-          data.Components.forEach((element:any) => {
-            this.tableDatas.push({
-              Srno:element.SRNO,
-              CompCode:element.COMP_CODE,
-              Description:element.COMP_DESCRIPTION,
-              Pcs:element.PCS,
-              SizeSet:element.COMPSIZE_CODE,
-              SizeCode:element.COMPSET_CODE,
-              Type:element.TYPE_CODE,
-              Category:element.CATEGORY_CODE,
-              Shape:element.COMP_SHAPE,
-              Height:element.HEIGHT,
-              Width:element.WIDTH,
-              Length:element.LENGTH,
-              Radius:element.RADIUS,
-              Remarks:element.REMARKS
-
-            
-            })
-          }); 
-          this.repairCustomerDeliveryForm.controls.vocNo.setValue(data.VOCNO)
-          this.repairCustomerDeliveryForm.controls.voctype.setValue(data.VOCTYPE)
-          this.repairCustomerDeliveryForm.controls.design.setValue(data.DESIGN_CODE)
-          this.repairCustomerDeliveryForm.controls.job.setValue(data.JOB_NUMBER)
-          this.repairCustomerDeliveryForm.controls.toWorker.setValue(data.TO_WORKER_CODE)
-          this.repairCustomerDeliveryForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
-          this.repairCustomerDeliveryForm.controls.soNumber.setValue(data.JOB_SO_NUMBER)
-          this.repairCustomerDeliveryForm.controls.subJobId.setValue(data.JOB_SO_MID)
-          this.repairCustomerDeliveryForm.controls.narration.setValue(data.REMARKS)
-         
-          
-        } else {
-          this.comService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
-  
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  openFileExplorer() {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    fileInput.click();
-  }
-
-  handleFileInput(event: any) {
-    const selectedFile = event.target.files[0];
-    
-    // Assuming you want to display the file path in the input field
-    this.repairCustomerDeliveryForm.get('attachments')?.setValue(selectedFile.name);
-
-    // You can also handle the file in other ways, such as uploading it
-  }
-
-
-  onFileChanged(event:any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result; 
-      };
-    }
-  }
-
-  setFormValues() {
-    if (!this.content) return
-    this.repairCustomerDeliveryForm.controls.job_number.setValue(this.content.JOB_NUMBER)
-    this.repairCustomerDeliveryForm.controls.design.setValue(this.content.DESIGN_CODE)
-    this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
-      if (data.status == 'Success') {
-        this.tableData = data.response.WaxProcessDetails;
-      }
-    });
-    
-  }
-  updateStandardTime(duration: any) {
-    // this.yourContent.standardTime.totalDays = duration[0] || 0;
-    // this.yourContent.standardTime.totalHours = duration[1] || 0;
-    // this.yourContent.standardTime.totalMinutes = duration[2] || 0;
-
-    this.formattedTime = duration;
-
-    // console.log(this.formattedTime);
-
-    console.log(duration)
-  }
-  yourContent = {
-    standardTime: {
-      totalDays: 0,
-      totalHours: 0,
-      totalMinutes: 0,
-    }
-  }
- 
  
 
-  adddata() {
 
+
+  openAddDetail() {
     const modalRef: NgbModalRef = this.modalService.open(MetalBranchTransferOutRepairDetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.result.then((postData) => {
+      // console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);    
+        if (postData.reopen= true) {
+          this.openAddDetail();
+        }   
+        this.metalBranchTransferOutRepairDetailsData.push(postData);
 
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "Srno": srno,
-      "Division": "",
-      "StoneType": "",
-      "StockCode": "",
-      "Karat": "",
-      "Color": "",
-      "Shape": "",
-      "Sieve": "",
-      "Size": 0,
-      "Pcs": 0,
-      "WtCt": 0,
-      "SettingType": 0,
-      "PointerWt": 0,
-      "Remarks": "",
-    };
-  
-    this.tableData.push(data);
-   
-}
-
-divisiontemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Division = data.target.value;
-}
-
-stonetypetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].StoneType = data.target.value;
-}
-
-stockcodetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].StockCode = data.target.value;
-}
-
-karattemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Karat = data.target.value;
-}
-
-colortemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Color = data.target.value;
-}
-
-shapetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Shape = data.target.value;
-}
-
-sievetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Sieve = data.target.value;
-}
-
-sizetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Size = data.target.value;
-}
-
-Pcstemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Pcs = data.target.value;
-}
-
-wtcttemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].WtCt = data.target.value;
-}
-
-settingtypetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].SettingType = data.target.value;
-}
-
-pointerwttemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].PointerWt = data.target.value;
-}
-
-remarkstemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Remarks = data.target.value;
-}
-stoneTypeSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].StoneType = event.CODE;
-}
-DivisionSelected(event: any, value: any) {
-  console.log(event);
-  this.tableData[value.data.Srno - 1].Division = event.DIVISION_CODE;
-}
-
-onHoverstoneType({ data }: any) {
-  this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
-}
-stockCodeSelected(event: any, value: any) {
-  console.log(event)
-  this.tableData[value.data.Srno - 1].StockCode = event.STOCK_CODE;
-}
-colorCodeSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].Color = event.CODE;
-}
-shapeSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].Shape = event.CODE;
-}
-sieveSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].Sieve = event.CODE;
-}
-categortySelected(event: any, value: any) {
-  this.tableDatas[value.data.Srno - 1].Category = event.CODE;
-}
-shapeSelected1(event: any, value: any) {
-  this.tableDatas[value.data.Srno - 1].Shape = event.CODE;
-}
-karatCodeSelected(event: any, value: any ) {
-  console.log(event)
-    this.tableData[value.data.Srno - 1].Karat = event['Karat Code'];
-}
-onHoverStockCode({ data }: any) {
-  this.stockCode.LOOKUPID = 23
- }
-
- onHoverColorCode({ data }: any) {
-  this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`
-}
-onHoverShape({ data }: any) {
-  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-onHoverSieve({data}:any){
-  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-onHoverCategory({data}:any){
-  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-onHoverKaratCode({data}:any){
-  this.karatCodeData.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-
-
-adddatas() {
-  let length = this.tableDatas.length;
-  let srno = length + 1;
-  let data2=  {
-    "Srno": srno,
-    "CompCode": "",
-    "Description": "",
-    "Pcs": "",
-    "SizeSet": "",
-    "SizeCode": "",
-    "Type": "",
-    "Category": "",
-    "Shape": 0,
-    "Height": 0,
-    "Width": 0,
-    "Length": 0,
-    "Radius": 0,
-    "Remarks": "",
-  };
-  this.tableDatas.push(data2);
- 
-}
-
-compcodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].CompCode = data.target.value;
-}
-
-descriptiontemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
-}
-Pcs2temp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
-}
-
-sizesettemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].SizeSet = data.target.value;
-}
-
-sizecodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].SizeCode = data.target.value;
-}
-
-typetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Type = data.target.value;
-}
-
-categorytemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Category = data.target.value;
-}
-
-shape2temp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Shape = data.target.value;
-}
-
-heighttemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Height = data.target.value;
-}
-
-widthtemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Width = data.target.value;
-}
-
-lengthtemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
-}
-
-radiustemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Radius = data.target.value;
-}
-
-remarks2temp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Remarks = data.target.value;
-}
-
-removedata(){
-  this.tableData.pop();
-}
-
-removedatas(){
-  this.tableDatas.pop();
-}
-setDetaills(){
-  let Details:any=[]
-  this.tableData.forEach((Element: any)=> {
-    Details.push(
-      {
-        "UNIQUEID": 0,
-        "DT_BRANCH_CODE": this.branchCode,
-        "DT_VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-        "DT_VOCNO": 0,
-        "DT_YEARMONTH": this.yearMonth,
-        "SRNO": Element.Srno,
-        "METALSTONE": this.comService.nullToString(Element.METALSTONE),
-        "DIVCODE": this.comService.nullToString(Element.DIVCODE),
-        "STONE_TYPE": Element.StoneType,
-        "KARAT_CODE": this.comService.nullToString(Element.KARAT_CODE),
-        "SIEVE_SET": "",
-        "SIEVE": Element.Sieve,
-        "COLOR": Element.Color,
-        "CLARITY": "",
-        "SHAPE": Element.Shape,
-        "SIZE": this.comService.nullToString(Element.Size),
-        "PCS": this.comService.emptyToZero(Element.Pcs),
-        "GROSS_WT": 0,
-        "D_REMARKS": Element.Remarks,
-        "PROCESS_TYPE": "",
-        "POINTER_WT": Element.PointerWt,
-        "STOCK_CODE": this.comService.nullToString(Element.StockCode),
-        "COMP_CODE": ""
       }
-    )
-    
+    });
   }
-  )
-  return Details  
-}
 
-componentSet(){
-  let Components:any=[]
-  this.tableDatas.forEach((item: any)=>{
-    Components.push(
-       {
-          "REFMID": 0,
-          "SRNO": item.Srno,
-          "COMP_CODE": item.CompCode,
-          "COMP_DESCRIPTION": item.Description,
-          "COMP_SHAPE": "",
-          "TYPE_CODE": item.Type,
-          "CATEGORY_CODE": item.Category,
-          "COMPSIZE_CODE": "string",
-          "COMPSET_CODE": "string",
-          "HEIGHT": item.Height,
-          "WIDTH": item.Width,
-          "LENGTH": item.Length,
-          "RADIUS": item.Radius,
-          "PCS": this.comService.emptyToZero(item.PCS),
-          "REMARKS": item.Remarks,
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth
-        }
+  removedata(){
 
-    ) 
   }
-  )
-  return Components
-}
 
-  
-
+  setFormValues() {
+    console.log('this.content', this.content);
+    if (!this.content) return
+    this.metalBranchTransferOutRepairForm.controls.vocType.setValue(this.content.VOCTYPE);
+    this.metalBranchTransferOutRepairForm.controls.branchCode.setValue(this.content.BRANCH_CODE);
+    this.metalBranchTransferOutRepairForm.controls.vocNo.setValue(this.content.VOCNO);
+    this.metalBranchTransferOutRepairForm.controls.vocDate.setValue(this.content.VOCDATE);
+    this.metalBranchTransferOutRepairForm.controls.yearMonth.setValue(this.content.YEARMONTH);
+    this.metalBranchTransferOutRepairForm.controls.transferStatus.setValue(this.content.TRANSFERSTATUS);
+    this.metalBranchTransferOutRepairForm.controls.locationTo.setValue(this.content.TO_LOC);
+    this.metalBranchTransferOutRepairForm.controls.itemCurrency.setValue(this.content.ITEM_CURRENCY);
+    this.metalBranchTransferOutRepairForm.controls.itemCurrencyAmt.setValue(this.content.ITEM_CURR_RATE);
+    this.metalBranchTransferOutRepairForm.controls.posVocType.setValue(this.content.TRANSVOCTYPE);
+    this.metalBranchTransferOutRepairForm.controls.enteredBy.setValue(this.content.SALESPERSON_CODE);
+    this.metalBranchTransferOutRepairForm.controls.deliveryOn.setValue(this.content.DELIVEREDDATE);
+    this.metalBranchTransferOutRepairForm.controls.branchToCode.setValue(this.content.BRANCH_NAME);
+    this.metalBranchTransferOutRepairForm.controls.branchtoDesc.setValue(this.content.TO_BRANCH_NAME);
+    this.metalBranchTransferOutRepairForm.controls.posVocNo.setValue(this.content.TRANS_VOCNO);
+    this.metalBranchTransferOutRepairForm.controls.creditDays.setValue(this.content.CR_DAYS);
+    this.metalBranchTransferOutRepairForm.controls.reference.setValue(this.content.REFNO);
+    this.metalBranchTransferOutRepairForm.controls.BaseCurrency.setValue(this.content.BASE_CURRENCY);
+    this.metalBranchTransferOutRepairForm.controls.BaseCurrencyAmt.setValue(this.content.BASE_CONV_RATE);
+    this.metalBranchTransferOutRepairForm.controls.stateCode.setValue(this.content.GST_STATE_CODE);
+    this.metalBranchTransferOutRepairForm.controls.metalRate.setValue(this.content.METAL_TYPE);
+    this.metalBranchTransferOutRepairForm.controls.metalRateAmt.setValue(this.content.METAL_TYPERATE);     
+  }
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.updateMeltingType()
+      this.update()
       return
     }
 
-    if (this.repairCustomerDeliveryForm.invalid) {
+    if (this.metalBranchTransferOutRepairForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = 'JobCadProcessDJ/InsertJobCadProcessDJ'
-    let postData ={
+    let API = 'RepairDelivery/InsertRepairDelivery'
+    let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-      "vocNo": this.repairCustomerDeliveryForm.value.vocNo,
+      "VOCTYPE": this.metalBranchTransferOutRepairForm.value.vocType,
+      "VOCNO": this.metalBranchTransferOutRepairForm.value.vocNo,
+      "VOCDATE":this.metalBranchTransferOutRepairForm.value.vocDate,
+      "VALUE_DATE": "2024-03-08T09:59:42.749Z",
       "YEARMONTH": this.yearMonth,
-      "SALESPERSON_CODE": "string",
-      "SYSTEM_DATE": this.repairCustomerDeliveryForm.value.date,
-      "MACHINEID": "",
-      "DOC_REF": "",
-      "REMARKS": this.repairCustomerDeliveryForm.value.remarks,
-      "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
+      "TRANSFERSTATUS": this.metalBranchTransferOutRepairForm.value.transferStatus,
+      "FROM_BR": "string",
+      "TO_BR": "string",
+      "TO_LOC": this.metalBranchTransferOutRepairForm.value.locationTo,
+      "REMARKS": "string",
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_STWT": 0,
+      "TOTAL_PUWT": 0,
+      "TOTAL_OZWT": 0,
+      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_CC": 0,
+      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_MKGVALUE_CC": 0,
+      "TOTAL_PUDIFF": 0,
+      "TOTAL_STONEDIFF": 0,
+      "SYSTEM_DATE": "2024-03-08T09:59:42.749Z",
+      "ITEM_CURRENCY": this.metalBranchTransferOutRepairForm.value.itemCurrency,
+      "ITEM_CURR_RATE": this.metalBranchTransferOutRepairForm.value.itemCurrencyAmt,
+      "TRANSREF": "string",
+      "TRANSMID": 0,
+      "TRANSVOCTYPE": this.metalBranchTransferOutRepairForm.value.posVocType,
       "NAVSEQNO": 0,
-      "PROCESS_CODE": this.repairCustomerDeliveryForm.value.process,
-      "WORKER_CODE": this.repairCustomerDeliveryForm.value.worker,
-      "JOB_NUMBER": this.repairCustomerDeliveryForm.value.job,
-      "UNQ_JOB_ID": "",
-      "JOB_SO_NUMBER": this.repairCustomerDeliveryForm.value.subJobId,
-      "DESIGN_CODE": this.repairCustomerDeliveryForm.value.design,
-      "UNQ_DESIGN_ID": "",
-      "PART_CODE": "",
-      "PCS": 0,
-      "TIME_TAKEN": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.TIME_TAKEN),
-      "JOB_SO_MID": 0,
-      "CAD_STATUS": "",
-      "APPR_CODE": "",
-      "APPR_TYPE": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.type),
-      "TRANS_REF": "",
-      "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-      "TO_PROCESS_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toProcess),
-      "TO_WORKER_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toWorker),
-      "SO_DELIVERY_TYPE": this.repairCustomerDeliveryForm.value.deliveryOn,
-      "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.deliveryOnDays),
-      "SO_DELIVERY_DATE": this.repairCustomerDeliveryForm.value.deliveryOnDate,
-      "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
-      "SO_CR_DAYS": 0,
-      "Details":this.setDetaills(),
-
-      "Components":this.componentSet(),
-       
-     
+      "RATE_TYPE": "string",
+      "FIXED": 0,
+      "METAL_RATE": 0,
+      "SCRAPTRANSFER": true,
+      "SALESPERSON_CODE": this.metalBranchTransferOutRepairForm.value.enteredBy,
+      "INVREFNO": "string",
+      "DELIVEREDDATE": this.metalBranchTransferOutRepairForm.value.deliveryOn, 
+      "PHYSTKTRANSTO_BR": "string",
+      "OUSTATUSNEW": 0,
+      "TOTAL_NETWT": 0,
+      "BRANCH_NAME": this.metalBranchTransferOutRepairForm.value.branchToCode,
+      "TO_BRANCH_NAME": this.metalBranchTransferOutRepairForm.value.branchtoDesc,
+      "TRANS_VOCNO": this.metalBranchTransferOutRepairForm.value.posVocNo,
+      "REF_DATE": "2024-03-08T09:59:42.749Z",
+      "CR_DAYS": this.metalBranchTransferOutRepairForm.value.creditDays,
+      "REFNO": this.metalBranchTransferOutRepairForm.value.reference,
+      "FROM_LOC": "string",
+      "SALESRETURNTRANSFER": true,
+      "CMBYEAR": "string",
+      "TOTAL_CHGWT": 0,
+      "AUTOPOSTING": true,
+      "DIVISION_CODE": "s",
+      "POSTDATE": "string",
+      "D2DTRANSFER": "s",
+      "BASE_CURRENCY": this.metalBranchTransferOutRepairForm.value.BaseCurrency,
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": this.metalBranchTransferOutRepairForm.value.BaseCurrencyAmt,
+      "HLOCTYPE_CODE": "string",
+      "HLOCTYPE_TOCODE": "string",
+      "DOC_REF": "string",
+      "PRINT_COUNT": 0,
+      "TOTAL_AMT_FC": 0,
+      "TOTAL_AMT_CC": 0,
+      "ADDL_VALUE_FC": 0,
+      "ADDL_VALUE_CC": 0,
+      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_CC": 0,
+      "GST_REGISTERED": true,
+      "GST_STATE_CODE": this.metalBranchTransferOutRepairForm.value.stateCode,
+      "GST_NUMBER": "string",
+      "GST_TYPE": "stri",
+      "GST_TOTALFC": 0,
+      "GST_TOTALCC": 0,
+      "INCLUSIVE": 0,
+      "TOTAL_WASTQTY": 0,
+      "SHIPCODE": "string",
+      "SHIPDESC": "string",
+      "ROUND_VALUE_CC": 0,
+      "TRANSPORTER_CODE": "string",
+      "VEHICLE_NO": "string",
+      "LR_NO": "string",
+      "TCS_ACCODE": "string",
+      "TCS_AMOUNT": 0,
+      "TCS_AMOUNTCC": 0,
+      "TCS_APPLICABLE": true,
+      "TOTSTAMP_AMTFC": 0,
+      "TOTSTAMP_AMTCC": 0,
+      "TOTSTAMP_PARTYAMTFC": 0,
+      "METAL_TYPE": this.metalBranchTransferOutRepairForm.value.metalRate,
+      "METAL_TYPERATE": this.metalBranchTransferOutRepairForm.value.metalRateAmt,
+      "PARTY_CODE": "string",
+      "FREIGHT_RATE": 0,
+      "E_INVOICE_CANCEL": true,
+      "HTUSERNAME": "string",
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "DRIVER_CODE": "string",
+      "TRANSIT_SEALNO": "string",
+      "PARTY_STATE_CODE": "st",
+      "SHIP_ACCODE": "string",
+      "SHIP_STATE_CODE": "st",
+      "DISPATCH_NAME": "string",
+      "DISPATCH_ADDRESS": "string",
+      "DISPATCH_STATE_CODE": "st",
+      "TRANSPORTER_ID": "string",
+      "TRANSPORTER_MODE": "s",
+      "TRANSPORT_DISTANCE": 0,
+      "TRANSPORT_DATE": "2024-03-08T09:59:42.749Z",
+      "VEHICLE_TYPE": "s",
+      "DISPATCH_CITY": "string",
+      "DISPATCH_ZIPCODE": 0,
+      "EWAY_TRANS_TYPE": "s",
+      "AIR_BILL_NO": "string",
+      "GENSEQNO": 0,
+      "Details": this.metalBranchTransferOutRepairDetailsData,
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if (result.status == " Success ") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -635,11 +304,11 @@ componentSet(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.repairCustomerDeliveryForm.reset()
-                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
+            this.metalBranchTransferOutRepairForm.reset()
+            this.tableData = []
           }
         } else {
           this.toastr.error('Not saved')
@@ -648,50 +317,126 @@ componentSet(){
     this.subscriptions.push(Sub)
   }
 
-  updateMeltingType() {
+  update() {
     console.log(this.branchCode,'working')
-    let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.repairCustomerDeliveryForm.value.voctype}/${this.repairCustomerDeliveryForm.value.vocNo}/${this.comService.yearSelected}` ;
-      let postData ={
-          "MID": 0,
-          "BRANCH_CODE": this.branchCode,
-          "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-          "vocNo": this.repairCustomerDeliveryForm.value.vocNo,
-          "YEARMONTH": this.yearMonth,
-          "SALESPERSON_CODE": "string",
-          "SYSTEM_DATE": this.repairCustomerDeliveryForm.value.date,
-          "MACHINEID": "",
-          "DOC_REF": "",
-          "REMARKS": this.repairCustomerDeliveryForm.value.narration,
-          "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
-          "NAVSEQNO": 0,
-          "PROCESS_CODE": this.repairCustomerDeliveryForm.value.process,
-          "WORKER_CODE": this.repairCustomerDeliveryForm.value.worker,
-          "JOB_NUMBER": this.repairCustomerDeliveryForm.value.job,
-          "UNQ_JOB_ID": "",
-          "JOB_SO_NUMBER": this.repairCustomerDeliveryForm.value.subJobId,
-          "DESIGN_CODE": this.repairCustomerDeliveryForm.value.design,
-          "UNQ_DESIGN_ID": "",
-          "PART_CODE": "",
-          "PCS": 0,
-          "TIME_TAKEN": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.TIME_TAKEN),
-          "JOB_SO_MID": 0,
-          "CAD_STATUS": "",
-          "APPR_CODE": "",
-          "APPR_TYPE": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.type),
-          "TRANS_REF": "",
-          "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-          "TO_PROCESS_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toProcess),
-          "TO_WORKER_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toWorker),
-          "SO_DELIVERY_TYPE": this.repairCustomerDeliveryForm.value.deliveryOn,
-          "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.deliveryOnDays),
-          "SO_DELIVERY_DATE": this.repairCustomerDeliveryForm.value.deliveryOnDate,
-          "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
-          "SO_CR_DAYS": 0,
-          "Details":this.setDetaills(),
-    
-          "Components":this.componentSet(),
-        }
-       
+    let API = `RepairDelivery/UpdateRepairDelivery/${this.branchCode}/${this.metalBranchTransferOutRepairForm.value.voctype}/${this.metalBranchTransferOutRepairForm.value.vocNo}/${this.comService.yearSelected}` ;
+    let postData ={
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.metalBranchTransferOutRepairForm.value.vocType,
+      "VOCNO": this.metalBranchTransferOutRepairForm.value.vocNo,
+      "VOCDATE":this.metalBranchTransferOutRepairForm.value.vocDate,
+      "VALUE_DATE": "2024-03-08T09:59:42.749Z",
+      "YEARMONTH": this.yearMonth,
+      "TRANSFERSTATUS": this.metalBranchTransferOutRepairForm.value.transferStatus,
+      "FROM_BR": "string",
+      "TO_BR": "string",
+      "TO_LOC": this.metalBranchTransferOutRepairForm.value.locationTo,
+      "REMARKS": "string",
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_STWT": 0,
+      "TOTAL_PUWT": 0,
+      "TOTAL_OZWT": 0,
+      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_CC": 0,
+      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_MKGVALUE_CC": 0,
+      "TOTAL_PUDIFF": 0,
+      "TOTAL_STONEDIFF": 0,
+      "SYSTEM_DATE": "2024-03-08T09:59:42.749Z",
+      "ITEM_CURRENCY": this.metalBranchTransferOutRepairForm.value.itemCurrency,
+      "ITEM_CURR_RATE": this.metalBranchTransferOutRepairForm.value.itemCurrencyAmt,
+      "TRANSREF": "string",
+      "TRANSMID": 0,
+      "TRANSVOCTYPE": this.metalBranchTransferOutRepairForm.value.posVocType,
+      "NAVSEQNO": 0,
+      "RATE_TYPE": "string",
+      "FIXED": 0,
+      "METAL_RATE": 0,
+      "SCRAPTRANSFER": true,
+      "SALESPERSON_CODE": this.metalBranchTransferOutRepairForm.value.enteredBy,
+      "INVREFNO": "string",
+      "DELIVEREDDATE": this.metalBranchTransferOutRepairForm.value.deliveryOn, 
+      "PHYSTKTRANSTO_BR": "string",
+      "OUSTATUSNEW": 0,
+      "TOTAL_NETWT": 0,
+      "BRANCH_NAME": this.metalBranchTransferOutRepairForm.value.branchToCode,
+      "TO_BRANCH_NAME": this.metalBranchTransferOutRepairForm.value.branchtoDesc,
+      "TRANS_VOCNO": this.metalBranchTransferOutRepairForm.value.posVocNo,
+      "REF_DATE": "2024-03-08T09:59:42.749Z",
+      "CR_DAYS": this.metalBranchTransferOutRepairForm.value.creditDays,
+      "REFNO": this.metalBranchTransferOutRepairForm.value.reference,
+      "FROM_LOC": "string",
+      "SALESRETURNTRANSFER": true,
+      "CMBYEAR": "string",
+      "TOTAL_CHGWT": 0,
+      "AUTOPOSTING": true,
+      "DIVISION_CODE": "s",
+      "POSTDATE": "string",
+      "D2DTRANSFER": "s",
+      "BASE_CURRENCY": this.metalBranchTransferOutRepairForm.value.BaseCurrency,
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": this.metalBranchTransferOutRepairForm.value.BaseCurrencyAmt,
+      "HLOCTYPE_CODE": "string",
+      "HLOCTYPE_TOCODE": "string",
+      "DOC_REF": "string",
+      "PRINT_COUNT": 0,
+      "TOTAL_AMT_FC": 0,
+      "TOTAL_AMT_CC": 0,
+      "ADDL_VALUE_FC": 0,
+      "ADDL_VALUE_CC": 0,
+      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_CC": 0,
+      "GST_REGISTERED": true,
+      "GST_STATE_CODE": this.metalBranchTransferOutRepairForm.value.stateCode,
+      "GST_NUMBER": "string",
+      "GST_TYPE": "stri",
+      "GST_TOTALFC": 0,
+      "GST_TOTALCC": 0,
+      "INCLUSIVE": 0,
+      "TOTAL_WASTQTY": 0,
+      "SHIPCODE": "string",
+      "SHIPDESC": "string",
+      "ROUND_VALUE_CC": 0,
+      "TRANSPORTER_CODE": "string",
+      "VEHICLE_NO": "string",
+      "LR_NO": "string",
+      "TCS_ACCODE": "string",
+      "TCS_AMOUNT": 0,
+      "TCS_AMOUNTCC": 0,
+      "TCS_APPLICABLE": true,
+      "TOTSTAMP_AMTFC": 0,
+      "TOTSTAMP_AMTCC": 0,
+      "TOTSTAMP_PARTYAMTFC": 0,
+      "METAL_TYPE": this.metalBranchTransferOutRepairForm.value.metalRate,
+      "METAL_TYPERATE": this.metalBranchTransferOutRepairForm.value.metalRateAmt,
+      "PARTY_CODE": "string",
+      "FREIGHT_RATE": 0,
+      "E_INVOICE_CANCEL": true,
+      "HTUSERNAME": "string",
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "DRIVER_CODE": "string",
+      "TRANSIT_SEALNO": "string",
+      "PARTY_STATE_CODE": "st",
+      "SHIP_ACCODE": "string",
+      "SHIP_STATE_CODE": "st",
+      "DISPATCH_NAME": "string",
+      "DISPATCH_ADDRESS": "string",
+      "DISPATCH_STATE_CODE": "st",
+      "TRANSPORTER_ID": "string",
+      "TRANSPORTER_MODE": "s",
+      "TRANSPORT_DISTANCE": 0,
+      "TRANSPORT_DATE": "2024-03-08T09:59:42.749Z",
+      "VEHICLE_TYPE": "s",
+      "DISPATCH_CITY": "string",
+      "DISPATCH_ZIPCODE": 0,
+      "EWAY_TRANS_TYPE": "s",
+      "AIR_BILL_NO": "string",
+      "GENSEQNO": 0,
+      "Details": this.metalBranchTransferOutRepairDetailsData,
+    }
       
   
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -706,7 +451,7 @@ componentSet(){
                 confirmButtonText: 'Ok'
               }).then((result: any) => {
                 if (result.value) {
-                  this.repairCustomerDeliveryForm.reset()
+                  this.metalBranchTransferOutRepairForm.reset()
                   this.tableData = []
                   this.close('reloadMainGrid')
                 }
@@ -719,8 +464,11 @@ componentSet(){
       this.subscriptions.push(Sub)
     }
       /**USE: delete Melting Type From Row */
-  deleteMeltingType() {
-    if (!this.content.WORKER_CODE) {
+      
+  deleteMetalBranchTransferOutRepair() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content.BRANCH_CODE&&!this.content.VOCTYPE&&!this.content.VOCNO&&!this.content.YEARMONTH) {
+
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -743,7 +491,7 @@ componentSet(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = '/JobCadProcessDJ/DeleteJobCadProcessDJ/' + this.repairCustomerDeliveryForm.value.brnachCode + this.repairCustomerDeliveryForm.value.voctype + this.repairCustomerDeliveryForm.value.vocNo + this.repairCustomerDeliveryForm.value.yearMoth;
+        let API = 'RepairDelivery/DeleteRepairDelivery/' + this.metalBranchTransferOutRepairForm.value.brnachCode + this.metalBranchTransferOutRepairForm.value.voctype + this.metalBranchTransferOutRepairForm.value.vocNo + this.metalBranchTransferOutRepairForm.value.yearMoth;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -756,7 +504,7 @@ componentSet(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.repairCustomerDeliveryForm.reset()
+                    this.metalBranchTransferOutRepairForm.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -770,7 +518,7 @@ componentSet(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.repairCustomerDeliveryForm.reset()
+                    this.metalBranchTransferOutRepairForm.reset()
                     this.tableData = []
                     this.close()
                   }
@@ -784,158 +532,9 @@ componentSet(){
       }
     });
   }
-  generalMaster: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'GENERAL MASTER',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  divisionMaster: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 18,
-    SEARCH_FIELD: 'DIVISION_CODE',
-    SEARCH_HEADING: 'Division Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  stockCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 4,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'STOCK CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  karatCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 84,
-    SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat Master',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  processCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  processSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.process.setValue(e.Process_Code);
-  }
-  
-  toprocessCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  toProcessSelected(e:any){
-    this.repairCustomerDeliveryForm.controls.toProcess.setValue(e.Process_Code);
-  }
-
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  workedSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
-  }
-  
-  toWorkedSelected(e:any){
-  console.log(e);
-  this.repairCustomerDeliveryForm.controls.toWorker.setValue(e.WORKER_CODE);
-  }
-////////////////////////////////////////////////////////////////////////////////////////////////////
-  salesManCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  salesManSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
-  }
-
-  customerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  customerSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
-  }
 
 
-  openaddalloyallocation() {
-    const modalRef: NgbModalRef = this.modalService.open(AlloyAllocationComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
 
-  }
 
-  deleteTableData(){
- 
-    
-  }
 
 }

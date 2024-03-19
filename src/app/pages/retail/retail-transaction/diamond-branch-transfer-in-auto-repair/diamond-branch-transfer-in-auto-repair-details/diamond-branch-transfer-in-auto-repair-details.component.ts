@@ -1,633 +1,220 @@
-import { Component, ComponentFactory, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
-import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { CommonServiceService } from 'src/app/services/common-service.service';
-import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import Swal from 'sweetalert2';
-import { Code } from 'angular-feather/icons';
-import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
-
-
-
+import { Component, ComponentFactory, Input, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import {
+  NgbActiveModal,
+  NgbModal,
+  NgbModalRef,
+} from "@ng-bootstrap/ng-bootstrap";
+import { ToastrService } from "ngx-toastr";
+import { Subscription } from "rxjs";
+import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { CommonServiceService } from "src/app/services/common-service.service";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import Swal from "sweetalert2";
+import { Code } from "angular-feather/icons";
+import { AlloyAllocationComponent } from "src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component";
 
 @Component({
-  selector: 'app-diamond-branch-transfer-in-auto-repair-details',
-  templateUrl: './diamond-branch-transfer-in-auto-repair-details.component.html',
-  styleUrls: ['./diamond-branch-transfer-in-auto-repair-details.component.scss']
+  selector: "app-diamond-branch-transfer-in-auto-repair-details",
+  templateUrl: "./diamond-branch-transfer-in-auto-repair-details.component.html",
+  styleUrls: [ "./diamond-branch-transfer-in-auto-repair-details.component.scss",],
 })
-export class DiamondBranchTransferInAutoRepairDetailsComponent implements OnInit {
+export class DiamondBranchTransferInAutoRepairDetailsComponent  implements OnInit {
   @Input() content!: any;
-  @Input()
-  selectedIndex!: number | null;
-  tableData: any[] = [];  
-  tableDatas: any[] = [];  
-  firstTableWidth : any;
-  secondTableWidth : any;
-  columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
-  columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
-  divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['Repair Narration']
-  branchCode?: String;
-  yearMonth?: String;
-  currentDate = new FormControl(new Date());
-  isdisabled:boolean=true;
+  tableData:any[]=[];
   private subscriptions: Subscription[] = [];
-  table: any;
-  status: boolean= true;
-  viewMode: boolean = false;
-  selectedTabIndex = 0;
-  urls: string | ArrayBuffer | null | undefined;
-  url: any;
-  formattedTime: any;
-  maxTime: any;
-  standTime: any;
-  // setAllInitialValues: any;
+
+  diamondBranchTransferInAutoRepairDetails: FormGroup = this.formBuilder.group(
+    {}
+  );
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
-    private comService: CommonServiceService,
-  ) { }
+    private comService: CommonServiceService
+  ) {}
 
-
-  ngOnInit(): void {
-    this.setvaluesdata()
-    if (this.content) {
-      // this.setFormValues()  
-      this.setAllInitialValues()
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true;
-      }
-    }
-    
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
-    if (this.content) {
-      this.setFormValues()
-    }
-    this.repairCustomerDeliveryForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
-  
-  }
-
-  private handleResize(): void {
-    // Access screen size here using window.innerWidth and window.innerHeight
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    if (screenWidth > 1200) {
-      this.firstTableWidth = 800
-      this.secondTableWidth = 450
-    } else if (screenWidth >= 768 && screenWidth < 1200) {
-      this.firstTableWidth = 700
-      this.secondTableWidth = 350
-    }
-  }
-
-
-  repairCustomerDeliveryForm: FormGroup = this.formBuilder.group({
-    voctype: [,''],
-    vocNo: [''],
-    vocDate: [''],
-    salesMan: [''],
-    customer: [''],
-    customerDesc: [''],
-    tel: [''],
-    mobile: [''],
-    nationality: [''],
-    type:['IGST'],
-    remarks:[''],
-    currency:[''],
-    currencyDesc:[''],
-    email:[''],
-    address:[''],
-    check1:[''],
-    check2:[''],
-    vocType:[''],
-    repairAmt:[''],
-    subTotal:[''],
-    roundOffAmount:[''],
-    netTotal:[''],
-    taxCode: ['TAXCODE'],
-    process: ['',''],
-    worker: ['PARIMA',''],
-    narration: [''],
-    soNumber: [''],    //no
-    design:['', [Validators.required]],
-    completed:[''], //no
-    toWorker:['', [Validators.required]],
-    toProcess:['', [Validators.required]],
-    job:[''],
-    subJobId:[''],
-    timeTaken:[new Date().getDay()+':'+new Date().getHours()+':'+new Date().getMinutes()],
-    userId:[''], // No
-    date:[''],
-    copy:[''], // no
-    reason:[''], //no
-    attachments:[''], //no
-    deliveryOn:[''],
-    deliveryOnDays:[''],
-    deliveryOnDate:[{disabled: true,value:''}],
-    salesPersonCode:[''],
-    StockCode: ['', [Validators.required]],
-  });
-
-  setvaluesdata(){
-    console.log(this.comService);
-    this.repairCustomerDeliveryForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.repairCustomerDeliveryForm.controls.vocNo.setValue('1')
-    this.repairCustomerDeliveryForm.controls.vocDate.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.completed.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.date.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
-  }
-
-  
-  
-  setAllInitialValues() {
-    if (!this.content) return
-    let API = `JobCadProcessDJ/GetJobCadProcessDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          data.Details.forEach((element:any) => {
-            this.tableData.push({
-              Srno: element.SRNO,
-              Division:element.DIVCODE,
-              StoneType:element.METALSTONE,
-              Karat:element.KARAT_CODE,
-              Sieve:element.SIEVE,
-              Color:element.COLOR,
-              Shape:element.SHAPE,
-              Size:element.SIZE,
-              Pcs:element.PCS,
-              Remarks:element.D_REMARKS,
-              PointerWt:element.POINTER_WT,
-              StockCode: element.STOCK_CODE
-              
-             
-
-            })
-          });
-          console.log(this.tableDatas)
-          data.Components.forEach((element:any) => {
-            this.tableDatas.push({
-              Srno:element.SRNO,
-              CompCode:element.COMP_CODE,
-              Description:element.COMP_DESCRIPTION,
-              Pcs:element.PCS,
-              SizeSet:element.COMPSIZE_CODE,
-              SizeCode:element.COMPSET_CODE,
-              Type:element.TYPE_CODE,
-              Category:element.CATEGORY_CODE,
-              Shape:element.COMP_SHAPE,
-              Height:element.HEIGHT,
-              Width:element.WIDTH,
-              Length:element.LENGTH,
-              Radius:element.RADIUS,
-              Remarks:element.REMARKS
-
-            
-            })
-          }); 
-          this.repairCustomerDeliveryForm.controls.vocNo.setValue(data.VOCNO)
-          this.repairCustomerDeliveryForm.controls.voctype.setValue(data.VOCTYPE)
-          this.repairCustomerDeliveryForm.controls.design.setValue(data.DESIGN_CODE)
-          this.repairCustomerDeliveryForm.controls.job.setValue(data.JOB_NUMBER)
-          this.repairCustomerDeliveryForm.controls.toWorker.setValue(data.TO_WORKER_CODE)
-          this.repairCustomerDeliveryForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
-          this.repairCustomerDeliveryForm.controls.soNumber.setValue(data.JOB_SO_NUMBER)
-          this.repairCustomerDeliveryForm.controls.subJobId.setValue(data.JOB_SO_MID)
-          this.repairCustomerDeliveryForm.controls.narration.setValue(data.REMARKS)
-         
-          
-        } else {
-          this.comService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
-  
+  ngOnInit(): void {}
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  openFileExplorer() {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    fileInput.click();
-  }
-
-  handleFileInput(event: any) {
-    const selectedFile = event.target.files[0];
-    
-    // Assuming you want to display the file path in the input field
-    this.repairCustomerDeliveryForm.get('attachments')?.setValue(selectedFile.name);
-
-    // You can also handle the file in other ways, such as uploading it
-  }
-
-
-  onFileChanged(event:any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result; 
-      };
-    }
-  }
-
-  setFormValues() {
-    if (!this.content) return
-    this.repairCustomerDeliveryForm.controls.job_number.setValue(this.content.JOB_NUMBER)
-    this.repairCustomerDeliveryForm.controls.design.setValue(this.content.DESIGN_CODE)
-    this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
-      if (data.status == 'Success') {
-        this.tableData = data.response.WaxProcessDetails;
-      }
-    });
-    
-  }
-  updateStandardTime(duration: any) {
-    // this.yourContent.standardTime.totalDays = duration[0] || 0;
-    // this.yourContent.standardTime.totalHours = duration[1] || 0;
-    // this.yourContent.standardTime.totalMinutes = duration[2] || 0;
-
-    this.formattedTime = duration;
-
-    // console.log(this.formattedTime);
-
-    console.log(duration)
-  }
-  yourContent = {
-    standardTime: {
-      totalDays: 0,
-      totalHours: 0,
-      totalMinutes: 0,
-    }
-  }
- 
- 
-
-  adddata() {
-
-    const modalRef: NgbModalRef = this.modalService.open(DiamondBranchTransferInAutoRepairDetailsComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
-
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "Srno": srno,
-      "Division": "",
-      "StoneType": "",
-      "StockCode": "",
-      "Karat": "",
-      "Color": "",
-      "Shape": "",
-      "Sieve": "",
-      "Size": 0,
-      "Pcs": 0,
-      "WtCt": 0,
-      "SettingType": 0,
-      "PointerWt": 0,
-      "Remarks": "",
-    };
-  
-    this.tableData.push(data);
-   
-}
-
-divisiontemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Division = data.target.value;
-}
-
-stonetypetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].StoneType = data.target.value;
-}
-
-stockcodetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].StockCode = data.target.value;
-}
-
-karattemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Karat = data.target.value;
-}
-
-colortemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Color = data.target.value;
-}
-
-shapetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Shape = data.target.value;
-}
-
-sievetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Sieve = data.target.value;
-}
-
-sizetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Size = data.target.value;
-}
-
-Pcstemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Pcs = data.target.value;
-}
-
-wtcttemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].WtCt = data.target.value;
-}
-
-settingtypetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].SettingType = data.target.value;
-}
-
-pointerwttemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].PointerWt = data.target.value;
-}
-
-remarkstemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Remarks = data.target.value;
-}
-stoneTypeSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].StoneType = event.CODE;
-}
-DivisionSelected(event: any, value: any) {
-  console.log(event);
-  this.tableData[value.data.Srno - 1].Division = event.DIVISION_CODE;
-}
-
-onHoverstoneType({ data }: any) {
-  this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
-}
-stockCodeSelected(event: any, value: any) {
-  console.log(event)
-  this.tableData[value.data.Srno - 1].StockCode = event.STOCK_CODE;
-}
-colorCodeSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].Color = event.CODE;
-}
-shapeSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].Shape = event.CODE;
-}
-sieveSelected(event: any, value: any) {
-  this.tableData[value.data.Srno - 1].Sieve = event.CODE;
-}
-categortySelected(event: any, value: any) {
-  this.tableDatas[value.data.Srno - 1].Category = event.CODE;
-}
-shapeSelected1(event: any, value: any) {
-  this.tableDatas[value.data.Srno - 1].Shape = event.CODE;
-}
-karatCodeSelected(event: any, value: any ) {
-  console.log(event)
-    this.tableData[value.data.Srno - 1].Karat = event['Karat Code'];
-}
-onHoverStockCode({ data }: any) {
-  this.stockCode.LOOKUPID = 23
- }
-
- onHoverColorCode({ data }: any) {
-  this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`
-}
-onHoverShape({ data }: any) {
-  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-onHoverSieve({data}:any){
-  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-onHoverCategory({data}:any){
-  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-onHoverKaratCode({data}:any){
-  this.karatCodeData.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-}
-
-
-adddatas() {
-  let length = this.tableDatas.length;
-  let srno = length + 1;
-  let data2=  {
-    "Srno": srno,
-    "CompCode": "",
-    "Description": "",
-    "Pcs": "",
-    "SizeSet": "",
-    "SizeCode": "",
-    "Type": "",
-    "Category": "",
-    "Shape": 0,
-    "Height": 0,
-    "Width": 0,
-    "Length": 0,
-    "Radius": 0,
-    "Remarks": "",
-  };
-  this.tableDatas.push(data2);
- 
-}
-
-compcodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].CompCode = data.target.value;
-}
-
-descriptiontemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
-}
-Pcs2temp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
-}
-
-sizesettemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].SizeSet = data.target.value;
-}
-
-sizecodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].SizeCode = data.target.value;
-}
-
-typetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Type = data.target.value;
-}
-
-categorytemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Category = data.target.value;
-}
-
-shape2temp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Shape = data.target.value;
-}
-
-heighttemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Height = data.target.value;
-}
-
-widthtemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Width = data.target.value;
-}
-
-lengthtemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
-}
-
-radiustemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Radius = data.target.value;
-}
-
-remarks2temp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Remarks = data.target.value;
-}
-
-removedata(){
-  this.tableData.pop();
-}
-
-removedatas(){
-  this.tableDatas.pop();
-}
-setDetaills(){
-  let Details:any=[]
-  this.tableData.forEach((Element: any)=> {
-    Details.push(
-      {
-        "UNIQUEID": 0,
-        "DT_BRANCH_CODE": this.branchCode,
-        "DT_VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-        "DT_VOCNO": 0,
-        "DT_YEARMONTH": this.yearMonth,
-        "SRNO": Element.Srno,
-        "METALSTONE": this.comService.nullToString(Element.METALSTONE),
-        "DIVCODE": this.comService.nullToString(Element.DIVCODE),
-        "STONE_TYPE": Element.StoneType,
-        "KARAT_CODE": this.comService.nullToString(Element.KARAT_CODE),
-        "SIEVE_SET": "",
-        "SIEVE": Element.Sieve,
-        "COLOR": Element.Color,
-        "CLARITY": "",
-        "SHAPE": Element.Shape,
-        "SIZE": this.comService.nullToString(Element.Size),
-        "PCS": this.comService.emptyToZero(Element.Pcs),
-        "GROSS_WT": 0,
-        "D_REMARKS": Element.Remarks,
-        "PROCESS_TYPE": "",
-        "POINTER_WT": Element.PointerWt,
-        "STOCK_CODE": this.comService.nullToString(Element.StockCode),
-        "COMP_CODE": ""
-      }
-    )
-    
-  }
-  )
-  return Details  
-}
-
-componentSet(){
-  let Components:any=[]
-  this.tableDatas.forEach((item: any)=>{
-    Components.push(
-       {
-          "REFMID": 0,
-          "SRNO": item.Srno,
-          "COMP_CODE": item.CompCode,
-          "COMP_DESCRIPTION": item.Description,
-          "COMP_SHAPE": "",
-          "TYPE_CODE": item.Type,
-          "CATEGORY_CODE": item.Category,
-          "COMPSIZE_CODE": "string",
-          "COMPSET_CODE": "string",
-          "HEIGHT": item.Height,
-          "WIDTH": item.Width,
-          "LENGTH": item.Length,
-          "RADIUS": item.Radius,
-          "PCS": this.comService.emptyToZero(item.PCS),
-          "REMARKS": item.Remarks,
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth
-        }
-
-    ) 
-  }
-  )
-  return Components
-}
-
-  
-
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.updateMeltingType()
+      this.update()
       return
     }
 
-    if (this.repairCustomerDeliveryForm.invalid) {
+    if (this.diamondBranchTransferInAutoRepairDetails.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = 'JobCadProcessDJ/InsertJobCadProcessDJ'
-    let postData ={
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-      "vocNo": this.repairCustomerDeliveryForm.value.vocNo,
-      "YEARMONTH": this.yearMonth,
-      "SALESPERSON_CODE": "string",
-      "SYSTEM_DATE": this.repairCustomerDeliveryForm.value.date,
-      "MACHINEID": "",
-      "DOC_REF": "",
-      "REMARKS": this.repairCustomerDeliveryForm.value.remarks,
-      "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
-      "NAVSEQNO": 0,
-      "PROCESS_CODE": this.repairCustomerDeliveryForm.value.process,
-      "WORKER_CODE": this.repairCustomerDeliveryForm.value.worker,
-      "JOB_NUMBER": this.repairCustomerDeliveryForm.value.job,
-      "UNQ_JOB_ID": "",
-      "JOB_SO_NUMBER": this.repairCustomerDeliveryForm.value.subJobId,
-      "DESIGN_CODE": this.repairCustomerDeliveryForm.value.design,
-      "UNQ_DESIGN_ID": "",
-      "PART_CODE": "",
+    let API = 'MetalTransferAuto/InsertMetalTransferAuto'
+    let postData = 
+    {
+      "UNIQUEID": 0,
+      "SRNO": 0,
+      "DIVISION_CODE": "s",
+      "STOCK_ACTION": "s",
+      "STOCK_CODE": "string",
+      "SUPPLIER": "string",
       "PCS": 0,
-      "TIME_TAKEN": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.TIME_TAKEN),
-      "JOB_SO_MID": 0,
-      "CAD_STATUS": "",
-      "APPR_CODE": "",
-      "APPR_TYPE": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.type),
-      "TRANS_REF": "",
-      "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-      "TO_PROCESS_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toProcess),
-      "TO_WORKER_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toWorker),
-      "SO_DELIVERY_TYPE": this.repairCustomerDeliveryForm.value.deliveryOn,
-      "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.deliveryOnDays),
-      "SO_DELIVERY_DATE": this.repairCustomerDeliveryForm.value.deliveryOnDate,
-      "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
-      "SO_CR_DAYS": 0,
-      "Details":this.setDetaills(),
-
-      "Components":this.componentSet(),
-       
-     
+      "GROSSWT": 0,
+      "STONEWT": 0,
+      "NETWT": 0,
+      "PURITY": 0,
+      "PUREWT": 0,
+      "CHARGABLEWT": 0,
+      "OZWT": 0,
+      "MKG_RATEFC": 0,
+      "MKG_RATECC": 0,
+      "MKGVALUEFC": 0,
+      "MKGVALUECC": 0,
+      "RATE_TYPE": "string",
+      "METAL_RATE": 0,
+      "METAL_RATE_GMSFC": 0,
+      "METAL_RATE_GMSCC": 0,
+      "METALVALUEFC": 0,
+      "METALVALUECC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATECC": 0,
+      "STONEVALUEFC": 0,
+      "STONEVALUECC": 0,
+      "DISCPER": 0,
+      "DISCAMTFC": 0,
+      "DISCAMTCC": 0,
+      "NETVALUEFC": 0,
+      "NETVALUECC": 0,
+      "PUDIFF": 0,
+      "STONEDIFF": 0,
+      "FROM_LOC": "string",
+      "TO_LOC": "string",
+      "STOCK_DOCDESC": "string",
+      "BAGNO": "string",
+      "BRTSFMKGAC": "string",
+      "BRTSFMTLAC": "string",
+      "PHYSICALSTOCKAC": "string",
+      "PUDIFFAC": "string",
+      "PURCHASEAC": "string",
+      "PRETURNAC": "string",
+      "STDIFFAC": "string",
+      "STONEVALAC": "string",
+      "ADJUSTMENTAC": "string",
+      "RUBY_WT": 0,
+      "RUBY_AMOUNTFC": 0,
+      "RUBY_AMOUNTCC": 0,
+      "EMERALD_WT": 0,
+      "EMERALD_AMOUNTFC": 0,
+      "EMERALD_AMOUNTCC": 0,
+      "SAPPHIRE_WT": 0,
+      "SAPPHIRE_AMOUNTFC": 0,
+      "SAPPHIRE_AMOUNTCC": 0,
+      "ZIRCON_WT": 0,
+      "ZIRCON_AMOUNTFC": 0,
+      "ZIRCON_AMOUNTCC": 0,
+      "COLOR_STONE_WT": 0,
+      "COLOR_STONE_AMOUNTFC": 0,
+      "COLOR_STONE_AMOUNTCC": 0,
+      "RUBY_RATE": 0,
+      "EMERALD_RATE": 0,
+      "SAPPHIRE_RATE": 0,
+      "ZIRCON_RATE": 0,
+      "COLOR_STONE_RATE": 0,
+      "MTL_SIZE": "string",
+      "MTL_COLOR": "string",
+      "MTL_DESIGN": "string",
+      "POSSALESVALUE": 0,
+      "DT_BRANCH_CODE": "string",
+      "DT_VOCTYPE": "str",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "string",
+      "SUPPLIERDESC": "string",
+      "IMPYEARMONTH": "string",
+      "IMPVOCTYPE": "str",
+      "IMPVOCNO": 0,
+      "IMPBATCHNO": 0,
+      "IMPMID": 0,
+      "BASE_CONV_RATE": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTCC": 0,
+      "CGST_PER": 0,
+      "CGST_AMOUNTFC": 0,
+      "CGST_AMOUNTCC": 0,
+      "SGST_PER": 0,
+      "SGST_AMOUNTFC": 0,
+      "SGST_AMOUNTCC": 0,
+      "IGST_PER": 0,
+      "IGST_AMOUNTFC": 0,
+      "IGST_AMOUNTCC": 0,
+      "CGST_ACCODE": "string",
+      "SGST_ACCODE": "string",
+      "IGST_ACCODE": "string",
+      "GST_ROUNDOFFFC": 0,
+      "GST_ROUNDOFFCC": 0,
+      "ROUNDOFF_ACCODE": "string",
+      "HSN_CODE": "string",
+      "GST_CODE": "string",
+      "REPAIRITEM": "string",
+      "METALGROSSWT": 0,
+      "DIAPCS": 0,
+      "DIACARAT": 0,
+      "MASTERDIACARAT": 0,
+      "STONEPCS": 0,
+      "STONECARAT": 0,
+      "MASTERSTONECARAT": 0,
+      "METAL_WT": 0,
+      "FINEGOLD": 0,
+      "MASTERFINEGOLD": 0,
+      "DIAMOND_RATEFC": 0,
+      "DIAMOND_RATELC": 0,
+      "DIAMOND_VALUEFC": 0,
+      "DIAMOND_VALUELC": 0,
+      "COLORSTONE_RATEFC": 0,
+      "COLORSTONE_RATELC": 0,
+      "COLORSTONE_VALUEFC": 0,
+      "COLORSTONE_VALUELC": 0,
+      "LABOUR_CHARGEFC": 0,
+      "LABOUR_CHARGELC": 0,
+      "HMCHARGEFC": 0,
+      "HMCHARGELC": 0,
+      "CERTCHARGEFC": 0,
+      "CERTCHARGELC": 0,
+      "WASTAGE": 0,
+      "WASTAGEPER": 0,
+      "WASTAGEAMOUNTFC": 0,
+      "WASTAGEAMOUNTLC": 0,
+      "PEARL_PCS": 0,
+      "PEARL_WT": 0,
+      "PEARL_AMTFC": 0,
+      "PEARL_AMTLC": 0
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    this.close(postData);
+  }
+
+  update(){
+    if (this.diamondBranchTransferInAutoRepairDetails.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+  
+    let API = 'MetalTransfer/UpdateMetalTransfer/'+ this.diamondBranchTransferInAutoRepairDetails.value.branchCode + this.diamondBranchTransferInAutoRepairDetails.value.voctype + this.diamondBranchTransferInAutoRepairDetails.value.vocno + this.diamondBranchTransferInAutoRepairDetails.value.yearMonth
+    let postData = {
+    }
+      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if(result.status == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -636,7 +223,7 @@ componentSet(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.repairCustomerDeliveryForm.reset()
+                this.diamondBranchTransferInAutoRepairDetails.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -648,80 +235,9 @@ componentSet(){
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
-  updateMeltingType() {
-    console.log(this.branchCode,'working')
-    let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.repairCustomerDeliveryForm.value.voctype}/${this.repairCustomerDeliveryForm.value.vocNo}/${this.comService.yearSelected}` ;
-      let postData ={
-          "MID": 0,
-          "BRANCH_CODE": this.branchCode,
-          "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-          "vocNo": this.repairCustomerDeliveryForm.value.vocNo,
-          "YEARMONTH": this.yearMonth,
-          "SALESPERSON_CODE": "string",
-          "SYSTEM_DATE": this.repairCustomerDeliveryForm.value.date,
-          "MACHINEID": "",
-          "DOC_REF": "",
-          "REMARKS": this.repairCustomerDeliveryForm.value.narration,
-          "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
-          "NAVSEQNO": 0,
-          "PROCESS_CODE": this.repairCustomerDeliveryForm.value.process,
-          "WORKER_CODE": this.repairCustomerDeliveryForm.value.worker,
-          "JOB_NUMBER": this.repairCustomerDeliveryForm.value.job,
-          "UNQ_JOB_ID": "",
-          "JOB_SO_NUMBER": this.repairCustomerDeliveryForm.value.subJobId,
-          "DESIGN_CODE": this.repairCustomerDeliveryForm.value.design,
-          "UNQ_DESIGN_ID": "",
-          "PART_CODE": "",
-          "PCS": 0,
-          "TIME_TAKEN": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.TIME_TAKEN),
-          "JOB_SO_MID": 0,
-          "CAD_STATUS": "",
-          "APPR_CODE": "",
-          "APPR_TYPE": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.type),
-          "TRANS_REF": "",
-          "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-          "TO_PROCESS_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toProcess),
-          "TO_WORKER_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toWorker),
-          "SO_DELIVERY_TYPE": this.repairCustomerDeliveryForm.value.deliveryOn,
-          "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.deliveryOnDays),
-          "SO_DELIVERY_DATE": this.repairCustomerDeliveryForm.value.deliveryOnDate,
-          "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
-          "SO_CR_DAYS": 0,
-          "Details":this.setDetaills(),
-    
-          "Components":this.componentSet(),
-        }
-       
-      
   
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.repairCustomerDeliveryForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
-      /**USE: delete Melting Type From Row */
-  deleteMeltingType() {
-    if (!this.content.WORKER_CODE) {
+  deleteRecord() {
+    if (!this.content.VOCTYPE) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -744,7 +260,7 @@ componentSet(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = '/JobCadProcessDJ/DeleteJobCadProcessDJ/' + this.repairCustomerDeliveryForm.value.brnachCode + this.repairCustomerDeliveryForm.value.voctype + this.repairCustomerDeliveryForm.value.vocNo + this.repairCustomerDeliveryForm.value.yearMoth;
+        let API = 'MetalTransfer/DeleteMetalTransfer/' + this.diamondBranchTransferInAutoRepairDetails.value.branchCode + this.diamondBranchTransferInAutoRepairDetails.value.voctype + this.diamondBranchTransferInAutoRepairDetails.value.vocno + this.diamondBranchTransferInAutoRepairDetails.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -757,7 +273,7 @@ componentSet(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.repairCustomerDeliveryForm.reset()
+                    this.diamondBranchTransferInAutoRepairDetails.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -771,7 +287,7 @@ componentSet(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.repairCustomerDeliveryForm.reset()
+                    this.diamondBranchTransferInAutoRepairDetails.reset()
                     this.tableData = []
                     this.close()
                   }
@@ -785,158 +301,7 @@ componentSet(){
       }
     });
   }
-  generalMaster: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'GENERAL MASTER',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  divisionMaster: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 18,
-    SEARCH_FIELD: 'DIVISION_CODE',
-    SEARCH_HEADING: 'Division Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  stockCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 4,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'STOCK CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  karatCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 84,
-    SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat Master',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  processCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  processSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.process.setValue(e.Process_Code);
-  }
   
-  toprocessCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  toProcessSelected(e:any){
-    this.repairCustomerDeliveryForm.controls.toProcess.setValue(e.Process_Code);
-  }
-
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  workedSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
-  }
-  
-  toWorkedSelected(e:any){
-  console.log(e);
-  this.repairCustomerDeliveryForm.controls.toWorker.setValue(e.WORKER_CODE);
-  }
-////////////////////////////////////////////////////////////////////////////////////////////////////
-  salesManCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  salesManSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
-  }
-
-  customerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  customerSelected(e:any){
-    console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
-  }
-
-
-  openaddalloyallocation() {
-    const modalRef: NgbModalRef = this.modalService.open(AlloyAllocationComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
-
-  }
-
-  deleteTableData(){
- 
-    
-  }
 
 }
+

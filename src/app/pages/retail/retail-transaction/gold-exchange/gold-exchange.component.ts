@@ -28,11 +28,7 @@ export class GoldExchangeComponent implements OnInit {
   currentDate = new Date();
   tableData: any[] = [];
   strBranchcode:any= '';
-  // columnhead:any[] = [
-  //   { title: 'Karat', field: 'KARAT_CODE' },
-  //   { title: 'Sale Rate', field: 'KARAT_RATE' },
-  //   { title: 'Purchase Rate', field: 'POPKARAT_RATE' }];
-
+  goldExchangeDetailsData : any[] = [];
   columnhead:any[] = ['Karat','Sale Rate','Purchase Rate'];
   columnheadDetails:any[] = ['Stock Code','Pcs','Gr.Wt','Purity','Pure Wt','Mkg.RATE','Mkg.Amount','Metal Amt','St.Amt','Wastage','Total','']
   
@@ -69,12 +65,26 @@ export class GoldExchangeComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Party Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CURRENCY_CODE ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  
+  salesManCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'SALES MAN ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   
-  posPurchaseForm: FormGroup = this.formBuilder.group({
+  goldExchangeForm: FormGroup = this.formBuilder.group({
     vocType:[''],
     vocTypeNo:[1],
     vocDate:[new Date()],
@@ -90,7 +100,7 @@ export class GoldExchangeComponent implements OnInit {
     creditDays:[new Date()],
     salesMan:[''],
     supInvNo:[''],
-    date:[new Date()],
+    supInvDate:[new Date()],
     custName:[''],
     email:[''],
     custId:[''],
@@ -127,14 +137,11 @@ export class GoldExchangeComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
-
-
-    this.posPurchaseForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
-    this.posPurchaseForm.controls.partyCurrCode.setValue(this.comService.compCurrency);
-    this.posPurchaseForm.controls.partyCurrCodeDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
-    this.posPurchaseForm.controls.itemCurr.setValue(this.comService.compCurrency);
-    this.posPurchaseForm.controls.itemCurrCode.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+    this.goldExchangeForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
+    this.goldExchangeForm.controls.partyCurrCode.setValue(this.comService.compCurrency);
+    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+    this.goldExchangeForm.controls.itemCurr.setValue(this.comService.compCurrency);
+    this.goldExchangeForm.controls.itemCurrCode.setValue(this.comService.getCurrRate(this.comService.compCurrency));
     this.getKaratDetails();
   }
 
@@ -149,22 +156,28 @@ export class GoldExchangeComponent implements OnInit {
 
   partyCodeSelected(e:any){
     console.log(e);
-    this.posPurchaseForm.controls.partyCode.setValue(e.ACCODE);
-    this.posPurchaseForm.controls.partyCodeName.setValue(e['ACCOUNT HEAD'])
-    this.posPurchaseForm.controls.partyCode1.setValue(e['ACCOUNT HEAD'])  
+    this.goldExchangeForm.controls.partyCode.setValue(e.ACCODE);
+    this.goldExchangeForm.controls.partyCodeName.setValue(e['ACCOUNT HEAD'])
+    this.goldExchangeForm.controls.partyCode1.setValue(e['ACCOUNT HEAD'])  
   }
 
   partyCurrencyCodeSelected(e:any){
     console.log(e);
   }
 
+
+ salesManCodeSelected(e:any){
+    console.log(e);
+    this.goldExchangeForm.controls.salesMan.setValue(e.SALESPERSON_CODE);
+  }
+
   customerCodeSelected(e:any){
     console.log(e);
-    this.posPurchaseForm.controls.customer.setValue(e.CODE);
-    this.posPurchaseForm.controls.custId.setValue(e.CODE);
-    this.posPurchaseForm.controls.custName.setValue(e.NAME);
-    this.posPurchaseForm.controls.email.setValue(e.EMAIL);
-    this.posPurchaseForm.controls.moblie.setValue(e.MOBILE);
+    this.goldExchangeForm.controls.customer.setValue(e.CODE);
+    this.goldExchangeForm.controls.custId.setValue(e.CODE);
+    this.goldExchangeForm.controls.custName.setValue(e.NAME);
+    this.goldExchangeForm.controls.email.setValue(e.EMAIL);
+    this.goldExchangeForm.controls.moblie.setValue(e.MOBILE);
   }
 
   opengoldposdirectdetail() {
@@ -174,6 +187,13 @@ export class GoldExchangeComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.result.then((postData) => {
+      // console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);    
+        this.goldExchangeDetailsData.push(postData);
+      }
+    });
   }
 
   
@@ -182,7 +202,622 @@ export class GoldExchangeComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  formSubmit(){
+  setFormValues(){
+    console.log('this.content', this.content);
+    if (!this.content) return
+    this.goldExchangeForm.controls.vocType.setValue(this.content.VOCTYPE);
+    this.goldExchangeForm.controls.vocTypeNo.setValue(this.content.VOCNO);
+    this.goldExchangeForm.controls.vocDate.setValue(this.content.VOCDATE);
+    this.goldExchangeForm.controls.partyCode.setValue(this.content.PARTYCODE);
+    this.goldExchangeForm.controls.partyCurrCode.setValue(this.content.PARTY_CURRENCY);
+    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.content.PARTY_CURR_RATE);
+    this.goldExchangeForm.controls.itemCurr.setValue(this.content.ITEM_CURRENCY);
+    this.goldExchangeForm.controls.itemCurrCode.setValue(this.content.ITEM_CURR_RATE);
+    this.goldExchangeForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
+    this.goldExchangeForm.controls.partyCurrency.setValue(this.content.PARTY_VALUE_FC);
+    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
+    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
+    this.goldExchangeForm.controls.rndNetAmt.setValue(this.content.NET_VALUE_FC);
+    this.goldExchangeForm.controls.rndNetAmtDes.setValue(this.content.NET_VALUE_CC);
+    this.goldExchangeForm.controls.otherAmt.setValue(this.content.ADDL_VALUE_FC);
+    this.goldExchangeForm.controls.otherAmtDes.setValue(this.content.ADDL_VALUE_CC);
+    this.goldExchangeForm.controls.grossAmt.setValue(this.content.GROSS_VALUE_FC);
+    this.goldExchangeForm.controls.grossAmtDes.setValue(this.content.GROSS_VALUE_CC);
+    this.goldExchangeForm.controls.narration.setValue(this.content.REMARKS);
     
+    this.goldExchangeForm.controls.supInvNo.setValue(this.content.SUPINVNO);
+    this.goldExchangeForm.controls.supInvDate.setValue(this.content.supInvDate);
+    
+    this.goldExchangeForm.controls.creditDaysCode.setValue(this.content.CREDITDAY);
+ 
+    this.goldExchangeForm.controls.customer.setValue(this.content.HLOCTYPE_CODE);
+    this.goldExchangeForm.controls.custName.setValue(this.content.HTUSERNAME);
+ 
+    this.goldExchangeForm.controls.custId.setValue(this.content.MHCUSTIDNO);
+    
+    this.goldExchangeForm.controls.moblie.setValue(this.content.CUSTOMER_MOBILE);
+    this.goldExchangeForm.controls.email.setValue(this.content.CUSTOMER_EMAIL);
+   
+  
+   
+    this.goldExchangeForm.controls.amount.setValue(this.content.TOTSTAMP_AMTFC);
+    this.goldExchangeForm.controls.amountDes.setValue(this.content.TOTSTAMP_AMTCC);
+    
+    
+  
+    this.goldExchangeForm.controls.rndOfAmt.setValue(this.content.VATAMOUNTFCROUND);
+    this.goldExchangeForm.controls.rndOfAmtDes.setValue(this.content.VATAMOUNTFCROUNDCC);
+
   }
+
+  formSubmit(){
+
+    if(this.content && this.content.FLAG == 'EDIT'){
+      this.update();
+      return
+    }
+    if (this.goldExchangeForm.invalid) {
+      this.toastr.error('select all required fields');
+      return
+    }
+
+    const saveApi = 'OldGoldPurchase/InsertMetalPurchase';
+    let postData = {
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.goldExchangeForm.value.vocType,
+      "VOCNO": this.goldExchangeForm.value.vocTypeNo,
+      "VOCDATE": this.goldExchangeForm.value.vocDate,
+      "YEARMONTH": this.yearMonth,
+      "PARTYCODE": this.goldExchangeForm.value.partyCode,
+      "PARTY_CURRENCY": this.goldExchangeForm.value.partyCurrCode,
+      "PARTY_CURR_RATE": this.goldExchangeForm.value.partyCurrCodeDesc,
+      "ITEM_CURRENCY": this.goldExchangeForm.value.itemCurr,
+      "ITEM_CURR_RATE": this.goldExchangeForm.value.itemCurrCode,
+      "VALUE_DATE": "2024-02-08T12:18:43.101Z",
+      "SALESPERSON_CODE": this.goldExchangeForm.value.salesMan,
+      "RATE_TYPE": "string",
+      "METAL_RATE": 0,
+      "FIXED": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_PUWT": 0,
+      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_MKGVALUE_CC": 0,
+      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_CC": 0,
+      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_CC": 0,
+      "TOTAL_PUDIFF": 0,
+      "TOTAL_STONEDIFF": 0,
+      "ITEM_VALUE_FC": 0,
+      "ITEM_VALUE_CC": 0,
+      "PARTY_VALUE_FC": this.goldExchangeForm.value.partyCurrency,
+      "PARTY_VALUE_CC": this.goldExchangeForm.value.partyCurrencyCode,
+      "NET_VALUE_FC": this.goldExchangeForm.value.rndNetAmt,
+      "NET_VALUE_CC": this.goldExchangeForm.value.rndNetAmtDes,
+      "ADDL_VALUE_FC": this.goldExchangeForm.value.otherAmt,
+      "ADDL_VALUE_CC": this.goldExchangeForm.value.otherAmtDes,
+      "GROSS_VALUE_FC": this.goldExchangeForm.value.grossAmt,
+      "GROSS_VALUE_CC": this.goldExchangeForm.value.grossAmtDes,
+      "REMARKS": this.goldExchangeForm.value.narration,
+      "SYSTEM_DATE": "2024-02-08T12:18:43.101Z",
+      "FLAG_EDIT_ALLOW": "string",
+      "TOTAL_OZWT": 0,
+      "ROUND_VALUE_CC": 0,
+      "NAVSEQNO": 0,
+      "SUPINVNO": this.goldExchangeForm.value.supInvNo,
+      "supInvDate": this.goldExchangeForm.value.supInvDate,
+      "FLAG_UPDATED": "string",
+      "FLAG_INPROCESS": "string",
+      "HHACCOUNT_HEAD": "string",
+      "PURCHASEFIXINGAMTLC": 0,
+      "PURCHASEFIXINGAMTFC": 0,
+      "PURCHASEFIXINGMID": 0,
+      "PURCHASEFIXINGREF": "string",
+      "PURCHASEFIXINGPUREWT": 0,
+      "PURCHASEFIXINGRATE": "string",
+      "D2DTRANSFER": "s",
+      "OUSTATUS": true,
+      "OUSTATUSNEW": 0,
+      "CURRRECMID": 0,
+      "CURRRECVOCTYPE": "str",
+      "CURRRECREF": "string",
+      "CURRRECAMOUNTFC": 0,
+      "CURRRECAMOUNTCC": 0,
+      "TOTAL_DISCOUNTWT": 0,
+      "CUSTOMER_NAME": "string",
+      "MACHINEID": "string",
+      "SALESPERSON_NAME": "string",
+      "TOTAL_WASTQTY": 0,
+      "TOTAL_AMT_FC": 0,
+      "PARTYADDRESS": this.goldExchangeForm.value.partyCode1,
+      "CREDITDAY": this.goldExchangeForm.value.creditDaysCode,
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "AUTHORIZEDPOSTING": true,
+      "CANCELLEDPOSTING": true,
+      "PURITYQUALITYCHECK": true,
+      "TESTINGPARTY": "string",
+      "TESTINGPARTYWT": 0,
+      "TESTINGPARTYREMARKS": "string",
+      "TESTINGPARTYWTRECEIVED": 0,
+      "DOC_DISCMTLRATE": 0,
+      "REP_REF": "string",
+      "REPAIR_REF": "string",
+      "HLOCTYPE_CODE": this.goldExchangeForm.value.customer,
+      "HTUSERNAME": this.goldExchangeForm.value.custName ,
+      "MHIDCATEGORY": "string",
+      "MHCUSTIDNO": this.goldExchangeForm.value.custId,
+      "GENSEQNO": 0,
+      "BASE_CURRENCY": "stri",
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": 0,
+      "INCLUSIVE": 0,
+      "PRINT_COUNT": 0,
+      "DOC_REF": "string",
+      "FIXED_QTY": 0,
+      "GST_REGISTERED": true,
+      "GST_STATE_CODE": "st",
+      "GST_NUMBER": "string",
+      "GST_TYPE": "stri",
+      "GST_TOTALFC": 0,
+      "GST_TOTALCC": 0,
+      "CUSTOMER_MOBILE": this.goldExchangeForm.value.moblie,
+      "CUSTOMER_EMAIL": this.goldExchangeForm.value.email,
+      "POSCUSTIDNO": "string",
+      "POPCUSTCODE": "string",
+      "GST_GROUP": "s",
+      "FIXING_PROCESS": true,
+      "TOTAL_ADDL_TAXFC": 0,
+      "TOTAL_ADDL_TAXCC": 0,
+      "DIRECTFIXINGREF": "string",
+      "INTERNALUNFIX": true,
+      "REF_JOBCREATED": true,
+      "EXCLUDEVAT": true,
+      "TEST_BRANCH_CODE": "string",
+      "TEST_VOCTYPE": "str",
+      "TEST_VOCNO": 0,
+      "TEST_YEARMONTH": "string",
+      "TDS_CODE": "string",
+      "TDS_APPLICABLE": true,
+      "TDS_TOTALFC": 0,
+      "TDS_TOTALCC": 0,
+      "H_DECLARATIONNO": "string",
+      "H_ORIGINCOUNTRY": "string",
+      "H_DECLARATIONDATE": "2024-02-08T12:18:43.101Z",
+      "H_PACKETNO": 0,
+      "SHIPPER_CODE": "string",
+      "SHIPPER_NAME": "string",
+      "ORIGIN_COUNTRY": "string",
+      "DESTINATION_STATE": "string",
+      "DESTINATION_COUNTRY": "string",
+      "MINING_COMP_CODE": "string",
+      "MINING_COMP_NAME": "string",
+      "AIRWAY_BILLNO": "string",
+      "AIRWAY_BILLDATE": "2024-02-08T12:18:43.101Z",
+      "AIRWAY_WEIGHT": 0,
+      "ARIVAL_DATE": "2024-02-08T12:18:43.101Z",
+      "CLEARENCE_DATE": "2024-02-08T12:18:43.101Z",
+      "BOE_FILLINGDATE": "2024-02-08T12:18:43.101Z",
+      "BOE_NO": "string",
+      "PO_IMP": 0,
+      "SILVER_RATE_TYPE": "string",
+      "SILVER_RATE": 0,
+      "TOTAL_SILVERWT": 0,
+      "TOTAL_SILVERVALUE_FC": 0,
+      "TOTAL_SILVERVALUE_CC": 0,
+      "PO_REFNO": "string",
+      "MINING_COMP_REFNO": "string",
+      "PARTY_ROUNDOFF": 0,
+      "TRANSPORTER_CODE": "string",
+      "VEHICLE_NO": "string",
+      "LR_NO": "string",
+      "AIR_BILL_NO": "string",
+      "SHIPCODE": "string",
+      "SHIPDESC": "string",
+      "STAMPCHARGE": true,
+      "TOTSTAMP_AMTFC": this.goldExchangeForm.value.amount,
+      "TOTSTAMP_AMTCC": this.goldExchangeForm.value.amountDes,
+      "TOTSTAMP_PARTYAMTFC": 0,
+      "REFPURIMPORT": "string",
+      "BOE_EXPIRY_DATE": "2024-02-08T12:18:43.101Z",
+      "H_BILLOFENTRYREF": "string",
+      "SUB_LED_ACCODE": "string",
+      "ACTIVITY_CODE": "string",
+      "TCS_ACCODE": "string",
+      "TCS_AMOUNT": 0,
+      "TCS_AMOUNTCC": 0,
+      "TCS_APPLICABLE": true,
+      "DISCOUNTPERCENTAGE": 0,
+      "CUSTOMER_ADDRESS": "string",
+      "FROM_TOUCH": true,
+      "CUSTOMER_CODE": "string",
+      "IMPORTINPURCHASE": true,
+      "SL_CODE": "string",
+      "SL_DESCRIPTION": "string",
+      "CNT_ORIGIN": "string",
+      "OT_TRANSFER_TIME": "string",
+      "FREIGHT_RATE": 0,
+      "TDS_PER": 0,
+      "TDS_TOPARTY": true,
+      "LONDONFIXING_TYPE": 0,
+      "LONDONFIXING_RATE": 0,
+      "PARTYROUNDOFF": 0,
+      "NOTIONAL_PARTY": true,
+      "METAL_CONV_CURR": "stri",
+      "METAL_CONV_RATE": 0,
+      "CHECK_HEDGINGBAL": true,
+      "IMPORTINSALES": true,
+      "AUTOGENMID": 0,
+      "AUTOGENVOCTYPE": "str",
+      "AUTOGENREF": "string",
+      "VATAMOUNTMakingONLYCC": 0,
+      "CALCULATEPARTYVATONMAKINGONLY": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "IMPEXPDOC_TYPE": 0,
+      "TOTAL_WASTAGE_AMOUNTCC": 0,
+      "PARTYTRANSWISE_DESIGNATEDZONE": true,
+      "PARTY_STATE_CODE": "string",
+      "SHIP_ACCODE": "string",
+      "SHIP_STATE_CODE": "string",
+      "DISPATCH_NAME": "string",
+      "DISPATCH_ADDRESS": "string",
+      "DISPATCH_STATE_CODE": "string",
+      "TRANSPORTER_ID": "string",
+      "TRANSPORTER_MODE": "string",
+      "TRANSPORT_DISTANCE": 0,
+      "TRANSPORT_DATE": "2024-02-08T12:18:43.101Z",
+      "VEHICLE_TYPE": "string",
+      "DISPATCH_CITY": "string",
+      "DISPATCH_ZIPCODE": 0,
+      "EWAY_TRANS_TYPE": "string",
+      "CREDIT_DAYSMTL": 0,
+      "VALUE_DATEMTL": "2024-02-08T12:18:43.101Z",
+      "PURITYQUALITYREMARKS": "string",
+      "DISCOUNT_PERGRM": 0,
+      "EXCLUDE_VAT": true,
+      "H_AIRWAYBILL": "string",
+      "H_BASIS": "string",
+      "H_DESTINATION": "string",
+      "H_MINER": "string",
+      "H_SHIPMENTMODE": "string",
+      "H_SHIPPER": "string",
+      "HTOTALAMOUNTWITHVAT_CC": 0,
+      "HTOTALAMOUNTWITHVAT_FC": 0,
+      "HVAT_AMOUNT_CC": 0,
+      "HVAT_AMOUNT_FC": 0,
+      "INTERNALFIXEDQTY": 0,
+      "ITEMROUNDVALUEFC": 0,
+      "NEWMID": 0,
+      "PARTYROUNDVALUEFC": 0,
+      "PARTYTRANSWISE_METALVATONMAKING": true,
+      "PLACEOFSUPPLY": "string",
+      "POSPRICESFIXED": true,
+      "QRCODEIMAGE": "",
+      "QRCODEVALUE": "string",
+      "SHIPMENTCOMPANY": "string",
+      "SHIPMENTPORT": "string",
+      "TAX_APPLICABLE": true,
+      "TOTAL_WASTAGE_AMOUNTFC": 0,
+      "TRANSFER_BRANCH": "string",
+      "VATAMOUNTFCROUND": this.goldExchangeForm.value.rndOfAmt,
+      "VATAMOUNTFCROUNDCC": this.goldExchangeForm.value.rndOfAmtDes,
+      "metalPurchaseDetails": this.goldExchangeDetailsData,
+    }
+
+    let Sub: Subscription = this.suntechApi.postDynamicAPI(saveApi, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.goldExchangeForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+
+  update(){
+
+    if (this.goldExchangeForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    const updateApi = 'OldGoldPurchase/UpdateMetalPurchase/'+this.branchCode+'/'+this.content.VOCTYPE+'/'+this.yearMonth
+
+    let updateData = {
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.goldExchangeForm.value.vocType,
+      "VOCNO": this.goldExchangeForm.value.vocTypeNo,
+      "VOCDATE": this.goldExchangeForm.value.vocDate,
+      "YEARMONTH": this.yearMonth,
+      "PARTYCODE": this.goldExchangeForm.value.partyCode,
+      "PARTY_CURRENCY": this.goldExchangeForm.value.partyCurrCode,
+      "PARTY_CURR_RATE": this.goldExchangeForm.value.partyCurrCodeDesc,
+      "ITEM_CURRENCY": this.goldExchangeForm.value.itemCurr,
+      "ITEM_CURR_RATE": this.goldExchangeForm.value.itemCurrCode,
+      "VALUE_DATE": "2024-02-08T12:18:43.101Z",
+      "SALESPERSON_CODE": this.goldExchangeForm.value.salesMan,
+      "RATE_TYPE": "string",
+      "METAL_RATE": 0,
+      "FIXED": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_PUWT": 0,
+      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_MKGVALUE_CC": 0,
+      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_CC": 0,
+      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_CC": 0,
+      "TOTAL_PUDIFF": 0,
+      "TOTAL_STONEDIFF": 0,
+      "ITEM_VALUE_FC": 0,
+      "ITEM_VALUE_CC": 0,
+      "PARTY_VALUE_FC": this.goldExchangeForm.value.partyCurrency,
+      "PARTY_VALUE_CC": this.goldExchangeForm.value.partyCurrencyCode,
+      "NET_VALUE_FC": this.goldExchangeForm.value.rndNetAmt,
+      "NET_VALUE_CC": this.goldExchangeForm.value.rndNetAmtDes,
+      "ADDL_VALUE_FC": this.goldExchangeForm.value.otherAmt,
+      "ADDL_VALUE_CC": this.goldExchangeForm.value.otherAmtDes,
+      "GROSS_VALUE_FC": this.goldExchangeForm.value.grossAmt,
+      "GROSS_VALUE_CC": this.goldExchangeForm.value.grossAmtDes,
+      "REMARKS": this.goldExchangeForm.value.narration,
+      "SYSTEM_DATE": "2024-02-08T12:18:43.101Z",
+      "FLAG_EDIT_ALLOW": "string",
+      "TOTAL_OZWT": 0,
+      "ROUND_VALUE_CC": 0,
+      "NAVSEQNO": 0,
+      "SUPINVNO": this.goldExchangeForm.value.supInvNo,
+      "supInvDate": this.goldExchangeForm.value.supInvDate,
+      "FLAG_UPDATED": "string",
+      "FLAG_INPROCESS": "string",
+      "HHACCOUNT_HEAD": "string",
+      "PURCHASEFIXINGAMTLC": 0,
+      "PURCHASEFIXINGAMTFC": 0,
+      "PURCHASEFIXINGMID": 0,
+      "PURCHASEFIXINGREF": "string",
+      "PURCHASEFIXINGPUREWT": 0,
+      "PURCHASEFIXINGRATE": "string",
+      "D2DTRANSFER": "s",
+      "OUSTATUS": true,
+      "OUSTATUSNEW": 0,
+      "CURRRECMID": 0,
+      "CURRRECVOCTYPE": "str",
+      "CURRRECREF": "string",
+      "CURRRECAMOUNTFC": 0,
+      "CURRRECAMOUNTCC": 0,
+      "TOTAL_DISCOUNTWT": 0,
+      "CUSTOMER_NAME": "string",
+      "MACHINEID": "string",
+      "SALESPERSON_NAME": "string",
+      "TOTAL_WASTQTY": 0,
+      "TOTAL_AMT_FC": 0,
+      "PARTYADDRESS": this.goldExchangeForm.value.partyCode1,
+      "CREDITDAY": this.goldExchangeForm.value.creditDaysCode,
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "AUTHORIZEDPOSTING": true,
+      "CANCELLEDPOSTING": true,
+      "PURITYQUALITYCHECK": true,
+      "TESTINGPARTY": "string",
+      "TESTINGPARTYWT": 0,
+      "TESTINGPARTYREMARKS": "string",
+      "TESTINGPARTYWTRECEIVED": 0,
+      "DOC_DISCMTLRATE": 0,
+      "REP_REF": "string",
+      "REPAIR_REF": "string",
+      "HLOCTYPE_CODE": this.goldExchangeForm.value.customer,
+      "HTUSERNAME": this.goldExchangeForm.value.custName,
+      "MHIDCATEGORY": "string",
+      "MHCUSTIDNO": this.goldExchangeForm.value.custId,
+      "GENSEQNO": 0,
+      "BASE_CURRENCY": "stri",
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": 0,
+      "INCLUSIVE": 0,
+      "PRINT_COUNT": 0,
+      "DOC_REF": "string",
+      "FIXED_QTY": 0,
+      "GST_REGISTERED": true,
+      "GST_STATE_CODE": "st",
+      "GST_NUMBER": "string",
+      "GST_TYPE": "stri",
+      "GST_TOTALFC": 0,
+      "GST_TOTALCC": 0,
+      "CUSTOMER_MOBILE": this.goldExchangeForm.value.moblie,
+      "CUSTOMER_EMAIL": this.goldExchangeForm.value.email,
+      "POSCUSTIDNO": "string",
+      "POPCUSTCODE": "string",
+      "GST_GROUP": "s",
+      "FIXING_PROCESS": true,
+      "TOTAL_ADDL_TAXFC": 0,
+      "TOTAL_ADDL_TAXCC": 0,
+      "DIRECTFIXINGREF": "string",
+      "INTERNALUNFIX": true,
+      "REF_JOBCREATED": true,
+      "EXCLUDEVAT": true,
+      "TEST_BRANCH_CODE": "string",
+      "TEST_VOCTYPE": "str",
+      "TEST_VOCNO": 0,
+      "TEST_YEARMONTH": "string",
+      "TDS_CODE": "string",
+      "TDS_APPLICABLE": true,
+      "TDS_TOTALFC": 0,
+      "TDS_TOTALCC": 0,
+      "H_DECLARATIONNO": "string",
+      "H_ORIGINCOUNTRY": "string",
+      "H_DECLARATIONDATE": "2024-02-08T12:18:43.101Z",
+      "H_PACKETNO": 0,
+      "SHIPPER_CODE": "string",
+      "SHIPPER_NAME": "string",
+      "ORIGIN_COUNTRY": "string",
+      "DESTINATION_STATE": "string",
+      "DESTINATION_COUNTRY": "string",
+      "MINING_COMP_CODE": "string",
+      "MINING_COMP_NAME": "string",
+      "AIRWAY_BILLNO": "string",
+      "AIRWAY_BILLDATE": "2024-02-08T12:18:43.101Z",
+      "AIRWAY_WEIGHT": 0,
+      "ARIVAL_DATE": "2024-02-08T12:18:43.101Z",
+      "CLEARENCE_DATE": "2024-02-08T12:18:43.101Z",
+      "BOE_FILLINGDATE": "2024-02-08T12:18:43.101Z",
+      "BOE_NO": "string",
+      "PO_IMP": 0,
+      "SILVER_RATE_TYPE": "string",
+      "SILVER_RATE": 0,
+      "TOTAL_SILVERWT": 0,
+      "TOTAL_SILVERVALUE_FC": 0,
+      "TOTAL_SILVERVALUE_CC": 0,
+      "PO_REFNO": "string",
+      "MINING_COMP_REFNO": "string",
+      "PARTY_ROUNDOFF": 0,
+      "TRANSPORTER_CODE": "string",
+      "VEHICLE_NO": "string",
+      "LR_NO": "string",
+      "AIR_BILL_NO": "string",
+      "SHIPCODE": "string",
+      "SHIPDESC": "string",
+      "STAMPCHARGE": true,
+      "TOTSTAMP_AMTFC": this.goldExchangeForm.value.amount,
+      "TOTSTAMP_AMTCC": this.goldExchangeForm.value.amountDes,
+      "TOTSTAMP_PARTYAMTFC": 0,
+      "REFPURIMPORT": "string",
+      "BOE_EXPIRY_DATE": "2024-02-08T12:18:43.101Z",
+      "H_BILLOFENTRYREF": "string",
+      "SUB_LED_ACCODE": "string",
+      "ACTIVITY_CODE": "string",
+      "TCS_ACCODE": "string",
+      "TCS_AMOUNT": 0,
+      "TCS_AMOUNTCC": 0,
+      "TCS_APPLICABLE": true,
+      "DISCOUNTPERCENTAGE": 0,
+      "CUSTOMER_ADDRESS": "string",
+      "FROM_TOUCH": true,
+      "CUSTOMER_CODE": "string",
+      "IMPORTINPURCHASE": true,
+      "SL_CODE": "string",
+      "SL_DESCRIPTION": "string",
+      "CNT_ORIGIN": "string",
+      "OT_TRANSFER_TIME": "string",
+      "FREIGHT_RATE": 0,
+      "TDS_PER": 0,
+      "TDS_TOPARTY": true,
+      "LONDONFIXING_TYPE": 0,
+      "LONDONFIXING_RATE": 0,
+      "PARTYROUNDOFF": 0,
+      "NOTIONAL_PARTY": true,
+      "METAL_CONV_CURR": "stri",
+      "METAL_CONV_RATE": 0,
+      "CHECK_HEDGINGBAL": true,
+      "IMPORTINSALES": true,
+      "AUTOGENMID": 0,
+      "AUTOGENVOCTYPE": "str",
+      "AUTOGENREF": "string",
+      "VATAMOUNTMakingONLYCC": 0,
+      "CALCULATEPARTYVATONMAKINGONLY": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "IMPEXPDOC_TYPE": 0,
+      "TOTAL_WASTAGE_AMOUNTCC": 0,
+      "PARTYTRANSWISE_DESIGNATEDZONE": true,
+      "PARTY_STATE_CODE": "string",
+      "SHIP_ACCODE": "string",
+      "SHIP_STATE_CODE": "string",
+      "DISPATCH_NAME": "string",
+      "DISPATCH_ADDRESS": "string",
+      "DISPATCH_STATE_CODE": "string",
+      "TRANSPORTER_ID": "string",
+      "TRANSPORTER_MODE": "string",
+      "TRANSPORT_DISTANCE": 0,
+      "TRANSPORT_DATE": "2024-02-08T12:18:43.101Z",
+      "VEHICLE_TYPE": "string",
+      "DISPATCH_CITY": "string",
+      "DISPATCH_ZIPCODE": 0,
+      "EWAY_TRANS_TYPE": "string",
+      "CREDIT_DAYSMTL": 0,
+      "VALUE_DATEMTL": "2024-02-08T12:18:43.101Z",
+      "PURITYQUALITYREMARKS": "string",
+      "DISCOUNT_PERGRM": 0,
+      "EXCLUDE_VAT": true,
+      "H_AIRWAYBILL": "string",
+      "H_BASIS": "string",
+      "H_DESTINATION": "string",
+      "H_MINER": "string",
+      "H_SHIPMENTMODE": "string",
+      "H_SHIPPER": "string",
+      "HTOTALAMOUNTWITHVAT_CC": 0,
+      "HTOTALAMOUNTWITHVAT_FC": 0,
+      "HVAT_AMOUNT_CC": 0,
+      "HVAT_AMOUNT_FC": 0,
+      "INTERNALFIXEDQTY": 0,
+      "ITEMROUNDVALUEFC": 0,
+      "NEWMID": 0,
+      "PARTYROUNDVALUEFC": 0,
+      "PARTYTRANSWISE_METALVATONMAKING": true,
+      "PLACEOFSUPPLY": "string",
+      "POSPRICESFIXED": true,
+      "QRCODEIMAGE": "",
+      "QRCODEVALUE": "string",
+      "SHIPMENTCOMPANY": "string",
+      "SHIPMENTPORT": "string",
+      "TAX_APPLICABLE": true,
+      "TOTAL_WASTAGE_AMOUNTFC": 0,
+      "TRANSFER_BRANCH": "string",
+      "VATAMOUNTFCROUND": this.goldExchangeForm.value.rndOfAmt,
+      "VATAMOUNTFCROUNDCC": this.goldExchangeForm.value.rndOfAmtDes,
+      "metalPurchaseDetails": this.goldExchangeDetailsData,
+    }
+
+    let Sub: Subscription = this.suntechApi.putDynamicAPI(updateApi, updateData)
+    .subscribe((result) => {
+      if (result.response) {
+        if(result.status == "Success"){
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.goldExchangeForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }, err => alert(err))
+  this.subscriptions.push(Sub)
+
+
+    
+
+  }
+
+
+  
+
 }
+

@@ -16,7 +16,7 @@
                             <div class="col-md-8">
                                 <div class="row align-items-center mb-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price
-                                        Code:</label>
+                                        Code * :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput [readonly]="viewMode" maxlength="6" #priceCode
@@ -26,7 +26,7 @@
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Description:</label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Description * :</label>
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput #description formControlName="description"
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="row align-items-center mb-2">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Price Type :</label>
+                                        Price Type * :</label>
                                     <div class="col-sm-10 d-flex align-items-center">
                                         <mat-form-field style="width: 150px; margin-right: 10px;">
                                             <mat-select (selectionChange)="onPriceTypeChange()"
@@ -84,8 +84,7 @@
 
                                 <div class="row align-items-center mb-2">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Additional
-                                        Value With Cost
-                                        :</label>
+                                        Value With Cost:</label>
                                     <div class="col-sm-10 d-flex align-items-center">
                                         <mat-form-field style="width: 150px; margin-right: 10px;">
                                             <mat-select formControlName="addlValueSign" [required]="required" >

@@ -15,8 +15,11 @@ export class RetailGridComponent implements OnInit {
   @Output() editRowClick = new EventEmitter<any>();
   @Output() viewRowClick = new EventEmitter<any>();
   @Output() AddBtnClick = new EventEmitter<any>();
+  @Output() AuditTrailClick = new EventEmitter<any>();
 
   @Input() tableName: any;
+  @Input() showAuditTrail:boolean = false;
+
   vocType: any;
   skeltonLoading: boolean = true;
   mainVocType: any;
@@ -40,6 +43,7 @@ export class RetailGridComponent implements OnInit {
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
+    this.onClickAuditTrail = this.onClickAuditTrail.bind(this);
     this.tableName = this.CommonService.getqueryParamTable()
   }
 
@@ -56,6 +60,9 @@ export class RetailGridComponent implements OnInit {
   }
   editRowDetails(e: any) {
     this.editRowClick.emit(e);
+  }
+  onClickAuditTrail(e: any) {
+    this.AuditTrailClick.emit(e);
   }
   /**USE: grid on scroll event */
   onContentReady(e: any) {
@@ -206,6 +213,9 @@ export class RetailGridComponent implements OnInit {
             if (data.DATA_TYPE == 'datetime') {
               data.FORMAT = 'dd-MM-yyyy';
               data.DATATYPE = 'date';
+            }
+            if (data.DATA_TYPE == 'bit') {
+              data.DATATYPE = 'boolean';
             }
 
             const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);

@@ -47,8 +47,9 @@ export class MasterSearchComponent implements OnInit {
       this.loadData();
     }
   }
-  getAllValue() {
+  getAPIValue() {
     let API: string = this.MasterSearchData.API_VALUE || ''
+    this.commonService.toastSuccessByMsgId('MSG81447');
     this.subscriptions$ = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         console.log(result);
@@ -56,6 +57,9 @@ export class MasterSearchComponent implements OnInit {
           this.dataSourceHead = this.MasterSearchData.SEARCH_FIELD?.split(',').map(item => item.trim()) || []
           this.dataSource = result.response
         } else {
+          this.dataSourceHead = []
+          this.dataSource = []
+          this.closeOverlayPanel()
           this.toastr.error('Data Not Available')
         }
       }, err => alert(err))
@@ -78,7 +82,7 @@ export class MasterSearchComponent implements OnInit {
   /**use: first call to load data */
   loadData() {
     if (this.MasterSearchData.API_VALUE && this.MasterSearchData.API_VALUE != '') {
-      this.getAllValue()
+      this.getAPIValue()
       return
     }
     let param = {
@@ -108,10 +112,8 @@ export class MasterSearchComponent implements OnInit {
     })
 
   }
-  /**use: load datas on scroll */
-  loadMoreData(currentPage?: number) {
-    if (this.totalItems >= this.dataSource.length + 1 && this.currentPage != currentPage) return
-    let param = {
+  setPostdata() {
+    return {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
@@ -120,9 +122,13 @@ export class MasterSearchComponent implements OnInit {
       "searchField": this.MasterSearchData.SEARCH_FIELD,
       "searchValue": this.MasterSearchData.SEARCH_VALUE,
     }
-    let APIS = 'MasterLookUp'
+  }
+  /**use: load datas on scroll */
+  loadMoreData(currentPage?: number) {
+    if (this.totalItems >= this.dataSource.length + 1 && this.currentPage != currentPage) return
+    let param = this.setPostdata()
     this.isLoading = true;
-    this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
+    this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param).subscribe((result) => {
       this.isLoading = false;
       if (result.dynamicData[0]) {
         this.dataSourceHead = Object.keys(this.dataSource[0]);
@@ -137,7 +143,7 @@ export class MasterSearchComponent implements OnInit {
 
   }
 
-  showOverlayPanel(event: Event) {
+  showOverlayPanel(event?: Event) {
     if (this.MasterSearchData.LOAD_ONCLICK) {
       this.loadData();
     }
@@ -155,7 +161,7 @@ export class MasterSearchComponent implements OnInit {
     this.MasterSearchData.SEARCH_VALUE = ''
   }
   closeOverlayPanel() {
-    if(this.MasterSearchData.SEARCH_VALUE != ''){
+    if (this.MasterSearchData.SEARCH_VALUE != '') {
       this.currentPage = 1
       this.MasterSearchData.LOAD_ONCLICK = true
     }
@@ -173,16 +179,10 @@ export class MasterSearchComponent implements OnInit {
   //search Value Change
   searchValueChange(event: any) {
     if (event.target.value == '') return
-    let param = {
-      "PAGENO": this.MasterSearchData.PAGENO,
-      "RECORDS": this.MasterSearchData.RECORDS,
-      "LOOKUPID": this.MasterSearchData.LOOKUPID,
-      "searchField": this.MasterSearchData.SEARCH_FIELD || "",
-      "searchValue": this.MasterSearchData.SEARCH_VALUE || ""
-    }
-    let APIS = 'MasterLookUp'
+    this.currentPage = 1
+    let param = this.setPostdata()
     this.isLoading = true;
-    this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
+    this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param).subscribe((result) => {
       this.isLoading = false;
       if (result.dynamicData[0]) {
         this.dataSource = result.dynamicData[0]
@@ -202,7 +202,6 @@ export class MasterSearchComponent implements OnInit {
   close() {
 
   }
-
   //unsubscriptions of streams
   ngOnDestroy(): void {
     this.subscriptions$ && this.subscriptions$.unsubscribe()

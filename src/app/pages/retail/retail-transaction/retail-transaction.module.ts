@@ -73,6 +73,7 @@ import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-retu
 import { PosCreditSaleReciptDetailsComponent } from './pos-credit-sale-recipt/pos-credit-sale-recipt-details/pos-credit-sale-recipt-details.component';
 import { PullPOSComponent } from './pos-credit-sale-recipt/pull-pos/pull-pos.component';
 import { VoucherRedeemComponent } from './pos-credit-sale-recipt/voucher-redeem/voucher-redeem.component';
+import { MetalBranchTransferInAutoRepairDetailsComponent } from './metal-branch-transfer-in-auto-repair/metal-branch-transfer-in-auto-repair-details/metal-branch-transfer-in-auto-repair-details.component';
 
 
 @NgModule({
@@ -151,7 +152,8 @@ import { VoucherRedeemComponent } from './pos-credit-sale-recipt/voucher-redeem/
     RepairDiamondPurchaseDetailComponent,
     PosCreditSaleReciptDetailsComponent,
     PullPOSComponent,
-    VoucherRedeemComponent
+    VoucherRedeemComponent,
+    MetalBranchTransferInAutoRepairDetailsComponent
   ],
   imports: [
     CommonModule,

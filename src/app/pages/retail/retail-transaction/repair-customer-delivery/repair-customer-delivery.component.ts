@@ -36,11 +36,11 @@ export class RepairCustomerDeliveryComponent implements OnInit {
   salesManCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'SALES MAN ',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -87,21 +87,55 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     currencyDesc:[''],
     email:[''],
     address:[''],
-    check1:[''],
-    check2:[''],
-    vocType:[''],
+    posVocType:[''],
     repairAmt:[''],
     subTotal:[''],
     roundOffAmount:[''],
     netTotal:[''],
+    CheckTheDiamondProduct:[false],
+    RepairRecieptRecieved:[false],
   });
 
   ngOnInit(): void {      
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.repairCustomerDeliveryForm.controls.voctype.setValue(this.comService.getqueryParamVocType());
+    this.repairCustomerDeliveryForm.controls.currency.setValue(this.comService.compCurrency);
+    this.repairCustomerDeliveryForm.controls.currencyDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+    // if (this.content.FLAG == 'VIEW') {
+    //   this.viewMode = true;
+    //   this.setFormValues();
+    // } else if (this.content.FLAG == 'EDIT') {
+    //   this.viewMode = false;
+    //   this.setFormValues();
+    // }
+    if (this.content?.MID != null){
+      this.setFormValues();
+      this.viewMode = false;
+    }
   }
   
+  setFormValues() {
+    console.log('this.content', this.content);
+    if (!this.content) return
+    this.repairCustomerDeliveryForm.controls.voctype.setValue(this.content.VOCTYPE);
+    this.repairCustomerDeliveryForm.controls.vocNo.setValue(this.content.VOCNO);
+    this.repairCustomerDeliveryForm.controls.vocDate.setValue(this.content.VOCDATE);
+    this.repairCustomerDeliveryForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
+    this.repairCustomerDeliveryForm.controls.customer.setValue(this.content.CUSCODE);
+    this.repairCustomerDeliveryForm.controls.remarks.setValue(this.content.REMARKS);
+    this.repairCustomerDeliveryForm.controls.posVocType.setValue(this.content.POSVOCTYPE);
+    this.repairCustomerDeliveryForm.controls.repairAmt.setValue(this.content.POSAMOUNT);
+    this.repairCustomerDeliveryForm.controls.subTotal.setValue(this.content.SUBTOTAL);
+    this.repairCustomerDeliveryForm.controls.netTotal.setValue(this.content.NETTOTAL);
+    this.repairCustomerDeliveryForm.controls.customerDesc.setValue(this.content.PARTYNAME);
+    this.repairCustomerDeliveryForm.controls.tel.setValue(this.content.TEL1);
+    this.repairCustomerDeliveryForm.controls.mobile.setValue(this.content.MOBILE);
+    this.repairCustomerDeliveryForm.controls.nationality.setValue(this.content.NATIONALITY);
+    this.repairCustomerDeliveryForm.controls.email.setValue(this.content.EMAIL);
+    this.repairCustomerDeliveryForm.controls.type.setValue(this.content.TYPE);
+    this.repairCustomerDeliveryForm.controls.address.setValue(this.content.ADDRESS);
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -110,7 +144,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
 
   salesManSelected(e:any){
     console.log(e);
-
+    this.repairCustomerDeliveryForm.controls.salesMan.setValue(e.SALESPERSON_CODE);
   }
 
   customerSelected(e:any){
@@ -123,9 +157,12 @@ export class RepairCustomerDeliveryComponent implements OnInit {
   }
 
 
+
+
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.updateMeltingType()
+      this.updateRepairCustomerDelivery()
       return
     }
 
@@ -141,28 +178,28 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       "VOCNO": this.repairCustomerDeliveryForm.value.vocNo,
       "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
       "YEARMONTH": this.yearMonth,
-      "SALESPERSON_CODE": "string",
-      "CUSCODE": "string",
-      "REMARKS": "string",
+      "SALESPERSON_CODE": this.repairCustomerDeliveryForm.value.salesMan,
+      "CUSCODE": this.repairCustomerDeliveryForm.value.customer,
+      "REMARKS": this.repairCustomerDeliveryForm.value.remarks,
       "SYSTEM_DATE": "2024-03-05T11:16:28.124Z",
       "NAVSEQNO": 0,
       "POSMID": 0,
       "POSVOCNO": 0,
-      "POSVOCTYPE": "str",
-      "POSAMOUNT": 0,
-      "SUBTOTAL": 0,
+      "POSVOCTYPE": this.repairCustomerDeliveryForm.value.posVocType,
+      "POSAMOUNT": this.repairCustomerDeliveryForm.value.repairAmt,
+      "SUBTOTAL": this.repairCustomerDeliveryForm.value.subTotal,
       "DISCOUNT": 0,
-      "NETTOTAL": 0,
+      "NETTOTAL": this.repairCustomerDeliveryForm.value.netTotal,
       "CHECKED": 0,
       "DAMAGED": 0,
       "RECEIPT": 0,
-      "PARTYNAME": "string",
-      "TEL1": "string",
-      "MOBILE": "string",
-      "NATIONALITY": "string",
-      "EMAIL": "string",
-      "TYPE": "string",
-      "ADDRESS": "string",
+      "PARTYNAME": this.repairCustomerDeliveryForm.value.customerDesc,
+      "TEL1": this.repairCustomerDeliveryForm.value.tel,
+      "MOBILE": this.repairCustomerDeliveryForm.value.mobile,
+      "NATIONALITY": this.repairCustomerDeliveryForm.value.nationality,
+      "EMAIL": this.repairCustomerDeliveryForm.value.email,
+      "TYPE": this.repairCustomerDeliveryForm.value.type,
+      "ADDRESS": this.repairCustomerDeliveryForm.value.address,
       "POBOX": "string",
       "SALESREFERENCE": "string",
       "PRINT_COUNT": 0,
@@ -174,7 +211,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if (result.status == " Success ") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -183,11 +220,11 @@ export class RepairCustomerDeliveryComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.repairCustomerDeliveryForm.reset()
-                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
+            this.repairCustomerDeliveryForm.reset()
+            this.tableData = []
           }
         } else {
           this.toastr.error('Not saved')
@@ -196,10 +233,46 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  updateMeltingType() {
+  updateRepairCustomerDelivery() {
     console.log(this.branchCode,'working')
-    let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.repairCustomerDeliveryForm.value.voctype}/${this.repairCustomerDeliveryForm.value.vocNo}/${this.comService.yearSelected}` ;
-      let postData ={}    
+    let API = `RepairDelivery/UpdateRepairDelivery/${this.branchCode}/${this.repairCustomerDeliveryForm.value.voctype}/${this.repairCustomerDeliveryForm.value.vocNo}/${this.comService.yearSelected}` ;
+    let postData ={
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
+      "VOCNO": this.repairCustomerDeliveryForm.value.vocNo,
+      "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
+      "YEARMONTH": this.yearMonth,
+      "SALESPERSON_CODE": this.repairCustomerDeliveryForm.value.salesMan,
+      "CUSCODE": this.repairCustomerDeliveryForm.value.customer,
+      "REMARKS": this.repairCustomerDeliveryForm.value.remarks,
+      "SYSTEM_DATE": "2024-03-05T11:16:28.124Z",
+      "NAVSEQNO": 0,
+      "POSMID": 0,
+      "POSVOCNO": 0,
+      "POSVOCTYPE": this.repairCustomerDeliveryForm.value.posVocType,
+      "POSAMOUNT": this.repairCustomerDeliveryForm.value.repairAmt,
+      "SUBTOTAL": this.repairCustomerDeliveryForm.value.subTotal,
+      "DISCOUNT": 0,
+      "NETTOTAL": this.repairCustomerDeliveryForm.value.netTotal,
+      "CHECKED": 0,
+      "DAMAGED": 0,
+      "RECEIPT": 0,
+      "PARTYNAME": this.repairCustomerDeliveryForm.value.customerDesc,
+      "TEL1": this.repairCustomerDeliveryForm.value.tel,
+      "MOBILE": this.repairCustomerDeliveryForm.value.mobile,
+      "NATIONALITY": this.repairCustomerDeliveryForm.value.nationality,
+      "EMAIL": this.repairCustomerDeliveryForm.value.email,
+      "TYPE": this.repairCustomerDeliveryForm.value.type,
+      "ADDRESS": this.repairCustomerDeliveryForm.value.address,
+      "POBOX": "string",
+      "SALESREFERENCE": "string",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "HTUSERNAME": "string",
+      "CUSTMOBILE": "string"
+      }    
       
   
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -228,8 +301,10 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     }
       /**USE: delete Melting Type From Row */
       
-  deleteMeltingType() {
-    if (!this.content.WORKER_CODE) {
+  deleteRepairCustomerDelivery() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content.BRANCH_CODE&&!this.content.VOCTYPE&&!this.content.VOCNO&&!this.content.YEARMONTH) {
+
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -252,7 +327,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = '/JobCadProcessDJ/DeleteJobCadProcessDJ/' + this.repairCustomerDeliveryForm.value.brnachCode + this.repairCustomerDeliveryForm.value.voctype + this.repairCustomerDeliveryForm.value.vocNo + this.repairCustomerDeliveryForm.value.yearMoth;
+        let API = 'RepairDelivery/DeleteRepairDelivery/' + this.repairCustomerDeliveryForm.value.brnachCode + this.repairCustomerDeliveryForm.value.voctype + this.repairCustomerDeliveryForm.value.vocNo + this.repairCustomerDeliveryForm.value.yearMoth;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

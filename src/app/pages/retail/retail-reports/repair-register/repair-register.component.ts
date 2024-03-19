@@ -15,7 +15,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class RepairRegisterComponent implements OnInit {
 
-  karatmasterFrom!: FormGroup;
+ 
   subscriptions: any;
   @Input() content!: any;
   tableData: any[] = [];
@@ -32,8 +32,61 @@ export class RepairRegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  repairRegisterForm: FormGroup = this.formBuilder.group({
+    
+    fromDate: [''],
+    toDate: [''],
+    partyCode: [''],
+    partyName: [''],
+    
+  });
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  formSubmit() {
+  
+
+    if (this.repairRegisterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = '/RptRepairRegister'
+    let postData ={
+      
+      "strFromDate": this.repairRegisterForm.value.fromDate,
+      "strToDate": this.repairRegisterForm.value.toDate,
+      "strBrString": "",
+      "strRepairType": 0,
+      "strDiv": ""
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.repairRegisterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+
 }

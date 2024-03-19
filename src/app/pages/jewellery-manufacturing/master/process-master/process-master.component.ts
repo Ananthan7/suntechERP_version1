@@ -19,6 +19,11 @@ export class ProcessMasterComponent implements OnInit {
 
   @Input() content!: any;
   viewMode: boolean = false;
+  searchModeLoss: boolean = true;
+  searchModeRecov: boolean = true;
+  searchModeAllow: boolean = true;
+
+
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
@@ -27,7 +32,7 @@ export class ProcessMasterComponent implements OnInit {
   islossReadOnly = true;
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
-  processMasterForm !: FormGroup;
+  // processMasterForm !: FormGroup;
 
   lossData: any;
 
@@ -50,30 +55,108 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-/**use: to check code exists in db */
-checkCodeExists(event: any) {
-  if (event.target.value == '' || this.viewMode == true) return
-  let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
-  let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.checkifExists) {
-        Swal.fire({
-          title: '',
-          text: result.message || 'Process Code Already Exists!',
-          icon: 'warning',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        }).then((result: any) => {
-          if (result.value) {
-          }
-        });
+
+  ngOnInit(): void {
+    // this.islossReadOnly = true;
+    // this.isRecovReadOnly = true;
+    // this.isAlloWGainReadOnly = true;
+
+    this.setInitialValues()
+    this.getProcessTypeOptions()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setFormValues();
+      // this.processMasterForm();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.setFormValues();
+
+    }
+  }
+
+
+  processMasterForm: FormGroup = this.formBuilder.group({
+    mid: [''],
+    processCode: ['', [Validators.required]],
+    processDesc: ['', [Validators.required]],
+    processType: [null],
+    stand_time: [''],
+    WIPaccount: ['', [Validators.required]],
+    max_time: [''],
+    Position: [''],
+    trayWeight: [''],
+    approvalCode: [''],
+    approvalProcess: [''],
+    recStockCode: [''],
+    labour_charge: [''],
+    accountStart: [''],
+    accountMiddle: [''],
+    accountEnd: [''],
+    loss: [false],
+    recovery: [false],
+    allowGain: [false],
+    accode_start: [''],
+    accode_end: [''],
+    accode_middle: [''],
+    loss_on_gross: [false],
+    FinalProcess: [false],
+    Setting: [false],
+    LabProcess: [false],
+    WaxProcess: [false],
+    Stone: [false],
+    MergePices: [false],
+    LockWeight: [false],
+    HaveTreeNo: [false],
+    NonQuantity: [false],
+    Consumable: [false],
+    RefineryAutoProcess: [false],
+    ApplyAutoLossToRefinery: [false],
+    RepairProcess: [false],
+    Metal: [false],
+    ApprovalRequired: [false],
+    DeductPureWeight: [false],
+    StoneIncluded: [false],
+    TimeCalculateonProcess: [false],
+    RecoveryProcess: [false],
+    AutoTransfer: [false],
+    ApplySetting: [false],
+    loss_standard: [''],
+    loss_min: ['', [Validators.min(0)]],
+    loss_max: [''],
+    standard_start: [''],
+    standard_end: [''],
+    min_start: [''],
+    min_end: ['', [Validators.min(0)]],
+    max: [''],
+
+  })
+
+
+
+
+  /**use: to check code exists in db */
+  checkCodeExists(event: any) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Process Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.processMasterForm.controls.processCode.setValue('')
+        }
+      }, err => {
         this.processMasterForm.controls.processCode.setValue('')
-      }
-    }, err => {
-      this.processMasterForm.controls.processCode.setValue('')
-    })
-  this.subscriptions.push(Sub)
-}
+      })
+    this.subscriptions.push(Sub)
+  }
 
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;
@@ -195,79 +278,6 @@ checkCodeExists(event: any) {
     // this.setInitialValues()
   }
 
-  ngOnInit(): void {
-
-    this.processMasterForm = this.formBuilder.group({
-      mid: [''],
-      processCode: ['', [Validators.required]],
-      processDesc: ['', [Validators.required]],
-      processType: [null],
-      stand_time: [''],
-      WIPaccount: ['', [Validators.required]],
-      max_time: [''],
-      Position: [''],
-      trayWeight: [''],
-      approvalCode: [''],
-      approvalProcess: [''],
-      recStockCode: [''],
-      labour_charge: [''],
-      accountStart: [''],
-      accountMiddle: [''],
-      accountEnd: [''],
-      loss: [false],
-      recovery: [false],
-      allowGain: [false],
-      accode_start: [''],
-      accode_end: [''],
-      accode_middle: [''],
-      loss_on_gross: [false],
-      FinalProcess: [false],
-      Setting: [false],
-      LabProcess: [false],
-      WaxProcess: [false],
-      Stone: [false],
-      MergePices: [false],
-      LockWeight: [false],
-      HaveTreeNo: [false],
-      NonQuantity: [false],
-      Consumable: [false],
-      RefineryAutoProcess: [false],
-      ApplyAutoLossToRefinery: [false],
-      RepairProcess: [false],
-      Metal: [false],
-      ApprovalRequired: [false],
-      DeductPureWeight: [false],
-      StoneIncluded: [false],
-      TimeCalculateonProcess: [false],
-      RecoveryProcess: [false],
-      AutoTransfer: [false],
-      ApplySetting: [false],
-      loss_standard: [''],
-      loss_min: ['', [Validators.min(0)]],
-      loss_max: [''],
-      standard_start: [''],
-      standard_end: [''],
-      min_start: [''],
-      min_end: ['', [Validators.min(0)]],
-      max: [''],
-
-    })
-
-    this.islossReadOnly = true;
-    this.isRecovReadOnly = true;
-    this.isAlloWGainReadOnly = true;
-
-    this.setInitialValues()
-    this.getProcessTypeOptions()
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.setFormValues();
-      // this.processMasterForm();
-    } else if (this.content.FLAG == 'EDIT') {
-      this.setFormValues();
-
-    }
-  }
 
   validateLossRange() {
     console.log(this.processMasterForm.value.loss_standard)
@@ -304,33 +314,45 @@ checkCodeExists(event: any) {
     this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
+
+
   private setFormValues() {
     console.log(this.content);
     if (!this.content) return
+
+
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
     this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
-    this.processMasterForm.controls.RepairProcess.setValue(this.content.REPAIR_PROCESS);
-    this.processMasterForm.controls.FinalProcess.setValue(this.content.FINAL_PROCESS);
-    this.processMasterForm.controls.Setting.setValue(this.content.SETTING_PROCESS);
-    this.processMasterForm.controls.LockWeight.setValue(this.content.LOCK_WEIGHT);
-    this.processMasterForm.controls.LabProcess.setValue(this.content.LAB_PROCESS);
-    this.processMasterForm.controls.WaxProcess.setValue(this.content.WAX_PROCESS);
-    this.processMasterForm.controls.allowGain.setValue(this.content.ALLOW_GAIN);
-    this.processMasterForm.controls.DeductPureWeight.setValue(this.content.DEDUCT_PURE_WT);
+
+    this.processMasterForm.controls.RepairProcess.setValue(this.onchangeCheckBoxNum(this.content.REPAIR_PROCESS));
+    this.processMasterForm.controls.FinalProcess.setValue(this.onchangeCheckBoxNum(this.content.FINAL_PROCESS));
+    this.processMasterForm.controls.Setting.setValue(this.onchangeCheckBoxNum(this.content.SETTING_PROCESS));
+    this.processMasterForm.controls.LockWeight.setValue(this.onchangeCheckBoxNum(this.content.LOCK_WEIGHT));
+    this.processMasterForm.controls.LabProcess.setValue(this.onchangeCheckBoxNum(this.content.LAB_PROCESS));
+    this.processMasterForm.controls.WaxProcess.setValue(this.onchangeCheckBoxNum(this.content.WAX_PROCESS));
+    this.processMasterForm.controls.recovery.setValue(this.onchangeCheckBoxNum(this.content.RECOV_VAR2));
+    this.processMasterForm.controls.DeductPureWeight.setValue(this.onchangeCheckBoxNum(this.content.DEDUCT_PURE_WT));
+
+
+    this.processMasterForm.controls.loss.setValue(this.onchangeCheckBox(this.content.ALLOW_LOSS));
+    this.processMasterForm.controls.loss_on_gross.setValue(this.onchangeCheckBox(this.content.LOSS_ON_GROSS));
+    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.onchangeCheckBox(this.content.TIMEON_PROCESS));
+    this.processMasterForm.controls.RecoveryProcess.setValue(this.onchangeCheckBox(this.content.RECOVERY_PROCESS));
+    this.processMasterForm.controls.Metal.setValue(this.onchangeCheckBox(this.content.ALLOW_METAL));
+    this.processMasterForm.controls.Stone.setValue(this.onchangeCheckBox(this.content.ALLOW_STONE));
+    this.processMasterForm.controls.Consumable.setValue(this.onchangeCheckBox(this.content.ALLOW_CONSUMABLE));
+    this.processMasterForm.controls.ApprovalRequired.setValue(this.onchangeCheckBox(this.content.APPROVAL_REQUIRED));
+    this.processMasterForm.controls.NonQuantity.setValue(this.onchangeCheckBox(this.content.NON_QUANTITY));
+    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.onchangeCheckBox(this.content.DF_REFINERY));
+    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.onchangeCheckBox(this.content.AUTO_LOSS));
+    this.processMasterForm.controls.HaveTreeNo.setValue(this.onchangeCheckBox(this.content.TREE_NO));
+    this.processMasterForm.controls.allowGain.setValue(this.onchangeCheckBox(this.content.ALLOW_GAIN));
+    this.processMasterForm.controls.StoneIncluded.setValue(this.onchangeCheckBox(this.content.STONE_INCLUDED));
+
+
+
     this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
     this.processMasterForm.controls.ApplySetting.setValue(this.content.APPLY_SETTING);
-    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.content.TIMEON_PROCESS);
-    this.processMasterForm.controls.StoneIncluded.setValue(this.content.STONE_INCLUDED);
-    this.processMasterForm.controls.RecoveryProcess.setValue(this.content.RECOVERY_PROCESS);
-    this.processMasterForm.controls.Metal.setValue(this.content.ALLOW_METAL);
-    this.processMasterForm.controls.Stone.setValue(this.content.ALLOW_STONE);
-    this.processMasterForm.controls.Consumable.setValue(this.content.ALLOW_CONSUMABLE);
-    this.processMasterForm.controls.ApprovalRequired.setValue(this.content.APPROVAL_REQUIRED);
-    this.processMasterForm.controls.NonQuantity.setValue(this.content.NON_QUANTITY);
-    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.content.DF_REFINERY);
-    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.content.AUTO_LOSS);
-    this.processMasterForm.controls.HaveTreeNo.setValue(this.content.TREE_NO);
-
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
     this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
@@ -339,15 +361,15 @@ checkCodeExists(event: any) {
     this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
     this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
     this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
-    this.processMasterForm.controls.loss_on_gross.setValue(this.content.LOSS_ON_GROSS);
     this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
     this.processMasterForm.controls.labour_charge.setValue(this.content.LABCHRG_PERHOUR);
-    this.processMasterForm.controls.loss.setValue(this.content.ALLOW_LOSS);
     this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
     this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
     this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
+
+
     // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
     // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
     // this.formattedMaxTime.controls.setValue(this.content.STD_TIME);
@@ -365,7 +387,20 @@ checkCodeExists(event: any) {
 
 
   }
+
   onchangeCheckBox(e: any) {
+    console.log(e);
+
+    if (e == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onchangeCheckBoxNum(e: any) {
+    console.log(e);
+
     if (e == true) {
       return 1;
     } else {
@@ -388,8 +423,6 @@ checkCodeExists(event: any) {
         this.toastr.error('Maximum time should not be less than Standard time');
       }
       else {
-
-        // let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
         if (this.content && this.content.FLAG == 'EDIT') {
           this.updateProcessMaster()
           return
@@ -405,8 +438,6 @@ checkCodeExists(event: any) {
           "MID": 0,
           "PROCESS_CODE": this.processMasterForm.value.processCode || "",
           "DESCRIPTION": this.processMasterForm.value.processDesc || "",
-          // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
-          // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
           "STD_TIME": this.formattedTime || "",
           "MAX_TIME": this.formattedMaxTime || "",
           "LOSS_ACCODE": this.processMasterForm.value.accountStart,
@@ -418,52 +449,52 @@ checkCodeExists(event: any) {
           "UNIT_RATE": 0,
           "LAB_ACCODE": "",
           "LAST_NO": "",
-          "REPAIR_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RepairProcess),
-          "FINAL_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.FinalProcess),
+          "REPAIR_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.RepairProcess),
+          "FINAL_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.FinalProcess),
           "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
           "TRAY_WT": this.processMasterForm.value.trayWeight || 0,
-          "SETTING_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.Setting),
+          "SETTING_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.Setting),
           "POINTS": 0,
-          "LOCK_WEIGHT": this.onchangeCheckBox(this.processMasterForm.value.LockWeight),
+          "LOCK_WEIGHT": this.onchangeCheckBoxNum(this.processMasterForm.value.LockWeight),
           "AUTOTRANSFER": 0,
           "MASTER_WEIGHT": 0,
-          "MERGE_BLOCK": 0,
-          "LAB_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.LabProcess),
-          "WAX_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.WaxProcess),
+          "MERGE_BLOCK": this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices),
+          "LAB_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.LabProcess),
+          "WAX_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.WaxProcess),
           "STD_LOSS_QTY": 0,
           "POSITION": this.processMasterForm.value.Position || 0,
           "RECOV_MIN": this.processMasterForm.value.standard_end || 0,
           "RECOV_ACCODE": this.processMasterForm.value.accountMiddle,
           "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || "",
           "RECOV_VAR1": this.processMasterForm.value.min_end || 0,
-          "RECOV_VAR2": 0,
-          "DEDUCT_PURE_WT": this.onchangeCheckBox(this.processMasterForm.value.DeductPureWeight),
+          "RECOV_VAR2": this.onchangeCheckBoxNum(this.processMasterForm.value.recovery),
+          "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(this.processMasterForm.value.DeductPureWeight),
           "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
           "APPR_CODE": this.processMasterForm.value.approvalCode || "",
           "ALLOW_GAIN": this.processMasterForm.value.AllowGain,
           "STD_GAIN": 0,
           "MIN_GAIN": 0,
           "MAX_GAIN": 0,
-          "ALLOW_LOSS": this.processMasterForm.value.loss,
+          "ALLOW_LOSS": this.onchangeCheckBox(this.processMasterForm.value.loss),
           "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
           "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
           "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
-          "LOSS_ON_GROSS": this.processMasterForm.value.loss_on_gross,
+          "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
           "JOB_NUMBER": "",
           "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
           "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
-          "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess,
-          "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
-          "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
-          "ALLOW_METAL": this.processMasterForm.value.Metal,
-          "ALLOW_STONE": this.processMasterForm.value.Stone,
-          "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
-          "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
-          "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
-          "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess,
-          "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery,
+          "TIMEON_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
+          "STONE_INCLUDED": this.onchangeCheckBox(this.processMasterForm.value.StoneIncluded),
+          "RECOVERY_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
+          "ALLOW_METAL": this.onchangeCheckBox(this.processMasterForm.value.Metal),
+          "ALLOW_STONE": this.onchangeCheckBox(this.processMasterForm.value.Stone),
+          "ALLOW_CONSUMABLE": this.onchangeCheckBox(this.processMasterForm.value.Consumable),
+          "APPROVAL_REQUIRED": this.onchangeCheckBox(this.processMasterForm.value.ApprovalRequired),
+          "NON_QUANTITY": this.onchangeCheckBox(this.processMasterForm.value.NonQuantity),
+          "DF_REFINERY": this.onchangeCheckBox(this.processMasterForm.value.RefineryAutoProcess),
+          "AUTO_LOSS": this.onchangeCheckBox(this.processMasterForm.value.ApplyAutoLossToRefinery),
           "ISACCUPDT": true,
-          "TREE_NO": this.processMasterForm.value.HaveTreeNo,
+          "TREE_NO": this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
         }
 
         let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -569,8 +600,6 @@ checkCodeExists(event: any) {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "",
       "DESCRIPTION": this.processMasterForm.value.processDesc || "",
-      // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
-      // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
       "STD_TIME": this.formattedTime || "",
       "MAX_TIME": this.formattedMaxTime || "",
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
@@ -582,52 +611,52 @@ checkCodeExists(event: any) {
       "UNIT_RATE": 0,
       "LAB_ACCODE": "",
       "LAST_NO": "",
-      "REPAIR_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RepairProcess),
-      "FINAL_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.FinalProcess),
+      "REPAIR_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.RepairProcess),
+      "FINAL_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.FinalProcess),
       "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
       "TRAY_WT": this.processMasterForm.value.trayWeight || 0,
-      "SETTING_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.Setting),
+      "SETTING_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.Setting),
       "POINTS": 0,
-      "LOCK_WEIGHT": this.onchangeCheckBox(this.processMasterForm.value.LockWeight),
+      "LOCK_WEIGHT": this.onchangeCheckBoxNum(this.processMasterForm.value.LockWeight),
       "AUTOTRANSFER": 0,
       "MASTER_WEIGHT": 0,
-      "MERGE_BLOCK": 0,
-      "LAB_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.LabProcess),
-      "WAX_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.WaxProcess),
+      "MERGE_BLOCK": this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices),
+      "LAB_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.LabProcess),
+      "WAX_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.WaxProcess),
       "STD_LOSS_QTY": 0,
       "POSITION": this.processMasterForm.value.Position || 0,
       "RECOV_MIN": this.processMasterForm.value.standard_end || 0,
       "RECOV_ACCODE": this.processMasterForm.value.accountMiddle,
       "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || "",
       "RECOV_VAR1": this.processMasterForm.value.min_end || 0,
-      "RECOV_VAR2": 0,
-      "DEDUCT_PURE_WT": this.onchangeCheckBox(this.processMasterForm.value.DeductPureWeight),
+      "RECOV_VAR2": this.onchangeCheckBoxNum(this.processMasterForm.value.recovery),
+      "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(this.processMasterForm.value.DeductPureWeight),
       "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
       "ALLOW_GAIN": this.processMasterForm.value.AllowGain,
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
-      "ALLOW_LOSS": this.processMasterForm.value.loss,
+      "ALLOW_LOSS": this.onchangeCheckBox(this.processMasterForm.value.loss),
       "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
       "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
       "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
-      "LOSS_ON_GROSS": this.processMasterForm.value.loss_on_gross,
+      "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
       "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
-      "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess,
-      "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
-      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
-      "ALLOW_METAL": this.processMasterForm.value.Metal,
-      "ALLOW_STONE": this.processMasterForm.value.Stone,
-      "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
-      "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
-      "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
-      "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess,
-      "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery,
+      "TIMEON_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
+      "STONE_INCLUDED": this.onchangeCheckBox(this.processMasterForm.value.StoneIncluded),
+      "RECOVERY_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
+      "ALLOW_METAL": this.onchangeCheckBox(this.processMasterForm.value.Metal),
+      "ALLOW_STONE": this.onchangeCheckBox(this.processMasterForm.value.Stone),
+      "ALLOW_CONSUMABLE": this.onchangeCheckBox(this.processMasterForm.value.Consumable),
+      "APPROVAL_REQUIRED": this.onchangeCheckBox(this.processMasterForm.value.ApprovalRequired),
+      "NON_QUANTITY": this.onchangeCheckBox(this.processMasterForm.value.NonQuantity),
+      "DF_REFINERY": this.onchangeCheckBox(this.processMasterForm.value.RefineryAutoProcess),
+      "AUTO_LOSS": this.onchangeCheckBox(this.processMasterForm.value.ApplyAutoLossToRefinery),
       "ISACCUPDT": true,
-      "TREE_NO": this.processMasterForm.value.HaveTreeNo,
+      "TREE_NO": this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -712,71 +741,82 @@ checkCodeExists(event: any) {
   }
 
   onlossChange(event: any) {
+    if (this.processMasterForm.value.loss == true) {
+      this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
+    }
+    else {
+      this.processMasterForm.get('accountStart')?.clearValidators();
+    }
+
     this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
-    // if(event.checked === true){
-    //   this.processMasterForm.controls['loss_max'].enable();
-    //   this.processMasterForm.controls['loss_min'].enable();
-    //   this.processMasterForm.controls['accountStart'].enable();
-    //   this.processMasterForm.controls['loss_standard'].enable();
-    // }
-    // else{
-    //   this.processMasterForm.controls['loss_min'].disable();
-    //   this.processMasterForm.controls['loss_max'].disable();
-    //   this.processMasterForm.controls['accountStart'].disable();
-    //   this.processMasterForm.controls['loss_standard'].disable();
-    //   this.processMasterForm.controls['loss_min'].disable();
-    //   this.processMasterForm.controls['loss_max'].disable();
-    //   this.processMasterForm.controls['accountStart'].disable();
-    //   this.processMasterForm.controls['loss_standard'].disable();
-    // }
+    this.searchModeLoss = !this.searchModeLoss;
+
+
+      // this.processMasterForm.controls.accountStart.setValue('');
+      // this.processMasterForm.controls.loss_standard.setValue('');
+      // this.processMasterForm.controls.loss_min.setValue('');
+      // this.processMasterForm.controls.loss_max.setValue('');
+    
+
+
+
+    // Update the validation status after setting or clearing validators
+    //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
+
   }
 
+
+
   onRecovery(event: any) {
+    if (this.processMasterForm.value.recovery == true) {
+      this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
+    }
+    else {
+      this.processMasterForm.get('accountMiddle')?.clearValidators();
+    }
+
     this.isRecovReadOnly = !this.isRecovReadOnly;
+    this.searchModeRecov = !this.searchModeRecov;
+
+ 
+      // this.processMasterForm.controls.accountMiddle.setValue('');
+      // this.processMasterForm.controls.standard_end.setValue('');
+      // this.processMasterForm.controls.min_end.setValue('');
 
     console.log(event);
-    // if(event.checked === true){
-    //   this.processMasterForm.controls['standard_end'].enable();
-    //   this.processMasterForm.controls['min_end'].enable();
-    //   this.processMasterForm.controls['accountMiddle'].enable();
-    // }
-    // else{
-    //   this.processMasterForm.controls['standard_end'].disable();
-    //   this.processMasterForm.controls['min_end'].disable();
-    //   this.processMasterForm.controls['accountMiddle'].disable();
-    //   this.processMasterForm.controls['standard_end'].disable();
-    //   this.processMasterForm.controls['min_end'].disable();
-    //   this.processMasterForm.controls['accountMiddle'].disable();
-    // }
+
   }
 
   onAllowGain(event: any) {
-    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
 
+    if (this.processMasterForm.value.RecoveryProcess == true) {
+      this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
+    }
+    else {
+      this.processMasterForm.get('accountEnd')?.clearValidators();
+    }
+
+    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
+    this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
-    // if(event.checked == true){
-    //   this.processMasterForm.controls['accountEnd'].enable();
-    //  }
-    //else{
-    //   this.processMasterForm.controls['accountEnd'].disable();
-    //   this.processMasterForm.controls['accountEnd'].disable();
-    // }
+
+      //this.processMasterForm.controls.accountEnd.setValue('');
+    
   }
 
-
-
-  // onInput(event: Event): void {
-  //   const inputValue = (event.target as HTMLInputElement).value;
-
-  //   // Trim the input to 3 letters
-  //   const limitedValue = inputValue.slice(0, 3);
-
-  //   // Update the input value
-  //   (event.target as HTMLInputElement).value = limitedValue;
-  //   }
-
-
+  onRecovStockCode(event: any) {
+    if (this.processMasterForm.value.allowGain == true) {
+      this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
+    }
+    else {
+      this.processMasterForm.get('recStockCode')?.clearValidators();
+    }
+    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
+    this.searchModeAllow = !this.searchModeAllow;
+    console.log(event);
+    this.processMasterForm.controls.recStockCode.setValue('');
+  }
 
 
   onInput(event: Event): void {
@@ -796,23 +836,6 @@ checkCodeExists(event: any) {
     // Update the input value
     (event.target as HTMLInputElement).value = formattedValue;
   }
-
-  // onInput(event: Event): void {
-  //   const inputValue = (event.target as HTMLInputElement).value;
-
-  //   // Remove any non-digit characters
-  //   const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-  //   // Extract up to 3 digits before and after the decimal point
-  //   const match = numericValue.match(/^(\d{0,3})(\.\d{0,3})?/);
-
-  //   // Combine the digits with a dot
-  //   const formattedValue = match ? match[1] + (match[2] || '') : '';
-
-  //   // Update the input value
-  //   (event.target as HTMLInputElement).value = formattedValue;
-  // }
-
 
 
 

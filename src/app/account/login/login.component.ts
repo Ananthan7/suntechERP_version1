@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit {
 
       this.user_name = username;
       this.comService.formControlSetReadOnly('password', false);
-      this.validateState = 1;
+      this.validateState = 2;
       this.renderer.selectRootElement('#password')?.focus();
 
 
@@ -188,6 +188,7 @@ export class LoginComponent implements OnInit {
         if (resp.status == 'Success') {
 
           this.comService.formControlSetReadOnly('password', false);
+          this.renderer.selectRootElement('#password')?.focus();
 
           this.userDetails = resp.response
           // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
@@ -208,7 +209,7 @@ export class LoginComponent implements OnInit {
   checkUserNamePassword(event: any) {
     let password = event.target.value;
 
-    if (this.validateState == 1) {
+    // if (this.validateState == 1 ) {
       if (password != '') {
 
         this.snackBarRef = this.snackBar.open(
@@ -249,32 +250,39 @@ export class LoginComponent implements OnInit {
             this.validateState = 2;
             this.snackBar.dismiss();
           } else {
-            this.renderer.selectRootElement('#password')?.focus();
-
+            
             this.snackBar.dismiss();
-
+            
             this.snackBar.open(
               'Invalid User Credentials! Check Username & Password.',
               'OK',
               {
                 duration: 5000,
               }
-            );
+              );
+
+              this.validateState = 1;
+              this.renderer.selectRootElement('#password')?.focus();
+
             this.filteredOptions = undefined;
           }
         });
         //to unsubscribe
         this.subscriptions.push(sub)
       }
-    } else {
-      this.snackBar.open('Enter Valid UserName', '', {
-        duration: 2000,
-      });
-    }
+    // } else {
+    //   this.snackBar.open('Enter Valid UserName', '', {
+    //     duration: 2000,
+    //   });
+    // }
   }
   validateYear(event: any) {
     if (event.target.value == '') {
-      this.renderer.selectRootElement('#year')?.focus();
+      if(this.dataForm.value.branch != ''){
+        this.renderer.selectRootElement('#year')?.focus();
+      }else{
+        this.renderer.selectRootElement('#branch')?.focus();
+      }
     }
     let yearSelected = this.options_year.filter((item: any) => item == event.target.value)
     if (yearSelected.length == 0) {
@@ -287,7 +295,10 @@ export class LoginComponent implements OnInit {
   }
   /**USE: branch change function to call financial year API */
   changeBranch(e: any) {
-    if (e.target.value == '') {
+    if (e.target.value == '' && 
+    this.validateState != 1
+    ) {
+
       this.renderer.selectRootElement('#branch')?.focus();
 
       return;

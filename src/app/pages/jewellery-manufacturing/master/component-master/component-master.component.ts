@@ -16,10 +16,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ComponentMasterComponent implements OnInit {
 
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
-  columnhead: any[] = ['Srno','Div.','Stock Code','Karat','Stock Type','Pcs','Wt/Ct','Color','Clarity','Shape','Sieve Std.','Description','Size','Process Type','Remarks','Pointer Wt','Ext.Clarity','Sieve From','Description','Sieve To','Description']
+  columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
   columnhead2: any[] = ['',]
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
@@ -27,6 +27,8 @@ export class ComponentMasterComponent implements OnInit {
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
   
+
+  images: any[] = [];
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -36,13 +38,16 @@ export class ComponentMasterComponent implements OnInit {
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { }
- 
+
   ngOnInit(): void {
+
+   // this.images = ['assets/images/transparentImg.png'];
+
     if (this.content.FLAG == 'VIEW') {
-     
+
       this.setFormValues();
     } else (this.content.FLAG == 'EDIT')
-     {
+    {
       this.setFormValues();
     }
 
@@ -52,7 +57,7 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
   }
 
-  
+
   divisionCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -60,62 +65,43 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<> ''",
+    WHERECONDITION: "division='M'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(value:any,data:any, controlName: string){
-    console.log('Data ',data);
-    console.log('values ',value);
- 
+  divisionCodeSelected(value: any, data: any, controlName: string) {
+    console.log('Data ', data);
+    console.log('values ', value);
+
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
 
-}
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
 
-stockCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 23,
-  SEARCH_FIELD: 'STOCK_CODE',
-  SEARCH_HEADING: 'STOCK Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "STOCK_CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-stockCodeDataSelected(value:any,data:any, controlName: string){
-  console.log(data);
-  console.log(value);
-
-  this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
-}
-
-onFileChangedimage(event:any) {
-  this.imageurl = event.target.files[0]
-  console.log(this.imageurl)
-  let reader = new FileReader();
-  if(event.target.files && event.target.files.length > 0) {
-    let file = event.target.files[0];
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      this.image = reader.result; 
-    };
   }
-}
 
-onFileChanged(event:any) {
-  this.url = event.target.files[0].name
-  console.log(this.url)
-  let reader = new FileReader();
-  if(event.target.files && event.target.files.length > 0) {
-    let file = event.target.files[0];
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      this.urls = reader.result; 
-    };
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Type',
+    SEARCH_VALUE: '',
+     //WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
+    // WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
-}
+
+  stockCodeDataSelected(value: any, data: any, controlName: string) {
+    console.log(data);
+    console.log(value);
+
+    this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+  //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  }
+
 
   setFormValues() {
     if (!this.content) return
@@ -164,25 +150,25 @@ onFileChanged(event:any) {
   private subscriptions: Subscription[] = [];
 
   componentmasterForm: FormGroup = this.formBuilder.group({
-    code: [""],
-    codedes: [""],
-    sizeSet : [""],
+    code: ["", [Validators.required]],
+    codedes: ["", [Validators.required]],
+    sizeSet: [""],
     size: [""],
-    type : [""],
+    type: [""],
     category: [""],
     shape: [""],
     settingType: [""],
-    remarks : [""],
-    height : [""],
-    length  : [""],
-    width  : [""],
-    radius  : [""],
-    processSeq : [""],
-    costCenter  : [""],
-    currencyCode  : [""],
-    currencyRate  : [""],
+    remarks: [""],
+    height: [""],
+    length: [""],
+    width: [""],
+    radius: [""],
+    processSeq: [""],
+    costCenter: [""],
+    currencyCode: [""],
+    currencyRate: [""],
   });
-  
+
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -194,9 +180,27 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  categoryCodeSelected(e:any){
+  categoryCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
+  }
+
+  
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  karatCodeSelected(value: any, data: any, controlName: string){
+
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
 
   codeCodeData: MasterSearchModel = {
@@ -206,15 +210,18 @@ onFileChanged(event:any) {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMP_PREFIX = 1",
+    WHERECONDITION: "COMP_PREFIX = '1'",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,    
+    VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  codeCodeSelected(e:any){
+  
+  codeCodeSelected(e: any) {
     console.log(e);
-    this.componentmasterForm.controls.code.setValue(e.PREFIX_CODE);
-    this.componentmasterForm.controls.codedes.setValue(e.DESCRIPTION); 
+    const prefixCode = e.PREFIX_CODE.toUpperCase();
+    const des = e.DESCRIPTION.toUpperCase();
+    this.componentmasterForm.controls.code.setValue(prefixCode);
+    this.componentmasterForm.controls.codedes.setValue(des);
   }
 
   typeCodeData: MasterSearchModel = {
@@ -228,7 +235,7 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  typeCodeSelected(e:any){
+  typeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
@@ -244,7 +251,7 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sizeSetCodeSelected(e:any){
+  sizeSetCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
   }
@@ -260,36 +267,84 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sizeCodeSelected(e:any){
+  sizeCodeSelected(e: any) {
     console.log(e);
 
     const apiDescription = e.DESCRIPTION;
 
     // Split the DESCRIPTION string into an array using the ',' delimiter
     const descriptionArray = apiDescription.split(',');
-    
+
+
     // Assign values to variables
     let height, width, length, radius;
-    
 
-      height = descriptionArray[0]; 
-      width = descriptionArray[1];  
-      length = descriptionArray[2]; 
-      radius = descriptionArray[3]; 
-    
-    
+
+    height = descriptionArray[0];
+    width = descriptionArray[2];
+    length = descriptionArray[1];
+    radius = descriptionArray[3];
+
+
     console.log("Height:", height);
     console.log("Width:", width);
     console.log("Length:", length);
     console.log("Radius:", radius);
 
 
+
+    // const resultheight = height.split('');
+    // resultheight.shift();
+    // resultheight.pop();
+
+    // let heightValue = resultheight.join("");
+    // console.log(heightValue);
+
+    // const resultwidth = width.split('');
+    // resultwidth.shift();
+    // resultwidth.pop();
+
+    // let widthValue = resultwidth.join("");
+    // console.log(widthValue);
+
+    // const resultlength = length.split('');
+    // resultlength.shift();
+    // resultlength.pop();
+
+    // let lengthValue = resultlength.join("");
+    // console.log(lengthValue);
+
+    // const resultradius = radius.split('');
+    // resultradius.shift();
+    // resultradius.pop();
+
+    // let radiusValue = resultradius.join("");
+    // console.log(radiusValue);
+
+    const finalHeight = this.commonService.dataSplitPop(height);
+    const finalWidth = this.commonService.dataSplitPop(width);
+    const finalLength = this.commonService.dataSplitPop(length);
+    const finalRadius = this.commonService.dataSplitPop(radius);
+
+
     this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
-    this.componentmasterForm.controls.height.setValue(height);
-    this.componentmasterForm.controls.length.setValue(width);
-    this.componentmasterForm.controls.width.setValue(length);
-    this.componentmasterForm.controls.radius.setValue(radius);
+    this.componentmasterForm.controls.height.setValue(finalHeight);
+    this.componentmasterForm.controls.length.setValue(finalWidth);
+    this.componentmasterForm.controls.width.setValue(finalLength);
+    this.componentmasterForm.controls.radius.setValue(finalRadius);
   }
+
+  // dataSplitPop(data:any){
+
+  //   const result = data.split('');
+  //   result.shift();
+  //   result.pop();
+
+  //   let heightValue = result.join("");
+  //   console.log(heightValue);
+  //   return heightValue;
+
+  // }
 
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -302,7 +357,7 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  shapeCodeSelected(e:any){
+  shapeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.shape.setValue(e.CODE);
   }
@@ -318,7 +373,7 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  settingTypeCodeSelected(e:any){
+  settingTypeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.settingType.setValue(e.CODE);
   }
@@ -334,7 +389,7 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  processSeqCodeSelected(e:any){
+  processSeqCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.processSeq.setValue(e.SEQ_CODE);
   }
@@ -350,11 +405,11 @@ onFileChanged(event:any) {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  costCenterCodeSelected(e:any){
+  costCenterCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.costCenter.setValue(e.COST_CODE);
   }
-  
+
 
 
   close(data?: any) {
@@ -362,33 +417,39 @@ onFileChanged(event:any) {
     this.activeModal.close(data);
   }
 
-  addTableData(){
+  addTableData() {
     let length = this.tableData.length;
 
-      let srno = length + 1;
-      let data = {
-        "SRNO": srno,
-        "DIVCODE": "",
-        "STOCK_CODE": "",
-        "CARAT": "",
-        "STOCK_FCCOST": "",
-        "PCS": "",
-        "GROSS_WT": "",
-        "COLOR": "",
-        "CLARITY": "",
-        "SHAPE": "",
-        "SIEVE": "",
-        "DESCRIPTION": "",
-        "DSIZE": "",
-        "PROCESS_TYPE": "",
-        "D_REMARKS": "",
-      };
-      this.tableData.push(data);
-      this.tableData.filter((data, i) => data.SRNO = i + 1)
+    let srno = length + 1;
+    let data = {
+      "SRNO": srno,
+      "DIVCODE": "",
+      "STOCK_CODE": "",
+      "CARAT": "",
+      "STOCK_FCCOST": "",
+      "PCS": "",
+      "GROSS_WT": "",
+      "COLOR": "",
+      "CLARITY": "",
+      "SHAPE": "",
+      "SIEVE": "",
+      "DESCRIPTION": "",
+      "DSIZE": "",
+      "PROCESS_TYPE": "",
+      "D_REMARKS": "",
+      "POINTER_WT": "",
+      "EXT_Color": "",
+      "EXT_CLARITY": "",
+      "SIEVE_FROM": "",
+      "SIEVE_TO": "",
+    
+    };
+    this.tableData.push(data);
+    this.tableData.filter((data, i) => data.SRNO = i + 1)
   }
-  
 
-  deleteTableData(){
+
+  deleteTableData() {
 
     console.log(this.commonService.transformDecimalVB(6, this.componentmasterForm.value.purity));
     //  this.tableData.push(data);
@@ -400,28 +461,28 @@ onFileChanged(event:any) {
     }
   }
 
-  setPostData(){
-    
+  setPostData() {
+
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
-      "DESIGN_DESCRIPTION":  this.componentmasterForm.value.codedes || "",
+      "DESIGN_DESCRIPTION": this.componentmasterForm.value.codedes || "",
       "CURRENCY_CODE": "1",
-      "CC_RATE":  this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
-      "COST_CODE": this.componentmasterForm.value.costCenter|| "",
-      "TYPE_CODE": this.componentmasterForm.value.type|| "",
-      "CATEGORY_CODE": this.componentmasterForm.value.category|| "",
+      "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
+      "COST_CODE": this.componentmasterForm.value.costCenter || "",
+      "TYPE_CODE": this.componentmasterForm.value.type || "",
+      "CATEGORY_CODE": this.componentmasterForm.value.category || "",
       "SUBCATEGORY_CODE": "string",
-      "BRAND_CODE":  "string",
-      "COUNTRY_CODE":  "string",
+      "BRAND_CODE": "string",
+      "COUNTRY_CODE": "string",
       "SUPPLIER_CODE": "string",
       "SUPPLIER_REF": "string",
-      "SET_REF":"string",
+      "SET_REF": "string",
       "PICTURE_NAME": "string",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
       "PRICE1PER": "",
-      "PRICE2PER":"string",
+      "PRICE2PER": "string",
       "PRICE3PER": "string",
       "PRICE4PER": "string",
       "PRICE5PER": "string",
@@ -446,11 +507,11 @@ onFileChanged(event:any) {
       "CHARGE5FC": 0,
       "CHARGE5LC": 0,
       "SHORT_ID": "",
-      "COLOR":  "",
+      "COLOR": "",
       "CLARITY": "",
-      "SIZE":  this.componentmasterForm.value.size || "",
-      "SIEVE":  this.componentmasterForm.value.sieve_to || "",
-      "SHAPE":  this.componentmasterForm.value.shape || "",
+      "SIZE": this.componentmasterForm.value.size || "",
+      "SIEVE": this.componentmasterForm.value.sieve_to || "",
+      "SHAPE": this.componentmasterForm.value.shape || "",
       "GRADE": "",
       "FLUOR": "",
       "FINISH": "",
@@ -527,7 +588,7 @@ onFileChanged(event:any) {
       "PENDING_JOB_PCS": 0,
       "PENDING_JOBS": 0,
       "LAST_COST": 0,
-      "SEQ_CODE": this.componentmasterForm.value.processSeq|| "",
+      "SEQ_CODE": this.componentmasterForm.value.processSeq || "",
       "SEQ_DESCRIPTION": "",
       "EDITED_ON": "2023-11-27T06:54:03.761Z",
       "EDITED_BY": "",
@@ -616,7 +677,7 @@ onFileChanged(event:any) {
       "METAL_VALUECC": 0,
       "PAIR_REF": "",
       "SURFACEPROPERTY": "",
-      "WIDTH":  this.componentmasterForm.value.width|| "",
+      "WIDTH": this.componentmasterForm.value.width || "",
       "THICKNESS": 0,
       "ENGRAVING_TEXT": "",
       "ENGRAVING_FONT": "",
@@ -658,9 +719,9 @@ onFileChanged(event:any) {
       "CC_MAKING": "",
       "STONE_INCLUDED": true,
       "CAD_REQUIRED": true,
-      "HEIGHT":  this.componentmasterForm.value.height|| "",
-      "RADIUS":  this.componentmasterForm.value.radius|| "",
-      "LENGTH": this.componentmasterForm.value.length|| "",
+      "HEIGHT": this.componentmasterForm.value.height || "",
+      "RADIUS": this.componentmasterForm.value.radius || "",
+      "LENGTH": this.componentmasterForm.value.length || "",
       "COMPSIZE_CODE": "",
       "COMPSET_CODE": "",
       "PROD_VARIANCE": 0,
@@ -731,7 +792,7 @@ onFileChanged(event:any) {
           "DESIGN_CODE": "",
           "KARAT": "",
           "PRICEID": "",
-          "SIZE_FROM":"" ,
+          "SIZE_FROM": "",
           "SIZE_TO": "",
           "RATEFC": 0,
           "PART_CODE": "",
@@ -754,7 +815,7 @@ onFileChanged(event:any) {
           "D_REMARKS": "",
           "POINTER_WT": 0,
           "SIEVE_FROM": "",
-          "SIEVE_TO":  this.componentmasterForm.value.sieve_to|| "",
+          "SIEVE_TO": this.componentmasterForm.value.sieve_to || "",
           "PURITY": 0,
           "OTHER_ATTR": ""
         }
@@ -861,9 +922,9 @@ onFileChanged(event:any) {
     }
     return postData
   }
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -871,14 +932,14 @@ onFileChanged(event:any) {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'DesignMaster/InsertDesignMaster'
     let postData = this.setPostData()
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -900,20 +961,20 @@ onFileChanged(event:any) {
     this.subscriptions.push(Sub)
   }
 
-  update(){
+  update() {
     if (this.componentmasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'DesignMaster/UpdateDesignMaster/'+this.content.DESIGN_CODE
+
+    let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -933,7 +994,7 @@ onFileChanged(event:any) {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-   
+
   }
 
   deleteRecord() {
@@ -1001,6 +1062,76 @@ onFileChanged(event:any) {
         this.subscriptions.push(Sub)
       }
     });
+  }
+  
+
+
+  onFileChangedimage(event: any) {
+
+      this.images = [];
+
+    if (event.target.files && event.target.files.length > 0) {
+
+      for (let i = 0; i < event.target.files.length; i++) {
+        let reader = new FileReader();
+
+        let file = event.target.files[i];
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.images.push(reader.result as string);
+        };
+      }
+    }
+
+  }
+
+  stockType(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
+  }
+  pcstemp(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].PCS = data.target.value;
+  }
+  wtCtt(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].GROSS_WT = data.target.value;
+  }
+  color(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].COLOR = data.target.value;
+  }
+  clarity(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].CLARITY = data.target.value;
+  }
+  shape(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SHAPE = data.target.value;
+  }
+  sieve(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SIEVE = data.target.value;
+  }
+  description(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].DESCRIPTION = data.target.value;
+  }
+  size(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].DSIZE = data.target.value;
+  }
+  processType(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].PROCESS_TYPE = data.target.value;
+  }
+  remark(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].D_REMARKS = data.target.value;
+  }
+  pointerWt(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].POINTER_WT = data.target.value;
+  }
+  extClarity(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].EXT.CLARITY = data.target.value;
+  }
+  sieveFrom(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SIEVE_FROM = data.target.value;
+  }
+  sieveTo(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SIEVE_TO = data.target.value;
+  }
+  extColor(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
 
 }

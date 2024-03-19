@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -19,26 +19,71 @@ export class LabourChargeMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
   buttonField: boolean = true;
-  forDesignOnlyTrue:boolean = true;
+  forDesignOnlyTrue: boolean = true;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
-  stockcodeDisable:boolean = false;
-  methodList: any[] = [];
-  labourTypeList: any[] = [];
-  DialabourTypeList: any[] = [];
-  unitList: any[] = [];
+  stockcodeDisable: boolean = false;
+  // methodList: any[] = [];
+  // labourTypeList: any[] = [];
+  // DialabourTypeList: any[] = [];
+  // unitList: any[] = [];
   currencyList: any[] = [];
-  settingTypeList: any[] = [];
+  // settingTypeList: any[] = [];
   divisionMS: any = 'ID';
+  salesRate: any;
+  salesRatePercentage: any;
+  salesRateMetal: any;
+  salesRatePercentageMetal: any;
+  editMode: boolean = false;
+
+  displayDiaCostRate: any;
+  displayDiaSellingRate: any;
+  displayDiaCtWtFrom: any;
+  displayDiaCtWtTo: any;
+  displayMetalCostRate: any;
+  displayMetalSellingRate: any;
+  displayMetalWtFrom: any;
+  displayMetalWtTo: any;
+  viewDisable: boolean = false;
+
+  viewselling: boolean = false;
+  viewsellingrate: boolean = false;
+  viewsellingrateMetal: boolean = false;
+  viewsellingMetal: boolean = false;
+
+
+  //   @ViewChild('codeInput')
+  //   codeInput!: ElementRef;
+
+  //   ngAfterViewInit(): void {
+  //     this.codeInput.nativeElement.focus();
+  // }
+
+  //   @ViewChild('codeInput1')
+  //   codeInput1!: ElementRef;
+
+  //   ngAfterViewInit1(): void {
+  //     this.codeInput1.nativeElement.focus();
+  // }
+
+
+  @ViewChild('codeInput') codeInput!: ElementRef;
+
+
+
+  ngAfterViewInit(): void {
+    this.codeInput.nativeElement.focus();
+  }
+
 
 
   diamondlabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
     divisions: ['', [Validators.required]],
     labour_code: ['', [Validators.required]],
-    labour_description:['', [Validators.required]],
+    labour_description: ['', [Validators.required]],
     shape: ['', [Validators.required]],
     process: ['', [Validators.required]],
     size_from: ['', [Validators.required]],
@@ -49,8 +94,8 @@ export class LabourChargeMasterComponent implements OnInit {
     selling_rate: ['', [Validators.required]],
     sieve_desc: [''],
     selling: ['', [Validators.required]],
-    ctWtFrom: ['.000', [Validators.required]],
-    ctWtTo: ['.000', [Validators.required]],
+    ctWtFrom: ['.000'],
+    ctWtTo: ['.000'],
     settingType: [''],
     labourType: ['', [Validators.required]],
     unitList: [''],
@@ -61,6 +106,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   });
 
+
   metallabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
     metalDivision: ['', [Validators.required]],
@@ -69,14 +115,14 @@ export class LabourChargeMasterComponent implements OnInit {
     metallabour_description: ['', [Validators.required]],
     metallabourType: ['', [Validators.required]],
     metalcurrency: ['', [Validators.required]],
-    karat: [''],
+    karat: ['', [Validators.required]],
     labourAc: ['', [Validators.required]],
     color: [''],
-    metalcost_rate: [''],
+    metalcost_rate: ['', [Validators.required]],
     typecode: [''],
-    metalselling_rate: [''],
-    category: [''],
-    metalSelling: [''],
+    metalselling_rate: ['', [Validators.required]],
+    category: ['', [Validators.required]],
+    metalSelling: ['', [Validators.required]],
     subCategory: [''],
     wastage: [''],
     brand: [''],
@@ -87,10 +133,45 @@ export class LabourChargeMasterComponent implements OnInit {
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
-  //number validation
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
+
+  salesChangesDia(data: any) {
+    console.log(data);
+
+    if (data == 'selling') {
+      this.viewsellingrate = true;
+      this.viewselling = false;
+      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+    } else if (data == 'selling_rate') {
+      this.viewselling = true;
+      this.viewsellingrate = false;
+      this.diamondlabourMasterForm.controls.selling.setValue('');
+    } else {
+      this.viewselling = false;
+      this.viewsellingrate = false;
+    }
+
   }
+
+
+  salesChangesMetal(data: any) {
+    console.log(data);
+
+    if (data == 'metalSelling') {
+      this.viewsellingrateMetal = true;
+      this.viewsellingMetal = false;
+      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+    } else if (data == 'metalselling_rate') {
+      this.viewsellingMetal = true;
+      this.viewsellingrateMetal = false;
+      this.metallabourMasterForm.controls.metalSelling.setValue('');
+    } else {
+      this.viewsellingMetal = false;
+      this.viewsellingrateMetal = false;
+    }
+
+  }
+
+
   diaDivisionCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -283,19 +364,125 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   // metallabourMasterForm
-stockCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 23,
-  SEARCH_FIELD: 'STOCK_CODE',
-  SEARCH_HEADING: 'Stock Type',
-  SEARCH_VALUE: '',
-  WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-  LOAD_ONCLICK:true,
-};
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
 
+  DialabourTypeList = [
+    {
+      name: 'SETTING',
+      value: 'SETTING'
+    },
+    {
+      name: 'HANDLING',
+      value: 'HANDLING'
+    },
+    {
+      name: 'CERTIFICATE',
+      value: 'CERTIFICATE'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+  ];
+
+  settingTypeList = [
+    {
+      name: 'GEN',
+      value: 'GEN'
+    },
+    {
+      name: 'PRESSURE',
+      value: 'PRESSURE'
+    },
+  ];
+
+  labourTypeList = [
+    {
+      name: 'MAKING',
+      value: 'MAKING'
+    },
+    {
+      name: 'POLISH',
+      value: 'POLISH'
+    },
+    {
+      name: 'FINISHING',
+      value: 'FINISHING'
+    },
+    {
+      name: 'CASTING',
+      value: 'CASTING'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+    {
+      name: 'RHODIUM',
+      value: 'RHODIUM'
+    },
+    {
+      name: 'STAMPING',
+      value: 'STAMPING'
+    },
+    {
+      name: 'WASTAGE',
+      value: 'WASTAGE'
+    },
+  ];
+  unitList = [
+    {
+      name: 'Lumpsum ',
+      value: 'Lumpsum '
+    },
+    {
+      name: 'PCS',
+      value: 'PCS'
+    },
+    {
+      name: 'Grams',
+      value: 'Grams'
+    },
+    {
+      name: 'Carat',
+      value: 'Carat'
+    },
+    {
+      name: 'Hours',
+      value: 'Hours'
+    }
+  ];
+
+  methodList = [
+    {
+      name: 'Hand Setting ',
+      value: 'Hand Setting '
+    },
+    {
+      name: 'Wax Setting',
+      value: 'Wax Setting'
+    },
+    {
+      name: 'Other Setting',
+      value: 'Other Setting'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+
+  ];
 
 
   constructor(
@@ -304,22 +491,25 @@ stockCodeData: MasterSearchModel = {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
 
 
   ngOnInit(): void {
-    if (this.content) {
-      this.setFormValues()
-      this.setInitialValues()
+    this.renderer.selectRootElement('#code').focus();
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.viewDisable = true;
+      this.setFormValues();
+      this.setInitialValues();
     }
-  
-    // this.diamondlabourMasterForm = this.formBuilder.group({
-    //   labourType: new FormControl(''),
-    //   settingType: new FormControl({ value: '', disabled: true }),
-    //   method: new FormControl({ value: '', disabled: true }),
-
-    // });
+    else (this.content.FLAG == 'EDIT')
+    {
+      this.editMode = true;
+      this.setFormValues();
+      this.setInitialValues();
+    }
 
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
@@ -332,6 +522,7 @@ stockCodeData: MasterSearchModel = {
         settingTypeControl?.disable();
         methodControl?.disable();
       }
+      console.log(this.settingTypeList);
     });
 
 
@@ -341,113 +532,77 @@ stockCodeData: MasterSearchModel = {
 
     this.getcurrencyOptions()
 
+  }
+
+  setFormValues() {
+    if (!this.content) return
+    this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
+    this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
+    this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
+    this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
+    this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
+    this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION);
+    this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
+    this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
+    this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
+    this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
+    this.diamondlabourMasterForm.controls.cost_rate.setValue(this.content.COST_RATE);
+    // this.diamondlabourMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE);
+    // this.diamondlabourMasterForm.controls.selling.setValue(this.content.SELLING_PER);
+    // this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.content.CARATWT_FROM);
+    // this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.content.CARATWT_TO);
+    this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
+    this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
+    this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
+
+    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARATWT_FROM));
+
+    this.diamondlabourMasterForm.controls.ctWtTo.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARATWT_TO));
+
+    this.diamondlabourMasterForm.controls.selling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_RATE));
+
+    this.diamondlabourMasterForm.controls.selling.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_PER));
 
 
-    this.DialabourTypeList = [
-      {
-        'name': 'SETTING',
-        'value': 'SETTING'
-      },
-      {
-        'name': 'HANDLING',
-        'value': 'HANDLING'
-      },
-      {
-        'name': 'CERTIFICATE',
-        'value': 'CERTIFICATE'
-      },
-      {
-        'name': 'GENERAL',
-        'value': 'GENERAL'
-      },
-    ]
 
-    this.settingTypeList = [
-      {
-        'name': 'GEN',
-        'value': 'GEN'
-      },
-      {
-        'name': 'PRESSURE',
-        'value': 'PRESSURE'
-      },
-    ]
+    this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
+    this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
+    this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
+    this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCY_CODE);
+    this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
+    this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
+    this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
+    this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
+    this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
+    this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
+    this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
+    this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
+    this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
+    this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
+    this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
 
-    this.labourTypeList = [
-      {
-        'name': 'MAKING',
-        'value': 'MAKING'
-      },
-      {
-        'name': 'POLISH',
-        'value': 'POLISH'
-      },
-      {
-        'name': 'FINISHING',
-        'value': 'FINISHING'
-      },
-      {
-        'name': 'CASTING',
-        'value': 'CASTING'
-      },
-      {
-        'name': 'GENERAL',
-        'value': 'GENERAL'
-      },
-      {
-        'name': 'RHODIUM',
-        'value': 'RHODIUM'
-      },
-      {
-        'name': 'STAMPING',
-        'value': 'STAMPING'
-      },
-      {
-        'name': 'WASTAGE',
-        'value': 'WASTAGE'
-      },
-    ]
-    this.unitList = [
-      {
-        'name': 'Lumpsum ',
-        'value': 'Lumpsum '
-      },
-      {
-        'name': 'PCS',
-        'value': 'PCS'
-      },
-      {
-        'name': 'Grams',
-        'value': 'Grams'
-      },
-      {
-        'name': 'Carat',
-        'value': 'Carat'
-      },
-      {
-        'name': 'Hours',
-        'value': 'Hours'
-      }
-    ]
-    this.methodList = [
-      {
-        'name': 'Hand Setting ',
-        'value': 'Hand Setting '
-      },
-      {
-        'name': 'Wax Setting',
-        'value': 'Wax Setting'
-      },
-      {
-        'name': 'Other Setting',
-        'value': 'Other Setting'
-      },
-      {
-        'name': 'GENERAL',
-        'value': 'GENERAL'
-      },
+    this.diamondlabourMasterForm.controls.purity.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.PURITY));
 
-    ]
+    this.diamondlabourMasterForm.controls.metalselling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.LAST_SELLING_RATE));
 
   }
 
@@ -489,7 +644,7 @@ stockCodeData: MasterSearchModel = {
   }
 
   metaldivisionCodeSelected(e: any) {
-    
+
     console.log(e);
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
@@ -509,7 +664,7 @@ stockCodeData: MasterSearchModel = {
     console.log(e);
     this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(e.DESCRIPTION);
-    
+
   }
 
   stockCodeSelected(e: any) {
@@ -517,7 +672,7 @@ stockCodeData: MasterSearchModel = {
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
-     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
   currencyCodeSelected(e: any) {
@@ -571,44 +726,49 @@ stockCodeData: MasterSearchModel = {
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if (!this.content) return
-    this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
-    this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
-    this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
-    this.metallabourMasterForm.controls.labour_code.setValue(this.content.CODE);
-    this.metallabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
-    this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
-    this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
-    this.diamondlabourMasterForm.controls.division.setValue(this.content.DIVISION);
-    this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
-    this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
-    this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
-    this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
-    this.diamondlabourMasterForm.controls.cost_rate.setValue(this.content.COST_RATE);
-    this.diamondlabourMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE);
-    this.metallabourMasterForm.controls.division.setValue(this.content.DIVISION_CODE);
-    this.metallabourMasterForm.controls.currency.setValue(this.content.CURRENCY_CODE);
-    this.diamondlabourMasterForm.controls.selling.setValue(this.content.SELLING_PER);
-    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.content.CARATWT_FROM);
-    this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.content.CARATWT_TO);
-    this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
-    this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
-    this.diamondlabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
-    this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
-    this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
-    this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
-    this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
-    this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
-    this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
-    this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
-    this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
-    this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
-    this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
-    this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
-    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
-  }
 
+
+  // salesChange(data: any) {
+  //   this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
+  //   this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
+
+  //   if (this.salesRate === '') {
+  //     this.diamondlabourMasterForm.controls.selling_rate.disable();
+  //     this.diamondlabourMasterForm.controls.selling.enable();
+  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentage === '') {
+  //     this.diamondlabourMasterForm.controls.selling.disable();
+  //     this.diamondlabourMasterForm.controls.selling_rate.enable();
+  //     this.diamondlabourMasterForm.controls.selling.setValue('');
+
+  //   }
+  //   else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+  //   }
+  // }
+
+  // salesChangeMetal() {
+  //   this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
+  //   this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
+
+  //   if (this.salesRateMetal === '') {
+  //     this.metallabourMasterForm.controls.metalselling_rate.disable();
+  //     this.metallabourMasterForm.controls.metalSelling.enable();
+  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentageMetal === '') {
+  //     this.metallabourMasterForm.controls.metalSelling.disable();
+  //     this.metallabourMasterForm.controls.metalselling_rate.enable();
+  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
+
+  //   }
+  //   else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+  //   }
+  // }
 
 
 
@@ -633,11 +793,11 @@ stockCodeData: MasterSearchModel = {
     let postData = {
       "MID": 0,
       "SRNO": 0,
-      "CODE": this.diamondlabourMasterForm.value.labour_code || "",
+      "CODE": this.diamondlabourMasterForm.value.labour_code,
       "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "",
       "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
       "METHOD": this.diamondlabourMasterForm.value.method || "",
-      "DIVISION": this.diamondlabourMasterForm.value.division,
+      "DIVISION": this.diamondlabourMasterForm.value.divisions,
       "SHAPE": this.diamondlabourMasterForm.value.shape,
       "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
       "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
@@ -649,7 +809,7 @@ stockCodeData: MasterSearchModel = {
       "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.division || "",
+      "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
       "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling,
       "ACCESSORIES": 0,
@@ -658,7 +818,7 @@ stockCodeData: MasterSearchModel = {
       "SIEVE": this.diamondlabourMasterForm.value.sieve,
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
       "WASTAGE_AMT": 0,
-      "TYPE_CODE": this.diamondlabourMasterForm.value.typecode || "",
+      "TYPE_CODE": this.metallabourMasterForm.controls.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category,
       "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
@@ -727,7 +887,7 @@ stockCodeData: MasterSearchModel = {
       "SIEVE": this.diamondlabourMasterForm.value.sieve || "",
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage || "",
       "WASTAGE_AMT": 0,
-      "TYPE_CODE": this.diamondlabourMasterForm.value.typecode || "",
+      "TYPE_CODE": this.metallabourMasterForm.controls.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category || "",
       "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory || "",
       "BRAND_CODE": this.metallabourMasterForm.value.brand || "",
@@ -770,19 +930,19 @@ stockCodeData: MasterSearchModel = {
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   Swal.fire({
+    //     title: '',
+    //     text: 'Please Select data to delete!',
+    //     icon: 'error',
+    //     confirmButtonColor: '#336699',
+    //     confirmButtonText: 'Ok'
+    //   }).then((result: any) => {
+    //     if (result.value) {
+    //     }
+    //   });
+    //   return
+    // }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -793,7 +953,7 @@ stockCodeData: MasterSearchModel = {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'LabourChargeMasterDj/DeleteLabourChargeMaster/' + this.content.MID;
+        let API = 'LabourChargeMasterDj/DeleteLabourChargeMaster/' + this.content.CODE;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -853,6 +1013,71 @@ stockCodeData: MasterSearchModel = {
       this.metallabourMasterForm.controls['metallabourType'].enable();
       this.metallabourMasterForm.controls['metalunitList'].enable();
 
+    }
+  }
+
+  DiaCostRatekeyupvalue(e: any) {
+    console.log(e);
+    this.displayDiaCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  DiaSellingRatekeyupvalue(e: any) {
+    console.log(e)
+    this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  DiaCtWtFromkeyupvalue(e: any) {
+    console.log(e);
+    this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  DiaCtWtTokeyupvalue(e: any) {
+    console.log(e);
+    this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalCostRatekeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalSellingRatekeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalWtFromkeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalWtTokeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  onweighttto(event: any) {
+    if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
+      Swal.fire({
+        title: event.message || 'Weight From should be lesser than Weight To',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
+    }
+  }
+
+
+  onCtweighttto(event: any) {
+    if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
+      Swal.fire({
+        title: event.message || 'Ct Weight From should be lesser than Weight To',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
     }
   }
 

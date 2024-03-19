@@ -29,6 +29,8 @@ export class WorkerMasterComponent implements OnInit {
   selectedKey: number[] = []
   private subscriptions: Subscription[] = [];
   readonlyMode: boolean = false;
+  editMode: boolean = false;
+  codeEnable :  boolean = true;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -93,6 +95,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.isViewMode = true;
@@ -100,13 +103,31 @@ export class WorkerMasterComponent implements OnInit {
       this.selectProcessWithSP()
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
+      this.editMode = true;
+      this.codeEnable = false;
       this.setFormValues();
       this.selectProcessWithSP()
     }
 
   }
 
+  checkCode(): boolean {
+    if (this.workerMasterForm.value.WorkerCode == '') {
+      this.commonService.toastErrorByMsgId('please enter Worker code')
+      return true
+    }
+    return false
+  }
 
+  codeEnabled(){
+    if (this.workerMasterForm.value.WorkerCode == '') {
+    this.codeEnable = true;
+    }
+    else{
+      this.codeEnable = false;
+    }
+   
+  }
 
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
@@ -416,7 +437,8 @@ export class WorkerMasterComponent implements OnInit {
 
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    if (event.target.value == '' || this.viewMode == true) return
+    if (this.content && this.content.FLAG == 'EDIT') {}else{
+    if (event.target.value == '' || this.viewMode == true ) return
     let API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -431,13 +453,16 @@ export class WorkerMasterComponent implements OnInit {
             if (result.value) {
             }
           });
-          this.workerMasterForm.controls.WorkerCode.setValue('')
+         // this.workerMasterForm.controls.WorkerCode.setValue('')
         }
       }, err => {
         this.workerMasterForm.reset()
       })
+    
     this.subscriptions.push(Sub)
   }
+  }
+
   /**use: to check worker exists in db */
   workerCodeChange(event: any, flag: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value
@@ -451,6 +476,7 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   setwithFormControl(status: any, code: any) {
     if (status == "Failed") {
       this.commonService.toastErrorByMsgId('MSG1531')
@@ -472,13 +498,16 @@ export class WorkerMasterComponent implements OnInit {
   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
+    if (this.checkCode()) return
     console.log(data);
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
   supervisorSelected(data: any) {
+    if (this.checkCode()) return
     this.workerMasterForm.controls.NameOfSupervisor.setValue(data.WORKER_CODE)
   }
   defaultProcessSelected(data: any) {
+    if (this.checkCode()) return
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
   }
 

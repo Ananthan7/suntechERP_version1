@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -20,19 +20,19 @@ import { FormsModule } from '@angular/forms';
 export class CustomerPriceMasterComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
-  columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'LABOUR_CODE'},
+  columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO',,'WEIGHT_FROM','WEIGHT_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
+  columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'CODE'},
    { title:'DIVISION_CODE', field: 'DIVISION_CODE'},
    { title:'SHAPE', field: 'SHAPE'},
    { title:'DIVISION', field: 'DIVISION'},
    { title:'METHOD', field: 'METHOD'},
    { title:'UNITCODE', field: 'UNITCODE'},
+   { title:'CARATWT_FROM', field: 'CARATWT_FROM'},
+   { title:'CARATWT_TO', field: 'CARATWT_TO'},
    { title:'CURRENCY_CODE', field: 'CURRENCYCODE'},
    { title:'CRACCODE', field: 'CRACCODE'},
    { title:'COST_RATE', field: 'COST_RATE'},
-   { title:'SELLING_RATE', field: 'SELLING_RATE'},
-   { title:'CARATWT_FROM', field: 'CARATWT_FROM'},
-   { title:'CARATWT_TO', field: 'CARATWT_TO'},
+   { title:'SELLING_RATE', field: 'SELLING_RATE'},   
    { title:'CUSTOMER_CODE', field: 'CUSTOMER_CODE'},
    { title:'REFMID', field: 'REFMID'},
    { title:'DT_VALID_FROM', field: 'DT_VALID_FROM'},];
@@ -74,9 +74,12 @@ export class CustomerPriceMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
  
   ngOnInit(): void {
+
+    this.renderer.selectRootElement('#customercode')?.focus();
 
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'StonePriceMasterDJ/GetStonePriceMasterList'

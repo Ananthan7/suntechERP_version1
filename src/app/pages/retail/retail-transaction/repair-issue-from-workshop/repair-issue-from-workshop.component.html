@@ -6,11 +6,11 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRepairReceive()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
-        <form [formGroup]="repairCustomerDeliveryForm">
+        <form [formGroup]="repairReceiveForm">
             <div class="container-fluid pt-3">
                 <!-- <div class="row">
                     <div class="col-md-6">
@@ -55,7 +55,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">SalesMan : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="salesMan" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="salesMan" [readonly]="viewMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
                                     (newRowClick)="salesManSelected($event)"></master-search>
@@ -68,23 +68,23 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label ">PartyCode : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 40%;">
-                                    <input type="text" matInput formControlName="partyCode" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="partyCode" [readonly]="viewMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="customerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="customerSelected($event)"></master-search>
                                 <mat-form-field style="width: 40%;">
-                                    <input type="text" matInput formControlName="customerDesc" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="partyDesc" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-2 col-form-label ">Branchcurr : </label>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="partyCode" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="branchcurrcode" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="customerDesc" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="branchcurr" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -97,6 +97,7 @@
                                 <mat-form-field style="width: 200%;">
                                     <input type="text" matInput formControlName="partyName" [readonly]="viewMode" />
                                 </mat-form-field>
+                            
                             </div>
 
                             <!-- <label for="inputPassword" class="col-sm-2 col-form-label ">Tel : </label>
@@ -118,7 +119,7 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label ">Date : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                    <input matInput [matDatepicker]="vocDate" formControlName="Date"
                                         [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
@@ -141,37 +142,8 @@
                         </div>
                     </div>
 
-                    <!-- <div class="col-md-2">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label">Currency : </label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currency" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currencyDesc" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label">Email : </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="email" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label">Address : </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
-                                    <textarea matInput formControlName="address" [readonly]="viewMode"></textarea>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div> -->
+                   
+                       
                     <div class="col-md-3">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
@@ -207,7 +179,7 @@
                             <mat-tab label="Received From Workshops">
                                 <div class="row mb-3">
                                     <div class="col-md-12">
-                                        <dx-resizable id="gridContainer" [width]="firstTableWidth" [height]="280"
+                                        <dx-resizable id="gridContainer"
                                             [keepAspectRatio]="false" handles="right">
                                             <dx-data-grid width="auto" #dataGrid id="gridContainer"
                                                 [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
@@ -234,7 +206,7 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+                        <mat-tab-group [(selectedIndex)]="selectedTabIndex1">
                             <mat-tab label="Pending Repair Items" id="get">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
@@ -254,7 +226,7 @@
                             <mat-tab label="Received Items To Deliver">
                                 <div class="row mb-3">
                                     <div class="col-md-12">
-                                        <dx-resizable id="gridContainer" [width]="firstTableWidth" [height]="280"
+                                        <dx-resizable id="gridContainer"
                                             [keepAspectRatio]="false" handles="right">
                                             <dx-data-grid width="auto" #dataGrid id="gridContainer"
                                                 [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"

@@ -64,6 +64,7 @@ export class RetailTransactionComponent implements OnInit {
   dialogBoxResult: any;
 
   modalRef!: NgbModalRef;
+  posPlanetIssuing: boolean = false;
 
   //   reasonLookup: MasterSearchModel =
   //   {
@@ -93,6 +94,8 @@ export class RetailTransactionComponent implements OnInit {
   reasonMaster: any = [];
   reasonMasterOptions!: Observable<any[]>;
 
+  showAuditTrail: boolean = false;
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -107,6 +110,12 @@ export class RetailTransactionComponent implements OnInit {
     this.getMasterGridData()
     this.menuTitle = this.CommonService.getModuleName()
     this.componentName = this.CommonService.getFormComponentName()
+    // need to change - if query params change to run again.
+    if (this.componentName == 'AddPosComponent') {
+      this.showAuditTrail = true;
+    } else {
+      // this.showAuditTrail = false;
+    }
   }
 
   ngOnInit(): void {
@@ -115,7 +124,10 @@ export class RetailTransactionComponent implements OnInit {
       localStorage.removeItem('AddNewFlag')
     }
 
+    this.posPlanetIssuing = this.CommonService.allbranchMaster.POSPLANETISSUING;
+
     this.getReasonMasters();
+
 
   }
 
@@ -128,13 +140,19 @@ export class RetailTransactionComponent implements OnInit {
   async editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
-    console.log(posPlanetFile);
+   console.log('====================================');
+   console.log(this.posPlanetIssuing , str.PLANETRESPONEFLG , str.TRAYN );
+   console.log('====================================');
+    if (this.posPlanetIssuing && str.PLANETRESPONEFLG == 'Y' && str.TRAYN == 'Y') {
 
-    if (posPlanetFile.value) {
-    } else {
-      this.snackBar.open(posPlanetFile.data.message, 'OK');
-      return;
+      let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
+      console.log(posPlanetFile);
+
+      if (posPlanetFile.value) {
+      } else {
+        this.snackBar.open(posPlanetFile.data.message, 'OK');
+        return;
+      }
     }
 
     let isAuth = await this.openAuthModal();
@@ -184,6 +202,7 @@ export class RetailTransactionComponent implements OnInit {
     }
     if (this.componentDbList[this.componentName]) {
       this.componentSelected = this.componentDbList[this.componentName]
+
     } else {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }

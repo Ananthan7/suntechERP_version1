@@ -15,10 +15,11 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class TransactionDetailsComponent implements OnInit {
 
+  tableDataProcess: any[] = [];
   selectedTabIndex = 0;
   columnhead:any[] = [''];
   columnhead2:any[] = [''];
-  columnhead3:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','FRM_PROCESS','FRM_WROKER','TO_PROCESS','TO_WROKER','METAL_PCS','METAL_WT','STONE_PCS','STONE_WT','LOSS_QTY','SCRAP_WT','APPROVE','APPROVE','PURE_WT','IN_DATE','OUT_DATE','TIME_CO','YEARMONTH','UNQ_DESIGN'];
+  columnhead3:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','FRM_PROCESS','FRM_WROKER','TO_PROCESS','TO_WROKER','METAL_PCS','METAL_WT','STONE_PCS','STONE_WT','LOSS_QTY','SCRAP_WT','APPROVE','PURE_WT','IN_DATE','OUT_DATE','TIME_CO','YEARMONTH','UNQ_DESIGN'];
   columnhead4:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','STOCK_CODE','GROSS_WEIGHT','METAL_WT','STONE_PCS','STONE_WT','AMOUNTFC','PRICE 1FC','PROCESS','WORKER','METAL_AMOUNT','STONE_AMOUNT','LAB_AMOUNT','YEARMONTH','UNQ_DESIGN','COST_CODE'];
   orders: any = [];
   viewOnly: boolean = false;
@@ -32,6 +33,25 @@ export class TransactionDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'JobTransactionsGrid/GetJobTransaction/{BRANCH}/{JOB_NUMBER}';
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe(
+        (result) => {
+          if (result.status === 'Success' && result.response) {
+            this.tableDataProcess = result.response.map((item: any, index: number) => {
+              return { ...item, SELECT1: false, SRNO: index + 1 };
+            });
+            console.log(this.tableDataProcess);
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+        },
+        err => {
+          console.error('Error fetching data:', err);
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      );
   }
 
   close(data?: any) {

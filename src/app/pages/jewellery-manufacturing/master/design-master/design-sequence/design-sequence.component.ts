@@ -20,10 +20,10 @@ export class DesignSequenceComponent implements OnInit {
 
   tableDataProcess: any[] = [];
 
-  columnhead:any[]=['SRNO','PROCESS_CODE','POINTS','STD_LOSS','MAX_LOSS','STD_TIME','LOSS_ACCODE','WIP_ACCODE','TIMEON_PROCESS']
+  columnhead: any[] = ['SRNO', 'PROCESS_CODE', 'POINTS', 'STD_LOSS', 'MAX_LOSS', 'STD_TIME', 'LOSS_ACCODE', 'WIP_ACCODE', 'TIMEON_PROCESS']
   designSequenceForm: FormGroup = this.formBuilder.group({
-    processCode:[''],
-    processDesc:[''],
+    processCode: [''],
+    processDesc: [''],
   })
 
   constructor(
@@ -36,7 +36,27 @@ export class DesignSequenceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    let secCode = this.designSequenceForm.value.processCode;
 
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'SequenceMasterDJ/GetSequenceMasterDJList';
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe(
+        (result) => {
+          if (result.status === 'Success' && result.response) {
+            this.tableDataProcess = result.response.map((item: any, index: number) => {
+              return { ...item, SELECT1: false, SRNO: index + 1 };
+            });
+            console.log(this.tableDataProcess);
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+        },
+        err => {
+          console.error('Error fetching data:', err);
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      );
   }
 
   processCodeData: MasterSearchModel = {
@@ -50,7 +70,7 @@ export class DesignSequenceComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  processCodeSelected(e:any){
+  processCodeSelected(e: any) {
     console.log(e);
     this.designSequenceForm.controls.processCode.setValue(e.SEQ_CODE);
     this.designSequenceForm.controls.processDesc.setValue(e.DESCRIPTION);
@@ -61,57 +81,37 @@ export class DesignSequenceComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  formSubmit(){
+  formSubmit() {
 
   }
 
-  deleteRecord(){
+  deleteRecord() {
 
   }
 
-  sequenceSearch(){
-  //  let secCode =  this.designSequenceForm.value.processCode;
-    
+  sequenceSearch() {
 
-  //   this.commonService.toastSuccessByMsgId('MSG81447');
-  //   let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/'+ secCode;
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       if (result.response.sequenceDetails) {
-  //         let data = result.response.sequenceDetails;
-  //         this.tableDataProcess.push(data);
-  //         let i = 0;
-  //         this.tableDataProcess.forEach((item: any) => {
-  //           item.SELECT1 = false
-  //           item.SRNO = i + 1;
-  //         });
-          
-  //         console.log(this.tableDataProcess);
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('MSG1531')
-  //     })
-  let secCode = this.designSequenceForm.value.processCode;
+    let secCode = this.designSequenceForm.value.processCode;
 
-this.commonService.toastSuccessByMsgId('MSG81447');
-let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + secCode;
-let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  .subscribe(
-    (result) => {
-      if (result.status === 'Success' && result.response.sequenceDetails) {
-        this.tableDataProcess = result.response.sequenceDetails.map((item: any, index: number) => {
-          return { ...item, SELECT1: false, SRNO: index + 1 };
-        });
-        console.log(this.tableDataProcess);
-      } else {
-        this.commonService.toastErrorByMsgId('MSG1531');
-      }
-    },
-    err => {
-      console.error('Error fetching data:', err);
-      this.commonService.toastErrorByMsgId('MSG1531');
-    }
-  );
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + secCode;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe(
+        (result) => {
+          if (result.status === 'Success' && result.response.sequenceDetails) {
+            this.tableDataProcess = result.response.sequenceDetails.map((item: any, index: number) => {
+              return { ...item, SELECT1: false, SRNO: index + 1 };
+            });
+            console.log(this.tableDataProcess);
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+        },
+        err => {
+          console.error('Error fetching data:', err);
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      );
 
   }
 }

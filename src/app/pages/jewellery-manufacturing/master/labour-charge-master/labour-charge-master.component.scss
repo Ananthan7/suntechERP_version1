@@ -1,3 +1,29 @@
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #ffff !important;
+  }
+
+  .mat-form-field {
+    font-weight: 600 !important;
+  }
+}
+
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+  .mat-tab-body-content {
+    overflow: hidden !important;
+  }
+}
+
+
 .card-content {
   font-family: Poppins;
   padding: 10px;
@@ -88,20 +114,6 @@
   border: 1px solid #ddd;
 }
 
-::ng-deep {
-  .cdk-overlay-container {
-    position: fixed;
-    z-index: 1070 !important;
-  }
-
-  .mat-form-field-appearance-fill .mat-form-field-flex {
-    background-color: #ffff !important;
-  }
-
-  .mat-form-field {
-    font-weight: 600 !important;
-  }
-}
 
 .example-margin {
   margin-top: 15px;
@@ -110,3 +122,6 @@
 .mat-input-element {
   font-size: 13px !important;
 }
+
+
+

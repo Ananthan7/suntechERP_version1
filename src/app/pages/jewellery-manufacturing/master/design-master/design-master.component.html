@@ -26,7 +26,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Design * :</label>
                     <div class="col-md-3">
@@ -402,13 +402,12 @@
                       </div>
 
 
-
                     </mat-tab>
                   </mat-tab-group>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                   <div class="row">
-                    <div class="col-md-7">
+                    <!-- <div class="col-md-7">
                       <div class="upload-btn-wrapper">
                         <button class="btn btnnew border-dark">
                           <img src={{image}} style="width:126px;height:124px">
@@ -417,44 +416,112 @@
                         <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                           (change)="onFileChangedimage($event)">
                       </div>
-                    </div>
-
-                    <!-- <div class="col-md-7">
-                          <div class="icons">
-                              <div class="image_box"></div>
-                              <div class="icons_footer">
-                                <i class="fas fa-backward-fast icon-common"></i>
-                                <i class="fas fa-caret-left icon-common"></i>
-                                <span>0/10</span>
-                                <i class="fas fa-caret-right icon-common"></i>
-                                <i class="fas fa-forward-fast icon-common"></i>
-                                <i class="fas fa-xmark icon-common text-danger"></i>
-                                <i class="fas fa-plus icon-common"></i>
+                    </div> -->
+                    <div class="row mt-4">
+                      <!-- <div class="col-md-7">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="
+                          margin-left: 26px;">
+                            <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                <div class="upload-btn-wrapper">
+                                  <button class="btn btnnew border-dark">
+                                    <img src={{image}} style="width:126px;height:124px">
+                                  </button>
+                                  <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                    (change)="onFileChangedimage($event)">
+                                </div>
                               </div>
                             </div>
+                            <button class="carousel-control-prev" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>  -->
+
+                      <div class="col-md-7">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
+                            style="margin-left: 26px;" data-bs-pause="hover" data-bs-interval="false">
+                            <div class="box-wrap">
+                            <div class="carousel-inner ">
+                              <div class="carousel-item active" *ngFor="let img of images; let i = index"
+                                [class.active]="i === 0">
+                               
+                                  <div class="upload-btn-wrapper ">
+                                    <button class="btn btnnew border-dark">
+                                      <img src={{img}} style="width:126px;height:124px">
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                            (change)="onFileChangedimage($event)" multiple>
+                        </div>
+                      </div>
+
+
+
+
+                      <!-- <div class="row mt-3">
+                        <div class="col-md-7">
+                          <div class="upload-btn-wrapper">
+                            <button class="btn btnnew border-dark">
+                              <img src={{image}} style="width:126px;height:124px">
+                            </button>
+                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
+                          </div>
+                        </div>
                       </div> -->
-                    <div class="col-md-5">
-                      <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 25px;
+
+
+
+                      <div class="col-md-5">
+                        <div class="p-1 bd-highlight">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 25px;
                         padding-right: 25px;" (click)="openaddDesignSequence()">
-                          Sequence
-                        </button>
-                      </div>
-                      <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
-                          (click)="openaddLabourChargesDetails()">
-                          Labour Charges
-                        </button>
-                      </div>
-                      <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 21px;
+                            Sequence
+                          </button>
+                        </div>
+                        <div class="p-1 bd-highlight">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                            (click)="openaddLabourChargesDetails()">
+                            Labour Charges
+                          </button>
+                        </div>
+                        <div class="p-1 bd-highlight">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 21px;
                         padding-right: 21px;" (click)="openaddDesignTransaction()">
-                          Transaction
-                        </button>
+                            Transaction
+                          </button>
+                        </div>
                       </div>
                     </div>
-
                   </div>
+
+
+
+
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-6 col-form-label">Engraving Text:</label>
                     <div class="col-md-6">
@@ -563,38 +630,66 @@
           <div class="col-md-12">
             <mat-tab-group [(selectedIndex)]="selectedTabIndex">
               <mat-tab label="BOM Details">
-                <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                  [showRowLines]="true" keyExpr="SRNO" class="mt-3">
+                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                  [allowColumnReordering]="true" [allowColumnResizing]="true" class="mt-3" [columnAutoWidth]="true"
+                  [showColumnLines]="true" [showRowLines]="true" keyExpr="SRNO"
+                  (onSelectionChanged)="onSelectionChanged($event)">
                   <dxo-selection mode="multiple"></dxo-selection>
-                  <!-- <dxo-editing mode="cell" [allowUpdating]="true">
-                  </dxo-editing> -->
+
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                   <dxi-column dataField="SRNO" caption="Srno"> </dxi-column>
                   <dxi-column dataField="Division" caption="Division" cellTemplate="divisiontemp">
                   </dxi-column>
-                  <dxi-column dataField="Stone_Type" caption="Stone Type">
+                  <dxi-column dataField="Stone_Type" caption="Stone Type" cellTemplate="stoneTypetemp">
                   </dxi-column>
                   <dxi-column dataField="Stock_Code" caption="Stock Code" cellTemplate="stockCodetemp">
                   </dxi-column>
                   <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp">
                   </dxi-column>
-                  <dxi-column dataField="Shape" caption="Shape">
+                  <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp">
                   </dxi-column>
-                  <dxi-column dataField="Color" caption="Color">
+                  <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp">
                   </dxi-column>
-                  <dxi-column dataField="Ext_Color" caption="Email">
+                  <dxi-column dataField="Ext_Color" caption="Email" cellTemplate="extColortemp">
                   </dxi-column>
-                  <dxi-column dataField="Clarity" caption="Clarity">
+                  <dxi-column dataField="Clarity" caption="Clarity" cellTemplate="claritytemp">
                   </dxi-column>
-                  <dxi-column dataField="Ext_Clarity" caption="Ext Clarity">
+                  <dxi-column dataField="Ext_Clarity" caption="Ext Clarity" cellTemplate="extClaritytemp">
                   </dxi-column>
-                  <dxi-column dataField="Sieve_Std" caption="Sieve Std">
+                  <dxi-column dataField="Sieve_Std" caption="Sieve Std" cellTemplate="sieveStdtemp">
                   </dxi-column>
-                  <dxi-column dataField="Description" caption="Description">
+                  <dxi-column dataField="Description" caption="Description" cellTemplate="descriptiontemp">
                   </dxi-column>
-                  <dxi-column dataField="Sieve_From" caption="Sieve From">
+                  <dxi-column dataField="Sieve_From" caption="Sieve From" cellTemplate="sieveFromtemp">
                   </dxi-column>
+                  <dxi-column dataField="Sieve_To" caption="Sieve To" cellTemplate="Sieve_Totemp">
+                  </dxi-column>
+                  <dxi-column dataField="Description_detail" caption="Description Detail"
+                    cellTemplate="Description_detailtemp">
+                  </dxi-column>
+                  <dxi-column dataField="Description_detail2" caption="Description_detail2"
+                    cellTemplate="Description_detail2temp">
+                  </dxi-column>
+                  <dxi-column dataField="Size" caption="Size" cellTemplate="Sizetemp">
+                  </dxi-column>
+                  <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcstemp">
+                  </dxi-column>
+                  <dxi-column dataField="WtCt" caption="Wt/Ct" cellTemplate="WtCttemp">
+                  </dxi-column>
+                  <dxi-column dataField="ProcessType" caption="Process Type" cellTemplate="ProcessTypetemp">
+                  </dxi-column>
+                  <dxi-column dataField="PointerWt" caption="Pointer Wt" cellTemplate="PointerWttemp">
+                  </dxi-column>
+                  <dxi-column dataField="Remark" caption="Remark" cellTemplate="Remarktemp">
+                  </dxi-column>
+                  <dxi-column dataField="currency" caption="currency" cellTemplate="currencytemp">
+                  </dxi-column>
+                  <dxi-column dataField="Design_currency" caption="Design currency" cellTemplate="Design_currencytemp">
+                  </dxi-column>
+                  <dxi-column dataField="Purity" caption="Purity" cellTemplate="Purity">
+                  </dxi-column>
+
 
                   <div *dxTemplate="let data of 'divisiontemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
@@ -605,72 +700,119 @@
 
                   <div *dxTemplate="let data of 'stoneTypetemp'">
                     <input type="text" (change)="stoneTypetemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
+                      [disabled]="fieldDisable" style="width: 100%;" required
                       oninput="this.value = this.value.toUpperCase()" />
                   </div>
 
                   <div *dxTemplate="let data of 'stockCodetemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                     <master-search [MasterSearchData]="stockCodeData"
-                      (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')">
+                      (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')" *ngIf="Disable == false">
                     </master-search>
                   </div>
 
-                  <div *dxTemplate="let data of 'karattemp'">
+                  <!-- <div *dxTemplate="let data of 'karattemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                     <master-search [MasterSearchData]="karatCodeData"
                       (newRowClick)="karatCodeSelected1($event,data,'karattemp')">
                     </master-search>
+                  </div> -->
+
+                  <div *dxTemplate="let data of 'karattemp'">
+                    <input type="text" (change)="shapetemp($event,data)" [disabled]="FieldEnable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
+
 
 
                   <div *dxTemplate="let data of 'shapetemp'">
-                    <input type="text" (change)="shapetemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="shapetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'colortemp'">
-                    <input type="text" (change)="colortemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="colortemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'extColortemp'">
-                    <input type="text" (change)="extColortemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="extColortemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'claritytemp'">
-                    <input type="text" (change)="claritytemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="claritytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'extClaritytemp'">
-                    <input type="text" (change)="extClaritytemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="extClaritytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'sieveStdtemp'">
-                    <input type="text" (change)="sieveStdtemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="sieveStdtemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'descriptiontemp'">
-                    <input type="text" (change)="descriptiontemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="descriptiontemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'sieveFromtemp'">
-                    <input type="text" (change)="sieveFromtemp($event,data)" [value]="data.value"
-                      [disabled]="data.value == ''" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                    <input type="text" (change)="sieveFromtemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
                   </div>
+                  <div *dxTemplate="let data of 'Sieve_Totemp'">
+                    <input type="text" (change)="SieveTotemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Description_detailtemp'">
+                    <input type="text" (change)="Description_detailtemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Description_detail2temp'">
+                    <input type="text" (change)="Description_detail2temp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Sizetemp'">
+                    <input type="text" (change)="Sizetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'WtCttemp'">
+                    <input type="text" (change)="WtCttemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'ProcessTypetemp'">
+                    <input type="text" (change)="ProcessTypetemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'PointerWttemp'">
+                    <input type="text" (change)="PointerWttemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Remarktemp'">
+                    <input type="text" (change)="Remarktemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'currencytemp'">
+                    <input type="text" (change)="currencytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Design_currencytemp'">
+                    <input type="text" (change)="Design_currencytemp($event,data)" [disabled]="fieldDisable"
+                      [value]="data.value" style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Purity'">
+                    <input type="text" (change)="Puritytemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
+                  </div>
+                  <div *dxTemplate="let data of 'Pcstemp'">
+                    <input type="text" (change)="Pcstempp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                      style="width: 100%;" required />
+                  </div>
+
                 </dx-data-grid>
 
               </mat-tab>
@@ -750,13 +892,16 @@
                 </dx-data-grid>
               </mat-tab>
               <mat-tab label="Design Parts Details">
-                <dx-data-grid id="gridContainer" [dataSource]="designPartDetails" [showBorders]="true">
-                  <!-- <dxo-selection mode="single"></dxo-selection> -->
+                <dx-data-grid id="gridContainer" [dataSource]="designPartDetails" [showBorders]="true"
+                  [allowColumnReordering]="true" [allowColumnResizing]="true" class="mt-3" [columnAutoWidth]="true"
+                  [showColumnLines]="true" [showRowLines]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
+
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
+
 
                   <dxi-column dataField="SRNO" dataType="SR_NO"></dxi-column>
                   <dxi-column dataField="DESIGN_C" caption="DESIGNCODE"></dxi-column>
@@ -813,17 +958,24 @@
         <mat-tab label="Attributes">
           <div class="row">
             <div class="col-md-12">
-              <div class="row pl-4">
+              <!-- <div class="row pl-4">
                 <div class="col-md-3 d-flex mb-2">
                   <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                    (addClick)="selectedTabIndex == 0 ? adddataAttributes() : adddataAttributesCountry();"
-                    (deleteClick)="selectedTabIndex == 0 ? removedataAttributes():removedataAttributesCountry()">
+                    (addClick)="selectedTabIndex1 == 0 ? adddataAttributes() : adddataAttributesCountry();"
+                    (deleteClick)="selectedTabIndex1 == 0 ? removedataAttributes():removedataAttributesCountry()">
                   </menu-buttons>
                 </div>
-              </div>
+              </div> -->
               <div class="col-md-12">
-                <mat-tab-group [(selectedIndex)]="selectedTabIndex1">
+                <mat-tab-group>
                   <mat-tab label="Cut Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributes()" (deleteClick)="removedataAttributes()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataCutRange" [showBorders]="true"
                         [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
@@ -842,6 +994,13 @@
                     </div>
                   </mat-tab>
                   <mat-tab label="Country Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributesCountry()" (deleteClick)="removedataAttributesCountry()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataCountryRange" [showBorders]="true"
                         [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
@@ -859,9 +1018,17 @@
                     </div>
                   </mat-tab>
                   <mat-tab label="Dye Strip Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributesDyeCodeRange()"
+                          (deleteClick)="removedataAttributesDyeCodeRange()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataDyeCodeRange" [showBorders]="true"
-                      [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
+                        [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -876,183 +1043,345 @@
                     </div>
                   </mat-tab>
                   <mat-tab label="Weight Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributesWeightRange()" (deleteClick)="removedataAttributesWeightRange()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataWeightRange" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column15" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Size" caption="Size">
+                        </dxi-column>
+                        <dxi-column dataField="Pcs" caption="Pcs">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Wax Models">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributesWaxModels()" (deleteClick)="removedataAttributesWaxModels()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataWaxModels" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column4" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Wax Model Code" caption="Wax Model Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Approved Vendors">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeApprovedVendors()"
+                          (deleteClick)="removedataAttributesApprovedVendors()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataApprovedVendors" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column5" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Accode" caption="Accode">
                         </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
+                        </dxi-column>
+                        <dxi-column dataField="Vend Design" caption="Vend Design">
+                        </dxi-column>
+                        <dxi-column dataField="Del.Days" caption="Del.Days">
+                        </dxi-column>
+                        <dxi-column dataField="Credit Days" caption="Credit Days">
+                        </dxi-column>
+                        <dxi-column dataField="Mode Of Payment" caption="Mode Of Payment">
+                        </dxi-column>
+
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Enamel Color">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeEnamelColor()" (deleteClick)="removedataAttributesEnamelColor()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataEnamelColor" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column6" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Color Code" caption="Color Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Components">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeComponents()" (deleteClick)="removedataAttributesComponents()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataComponents" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column7" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Comp Code" caption="Color Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Size Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeSizeRange()" (deleteClick)="removedataAttributesSizeRange()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataSizeRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of columnheader4" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Size Code" caption="Size Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
+                        </dxi-column>
+                        <dxi-column dataField="Default" caption="Default">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Width Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeWidthRange()" (deleteClick)="removedataAttributesWidthRange()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataWidthRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column8" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Width Code" caption="Width Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
+                        </dxi-column>
+                        <dxi-column dataField="Default" caption="Default">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Length">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeLength()" (deleteClick)="removedataAttributesLength()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataLength" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column9" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Length Code" caption="Length Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Height">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeHeight()" (deleteClick)="removedataAttributesHeight()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataHeight" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column10" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Height Code" caption="Length Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Karat Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeKaratRange()" (deleteClick)="removedataAttributesKaratRange()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+
+                      <dx-data-grid #dataGrid [dataSource]="tableDataKaratRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column11" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Karat Code" caption="Karat Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
+                        </dxi-column>
+                        <dxi-column dataField="Default" caption="Default">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Color Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeColorRange()" (deleteClick)="removedataAttributesColorRange()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataColorRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column12" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Color Code" caption="Color Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
+                        </dxi-column>
+                        <dxi-column dataField="Default" caption="Default">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Stock Code">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeStockCode()" (deleteClick)="removedataAttributesStockCode()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataStockCode" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column13" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Billing Code" caption="Billing Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
                   <mat-tab label="Finishing Range">
+                    <div class="row mt-2">
+                      <div class="col-md-3 d-flex mb-2">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                          (addClick)="adddataAttributeFinishingRange()" (deleteClick)="removedataAttributesStockCode()">
+                        </menu-buttons>
+                      </div>
+                    </div>
                     <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid [dataSource]="tableDataFinishingRange" id="gridContainer" keyExpr="SINO"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column14" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+
+                        <dxi-column dataField="SINO" caption="SINO"> </dxi-column>
+                        <dxi-column dataField="Finishing Code" caption="Billing Code">
+                        </dxi-column>
+                        <dxi-column dataField="Description" caption="Description">
+                        </dxi-column>
+                        <dxi-column dataField="Default" caption="Default">
                         </dxi-column>
                       </dx-data-grid>
                     </div>

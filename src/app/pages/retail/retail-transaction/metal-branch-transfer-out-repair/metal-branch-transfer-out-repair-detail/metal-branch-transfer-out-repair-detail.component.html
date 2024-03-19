@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Branch Transfer in Auto Repair - Detail</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Metal Branch Transfer Out Repair - Detail</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -10,719 +10,658 @@
 <!-- content section -->
 
 <div class="container-fluid pt-3">
-
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Stock Code: </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-
-
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            To Stock Code : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-2 col-form-label ">
-                            Bar No : </label>
-                        <div class="col-sm-2">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label ">
-                            Ticket No : </label>
-                        <div class="col-sm-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label ">
-                            Lot No : </label>
-                        <div class="col-sm-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-2 col-form-label ">
-                            Bar No : </label>
-                        <div class="col-sm-6">
-                            <mat-form-field style="width: 60%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="p-1 bd-highlight">
-                                <button type="button" class="btn btn-outline-primary add-btn">TAGIT ID</button>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-6">
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Supplier : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Location from : </label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Repair Item : </label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Bag No : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            GST CODE : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="boxed-label">
-                        <h6>GST Details</h6>
-                    </div>
-
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Pieces : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Unit Weight : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Gross Weight : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Stone Weight : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Purity : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Pure Weight (Gm/Oz) : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Net Weight : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Chargable Weight : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Kundan (Pcs/Cts/Wt) : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label ">
-                            Carat : </label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="col-md-8">
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="boxed-label">
-                                <h6>Product Price & Values</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="boxed-label">
-                                <h6>Unit</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="boxed-label">
-                                <h6>Quantity</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="boxed-label">
-                                <h6>Rate</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="boxed-label">
-                                <h6>Amount</h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-12 col-form-label ">
-                                Making Charges : </label>
-                        </div>
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-                        <div class="col-sm-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <div class="row">
-                                <label for="inputPassword" class="col-sm-6 col-form-label ">
-                                    Metal Value : </label>
-                                <div class="col-sm-6">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-12 col-form-label ">
-                                Stone Value : </label>
-                        </div>
-
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-12 col-form-label ">
-                                Wastage : </label>
-                        </div>
-
-                        <div class="col-md-2 ">
-                            <div class="boxed-label">
-                                <h6>%</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <div class="checkbox ">
-                                <mat-checkbox>Stamp Charges</mat-checkbox>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-
-                        <div class="col-md-2 ">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-12 col-form-label ">
-                                Kundan Value : </label>
-                        </div>
-
-                        <div class="col-md-2 ">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row mb-1">
-                        <div class="col-md-10">
-                            <div class="boxed-label text-start">
-                                <h6>TOTAL VALUE</h6>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-12 col-form-label ">
-                                TOTAL TAX : </label>
-                        </div>
-
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-                        <div class="col-md-2 col-offset-2">
-
-                        </div>
-                        <div class="col-md-1">
-                            <div class="boxed-label">
-                                <h6>%</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-10">
-                            <div class="boxed-label text-start">
-                                <h6>NET VALUE</h6>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <label for="inputPassword" class="col-sm-6 col-form-label ">
-                                    Purity Difference : </label>
-                                <div class="col-sm-6">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <label for="inputPassword" class="col-sm-6 col-form-label ">
-                                    Stone Difference : </label>
-                                <div class="col-sm-6">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of columnheadItemDetails2" dataField="{{ data }}"
-                            caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                    </dx-data-grid>
-                </div>
-            </div>
-
-            <div class="row mt-2">
-                <div class="col-md-12">
-                    <div class="boxed-label">
-                        <h6>GST Rates</h6>
-                    </div>
-                    <div class="your-box-container">
-                        
+    <form [formGroup]="metalBranchTransferOutRepairDetailsForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-10 col-form-label">GST Allocation</label>
-                        
-                            <label for="inputPassword" class="col-sm-2 col-form-label"><div class="boxed-label">
-                                <h6>Type</h6>
-                            </div></label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Stock Code: </label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="stockCode" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="stockCodeDes" />
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                To Stock Code : </label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="toStockCode" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="toStockCodeDesc" />
+                                </mat-form-field>
+
+                            </div>
                         </div>
 
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Total Amount : </label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label ">
+                                Bar No : </label>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input class="text-right" type="number" matInput formControlName="barno" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <label for="inputPassword" class="col-sm-2 col-form-label ">
+                                Ticket No : </label>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="ticketNo" />
+                                </mat-form-field>
+
+                            </div>
+                            <label for="inputPassword" class="col-sm-2 col-form-label ">
+                                Lot No : </label>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="lotNo" />
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-2 col-form-label ">
+                                Bar No : </label>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="salesMan" [readonly]="viewMode" />
+                                <mat-form-field style="width: 60%;">
+                                    <input class="text-right" type="number" matInput formControlName="barNo" />
                                 </mat-form-field>
+                                <master-search></master-search>
                             </div>
-                        </div>
-
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label"></label>
-                            <label for="inputPassword" class="col-sm-5 col-form-label"></label>
-                            <label for="inputPassword" class="col-sm-5 col-form-label"><div class="boxed-label">
-                                <h6>Amount</h6>
-                            </div></label>
-                        </div>
-
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">CGST : </label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="boxed-label">
-                                    <h6>%</h6>
+                            <div class="col-md-4">
+                                <div class="p-1 bd-highlight">
+                                    <button type="button" class="btn btn-outline-primary add-btn">TAGIT ID</button>
                                 </div>
                             </div>
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Supplier : </label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="supplier" />
                                 </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="supplierDesc" />
+                                </mat-form-field>
+
                             </div>
                         </div>
-
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">SGST : </label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Location from : </label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="LoactionFrom" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Repair Item : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                                    <input class="text-right" type="number" matInput formControlName="repairItem" />
                                 </mat-form-field>
+
                             </div>
-                            <div class="col-sm-2">
-                                <div class="boxed-label">
-                                    <h6>%</h6>
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Bag No : </label>
+                            <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                                    <input class="text-right" type="number" matInput formControlName="bagNo" />
                                 </mat-form-field>
                             </div>
                         </div>
-
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">IGST : </label>
-                            <div class="col-sm-3">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                GST CODE : </label>
+                            <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="boxed-label">
-                                    <h6>%</h6>
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-7 col-form-label">Round >></label>
-
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Total >> </label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="boxed-label">
-                                    <h6>%</h6>
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                                    <input class="text-right" type="number" matInput formControlName="gstCode" />
                                 </mat-form-field>
                             </div>
                         </div>
 
                     </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="boxed-label">
+                            <h6>GST Details</h6>
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Pieces : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="pieces" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Unit Weight : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="unitWeight" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Gross Weight : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="grossWeight" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Stone Weight : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="stoneWeight" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Purity : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="purity" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Pure Weight (Gm/Oz) : </label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 70%;">
+                                    <input class="text-right" type="number" matInput formControlName="pureWeight" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="pureWeightCode" />
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Net Weight : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="netWeight" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Chargable Weight : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="chargableWeight" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Kundan (Pcs/Cts/Wt) : </label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 70%;">
+                                    <input class="text-right" type="number" matInput formControlName="kundanWt" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="kundantPcs" />
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">
+                                Carat : </label>
+                            <div class="col-sm-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="carat" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-8">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="boxed-label">
+                                    <h6>Product Price & Values</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="boxed-label">
+                                    <h6>Unit</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="boxed-label">
+                                    <h6>Quantity</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="boxed-label">
+                                    <h6>Rate</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="boxed-label">
+                                    <h6>Amount</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-4">
+                                <label for="inputPassword" class="col-sm-12 col-form-label ">
+                                    Making Charges : </label>
+                            </div>
+                            <div class="col-sm-2 offset-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="makingChargesQuantity" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="makingChargesRate" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="makingChargesAmount" />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-2 col-form-label ">
+                                Metal Value : </label>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="metalValueValues" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="metalValueUnit" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="metalValueQuantity" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="metalValueRate" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="metalValueAmount" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label ">
+                                Stone Value : </label>
+                            <div class="col-md-2 offset-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="stoneValueQuantity" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="stoneValueRate" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="stoneValueAmount" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-1">
+                            <div class="col-md-4">
+                                <label for="inputPassword" class="col-sm-12 col-form-label ">
+                                    Wastage : </label>
+                            </div>
+
+                            <div class="col-md-2 ">
+                                <div class="boxed-label">
+                                    <h6>%</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="wastageQuantityone" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="wastageQuantity" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2 offset-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="wasteageAmount" />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-4">
+                                <div class="checkbox ">
+                                    <mat-checkbox formControlName="stampCharges">Stamp Charges</mat-checkbox>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 offset-md-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="stampChargesRate" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="stampChargesAmount" />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-4">
+                                <label for="inputPassword" class="col-sm-12 col-form-label ">
+                                    Kundan Value : </label>
+                            </div>
+
+                            <div class="col-md-2 ">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="kundanValueunit" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="kundanValueQuantityone" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="kundanValueQuantity" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="kundanValueAmount" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-10">
+                                <div class="boxed-label text-start">
+                                    <h6>TOTAL VALUE</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="totalValue" />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-4">
+                                <label for="inputPassword" class="col-sm-12 col-form-label ">
+                                    TOTAL TAX : </label>
+                            </div>
+                            <div class="col-md-1 offset-md-4">
+                                <div class="boxed-label">
+                                    <h6>%</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="totalTaxRate" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="totalTaxAmount" />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-10">
+                                <div class="boxed-label text-start">
+                                    <h6>NET VALUE</h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="netValue" />
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="inputPassword" class="col-sm-6 col-form-label ">
+                                        Purity Difference : </label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%;">
+                                            <input class="text-right" type="number" matInput formControlName="purityDiff" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="inputPassword" class="col-sm-6 col-form-label ">
+                                        Stone Difference : </label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%;">
+                                            <input class="text-right" type="number" matInput formControlName="stoneDiff" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                            <dxi-column *ngFor="let data of columnheadItemDetails2" dataField="{{ data }}"
+                                caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                            </dxi-column>
+                        </dx-data-grid>
+                    </div>
+                </div>
 
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <div class="boxed-label">
+                            <h6>GST Rates</h6>
+                        </div>
+                        <div class="your-box-container">
 
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-10 col-form-label">GST Allocation</label>
 
+                                <label for="inputPassword" class="col-sm-2 col-form-label">
+                                    <div class="boxed-label">
+                                        <h6>Type</h6>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Total Amount : </label>
+                                <div class="col-sm-6">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="totalAmount" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-5 offset-md-7 col-form-label">
+                                    <div class="boxed-label">
+                                        <h6>Amount</h6>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">CGST : </label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="cgst" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="boxed-label">
+                                        <h6>%</h6>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="cgstAmt" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">SGST : </label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="sgst" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="boxed-label">
+                                        <h6>%</h6>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="sgstAmount" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">IGST : </label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="igst" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="boxed-label">
+                                        <h6>%</h6>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="igstAmt" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-7 col-form-label">Round >></label>
+
+                                <div class="col-sm-5">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="round" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Total >> </label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="total" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="boxed-label">
+                                        <h6>%</h6>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <mat-form-field style="width: 100%;">
+                                        <input class="text-right" type="number" matInput formControlName="totalRate" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-    </div>
+    </form>
 </div>
