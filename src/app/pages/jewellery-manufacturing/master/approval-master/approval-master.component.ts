@@ -334,13 +334,31 @@ export class ApprovalMasterComponent implements OnInit {
       console.log('mobileNo:', mobileNo);
       console.log('emailId:', emailId);
 
-      if ((orgMessageChecked == true || emailChecked == true) && (!mobileNo.trim() || !emailId.trim())) {
-        console.log("Condition met: selected fields cannot be empty");
-        this.toastr.error("selected fields cannot be empty")
+    //   if ((orgMessageChecked == true || emailChecked == true) && (!mobileNo.trim() || !emailId.trim())) {
+    //     console.log("Condition met: selected fields cannot be empty");
+    //     this.toastr.error("selected fields cannot be empty")
+    //     conditionMet = true;
+    //     return; // Prevent further execution for the current item
+    //   }
+    // });
+  
+    if (orgMessageChecked) {
+      if (!mobileNo.trim()) {
+        console.log("Condition met: mobile number must be filled for MessageChecked");
+        this.toastr.error("Mobile number must be filled for MessageChecked");
         conditionMet = true;
         return; // Prevent further execution for the current item
       }
-    });
+    } else if (emailChecked) {
+      if (!emailId.trim()) {
+        console.log("Condition met: emailId must be filled for emailChecked");
+        this.toastr.error("Email ID must be filled for emailChecked");
+        conditionMet = true;
+        return; // Prevent further execution for the current item
+      }
+    }
+  });
+
   
     if (!conditionMet) {
       // Continue with the rest of your code for submission
