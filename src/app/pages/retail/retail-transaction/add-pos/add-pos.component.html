@@ -377,17 +377,17 @@
               [matAutocomplete]="currencyList"
             />
             <mat-autocomplete
-            #currencyList="matAutocomplete"
-            autoActiveFirstOption
-            (optionSelected)="changeCurrency($event)"
-          >
-            <mat-option
-              *ngFor="let option of currencyMasterOptions | async"
-              [value]="option.CURRENCY_CODE"
+              #currencyList="matAutocomplete"
+              autoActiveFirstOption
+              (optionSelected)="changeCurrency($event)"
             >
-              {{ option.CURRENCY_CODE }}
-            </mat-option>
-          </mat-autocomplete>
+              <mat-option
+                *ngFor="let option of currencyMasterOptions | async"
+                [value]="option.CURRENCY_CODE"
+              >
+                {{ option.CURRENCY_CODE }}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="col-md-1 m-t-10 pt-2">
@@ -404,7 +404,6 @@
               "
               (change)="changeCurRate($event)"
             />
-            
           </mat-form-field>
         </div>
 
@@ -895,7 +894,7 @@
                               caption="Weight"
                               [valueFormat]="weightDecimalFormat"
                               displayFormat="Wt: {0}"
-                              >
+                            >
                               <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
@@ -919,7 +918,6 @@
                               displayFormat="AED {0}"
                               precision="2"
                               [valueFormat]="gridAmountDecimalFormat"
-                              
                             >
                             </dxi-total-item>
                             <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
@@ -1010,7 +1008,6 @@
                             [width]="100"
                             [allowEditing]="false"
                             displayFormat="Wt: {0}"
-
                             [format]="weightDecimalFormat"
                           >
                           </dxi-column>
@@ -1035,7 +1032,6 @@
                             [allowEditing]="false"
                             [format]="amountDecimalFormat"
                             [width]="150"
-
                           >
                           </dxi-column>
                           <!-- <dxi-column type="buttons" >
@@ -1061,8 +1057,7 @@
                               caption="Total Wt"
                               [valueFormat]="weightDecimalFormat"
                               displayFormat="Wt: {0}"
-
-                              >
+                            >
                               <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
@@ -1167,8 +1162,7 @@
                             caption="Weight"
                             [width]="100"
                             [allowEditing]="false"
-                           [format]="weightDecimalFormat"
-
+                            [format]="weightDecimalFormat"
                           >
                           </dxi-column>
                           <dxi-column
@@ -1180,7 +1174,7 @@
                           <dxi-column
                             dataField="net_amount"
                             alignment="right"
-                           [format]="amountDecimalFormat"
+                            [format]="amountDecimalFormat"
                             [allowEditing]="false"
                           >
                           </dxi-column>
@@ -1207,8 +1201,7 @@
                               caption="Total Wt"
                               [valueFormat]="weightDecimalFormat"
                               displayFormat="Wt: {0}"
-
-                              >
+                            >
                               <!-- [customizeText]="customizeWeight" -->
                             </dxi-total-item>
                             <dxi-total-item
@@ -1527,7 +1520,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ prnt_inv_total_gross_amt | decimalFormat:'AMOUNT' }}"
+                    value="{{
+                      prnt_inv_total_gross_amt | decimalFormat : 'AMOUNT'
+                    }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1541,7 +1536,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ this.order_items_total_tax | decimalFormat:'AMOUNT' }}"
+                    value="{{
+                      this.order_items_total_tax | decimalFormat : 'AMOUNT'
+                    }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1557,7 +1554,7 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_gross_amount | decimalFormat:'AMOUNT'
+                      order_items_total_gross_amount | decimalFormat : 'AMOUNT'
                     }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
@@ -1574,7 +1571,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ invReturnSalesTotalNetTotal | decimalFormat:'AMOUNT' }}"
+                    value="{{
+                      invReturnSalesTotalNetTotal | decimalFormat : 'AMOUNT'
+                    }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1588,7 +1587,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_total_exchange | decimalFormat:'AMOUNT' }}"
+                    value="{{
+                      order_total_exchange | decimalFormat : 'AMOUNT'
+                    }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1608,7 +1609,8 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_discount_amount | decimalFormat:'AMOUNT'
+                      order_items_total_discount_amount
+                        | decimalFormat : 'AMOUNT'
                     }}"
                     (change)="changeFinalDiscount($event)"
                     aria-describedby
@@ -1633,7 +1635,9 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_items_total_net_amount | decimalFormat:'AMOUNT' }}"
+                    value="{{
+                      order_items_total_net_amount | decimalFormat : 'AMOUNT'
+                    }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -3995,7 +3999,8 @@
 <ng-template #mymodal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-dia-metal">
-      {{ lineItemModalForSalesReturn ? "Sales Return " : "Line Item" }}
+      Item Details
+      <!-- {{ lineItemModalForSalesReturn ? "Sales Return " : "Line Item" }} -->
     </h4>
     <button
       style="border: none"
@@ -4010,8 +4015,8 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="lineItemForm">
-      <mat-tab-group>
-        <mat-tab label="ITEM DETAILS">
+      <!-- <mat-tab-group> -->
+        <!-- <mat-tab label="ITEM DETAILS"> -->
           <div class="row" style="padding-top: 15px">
             <div class="errormsg col-md-12" id="modelerrmsg">
               <!-- {{ pos_div_modelerrmsg }} -->
@@ -4270,7 +4275,6 @@
                             matInput
                             formControlName="fcn_ad_metal_rate"
                             id="fcn_ad_metal_rate"
-                            
                             readonly
                           />
                         </mat-form-field>
@@ -4293,6 +4297,62 @@
                         </mat-form-field>
                       </div>
                     </div>
+                    <div
+                      class="form-group row"
+                      *ngIf="this.divisionMS == 'S' ? false : true"
+                    >
+                      <div class="col-md-4">
+                        <mat-form-field>
+                          <mat-label>Stone Rate</mat-label>
+                          <input
+                            class="st_txt_right"
+                            type="number"
+                            [min]="0"
+                            [maxLength]="14"
+                            (keyup)="this.comFunc.enforceMinMax($event.target)"
+                            matInput
+                            formControlName="fcn_ad_stone_rate"
+                            id="fcn_ad_stone_rate"
+                            (change)="changeStoneRate($event)"
+                            value="{{ li_stone_rate_val }}"
+                            [readonly]="viewOnly"
+                            AmountDecimalInput
+                          />
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-4">
+                        <mat-form-field>
+                          <mat-label>Stone Amount</mat-label>
+                          <input
+                            class="st_txt_right"
+                            type="number"
+                            [min]="0"
+                            [maxLength]="14"
+                            (keyup)="this.comFunc.enforceMinMax($event.target)"
+                            id="fcn_ad_stone_amount"
+                            matInput
+                            formControlName="fcn_ad_stone_amount"
+                            value="{{ li_stone_amount_val }}"
+                            (change)="changeStoneAmt($event)"
+                            [readonly]="viewOnly"
+                            AmountDecimalInput
+                          />
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-4">
+                        <mat-form-field>
+                          <mat-label>Rate Type</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="fcn_ad_rate_type"
+                            id="fcn_ad_rate_type"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
                     <div class="form-group row">
                       <div class="col-md-6">
                         <mat-form-field>
@@ -4309,15 +4369,13 @@
                             id="fcn_li_rate"
                             formControlName="fcn_li_rate"
                             (change)="changeRate($event)"
-                            readonly="{{
-                              viewOnly 
-                            }}"
+                            readonly="{{ viewOnly }}"
                             (focus)="
-                            setValToLocalStorage($event, 'fcn_li_rate')
+                              setValToLocalStorage($event, 'fcn_li_rate')
                             "
                             AmountDecimalInput
-                            />
-                            <!-- readonly="{{
+                          />
+                          <!-- readonly="{{
                               viewOnly || divisionMS == 'S' ? true : false
                             }}" -->
                           <mat-error
@@ -4346,12 +4404,10 @@
                         <mat-form-field>
                           <mat-label>
                             {{
-                              divisionMS == "M"
-                                ? "Making Amount"
-                                : "Amount"
-                              }}</mat-label
-                              >
-                              <!-- : "Total Amount" -->
+                              divisionMS == "M" ? "Making Amount" : "Amount"
+                            }}</mat-label
+                          >
+                          <!-- : "Total Amount" -->
                           <input
                             class="st_txt_right"
                             type="number"
@@ -4363,12 +4419,10 @@
                             formControlName="fcn_li_total_amount"
                             (change)="changeTotalAmt($event)"
                             id="fcn_li_total_amount"
-                            readonly="{{
-                              viewOnly 
-                            }}"
+                            readonly="{{ viewOnly }}"
                             AmountDecimalInput
-                            />
-                            <!-- readonly="{{
+                          />
+                          <!-- readonly="{{
                               viewOnly || divisionMS == 'S' ? true : false
                             }}" -->
                           <mat-error
@@ -4378,12 +4432,8 @@
                               )
                             "
                           >
-                            {{
-                              divisionMS == "M"
-                                ? "Making Amount"
-                                : "Amount"
-                              }}
-                              <!-- : "Total Amount" -->
+                            {{ divisionMS == "M" ? "Making Amount" : "Amount" }}
+                            <!-- : "Total Amount" -->
                             is
                             <strong>required</strong>
                           </mat-error>
@@ -4423,6 +4473,7 @@
                             (change)="changeDisPer($event)"
                             id="fcn_li_discount_percentage"
                             [readonly]="viewOnly"
+                            AmountDecimalInput
                           />
                         </mat-form-field>
                       </div>
@@ -4440,6 +4491,7 @@
                             id="fcn_li_discount_amount"
                             (change)="changeDisAmount($event)"
                             [readonly]="viewOnly"
+                            AmountDecimalInput
                           />
                         </mat-form-field>
                       </div>
@@ -4466,9 +4518,25 @@
                         />
                       </div>
                     </div>
+                    <div
+                      class="form-group  d-flex align-items-center justify-content-center" 
+                      *ngIf="this.divisionMS == 'S' ? false : true"
+                    >
+                    
+                      <div class="col-md-6 text-center">
+                        <label class="font-weight-bold col-form-label"
+                          >Tag Details</label
+                        >
+                        <textarea
+                          class="form-control"
+                          style="height: 140px"
+                          formControllName="fcn_tab_details"
+                          [readonly]="viewOnly"
+                        ></textarea>
+                      </div>
+                    </div>
 
                     <!-- <div class="form-group row" style="padding-top: 162px"> -->
-                  </div>
                 </div>
                 <div class="row mt-1">
                   <div class="col-md-12 form-group row">
@@ -4504,7 +4572,7 @@
                             )
                           "
                         >
-                        Total Amount
+                          Total Amount
                           <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
                           }} -->
@@ -4621,7 +4689,7 @@
                             )
                           "
                         >
-                           Net Amount 
+                          Net Amount
                           <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
                           is <strong>required</strong>
                         </mat-error>
@@ -4633,7 +4701,7 @@
                           "
                         >
                           <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                         Net Amount
+                          Net Amount
                           <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
                           should Not Be Zero
                         </mat-error>
@@ -4643,17 +4711,17 @@
                   </div>
                 </div>
               </div>
+              </div>
             </span>
             <!-- </form> -->
           </div>
-        </mat-tab>
+        <!-- </mat-tab> -->
         <!-- <mat-tab label="ADDITIONAL DETAILS"  hidden="{{this.divisionMS == 'S'? true: false}}" > -->
-        <mat-tab
+        <!-- <mat-tab hidden
           label="ADDITIONAL DETAILS"
           *ngIf="this.divisionMS == 'S' ? false : true"
         >
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-            <!-- <form [formGroup]="additionalDetailsForm"> -->
             <div class="form-group row">
               <div class="col-md-4">
                 <mat-form-field>
@@ -4670,6 +4738,7 @@
                     (change)="changeStoneRate($event)"
                     value="{{ li_stone_rate_val }}"
                     [readonly]="viewOnly"
+                    AmountDecimalInput
                   />
                 </mat-form-field>
               </div>
@@ -4688,6 +4757,7 @@
                     value="{{ li_stone_amount_val }}"
                     (change)="changeStoneAmt($event)"
                     [readonly]="viewOnly"
+                    AmountDecimalInput
                   />
                 </mat-form-field>
               </div>
@@ -4767,18 +4837,7 @@
                   />
                 </mat-form-field>
               </div>
-              <div class="col-md-4">
-                <mat-form-field>
-                  <mat-label>Rate Type</mat-label>
-                  <input
-                    type="text"
-                    matInput
-                    formControlName="fcn_ad_rate_type"
-                    id="fcn_ad_rate_type"
-                    [readonly]="viewOnly"
-                  />
-                </mat-form-field>
-              </div>
+
               <div class="col-md-4" hidden>
                 <mat-form-field>
                   <mat-label>Rate</mat-label>
@@ -4809,24 +4868,12 @@
                   />
                 </mat-form-field>
               </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label class="font-weight-bold col-form-label"
-                    >Tag Details</label
-                  >
-                  <textarea
-                    class="form-control"
-                    style="height: 170px"
-                    formControllName="fcn_tab_details"
-                    [readonly]="viewOnly"
-                  ></textarea>
-                </div>
-              </div>
             </div>
           </div>
         </mat-tab>
-      </mat-tab-group>
+    
+     -->
+      <!-- </mat-tab-group> -->
     </form>
 
     <div style="padding-bottom: 0px">
@@ -4836,6 +4883,7 @@
           color="accent"
           *ngIf="!lineItemModalForSalesReturn"
           (click)="addItemtoList('newitem_btn')"
+          [disabled]="disableSaveBtn"
         >
           Next Item</button
         >&nbsp;
@@ -4844,6 +4892,7 @@
           color="primary"
           *ngIf="!lineItemModalForSalesReturn"
           (click)="addItemtoList('finish_btn')"
+          [disabled]="disableSaveBtn"
         >
           {{ updateBtn ? "Update" : "Finish" }}</button
         >&nbsp;
@@ -4854,6 +4903,8 @@
           class="btn btn btn-primary"
           *ngIf="lineItemModalForSalesReturn"
           (click)="updateRetailSalesReturnVal()"
+          [disabled]="disableSaveBtn"
+
         >
           {{ updateBtn ? "Update" : "Finish" }}</button
         >&nbsp;
