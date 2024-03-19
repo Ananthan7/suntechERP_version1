@@ -63,9 +63,158 @@ export class RepairDetailsComponent implements OnInit {
     Cut :[''],
     Approx :[''],
     remark:[''],
+    Description1:[''],
+    text:[''],
    });
 
-  
+
+   DescCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 10,
+    SEARCH_FIELD: 'DESCRIPTION',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESCRIPTION<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  DescCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.Description.setValue(e.CODE);
+    this.repairjewelleryreceiptdetailsFrom.controls.Description1.setValue(e.DESCRIPTION);
+  }
+
+
+  typeOfCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'type of',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeOfCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.type_of.setValue(e.CODE);
+  }
+
+
+  typeOfItemCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: "type of item",
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeOfItemCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.type_of_item.setValue(e.CODE);
+  }
+
+  statusCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Status ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  statusCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.status.setValue(e.CODE);
+  }
+
+  materialCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  materialCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.material.setValue(e.CODE);
+  }
+
+  EstRepairChargeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Est Repair Charge CodeData',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  EstRepairChargeCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.Est_repair_charge.setValue(e.CODE);
+  }
+
+  stoneTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stone Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stoneTypeCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.stone_type.setValue(e.CODE);
+  }
+
+  CutCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Cut',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  CutCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.Cut.setValue(e.CODE);
+  }
+
+  ApproxCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Approx',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  ApproxCodeSelected(e: any) {
+    console.log(e);
+    this.repairjewelleryreceiptdetailsFrom.controls.Approx.setValue(e.CODE);
+  }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing

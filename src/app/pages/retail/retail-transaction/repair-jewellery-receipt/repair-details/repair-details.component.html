@@ -28,10 +28,11 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 90%;">
-                                        <input class="text-right" type="text" matInput 
+                                        <input class="text-right" type="text" formControlName="Description1" matInput 
                                               />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="DescCodeData"
+                                (newRowClick)="DescCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +59,8 @@
                                         <input class="text-right" type="text" matInput formControlName="type_of"
                                               />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="typeOfCodeData"
+                                    (newRowClick)="typeOfCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
@@ -88,7 +90,8 @@
                                         <input class="text-right" type="text" matInput formControlName="type_of_item"
                                               />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="typeOfItemCodeData"
+                                    (newRowClick)="typeOfItemCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
@@ -125,14 +128,15 @@
                                         <input class="text-right" type="number" matInput formControlName="status"
                                               />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="statusCodeData"
+                                    (newRowClick)="statusCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput    />
+                                        <input type="text" matInput  formControlName="text"  />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -151,7 +155,8 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="material"   />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="materialCodeData"
+                                    (newRowClick)="materialCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
@@ -164,7 +169,8 @@
                                         <input class="text-right" type="text" matInput formControlName="Est_repair_charge"
                                               />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="EstRepairChargeCodeData"
+                                    (newRowClick)="EstRepairChargeCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
@@ -269,7 +275,8 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="stone_type"   />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="stoneTypeCodeData"
+                                    (newRowClick)="stoneTypeCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
@@ -286,7 +293,8 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="Cut"   />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="CutCodeData"
+                                    (newRowClick)="CutCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 
@@ -295,7 +303,8 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="Approx"   />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="ApproxCodeData"
+                                    (newRowClick)="ApproxCodeSelected($event)"></master-search>
                                 </div>
                             </div>
 

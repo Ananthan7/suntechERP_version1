@@ -101,7 +101,119 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
 
   });
 
+  salesManCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  salesManCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.enteredBy.setValue(e.UsersName);
+  }
   
+
+  branchToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'BRANCH CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  branchToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.enteredBy.setValue(e.BRANCH_CODE);
+  }
+
+  locationToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    SEARCH_FIELD: 'Location',
+    SEARCH_HEADING: 'location To',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Location<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.locationTo.setValue(e.Location);
+  }
+
+  returnlocationToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    SEARCH_FIELD: 'Location',
+    SEARCH_HEADING: 'location To',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Location<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  returnlocationToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.returnlocationTo.setValue(e.Location);
+  }
+  
+  shipToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Ship To',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  shipToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.shipTo.setValue(e.CODE);
+  }
+
+  stateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 48,
+    SEARCH_FIELD: 'STATE_CODE',
+    SEARCH_HEADING: 'STATE CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STATE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stateCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.stateCode.setValue(e.STATE_CODE);
+  }
+
+  scrapTransferCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'LOCATION CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  scrapTransferCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferinAutoRepairForm.controls.scrapTransfer.setValue(e.LOCATION_CODE);
+  }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
