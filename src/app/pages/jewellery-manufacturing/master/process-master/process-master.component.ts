@@ -32,7 +32,7 @@ export class ProcessMasterComponent implements OnInit {
   islossReadOnly = true;
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
- // processMasterForm !: FormGroup;
+  // processMasterForm !: FormGroup;
 
   lossData: any;
 
@@ -72,9 +72,9 @@ export class ProcessMasterComponent implements OnInit {
 
     }
   }
-  
-  
-   processMasterForm: FormGroup = this.formBuilder.group({
+
+
+  processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
     processCode: ['', [Validators.required]],
     processDesc: ['', [Validators.required]],
@@ -278,7 +278,7 @@ export class ProcessMasterComponent implements OnInit {
     // this.setInitialValues()
   }
 
- 
+
   validateLossRange() {
     console.log(this.processMasterForm.value.loss_standard)
     console.log(this.processMasterForm.value.loss_min)
@@ -315,39 +315,42 @@ export class ProcessMasterComponent implements OnInit {
 
   }
 
-  
+
   private setFormValues() {
     console.log(this.content);
     if (!this.content) return
 
-    
+
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
     this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
 
+    this.processMasterForm.controls.RepairProcess.setValue(this.onchangeCheckBoxNum(this.content.REPAIR_PROCESS));
+    this.processMasterForm.controls.FinalProcess.setValue(this.onchangeCheckBoxNum(this.content.FINAL_PROCESS));
+    this.processMasterForm.controls.Setting.setValue(this.onchangeCheckBoxNum(this.content.SETTING_PROCESS));
+    this.processMasterForm.controls.LockWeight.setValue(this.onchangeCheckBoxNum(this.content.LOCK_WEIGHT));
+    this.processMasterForm.controls.LabProcess.setValue(this.onchangeCheckBoxNum(this.content.LAB_PROCESS));
+    this.processMasterForm.controls.WaxProcess.setValue(this.onchangeCheckBoxNum(this.content.WAX_PROCESS));
+    this.processMasterForm.controls.recovery.setValue(this.onchangeCheckBoxNum(this.content.RECOV_VAR2));
+    this.processMasterForm.controls.DeductPureWeight.setValue(this.onchangeCheckBoxNum(this.content.DEDUCT_PURE_WT));
 
-    this.processMasterForm.controls.RepairProcess.setValue(this.content.REPAIR_PROCESS);
-    this.processMasterForm.controls.FinalProcess.setValue(this.content.FINAL_PROCESS);
-    this.processMasterForm.controls.Setting.setValue(this.content.SETTING_PROCESS);
-    this.processMasterForm.controls.LockWeight.setValue(this.content.LOCK_WEIGHT);
-    this.processMasterForm.controls.LabProcess.setValue(this.content.LAB_PROCESS);
-    this.processMasterForm.controls.recovery.setValue(this.content.RECOV_VAR2);
-    this.processMasterForm.controls.DeductPureWeight.setValue(this.content.DEDUCT_PURE_WT);
-    this.processMasterForm.controls.loss.setValue(this.content.ALLOW_LOSS);
-    this.processMasterForm.controls.loss_on_gross.setValue(this.content.LOSS_ON_GROSS);
-    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.content.TIMEON_PROCESS);
-    this.processMasterForm.controls.StoneIncluded.setValue(this.content.STONE_INCLUDED);
-    this.processMasterForm.controls.RecoveryProcess.setValue(this.content.RECOVERY_PROCESS);
-    this.processMasterForm.controls.Metal.setValue(this.content.ALLOW_METAL);
-    this.processMasterForm.controls.Stone.setValue(this.content.ALLOW_STONE);
-    this.processMasterForm.controls.Consumable.setValue(this.content.ALLOW_CONSUMABLE);
-    this.processMasterForm.controls.ApprovalRequired.setValue(this.content.APPROVAL_REQUIRED);
-    this.processMasterForm.controls.NonQuantity.setValue(this.content.NON_QUANTITY);
-    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.content.DF_REFINERY);
-    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.content.AUTO_LOSS);
-    this.processMasterForm.controls.HaveTreeNo.setValue(this.content.TREE_NO);
-    this.processMasterForm.controls.allowGain.setValue(this.content.ALLOW_GAIN);
 
-    this.processMasterForm.controls.WaxProcess.setValue(this.content.WAX_PROCESS);
+    this.processMasterForm.controls.loss.setValue(this.onchangeCheckBox(this.content.ALLOW_LOSS));
+    this.processMasterForm.controls.loss_on_gross.setValue(this.onchangeCheckBox(this.content.LOSS_ON_GROSS));
+    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.onchangeCheckBox(this.content.TIMEON_PROCESS));
+    this.processMasterForm.controls.RecoveryProcess.setValue(this.onchangeCheckBox(this.content.RECOVERY_PROCESS));
+    this.processMasterForm.controls.Metal.setValue(this.onchangeCheckBox(this.content.ALLOW_METAL));
+    this.processMasterForm.controls.Stone.setValue(this.onchangeCheckBox(this.content.ALLOW_STONE));
+    this.processMasterForm.controls.Consumable.setValue(this.onchangeCheckBox(this.content.ALLOW_CONSUMABLE));
+    this.processMasterForm.controls.ApprovalRequired.setValue(this.onchangeCheckBox(this.content.APPROVAL_REQUIRED));
+    this.processMasterForm.controls.NonQuantity.setValue(this.onchangeCheckBox(this.content.NON_QUANTITY));
+    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.onchangeCheckBox(this.content.DF_REFINERY));
+    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.onchangeCheckBox(this.content.AUTO_LOSS));
+    this.processMasterForm.controls.HaveTreeNo.setValue(this.onchangeCheckBox(this.content.TREE_NO));
+    this.processMasterForm.controls.allowGain.setValue(this.onchangeCheckBox(this.content.ALLOW_GAIN));
+    this.processMasterForm.controls.StoneIncluded.setValue(this.onchangeCheckBox(this.content.STONE_INCLUDED));
+
+
+
     this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
     this.processMasterForm.controls.ApplySetting.setValue(this.content.APPLY_SETTING);
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
@@ -395,7 +398,7 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-  onchangeCheckBoxNum(e:any){
+  onchangeCheckBoxNum(e: any) {
     console.log(e);
 
     if (e == true) {
@@ -446,7 +449,7 @@ export class ProcessMasterComponent implements OnInit {
           "UNIT_RATE": 0,
           "LAB_ACCODE": "",
           "LAST_NO": "",
-          "REPAIR_PROCESS":  this.onchangeCheckBoxNum(this.processMasterForm.value.RepairProcess),
+          "REPAIR_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.RepairProcess),
           "FINAL_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.FinalProcess),
           "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
           "TRAY_WT": this.processMasterForm.value.trayWeight || 0,
@@ -455,7 +458,7 @@ export class ProcessMasterComponent implements OnInit {
           "LOCK_WEIGHT": this.onchangeCheckBoxNum(this.processMasterForm.value.LockWeight),
           "AUTOTRANSFER": 0,
           "MASTER_WEIGHT": 0,
-          "MERGE_BLOCK":this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices) ,
+          "MERGE_BLOCK": this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices),
           "LAB_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.LabProcess),
           "WAX_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.WaxProcess),
           "STD_LOSS_QTY": 0,
@@ -472,26 +475,26 @@ export class ProcessMasterComponent implements OnInit {
           "STD_GAIN": 0,
           "MIN_GAIN": 0,
           "MAX_GAIN": 0,
-          "ALLOW_LOSS":  this.onchangeCheckBox(this.processMasterForm.value.loss),
+          "ALLOW_LOSS": this.onchangeCheckBox(this.processMasterForm.value.loss),
           "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
           "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
           "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
-          "LOSS_ON_GROSS":  this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
+          "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
           "JOB_NUMBER": "",
           "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
           "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
-          "TIMEON_PROCESS":  this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
+          "TIMEON_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
           "STONE_INCLUDED": this.onchangeCheckBox(this.processMasterForm.value.StoneIncluded),
-          "RECOVERY_PROCESS":  this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
+          "RECOVERY_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
           "ALLOW_METAL": this.onchangeCheckBox(this.processMasterForm.value.Metal),
-          "ALLOW_STONE":  this.onchangeCheckBox( this.processMasterForm.value.Stone),
-          "ALLOW_CONSUMABLE":  this.onchangeCheckBox(this.processMasterForm.value.Consumable),
-          "APPROVAL_REQUIRED":  this.onchangeCheckBox(this.processMasterForm.value.ApprovalRequired),
-          "NON_QUANTITY":  this.onchangeCheckBox(this.processMasterForm.value.NonQuantity),
-          "DF_REFINERY":  this.onchangeCheckBox(this.processMasterForm.value.RefineryAutoProcess),
-          "AUTO_LOSS":  this.onchangeCheckBox(this.processMasterForm.value.ApplyAutoLossToRefinery),
+          "ALLOW_STONE": this.onchangeCheckBox(this.processMasterForm.value.Stone),
+          "ALLOW_CONSUMABLE": this.onchangeCheckBox(this.processMasterForm.value.Consumable),
+          "APPROVAL_REQUIRED": this.onchangeCheckBox(this.processMasterForm.value.ApprovalRequired),
+          "NON_QUANTITY": this.onchangeCheckBox(this.processMasterForm.value.NonQuantity),
+          "DF_REFINERY": this.onchangeCheckBox(this.processMasterForm.value.RefineryAutoProcess),
+          "AUTO_LOSS": this.onchangeCheckBox(this.processMasterForm.value.ApplyAutoLossToRefinery),
           "ISACCUPDT": true,
-          "TREE_NO":   this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
+          "TREE_NO": this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
         }
 
         let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -608,7 +611,7 @@ export class ProcessMasterComponent implements OnInit {
       "UNIT_RATE": 0,
       "LAB_ACCODE": "",
       "LAST_NO": "",
-      "REPAIR_PROCESS":  this.onchangeCheckBoxNum(this.processMasterForm.value.RepairProcess),
+      "REPAIR_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.RepairProcess),
       "FINAL_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.FinalProcess),
       "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
       "TRAY_WT": this.processMasterForm.value.trayWeight || 0,
@@ -617,7 +620,7 @@ export class ProcessMasterComponent implements OnInit {
       "LOCK_WEIGHT": this.onchangeCheckBoxNum(this.processMasterForm.value.LockWeight),
       "AUTOTRANSFER": 0,
       "MASTER_WEIGHT": 0,
-      "MERGE_BLOCK":this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices) ,
+      "MERGE_BLOCK": this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices),
       "LAB_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.LabProcess),
       "WAX_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.WaxProcess),
       "STD_LOSS_QTY": 0,
@@ -634,28 +637,27 @@ export class ProcessMasterComponent implements OnInit {
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
-      "ALLOW_LOSS":  this.onchangeCheckBox(this.processMasterForm.value.loss),
+      "ALLOW_LOSS": this.onchangeCheckBox(this.processMasterForm.value.loss),
       "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
       "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
       "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
-      "LOSS_ON_GROSS":  this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
+      "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
       "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
-      "TIMEON_PROCESS":  this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
+      "TIMEON_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
       "STONE_INCLUDED": this.onchangeCheckBox(this.processMasterForm.value.StoneIncluded),
-      "RECOVERY_PROCESS":  this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
+      "RECOVERY_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
       "ALLOW_METAL": this.onchangeCheckBox(this.processMasterForm.value.Metal),
-      "ALLOW_STONE":  this.onchangeCheckBox( this.processMasterForm.value.Stone),
-      "ALLOW_CONSUMABLE":  this.onchangeCheckBox(this.processMasterForm.value.Consumable),
-      "APPROVAL_REQUIRED":  this.onchangeCheckBox(this.processMasterForm.value.ApprovalRequired),
-      "NON_QUANTITY":  this.onchangeCheckBox(this.processMasterForm.value.NonQuantity),
-      "DF_REFINERY":  this.onchangeCheckBox(this.processMasterForm.value.RefineryAutoProcess),
-      "AUTO_LOSS":  this.onchangeCheckBox(this.processMasterForm.value.ApplyAutoLossToRefinery),
+      "ALLOW_STONE": this.onchangeCheckBox(this.processMasterForm.value.Stone),
+      "ALLOW_CONSUMABLE": this.onchangeCheckBox(this.processMasterForm.value.Consumable),
+      "APPROVAL_REQUIRED": this.onchangeCheckBox(this.processMasterForm.value.ApprovalRequired),
+      "NON_QUANTITY": this.onchangeCheckBox(this.processMasterForm.value.NonQuantity),
+      "DF_REFINERY": this.onchangeCheckBox(this.processMasterForm.value.RefineryAutoProcess),
+      "AUTO_LOSS": this.onchangeCheckBox(this.processMasterForm.value.ApplyAutoLossToRefinery),
       "ISACCUPDT": true,
-      "TREE_NO":   this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
+      "TREE_NO": this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
     }
-
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -739,41 +741,48 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   onlossChange(event: any) {
-    if(this.processMasterForm.value.loss == true){
+    if (this.processMasterForm.value.loss == true) {
       this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
-     }
-     else{
+    }
+    else {
       this.processMasterForm.get('accountStart')?.clearValidators();
-     }
+    }
 
     this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
     this.searchModeLoss = !this.searchModeLoss;
-    this.processMasterForm.controls.accountStart.setValue('');
-    this.processMasterForm.controls.loss_standard.setValue('');
-    this.processMasterForm.controls.loss_min.setValue('');
-    this.processMasterForm.controls.loss_max.setValue('');
-    
-    // Update the validation status after setting or clearing validators
-   //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
-  
- }
 
-  
+
+      // this.processMasterForm.controls.accountStart.setValue('');
+      // this.processMasterForm.controls.loss_standard.setValue('');
+      // this.processMasterForm.controls.loss_min.setValue('');
+      // this.processMasterForm.controls.loss_max.setValue('');
+    
+
+
+
+    // Update the validation status after setting or clearing validators
+    //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
+
+  }
+
+
 
   onRecovery(event: any) {
-    if(this.processMasterForm.value.recovery == true){
+    if (this.processMasterForm.value.recovery == true) {
       this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
-     }
-     else{
+    }
+    else {
       this.processMasterForm.get('accountMiddle')?.clearValidators();
-     }
+    }
 
     this.isRecovReadOnly = !this.isRecovReadOnly;
     this.searchModeRecov = !this.searchModeRecov;
-    this.processMasterForm.controls.accountMiddle.setValue('');
-    this.processMasterForm.controls.standard_end.setValue('');
-    this.processMasterForm.controls.min_end.setValue('');
+
+ 
+      // this.processMasterForm.controls.accountMiddle.setValue('');
+      // this.processMasterForm.controls.standard_end.setValue('');
+      // this.processMasterForm.controls.min_end.setValue('');
 
     console.log(event);
 
@@ -781,33 +790,32 @@ export class ProcessMasterComponent implements OnInit {
 
   onAllowGain(event: any) {
 
-    if(this.processMasterForm.value.RecoveryProcess == true){
+    if (this.processMasterForm.value.RecoveryProcess == true) {
       this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
-     }
-     else{
+    }
+    else {
       this.processMasterForm.get('accountEnd')?.clearValidators();
-     }
+    }
 
     this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
     this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
-    this.processMasterForm.controls.accountEnd.setValue('');
 
-
-
+      //this.processMasterForm.controls.accountEnd.setValue('');
+    
   }
 
-  onRecovStockCode(event:any){
-    if(this.processMasterForm.value.allowGain == true){
+  onRecovStockCode(event: any) {
+    if (this.processMasterForm.value.allowGain == true) {
       this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
-     }
-     else{
+    }
+    else {
       this.processMasterForm.get('recStockCode')?.clearValidators();
-     }
-     this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
-     this.searchModeAllow = !this.searchModeAllow;
-     console.log(event);
-     this.processMasterForm.controls.recStockCode.setValue('');
+    }
+    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
+    this.searchModeAllow = !this.searchModeAllow;
+    console.log(event);
+    this.processMasterForm.controls.recStockCode.setValue('');
   }
 
 

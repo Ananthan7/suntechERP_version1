@@ -124,7 +124,7 @@ export class MeltingTypeComponent implements OnInit {
       let data = {
         "UNIQUEID": 0,
         "SRNO": this.slNo,
-        "MELTYPE_CODE": 'Y' || "",
+        "MELTYPE_CODE": "Y",
         "MELTYPE_DESCRIPTION": "",
         "KARAT_CODE": this.meltingTypeForm.value.karat,
         "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
@@ -356,7 +356,7 @@ export class MeltingTypeComponent implements OnInit {
       .subscribe((result: any) => {
         console.log(result);
 
-        let data = result.response;
+       let data = result.response;
 
         this.meltingTypeForm.controls.mid.setValue(data.MID);
         this.meltingTypeForm.controls.code.setValue(data.MELTYPE_CODE);
@@ -488,22 +488,6 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-
-
-  // deleteTableData() {
-
-
-  //   console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
-  //   //  this.tableData.push(data);
-  //   console.log(this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-  //     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  //   } else {
-  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  //   }
-
-  // }
-
   deleteTableData() {
     console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
     console.log(this.selectedIndexes);
@@ -529,9 +513,6 @@ export class MeltingTypeComponent implements OnInit {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-
-
-
 
 
   defaultAlloy: MasterSearchModel = {
@@ -561,10 +542,10 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-  division(data: any, value: any) {
+  // division(data: any, value: any) {
 
-    this.tableData[value.data.SRNO - 1].MELTYPE_CODE = data.target.value;
-  }
+  //   this.tableData[value.data.SRNO - 1].MELTYPE_CODE = data.target.value;
+  // }
 
   alloyPer(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ALLOY_PER = data.target.value;
