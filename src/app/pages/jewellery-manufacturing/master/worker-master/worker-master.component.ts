@@ -113,7 +113,7 @@ export class WorkerMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('please enter stockcode')
+      this.commonService.toastErrorByMsgId('please enter Worker code')
       return true
     }
     return false
