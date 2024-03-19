@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } from '@angular/forms';
@@ -25,6 +25,8 @@ export class AlloyMasterComponent implements OnInit {
   url: any;
   numericValue!: number;
   branchCode:any = localStorage.getItem('userbranch');
+
+  currencyDt:any;
 
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -83,8 +85,10 @@ export class AlloyMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) {
-    this.branchCode = this.commonService.branchCode
+    this.branchCode = this.commonService.branchCode;
+    this.currencyDt = this.commonService.compCurrency;
   }
 
   close(data?: any) {
@@ -93,6 +97,10 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.renderer.selectRootElement('#code')?.focus();
+    this.setCompanyCurrency()
+
     console.log(this.content.FLAG);
     
     if (this.content.FLAG == 'EDIT') {
@@ -103,7 +111,7 @@ export class AlloyMasterComponent implements OnInit {
       this.setInitialValues()
     }
 
-    this.setCompanyCurrency()
+    
   }
   setInitialValues() {
     console.log(this.content, 'content');
@@ -122,7 +130,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    let CURRENCY_CODE = this.commonService.compCurrency;
     this.alloyMastereForm.controls.currency.setValue(CURRENCY_CODE);
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
     this.alloyMastereForm.controls.currencyRate.setValue(
@@ -142,18 +150,6 @@ export class AlloyMasterComponent implements OnInit {
     }
   }
 
-  costCenterData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "COST_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
   codeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -161,11 +157,102 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'prefix_code',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "prefix_code<>''",
+    WHERECONDITION: "DIVISION='S'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
 
   }
+
+  costCenterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPE = 'CONSUMABLE ITEMS' ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,    
+  }
+
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 31,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,    
+  }
+
+  
+  BrandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'BRAND MASTER' AND DIV_Y=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  colorData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  
+  vendorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Vendor',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    
+  }
+
+ 
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -179,82 +266,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 62,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'TYPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  categoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  subcategoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 31,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Subcategory Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types= 'SUB CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  BrandCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 32,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types='BRAND MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  colorData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  vendorCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Vendor',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
 
   priceSchemeData: MasterSearchModel = {
     PAGENO: 1,
@@ -306,6 +317,8 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
+
   priceCodeSelected(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price.setValue(e.PREFIX_CODE);
@@ -963,20 +976,8 @@ export class AlloyMasterComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
-    if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
+ 
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -987,7 +988,7 @@ export class AlloyMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'MeltingType/DeleteMeltingType/' + this.content.MID;
+        let API = 'DiamondStockMaster/DeleteDiamondStockMaster/' + this.alloyMastereForm.value.code;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

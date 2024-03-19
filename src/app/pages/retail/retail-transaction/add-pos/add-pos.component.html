@@ -1527,7 +1527,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ prnt_inv_total_gross_amt | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ prnt_inv_total_gross_amt | decimalFormat:'AMOUNT' }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1541,7 +1541,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ this.order_items_total_tax | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ this.order_items_total_tax | decimalFormat:'AMOUNT' }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1557,7 +1557,7 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_gross_amount | number : '1.'+this.comFunc.amtDecimals
+                      order_items_total_gross_amount | decimalFormat:'AMOUNT'
                     }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
@@ -1574,7 +1574,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ invReturnSalesTotalNetTotal | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ invReturnSalesTotalNetTotal | decimalFormat:'AMOUNT' }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1588,7 +1588,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_total_exchange | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ order_total_exchange | decimalFormat:'AMOUNT' }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -1608,7 +1608,7 @@
                     class="form-control textboxcorner"
                     id
                     value="{{
-                      order_items_total_discount_amount | number : '1.'+this.comFunc.amtDecimals
+                      order_items_total_discount_amount | decimalFormat:'AMOUNT'
                     }}"
                     (change)="changeFinalDiscount($event)"
                     aria-describedby
@@ -1633,7 +1633,7 @@
                     type="text"
                     class="form-control textboxcorner"
                     id
-                    value="{{ order_items_total_net_amount | number : '1.'+this.comFunc.amtDecimals }}"
+                    value="{{ order_items_total_net_amount | decimalFormat:'AMOUNT' }}"
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     readonly
@@ -4310,13 +4310,16 @@
                             formControlName="fcn_li_rate"
                             (change)="changeRate($event)"
                             readonly="{{
-                              viewOnly || divisionMS == 'S' ? true : false
+                              viewOnly 
                             }}"
                             (focus)="
-                              setValToLocalStorage($event, 'fcn_li_rate')
+                            setValToLocalStorage($event, 'fcn_li_rate')
                             "
                             AmountDecimalInput
-                          />
+                            />
+                            <!-- readonly="{{
+                              viewOnly || divisionMS == 'S' ? true : false
+                            }}" -->
                           <mat-error
                             *ngIf="
                               lineItemForm.controls.fcn_li_rate.hasError(
@@ -4345,9 +4348,10 @@
                             {{
                               divisionMS == "M"
                                 ? "Making Amount"
-                                : "Total Amount"
-                            }}</mat-label
-                          >
+                                : "Amount"
+                              }}</mat-label
+                              >
+                              <!-- : "Total Amount" -->
                           <input
                             class="st_txt_right"
                             type="number"
@@ -4360,10 +4364,13 @@
                             (change)="changeTotalAmt($event)"
                             id="fcn_li_total_amount"
                             readonly="{{
-                              viewOnly || divisionMS == 'S' ? true : false
+                              viewOnly 
                             }}"
                             AmountDecimalInput
-                          />
+                            />
+                            <!-- readonly="{{
+                              viewOnly || divisionMS == 'S' ? true : false
+                            }}" -->
                           <mat-error
                             *ngIf="
                               lineItemForm.controls.fcn_li_total_amount.hasError(
@@ -4374,8 +4381,9 @@
                             {{
                               divisionMS == "M"
                                 ? "Making Amount"
-                                : "Total Amount"
-                            }}
+                                : "Amount"
+                              }}
+                              <!-- : "Total Amount" -->
                             is
                             <strong>required</strong>
                           </mat-error>
@@ -4467,10 +4475,10 @@
                     <div class="col-md-3">
                       <mat-form-field>
                         <mat-label>
-                          <!-- Total Amount -->
-                          {{
+                          Total Amount
+                          <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
-                          }}
+                          }} -->
                         </mat-label>
                         <!-- <mat-label>Gross Amount</mat-label> -->
                         <input
@@ -4483,7 +4491,7 @@
                           matInput
                           formControlName="fcn_li_gross_amount"
                           id="fcn_li_gross_amount"
-                          [readonly]="viewOnly"
+                          [readonly]="true"
                           (change)="changeGrossAmt($event)"
                           (focus)="
                             setValToLocalStorage($event, 'fcn_li_gross_amount')
@@ -4496,9 +4504,10 @@
                             )
                           "
                         >
-                          {{
+                        Total Amount
+                          <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
-                          }}
+                          }} -->
                           is <strong>required</strong>
                         </mat-error>
                         <mat-error
@@ -4509,9 +4518,10 @@
                           "
                         >
                           <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                          {{
+                          Total Amount
+                          <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
-                          }}
+                          }} -->
                           should Not Be Zero
                         </mat-error>
                       </mat-form-field>
@@ -4583,10 +4593,12 @@
                     </div>
                     <div class="col-md-3">
                       <mat-form-field>
-                        <mat-label>{{
+                        <!-- <mat-label>
+                          {{
                           divisionMS == "M" ? "Net Amount" : "Total+Tax"
-                        }}</mat-label>
-                        <!-- <mat-label>Net Amount</mat-label> -->
+                        }}
+                      </mat-label> -->
+                        <mat-label>Net Amount</mat-label>
                         <input
                           class="st_txt_right"
                           type="number"
@@ -4609,7 +4621,8 @@
                             )
                           "
                         >
-                          {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }}
+                           Net Amount 
+                          <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
                           is <strong>required</strong>
                         </mat-error>
                         <mat-error
@@ -4620,7 +4633,8 @@
                           "
                         >
                           <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                          {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }}
+                         Net Amount
+                          <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
                           should Not Be Zero
                         </mat-error>
                       </mat-form-field>

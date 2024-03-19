@@ -34,10 +34,10 @@
               <label for="input" class="col-sm-3 col-form-label">Voucher Date :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
-                  placeholder="DD/MM/YYYY"  DateValidation />
-                <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY"
+                    DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -77,7 +77,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="basecurrency" />
                 </mat-form-field>
-                <master-search   [MasterSearchData]="CurrencyCodeData" (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
+                <master-search [MasterSearchData]="CurrencyCodeData"
+                  (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
@@ -91,7 +92,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="currency" />
                 </mat-form-field>
-               <master-search  [MasterSearchData]="CurrencyCodeData" (newRowClick)="currencyCodeSelected($event)"></master-search>
+                <master-search [MasterSearchData]="CurrencyCodeData"
+                  (newRowClick)="currencyCodeSelected($event)"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
@@ -123,12 +125,9 @@
           <div class="row my-4">
             <div class="col-md-12">
               <div class="d-flex justify-content-start text-start">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                [viewImportBtn]="false"
-                (addClick)="openaddstonereturndetails()"
-                (deleteClick)="deleteTableData()"
-                >
-            </menu-buttons>
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                  (addClick)="openaddstonereturndetails()" (deleteClick)="deleteTableData()">
+                </menu-buttons>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput />
@@ -138,13 +137,13 @@
                 </div>
               </div>
               <div class="row mt-1 pt-3">
-                <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="stoneReturnData"
-                [allowColumnReordering]="true"
-                [allowColumnResizing]="true"
-                [columnAutoWidth]="true">
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="stoneReturnData"
+                  [selectedRowKeys]="selectedKey" (onRowClick)="onRowClickHandler($event)"
+                  [allowColumnReordering]="true" [allowColumnResizing]="true"
+                  (onSelectionChanged)="onSelectionChanged($event)" [columnAutoWidth]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="true">
-                  </dxo-editing>
+                  <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing> -->
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 

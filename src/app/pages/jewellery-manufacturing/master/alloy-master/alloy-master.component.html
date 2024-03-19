@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -22,6 +22,7 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" 
+                                            id="code"
                                              matInput
                                             (focusout)="prefixCodeValidate()"
                                             formControlName="code" [readonly]="viewMode"/>
@@ -228,20 +229,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 ">
                             <div class="row mb-1">
                                 <label for="input"
                                     class="col-sm-4 col-form-label">Currency *
                                     :</label>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 80%;">
+                                <div class="col-sm-4 flexbox">
+                                    <mat-form-field style="width: 80%;" class="stretch">
                                         <input  type="text" matInput readonly
                                             formControlName="currency" [readonly]="viewMode"/>
                                     </mat-form-field>
-                                    <master-search *ngIf="!viewMode"
-                                    [MasterSearchData]="currencyCodeData"
-                                    (newRowClick)="currencyDataSelected($event)">
-                                </master-search>
+                                    <div class="normal">
+                                        <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="currencyCodeData"
+                                        (newRowClick)="currencyDataSelected($event)">
+                                    </master-search>
+                                    </div>
+                                    
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
@@ -322,7 +326,7 @@
                                         <input type="number" matInput
                                             AmountDecimalInput
                                             formControlName="price1Fc"
-                                            class="text-right" [readonly]="viewMode"/>
+                                            class="text-right" [readonly]="true"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -359,7 +363,7 @@
                                         <input type="number" matInput
                                             formControlName="price2Fc"
                                             AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode"/>
+                                            class="text-right" [readonly]="true"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -396,7 +400,7 @@
                                         <input type="number" matInput
                                             formControlName="price3Fc"
                                             AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode"/>
+                                            class="text-right" [readonly]="true"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -433,7 +437,7 @@
                                         <input type="number" matInput
                                             formControlName="price4Fc"
                                             AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode"/>
+                                            class="text-right" [readonly]="true"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -470,7 +474,7 @@
                                         <input type="number" matInput
                                             formControlName="price5Fc"
                                             AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode"/>
+                                            class="text-right" [readonly]="true"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

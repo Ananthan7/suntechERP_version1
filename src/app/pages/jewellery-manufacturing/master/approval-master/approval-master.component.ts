@@ -1,4 +1,4 @@
-import { Input, OnInit, Component, ViewChild, ElementRef} from '@angular/core';
+import { Input, OnInit, Component, ViewChild, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +16,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./approval-master.component.scss']
 })
 export class ApprovalMasterComponent implements OnInit {
- 
+
 
   @Input() content!: any;
   tableData: any[] = [];
@@ -27,7 +27,7 @@ export class ApprovalMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   isDisabled: boolean = false;
-  controlName : any;
+  controlName: any;
   orgMessageCheckbox: any;
   userCodeEnable: boolean = false;
   editableMode: boolean = false;
@@ -39,11 +39,11 @@ export class ApprovalMasterComponent implements OnInit {
   codeInput!: ElementRef;
 
   ngAfterViewInit(): void {
-      this.codeInput.nativeElement.focus();
+    this.codeInput.nativeElement.focus();
   }
 
 
-  
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -82,6 +82,7 @@ export class ApprovalMasterComponent implements OnInit {
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
+
   ngOnInit(): void {
     if (this.content.FLAG == 'VIEW') {
       this.userCodeEnable = true;
@@ -102,13 +103,14 @@ export class ApprovalMasterComponent implements OnInit {
     this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
     this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
     this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + this.content.APPR_CODE)
-    .subscribe((data) => {
-      if (data.status == 'Success') {
-        this.tableData = data.response.approvalDetails;
-      }
-    });
+      .subscribe((data) => {
+        if (data.status == 'Success') {
+          this.tableData = data.response.approvalDetails;
+        }
+      });
   }
   checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {}else{
     if (event.target.value == '' || this.viewMode == true) return
     let API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -124,13 +126,14 @@ export class ApprovalMasterComponent implements OnInit {
             if (result.value) {
             }
           });
-        //  this.approvalMasterForm.controls.code.setValue('')
+          //  this.approvalMasterForm.controls.code.setValue('')
         }
       }, err => {
-      //  this.approvalMasterForm.controls.code.setValue('')
+        //  this.approvalMasterForm.controls.code.setValue('')
       })
     this.subscriptions.push(Sub)
   }
+}
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -143,11 +146,11 @@ export class ApprovalMasterComponent implements OnInit {
       this.toastr.error('Same User cannot be added.')
     }
     else {
-    console.log(value);
-    console.log(data);
-    this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
+      console.log(value);
+      console.log(data);
+      this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
+    }
   }
-}
 
   typedataselected(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].APPR_TYPE = data.target.value;
@@ -164,17 +167,17 @@ export class ApprovalMasterComponent implements OnInit {
   }
   messagecheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ORG_MESSAGE = data.target.checked;
-    if(data.target.checked){
+    if (data.target.checked) {
       this.tableData[value.data.SRNO - 1].MOBILE_NO = ' ';
-    }else{
+    } else {
       this.tableData[value.data.SRNO - 1].MOBILE_NO = '';
     }
   }
   emailcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
-    if(data.target.checked){
+    if (data.target.checked) {
       this.tableData[value.data.SRNO - 1].EMAIL_ID = ' ';
-    }else{
+    } else {
       this.tableData[value.data.SRNO - 1].EMAIL_ID = '';
     }
   }
@@ -208,20 +211,27 @@ export class ApprovalMasterComponent implements OnInit {
   };
 
   adddata() {
-  
+
+    
+    if (this.approvalMasterForm.value.code == '') {
+      this.toastr.error("Code Cannot be empty")
+    }
+
+    if (this.approvalMasterForm.value.description == '') {
+      this.toastr.error("Description cannot be empty")
+    }
+
+
     const userCodeValue = this.approvalMasterForm.value.USER_CODE;
     const mobileCheck = this.approvalMasterForm.value.ORG_MESSAGE;
     const emailCheck = this.approvalMasterForm.value.EMAIL;
-    const mobilenum = this.approvalMasterForm.value.MOBILE_NO  || "";
-    const emailId = this.approvalMasterForm.value.EMAIL_ID  || "";
+    const mobilenum = this.approvalMasterForm.value.MOBILE_NO || "";
+    const emailId = this.approvalMasterForm.value.EMAIL_ID || "";
 
 
-
-    
-  
     if (this.approvalMasterForm.value.code !== "" && this.approvalMasterForm.value.description !== "") {
       let length = this.tableData.length;
-  
+
       let srno = length + 1;
       let data = {
         "UNIQUEID": 12345,
@@ -235,21 +245,22 @@ export class ApprovalMasterComponent implements OnInit {
         "EMAIL": emailCheck,
         "SYS_MESSAGE": false,
         "EMAIL_ID": emailId,
-        "MOBILE_NO":mobilenum,
+        "MOBILE_NO": mobilenum,
       };
-      
+
       this.tableData.push(data);
 
       this.tableData.forEach((item, i) => {
         item.SRNO = i + 1;
         item.isDisabled = true;
       });
-  
-    } else {
-      this.toastr.error('Please Fill all Mandatory Fields');
-    }
+
+    } 
+    // else {
+    //   this.toastr.error('Please Fill all Mandatory Fields');
+    // }
   }
-  
+
 
 
 
@@ -269,31 +280,10 @@ export class ApprovalMasterComponent implements OnInit {
     console.log(this.selectedIndexes);
   }
 
-  // removedata() {
-
-  //   console.log(this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-  //     Swal.fire({
-  //       title: 'Are you sure?',
-  //       text: "You won't be able to revert this!",
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#3085d6',
-  //       cancelButtonColor: '#d33',
-  //       confirmButtonText: 'Yes, delete!'
-  //     }).then((result) => {
-        
-  //     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  //     })
-  //   } else {
-  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  //   }
-
-  // }
 
   removedata() {
     console.log(this.selectedIndexes);
-  
+
     if (this.selectedIndexes.length > 0) {
       Swal.fire({
         title: 'Are you sure?',
@@ -320,55 +310,81 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
 
-  checkFinalApproval(){
+  checkFinalApproval() {
     let final = []
-    final = this.tableData.filter((item:any)=> item.APPR_TYPE == '3')
+    final = this.tableData.filter((item: any) => item.APPR_TYPE == '3')
     return final.length == 0
   }
-
+ 
   formSubmit() {
 
-    
     let conditionMet = false;
 
     this.tableData.forEach((item: any, index: number) => {
       console.log(`Checking item at index ${index}:`, item);
-    
+
       const orgMessageChecked = item.ORG_MESSAGE;
       const emailChecked = item.EMAIL;
       const mobileNo = item.MOBILE_NO;
       const emailId = item.EMAIL_ID;
     
+
       console.log('orgMessageChecked:', orgMessageChecked);
       console.log('emailChecked:', emailChecked);
       console.log('mobileNo:', mobileNo);
       console.log('emailId:', emailId);
-    
-      if ((orgMessageChecked  == true  || emailChecked  == true )  && (!mobileNo.trim() || !emailId.trim())) {
-        console.log("Condition met: selected fields cannot be empty");
-        this.toastr.error("selected fields cannot be empty")
+
+    //   if ((orgMessageChecked == true || emailChecked == true) && (!mobileNo.trim() || !emailId.trim())) {
+    //     console.log("Condition met: selected fields cannot be empty");
+    //     this.toastr.error("selected fields cannot be empty")
+    //     conditionMet = true;
+    //     return; // Prevent further execution for the current item
+    //   }
+    // });
+  
+    if (orgMessageChecked) {
+      if (!mobileNo.trim()) {
+        console.log("Condition met: mobile number must be filled for MessageChecked");
+        this.toastr.error("Mobile number must be filled for MessageChecked");
         conditionMet = true;
         return; // Prevent further execution for the current item
       }
-    });
-    
+    } else if (emailChecked) {
+      if (!emailId.trim()) {
+        console.log("Condition met: emailId must be filled for emailChecked");
+        this.toastr.error("Email ID must be filled for emailChecked");
+        conditionMet = true;
+        return; // Prevent further execution for the current item
+      }
+    }
+  });
+
+  
     if (!conditionMet) {
       // Continue with the rest of your code for submission
       if (this.checkFinalApproval()) {
-        this.toastr.error('Final Approval Type Not Selected');
+        this.toastr.error('final optional should be selected');
         return;
       }
-    
+
+      if (this.approvalMasterForm.value.code == '') {
+        this.toastr.error("Code Cannot be empty")
+      }
+
+      if (this.approvalMasterForm.value.description == '') {
+        this.toastr.error("Description cannot be empty")
+      }
+
       if (this.approvalMasterForm.invalid) {
         this.toastr.error('Select all required fields');
         return;
       }
-    
+
       if (this.content && this.content.FLAG == 'EDIT') {
         this.update();
         return;
       }
-    
+
       // Omit mobilenum and emailId from postData when mobileCheck or emailCheck is true
       const postData: any = {
         "APPR_CODE": this.approvalMasterForm.value.code || "",
@@ -379,7 +395,7 @@ export class ApprovalMasterComponent implements OnInit {
       console.log(postData);
 
       let API = 'ApprovalMaster/InsertApprovalMaster';
-    
+
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
           if (result.response) {
@@ -399,14 +415,14 @@ export class ApprovalMasterComponent implements OnInit {
               });
             }
           } else {
-            this.toastr.error('Not saved')
+            this.toastr.error('User Name cannot be empty')
           }
         }, err => alert(err));
-    
+
       this.subscriptions.push(Sub);
     }
   }
-  
+
 
 
 
@@ -415,7 +431,7 @@ export class ApprovalMasterComponent implements OnInit {
   //     this.toastr.error('Final Approval Type Not Selected');
   //     return;
   //   }
-    
+
   //   // Check if message template is true and mobile number is empty
   //   const messageTemplate = this.tableData.find(data => data.template === 'messagetemp');
   //   const mobileNumberData = this.tableData.find(data => data.template === 'mobilenumber');
@@ -423,7 +439,7 @@ export class ApprovalMasterComponent implements OnInit {
   //     this.toastr.error('Mobile Number is required for Message Template');
   //     return;
   //   }
-  
+
   //   // Check if email template is true and email ID is empty
   //   const emailTemplate = this.tableData.find(data => data.template === 'emailtemp');
   //   const emailIdData = this.tableData.find(data => data.template === 'emailid');
@@ -431,26 +447,26 @@ export class ApprovalMasterComponent implements OnInit {
   //     this.toastr.error('Email ID is required for Email Template');
   //     return;
   //   }
-  
+
   //   if (this.approvalMasterForm.invalid) {
   //     this.toastr.error('Select all required fields');
   //     return;
   //   }
-  
+
   //   if (this.content && this.content.FLAG == 'EDIT') {
   //     this.update();
   //     return;
   //   }
-  
+
   //   let API = 'ApprovalMaster/InsertApprovalMaster';
   //   let postData = {
   //     "APPR_CODE": this.approvalMasterForm.value.code || "",
   //     "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
   //     "approvalDetails": this.tableData,
   //   };
-  
+
   //   console.log(this.tableData);
-  
+
   //   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
   //     .subscribe((result) => {
   //       if (result.response) {
@@ -473,17 +489,17 @@ export class ApprovalMasterComponent implements OnInit {
   //         this.toastr.error('Not saved');
   //       }
   //     }, err => alert(err));
-  
+
   //   this.subscriptions.push(Sub);
   // }
-  
+
 
   update() {
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('Please select all required fields');
       return;
     }
-  
+
     const API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE;
     const postData = {
       "APPR_CODE": this.approvalMasterForm.value.code || "",
@@ -491,34 +507,34 @@ export class ApprovalMasterComponent implements OnInit {
       "MID": this.content.MID,
       "approvalDetails": this.tableData,
     };
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.approvalMasterForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.approvalMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
         }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
-}
-  
- 
-  
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+
+
 
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
