@@ -207,13 +207,17 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.PartyDescription.setValue(this.content.HHACCOUNT_HEAD);
     this.receiptDetailsForm.controls.PartyAddress.setValue(this.content.PARTY_ADDRESS);
     this.receiptDetailsForm.controls.PartyAmtCode.setValue(this.content.PARTY_CURRENCY);
-    this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
-    this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.IGST_ACCODE.setValue(this.content.IGST_ACCODE);
-    this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
     this.receiptDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH);
     this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
     this.receiptDetailsForm.controls.POS_TAX_CRACCODE.setValue(this.content.POS_TAX_CRACCODE);
+    // this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
+    // this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTCC);
+    // this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTCC);
+
+    this.setFormControlAmount('PartyAmount',this.content.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('TotalAmount',this.content.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('TotalTax',this.content.GST_TOTALFC)
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
@@ -300,7 +304,7 @@ export class SchemeReceiptComponent implements OnInit {
               item.AC_Code = item.ACCODE
               item.CurrCode = item.CURRENCY_CODE
               item.AC_Description = item.HDACCOUNT_HEAD
-              item.CurrRate = item.CURRENCY_RATE
+              item.CurrRate = this.commonService.decimalQuantityFormat(item.CURRENCY_RATE,'RATE')
               item.AMOUNT_VAT = item.AMOUNTFC
             });
           }
@@ -1033,13 +1037,18 @@ export class SchemeReceiptComponent implements OnInit {
         this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
       });
       this.receiptDetailsForm.controls.SchemeBalance.setValue(SchemeBalance)
-      this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
-      this.receiptDetailsForm.controls.TotalAmount.setValue(
-        this.commonService.commaSeperation(this.totalAmount_LC.toFixed(2))
-      )
+      // this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
+      // this.receiptDetailsForm.controls.TotalAmount.setValue(
+      //   this.commonService.commaSeperation(this.totalAmount_LC.toFixed(2))
+      // )
+      this.setFormControlAmount('TotalTax',vatTotal)
+      this.setFormControlAmount('TotalAmount',this.totalAmount_LC)
       let PartyAmount = (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_LC).toFixed(2)
-      this.receiptDetailsForm.controls.PartyAmount.setValue(
-        this.commonService.commaSeperation(PartyAmount))
+      // this.receiptDetailsForm.controls.PartyAmount.setValue(
+      //   this.commonService.commaSeperation(PartyAmount))
+
+      this.setFormControlAmount('PartyAmount',PartyAmount)
+
       this.receiptDetailsForm.controls.PartyAmtCode.setValue(
         this.receiptDetailsForm.value.CurrCode
       )
@@ -1050,6 +1059,13 @@ export class SchemeReceiptComponent implements OnInit {
         .priceToTextWithCurrency(this.totalValue, "UNITED ARAB EMIRATES DIRHAM")
         ?.toUpperCase();
     }
+  }
+  setFormControlAmount(controlName: string, amount: any) {
+    amount = this.commonService.emptyToZero(amount)
+    amount = this.commonService.decimalQuantityFormat(amount, 'AMOUNT')
+    this.receiptDetailsForm.controls[controlName].setValue(
+      this.commonService.commaSeperation(amount)
+    )
   }
   private calculateVAT(VAT: number, AMOUNT: number): number {
     return (AMOUNT / (100 + VAT)) * 100

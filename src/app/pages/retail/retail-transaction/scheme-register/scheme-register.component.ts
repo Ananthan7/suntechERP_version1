@@ -778,25 +778,25 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BRANCH`, this.commonService.branchCode);
       this.formdata.append(`Model.model[${i}].schemeData.SALESPERSON_CODE`, formValue.Salesman);
       this.formdata.append(`Model.model[${i}].schemeData.SALESMAN_NAME`, formValue.SalesmanName);
-      this.SchemeMasterDetails.forEach((item: any, index: any) => {
+      this.SchemeMasterDetails.forEach((data: any, index: any) => {
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_CODE`, formValue.Code);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_ID`, '');
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SRNO`, item.SRNO || '0');
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_DATE`, this.commonService.formatDate(new Date(item.PAY_DATE)));
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_FC`, item.PAY_AMOUNT_FC || 0);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_CC`, item.PAY_AMOUNT_CC || 0);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, item.PAY_STATUS);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_DATE`, this.commonService.formatDate(new Date(item.REMAINDER_DATE)));
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`, item.REMAINDER_SEND);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SRNO`, data.SRNO || '0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_DATE`, this.commonService.formatDate(new Date(data.PAY_DATE)));
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_FC`, data.PAY_AMOUNT_FC || 0);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_CC`, data.PAY_AMOUNT_CC || 0);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, data.PAY_STATUS);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_DATE`, this.commonService.formatDate(new Date(data.REMAINDER_DATE)));
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`, data.REMAINDER_SEND);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].DT_BRANCH_CODE`, this.commonService.branchCode);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_DATE`, this.commonService.formatDate(new Date(item.RCVD_DATE)));
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_BRANCH_CODE`, item.RCVD_BRANCH_CODE);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCTYPE`, item.RCVD_VOCTYPE);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_DATE`, this.commonService.formatDate(new Date(data.RCVD_DATE)));
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_BRANCH_CODE`, data.RCVD_BRANCH_CODE);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCTYPE`, data.RCVD_VOCTYPE);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCNO`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_YEARMONTH`, this.commonService.yearSelected);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTFC`, '0');
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTCC`, item.RCVD_AMOUNTCC);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTCC`, data.RCVD_AMOUNTCC);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTFC`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTCC`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_PARTIALLY_PAID`, formValue.SCH_PARTIALLY_PAID);
