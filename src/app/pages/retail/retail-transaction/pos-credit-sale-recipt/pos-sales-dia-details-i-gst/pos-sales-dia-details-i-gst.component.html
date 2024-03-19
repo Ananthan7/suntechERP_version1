@@ -9,30 +9,31 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid pt-3">
-    <form >
+    <form [formGroup]="PossalesdiadetailsgstForm">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6">
 
                     <div class="row mb-3">
-                        <div class="col-md-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Stock Code :</label>
+                        <div class="col-md-2">
+                            <label for="inputPassword" class="col-sm-10 col-form-label">Stock Code :</label>
                         </div>
                         <div class="col-md-2">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="stockCode" />
+                                <input type="text" matInput formControlName="Stockdiv" />
                             </mat-form-field>
                          
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="stockType" />
+                                <input type="text" matInput formControlName="stockcode" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="stockCodeData"
+                  (newRowClick)="stockCodeSelected($event)"></master-search>
                         </div>
                         <div class="col-md-5">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="goldType" />
+                                <input type="text" matInput formControlName="stockdes" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
@@ -84,9 +85,10 @@
                         </div>
                         <div class="col-md-8">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="stockCode" />
+                                <input type="text" matInput formControlName="location" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="locationCodeData"
+                            (newRowClick)="locationCodeSelected($event)"></master-search>
                         </div>
                     </div> 
 
@@ -96,9 +98,10 @@
                         </div>
                         <div class="col-md-8">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="stockCode" />
+                                <input type="text" matInput formControlName="salesman" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="salesCodeData"
+                            (newRowClick)="salesCodeSelected($event)"></master-search>
                         </div>
                     </div> 
 

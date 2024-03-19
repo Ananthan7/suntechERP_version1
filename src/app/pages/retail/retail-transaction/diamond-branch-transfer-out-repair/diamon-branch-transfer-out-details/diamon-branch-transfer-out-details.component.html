@@ -21,13 +21,14 @@
                         </div>
                         <div class="col-md-2">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="stock" />
+                                <input type="text" matInput formControlName="stockaction" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="stockCodeData"
+                  (newRowClick)="stockCodeSelected($event)"></master-search>
                         </div>
                         <div class="col-md-2">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="stockaction" />
+                                <input type="text" matInput formControlName="stock" />
                             </mat-form-field>
                             <master-search ></master-search>
                         </div>
@@ -47,7 +48,8 @@
                             <mat-form-field style="width: 80%;">
                                 <input type="text" matInput formControlName="location" />
                             </mat-form-field>
-                            <master-search ></master-search>
+                            <master-search [MasterSearchData]="locationCodeData"
+                            (newRowClick)="locationCodeSelected($event)"></master-search>
                         </div>
                         <div class="col-md-4">
                             <div class="row mb-2">

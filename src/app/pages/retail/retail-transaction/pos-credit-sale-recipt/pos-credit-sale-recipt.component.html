@@ -332,7 +332,7 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="type" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="typeCodeData" (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-1 col-form-label">Language:</label>
                                 <div class="col-md-2">
@@ -370,7 +370,7 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="IDType" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="typeidCodeData" (newRowClick)="typeidCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-1 col-form-label">Ref By:</label>
                                 <div class="col-md-2">

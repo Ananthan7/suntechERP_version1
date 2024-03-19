@@ -42,6 +42,86 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
   }
 
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  branchCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutfrom.controls.branchfrom.setValue(e.BRANCH_CODE);
+    this.diamondbranchtransoutfrom.controls.branchto.setValue(e.BRANCH_NAME);
+  }
+
+  enteredCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Entered Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  enteredCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutfrom.controls.enteredby.setValue(e.UsersName);
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutfrom.controls.locationfrom.setValue(e.LOCATION_CODE);
+  }
+
+  locationtoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationtoCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutfrom.controls.locationto.setValue(e.LOCATION_CODE);
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutfrom.controls.stockcode.setValue(e.STOCK_CODE);
+  }
 
   diamondbranchtransoutfrom: FormGroup = this.formBuilder.group({
     voctype:['',[Validators.required]],

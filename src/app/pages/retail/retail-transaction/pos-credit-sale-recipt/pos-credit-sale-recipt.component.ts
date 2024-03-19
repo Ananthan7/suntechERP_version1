@@ -78,13 +78,44 @@ export class PosCreditSaleReciptComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Code',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.type.setValue(e.CODE);
+  } 
+
+  typeidCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Code',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeidCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.IDType.setValue(e.CODE);
+  } 
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
   POSCreditSaleReceiptForm: FormGroup = this.formBuilder.group({
-    
     voucherType: [''],
     voucherNo: [''],
     gstNo: [''],

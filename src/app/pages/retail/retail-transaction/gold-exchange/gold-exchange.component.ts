@@ -65,7 +65,7 @@ export class GoldExchangeComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Party Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE ''",
+    WHERECONDITION: "CURRENCY_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -163,6 +163,7 @@ export class GoldExchangeComponent implements OnInit {
 
   partyCurrencyCodeSelected(e:any){
     console.log(e);
+    this.goldExchangeForm.controls.partyCurrencyCode.setValue(e.CURRENCY_CODE);
   }
 
 
