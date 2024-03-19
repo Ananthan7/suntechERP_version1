@@ -35,11 +35,13 @@
             </dxi-column>
             <dxo-summary>
                 <dxi-total-item column="AMOUNTCC_DEBIT"
-                    summaryType="sum"
+                    summaryType="sum"  precision="2"
+                    [valueFormat]="{ currency: 'AED' }"
                     displayFormat="{0}">
                 </dxi-total-item>
                 <dxi-total-item column="AMOUNTCC_CREDIT"
-                    summaryType="sum"
+                    summaryType="sum" precision="2" 
+                    [valueFormat]="{ currency: 'AED' }"
                     displayFormat="{0}">
                 </dxi-total-item>
             </dxo-summary>

@@ -23,10 +23,10 @@ export class AuditTrailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
   }
 
-  showDialog(formData:any) {
+  showDialog(formData: any) {
     const modalRef: NgbModalRef = this.modalService.open(this.content, {
       size: "lg",
       backdrop: true, //'static'
@@ -46,21 +46,50 @@ export class AuditTrailComponent implements OnInit {
     );
     this.getPostedData(formData)
   }
-
-  getPostedData(formData:any) {
-    let API = `SchemeCurrencyReceipt/GetAuditTrial`+
-    `/${formData.BRANCH_CODE}`+
-    `/${formData.VOCTYPE}/${formData.VOCNO}`+
-    `/${formData.MID}/${formData.YEARMONTH}`+
-    `/n`
+  customizeTexts(data: any) {
+    let amt = ''
+    if (data.value) {
+      amt = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT')
+      amt = this.commonService.commaSeperation(amt)
+    }
+    return amt
+    // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
+  }
+  // calculateSummary(options: any) {
+  //   console.log(options, 'calculateSummary');
+  //   if (options.name == "AMOUNTCC_DEBIT") {
+  //     switch (options.summaryProcess) {
+  //       case "start":
+  //         // Initializing "totalValue" here
+  //         break;
+  //       case "calculate":
+  //         // Modifying "totalValue" here
+  //         break;
+  //       case "finalize":
+  //         // Assigning the final value to "totalValue" here
+  //         break;
+  //     }
+  //   }
+  // }
+  getPostedData(formData: any) {
+    this.gridData = [
+      { 'AMOUNTCC_DEBIT': 10002, 'AMOUNTCC_CREDIT': 100023 },
+      { 'AMOUNTCC_DEBIT': 10002, 'AMOUNTCC_CREDIT': 100023 }
+    ]
+    return
+    let API = `SchemeCurrencyReceipt/GetAuditTrial` +
+      `/${formData.BRANCH_CODE}` +
+      `/${formData.VOCTYPE}/${formData.VOCNO}` +
+      `/${formData.MID}/${formData.YEARMONTH}` +
+      `/n`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.dynamicData) {
           this.gridData = result.dynamicData[0]
-          if(this.gridData.length>0){
-            this.gridData.forEach((item:any)=>{
-              item.AMOUNTCC_DEBIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_DEBIT,'AMOUNT')
-              item.AMOUNTCC_CREDIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_CREDIT,'AMOUNT')
+          if (this.gridData.length > 0) {
+            this.gridData.forEach((item: any) => {
+              item.AMOUNTCC_DEBIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_DEBIT, 'AMOUNT')
+              item.AMOUNTCC_CREDIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_CREDIT, 'AMOUNT')
             })
           }
         } else {

@@ -188,7 +188,8 @@
                     </span>
                     <span style="width: 45%">
                         <mat-form-field>
-                            <input type="text" matInput [readonly]="disableAmountFC"
+                            <input type="text" matInput
+                                [readonly]="disableAmountFC"
                                 class="text-right" AmountDecimalInput
                                 formControlName="Amount_FC"
                                 (change)="calculateAmountFC()"
@@ -298,7 +299,8 @@
                         caption="RCVD AMOUNT" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTCC"
-                        caption="RCVD_AMOUNTCC" alignment="right">
+                        caption="RCVD_AMOUNTCC"
+                        alignment="right">
                     </dxi-column>
                     <dxo-summary>
                     </dxo-summary>
