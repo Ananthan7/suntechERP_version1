@@ -21,12 +21,12 @@
               <label for="input" class="col-sm-3 col-form-label">Voucher * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="voctype" />
+                  <input type="text" matInput formControlName="voctype" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="vocno" />
+                  <input type="number" matInput formControlName="vocno" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -35,7 +35,7 @@
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
                   <input matInput [matDatepicker]="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY"
-                    DateValidation />
+                    DateValidation [readonly]="viewMode"/>
                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
@@ -45,13 +45,13 @@
               <label for="input" class="col-sm-3 col-form-label">Entered By :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="enterdBy" />
+                  <input type="text" matInput formControlName="enterdBy" [readonly]="viewMode"/>
                 </mat-form-field>
 
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 140%;">
-                  <input type="text" matInput formControlName="enteredByName" />
+                  <input type="text" matInput formControlName="enteredByName" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
 
@@ -60,12 +60,12 @@
               <label for="input" class="col-sm-3 col-form-label">Worker :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="worker" />
+                  <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 140%;">
-                  <input type="text" matInput formControlName="workername" />
+                  <input type="text" matInput formControlName="workername" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -75,14 +75,14 @@
               <label for="input" class="col-sm-3 col-form-label">Base Currency :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="basecurrency" />
+                  <input type="text" matInput formControlName="basecurrency" [readonly]="viewMode"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
-                  (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
+                  (newRowClick)="baseCurrencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="basecurrencyrate" />
+                  <input type="number" matInput formControlName="basecurrencyrate" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -90,14 +90,14 @@
               <label for="input" class="col-sm-3 col-form-label">Currency * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="currency" />
+                  <input type="text" matInput formControlName="currency" [readonly]="viewMode"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
-                  (newRowClick)="currencyCodeSelected($event)"></master-search>
+                  (newRowClick)="currencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="currencyrate" />
+                  <input type="text" matInput formControlName="currencyrate" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>

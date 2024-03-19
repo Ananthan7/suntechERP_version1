@@ -23,6 +23,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   currentDate = new Date();
   jobDate = new Date();
   jobNumberDetailData: any[] = [];
+  viewMode: boolean = false;
   
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -37,6 +38,17 @@ export class StoneReturnDetailsComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  subJobNoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -49,19 +61,20 @@ export class StoneReturnDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    console.log(this.content,'content')
+    console.log(this.content.FLAG, 'viewMode is true');
+
+
     this.setFormValues()
+    if (this.content) {
+      this.stonereturndetailsFrom.controls.FLAG.setValue(this.content[0].FLAG)
+    }
+    if (this.content[0].FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
   }
-  subJobNoCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 46,
-    SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Job Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+  
+
   subJobNoCodeSelected(e:any){
     console.log(e);
     this.stonereturndetailsFrom.controls.subjobno.setValue(e.job_number);
@@ -107,6 +120,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     amount: [''],
     pointerwt: [''],
     vocType: [''],
+    FLAG: [null]
   });
   setFormValues() {
     console.log(this.content,'formfunction')
