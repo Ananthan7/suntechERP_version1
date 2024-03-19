@@ -41,6 +41,7 @@ export class SchemeReceiptComponent implements OnInit {
   editFlag: boolean = false;
   isViewAddbtn: boolean = true;
   viewMode: boolean = false;
+  gridAmountDecimalFormat: any;
 
   totalValue: number = 0;
   totalValue_FC: number = 0;
@@ -159,6 +160,11 @@ export class SchemeReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+      currency: 'AED'
+    };
     this.setInitialValues()
     if (!this.content) {
       this.fetchPartyCode();

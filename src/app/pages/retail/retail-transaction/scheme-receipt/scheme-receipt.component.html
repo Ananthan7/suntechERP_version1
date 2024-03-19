@@ -345,10 +345,12 @@
                                     <dxo-summary>
                                         <dxi-total-item column="SRNO"
                                             summaryType="count"
+                                            [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
                                         <dxi-total-item column="AMOUNT_VAT"
                                             summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
                                     </dxo-summary>
