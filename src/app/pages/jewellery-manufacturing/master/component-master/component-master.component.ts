@@ -215,6 +215,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  
   codeCodeSelected(e: any) {
     console.log(e);
     const prefixCode = e.PREFIX_CODE.toUpperCase();
