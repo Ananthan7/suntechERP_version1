@@ -466,8 +466,8 @@ export class AddReceiptComponent implements OnInit {
       return
     }
     let amount = this.commonService.emptyToZero(form.Amount_FC) * this.commonService.emptyToZero(form.CurrRate)
-    this.setFormControlAmount('Amount_LC', amount.toFixed(2))
-    this.setFormControlAmount('Header_Amount', amount.toFixed(2))
+    this.setFormControlAmount('Amount_LC', amount)
+    this.setFormControlAmount('Header_Amount', amount)
     this.setFormControlAmount('Amount_FC', form.Amount_FC)
     if (this.gridDataSource.length > 0) {
       this.calculateGridAmount()

@@ -15,6 +15,7 @@ export class AuditTrailComponent implements OnInit {
   @Input() gridData: any[] = [];
   @ViewChild('content') public content!: NgbModal;
   private subscriptions: Subscription[] = [];
+  gridAmountDecimalFormat: any;
 
   constructor(
     private modalService: NgbModal,
@@ -23,7 +24,11 @@ export class AuditTrailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+      currency: 'AED'
+    };
   }
 
   showDialog(formData: any) {
@@ -46,37 +51,8 @@ export class AuditTrailComponent implements OnInit {
     );
     this.getPostedData(formData)
   }
-  customizeTexts(data: any) {
-    let amt = ''
-    if (data.value) {
-      amt = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT')
-      amt = this.commonService.commaSeperation(amt)
-    }
-    return amt
-    // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
-  }
-  // calculateSummary(options: any) {
-  //   console.log(options, 'calculateSummary');
-  //   if (options.name == "AMOUNTCC_DEBIT") {
-  //     switch (options.summaryProcess) {
-  //       case "start":
-  //         // Initializing "totalValue" here
-  //         break;
-  //       case "calculate":
-  //         // Modifying "totalValue" here
-  //         break;
-  //       case "finalize":
-  //         // Assigning the final value to "totalValue" here
-  //         break;
-  //     }
-  //   }
-  // }
+ 
   getPostedData(formData: any) {
-    this.gridData = [
-      { 'AMOUNTCC_DEBIT': 10002, 'AMOUNTCC_CREDIT': 100023 },
-      { 'AMOUNTCC_DEBIT': 10002, 'AMOUNTCC_CREDIT': 100023 }
-    ]
-    return
     let API = `SchemeCurrencyReceipt/GetAuditTrial` +
       `/${formData.BRANCH_CODE}` +
       `/${formData.VOCTYPE}/${formData.VOCNO}` +
