@@ -433,7 +433,7 @@ export class AddReceiptComponent implements OnInit {
       return
     }
 
-    if (this.commonService.emptyToZero(form.CurrCode) != this.commonService.compCurrency) {
+    if (this.commonService.emptyToZero(form.Amount_FC) > 0 && form.CurrCode != this.commonService.compCurrency) {
       let currencyRate = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.Amount_FC)
       if (currencyRate > form.MAX_CONV_RATE) {
         this.commonService.toastErrorByMsgId('Currency Rate cannot be more than ' + form.MAX_CONV_RATE)
@@ -453,6 +453,8 @@ export class AddReceiptComponent implements OnInit {
     } else {
       let amount = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.CurrRate)
       this.setFormControlAmount('Amount_FC', amount.toFixed(2))
+      console.log('fired??????????');
+      
     }
     this.setFormControlAmount('Amount_LC', form.Amount_LC)
     this.setFormControlAmount('Header_Amount', form.Amount_LC)
@@ -485,7 +487,9 @@ export class AddReceiptComponent implements OnInit {
       this.setGridData()
     }
   }
-  CLfired:Number = 0
+  CLfired:number = 0
+  extraBalance: number = 0
+
   /**calculate amount and split to rows in grid*/
   calculateGridAmount() {
     let formData = this.receiptEntryForm.value
@@ -514,9 +518,8 @@ export class AddReceiptComponent implements OnInit {
     let balanceAmount: number = Amount_LC - InstallmentAmount
     let totalRowsToUpdate = Math.floor(Amount_LC / InstallmentAmount)
     let flag = 0
-    let extraBalance: number = 0
     if(this.gridDataSource[0].RCVD_AMOUNTFC != '0.000' && this.CLfired != 1){
-      extraBalance = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
+      this.extraBalance = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
       this.gridDataSource[1].RCVD_AMOUNTFC = this.gridDataSource[0].RCVD_AMOUNTFC
       this.gridDataSource[1].RCVD_AMOUNTCC = this.gridDataSource[0].RCVD_AMOUNTCC
       this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
@@ -525,27 +528,24 @@ export class AddReceiptComponent implements OnInit {
       flag = 1
       return
     }
+
     //calculating amount and spliting to each rows
     this.gridDataSource.forEach((item: any, index: any) => {
       if (balanceAmount <= 0 && this.gridDataSource[0].RCVD_AMOUNTFC == '0.000') {
-        console.log('fired = 1');
         this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
         this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
         flag = 1
       }
       if (flag == 1) return
       if (totalRowsToUpdate >= index + 1) {
-        console.log('fired = 2');
         item.RCVD_AMOUNTFC = InstallmentAmount
         item.RCVD_AMOUNTCC = InstallmentAmount
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((item.RCVD_AMOUNTCC), 'THREE')
       } else {
-        console.log('fired = 3');
-
-        item.RCVD_AMOUNTFC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+extraBalance
+        item.RCVD_AMOUNTFC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+this.extraBalance
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
-        item.RCVD_AMOUNTCC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+extraBalance
+        item.RCVD_AMOUNTCC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+this.extraBalance
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         flag = 1
       }
