@@ -19,7 +19,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%">
                                     <input type="text" #codeInput maxlength="15" [readonly]="editCode" matInput
-                                        formControlName="code" oninput="this.value = this.value.toUpperCase()"  />
+                                        formControlName="code" oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                     <label for="input" class="col-md-2 col-form-label">Description * :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%">
-                            <input type="text" maxlength="85" matInput [readonly]="viewMode"
+                            <input type="text" maxlength="85" matInput [readonly]="viewMode || codeEnable"
                                 formControlName="description" oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
                     </div>
@@ -39,7 +39,7 @@
                     <label for="input" class="col-sm-2 col-form-label" >Metal % :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput [readonly]="viewModeField" step="0.001" min="0"
+                            <input type="number" matInput [readonly]="viewModeField || codeEnable" step="0.001" min="0"
                                 formControlName="metal" (input)="onInput($event)" style="text-align: right;" />
                         </mat-form-field>
                     </div>
@@ -47,7 +47,7 @@
                     <label for="input" class="col-sm-2 col-form-label">Color * :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode" />
+                            <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode || codeEnable" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"
                             *ngIf="SearchDisable == viewMode">
@@ -62,7 +62,7 @@
                     <label for="input" class="col-sm-1 col-form-label">Karat :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="karat" 
+                            <input type="text"  [readonly]="viewMode || codeEnable"  matInput formControlName="karat" 
                              />
                         </mat-form-field>
                         <master-search [MasterSearchData]="karatCodeData" (newRowClick)="KaratCodeSelected($event)"
@@ -73,7 +73,7 @@
                     <label for="input" class="col-sm-1 col-form-label">Purity :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput [readonly]="viewModeField" formControlName="purity"
+                            <input type="number" matInput [readonly]="viewModeField || codeEnable" formControlName="purity"
                                 style="text-align: right;" />
                         </mat-form-field>
 
@@ -85,7 +85,7 @@
                     <label for="input" class="col-sm-1 col-form-label">Alloy % :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput [readonly]="viewModeField" formControlName="alloy"
+                            <input type="number" matInput [readonly]="viewModeField || codeEnable" formControlName="alloy"
                                 (input)="onInput($event)" style="text-align: right;" />
                         </mat-form-field>
 
@@ -94,7 +94,7 @@
                     <label for="input" class="col-sm-1 col-form-label">Stock Code :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="stockCode" [readonly]="viewMode" />
+                            <input type="text" matInput formControlName="stockCode" [readonly]="viewMode || codeEnable" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="stockCodeData" (newRowClick)="StockCodeSelected($event)"
                             *ngIf="SearchDisable == viewMode">
@@ -129,7 +129,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'division'">
-                                <input type="text" (change)="division($event,data)" [value]="data.value"
+                                <input type="text"  [value]="data.value"
                                     [disabled]="data.value == ''" style="width: 100%;" required readonly
                                     oninput="this.value = this.value.toUpperCase()"/>
                             </div>

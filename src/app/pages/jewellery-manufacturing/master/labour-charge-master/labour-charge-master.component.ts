@@ -29,7 +29,7 @@ export class LabourChargeMasterComponent implements OnInit {
   // labourTypeList: any[] = [];
   // DialabourTypeList: any[] = [];
   // unitList: any[] = [];
-   currencyList: any[] = [];
+  currencyList: any[] = [];
   // settingTypeList: any[] = [];
   divisionMS: any = 'ID';
   salesRate: any;
@@ -46,7 +46,12 @@ export class LabourChargeMasterComponent implements OnInit {
   displayMetalSellingRate: any;
   displayMetalWtFrom: any;
   displayMetalWtTo: any;
+  viewDisable: boolean = false;
 
+  viewselling: boolean = false;
+  viewsellingrate: boolean = false;
+  viewsellingrateMetal: boolean = false;
+  viewsellingMetal: boolean = false;
 
 
   //   @ViewChild('codeInput')
@@ -65,12 +70,11 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   @ViewChild('codeInput') codeInput!: ElementRef;
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
+
 
 
   ngAfterViewInit(): void {
     this.codeInput.nativeElement.focus();
-    this.codeInput1.nativeElement.focus();
   }
 
 
@@ -129,6 +133,44 @@ export class LabourChargeMasterComponent implements OnInit {
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
+
+  salesChangesDia(data: any) {
+    console.log(data);
+
+    if (data == 'selling') {
+      this.viewsellingrate = true;
+      this.viewselling = false;
+      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+    } else if (data == 'selling_rate') {
+      this.viewselling = true;
+      this.viewsellingrate = false;
+      this.diamondlabourMasterForm.controls.selling.setValue('');
+    } else {
+      this.viewselling = false;
+      this.viewsellingrate = false;
+    }
+
+  }
+
+
+  salesChangesMetal(data: any) {
+    console.log(data);
+
+    if (data == 'metalSelling') {
+      this.viewsellingrateMetal = true;
+      this.viewsellingMetal = false;
+      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+    } else if (data == 'metalselling_rate') {
+      this.viewsellingMetal = true;
+      this.viewsellingrateMetal = false;
+      this.metallabourMasterForm.controls.metalSelling.setValue('');
+    } else {
+      this.viewsellingMetal = false;
+      this.viewsellingrateMetal = false;
+    }
+
+  }
+
 
   diaDivisionCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -335,7 +377,7 @@ export class LabourChargeMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
-DialabourTypeList = [
+  DialabourTypeList = [
     {
       name: 'SETTING',
       value: 'SETTING'
@@ -354,7 +396,7 @@ DialabourTypeList = [
     },
   ];
 
- settingTypeList = [
+  settingTypeList = [
     {
       name: 'GEN',
       value: 'GEN'
@@ -365,7 +407,7 @@ DialabourTypeList = [
     },
   ];
 
- labourTypeList = [
+  labourTypeList = [
     {
       name: 'MAKING',
       value: 'MAKING'
@@ -399,7 +441,7 @@ DialabourTypeList = [
       value: 'WASTAGE'
     },
   ];
- unitList = [
+  unitList = [
     {
       name: 'Lumpsum ',
       value: 'Lumpsum '
@@ -422,7 +464,7 @@ DialabourTypeList = [
     }
   ];
 
- methodList = [
+  methodList = [
     {
       name: 'Hand Setting ',
       value: 'Hand Setting '
@@ -455,30 +497,19 @@ DialabourTypeList = [
 
 
   ngOnInit(): void {
-   // this.renderer.selectRootElement('#metallabour_code')?.focus();
-    // this.renderer.selectRootElement('#labour_code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
-      this.setFormValues()
-      this.setInitialValues()
+      this.viewMode = true;
+      this.viewDisable = true;
+      this.setFormValues();
+      this.setInitialValues();
     }
     else (this.content.FLAG == 'EDIT')
     {
       this.editMode = true;
-      this.setFormValues()
-      this.setInitialValues()
+      this.setFormValues();
+      this.setInitialValues();
     }
-
-
-
-
-
-    // this.diamondlabourMasterForm = this.formBuilder.group({
-    //   labourType: new FormControl(''),
-    //   settingType: new FormControl({ value: '', disabled: true }),
-    //   method: new FormControl({ value: '', disabled: true }),
-
-    // });
 
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
@@ -501,13 +532,7 @@ DialabourTypeList = [
 
     this.getcurrencyOptions()
 
-
-
-
-
   }
-
-
 
   setFormValues() {
     if (!this.content) return
@@ -522,13 +547,34 @@ DialabourTypeList = [
     this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
     this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
     this.diamondlabourMasterForm.controls.cost_rate.setValue(this.content.COST_RATE);
-    this.diamondlabourMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE);
-    this.diamondlabourMasterForm.controls.selling.setValue(this.content.SELLING_PER);
-    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.content.CARATWT_FROM);
-    this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.content.CARATWT_TO);
+    // this.diamondlabourMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE);
+    // this.diamondlabourMasterForm.controls.selling.setValue(this.content.SELLING_PER);
+    // this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.content.CARATWT_FROM);
+    // this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.content.CARATWT_TO);
     this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
     this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
+
+    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARATWT_FROM));
+
+    this.diamondlabourMasterForm.controls.ctWtTo.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARATWT_TO));
+
+    this.diamondlabourMasterForm.controls.selling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_RATE));
+
+    this.diamondlabourMasterForm.controls.selling.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_PER));
+
 
 
     this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
@@ -547,6 +593,17 @@ DialabourTypeList = [
     this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
+
+    this.diamondlabourMasterForm.controls.purity.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.PURITY));
+
+    this.diamondlabourMasterForm.controls.metalselling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.LAST_SELLING_RATE));
+
   }
 
   private setInitialValues() {
@@ -671,47 +728,47 @@ DialabourTypeList = [
 
 
 
-  salesChange() {
-    this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
-    this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
+  // salesChange(data: any) {
+  //   this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
+  //   this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
 
-    if (this.salesRate === '') {
-      this.diamondlabourMasterForm.controls.selling_rate.disable();
-      this.diamondlabourMasterForm.controls.selling.enable();
-      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
-    }
-    else if (this.salesRatePercentage === '') {
-      this.diamondlabourMasterForm.controls.selling.disable();
-      this.diamondlabourMasterForm.controls.selling_rate.enable();
-      this.diamondlabourMasterForm.controls.selling.setValue('');
+  //   if (this.salesRate === '') {
+  //     this.diamondlabourMasterForm.controls.selling_rate.disable();
+  //     this.diamondlabourMasterForm.controls.selling.enable();
+  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentage === '') {
+  //     this.diamondlabourMasterForm.controls.selling.disable();
+  //     this.diamondlabourMasterForm.controls.selling_rate.enable();
+  //     this.diamondlabourMasterForm.controls.selling.setValue('');
 
-    }
-    else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
-      return;
-    }
-  }
+  //   }
+  //   else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+  //   }
+  // }
 
-  salesChangeMetal() {
-    this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
-    this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
+  // salesChangeMetal() {
+  //   this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
+  //   this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
 
-    if (this.salesRateMetal === '') {
-      this.metallabourMasterForm.controls.metalselling_rate.disable();
-      this.metallabourMasterForm.controls.metalSelling.enable();
-      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
-    }
-    else if (this.salesRatePercentageMetal === '') {
-      this.metallabourMasterForm.controls.metalSelling.disable();
-      this.metallabourMasterForm.controls.metalselling_rate.enable();
-      this.metallabourMasterForm.controls.metalSelling.setValue('');
+  //   if (this.salesRateMetal === '') {
+  //     this.metallabourMasterForm.controls.metalselling_rate.disable();
+  //     this.metallabourMasterForm.controls.metalSelling.enable();
+  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentageMetal === '') {
+  //     this.metallabourMasterForm.controls.metalSelling.disable();
+  //     this.metallabourMasterForm.controls.metalselling_rate.enable();
+  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
 
-    }
-    else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
-      return;
-    }
-  }
+  //   }
+  //   else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+  //   }
+  // }
 
 
 
@@ -873,19 +930,19 @@ DialabourTypeList = [
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   Swal.fire({
+    //     title: '',
+    //     text: 'Please Select data to delete!',
+    //     icon: 'error',
+    //     confirmButtonColor: '#336699',
+    //     confirmButtonText: 'Ok'
+    //   }).then((result: any) => {
+    //     if (result.value) {
+    //     }
+    //   });
+    //   return
+    // }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -896,7 +953,7 @@ DialabourTypeList = [
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'LabourChargeMasterDj/DeleteLabourChargeMaster/' + this.content.MID;
+        let API = 'LabourChargeMasterDj/DeleteLabourChargeMaster/' + this.content.CODE;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

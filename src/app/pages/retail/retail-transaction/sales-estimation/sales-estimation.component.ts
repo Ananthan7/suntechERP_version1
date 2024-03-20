@@ -982,7 +982,7 @@ export class SalesEstimationComponent implements OnInit {
 
 
         }
-        
+
         if (!this.viewOnly && !this.editOnly)
             this.open(this.mymodal);
     }
@@ -6376,11 +6376,12 @@ export class SalesEstimationComponent implements OnInit {
                             );
 
 
-                            this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+
 
                             this.curr_line_item_images = stockInfos.PICTURE_NAME;
 
                             if (this.divisionMS == 'M') {
+                                this.renderer.selectRootElement('#fcn_li_total_amount').focus();
                                 this.lineItemForm.controls['fcn_ad_making_rate'].setValue(
                                     parseFloat(stockInfoPrice.SELLING_PRICE).toFixed(2)
                                 ); //calculation
@@ -6784,7 +6785,7 @@ export class SalesEstimationComponent implements OnInit {
     managePcsGrossWt() {
         if (this.validatePCS == true) {
             this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
-            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
             this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
                 Validators.required,
@@ -6792,13 +6793,13 @@ export class SalesEstimationComponent implements OnInit {
             ]);
         } else {
             this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
-            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
             this.removeValidationsForForms(this.lineItemForm, ['fcn_li_pcs']);
 
             if (this.newLineItem.BLOCK_GRWT == true)
-                this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
-            else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', this.validateGrossWt);
+                this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+            else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
         }
         //   if (stockInfos.BLOCK_GRWT == true)
@@ -7426,73 +7427,93 @@ export class SalesEstimationComponent implements OnInit {
         }
     }
     changeGrossWt(event: any) {
-        this.lineItemForm.controls.fcn_li_gross_wt.setValue(
-            this.comFunc.transformDecimalVB(
-                this.comFunc.mQtyDecimals,
-                this.comFunc.emptyToZero(event.target.value)
-            )
-        );
-        console.log('====================================');
-        console.log(
-            this.comFunc.transformDecimalVB(
-                this.comFunc.mQtyDecimals,
-                this.comFunc.emptyToZero(event.target.value)
-            )
-        );
-        console.log('====================================');
-        const value = event.target.value;
-        if (value != '' && this.validatePCS == false) {
-            if (this.blockNegativeStock == 'B') {
-                if (this.lineItemGrossWt < value) {
-                    this.openDialog(
-                        'Warning',
-                        'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                        true
+        if (parseFloat(this.lineItemGrossWt) < this.lineItemForm.controls.fcn_li_gross_wt.value && this.lineItemGrossWt != 0) {
+
+            this.openDialog(
+                'Warning',
+                'Gross Weight Exceeding Available Gross Weight',
+                true
+            );
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'OK') {
+                    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                        this.lineItemGrossWt
                     );
-                    this.dialogBox.afterClosed().subscribe((data: any) => {
-                        if (data == 'OK') {
-                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                                this.lineItemGrossWt
-                            );
-                            // this.setNettWeight();
-                            this.manageCalculations();
-                        }
-                    });
-                } else {
-                    // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
                     this.manageCalculations();
                 }
-            } else if (this.blockNegativeStock == 'W') {
-                if (this.lineItemGrossWt < value) {
-                    this.openDialog(
-                        'Warning',
-                        'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                        false
-                    );
-                    this.dialogBox.afterClosed().subscribe((data: any) => {
-                        if (data == 'No') {
-                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                                this.lineItemGrossWt
-                            );
-                            // this.setNettWeight();
-                            this.manageCalculations();
-                        } else {
-                            // this.setNettWeight();
-                            this.manageCalculations();
-                        }
-                    });
+            });
+
+        }
+        else {
+            this.lineItemForm.controls.fcn_li_gross_wt.setValue(
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.mQtyDecimals,
+                    this.comFunc.emptyToZero(event.target.value)
+                )
+            );
+            console.log('====================================');
+            console.log(
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.mQtyDecimals,
+                    this.comFunc.emptyToZero(event.target.value)
+                )
+            );
+            console.log('====================================');
+            const value = event.target.value;
+            if (value != '' && this.validatePCS == false) {
+                if (this.blockNegativeStock == 'B') {
+                    if (this.lineItemGrossWt < value) {
+                        this.openDialog(
+                            'Warning',
+                            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                            true
+                        );
+                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                            if (data == 'OK') {
+                                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                    this.lineItemGrossWt
+                                );
+                                // this.setNettWeight();
+                                this.manageCalculations();
+                            }
+                        });
+                    } else {
+                        // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                        this.manageCalculations();
+                    }
+                } else if (this.blockNegativeStock == 'W') {
+                    if (this.lineItemGrossWt < value) {
+                        this.openDialog(
+                            'Warning',
+                            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                            false
+                        );
+                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                            if (data == 'No') {
+                                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                    this.lineItemGrossWt
+                                );
+                                // this.setNettWeight();
+                                this.manageCalculations();
+                            } else {
+                                // this.setNettWeight();
+                                this.manageCalculations();
+                            }
+                        });
+                    } else {
+                        this.manageCalculations();
+                    }
                 } else {
+                    // blockNegativeStock = 'A'
+                    // this.setNettWeight();
                     this.manageCalculations();
                 }
             } else {
-                // blockNegativeStock = 'A'
                 // this.setNettWeight();
                 this.manageCalculations();
             }
-        } else {
-            // this.setNettWeight();
-            this.manageCalculations();
         }
+
     }
     validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt = null) {
         // alert(this.lineItemForm.value.fcn_li_net_amount)
@@ -7585,7 +7606,7 @@ export class SalesEstimationComponent implements OnInit {
 
                         this.lineItemForm.controls.fcn_li_tax_amount.setValue(
                             this.totalTaxAmount
-                        ); 
+                        );
 
                         this.lineItemForm.controls.fcn_li_gross_amount.setValue(
                             this.totalGrossAmount
@@ -8363,7 +8384,7 @@ export class SalesEstimationComponent implements OnInit {
                 parseFloat(this.lineItemForm.value.fcn_li_net_amount) -
                 parseFloat(taxAmt));
 
-
+        let changingRate;
         let totalAmt;
         if (this.divisionMS == 'M') {
             totalAmt = this.comFunc.transformDecimalVB(
@@ -8421,6 +8442,16 @@ export class SalesEstimationComponent implements OnInit {
                 { target: { value: discountAmt } },
                 this.lineItemForm.value.fcn_li_net_amount
             );
+
+
+            changingRate = this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.lineItemForm.value.fcn_li_gross_amount / this.lineItemForm.value.fcn_li_pcs
+            );
+            this.lineItemForm.controls.fcn_li_rate.setValue(
+                changingRate
+            );
+
         }
 
     }
@@ -8624,8 +8655,8 @@ export class SalesEstimationComponent implements OnInit {
                 parseFloat(mkgvalue)
             )
         );
-        
-        this.totalMakingAmount=  this.comFunc.transformDecimalVB(
+
+        this.totalMakingAmount = this.comFunc.transformDecimalVB(
             this.comFunc.amtDecimals,
             parseFloat(mkgvalue)
         );
@@ -8689,7 +8720,7 @@ export class SalesEstimationComponent implements OnInit {
                         this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
                     )
                 );
-                this.totalGrossAmount=  this.comFunc.transformDecimalVB(
+                this.totalGrossAmount = this.comFunc.transformDecimalVB(
                     this.comFunc.amtDecimals,
                     this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
                 );
@@ -8724,7 +8755,7 @@ export class SalesEstimationComponent implements OnInit {
                 this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, taxAmount)
             );
 
-            this.totalTaxAmount=this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, taxAmount);
+            this.totalTaxAmount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, taxAmount);
 
             this.li_tax_amount_val = this.comFunc.transformDecimalVB(
                 this.comFunc.amtDecimals,
@@ -8746,7 +8777,7 @@ export class SalesEstimationComponent implements OnInit {
                 this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, netAmtValue)
             );
 
-            this.totalNetAmount=this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, netAmtValue);
+            this.totalNetAmount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, netAmtValue);
 
         } else {
 

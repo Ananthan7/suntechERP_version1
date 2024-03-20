@@ -103,7 +103,17 @@ export class JobcardComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  currencyMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
