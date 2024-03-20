@@ -23,6 +23,7 @@ export class TransactionDetailsComponent implements OnInit {
   columnhead4:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','STOCK_CODE','GROSS_WEIGHT','METAL_WT','STONE_PCS','STONE_WT','AMOUNTFC','PRICE 1FC','PROCESS','WORKER','METAL_AMOUNT','STONE_AMOUNT','LAB_AMOUNT','YEARMONTH','UNQ_DESIGN','COST_CODE'];
   orders: any = [];
   viewOnly: boolean = false;
+  branchCode?: String;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -33,8 +34,10 @@ export class TransactionDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+
     this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'JobTransactionsGrid/GetJobTransaction/{BRANCH}/{JOB_NUMBER}';
+    let API = 'JobTransactionsGrid/GetJobTransaction/'+this.branchCode+'/'+524;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe(
         (result) => {

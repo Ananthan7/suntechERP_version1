@@ -103,48 +103,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
-  setFormValues() {
-    if (!this.content) return
 
 
-
-    this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
-    this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
-    this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
-    this.componentmasterForm.controls.size.setValue(this.content.SIZE)
-    this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE_TO)
-    this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
-    this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
-    this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
-    this.componentmasterForm.controls.settingType.setValue(this.content.SETTING)
-    this.componentmasterForm.controls.remarks.setValue(this.content.CURRENCYCODE)
-    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
-    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
-    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
-    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
-    this.componentmasterForm.controls.processSeq.setValue(this.content.PROCESS_CODE)
-    this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
-    this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
-    this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
-
-  }
-
-  onSelectionChanged(event: any) {
-    const values: number[] = event.selectedRowKeys;
-    const indexes: number[] = [];
-
-    values.forEach((selectedValue: number) => {
-      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
-
-      // Check if the value is not already in the selectedIndexes array
-      if (index !== -1 && !this.selectedIndexes.includes(index)) {
-        indexes.push(index);
-      }
-    });
-
-    this.selectedIndexes = indexes;
-    console.log(this.selectedIndexes);
-  }
 
 
   private subscriptions: Subscription[] = [];
@@ -448,18 +408,73 @@ export class ComponentMasterComponent implements OnInit {
     this.tableData.filter((data, i) => data.SRNO = i + 1)
   }
 
+  onSelectionChanged(event: any) {
+    const values: number[] = event.selectedRowKeys;
+    const indexes: number[] = [];
+
+    values.forEach((selectedValue: number) => {
+      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
+
+      // Check if the value is not already in the selectedIndexes array
+      if (index !== -1 && !this.selectedIndexes.includes(index)) {
+        indexes.push(index);
+      }
+    });
+
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+  }
+
+
+  // deleteTableData() {
+  //   console.log(this.selectedIndexes);
+  //   if (this.selectedIndexes.length > 0) {
+  //     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+  //   } else {
+  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+  //   }
+  // }
 
   deleteTableData() {
-
-    console.log(this.commonService.transformDecimalVB(6, this.componentmasterForm.value.purity));
-    //  this.tableData.push(data);
     console.log(this.selectedIndexes);
     if (this.selectedIndexes.length > 0) {
-      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+        this.selectedIndexes.sort((a:number, b:number) => b - a);
+
+        this.selectedIndexes.forEach((indexToRemove:number) => {
+            this.tableData.splice(indexToRemove, 2);
+        });
+        this.selectedIndexes = [];
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+        this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
-  }
+}
+
+
+setFormValues() {
+  if (!this.content) return
+
+
+
+  this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
+  this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
+  this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
+  this.componentmasterForm.controls.size.setValue(this.content.SIZE)
+ // this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE)
+  this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
+  this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
+  this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
+  this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
+  this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
+  this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+  this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+  this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+  this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+  this.componentmasterForm.controls.processSeq.setValue(this.content.SEQ_CODE)
+  this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
+  this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
+  this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
+
+}
 
   setPostData() {
 
@@ -469,14 +484,14 @@ export class ComponentMasterComponent implements OnInit {
       "CURRENCY_CODE": "1",
       "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
       "COST_CODE": this.componentmasterForm.value.costCenter || "",
-      "TYPE_CODE": this.componentmasterForm.value.type || "",
+      "TYPE_CODE": this.componentmasterForm.value.type,
       "CATEGORY_CODE": this.componentmasterForm.value.category || "",
       "SUBCATEGORY_CODE": "string",
       "BRAND_CODE": "string",
       "COUNTRY_CODE": "string",
       "SUPPLIER_CODE": "string",
       "SUPPLIER_REF": "string",
-      "SET_REF": "string",
+      "SET_REF": this.componentmasterForm.value.settingType,
       "PICTURE_NAME": "string",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
@@ -509,9 +524,9 @@ export class ComponentMasterComponent implements OnInit {
       "SHORT_ID": "",
       "COLOR": "",
       "CLARITY": "",
-      "SIZE": this.componentmasterForm.value.size || "",
-      "SIEVE": this.componentmasterForm.value.sieve_to || "",
-      "SHAPE": this.componentmasterForm.value.shape || "",
+      "SIZE": this.componentmasterForm.value.size ,
+      "SIEVE": "",
+      "SHAPE": this.componentmasterForm.value.shape ,
       "GRADE": "",
       "FLUOR": "",
       "FINISH": "",
@@ -588,7 +603,7 @@ export class ComponentMasterComponent implements OnInit {
       "PENDING_JOB_PCS": 0,
       "PENDING_JOBS": 0,
       "LAST_COST": 0,
-      "SEQ_CODE": this.componentmasterForm.value.processSeq || "",
+      "SEQ_CODE": this.componentmasterForm.value.processSeq,
       "SEQ_DESCRIPTION": "",
       "EDITED_ON": "2023-11-27T06:54:03.761Z",
       "EDITED_BY": "",
@@ -677,7 +692,7 @@ export class ComponentMasterComponent implements OnInit {
       "METAL_VALUECC": 0,
       "PAIR_REF": "",
       "SURFACEPROPERTY": "",
-      "WIDTH": this.componentmasterForm.value.width || "",
+      "WIDTH": this.componentmasterForm.value.width,
       "THICKNESS": 0,
       "ENGRAVING_TEXT": "",
       "ENGRAVING_FONT": "",
@@ -719,9 +734,9 @@ export class ComponentMasterComponent implements OnInit {
       "CC_MAKING": "",
       "STONE_INCLUDED": true,
       "CAD_REQUIRED": true,
-      "HEIGHT": this.componentmasterForm.value.height || "",
-      "RADIUS": this.componentmasterForm.value.radius || "",
-      "LENGTH": this.componentmasterForm.value.length || "",
+      "HEIGHT": this.componentmasterForm.value.height,
+      "RADIUS": this.componentmasterForm.value.radius,
+      "LENGTH": this.componentmasterForm.value.length,
       "COMPSIZE_CODE": "",
       "COMPSET_CODE": "",
       "PROD_VARIANCE": 0,
@@ -792,7 +807,7 @@ export class ComponentMasterComponent implements OnInit {
           "DESIGN_CODE": "",
           "KARAT": "",
           "PRICEID": "",
-          "SIZE_FROM": "",
+          "SIZE_FROM":  this.componentmasterForm.value.sizeSet,
           "SIZE_TO": "",
           "RATEFC": 0,
           "PART_CODE": "",
@@ -812,10 +827,10 @@ export class ComponentMasterComponent implements OnInit {
           "STONE_TYPE": "",
           "EXT_COLOR": "",
           "EXT_CLARITY": "",
-          "D_REMARKS": "",
+          "D_REMARKS":  this.componentmasterForm.value.remarks,
           "POINTER_WT": 0,
           "SIEVE_FROM": "",
-          "SIEVE_TO": this.componentmasterForm.value.sieve_to || "",
+          "SIEVE_TO":"" ,
           "PURITY": 0,
           "OTHER_ATTR": ""
         }

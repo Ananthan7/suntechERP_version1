@@ -92,10 +92,10 @@
                   </mat-form-field>
                   <mat-form-field
                       style="width: 50%; margin-left: 7px;">
-                      <input type="number" matInput
+                      <input type="ext" matInput
                           SixDecimalInput
                           class="text-right"
-                          formControlName="itemcurrencycc" />
+                          formControlName="itemcurrencycc" SixDecimalInput/>
                   </mat-form-field>
                   <master-search
                       [MasterSearchData]="itemCodeData"
@@ -117,7 +117,7 @@
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="metalratetype"
+                  <input type="text" matInput formControlName="metalratetype" (keypress)="isNumeric($event)" SixDecimalInput
                     style="text-align: right;"
                     [readonly]="viewMode" />
                 </mat-form-field>

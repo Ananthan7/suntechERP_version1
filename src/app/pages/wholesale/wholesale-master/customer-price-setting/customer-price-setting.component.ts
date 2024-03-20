@@ -69,7 +69,14 @@ export class CustomerPriceSettingComponent implements OnInit {
     this.checkboxvalue = !this.checkboxvalue;
   }
   
+  checkPriceCode(): boolean {
 
+    if (this.customerpricesettingForm.value.pricecode == '') {
+      this.commonService.toastErrorByMsgId('please enter pricecode')
+      return true
+    }
+    return false
+}
   
   customerpricesettingForm: FormGroup = this.formBuilder.group({
     pricecode:['',[Validators.required]],
@@ -113,6 +120,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   userDataSelected(value: any) {
     console.log(value);
+    if (this.checkPriceCode()) return
        this.customerpricesettingForm.controls.enteredBy.setValue(value.UsersName);
   }
 
@@ -129,6 +137,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   divisionCodeSelected(e:any){
     console.log(e); 
+    if (this.checkPriceCode()) return
     this.customerpricesettingForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
@@ -145,6 +154,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   currencyCodeSelected(e:any){
     console.log(e); 
+    if (this.checkPriceCode()) return
     this.customerpricesettingForm.controls.currency.setValue(e.CURRENCY_CODE);
   }
 
@@ -161,6 +171,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   ApprovedbyCodeSelected(e: any) {
     console.log(e);
+    if (this.checkPriceCode()) return
     this.customerpricesettingForm.controls.approvedby.setValue(e.UsersName);
   }
 

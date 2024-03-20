@@ -47,7 +47,7 @@ export class JobcardComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 10,
-    SEARCH_FIELD: 'DESCRIPTION',
+    SEARCH_FIELD: 'btnOrderType',
     SEARCH_HEADING: 'Length Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'LENGTH MASTER'",
@@ -59,7 +59,7 @@ export class JobcardComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 10,
-    SEARCH_FIELD: 'DESCRIPTION',
+    SEARCH_FIELD: 'btnOrderType',
     SEARCH_HEADING: 'Order type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'ORDERTYPE MASTER'",
@@ -70,11 +70,11 @@ export class JobcardComponent implements OnInit {
   designCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 56,
+    LOOKUPID: 16,
     SEARCH_FIELD: 'DESIGN_CODE',
     SEARCH_HEADING: 'Design type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DESIGN_CODE<> ''",
+    WHERECONDITION: "DESIGN_HOLD = '0'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -332,9 +332,10 @@ export class JobcardComponent implements OnInit {
     time: [''],
     range: [''],
     seqcode: ['',[Validators.required]],
-    totalpcs: [''],
-    pending: [''],
-    parts: [''],
+    totalpcs: ['',[Validators.required]],
+    pending: ['',[Validators.required]],
+    pending1: ['',[Validators.required]],
+    parts: ['',[Validators.required]],
     srewFiled: [''],
     instruction: [''],
     picture_name: [''],
@@ -501,9 +502,9 @@ export class JobcardComponent implements OnInit {
 
   designCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.designcode.setValue(e.DESIGN_CODE);
-    this.jobCardFrom.controls.designtype.setValue(e.DESIGN_DESCRIPTION);
-    this.jobCardFrom.controls.jobtype.setValue(e.DESIGN_DESCRIPTION);
+    this.jobCardFrom.controls.designcode.setValue(e.Design_Code);
+    this.jobCardFrom.controls.designtype.setValue(e.Design_Description);
+    this.jobCardFrom.controls.jobtype.setValue(e.Design_Description);
 
     let length = this.tableData.length;
     let sn = length + 1;
@@ -511,8 +512,8 @@ export class JobcardComponent implements OnInit {
       let data = {
         "SINO": sn,
         "job_reference": '5/' + sn,
-        "part_code": e.DESIGN_CODE,
-        "Description": e.DESIGN_DESCRIPTION,
+        "part_code": e.Design_Code,
+        "Description": e.Design_Description,
         "Pcs": "",
         "metal_color": "",
         "metal_wt": "",
@@ -648,7 +649,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.size.setValue(this.content.SIZE)
     this.jobCardFrom.controls.length.setValue(this.content.LENGTH)
     this.jobCardFrom.controls.orderType.setValue(this.content.ORDER_TYPE)
-    this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_TYPE)
+    this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_DESC)
     this.jobCardFrom.controls.purity.setValue(this.content.JOB_PURITY)
     this.jobCardFrom.controls.customername.setValue(this.content.CUSTOMER_NAME)
   }
@@ -733,11 +734,11 @@ export class JobcardComponent implements OnInit {
       "LENGTH": this.jobCardFrom.value.length || "",
       "SCREW_FIELD": "string",
       "ORDER_TYPE": this.jobCardFrom.value.orderType || "",
-      "DESIGN_TYPE": this.jobCardFrom.value.designtype || "",
+      "DESIGN_TYPE": "",
       "SO_VOCNO": 0,
       "SO_VOCDATE": "2023-10-26T05:59:21.735Z",
       "JOB_PURITY": this.jobCardFrom.value.purity || "",
-      "DESIGN_DESC": "string",
+      "DESIGN_DESC": this.jobCardFrom.value.designtype || "",
       "CUSTOMER_NAME": this.jobCardFrom.value.customername || "",
       "COST_CENTER_DESC": "",
       "KARAT_DESC": "",
