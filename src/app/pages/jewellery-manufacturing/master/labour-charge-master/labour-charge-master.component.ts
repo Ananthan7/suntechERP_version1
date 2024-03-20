@@ -497,7 +497,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#code').focus();
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
