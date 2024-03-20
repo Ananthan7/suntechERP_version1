@@ -35,6 +35,7 @@ export class MeltingTypeComponent implements OnInit {
   editCode: boolean = false;
   allStockCodes: any;
   filteredStockCodes: any[] | undefined;
+  codeEnable :  boolean = true;
 
   karatval: any;
   purityval: any;
@@ -116,6 +117,17 @@ export class MeltingTypeComponent implements OnInit {
     console.log(this.selectedIndexes);
   }
 
+
+
+  codeEnabled(){
+    if (this.meltingTypeForm.value.WorkerCode == '') {
+    this.codeEnable = true;
+    }
+    else{
+      this.codeEnable = false;
+    }
+   
+  }
 
   addTableData() {
     if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "" && this.meltingTypeForm.value.color != "") {

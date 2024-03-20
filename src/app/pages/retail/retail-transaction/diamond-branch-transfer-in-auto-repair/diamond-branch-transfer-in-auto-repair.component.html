@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
-    <form [formGroup]="diamondBranchTransferInAutoRepairForm">
+    <form [formGroup]="diamondBranchTransferinAutoRepairForm">
         <div class="">
             <div class="row">
                 <div class="col-md-3">
@@ -25,7 +25,7 @@
 
                 </div>
                 <div class="col-md-1">
-                    
+
                 </div>
                 <div class="col-md-1">
                     <div class="p-1 bd-highlight">
@@ -45,15 +45,14 @@
                         <div class="col-md-3">
                             <div class="position-relative d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="voctype"   />
+                                    <input type="text" matInput formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="position-relative d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="vocNo"
-                                          />
+                                    <input class="text-right" type="number" matInput formControlName="vocNo" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -63,7 +62,7 @@
                         <div class="col-sm-6">
                             <mat-form-field style="width: 72%;">
                                 <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                      placeholder="DD/MM/YYYY" DateValidation />
+                                    placeholder="DD/MM/YYYY" DateValidation />
                                 <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                             </mat-form-field>
@@ -73,36 +72,32 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Branch : </label>
                         <div class="col-sm-6">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="branch"   />
+                                <input type="text" matInput formControlName="branch" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="branchCodeData" *ngIf="!viewMode"
-                            (newRowClick)="branchCodeSelected($event)"></master-search>
+                                (newRowClick)="branchCodeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-4 col-form-label">Entered By : </label>
                         <div class="col-sm-6">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="enteredBy"   />
+                                <input type="text" matInput formControlName="enteredBy" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                            (newRowClick)="salesManSelected($event)"></master-search>
-                        </div>
-                    </div>
-                    <div class="row mb-1 ">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Currency : </label>
-                        <div class="col-md-3">
-                            <div class="position-relative d-flex">
+
+                            <master-search [MasterSearchData]="enteredByCodeData"
+                                (newRowClick)="enteredByCodeSelected($event)"></master-search>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Currency : </label>
+                            <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currency"   />
+                                    <input type="text" matInput formControlName="Currency" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="position-relative d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="currencyAmt"
-                                          />
+                                    <input class="text-right" type="number" matInput formControlName="CurrencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -119,8 +114,8 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date : </label>
                         <div class="col-sm-6">
                             <mat-form-field style="width: 72%;">
-                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                      placeholder="DD/MM/YYYY" DateValidation />
+                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate1"
+                                    placeholder="DD/MM/YYYY" DateValidation />
                                 <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                             </mat-form-field>
@@ -134,7 +129,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label ">Status : </label>
                         <div class="col-sm-8">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="status"   />
+                                <input type="text" matInput formControlName="status" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -143,13 +138,13 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label ">Credit Days : </label>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="creditDays"   />
+                                <input type="text" matInput formControlName="CreditDays" />
                             </mat-form-field>
                         </div>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%;">
-                                <input matInput [matDatepicker]="creditDate" formControlName="creditDate"
-                                      placeholder="DD/MM/YYYY" DateValidation />
+                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate2"
+                                    placeholder="DD/MM/YYYY" DateValidation />
                                 <mat-datepicker-toggle matSuffix [for]="creditDate"></mat-datepicker-toggle>
                                 <mat-datepicker [startAt]="currentDate" #creditDate></mat-datepicker>
                             </mat-form-field>
@@ -163,7 +158,7 @@
                         <label for="inputPassword" class="col-sm-5 col-form-label">Location : </label>
                         <div class="col-sm-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="location"   />
+                                <input type="text" matInput formControlName="location" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -198,10 +193,10 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">State Code : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="stateCode"   />
+                                    <input type="text" matInput formControlName="stateCode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="stateCodeData" *ngIf="!viewMode"
-                                (newRowClick)="stateCodeSelected($event)"></master-search>
+                                    (newRowClick)="stateCodeSelected($event)"></master-search>
                             </div>
                         </div>
 
@@ -213,7 +208,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">TaxCode : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="taxCode"   />
+                                    <input type="text" matInput formControlName="taxCode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -222,7 +217,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Type : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="type"   />
+                                    <input type="text" matInput formControlName="type" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -238,7 +233,7 @@
                         <div class="col-md-10">
                             <div class="position-relative d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="refno"   />
+                                    <input type="text" matInput formControlName="RefNo" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -246,9 +241,7 @@
                 </div>
             </div>
 
-
             <div class="row mt-3">
-
                 <div class="col-md-12">
                     <div class="row mt-3">
 
@@ -258,7 +251,7 @@
                                     <div class="row">
                                         <div class="col-md-2 d-flex  justify-content-between">
                                             <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                                                [viewImportBtn]="false" (addClick)="openadddetails()">
+                                                [viewImportBtn]="false" (addClick)="adddata()">
                                             </menu-buttons>
                                         </div>
                                         <div class="col-md-2 d-flex">
@@ -267,18 +260,18 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2 d-flex">
-                                                    <mat-form-field style="width: 100%;">
-                                                        <input type="text" matInput formControlName="fullCheck"
-                                                              />
-                                                    </mat-form-field>
+                                            <mat-form-field style="width: 100%;">
+
+                                                <input type="text" matInput formControlName="FullChecked" />
+                                            </mat-form-field>
                                         </div>
                                         <div class="col-md-3 d-flex">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label">DPU Voc No : </label>
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">DPU Voc No :
+                                            </label>
                                             <div class="col-md-3">
-                                                    <mat-form-field style="width: 100%;">
-                                                        <input type="text" matInput formControlName="dpuVocNo"
-                                                              />
-                                                    </mat-form-field>
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="FullChecked1" />
+                                                </mat-form-field>
                                             </div>
                                         </div>
                                     </div>
@@ -301,8 +294,7 @@
                                 <mat-tab label="Other Amounts">
                                     <div class="row mb-3">
                                         <div class="col-md-12">
-                                            <dx-resizable id="gridContainer" 
-                                                [keepAspectRatio]="false" handles="right">
+                                            <dx-resizable id="gridContainer" [keepAspectRatio]="false" handles="right">
                                                 <dx-data-grid width="auto" #dataGrid id="gridContainer"
                                                     [dataSource]="tableData" [showBorders]="true"
                                                     [showColumnLines]="true" [showRowLines]="true" class="mt-3">
@@ -334,16 +326,14 @@
                                         <div class="col-md-3">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" class="text-right" matInput formControlName="toal"
-                                                          />
+                                                    <input type="text" matInput formControlName="Total" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" class="text-right" matInput formControlName="subTotal"
-                                                          />
+                                                    <input type="text" matInput formControlName="Total1" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -368,8 +358,8 @@
                                         <div class="col-md-6">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" class="text-right" matInput formControlName="totalFc"
-                                                          />
+                                                    <input type="number" class="text-right" matInput
+                                                        formControlName="totalFc" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -380,8 +370,9 @@
                                         <div class="col-md-6">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" class="text-right" matInput formControlName="totalCss"
-                                                          />
+
+                                                    <input type="number" class="text-right" matInput
+                                                        formControlName="totalCss" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -395,8 +386,7 @@
                                         <div class="col-md-6">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" class="text-right" matInput formControlName="totalGst"
-                                                          />
+                                                    <input type="text" matInput formControlName="TotalGST" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -406,8 +396,7 @@
                                         <div class="col-md-6">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" class="text-right" matInput formControlName="thAmtFc"
-                                                          />
+                                                    <input type="text" matInput formControlName="zerothAmtFC" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -416,16 +405,16 @@
                                             <div class="col-md-3">
                                                 <div class="position-relative d-flex">
                                                     <mat-form-field style="width: 100%;">
-                                                        <input type="number" class="text-right" matInput formControlName="gross"
-                                                              />
+
+                                                        <input type="text" matInput formControlName="Gross" />
+
                                                     </mat-form-field>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="position-relative d-flex">
                                                     <mat-form-field style="width: 100%;">
-                                                        <input type="number" class="text-right" matInput formControlName="gorssTotal"
-                                                              />
+                                                        <input type="text" matInput formControlName="Gross1" />
                                                     </mat-form-field>
                                                 </div>
                                             </div>

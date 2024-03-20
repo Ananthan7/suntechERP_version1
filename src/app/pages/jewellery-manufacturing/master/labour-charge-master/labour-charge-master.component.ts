@@ -48,6 +48,11 @@ export class LabourChargeMasterComponent implements OnInit {
   displayMetalWtTo: any;
   viewDisable: boolean = false;
 
+  viewselling: boolean = false;
+  viewsellingrate: boolean = false;
+  viewsellingrateMetal: boolean = false;
+  viewsellingMetal: boolean = false;
+
 
   //   @ViewChild('codeInput')
   //   codeInput!: ElementRef;
@@ -128,6 +133,44 @@ export class LabourChargeMasterComponent implements OnInit {
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
+
+  salesChangesDia(data: any) {
+    console.log(data);
+
+    if (data == 'selling') {
+      this.viewsellingrate = true;
+      this.viewselling = false;
+      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+    } else if (data == 'selling_rate') {
+      this.viewselling = true;
+      this.viewsellingrate = false;
+      this.diamondlabourMasterForm.controls.selling.setValue('');
+    } else {
+      this.viewselling = false;
+      this.viewsellingrate = false;
+    }
+
+  }
+
+
+  salesChangesMetal(data: any) {
+    console.log(data);
+
+    if (data == 'metalSelling') {
+      this.viewsellingrateMetal = true;
+      this.viewsellingMetal = false;
+      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+    } else if (data == 'metalselling_rate') {
+      this.viewsellingMetal = true;
+      this.viewsellingrateMetal = false;
+      this.metallabourMasterForm.controls.metalSelling.setValue('');
+    } else {
+      this.viewsellingMetal = false;
+      this.viewsellingrateMetal = false;
+    }
+
+  }
+
 
   diaDivisionCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -454,7 +497,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#code').focus();
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -685,47 +728,47 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
 
-  salesChange() {
-    this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
-    this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
+  // salesChange(data: any) {
+  //   this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
+  //   this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
 
-    if (this.salesRate === '') {
-      this.diamondlabourMasterForm.controls.selling_rate.disable();
-      this.diamondlabourMasterForm.controls.selling.enable();
-      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
-    }
-    else if (this.salesRatePercentage === '') {
-      this.diamondlabourMasterForm.controls.selling.disable();
-      this.diamondlabourMasterForm.controls.selling_rate.enable();
-      this.diamondlabourMasterForm.controls.selling.setValue('');
+  //   if (this.salesRate === '') {
+  //     this.diamondlabourMasterForm.controls.selling_rate.disable();
+  //     this.diamondlabourMasterForm.controls.selling.enable();
+  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentage === '') {
+  //     this.diamondlabourMasterForm.controls.selling.disable();
+  //     this.diamondlabourMasterForm.controls.selling_rate.enable();
+  //     this.diamondlabourMasterForm.controls.selling.setValue('');
 
-    }
-    else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
-      return;
-    }
-  }
+  //   }
+  //   else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+  //   }
+  // }
 
-  salesChangeMetal() {
-    this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
-    this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
+  // salesChangeMetal() {
+  //   this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
+  //   this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
 
-    if (this.salesRateMetal === '') {
-      this.metallabourMasterForm.controls.metalselling_rate.disable();
-      this.metallabourMasterForm.controls.metalSelling.enable();
-      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
-    }
-    else if (this.salesRatePercentageMetal === '') {
-      this.metallabourMasterForm.controls.metalSelling.disable();
-      this.metallabourMasterForm.controls.metalselling_rate.enable();
-      this.metallabourMasterForm.controls.metalSelling.setValue('');
+  //   if (this.salesRateMetal === '') {
+  //     this.metallabourMasterForm.controls.metalselling_rate.disable();
+  //     this.metallabourMasterForm.controls.metalSelling.enable();
+  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+  //   }
+  //   else if (this.salesRatePercentageMetal === '') {
+  //     this.metallabourMasterForm.controls.metalSelling.disable();
+  //     this.metallabourMasterForm.controls.metalselling_rate.enable();
+  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
 
-    }
-    else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
-      return;
-    }
-  }
+  //   }
+  //   else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
+  //     this.toastr.error('Enter values either Selling % or Selling Rate');
+  //     return;
+  //   }
+  // }
 
 
 

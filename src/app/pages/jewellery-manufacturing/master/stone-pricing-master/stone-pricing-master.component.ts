@@ -179,8 +179,6 @@ export class StonePricingMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
-
-
   stonePrizeMasterForm: FormGroup = this.formBuilder.group({
     price_code: ['', [Validators.required]],
     sieve_set: [''],
@@ -202,6 +200,9 @@ export class StonePricingMasterComponent implements OnInit {
     selling: [''],
     selling_rate: [''],
   })
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
