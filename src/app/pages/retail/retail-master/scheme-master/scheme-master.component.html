@@ -28,7 +28,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
-                        <label class="col-form-label m-2">Prefix</label>
+                        <label class="col-form-label m-2">Prefix*</label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
                                 (focusout)="prefixCodeValidate()"
@@ -92,8 +92,10 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" [readonly]="viewMode"
-                                style="text-align: right;" maxlength="15" 
-                                (keypress)="isNumeric($event)" CommaSeparatedNumber
+                                class="text-right" maxlength="15" 
+                                (keypress)="isNumeric($event)"
+                                (focusout)="addCommaSeperation($event)"
+                                AmountDecimalInput
                                 matInput formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
@@ -103,14 +105,6 @@
                         <ng-select [items]="receipt1List" [readonly]="viewMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeone"></ng-select>
-                        <!-- <mat-form-field style="width: 100%;">
-                            <mat-select formControlName="receiptModeone">
-                                <mat-option
-                                    *ngFor="let data of receipt1List"
-                                    [value]="data.CREDIT_CODE">{{
-                                    data.CREDIT_CODE }}</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -119,9 +113,11 @@
                     </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" style="text-align: right;"
+                            <input type="text" class="text-right"
                                 [readonly]="viewMode" maxlength="5" 
-                                (keypress)="isNumeric($event)" CommaSeparatedNumber
+                                (keypress)="isNumeric($event)" 
+                                (focusout)="addCommaSeperation($event)"
+                                AmountDecimalInput
                                 matInput formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
@@ -131,14 +127,6 @@
                         <ng-select [items]="receipt2List" [readonly]="viewMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeTwo"></ng-select>
-                        <!-- <mat-form-field style="width: 100%;">
-                           <mat-select formControlName="receiptModeTwo">
-                                <mat-option
-                                    *ngFor="let data of receipt2List"
-                                    [value]="data.CREDIT_CODE">{{
-                                    data.CREDIT_CODE }}</mat-option>
-                            </mat-select> 
-                        </mat-form-field>-->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -148,8 +136,10 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text" maxlength="15" 
                                 (keypress)="isNumeric($event)"
-                                style="text-align: right;"
-                                [readonly]="viewMode" CommaSeparatedNumber
+                                class="text-right"
+                                [readonly]="viewMode"
+                                (focusout)="addCommaSeperation($event)"
+                                AmountDecimalInput
                                 matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>

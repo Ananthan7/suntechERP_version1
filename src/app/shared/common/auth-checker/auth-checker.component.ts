@@ -17,6 +17,7 @@ export class AuthCheckerComponent implements OnInit {
   reasonMaster: any = [];
   reasonMasterOptions!: Observable<any[]>;
   modalReferenceUserAuth!: NgbModalRef;
+  private subscriptions: Subscription[] = [];
 
   authForm: FormGroup = this.formBuilder.group({
     // username: [localStorage.getItem('username'), Validators.required],
@@ -36,6 +37,11 @@ export class AuthCheckerComponent implements OnInit {
   ngOnInit(): void {
     this.getReasonMasters()
   }
+  reseForm() {
+    this.authForm.controls.password.setValue('')
+    this.authForm.controls.reason.setValue('')
+    this.authForm.controls.description.setValue('')
+  }
   openAuthModal() {
     return new Promise((resolve) => {
       this.modalReferenceUserAuth = this.modalService.open(
@@ -49,14 +55,14 @@ export class AuthCheckerComponent implements OnInit {
       );
       this.modalReferenceUserAuth.result.then((result) => {
         if (result) {
-          console.log("Result :", result);
+          this.reseForm()
           resolve(true);
         } else {
           resolve(false);
         }
       },
         (reason) => {
-          console.log(`Dismissed ${reason}`);
+          this.reseForm()
           resolve(false);
 
         }
@@ -71,12 +77,9 @@ export class AuthCheckerComponent implements OnInit {
 
 
   getReasonMasters() {
-    console.log('fired');
-    
     let API = `GeneralMaster/GetGeneralMasterList/reason%20master`
-    this.dataService.getDynamicAPI(API).
+    let sub: Subscription = this.dataService.getDynamicAPI(API).
       subscribe(data => {
-
         if (data.status == "Success") {
           this.reasonMaster = data.response;
           this.reasonMasterOptions = this.authForm.controls.reason.valueChanges.pipe(
@@ -85,13 +88,11 @@ export class AuthCheckerComponent implements OnInit {
               this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
             )
           );
-          console.log(this.reasonMasterOptions);
         } else {
           this.reasonMaster = [];
         }
-
       });
-
+    this.subscriptions.push(sub)
   }
   private _filterMasters(
     arrName: any,
@@ -124,8 +125,7 @@ export class AuthCheckerComponent implements OnInit {
           this.CommonService.showSnackBarMsg(resp.message)
         }
       });
-
-
+      this.subscriptions.push(sub)
     } else {
       this.CommonService.showSnackBarMsg('Please fill all fields')
     }
@@ -133,12 +133,9 @@ export class AuthCheckerComponent implements OnInit {
   }
 
   changeReason(e: any) {
-    console.log(e);
     const res = this.reasonMaster.filter((data: any) => data.CODE == e.value)
     let description = res.length > 0 ? res[0]['DESCRIPTION'] : '';
     this.authForm.controls.description.setValue(description);
-
-
   }
   autoCompleteValidator(optionsProvider: any, field: any = null) {
     return (control: AbstractControl) => {
@@ -158,6 +155,13 @@ export class AuthCheckerComponent implements OnInit {
       }
       return null;
     };
+  }
+  ngOnDestroy() {
+    this.reseForm()
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());
+      this.subscriptions = []; // Clear the array
+    }
   }
 
 
