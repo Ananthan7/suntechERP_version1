@@ -30,6 +30,7 @@ export class SchemeMasterComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   viewMode: boolean = false;
+  codeEditMode: boolean = false;
 
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -48,7 +49,7 @@ export class SchemeMasterComponent implements OnInit {
     code: ["", Validators.required],
     branch: [""],
     prefix: [""],
-    description: [""],
+    description: ["", Validators.required],
     frequency: ["", Validators.required],
     tenurePeriod: [""],
     installmentAmount: ["", Validators.required],
@@ -82,6 +83,7 @@ export class SchemeMasterComponent implements OnInit {
         this.viewMode = true;
       }
       if(this.content.FLAG == 'EDIT'){
+        this.codeEditMode = true
         this.schemeRegistrationWithParameter()
       }
       this.setInitialValues()

@@ -21,7 +21,7 @@
                         class="col-sm-2 col-form-label">Code*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" [readonly]="viewMode"
+                            <input type="text" [readonly]="viewMode || codeEditMode"
                                 oninput="this.value = this.value.toUpperCase()"
                                 (focusout)="getSchemeMasterList()" maxlength="6"
                                 matInput formControlName="code" />
@@ -46,7 +46,7 @@
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Description</label>
+                        class="col-sm-2 col-form-label">Description*</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
                             <input [readonly]="viewMode" type="text" matInput

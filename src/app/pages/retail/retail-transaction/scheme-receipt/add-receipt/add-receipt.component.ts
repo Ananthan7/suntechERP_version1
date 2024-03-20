@@ -186,7 +186,6 @@ export class AddReceiptComponent implements OnInit {
         if (result.response) {
           this.gridDataSource = result.response
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
-
           this.calculateGridAmount()
         } else {
           this.disableAmountFC = true;
@@ -269,29 +268,7 @@ export class AddReceiptComponent implements OnInit {
       this.close(this.receiptEntryForm.value)
     }
   }
-  currencyRateChange(event: any) {
-    let form = this.receiptEntryForm.value
 
-
-    if (this.commonService.emptyToZero(event.target.value) < this.commonService.emptyToZero(form.MIN_CONV_RATE)) {
-      this.commonService.toastErrorByMsgId('Rate should not be less than ' + form.MIN_CONV_RATE)
-      this.receiptEntryForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(form.MIN_CONV_RATE, 'RATE')
-      )
-    } else if (this.commonService.emptyToZero(event.target.value) > this.commonService.emptyToZero(form.MAX_CONV_RATE)) {
-      this.commonService.toastErrorByMsgId('Rate should not be greater than ' + form.MAX_CONV_RATE)
-      this.receiptEntryForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(form.MAX_CONV_RATE, 'RATE')
-      )
-    } else {
-      this.receiptEntryForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(event.target.value, 'RATE')
-      )
-    }
-    this.setFormControlAmount('Header_Amount', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.setFormControlAmount('Amount_LC', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.setFormControlAmount('Amount_FC', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-  }
   //USE: get currency master min max rate
   getCurrencyMasterDetail() {
     this.commonService.toastInfoByMsgId('MSG81447');
@@ -409,6 +386,39 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.commaSeperation(amount)
     )
   }
+  //use: currency rate change fn
+  currencyRateChange(event: any) {
+    let form = this.receiptEntryForm.value
+    if (this.commonService.emptyToZero(event.target.value) < this.commonService.emptyToZero(form.MIN_CONV_RATE)) {
+      this.commonService.toastErrorByMsgId('Rate should not be less than ' + form.MIN_CONV_RATE)
+      this.receiptEntryForm.controls.CurrRate.setValue(
+        this.commonService.decimalQuantityFormat(form.MIN_CONV_RATE, 'RATE')
+      )
+    } else if (this.commonService.emptyToZero(event.target.value) > this.commonService.emptyToZero(form.MAX_CONV_RATE)) {
+      this.commonService.toastErrorByMsgId('Rate should not be greater than ' + form.MAX_CONV_RATE)
+      this.receiptEntryForm.controls.CurrRate.setValue(
+        this.commonService.decimalQuantityFormat(form.MAX_CONV_RATE, 'RATE')
+      )
+    } else {
+      this.receiptEntryForm.controls.CurrRate.setValue(
+        this.commonService.decimalQuantityFormat(event.target.value, 'RATE')
+      )
+    }
+    // this.setFormControlAmount('Header_Amount', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.setFormControlAmount('Amount_LC', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.setFormControlAmount('Amount_FC', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+
+    let amount = this.commonService.emptyToZero(form.Amount_FC) * this.commonService.emptyToZero(form.CurrRate)
+    this.setFormControlAmount('Amount_LC', amount)
+    this.setFormControlAmount('Header_Amount', amount)
+    this.setFormControlAmount('Amount_FC', form.Amount_FC)
+    if (this.gridDataSource.length > 0) {
+      this.calculateGridAmount()
+    } else {
+      this.setGridData()
+    }
+  }
+  /**use: amount lc change fn to calculate amounts */
   calculateAmountLC() {
     let form = this.receiptEntryForm.value
     if (this.commonService.emptyToZero(form.SchemeBalance) == 0) {
@@ -475,6 +485,7 @@ export class AddReceiptComponent implements OnInit {
       this.setGridData()
     }
   }
+  CLfired:Number = 0
   /**calculate amount and split to rows in grid*/
   calculateGridAmount() {
     let formData = this.receiptEntryForm.value
@@ -503,26 +514,38 @@ export class AddReceiptComponent implements OnInit {
     let balanceAmount: number = Amount_LC - InstallmentAmount
     let totalRowsToUpdate = Math.floor(Amount_LC / InstallmentAmount)
     let flag = 0
+    let extraBalance: number = 0
+    if(this.gridDataSource[0].RCVD_AMOUNTFC != '0.000' && this.CLfired != 1){
+      extraBalance = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
+      this.gridDataSource[1].RCVD_AMOUNTFC = this.gridDataSource[0].RCVD_AMOUNTFC
+      this.gridDataSource[1].RCVD_AMOUNTCC = this.gridDataSource[0].RCVD_AMOUNTCC
+      this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
+      this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
+      this.CLfired = 1
+      flag = 1
+      return
+    }
     //calculating amount and spliting to each rows
     this.gridDataSource.forEach((item: any, index: any) => {
-      if (balanceAmount <= 0) {
-        if (this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTCC) == 0) {
-
-          this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
-          this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
-          flag = 1
-        }
+      if (balanceAmount <= 0 && this.gridDataSource[0].RCVD_AMOUNTFC == '0.000') {
+        console.log('fired = 1');
+        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
+        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
+        flag = 1
       }
       if (flag == 1) return
       if (totalRowsToUpdate >= index + 1) {
+        console.log('fired = 2');
         item.RCVD_AMOUNTFC = InstallmentAmount
         item.RCVD_AMOUNTCC = InstallmentAmount
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((item.RCVD_AMOUNTCC), 'THREE')
       } else {
-        item.RCVD_AMOUNTFC = Header_Amount - (totalRowsToUpdate * InstallmentAmount)
+        console.log('fired = 3');
+
+        item.RCVD_AMOUNTFC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+extraBalance
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
-        item.RCVD_AMOUNTCC = Header_Amount - (totalRowsToUpdate * InstallmentAmount)
+        item.RCVD_AMOUNTCC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+extraBalance
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         flag = 1
       }
@@ -551,7 +574,7 @@ export class AddReceiptComponent implements OnInit {
             this.receiptEntryForm.controls.CurrRate.setValue(
               this.commonService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
             )
-            this.calculateAmountFC()
+            // this.calculateAmountFC()
             this.getTaxDetails()
             this.getCurrencyMasterDetail()
             this.currencyRate = data.CONV_RATE
