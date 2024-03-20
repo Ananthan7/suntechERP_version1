@@ -67,7 +67,27 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   //   VIEW_TABLE: true,
   // }
  
-
+  CurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  currencyCodeSelected(e: any) {
+    console.log(e);
+    this.diamondJobBoqIssue.controls.currencyType.setValue(e.CURRENCY_CODE);
+    this.diamondJobBoqIssue.controls.currencyNo.setValue(e.CONV_RATE);
+  }
+  baseCurrencyCodeSelected(e: any) {
+    console.log(e);
+    this.diamondJobBoqIssue.controls.baseCurrencyType.setValue(e.CURRENCY_CODE);
+    this.diamondJobBoqIssue.controls.baseCurrencyNo.setValue(e.CONV_RATE);
+  }
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -112,6 +132,8 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
+    this.setCompanyCurrency()
+    this.basesetCompanyCurrency()
     this.setvalues()
   }
 
@@ -120,6 +142,62 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   
     
   }
+  /**USE: to set currency on selected change*/
+  currencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.diamondJobBoqIssue.controls.currencyType.setValue((event.target.value).toUpperCase())
+    } else {
+      this.diamondJobBoqIssue.controls.currencyType.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.diamondJobBoqIssue.controls.currencyType.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.diamondJobBoqIssue.value.currencyType);
+    if (CURRENCY_RATE.length > 0) {
+      this.diamondJobBoqIssue.controls.currencyNo.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.diamondJobBoqIssue.controls.currencyType.setValue('')
+      this.diamondJobBoqIssue.controls.currencyNo.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
+  }
+  basecurrencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.diamondJobBoqIssue.controls.baseCurrencyType.setValue((event.target.value).toUpperCase())
+    } else {
+      this.diamondJobBoqIssue.controls.baseCurrencyType.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  basesetCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.diamondJobBoqIssue.controls.baseCurrencyType.setValue(CURRENCY_CODE);
+    this.basesetCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  basesetCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.diamondJobBoqIssue.value.baseCurrencyType);
+    if (CURRENCY_RATE.length > 0) {
+      this.diamondJobBoqIssue.controls.baseCurrencyNo.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.diamondJobBoqIssue.controls.baseCurrencyType.setValue('')
+      this.diamondJobBoqIssue.controls.baseCurrencyNo.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
+  }
+
 
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
@@ -140,7 +218,10 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       this.diamondJobBoqIssue.controls.vocdate.setValue(new Date(date))
     }
   }
-  
+    //number validation
+ isNumeric(event: any) {
+  return this.commonService.isNumeric(event);
+}
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

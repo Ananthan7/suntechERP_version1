@@ -153,8 +153,8 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px; text-align: right;">
                                             <input type="number" [readonly]="viewModeAll" matInput
-                                                formControlName="carat_wt" MetalDecimalInput
-                                                (input)="onInputChange($event,'carat_wt', 12)" 
+                                                formControlName="carat_wt" MetalDecimalInput 
+                                                (input)="onInputChange($event,'carat_wt', 12)"   (keypress)="isNumeric($event)"
                                                 />
                                         </mat-form-field>
                                     </div>
@@ -186,8 +186,8 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" [readonly]="viewModeAll" matInput maxlength="15"
-                                                class="text-right" formControlName="wt_from" MetalDecimalInput
-                                                (input)="onInputChange($event,'wt_from', 12)" />
+                                                class="text-right" formControlName="wt_from" ThreeDecimalInput
+                                                (input)="onInputChange($event,'wt_from', 12)"  (keypress)="isNumeric($event)"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -198,8 +198,8 @@
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" [readonly]="viewModeAll" matInput maxlength="15"
                                                 class="text-right" formControlName="wt_to"
-                                                (change)="onweighttto($event)" MetalDecimalInput
-                                                (input)="onInputChange($event,'wt_to', 12)" />
+                                                (change)="onweighttto($event)" ThreeDecimalInput
+                                                (input)="onInputChange($event,'wt_to', 12)"  (keypress)="isNumeric($event)"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" [readonly]="viewModeAll" matInput maxlength="15"
                                                 class="text-right" formControlName="issue_rate" AmountDecimalInput
-                                                (input)="onInputChange($event,'issue_rate', 12)" />
+                                                (input)="onInputChange($event,'issue_rate', 12)" (keypress)="isNumeric($event)" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -223,7 +223,7 @@
                                                 class="text-right" formControlName="selling" AmountDecimalInput
                                                 (input)="onInputChange($event,'selling', 3)"
                                                 (keypress)="salesChange('selling')"
-                                                
+                                                (keypress)="isNumeric($event)"
                                                 />
                                         </mat-form-field>
                                     </div>
@@ -236,7 +236,7 @@
                                             <input type="number"  [readonly]="viewModeAll || viewsellingrate"
                                                 matInput class="text-right" formControlName="selling_rate"
                                                 AmountDecimalInput
-                                                 (keypress)="salesChange('selling_rate')"
+                                                 (keypress)="salesChange('selling_rate')"  (keypress)="isNumeric($event)"
                                                  />
                                         </mat-form-field>
 
