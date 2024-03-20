@@ -433,7 +433,7 @@ export class AddReceiptComponent implements OnInit {
       return
     }
 
-    if (this.commonService.emptyToZero(form.Amount_FC) > 0) {
+    if (this.commonService.emptyToZero(form.CurrCode) != this.commonService.compCurrency) {
       let currencyRate = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.Amount_FC)
       if (currencyRate > form.MAX_CONV_RATE) {
         this.commonService.toastErrorByMsgId('Currency Rate cannot be more than ' + form.MAX_CONV_RATE)
