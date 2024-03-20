@@ -91,9 +91,9 @@ export class LabourChargeMasterComponent implements OnInit {
     size_to: ['', [Validators.required]],
     cost_rate: ['', [Validators.required]],
     sieve: ['', [Validators.required]],
-    selling_rate: ['', [Validators.required]],
+    selling_rate: [''],
     sieve_desc: [''],
-    selling: ['', [Validators.required]],
+    selling: [''],
     ctWtFrom: ['.000'],
     ctWtTo: ['.000'],
     settingType: [''],
@@ -122,11 +122,11 @@ export class LabourChargeMasterComponent implements OnInit {
     color: [''],
     metalcost_rate: ['', [Validators.required]],
     typecode: [''],
-    metalselling_rate: ['', [Validators.required]],
+    metalselling_rate: [''],
     category: ['', [Validators.required]],
-    metalSelling: ['', [Validators.required]],
+    metalSelling: [''],
     subCategory: [''],
-    wastage: [''],
+    wastage: ['', [Validators.required]],
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
@@ -499,7 +499,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#code').focus();
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -548,7 +548,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
     this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
     this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
-    this.diamondlabourMasterForm.controls.cost_rate.setValue(this.content.COST_RATE);
+    //this.diamondlabourMasterForm.controls.cost_rate.setValue(this.content.COST_RATE);
     // this.diamondlabourMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE);
     // this.diamondlabourMasterForm.controls.selling.setValue(this.content.SELLING_PER);
     // this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.content.CARATWT_FROM);
@@ -577,6 +577,11 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_PER));
 
+    this.diamondlabourMasterForm.controls.cost_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.COST_RATE));
+
 
 
     this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
@@ -596,15 +601,25 @@ export class LabourChargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
 
-    this.diamondlabourMasterForm.controls.purity.setValue(
+    this.metallabourMasterForm.controls.purity.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.PURITY));
 
-    this.diamondlabourMasterForm.controls.metalselling_rate.setValue(
+    this.metallabourMasterForm.controls.metalselling_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.LAST_SELLING_RATE));
+
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.LAST_COST_RATE));
+
+        this.metallabourMasterForm.controls.metalselling.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,
+            this.content.METALSTONE));
 
   }
 
@@ -780,19 +795,28 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   formSubmit() {
+
+
+
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updatelabourChargeMaster()
       return
     }
 
-    if (this.diamondlabourMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.diamondlabourMasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+    // if (this.metallabourMasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
-    let postData = {
+    let postData =
+     {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code,
@@ -806,27 +830,27 @@ export class LabourChargeMasterComponent implements OnInit {
       "CURRENCYCODE": this.diamondlabourMasterForm.value.currency || "",
       "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
-      "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate,
+      "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
       "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
-      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate,
+      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate || 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
       "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
-      "SELLING_PER": this.diamondlabourMasterForm.value.selling,
+      "SELLING_PER": this.diamondlabourMasterForm.value.selling || 0,
       "ACCESSORIES": 0,
       "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
       "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
       "SIEVE": this.diamondlabourMasterForm.value.sieve,
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
       "WASTAGE_AMT": 0,
-      "TYPE_CODE": this.metallabourMasterForm.controls.typecode || "",
+      "TYPE_CODE": this.metallabourMasterForm.value.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category,
       "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": "",
+      "METALSTONE":  this.metallabourMasterForm.value.metalselling_rate || "",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
@@ -834,12 +858,16 @@ export class LabourChargeMasterComponent implements OnInit {
       "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
+    console.log(this.metallabourMasterForm.value)
+    console.log(postData)
+    console.log('start')
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
+        console.log('Server Response:', result); 
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: result?.message || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -847,6 +875,7 @@ export class LabourChargeMasterComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.diamondlabourMasterForm.reset()
+                this.metallabourMasterForm.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -855,52 +884,55 @@ export class LabourChargeMasterComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }
+       , err => alert('save '+err)
+      )
     this.subscriptions.push(Sub)
   }
 
   updatelabourChargeMaster() {
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
-    let postData = {
+    let postData =
+     {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code,
-      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description,
+      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "",
       "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
       "METHOD": this.diamondlabourMasterForm.value.method || "",
-      "DIVISION": this.diamondlabourMasterForm.value.division,
+      "DIVISION": this.diamondlabourMasterForm.value.divisions,
       "SHAPE": this.diamondlabourMasterForm.value.shape,
       "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
       "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
       "CURRENCYCODE": this.diamondlabourMasterForm.value.currency || "",
       "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
-      "COST_RATE": this.diamondlabourMasterForm.value.cost_rate || "",
-      "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || "",
-      "LAST_COST_RATE": 0,
-      "LAST_SELLING_RATE": 0,
+      "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
+      "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
+      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
+      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate || 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
       "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
-      "SELLING_PER": this.diamondlabourMasterForm.value.selling || "",
+      "SELLING_PER": this.diamondlabourMasterForm.value.selling || 0,
       "ACCESSORIES": 0,
       "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
       "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
-      "SIEVE": this.diamondlabourMasterForm.value.sieve || "",
-      "WASTAGE_PER": this.metallabourMasterForm.value.wastage || "",
+      "SIEVE": this.diamondlabourMasterForm.value.sieve,
+      "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
       "WASTAGE_AMT": 0,
-      "TYPE_CODE": this.metallabourMasterForm.controls.typecode || "",
-      "CATEGORY_CODE": this.metallabourMasterForm.value.category || "",
-      "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory || "",
-      "BRAND_CODE": this.metallabourMasterForm.value.brand || "",
+      "TYPE_CODE": this.metallabourMasterForm.value.typecode || "",
+      "CATEGORY_CODE": this.metallabourMasterForm.value.category,
+      "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
+      "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
-      "KARAT_CODE": this.metallabourMasterForm.value.karat || "0",
-      "METALSTONE": "s",
-      "STOCK_CODE": this.metallabourMasterForm.value.stock_code || "",
-      "PURITY": this.metallabourMasterForm.value.purity || 0,
-      "COLOR": this.metallabourMasterForm.value.color || "",
+      "KARAT_CODE": this.metallabourMasterForm.value.karat,
+      "METALSTONE":  this.metallabourMasterForm.value.metalselling_rate || "",
+      "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
+      "PURITY": this.metallabourMasterForm.value.purity,
+      "COLOR": this.metallabourMasterForm.value.color,
       "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly,
-      "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc || "",
+      "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
     }
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -925,7 +957,7 @@ export class LabourChargeMasterComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => alert('update '+err))
     this.subscriptions.push(Sub)
   }
 
@@ -993,7 +1025,7 @@ export class LabourChargeMasterComponent implements OnInit {
             } else {
               this.toastr.error('Not deleted')
             }
-          }, err => alert(err))
+          }, err => alert('delete '+err))
         this.subscriptions.push(Sub)
       }
     });
@@ -1033,10 +1065,10 @@ export class LabourChargeMasterComponent implements OnInit {
     this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  DiaCtWtTokeyupvalue(e: any) {
-    console.log(e);
-    this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  // DiaCtWtTokeyupvalue(e: any) {
+  //   console.log(e);
+  //   this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
 
   MetalCostRatekeyupvalue(e: any) {
     console.log(e);
