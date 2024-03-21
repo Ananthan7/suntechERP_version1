@@ -74,6 +74,8 @@ import { PosCreditSaleReciptDetailsComponent } from './pos-credit-sale-recipt/po
 import { PullPOSComponent } from './pos-credit-sale-recipt/pull-pos/pull-pos.component';
 import { VoucherRedeemComponent } from './pos-credit-sale-recipt/voucher-redeem/voucher-redeem.component';
 import { MetalBranchTransferInAutoRepairDetailsComponent } from './metal-branch-transfer-in-auto-repair/metal-branch-transfer-in-auto-repair-details/metal-branch-transfer-in-auto-repair-details.component';
+import { PreciousStonePurchaseComponent } from './precious-stone-purchase/precious-stone-purchase.component';
+import { RepairPurchaseComponent } from './repair-purchase/repair-purchase.component';
 
 
 @NgModule({
@@ -153,7 +155,9 @@ import { MetalBranchTransferInAutoRepairDetailsComponent } from './metal-branch-
     PosCreditSaleReciptDetailsComponent,
     PullPOSComponent,
     VoucherRedeemComponent,
-    MetalBranchTransferInAutoRepairDetailsComponent
+    MetalBranchTransferInAutoRepairDetailsComponent,
+    PreciousStonePurchaseComponent,
+    RepairPurchaseComponent
   ],
   imports: [
     CommonModule,

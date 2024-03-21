@@ -1,7 +1,7 @@
 import {  Directive, ElementRef, HostListener  } from '@angular/core';
 
 @Directive({
-  selector: '[Uppercase]'
+  selector: '[UppercaseDirective]'
 })
 export class UppercaseDirective {
   constructor(private el: ElementRef) { }
