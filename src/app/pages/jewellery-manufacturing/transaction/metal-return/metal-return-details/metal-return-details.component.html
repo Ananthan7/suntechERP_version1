@@ -100,19 +100,19 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="makingRateFc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" SixDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="makingRateLc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" SixDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="makingAmountLC"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="makingAmountFC"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Tree Number :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="treeNumber" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="treeNumber" [readonly]="viewMode" NumberOnly/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Location * :</label>
@@ -167,14 +167,14 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="pcs" style="text-align: right;"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode" NumberOnly/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Purity:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="purity" style="text-align: right;"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode" SixDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -183,14 +183,14 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="grossWeight"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Net Weight :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="netWeight" style="text-align: right;"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode" ThreeDecimalInput/>
                                 </mat-form-field>
                             </div>
 
@@ -203,14 +203,14 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="stoneWeight"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="pureWeight"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
                                 </mat-form-field>
                             </div>
 
@@ -229,38 +229,38 @@
                         <div class="row justify-content-end">
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="metalGramRateFc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="metalGramRateFc"
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="metalGramRateLc"
-                                        style="text-align: right;" [readonly]="viewMode" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row  justify-content-end">
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="metalAmountFc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="metalGramRateLc"
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row  justify-content-end">
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="metalAmountLc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="metalAmountFc"
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row  justify-content-end">
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="totalRateFc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="metalAmountLc"
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row  justify-content-end">
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="totalRateFc"
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -269,13 +269,13 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="purityDiff"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3 offset-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="totalRateLc"
-                                        style="text-align: right;" [readonly]="viewMode" />
+                                        style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -283,12 +283,12 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Job Pcs :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobPcs" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="jobPcs" [readonly]="viewMode" NumberOnly/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3  offset-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobPcsDate" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="jobPcsDate" [readonly]="viewMode" NumberOnly/>
                                 </mat-form-field>
                                 <!-- <mat-form-field style="width: 100%">
                                     <input matInput [matDatepicker]="jobPcsDate" name="jobPcsDate" formControlName="jobPcsDate"
