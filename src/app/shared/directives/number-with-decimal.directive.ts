@@ -6,6 +6,12 @@ import { Directive, HostListener, ElementRef } from '@angular/core';
 export class DecimalInputDirective {
 
   constructor(private el: ElementRef) { }
+  @HostListener('keypress', ['$event']) onKeyPress(event: any) {
+    console.log('Key pressed:', event);
+    var keyCode = event.which ? event.which : event.keyCode;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode === 46;
+    return isValid;  
+  }
   @HostListener('input', ['$event']) onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;
