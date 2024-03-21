@@ -11,7 +11,12 @@ export class MetalDecimalDirective {
     private commonService: CommonServiceService,
   ) {
   }
- 
+  @HostListener('keypress', ['$event']) onKeyPress(event: any) {
+    console.log('Key pressed:', event);
+    var keyCode = event.which ? event.which : event.keyCode;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode === 46;
+    return isValid;  
+  }
   @HostListener('input', ['$event']) onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
