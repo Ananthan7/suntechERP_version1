@@ -53,29 +53,61 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
 
-
-  //   @ViewChild('codeInput')
-  //   codeInput!: ElementRef;
-
-  //   ngAfterViewInit(): void {
-  //     this.codeInput.nativeElement.focus();
-  // }
-
-  //   @ViewChild('codeInput1')
-  //   codeInput1!: ElementRef;
-
-  //   ngAfterViewInit1(): void {
-  //     this.codeInput1.nativeElement.focus();
+  // @ViewChild('codeInput') codeInput!: ElementRef;
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
   // }
 
 
-  @ViewChild('codeInput') codeInput!: ElementRef;
+  ngOnInit(): void {
+    this.renderer.selectRootElement('#metallabour_code')?.focus();
+
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.viewDisable = true;
+      this.setFormValues();
+      this.setInitialValues();
+    }
+    else (this.content.FLAG == 'EDIT')
+    {
+      this.editMode = true;
+      this.setFormValues();
+      this.setInitialValues();
+    }
+
+    this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
+      const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
+      const methodControl = this.diamondlabourMasterForm.get('method');
+
+      if (selectedLabourType === 'SETTING') {
+        settingTypeControl?.enable();
+        methodControl?.enable();
+      } else {
+        settingTypeControl?.disable();
+        methodControl?.disable();
+      }
+      console.log(this.settingTypeList);
+    });
 
 
+    this.metallabourMasterForm.controls['stock_code'].enable();
+    this.metallabourMasterForm.controls['color'].enable();
+    this.metallabourMasterForm.controls['metallabourType'].enable();
 
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
+    this.getcurrencyOptions()
+
   }
+
+  
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
+    private renderer: Renderer2,
+  ) { }
+
 
 
 
@@ -135,6 +167,7 @@ export class LabourChargeMasterComponent implements OnInit {
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
+
 
   salesChangesDia(data: any) {
     console.log(data);
@@ -485,56 +518,6 @@ export class LabourChargeMasterComponent implements OnInit {
     },
 
   ];
-
-
-  constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService,
-    private renderer: Renderer2,
-  ) { }
-
-
-
-  ngOnInit(): void {
-
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.viewDisable = true;
-      this.setFormValues();
-      this.setInitialValues();
-    }
-    else (this.content.FLAG == 'EDIT')
-    {
-      this.editMode = true;
-      this.setFormValues();
-      this.setInitialValues();
-    }
-
-    this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
-      const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
-      const methodControl = this.diamondlabourMasterForm.get('method');
-
-      if (selectedLabourType === 'SETTING') {
-        settingTypeControl?.enable();
-        methodControl?.enable();
-      } else {
-        settingTypeControl?.disable();
-        methodControl?.disable();
-      }
-      console.log(this.settingTypeList);
-    });
-
-
-    this.metallabourMasterForm.controls['stock_code'].enable();
-    this.metallabourMasterForm.controls['color'].enable();
-    this.metallabourMasterForm.controls['metallabourType'].enable();
-
-    this.getcurrencyOptions()
-
-  }
 
   setFormValues() {
     if (!this.content) return
