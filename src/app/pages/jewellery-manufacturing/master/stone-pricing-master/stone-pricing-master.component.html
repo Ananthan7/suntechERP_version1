@@ -312,10 +312,9 @@
                                                 maxlength="15"
                                                 class="text-right"
                                                 formControlName="selling"
-                                                AmountDecimalInput
+                                                CommaSeparatedNumber
                                                 (input)="onInputChange($event,'selling', 3)"
-                                                (change)="salesChange('selling')"
-                                                (keypress)="isNumeric($event)" />
+                                                (keypress)="salesChange('selling')" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -331,9 +330,9 @@
                                                 [readonly]="viewModeAll || viewsellingrate"
                                                 matInput class="text-right"
                                                 formControlName="selling_rate"
-                                                AmountDecimalInput
-                                                (change)="salesChange('selling_rate')"
-                                                (keypress)="isNumeric($event)" />
+                                                CommaSeparatedNumber
+                                                (keypress)="salesChange('selling_rate')"
+                                             />
                                         </mat-form-field>
                                     </div>
                                 </div>
