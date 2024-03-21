@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -20,6 +20,7 @@ export class PricelistMasterComponent implements OnInit {
   currentDate: any = new Date();
   viewMode: boolean = false;
   required : boolean = false;
+
 
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
@@ -107,6 +108,8 @@ export class PricelistMasterComponent implements OnInit {
         err => alert(err)
       );
   }
+ 
+
 
   update() {
     if (!this.validateForm()) return;
