@@ -137,9 +137,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   });
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
-  }
+ 
 
   metallabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],

@@ -19,14 +19,14 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Job Number * :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="jobNumber" [readonly]="viewMode"/>
+                                            <input type="text" matInput formControlName="jobNumber" [readonly]="viewMode" class="text-right"/>
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="jobNumberCodeData"
                                             (newRowClick)="jobNumberCodeSelected($event)" *ngIf="!viewMode"></master-search>
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="subJobNoDes" [readonly]="viewMode"/>
+                                            <input type="text" matInput formControlName="subJobNoDes" [readonly]="viewMode" class="text-right"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -34,14 +34,14 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Sub Job No : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="subJobNo" [readonly]="viewMode"/>
+                                            <input type="text" matInput formControlName="subJobNo" [readonly]="viewMode" class="text-right"/>
                                         </mat-form-field>
                                         <!-- <master-search [MasterSearchData]="subJobNoCodeData"
                                             (newRowClick)="subJobNoCodeSelected($event)"></master-search> -->
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="subJobNoDes"  [readonly]="viewMode"/>
+                                            <input type="text" matInput formControlName="subJobNoDes"  [readonly]="viewMode" class="text-right"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -138,13 +138,13 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Tree Number :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="treeNumber" [readonly]="viewMode"/>
+                                            <input type="text" matInput formControlName="treeNumber" [readonly]="viewMode" class="text-right" NumberOnly/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Job Purity :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="jobPurity" style="text-align: right;" [readonly]="viewMode"/>
+                                            <input type="number" matInput formControlName="jobPurity" style="text-align: right;" [readonly]="viewMode" NumberOnly/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -167,13 +167,13 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Pcs :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="pcs"  [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="text" matInput formControlName="pcs"  [readonly]="viewMode" style="text-align: right;" NumberOnly/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Purity : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="purity" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="text" matInput formControlName="purity" [readonly]="viewMode" style="text-align: right;" SixDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -181,13 +181,13 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Gross Weight :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="grossWeight" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="text" matInput formControlName="grossWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Net Weight : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="netWeight" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="text" matInput formControlName="netWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -195,13 +195,13 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="stoneWeight" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="text" matInput formControlName="stoneWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="pureWeight" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="text" matInput formControlName="pureWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@
                                     </div>
                                     <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="totalAmountFc" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="number" matInput formControlName="totalAmountFc" [readonly]="viewMode" style="text-align: right;" AmountDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="totalAmountLc" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="number" matInput formControlName="totalAmountLc" [readonly]="viewMode" style="text-align: right;" AmountDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -257,12 +257,12 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Purity Diff : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="purityDiff" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="number" matInput formControlName="purityDiff" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="amountFc" [readonly]="viewMode" style="text-align: right;" />
+                                            <input type="number" matInput formControlName="amountFc" [readonly]="viewMode" style="text-align: right;" AmountDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -275,7 +275,7 @@
                                     </div>
                                     <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="amountLc" [readonly]="viewMode"style="text-align: right;" />
+                                            <input type="number" matInput formControlName="amountLc" [readonly]="viewMode"style="text-align: right;" AmountDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>

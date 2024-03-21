@@ -215,6 +215,7 @@ stockCodeData: MasterSearchModel = {
     this.activeModal.close(data);
   }
   
+
   addTableData(){
     let length = this.tableData.length;
     let sn = length + 1;

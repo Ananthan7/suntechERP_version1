@@ -288,6 +288,7 @@ export class MeltingProcessComponent implements OnInit {
     issued: [''],
     
   });
+ 
 
   setvalues(){
     this.meltingProcessFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())

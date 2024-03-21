@@ -191,9 +191,7 @@ export class JewelleryAltrationComponent implements OnInit {
     itemcurrencycc: [''],
     narration: [''],
   });
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
-  }
+
   setvalues() {
     console.log(this.comService);
     this.jewelleryaltrationFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
