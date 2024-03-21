@@ -288,9 +288,7 @@ export class MeltingProcessComponent implements OnInit {
     issued: [''],
     
   });
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
-  }
+ 
 
   setvalues(){
     this.meltingProcessFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())

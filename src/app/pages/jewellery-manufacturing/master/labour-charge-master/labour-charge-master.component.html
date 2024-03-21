@@ -312,7 +312,7 @@
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode" matInput NumberOnly #MetalCostRate
                     (keyup)="MetalCostRatekeyupvalue(MetalCostRate.value)" formControlName="metalcost_rate"
-                    style="text-align: right;" (keypress)="isNumeric($event)"
+                    style="text-align: right;" 
                     SixDecimalInput/>
                 </mat-form-field>
               </div>
@@ -331,7 +331,7 @@
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode" SixDecimalInput matInput
                     formControlName="metalselling_rate" (keypress)="salesChangesMetal('metalselling_rate')"
-                    style="text-align: right;" (keypress)="isNumeric($event)"/>
+                    style="text-align: right;" />
 
                 </mat-form-field>
               </div>
@@ -349,7 +349,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="number" matInput [readonly]="viewMode" AmountDecimalInput formControlName="metalSelling"
-                    (keypress)="salesChangesMetal('metalSelling')" style="text-align: right;" (keypress)="isNumeric($event)"/>
+                    (keypress)="salesChangesMetal('metalSelling')" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -365,7 +365,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wastage % :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" [readonly]="viewMode" formControlName="wastage" (keypress)="isNumeric($event)"
+                  <input matInput type="number" [readonly]="viewMode" formControlName="wastage" 
                     style="text-align: right;" AmountDecimalInput/>
                 </mat-form-field>
               </div>
@@ -396,7 +396,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="number" [readonly]="viewMode" formControlName="purity"
-                    style="text-align: right;" (keypress)="isNumeric($event)">
+                    style="text-align: right;" NumberOnly>
                 </mat-form-field>
               </div>
             </div>
@@ -405,7 +405,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
                   <input matInput type="text" [readonly]="viewMode"  matInput 
-                  formControlName="wtFrom" MetalDecimalInput (keypress)="isNumeric($event)"
+                  formControlName="wtFrom" MetalDecimalInput 
                     style="text-align: right;" />
                 </mat-form-field>
               </div>
@@ -416,7 +416,7 @@
                 <mat-form-field style="width: 100%">
                   <input matInput type="text" [readonly]="viewMode"  matInput 
                   (change)="onweighttto($event)" formControlName="wtTo"
-                  (keypress)="isNumeric($event)"
+                  NumberOnly
                     style="text-align: right;"  MetalDecimalInput/>
                 </mat-form-field>
               </div>

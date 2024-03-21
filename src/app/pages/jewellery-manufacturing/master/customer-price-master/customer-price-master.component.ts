@@ -176,9 +176,7 @@ export class CustomerPriceMasterComponent implements OnInit {
    });
 
 
-   isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
-  }
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

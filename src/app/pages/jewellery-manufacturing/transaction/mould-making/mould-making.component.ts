@@ -215,9 +215,7 @@ stockCodeData: MasterSearchModel = {
     this.activeModal.close(data);
   }
   
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
-  }
+
   addTableData(){
     let length = this.tableData.length;
     let sn = length + 1;

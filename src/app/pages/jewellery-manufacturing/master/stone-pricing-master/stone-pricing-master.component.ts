@@ -201,12 +201,6 @@ export class StonePricingMasterComponent implements OnInit {
     selling_rate: [''],
   })
 
- //number validation
- isNumeric(event: any) {
-  return this.commonService.isNumeric(event);
-}
-
-
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
