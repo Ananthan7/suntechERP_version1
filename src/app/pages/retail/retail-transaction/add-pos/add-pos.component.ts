@@ -7486,6 +7486,7 @@ export class AddPosComponent implements OnInit {
 
     if (
       !this.vocDataForm.invalid &&
+      !this.customerDataForm.invalid &&
       this.customerDataForm.value.fcn_customer_mobile != '' &&
       this.customerDataForm.value.fcn_customer_name != '' &&
       this.vocDataForm.value.sales_person != '' &&
