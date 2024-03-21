@@ -93,8 +93,6 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text" [readonly]="viewMode"
                                 class="text-right" maxlength="15" 
-                                (keypress)="isNumeric($event)"
-                                (focusout)="addCommaSeperation($event)"
                                 AmountDecimalInput
                                 matInput formControlName="installmentAmount" />
                         </mat-form-field>
@@ -116,7 +114,6 @@
                             <input type="text" class="text-right"
                                 [readonly]="viewMode" maxlength="5" 
                                 (keypress)="isNumeric($event)" 
-                                (focusout)="addCommaSeperation($event)"
                                 AmountDecimalInput
                                 matInput formControlName="bonusInstallment" />
                         </mat-form-field>
@@ -138,7 +135,6 @@
                                 (keypress)="isNumeric($event)"
                                 class="text-right"
                                 [readonly]="viewMode"
-                                (focusout)="addCommaSeperation($event)"
                                 AmountDecimalInput
                                 matInput formControlName="cancelCharges" />
                         </mat-form-field>
