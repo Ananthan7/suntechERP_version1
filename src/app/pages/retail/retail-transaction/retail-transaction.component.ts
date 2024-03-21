@@ -123,6 +123,15 @@ export class RetailTransactionComponent implements OnInit {
     str.FLAG = 'VIEW'
     this.openModalView(str)
   }
+  async deleteBtnClicked(e: any) {
+    let str = e.row.data;
+    str.FLAG = 'DELETE'
+    let isAuth = await this.openAuthModal();
+    if (isAuth)
+      this.openModalView(str)
+    else
+      this.snackBar.open('Authentication Failed', 'OK');
+  }
   async editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
@@ -259,7 +268,6 @@ export class RetailTransactionComponent implements OnInit {
   }
 
   reasonSelected(e: any) {
-    console.log(e);
     // this.authForm.controls.reason.setValue(e.CODE);
     this.authForm.controls.reason.setValue(e.DESCRIPTION);
     this.authForm.controls.description.setValue(e.DESCRIPTION);
@@ -279,7 +287,6 @@ export class RetailTransactionComponent implements OnInit {
               this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
             )
           );
-          console.log(this.reasonMasterOptions);
         } else {
           this.reasonMaster = [];
         }

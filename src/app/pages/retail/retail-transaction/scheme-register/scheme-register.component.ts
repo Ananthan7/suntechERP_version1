@@ -27,9 +27,11 @@ export class SchemeRegisterComponent implements OnInit {
   viewMode: boolean = false;
   processMode: boolean = false;
   editMode: boolean = false;
+  editUNITS: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
   disableCancelBtn: boolean = true;
   viewPorcessBtn: boolean = true;
+  viewDeleteBtn: boolean = false;
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
 
@@ -44,7 +46,8 @@ export class SchemeRegisterComponent implements OnInit {
   newSchemeLength: number = 0
   dataIndex: any;
   currentDate: any = new Date();
-
+  dateFormat: any = this.commonService.allbranchMaster?.BDATEFORMAT
+  initialLoadedAmounts: any;
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -162,9 +165,7 @@ export class SchemeRegisterComponent implements OnInit {
     private snackBar: MatSnackBar,
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
-    this.editMainGridDetails = this.editMainGridDetails.bind(this);
-    this.editRowDetails = this.editRowDetails.bind(this);
-    this.deleteRow = this.deleteRow.bind(this);
+
   }
   ngOnInit(): void {
     if (this.content?.FLAG == 'VIEW') {
@@ -174,6 +175,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.editMode = true
       this.disableCancelBtn = false
     }
+
     this.schemeRegistrationForm.controls.SchemeType.setValue('AMOUNT');
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.DateOfJoining.setValue(this.currentDate)
@@ -228,13 +230,22 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.SchemeMasterDetails = data.Details
+          if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'DELETE') {
+            let schemeReceipts: any[] = this.SchemeMasterDetails.filter((item: any) => item.RCVD_VOCTYPE != '')
+            if (schemeReceipts.length == 0) {
+              this.viewDeleteBtn = true;
+              if (this.content.FLAG == 'DELETE') this.deleteBtnClicked();
+            } else {
+              this.viewMode = true;
+            }
+          }
           if (data.SCH_CANCEL) {
             this.viewMode = true
           }
+
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
           this.schemeRegistrationForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
           this.schemeRegistrationForm.controls.SalesmanName.setValue(data.SALESMAN_NAME)
-
           this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.Units.setValue(data.SCH_UNITS)
@@ -251,12 +262,20 @@ export class SchemeRegisterComponent implements OnInit {
           this.setFormControlAmount('InstallmentAmount', data.SCH_INST_AMOUNT_CC)
           this.setFormControlAmount('CancellationCharge', data.SCH_CANCEL_AMT)
           this.setFormControlAmount('SumAssured', data.SCH_ASSURED_AMT_FC)
-
+          //amounts used for calculating number of units
+          this.initialLoadedAmounts = {
+            InstallmentAmount: data.SCH_INST_AMOUNT_CC,
+            CancellationCharge: data.SCH_CANCEL_AMT,
+            BonusInstallment: data.SCHEME_BONUS,
+          }
           this.schemeRegistrationForm.controls.Remarks.setValue(data.REMARKS)
           this.schemeRegistrationForm.controls.PanNo.setValue(data.PAN_NUMBER)
           this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.SCH_JOIN_DATE)
           this.schemeRegistrationForm.controls.VOCDATE.setValue(data.VOCDATE)
           this.schemeRegistrationForm.controls.MaturingDate.setValue(data.SCH_EXPIRE_DATE)
+
+
+
           let params = {
             "ID": 1,
             "SCHEME_UNIQUEID": this.commonService.nullToString(data.Details[0].UNIQUEID),
@@ -308,9 +327,26 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  /**USE: change fn to calculate no of units and amount */
+  numberOfUnitCalculate() {
+    let form = this.schemeRegistrationForm.value
+    if (form.Units) {
+      let InstallmentAmount: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.InstallmentAmount)
+      let CancellationCharge: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.CancellationCharge)
+      let BonusInstallment: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.BonusInstallment)
+      let TotalAmountToPay: number = InstallmentAmount * this.commonService.emptyToZero(form.TenurePeriod)
+      let SumAssured: number = TotalAmountToPay + BonusInstallment;
+
+      this.setFormControlAmount('InstallmentAmount', InstallmentAmount);
+      this.setFormControlAmount('CancellationCharge', CancellationCharge);
+      this.setFormControlAmount('BonusInstallment', BonusInstallment);
+      this.setFormControlAmount('TotalAmountToPay', TotalAmountToPay);
+      this.setFormControlAmount('SumAssured', SumAssured);
+    }
+  }
   setFormControlAmount(controlName: string, amount: any) {
     amount = this.commonService.emptyToZero(amount)
-    amount = this.commonService.decimalQuantityFormat(amount, 'THREE')
+    amount = this.commonService.decimalQuantityFormat(amount, 'AMOUNT')
     this.schemeRegistrationForm.controls[controlName].setValue(
       this.commonService.commaSeperation(amount)
     )
@@ -391,8 +427,6 @@ export class SchemeRegisterComponent implements OnInit {
     this.authCheckerComponent?.openAuthModal()
   }
   cancelScheme(event: any) {
-    console.log(event, 'event');
-
     if (!this.content?.SCH_CUSTOMER_ID) {
       this.commonService.toastErrorByMsgId('customer id not available')
       return
@@ -434,7 +468,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
           this.schemeRegistrationForm.controls.Remarks.setValue(data.SCHEME_REMARKS)
-          // this.schemeRegistrationForm.controls.Units.setValue(data.SCHEME_UNIT)
+          this.schemeRegistrationForm.controls.Units.setValue(data.SCHEME_UNIT)
           // this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.START_DATE)
           // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCHEME_PERIOD)
@@ -446,18 +480,12 @@ export class SchemeRegisterComponent implements OnInit {
           this.setFormControlAmount('InstallmentAmount', data.SCHEME_AMOUNT)
           this.setFormControlAmount('CancellationCharge', data.CANCEL_CHARGE)
           this.setFormControlAmount('SumAssured', (total + data.SCHEME_BONUS))
-          // this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
-          //   this.commonService.commaSeperation(data.SCHEME_AMOUNT * data.SCHEME_PERIOD)
-          // )
-          // this.schemeRegistrationForm.controls.SumAssured.setValue(
-          //   this.commonService.commaSeperation((data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS)
-          // )
-          // this.schemeRegistrationForm.controls.CancellationCharge.setValue(
-          //   this.commonService.commaSeperation(data.CANCEL_CHARGE)
-          // )
-          // this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
-          //   this.commonService.commaSeperation(data.SCHEME_AMOUNT)
-          // )
+          this.initialLoadedAmounts = {
+            InstallmentAmount: data.SCHEME_AMOUNT,
+            CancellationCharge: data.CANCEL_CHARGE,
+            BonusInstallment: data.SCHEME_BONUS,
+          }
+
           let maturingdate
           if (data.SCHEME_FREQUENCY.toUpperCase() == 'WEEKLY') {
             maturingdate = this.commonService.addWeeksToDate(this.schemeRegistrationForm.value.DateOfJoining, this.schemeRegistrationForm.value.TenurePeriod)
@@ -530,6 +558,12 @@ export class SchemeRegisterComponent implements OnInit {
       });
     this.subscriptions.push(Sub)
   }
+  emailIdChange(event: any) {
+    if (event.target.value == '') return
+    if (this.schemeRegistrationForm.controls.Email.hasError('pattern')) {
+      this.schemeRegistrationForm.controls.Email.setValue('')
+    }
+  }
   //search Value Change SCHEME_CUSTCODE
   searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
     if (event.target.value == '' || this.content?.FLAG == 'VIEW') return
@@ -569,9 +603,9 @@ export class SchemeRegisterComponent implements OnInit {
     // this.schemeRegistrationForm.controls.GovIdNumber.setValue(data.POSCustIDNo)
     // if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode()
   }
-  selectedScheme(data: any, schemeFlag?: boolean) {
+  selectedScheme(data: any) {
     this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCHEME_CODE)
-    this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCHEME_CODE)
+    this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCHEME_CODE.toUpperCase())
     if (data.SCHEME_CODE) this.fetchSchemeWithCustCode()
   }
   reset() {
@@ -927,7 +961,7 @@ export class SchemeRegisterComponent implements OnInit {
     str.FLAG = 'EDIT'
   }
   //USE delete row
-  deleteRow(e: any) {
+  deleteBtnClicked() {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -938,18 +972,12 @@ export class SchemeRegisterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let str = e.row.data;
-        if (str.SCHEME_UNIQUEID == '') {
-          let data = this.newSchemeItems.filter((item: any) => item.ID != str.ID)
-          this.newSchemeItems = data
-        } else {
-          this.deleteSchemeWithUniqueId(str.SCHEME_UNIQUEID)
-        }
+        this.deleteSchemeRegistration(this.content?.SCH_CUSTOMER_ID)
       }
     })
   }
-  deleteSchemeWithUniqueId(SCHEME_UNIQUEID: string) {
-    let API = `Scheme/SchemeMaster?SCHEME_UNIQUEID=${SCHEME_UNIQUEID}`
+  deleteSchemeRegistration(SCH_CUSTOMER_ID: string) {
+    let API = `SchemeRegistration/DeleteSchemeRegistration/${SCH_CUSTOMER_ID}`
     let Sub: Subscription = this.dataService.deleteDynamicAPI(API).subscribe((result) => {
       if (result.status == "Success") {
         this.close()

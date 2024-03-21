@@ -183,8 +183,8 @@ export class AddReceiptComponent implements OnInit {
     }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts', param)
       .subscribe((result) => {
-        if (result.response) {
-          this.gridDataSource = result.response
+        if (result.status == "Success") {
+          this.gridDataSource = result.dynamicData[1]
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
           this.calculateGridAmount()
         } else {

@@ -11,7 +11,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmitWithAttachment()" 
-    [isViewDelete]="false" [disableSaveBtn]="viewMode"
+    [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode"
     (cancelClick)="close()"></modal-header>
 <auth-checker (authSubmit)="cancelScheme($event)"></auth-checker>
 <!-- content section -->
@@ -30,7 +30,6 @@
                                 name="VocDate"
                                 [matDatepicker]="VocDates"
                                 formControlName="VOCDATE"
-                                placeholder="DD/MM/YYYY"
                                 (dateChange)="formatDate($event)" />
                             <mat-datepicker-toggle
                                 matSuffix
@@ -49,8 +48,8 @@
                         <label class="matlabels">No of units:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput [readonly]="viewMode || processMode"
-                                formControlName="Units"
+                            <input type="text" NumberOnly matInput [readonly]="viewMode || editUNITS"
+                                formControlName="Units" (focusout)="numberOfUnitCalculate()"
                                 class="text-right" />
                         </mat-form-field>
                     </div>
@@ -85,7 +84,6 @@
                                 name="DOJ"
                                 [matDatepicker]="DOJ"
                                 formControlName="DateOfJoining"
-                                placeholder="DD/MM/YYYY"
                                 (dateChange)="changeDateOfJoining($event)" 
                                 />
                                 <!-- (dateChange)="formatDate($event)"  -->
@@ -116,7 +114,7 @@
                         <label class="matlabels">Email Id:
                         </label>
                         <mat-form-field style="width: 50%">
-                            <input type="text" matInput
+                            <input type="text" matInput (focusout)="emailIdChange($event)"
                                 formControlName="Email" [readonly]="viewMode  || processMode" />
                             <mat-error
                                 *ngIf="schemeRegistrationForm.controls.Email.touched 
@@ -158,8 +156,8 @@
                         <label class="matlabels">Alert Before (Days):
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput [readonly]="viewMode  || processMode"
-                                formControlName="AlertBeforeDays"
+                            <input type="text" matInput [readonly]="viewMode  || processMode"
+                                formControlName="AlertBeforeDays" NumberOnly
                                 class="text-right" />
                         </mat-form-field>
                     </div>
@@ -226,7 +224,6 @@
                                     name="MaturingDate"
                                     [matDatepicker]="MaturingDate"
                                     formControlName="MaturingDate"
-                                    placeholder="DD/MM/YYYY"
                                     (dateChange)="formatDateMaturingDate($event)" />
                                 <mat-datepicker-toggle
                                     matSuffix
@@ -351,7 +348,7 @@
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" dataType="date"
-                        caption="Pay Date" [format]="'dd-MM-yyyy'"
+                        caption="Pay Date" [format]="dateFormat"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_AMOUNT_CC"
@@ -365,7 +362,7 @@
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_DATE"
                         caption="Reminder Date" dataType="date"
-                        [format]="'dd-MM-yyyy'"
+                        [format]="dateFormat"
                          alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_SEND"
@@ -374,7 +371,7 @@
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_DATE" dataType="date"
-                        [format]="'dd-MM-yyyy'"
+                        [format]="dateFormat"
                         caption="Receipt Date"
                          alignment="center">
                     </dxi-column>
@@ -393,28 +390,28 @@
                         caption="Receipt Amount"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column width="200"
+                    <!-- <dxi-column width="200"
                         caption="Attachment"
                         cellTemplate="files" alignment="center">
-                    </dxi-column>
+                    </dxi-column> -->
                     <dxi-column
                         caption alignment="center">
                     </dxi-column>
                     <div *dxTemplate="let datas of 'PayStatus'">
-                        <input type="checkbox" [disabled]="viewMode || editMode"
+                        <input type="checkbox" disabled="true"
                             (change)="PayStatusSelected($event,datas)"
                             [checked]="datas.value" />
                     </div>
                     <div *dxTemplate="let data of 'ReminderSend'">
-                        <input type="checkbox" [disabled]="viewMode || editMode"
+                        <input type="checkbox" disabled="true"
                             (change)="ReminderSendSelected($event,data)"
                             [checked]="data.value" />
                     </div>
-                    <div *dxTemplate="let data of 'files'">
+                    <!-- <div *dxTemplate="let data of 'files'">
                         <input class="form-control fileAttach" type="file"
                             (change)="onFileChange($event)"
                             [disabled]="viewMode || editMode" />
-                    </div>
+                    </div> -->
                 </dx-data-grid>
             </div>
         </div>
