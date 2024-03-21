@@ -7,7 +7,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [disableSaveBtn]="viewMode" [disableDeleteBtn]="viewMode" 
+<modal-header [disableSaveBtn]="viewMode && usedSchemeEditMode" [disableDeleteBtn]="viewMode" 
     (cancelClick)="close()" (saveClick)="formSubmit()"
     (deleteClick)="deleteSchemeMaster()"></modal-header>
 <!-- content section -->
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="col-form-label me-2">Status</label>
-                        <mat-checkbox class="mt-2" [disabled]="viewMode"
+                        <mat-checkbox class="mt-2" [disabled]="viewMode && usedSchemeEditMode"
                             formControlName="schemeStatus">Active</mat-checkbox>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         class="col-sm-2 col-form-label">Description*</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input [readonly]="viewMode" type="text" matInput
+                            <input [readonly]="viewMode && usedSchemeEditMode" type="text" matInput
                                 oninput="this.value = this.value.toUpperCase()"
                                 (onkeypress)="handleKeyPress($event)"
                                 formControlName="description" maxlength="40"/>
@@ -64,13 +64,6 @@
                             bindLabel="ENGLISH"
                             bindValue="ENGLISH"
                             formControlName="frequency"></ng-select>
-                        <!-- <mat-form-field style="width: 100%;">
-                            <mat-select formControlName="frequency">
-                                <mat-option *ngFor="let data of frequencyList"
-                                    [value]="data.ENGLISH">{{ data.ENGLISH
-                                    }}</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -98,7 +91,7 @@
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Receipt Mode</label>
+                        class="col-sm-2 col-form-label">Receipt Mode*</label>
                     <div class="col-md-2">
                         <ng-select [items]="receipt1List" [readonly]="viewMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
@@ -121,7 +114,7 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <ng-select [items]="receipt2List" [readonly]="viewMode"
+                        <ng-select [items]="receipt2List" [readonly]="viewMode && usedSchemeEditMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeTwo"></ng-select>
                     </div>
@@ -142,7 +135,7 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <ng-select [items]="receipt2List" [readonly]="viewMode"
+                        <ng-select [items]="receipt2List" [readonly]="viewMode && usedSchemeEditMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeThree"></ng-select>
                         <!-- <mat-form-field style="width: 100%;">

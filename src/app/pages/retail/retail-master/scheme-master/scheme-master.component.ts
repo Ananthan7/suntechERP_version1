@@ -31,7 +31,7 @@ export class SchemeMasterComponent implements OnInit {
   yearMonth?: String;
   viewMode: boolean = false;
   codeEditMode: boolean = false;
-
+  usedSchemeEditMode: boolean = false;
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -80,6 +80,7 @@ export class SchemeMasterComponent implements OnInit {
     if (this.content) {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.usedSchemeEditMode = true;
       }
       if(this.content.FLAG == 'EDIT'){
         this.codeEditMode = true
@@ -338,12 +339,14 @@ export class SchemeMasterComponent implements OnInit {
     let data = {
       "SCH_SCHEME_CODE": this.content.SCHEME_CODE
     }
+    this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI(API,data)
       .subscribe((resp: any) => {
+        this.comService.closeSnackBarMsg()
         if (resp.status == 'Success') {
-          this.comService.toastErrorByMsgId('Cannot Edit Registered Scheme')
+          // this.comService.toastErrorByMsgId('Cannot Edit Registered Scheme')
           this.viewMode = true
-          return
+          this.usedSchemeEditMode = false
         }
       });
     this.subscriptions.push(Sub);

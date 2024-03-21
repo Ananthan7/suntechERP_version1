@@ -187,10 +187,10 @@ span {
 }
 .form-control,
 .ng-select .ng-select-container {
-  border-radius: none !important;
+  border-radius: 0px !important;
   border: none !important;
-  border-bottom: 1px solid #bebebe !important;
-  background: transparent;
+  border-bottom: 2px solid #bebebe !important;
+  background: #fff;
 }
 .form-card label,
 .form-card .col-form-label {
