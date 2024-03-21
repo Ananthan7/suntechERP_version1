@@ -60,6 +60,7 @@ export class CommonServiceService {
   public creditCardMasterData: any = [];
   public SalespersonMasterData: any = [];
   public VocTypeMasterData: any = [];
+  public reasonMasterList: any = [];
   private DECIMAL_CONSTANTS_FLAG: any = {};
 
   constructor(

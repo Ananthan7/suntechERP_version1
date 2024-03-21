@@ -40,12 +40,11 @@ export class IndexedApiService {
         // this.comFunc.setCompParaValues();
       }
     });
-    this.inDb.getAllData('compparams').subscribe((data) => {
+    this.inDb.getAllData('ReasonMaster').subscribe((data) => {
       if (data.length == 0) {
-        this.getAllCompanyParameters();
+        this.getReasonMasterList();
       } else {
-        this.comFunc.allCompanyParams = data;
-        this.comFunc.setCompParaValues();
+        this.comFunc.reasonMasterList = data;
       }
     });
 
@@ -375,6 +374,14 @@ export class IndexedApiService {
       if (resp.status == 'Success') {
         this.comFunc.karatMasterData = resp.response;
         this.inDb.bulkInsert('karatMaster', resp.response);
+      }
+    });
+  }
+  getReasonMasterList() {
+    this.suntechApi.getDynamicAPI('GeneralMaster/GetGeneralMasterList/reason%20master').subscribe((resp) => {
+      if (resp.status == 'Success') {
+        this.comFunc.reasonMasterList = resp.response;
+        this.inDb.bulkInsert('ReasonMaster', resp.response);
       }
     });
   }

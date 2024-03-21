@@ -77,6 +77,9 @@ export class SchemeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.checkInitialConditions()
+  }
+  checkInitialConditions(){
     if (this.content) {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
@@ -86,6 +89,11 @@ export class SchemeMasterComponent implements OnInit {
         this.codeEditMode = true
         this.schemeRegistrationWithParameter()
         this.getAllSelectOptions()
+      }
+      if(this.content.FLAG == 'DELETE'){
+        this.viewMode = true;
+        this.usedSchemeEditMode = true;
+        this.schemeRegistrationWithParameter()
       }
       this.setInitialValues()
     } else {
@@ -162,7 +170,7 @@ export class SchemeMasterComponent implements OnInit {
     let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
-        if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
+        if (this.content && this.content?.FLAG) {
           let data = resp.response
           this.schemeMasterForm.controls.startDate.setValue(data.START_DATE)
         } else {
@@ -346,7 +354,15 @@ export class SchemeMasterComponent implements OnInit {
         if (resp.status == 'Success') {
           // this.comService.toastErrorByMsgId('Cannot Edit Registered Scheme')
           this.viewMode = true
+          if(this.content?.FLAG == 'DELETE'){
+            this.comService.toastErrorByMsgId('Scheme Already Registered')
+            return
+          }
           this.usedSchemeEditMode = false
+        }else{
+          if(this.content?.FLAG == 'DELETE'){
+            this.deleteSchemeMaster()
+          }
         }
       });
     this.subscriptions.push(Sub);

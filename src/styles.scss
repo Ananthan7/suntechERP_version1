@@ -189,8 +189,10 @@ span {
 .ng-select .ng-select-container {
   border-radius: 0px !important;
   border: none !important;
-  border-bottom: 2px solid #bebebe !important;
-  background: #fff;
+  border-bottom: 1px solid #7f7f7f !important;
+  background: transparent;
+  font-size: 12px !important; 
+  font-weight: 600 !important;
 }
 .form-card label,
 .form-card .col-form-label {

@@ -15,6 +15,7 @@ export class RetailGridComponent implements OnInit {
   @Output() editRowClick = new EventEmitter<any>();
   @Output() viewRowClick = new EventEmitter<any>();
   @Output() AddBtnClick = new EventEmitter<any>();
+  @Output() deleteBtnClick = new EventEmitter<any>();
 
   @Input() tableName: any;
   vocType: any;
@@ -39,6 +40,7 @@ export class RetailGridComponent implements OnInit {
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
+    this.deleteRowDetails = this.deleteRowDetails.bind(this);
     this.tableName = this.CommonService.getqueryParamTable()
     this.getMasterGridData()
   }
@@ -54,6 +56,9 @@ export class RetailGridComponent implements OnInit {
   }
   editRowDetails(e: any) {
     this.editRowClick.emit(e);
+  }
+  deleteRowDetails(e: any) {
+    this.deleteBtnClick.emit(e);
   }
   /**USE: grid on scroll event */
   onContentReady(e: any) {

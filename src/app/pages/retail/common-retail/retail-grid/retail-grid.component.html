@@ -34,6 +34,7 @@
         <dxi-column type="buttons" caption="Edit | View" [fixed]="true" fixedPosition="left">
             <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
             <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
+            <dxi-button [onClick]="deleteRowDetails" icon="fa fa-trash"></dxi-button>
         </dxi-column>
 
         <dxi-column *ngFor="let data of orderedItemsHead" 

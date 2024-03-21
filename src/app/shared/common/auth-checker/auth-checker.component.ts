@@ -32,10 +32,10 @@ export class AuthCheckerComponent implements OnInit {
     private dataService: SuntechAPIService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
-    this.getReasonMasters()
   }
   reseForm() {
     this.authForm.controls.password.setValue('')
@@ -43,6 +43,8 @@ export class AuthCheckerComponent implements OnInit {
     this.authForm.controls.description.setValue('')
   }
   openAuthModal() {
+    this.reseForm()
+    this.getReasonMasters()
     return new Promise((resolve) => {
       this.modalReferenceUserAuth = this.modalService.open(
         this.userAuthModal,
@@ -55,14 +57,12 @@ export class AuthCheckerComponent implements OnInit {
       );
       this.modalReferenceUserAuth.result.then((result) => {
         if (result) {
-          this.reseForm()
           resolve(true);
         } else {
           resolve(false);
         }
       },
         (reason) => {
-          this.reseForm()
           resolve(false);
 
         }
@@ -71,28 +71,23 @@ export class AuthCheckerComponent implements OnInit {
   }
 
   reasonSelected(e: any) {
-    this.authForm.controls.reason.setValue(e.DESCRIPTION);
+    console.log(e);
+    
+    this.authForm.controls.reason.setValue(e.CODE);
     this.authForm.controls.description.setValue(e.DESCRIPTION);
   }
 
 
   getReasonMasters() {
-    let API = `GeneralMaster/GetGeneralMasterList/reason%20master`
-    let sub: Subscription = this.dataService.getDynamicAPI(API).
-      subscribe(data => {
-        if (data.status == "Success") {
-          this.reasonMaster = data.response;
-          this.reasonMasterOptions = this.authForm.controls.reason.valueChanges.pipe(
-            startWith(''),
-            map((value) =>
-              this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
-            )
-          );
-        } else {
-          this.reasonMaster = [];
-        }
-      });
-    this.subscriptions.push(sub)
+
+    console.log(this.CommonService.reasonMasterList, 'reasonMasterList');
+    this.reasonMaster = this.CommonService.reasonMasterList;
+    this.reasonMasterOptions = this.authForm.controls.reason.valueChanges.pipe(
+      startWith(''),
+      map((value) =>
+        this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
+      )
+    );
   }
   private _filterMasters(
     arrName: any,
@@ -133,7 +128,8 @@ export class AuthCheckerComponent implements OnInit {
   }
 
   changeReason(e: any) {
-    const res = this.reasonMaster.filter((data: any) => data.CODE == e.value)
+    this.authForm.controls.reason.setValue(e.CODE);
+    const res = this.reasonMaster.filter((data: any) => data.CODE == e.CODE)
     let description = res.length > 0 ? res[0]['DESCRIPTION'] : '';
     this.authForm.controls.description.setValue(description);
   }

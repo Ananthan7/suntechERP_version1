@@ -70,6 +70,11 @@ export class RetailMasterComponent implements OnInit {
     this.dataToEdit.FLAG = 'EDIT'
     this.authCheckerComponent?.openAuthModal();
   }
+  deleteBtnClicked(e: any) {
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'DELETE'
+    this.authCheckerComponent?.openAuthModal();
+  }
   authSubmit(){
     this.openModalView(this.dataToEdit)
   }

@@ -222,7 +222,7 @@ export class RetailTransactionComponent implements OnInit {
 
 
   openAuthModal() {
-
+    
     return new Promise((resolve) => {
 
       this.modalReferenceUserAuth = this.modalService.open(
