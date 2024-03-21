@@ -467,7 +467,7 @@ export class SchemeRegisterComponent implements OnInit {
           }
           this.schemeRegistrationForm.controls.MaturingDate.setValue(maturingdate)
         } else {
-          this.schemeRegistrationForm.value.SchemeId
+          this.schemeRegistrationForm.controls.SchemeId.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       })

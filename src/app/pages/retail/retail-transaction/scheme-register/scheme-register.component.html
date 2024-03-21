@@ -146,7 +146,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" [readonly]="viewMode  || processMode" matInput
-                                formControlName="Code"
+                                formControlName="Code" UppercaseDirective
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
                         <master-search *ngIf="!viewMode"
@@ -188,7 +188,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput [readonly]="viewMode  || processMode"
-                                formControlName="SchemeId"
+                                formControlName="SchemeId" UppercaseDirective
                                 (focusout)="fetchSchemeWithCustCode()" />
                         </mat-form-field>
                         <master-search *ngIf="!viewMode || !processMode"

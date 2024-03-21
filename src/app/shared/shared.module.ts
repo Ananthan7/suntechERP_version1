@@ -183,6 +183,7 @@ import { AuthCheckerComponent } from './common/auth-checker/auth-checker.compone
     FormatSixDecimalDirective,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
+    UppercaseDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

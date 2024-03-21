@@ -22,7 +22,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" [readonly]="viewMode || codeEditMode"
-                                oninput="this.value = this.value.toUpperCase()"
+                                UppercaseDirective
                                 (focusout)="getSchemeMasterList()" maxlength="6"
                                 matInput formControlName="code" />
                         </mat-form-field>
