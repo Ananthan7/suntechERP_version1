@@ -78,13 +78,124 @@ export class PosCreditSaleReciptComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Code',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.type.setValue(e.CODE);
+  } 
+
+  typeidCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Code',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeidCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.IDType.setValue(e.CODE);
+  } 
+
+  stateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 48,
+    SEARCH_FIELD: 'STATE_CODE',
+    SEARCH_HEADING: 'State Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STATE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stateCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.state.setValue(e.STATE_DESCRIPTION);
+  }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  countryCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.country.setValue(e.CODE);
+  }
+
+  nationalityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Nationality Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  nationalityCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.nationality.setValue(e.CODE);
+  }
+
+  cityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'City Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='REGION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  cityCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.city.setValue(e.CODE);
+  }
+
+ languageCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 45,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Language Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "where types = 'LANGUAGE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  languageCodeSelected(e: any) {
+    console.log(e);
+    this.POSCreditSaleReceiptForm.controls.language.setValue(e.CODE);
+  }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
   POSCreditSaleReceiptForm: FormGroup = this.formBuilder.group({
-    
     voucherType: [''],
     voucherNo: [''],
     gstNo: [''],

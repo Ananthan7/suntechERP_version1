@@ -37,6 +37,41 @@ export class DiamonBranchTransferOutDetailsComponent implements OnInit {
 
   }
 
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutdetailForm.controls.location.setValue(e.LOCATION_CODE);
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeSelected(e: any) {
+    console.log(e);
+    this.diamondbranchtransoutdetailForm.controls.stockaction.setValue(e.DIVISION_CODE);
+    this.diamondbranchtransoutdetailForm.controls.stock.setValue(e.STOCK_CODE);
+    this.diamondbranchtransoutdetailForm.controls.stockdes.setValue(e.DESCRIPTION);
+  }
+
+
   
   diamondbranchtransoutdetailForm: FormGroup = this.formBuilder.group({
     stockaction : [""],

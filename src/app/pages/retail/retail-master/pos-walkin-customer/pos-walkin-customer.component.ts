@@ -39,6 +39,24 @@ export class PosWalkinCustomerComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
   }
 
+  salesCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  salesCodeSelected(e: any) {
+    console.log(e);
+    this.poswalkincustomersForm.controls.salesman_code.setValue(e.SALESPERSON_CODE);
+    this.poswalkincustomersForm.controls.salesman.setValue(e.	DESCRIPTION);
+  }
+
+
 
   poswalkincustomersForm: FormGroup = this.formBuilder.group({
     voctype: [''],

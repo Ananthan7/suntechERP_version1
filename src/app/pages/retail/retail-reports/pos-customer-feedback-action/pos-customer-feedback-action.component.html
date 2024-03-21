@@ -54,7 +54,8 @@
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput  formControlName="assigned_to"/>
                 </mat-form-field>
-                <master-search ></master-search>
+                <master-search [MasterSearchData]="assignedtoCodeData"
+                (newRowClick)="assignedtoCodeSelected($event)"></master-search>
               </div>
             </div>
           </div>
@@ -65,7 +66,8 @@
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="assigned_by"/>
                 </mat-form-field>
-                <master-search ></master-search>
+                <master-search [MasterSearchData]="assignedbyCodeData"
+                (newRowClick)="assignedbyCodeSelected($event)"></master-search>
               </div>
             </div>
           </div>
