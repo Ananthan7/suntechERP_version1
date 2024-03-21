@@ -339,7 +339,7 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="language" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="languageCodeData" (newRowClick)="languageCodeSelected($event)"></master-search>
                                 </div>
 
                                 <label for="inputPassword" class="col-sm-1 col-form-label">P.O.Box:</label>
@@ -356,14 +356,14 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="nationality" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="nationalityCodeData" (newRowClick)="nationalityCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-1 col-form-label">Country:</label>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="country" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="countryCodeData" (newRowClick)="countryCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-1 col-form-label">ID Type :</label>
                                 <div class="col-md-2">
@@ -386,14 +386,14 @@
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="state" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="stateCodeData" (newRowClick)="stateCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-1 col-form-label">City:</label>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 80%;">
                                         <input type="text" matInput formControlName="city" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="cityCodeData" (newRowClick)="cityCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-1 col-form-label">ID No:</label>
                                 <div class="col-md-3">

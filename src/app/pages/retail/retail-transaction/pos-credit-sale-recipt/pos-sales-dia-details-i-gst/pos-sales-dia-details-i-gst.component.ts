@@ -44,8 +44,7 @@ export class PosSalesDiaDetailsIGSTComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
+    SEARCH_HEADING: 'Stock Code',    SEARCH_VALUE: '',
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -87,6 +86,22 @@ export class PosSalesDiaDetailsIGSTComponent implements OnInit {
   salesCodeSelected(e: any) {
     console.log(e);
     this.PossalesdiadetailsgstForm.controls.salesman.setValue(e.SALESPERSON_CODE);
+  }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  countryCodeSelected(e: any) {
+    console.log(e);
+    this.PossalesdiadetailsgstForm.controls.country.setValue(e.DESCRIPTION);
   }
 
   PossalesdiadetailsgstForm: FormGroup = this.formBuilder.group({

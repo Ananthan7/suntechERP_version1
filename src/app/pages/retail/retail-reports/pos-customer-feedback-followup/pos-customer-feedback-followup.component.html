@@ -7,7 +7,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="poscustomerfeedbackfollowForm">
         <div class="row mb-3">
             <div class="col-md-3">
                 <div class="row">
@@ -38,9 +38,10 @@
                     <div class="col-sm-9">
                       <div class="position-relative d-flex">
                         <mat-form-field style="width: 100%;">
-                            <input matInput type="text"/>                          
+                            <input matInput type="text" formControlName="Code" />                          
                           </mat-form-field>
-                          <master-search ></master-search>
+                          <master-search [MasterSearchData]="CodeCodeData"
+                  (newRowClick)="CodeCodeSelected($event)"></master-search>
                       </div>
                     </div>
                   </div>
@@ -73,9 +74,10 @@
                             <div class="col-sm-8">
                               <div class="position-relative d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput type="text"/>                          
+                                    <input matInput type="text" formControlName="Salesman" />                          
                                   </mat-form-field>
-                                  <master-search ></master-search>
+                                  <master-search [MasterSearchData]="salesmanCodeData"
+                                  (newRowClick)="salesmanCodeSelected($event)"></master-search>
                               </div>
                             </div>
                           </div>

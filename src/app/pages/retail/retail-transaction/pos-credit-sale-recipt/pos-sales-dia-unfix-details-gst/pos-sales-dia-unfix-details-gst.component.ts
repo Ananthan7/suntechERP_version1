@@ -42,13 +42,6 @@ export class PosSalesDiaUnfixDetailsGSTComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  
-  PosdiaunfixdetailsgstForm: FormGroup = this.formBuilder.group({
-    location: [''],
-    salesman: [''],
-   
-  });
-
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -80,6 +73,31 @@ export class PosSalesDiaUnfixDetailsGSTComponent implements OnInit {
     console.log(e);
     this.PosdiaunfixdetailsgstForm.controls.salesman.setValue(e.SALESPERSON_CODE);
   }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  countryCodeSelected(e: any) {
+    console.log(e);
+    this.PosdiaunfixdetailsgstForm.controls.country.setValue(e.DESCRIPTION);
+  }
+
+  
+  PosdiaunfixdetailsgstForm: FormGroup = this.formBuilder.group({
+    location: [''],
+    salesman: [''],
+    country: [''],
+   
+  });
+
 
 
 

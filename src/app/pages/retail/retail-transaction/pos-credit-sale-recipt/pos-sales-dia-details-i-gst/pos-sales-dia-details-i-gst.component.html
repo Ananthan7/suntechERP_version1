@@ -68,9 +68,10 @@
                         </div>
                         <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="stockCode" />
+                                <input type="text" matInput formControlName="country" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="countryCodeData"
+                            (newRowClick)="countryCodeSelected($event)"></master-search>
                         </div>
                        
                     </div> 

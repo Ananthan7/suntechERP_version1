@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';  
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -27,6 +28,38 @@ export class PosCustomerFeedbackActionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  assignedtoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Assigned To Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  assignedtoCodeSelected(e: any) {
+    console.log(e);
+    this.posActionForm.controls.assigned_to.setValue(e.UsersName);
+  }
+
+  assignedbyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Assigned By Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  assignedbyCodeSelected(e: any) {
+    console.log(e);
+    this.posActionForm.controls.assigned_by.setValue(e.UsersName);
   }
 
   posActionForm: FormGroup = this.formBuilder.group({

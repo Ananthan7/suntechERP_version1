@@ -54,6 +54,7 @@ export class RepairDetailsComponent implements OnInit {
     type_of_item :[''],
     total_amount  :[''],
     status :[''],
+    status_des :[''],
     material :[''],
     Est_repair_charge :[''],
     own_stock :[''],
@@ -122,17 +123,18 @@ export class RepairDetailsComponent implements OnInit {
   statusCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 48,
+    SEARCH_FIELD: 'STATE_CODE',
     SEARCH_HEADING: 'Status ',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "STATE_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   statusCodeSelected(e: any) {
     console.log(e);
-    this.repairjewelleryreceiptdetailsFrom.controls.status.setValue(e.CODE);
+    this.repairjewelleryreceiptdetailsFrom.controls.status.setValue(e.STATE_CODE);
+    this.repairjewelleryreceiptdetailsFrom.controls.status_des.setValue(e.STATE_DESCRIPTION);
   }
 
   materialCodeData: MasterSearchModel = {
