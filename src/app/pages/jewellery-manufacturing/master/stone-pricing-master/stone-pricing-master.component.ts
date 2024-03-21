@@ -201,6 +201,10 @@ export class StonePricingMasterComponent implements OnInit {
     selling_rate: [''],
   })
 
+ //number validation
+ isNumeric(event: any) {
+  return this.commonService.isNumeric(event);
+}
 
 
   constructor(
@@ -246,7 +250,7 @@ export class StonePricingMasterComponent implements OnInit {
 
 
   onSievetto(event: any) {
-    if (this.stonePrizeMasterForm.value.sieve_form < this.stonePrizeMasterForm.value.sieve_to) {
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       Swal.fire({
         title: event.message || ' Sieve To Should be greater than the Sieve From',
         text: '',
@@ -673,19 +677,12 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
 
-
   onInputChange(event: any, controlName: string, maxLength: number) {
     const inputValue = event.target.value;
 
     if (inputValue.length > maxLength) {
       this.stonePrizeMasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
     }
-  }
-
-  commaSeperation(data: any) {
-    console.log(data);
-    if (!Number(data)) return data; // Use data directly
-    return Number(data).toLocaleString('en-US', { style: 'decimal' });
   }
 
   ngOnDestroy() {

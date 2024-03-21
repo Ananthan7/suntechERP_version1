@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="itemcurrency_rate"   style="text-align: right;" />
+                                    <input type="text" matInput formControlName="itemcurrency_rate"   class="text-right" SixDecimalInput (keypress)="isNumeric($event)"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -93,12 +93,15 @@
                             <label for="inputPassword" class="col-sm-5">Base Currency: </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="basecurrency" />
+                                    <input type="text" matInput formControlName="basecurrency" />    
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="CurrencyCodeData"
+                                (newRowClick)="baseCurrencyCodeSelected($event)" ></master-search>
+                           
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="basecurrency_rate"   style="text-align: right;" />
+                                    <input type="text" matInput formControlName="basecurrency_rate"   class="text-right"  SixDecimalInput (keypress)="isNumeric($event)"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -165,7 +168,7 @@
                             <label for="inputPassword" class="col-sm-5">Current Rate FC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currentrate_FC"   style="text-align: right;" />
+                                    <input type="text" matInput formControlName="currentrate_FC"   class="text-right" (keypress)="isNumeric($event)" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -173,7 +176,7 @@
                             <label for="inputPassword" class="col-sm-5">Current Rate LC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currentrate_LC"   style="text-align: right;" />
+                                    <input type="text" matInput formControlName="currentrate_LC"   class="text-right" (keypress)="isNumeric($event)" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -184,7 +187,7 @@
                             <label for="inputPassword" class="col-sm-5">New Rate FC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="newrate_FC"   style="text-align: right;" />
+                                    <input type="text" matInput formControlName="newrate_FC"   class="text-right" (keypress)="isNumeric($event)" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -192,7 +195,7 @@
                             <label for="inputPassword" class="col-sm-5">New Rate LC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="newrate_LC"   style="text-align: right;" />
+                                    <input type="text" matInput formControlName="newrate_LC"   class="text-right" (keypress)="isNumeric($event)" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>

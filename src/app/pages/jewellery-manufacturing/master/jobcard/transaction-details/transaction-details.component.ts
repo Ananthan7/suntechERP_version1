@@ -17,12 +17,13 @@ export class TransactionDetailsComponent implements OnInit {
 
   tableDataProcess: any[] = [];
   selectedTabIndex = 0;
-  columnhead:any[] = [''];
-  columnhead2:any[] = [''];
-  columnhead3:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','FRM_PROCESS','FRM_WROKER','TO_PROCESS','TO_WROKER','METAL_PCS','METAL_WT','STONE_PCS','STONE_WT','LOSS_QTY','SCRAP_WT','APPROVE','PURE_WT','IN_DATE','OUT_DATE','TIME_CO','YEARMONTH','UNQ_DESIGN'];
-  columnhead4:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','STOCK_CODE','GROSS_WEIGHT','METAL_WT','STONE_PCS','STONE_WT','AMOUNTFC','PRICE 1FC','PROCESS','WORKER','METAL_AMOUNT','STONE_AMOUNT','LAB_AMOUNT','YEARMONTH','UNQ_DESIGN','COST_CODE'];
+  columnhead: any[] = [''];
+  columnhead2: any[] = [''];
+  columnhead3: any[] = ['VOCDATE', 'VOCTYPE', 'VOCNO', 'UNQ_JOB', 'DESIGN', 'FRM_PROCESS', 'FRM_WROKER', 'TO_PROCESS', 'TO_WROKER', 'METAL_PCS', 'METAL_WT', 'STONE_PCS', 'STONE_WT', 'LOSS_QTY', 'SCRAP_WT', 'APPROVE', 'PURE_WT', 'IN_DATE', 'OUT_DATE', 'TIME_CO', 'YEARMONTH', 'UNQ_DESIGN'];
+  columnhead4: any[] = ['VOCDATE', 'VOCTYPE', 'VOCNO', 'UNQ_JOB', 'DESIGN', 'STOCK_CODE', 'GROSS_WEIGHT', 'METAL_WT', 'STONE_PCS', 'STONE_WT', 'AMOUNTFC', 'PRICE 1FC', 'PROCESS', 'WORKER', 'METAL_AMOUNT', 'STONE_AMOUNT', 'LAB_AMOUNT', 'YEARMONTH', 'UNQ_DESIGN', 'COST_CODE'];
   orders: any = [];
   viewOnly: boolean = false;
+  branchCode?: String;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -33,8 +34,12 @@ export class TransactionDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+
     this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'JobTransactionsGrid/GetJobTransaction/{BRANCH}/{JOB_NUMBER}';
+    //  let API = 'JobTransactionsGrid/GetJobTransaction/' + this.branchCode + '/' + 524;
+     let API = 'JobTransactionsGrid/GetJobTransaction/{strBranch}/{strJobNumber}';
+    
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe(
         (result) => {
@@ -70,6 +75,18 @@ export class TransactionDetailsComponent implements OnInit {
   }
   customizeDate(data: any) {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
+  }
+
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "051",
+      "parameter": {
+        'strBranch': this.commonService.nullToString(this.branchCode),
+        'strJobNumber': this.commonService.nullToString(event.target.value),
+
+      }
+    }
   }
 
 }

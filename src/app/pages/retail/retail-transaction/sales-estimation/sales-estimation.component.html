@@ -643,26 +643,52 @@
                                                           </div>
                                                       </dxi-button>
                                                   </dxi-column> -->
-                            <dxo-summary>
-                              <dxi-total-item column="sn_no" summaryType="count">
-                              </dxi-total-item>
-                              <dxi-total-item column="stock_code" summaryType="min" [customizeText]="customizeDate">
-                              </dxi-total-item>
-                              <dxi-total-item column="weight" summaryType="sum" caption="Weight"
-                                [customizeText]="customizeWeight">
-                              </dxi-total-item>
-                              <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
-                              </dxi-total-item>
-                              <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
-                                type="fixedPoint" precision="2" [valueFormat]="{ currency: 'AED' }">
-                              </dxi-total-item>
-                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="AED {0}"
-                                precision="2" [valueFormat]="{ currency: 'AED' }">
-                              </dxi-total-item>
-                              <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
+
+                          <dxo-summary>
+                            <dxi-total-item column="sn_no" summaryType="count">
+                            </dxi-total-item>
+                            <dxi-total-item
+                              column="stock_code"
+                              summaryType="min"
+                              [customizeText]="customizeDate"
+                            >
+                            </dxi-total-item>
+                            <dxi-total-item
+                              column="weight"
+                              summaryType="sum"
+                              caption="Weight"
+                              [valueFormat]="weightDecimalFormat"
+                              displayFormat="Wt: {0}"
+                            >
+                            
+                            </dxi-total-item>
+                            <dxi-total-item
+                              column="pcs"
+                              summaryType="sum"
+                              [customizeText]="customizeQty"
+                            >
+                            </dxi-total-item>
+                            <dxi-total-item
+                              column="total_amount"
+                              summaryType="sum"
+                              displayFormat="AED {0}"
+                              type="fixedPoint"
+                              precision="2"
+                              [valueFormat]="gridAmountDecimalFormat"
+                            >
+                            </dxi-total-item>
+                            <dxi-total-item
+                              column="net_amount"
+                              summaryType="sum"
+                              displayFormat="AED {0}"
+                              precision="2"
+                              [valueFormat]="gridAmountDecimalFormat"
+                            >
+                            </dxi-total-item>
+                            <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
                                 [valueFormat]="{ currency: 'AED' }">
                               </dxi-total-item> -->
-                            </dxo-summary>
+                          </dxo-summary>
                           </dx-data-grid>
                         </div>
 

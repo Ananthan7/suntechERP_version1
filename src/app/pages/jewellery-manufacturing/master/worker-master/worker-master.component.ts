@@ -206,6 +206,9 @@ export class WorkerMasterComponent implements OnInit {
       this.toastr.error('select all required fields & Process')
       return
     }
+    if (this.workerMasterForm.value.description == '') {
+      this.toastr.error("Description cannot be empty")
+    }
     this.selectedProcessArr.forEach((item: any, i: any) => {
       item.SRNO = i + 1;
     });

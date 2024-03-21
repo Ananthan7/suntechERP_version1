@@ -44,7 +44,8 @@ export class StoneCostUpdationComponent implements OnInit {
   ngOnInit(): void {
    this.branchCode = this.commonService.branchCode;
    this.yearMonth = this.commonService.yearSelected;
-
+   this.setCompanyCurrency()
+    this.basesetCompanyCurrency()
    this.setvalues()
   }
 
@@ -102,9 +103,9 @@ export class StoneCostUpdationComponent implements OnInit {
     this.stonecostupdationFrom.controls.vocno.setValue(this.commonService.popMetalValueOnNet)
     this.stonecostupdationFrom.controls.vocdate.setValue(this.commonService.currentDate)
     this.stonecostupdationFrom.controls.itemcurrency.setValue(this.commonService.compCurrency)
-    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    // this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.stonecostupdationFrom.controls.basecurrency.setValue(this.commonService.compCurrency)
-    this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    // this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   
   }
 
@@ -140,6 +141,7 @@ export class StoneCostUpdationComponent implements OnInit {
   itemcurrencySelected(value: any) {
     console.log(value);
     this.stonecostupdationFrom.controls.itemcurrency.setValue(value.CURRENCY_CODE);
+    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(value.CONV_RATE);
   }
 
   shapeCodeData: MasterSearchModel = {
@@ -237,8 +239,84 @@ export class StoneCostUpdationComponent implements OnInit {
     console.log(value);
     this.stonecostupdationFrom.controls.sieve_set.setValue(value.CODE);
   }
+  baseCurrencyCodeSelected(e: any) {
+    console.log(e);
+    this.stonecostupdationFrom.controls.basecurrency.setValue(e.CURRENCY_CODE);
+    this.stonecostupdationFrom.controls.basecurrency_rate.setValue(e.CONV_RATE);
+  }
+  CurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ /**USE: to set currency on selected change*/
+ currencyDataSelected(event: any) {
+  if (event.target?.value) {
+    this.stonecostupdationFrom.controls.itemcurrency.setValue((event.target.value).toUpperCase())
+  } else {
+    this.stonecostupdationFrom.controls.itemcurrency.setValue(event.CURRENCY_CODE)
+  }
+  this.setCurrencyRate()
+}
 
+/**USE: to set currency from company parameter */
+setCompanyCurrency() {
+  let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+  this.stonecostupdationFrom.controls.itemcurrency.setValue(CURRENCY_CODE);
+  this.setCurrencyRate()
+}
+/**USE: to set currency from branch currency master */
+setCurrencyRate() {
+  const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonecostupdationFrom.value.itemcurrency);
+  if (CURRENCY_RATE.length > 0) {
+    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
+  } else {
+    this.stonecostupdationFrom.controls.itemcurrency.setValue('')
+    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue('')
+    this.commonService.toastErrorByMsgId('MSG1531')
+  }
+}
 
+/**USE: to set basecurrency on selected change*/
+basecurrencyDataSelected(event: any) {
+  if (event.target?.value) {
+    this.stonecostupdationFrom.controls.basecurrency.setValue((event.target.value).toUpperCase())
+  } else {
+    this.stonecostupdationFrom.controls.basecurrency.setValue(event.CURRENCY_CODE)
+  }
+  this.setCurrencyRate()
+}
+/**USE: to set currency from company parameter */
+basesetCompanyCurrency() {
+  let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+  this.stonecostupdationFrom.controls.basecurrency.setValue(CURRENCY_CODE);
+  this.basesetCurrencyRate()
+}
+/**USE: to set currency from branch currency master */
+basesetCurrencyRate() {
+  const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonecostupdationFrom.value.basecurrency);
+  if (CURRENCY_RATE.length > 0) {
+    this.stonecostupdationFrom.controls.basecurrency_rate.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
+  } else {
+    this.stonecostupdationFrom.controls.basecurrency.setValue('')
+    this.stonecostupdationFrom.controls.basecurrency_rate.setValue('')
+    this.commonService.toastErrorByMsgId('MSG1531')
+  }
+}
+ //number validation
+ isNumeric(event: any) {
+  return this.commonService.isNumeric(event);
+}
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
