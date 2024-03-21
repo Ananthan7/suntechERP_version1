@@ -313,10 +313,7 @@ basesetCurrencyRate() {
     this.commonService.toastErrorByMsgId('MSG1531')
   }
 }
- //number validation
- isNumeric(event: any) {
-  return this.commonService.isNumeric(event);
-}
+ 
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return

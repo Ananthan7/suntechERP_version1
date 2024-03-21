@@ -72,7 +72,7 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Branch : </label>
                         <div class="col-sm-6">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="branch" />
+                                <input type="text" matInput formControlName="Branch" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="branchCodeData" *ngIf="!viewMode"
                                 (newRowClick)="branchCodeSelected($event)"></master-search>

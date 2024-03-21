@@ -55,6 +55,10 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
+  checked = false;
+  indeterminate = false;
+  labelPosition: 'before' | 'after' = 'after';
+  disabled = false;
 
   ngOnInit(): void {
     // this.islossReadOnly = true;

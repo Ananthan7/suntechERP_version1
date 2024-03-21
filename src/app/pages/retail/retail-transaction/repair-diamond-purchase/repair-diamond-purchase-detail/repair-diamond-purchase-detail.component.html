@@ -10,7 +10,7 @@
 <!-- content section -->
 
 <div class="container-fluid pt-3">
-
+<form [formGroup]="repairdiapurchasedetailsForm">
     <div class="row">
         <div class="col-md-8">
 
@@ -22,20 +22,20 @@
                             Stock Code: </label>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="remarks"   />
+                                <input type="text" matInput formControlName="Stockdiv"   />
                             </mat-form-field>
                         </div>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks"   />
+                                <input type="text" matInput formControlName="stockcode"   />
                             </mat-form-field>
                             <master-search ></master-search>
                         </div>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="remarks"   />
+                                <input type="text" matInput formControlName="stockdes"   />
                             </mat-form-field>
-                            <master-search ></master-search>
+                            <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"></master-search>
                         </div>
                     </div>
 
@@ -96,9 +96,9 @@
                                 Location : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="location"   />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="locationCodeData" (newRowClick)="locationCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -785,3 +785,5 @@
             </div>
         </div>
     </div>
+</form>
+    

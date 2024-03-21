@@ -17,7 +17,8 @@
               <mat-form-field style="width: 70%;">
                 <input matInput formControlName="branch" type="text" />
               </mat-form-field>
-              <master-search></master-search>
+              <master-search [MasterSearchData]="branchCodeData"
+              (newRowClick)="branchCodeSelected($event)"></master-search>
             </div>
           </div>
         </div>

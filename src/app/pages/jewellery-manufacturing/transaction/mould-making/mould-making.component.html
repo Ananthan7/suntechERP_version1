@@ -119,7 +119,7 @@
                 <label for="inputPassword" class="col-sm-6 ">Mould No * :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="mouldNo" [readonly]="viewMode"/>
+                    <input type="number" matInput formControlName="mouldNo" [readonly]="viewMode" style="text-align: right;" NumberOnly/>
                   </mat-form-field>
                 </div>
               </div>
@@ -137,7 +137,7 @@
                 <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="noOfParts" [readonly]="viewMode"/>
+                    <input type="number" matInput formControlName="noOfParts" [readonly]="viewMode" NumberOnly/>
                   </mat-form-field>
                 </div>
               </div>
@@ -272,8 +272,8 @@
                   <input type="number" (change)="gross_weighttemp($event,data)" style="width: 100%;  text-align: right;"
                     [value]="data.value" [readonly]="viewMode"/>
                 </div>
-                <div *dxTemplate="let data of 'ratetemp'">
-                  <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode"/>
+                <div *dxTemplate="let data of 'ratetemp'" >
+                  <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
                 </div>
                 <div *dxTemplate="let data of 'amounttemp'">
                   <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode"/>

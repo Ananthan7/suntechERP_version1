@@ -37,8 +37,8 @@
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput  formControlName="partyCode">
                             </mat-form-field>
-                            <master-search>
-                            </master-search>
+                            <master-search [MasterSearchData]="partyCodeData"
+                            (newRowClick)="partyCodeSelected($event)"></master-search>
                           </div>
                         </div>
                         <div class="row align-items-center mb-1">

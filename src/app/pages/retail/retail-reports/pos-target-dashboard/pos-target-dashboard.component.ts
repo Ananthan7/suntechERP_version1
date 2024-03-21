@@ -38,6 +38,24 @@ export class PosTargetDashboardComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  branchCodeSelected(e: any) {
+    console.log(e);
+    this.POSTargetStatusForm.controls.branch.setValue(e.BRANCH_CODE);
+    
+  }
+
   POSTargetStatusForm: FormGroup = this.formBuilder.group({
     branch : [''],
     date : [''],

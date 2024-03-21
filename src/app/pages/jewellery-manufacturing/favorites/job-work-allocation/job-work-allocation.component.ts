@@ -44,6 +44,29 @@ export class JobWorkAllocationComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
   }
 
+  jobworkallocationForm: FormGroup = this.formBuilder.group({
+    entered_by: [""],
+    
+  });
+
+  enteredCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Entered By Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  enteredCodeSelected(e: any) {
+    console.log(e);
+    this.jobworkallocationForm.controls.entered_by.setValue(e.UsersName);
+    
+  }
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

@@ -2618,7 +2618,11 @@ export class AddPosComponent implements OnInit {
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.NETVALUEFC)
     );
     // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
-    this.lineItemForm.controls.fcn_li_tax_percentage.setValue(value.VAT_PER);
+    this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
+      this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,    value.VAT_PER
+      )
+      );
     this.lineItemForm.controls.fcn_li_tax_amount.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC));
@@ -5022,7 +5026,7 @@ export class AddPosComponent implements OnInit {
       SUPPLIER: '', // need_input
       BATCHSRNO: 0, // need_input
       STOCK_DOCDESC: this.exchangeForm.value.fcn_exchange_item_desc || '',
-      BAGNO: this.exchangeForm.value.fcn_exchange_scrap_bag_no.toString() || '',
+      BAGNO: this.exchangeForm.value.fcn_exchange_scrap_bag_no?.toString() || '',
       BAGREMARKS: this.exchangeForm.value.fcn_exchange_scrap_bag_desc || '',
       WASTAGEPER: 0.0,
       WASTAGEQTY: 0.0,
@@ -7339,6 +7343,7 @@ export class AddPosComponent implements OnInit {
   // }
 
   managePcsGrossWt() {
+    alert('validatePCS '+this.validatePCS )
     if (this.validatePCS == true) {
       this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
@@ -7481,6 +7486,7 @@ export class AddPosComponent implements OnInit {
 
     if (
       !this.vocDataForm.invalid &&
+      !this.customerDataForm.invalid &&
       this.customerDataForm.value.fcn_customer_mobile != '' &&
       this.customerDataForm.value.fcn_customer_name != '' &&
       this.vocDataForm.value.sales_person != '' &&
@@ -8711,88 +8717,89 @@ export class AddPosComponent implements OnInit {
         let dblStockFcCost: any;
         let karatCode = this.newLineItem.KARAT_CODE;
 
-        if (this.comFunc.compCurrency == this.vocDataForm.value.txtCurrency.toString().trim()) {
-          // if (this.comFunc.compCurrency == 'AED') {
-          if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
-            if (karatCode.toString() == "24") {
-              dblStockFcCost = dblStockCost + 1;
-            }
-            else {
-              dblStockFcCost = dblStockCost + 5;
-            }
-          }
-          else
-            if ((dblStockCost <= .5) && (this.comFunc.compAcCode == "JHROR1")) {
-              dblStockCost = dblStockCost + .5;
-            }
-            else {
-              console.log('minbranch ', dblStockCost * minBranchProfitPercentMetal / 100.00, 'dblStockCost', dblStockCost);
-              dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
-            }
-        }
-        else {
-          if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
-            if (karatCode == "24") {
-              dblStockFcCost =
-                this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 1), this.vocDataForm.value.txtCurRate);
-            }
-            else {
-
-              dblStockFcCost =
-                this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 5), this.vocDataForm.value.txtCurRate);
-            }
-          }
-          else {
-            dblStockFcCost =
-              this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00)), this.vocDataForm.value.txtCurRate);
-          }
-        }
-        // alert(dblStockFcCost);
-        this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
-        this.manageCalculations();
-
-        if (!this.newLineItem.LESSTHANCOST) {
-
-          // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
-          {
-            if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
-
-              this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                if (data == 'OK') {
-                  this.lineItemForm.controls.fcn_li_rate.setValue(
-                    ''
-                    // preVal
-                  );
-                  this.renderer.selectRootElement('#fcn_li_rate').focus();
-                }
-              });
-              return;
-            }
-          }
-        }
-
-        // if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
-
-        //   this.rateFunc(value);
+        // this code commented at 21/3/2024 by jebaraj instruction
+        // if (this.comFunc.compCurrency == this.vocDataForm.value.txtCurrency.toString().trim()) {
+        //   // if (this.comFunc.compCurrency == 'AED') {
+        //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
+        //     if (karatCode.toString() == "24") {
+        //       dblStockFcCost = dblStockCost + 1;
+        //     }
+        //     else {
+        //       dblStockFcCost = dblStockCost + 5;
+        //     }
+        //   }
+        //   else
+        //     if ((dblStockCost <= .5) && (this.comFunc.compAcCode == "JHROR1")) {
+        //       dblStockCost = dblStockCost + .5;
+        //     }
+        //     else {
+        //       console.log('minbranch ', dblStockCost * minBranchProfitPercentMetal / 100.00, 'dblStockCost', dblStockCost);
+        //       dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
+        //     }
         // }
         // else {
-        //   // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
-        //   // Rate Cannot be Less Than Cost
-        //   this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-        //   this.dialogBox.afterClosed().subscribe((data: any) => {
-        //     if (data == 'OK') {
-        //       this.lineItemForm.controls.fcn_li_rate.setValue(
-        //         ''
-        //         // this.comFunc.transformDecimalVB(
-        //         //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        //         //   this.zeroAmtVal
-        //         // )
-        //       );
-        //       this.renderer.selectRootElement('#fcn_li_rate').focus();
+        //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
+        //     if (karatCode == "24") {
+        //       dblStockFcCost =
+        //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 1), this.vocDataForm.value.txtCurRate);
         //     }
-        //   });
+        //     else {
+
+        //       dblStockFcCost =
+        //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 5), this.vocDataForm.value.txtCurRate);
+        //     }
+        //   }
+        //   else {
+        //     dblStockFcCost =
+        //       this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00)), this.vocDataForm.value.txtCurRate);
+        //   }
         // }
+        // this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
+        // this.manageCalculations();
+
+        // if (!this.newLineItem.LESSTHANCOST) {
+
+        //   // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
+        //   {
+        //     if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
+        //       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+        //       this.dialogBox.afterClosed().subscribe((data: any) => {
+        //         if (data == 'OK') {
+        //           this.lineItemForm.controls.fcn_li_rate.setValue(
+        //             // ''
+        //             preVal
+        //           );
+        //           this.manageCalculations();
+        //           this.renderer.selectRootElement('#fcn_li_rate').focus();
+        //         }
+        //       });
+        //       return;
+        //     }
+        //   }
+        // }
+
+        if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+
+          this.rateFunc(value);
+        }
+        else {
+          // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
+          // Rate Cannot be Less Than Cost
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+          this.dialogBox.afterClosed().subscribe((data: any) => {
+            if (data == 'OK') {
+              this.lineItemForm.controls.fcn_li_rate.setValue(
+                // ''
+                preVal
+                // this.comFunc.transformDecimalVB(
+                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                //   this.zeroAmtVal
+                // )
+              );
+              this.renderer.selectRootElement('#fcn_li_rate').focus();
+            }
+          });
+        }
       }
       let checkStockCostVal =
         parseFloat(this.lineItemForm.value.fcn_li_net_amount) /

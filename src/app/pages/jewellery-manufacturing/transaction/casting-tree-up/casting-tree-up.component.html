@@ -89,7 +89,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Tree:</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%; margin-left: -2px; margin-top: -4PX;">
-                  <input type="number" matInput formControlName="tree" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateTreeMode($event)"/>
+                  <input type="number" matInput formControlName="tree" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateTreeMode($event)" NumberOnly/>
                 </mat-form-field>
               </div>
             </div>
@@ -99,7 +99,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Stone Wt * :</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-right: -10px;">
-                  <input type="number" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -114,7 +114,7 @@
               <label for="inputPassword" class="col-sm-6 col-form-label">Tree No: </label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 114%; margin-left:-22px; margin-top:-4px;">
-                  <input type="text" matInput formControlName="treeNo" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="treeNo" [readonly]="viewMode" NumberOnly/>
                 </mat-form-field>
               </div>
             </div>
@@ -136,7 +136,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Conv.Fact:</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-left: -9px; margin-top:-4px;" >
-                  <input type="number" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"  (focusout)="calculateReqMetal($event)"/>
+                  <input type="number" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"  (focusout)="calculateReqMetal($event)" NumberOnly/>
                 </mat-form-field>
               </div>
             </div>
@@ -146,7 +146,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt * : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 124%; margin-top: -5px;">
-                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)"/>
+                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)" NumberOnly/>
                 </mat-form-field>
               </div>
             </div>
