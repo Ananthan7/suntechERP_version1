@@ -26,17 +26,16 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   url: any;
 
 
-  currencyCodeData: MasterSearchModel = {
+  CurrencyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 176,
+    LOOKUPID: 8,
     SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'CURRENCY CODE',
+    SEARCH_HEADING: 'Currency Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CURRENCY_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
 
   enteredByCodeData: MasterSearchModel = {
@@ -112,9 +111,9 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   
     this.diamondJobBoqReceipt.controls.kariggerDesc.setValue('Sertan, Turkey')
     this.diamondJobBoqReceipt.controls.currency.setValue(this.comService.compCurrency)
-    this.diamondJobBoqReceipt.controls.currencyDesc.setValue('1.000')
+    this.diamondJobBoqReceipt.controls.currencyDesc.setValue('1.000000')
     this.diamondJobBoqReceipt.controls.baseCurrency.setValue(this.comService.compCurrency)
-    this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(this.comService.popMetalValueOnNet)
+    this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue('1.000000')
   }
 
 
@@ -143,6 +142,10 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     console.log(value);
        this.diamondJobBoqReceipt.controls.currency.setValue(value.CURRENCY_CODE);
        this.diamondJobBoqReceipt.controls.currencyDesc.setValue(value.CONV_RATE);
+  }
+       baseCurrencyCodeSelected(value: any) {
+        console.log(value);
+         
        this.diamondJobBoqReceipt.controls.baseCurrency.setValue(value.CURRENCY_CODE);
        this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(value.CONV_RATE);
   }

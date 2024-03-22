@@ -100,10 +100,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Delivery On :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput DateValidation [matDatepicker]="DeliveryOn"
-                                        formControlName="DeliveryOnDate" />
-                                    <mat-datepicker-toggle matSuffix [for]="DeliveryOn"></mat-datepicker-toggle>
-                                    <mat-datepicker #DeliveryOn></mat-datepicker>
+                                    <input matInput AmountDecimalInput
+                                        formControlName="DeliveryOn" class="text-right" />
+                                    <!-- <mat-datepicker-toggle matSuffix [for]="DeliveryOn"></mat-datepicker-toggle>
+                                    <mat-datepicker #DeliveryOn></mat-datepicker> -->
                                 </mat-form-field>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Account :</label>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput AmountDecimalInput class="text-right"/>
                                     </mat-form-field>
                                 </div>
                             </ng-container>
@@ -156,15 +156,15 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="PCS"
-                                            (change)="calculateTotal($event)" class="text-right" />
+                                            (change)="calculateTotal($event)" class="text-right" NumberOnly/>
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Metal Weight :
                                 </label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput MetalDecimalInput class="text-right"
-                                            [readOnly]="isViewBOMTab" formControlName="METAL_WT" />
+                                        <input type="text" matInput MetalDecimalInput class="text-right"
+                                            [readOnly]="isViewBOMTab" formControlName="METAL_WT" ThreeDecimalInput/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -172,14 +172,14 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Rate :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput [readOnly]="true" formControlName="RATEFC"
-                                            class="text-right" />
+                                        <input type="text" matInput [readOnly]="true" formControlName="RATEFC"
+                                            class="text-right" SixDecimalInput/>
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" StoneDecimalInput matInput [readOnly]="isViewBOMTab"
+                                        <input type="text" StoneDecimalInput matInput [readOnly]="isViewBOMTab"
                                             class="text-right" formControlName="STONE_WT" />
                                     </mat-form-field>
                                 </div>
@@ -188,14 +188,14 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Amount :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput [readOnly]="true" formControlName="AMOUNT"
-                                            class="text-right" />
+                                        <input type="text" matInput [readOnly]="true" formControlName="AMOUNT"
+                                            class="text-right" AmountDecimalInput/>
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Gross Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput MetalDecimalInput formControlName="GROSS_WT"
+                                        <input type="text" matInput MetalDecimalInput formControlName="GROSS_WT"
                                             [readOnly]="true" class="text-right" />
                                     </mat-form-field>
                                 </div>
@@ -725,7 +725,11 @@
                                             <table class="rhs-table-1 mt-2">
                                                 <tr>
                                                     <td class="td-p-5" colspan="2"><b>Labour
-                                                            Charges</b></td>
+                                                            Charges</b>
+                                                            <mat-form-field style="width: 50px;">
+                                                                <input type="number" matInput AmountDecimalInput
+                                                                    class="text-right" formControlName="labourcharge" />
+                                                            </mat-form-field></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Setting</td>
@@ -788,7 +792,11 @@
                                             <table class="rhs-table-1 mt-2">
                                                 <tr>
                                                     <td class="td-p-5" colspan="2"><b>Price
-                                                            Factors</b></td>
+                                                            Factors</b>
+                                                            <mat-form-field style="width: 50px;">
+                                                                <input type="number" matInput AmountDecimalInput
+                                                                    class="text-right" formControlName="pricefactor" />
+                                                            </mat-form-field></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Wastage %</td>
