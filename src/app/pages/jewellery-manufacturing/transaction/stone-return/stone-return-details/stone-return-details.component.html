@@ -61,7 +61,8 @@
           <div class="col-md-3">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="salesorderno" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="salesorderno" [readonly]="viewMode" class="text-right" NumberOnly
+                />
               </mat-form-field>
             </div>
           </div>
@@ -187,7 +188,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pieces" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="pieces" [readonly]="viewMode" class="text-right"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
@@ -218,10 +219,10 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="carat" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="carat" [readonly]="viewMode" ThreeDecimalInput class="text-right"/>
               </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+              <!-- <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode" ></master-search> -->
             </div>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label">Color:
@@ -249,7 +250,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="unitrate" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="unitrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
               </mat-form-field>
             </div>
           </div>
@@ -278,7 +279,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="amount" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="amount" [readonly]="viewMode" AmountDecimalInput class="text-right"/>
               </mat-form-field>
             </div>
           </div>
@@ -287,7 +288,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pointerwt" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="pointerwt" [readonly]="viewMode" class="text-right" ThreeDecimalInput/>
               </mat-form-field>
             </div>
           </div>

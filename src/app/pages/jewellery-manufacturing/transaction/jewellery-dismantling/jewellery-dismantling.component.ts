@@ -38,6 +38,17 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  CurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -81,7 +92,7 @@ export class JewelleryDismantlingComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    this.setCompanyCurrency()
     this.setvalues()
   }
 
@@ -98,6 +109,29 @@ export class JewelleryDismantlingComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+  currencyCodeSelected(e: any) {
+    console.log(e);
+    this.jewellerydismantlingFrom.controls.itemcurrency.setValue(e.CURRENCY_CODE);
+    this.jewellerydismantlingFrom.controls.itemcurrencDesc.setValue(e.CONV_RATE);
+  }
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
+    this.jewellerydismantlingFrom.controls.itemcurrency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.comService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.jewellerydismantlingFrom.value.itemcurrency);
+    if (CURRENCY_RATE.length > 0) {
+      this.jewellerydismantlingFrom.controls.itemcurrencDesc.setValue(
+        this.comService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.jewellerydismantlingFrom.controls.itemcurrency.setValue('')
+      this.jewellerydismantlingFrom.controls.itemcurrencDesc.setValue('')
+      this.comService.toastErrorByMsgId('MSG1531')
+    }
   }
 
   addTableData(){ 
