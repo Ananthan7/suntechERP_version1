@@ -1095,14 +1095,14 @@ export class SchemeReceiptComponent implements OnInit {
       this.totalValueInText = "";
 
       this.orderedItems.forEach((item: any) => {
-        this.totalAmount_LC += item.AMOUNTCC;
-        this.totalAmount_FC += item.AMOUNTFC;
+        this.totalAmount_LC += this.commonService.emptyToZero(item.AMOUNTCC);
+        this.totalAmount_FC += this.commonService.emptyToZero(item.AMOUNTFC);
 
-        this.VATAmount += item.VAT_AMOUNTCC;
-        this.VATAmount_FC += item.VAT_AMOUNTFC;
+        this.VATAmount += this.commonService.emptyToZero(item.VAT_AMOUNTCC);
+        this.VATAmount_FC += this.commonService.emptyToZero(item.VAT_AMOUNTFC);
 
-        this.TOTAL_AMOUNTFC += item.AMOUNTFC;
-        this.TOTAL_AMOUNTLC += item.AMOUNTLC;
+        this.TOTAL_AMOUNTFC += this.commonService.emptyToZero(item.AMOUNTFC);
+        this.TOTAL_AMOUNTLC += this.commonService.emptyToZero(item.AMOUNTLC);
       });
       this.totalValue = this.totalAmount_LC + this.VATAmount;
       this.totalValue_FC = this.totalAmount_FC + this.VATAmount_FC;

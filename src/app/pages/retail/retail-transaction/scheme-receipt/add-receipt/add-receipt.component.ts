@@ -197,6 +197,12 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.gridDataSource = result.dynamicData[1]
+          this.gridDataSource.forEach((item:any)=>{
+            item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC,'AMOUNT')
+            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
+            item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+          })
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
           this.calculateGridAmount()
         } else {
