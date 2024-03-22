@@ -31,7 +31,7 @@ export class SchemeRegisterComponent implements OnInit {
   disableCancelBtn: boolean = true;
   viewPorcessBtn: boolean = true;
   viewDeleteBtn: boolean = false;
-  viewSaveBtn: boolean = false;
+  disableSaveBtn: boolean = false;
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
 
@@ -235,7 +235,7 @@ export class SchemeRegisterComponent implements OnInit {
             let schemeReceipts: any[] = this.SchemeMasterDetails.filter((item: any) => item.RCVD_VOCTYPE != '')
             if (schemeReceipts.length == 0) {
               this.viewDeleteBtn = true;
-              this.viewSaveBtn = true;
+              this.disableSaveBtn = true;
               if (this.content.FLAG == 'EDIT') this.viewMode = false;
               if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
             } else {
@@ -248,6 +248,7 @@ export class SchemeRegisterComponent implements OnInit {
           }
           if (data.SCH_CANCEL) {
             this.viewMode = true
+            this.disableSaveBtn = false;
             this.commonService.toastErrorByMsgId('Scheme is canceled')
           }
 
@@ -532,7 +533,7 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((resp: any) => {
         if (resp) {
           this.viewMode = true;
-          this.viewSaveBtn = true;
+          this.disableSaveBtn = true;
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item: any) => {
             // item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch

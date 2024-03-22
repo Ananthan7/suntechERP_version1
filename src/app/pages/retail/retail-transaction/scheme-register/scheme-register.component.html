@@ -11,7 +11,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmitWithAttachment()" 
-    [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode && !viewSaveBtn"
+    [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode && !disableSaveBtn"
     (cancelClick)="close()" (deleteClick)="deleteBtnClicked()"></modal-header>
 <auth-checker (authSubmit)="cancelScheme($event)"></auth-checker>
 <!-- content section -->
@@ -284,16 +284,16 @@
                         <label style="width: 20%;">Salesman* :
                         </label>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput [readonly]="viewMode && !disableSaveBtn"
                                 formControlName="Salesman" 
                                 (focusout)="salesmanChange($event)" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode"
+                        <master-search *ngIf="!viewMode || disableSaveBtn"
                             [MasterSearchData]="SalesmanData"
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput readonly="viewMode"
                                 formControlName="SalesmanName" />
                         </mat-form-field>
                     </div>
