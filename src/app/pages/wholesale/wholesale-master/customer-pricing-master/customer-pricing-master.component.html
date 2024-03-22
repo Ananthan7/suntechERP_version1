@@ -5,8 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-(deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="customerpricemasterForm">
@@ -21,11 +20,11 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Division * :</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="division"/>
+                          <input type="text" matInput formControlName="division" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="divisionCodeData"
-                    (newRowClick)="divisionCodeSelected($event)">
-                </master-search>
+                          (newRowClick)="divisionCodeSelected($event)">
+                        </master-search>
                       </div>
                     </div>
                   </div>
@@ -34,10 +33,10 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Date :</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 72%;">
-                          <input matInput [matDatepicker]="date"  formControlName="date"
-                          placeholder="DD/MM/YYYY"  DateValidation />
-                        <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                        <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                          <input matInput [matDatepicker]="date" formControlName="date" placeholder="DD/MM/YYYY"
+                            DateValidation />
+                          <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                          <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
                         </mat-form-field>
                       </div>
                     </div>
@@ -49,16 +48,16 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Cust/Supp Code * :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 80%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="customercode" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-5">
                         <mat-form-field style="width: 80%;">
-                          <input type="text" matInput formControlName="customercode" />
+                          <input type="text" matInput formControlName="customercodeDesc" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="custsuppCodeData"
-                        (newRowClick)="custsuppCodeSelected($event)">
-                    </master-search>
+                          (newRowClick)="custsuppCodeSelected($event)">
+                        </master-search>
                       </div>
                     </div>
                   </div>
@@ -76,9 +75,8 @@
                         <mat-form-field style="width: 80%;">
                           <input type="text" matInput formControlName="price" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="priceCodeData"
-                    (newRowClick)="priceCodeSelected($event)">
-                </master-search>
+                        <master-search [MasterSearchData]="priceCodeData" (newRowClick)="priceCodeSelected($event)">
+                        </master-search>
                       </div>
                     </div>
                   </div>
@@ -91,16 +89,16 @@
                       <label for="inputPassword" class="col-sm-5 col-form-label">Entered By * :</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 80%;">
-                          <input type="text" matInput  formControlName="enteredBy"/>
+                          <input type="text" matInput formControlName="enteredBy" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="user"
-                        (newRowClick)="userDataSelected($event)">
-                    </master-search>
+                        <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                        </master-search>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-5 pt-3">
-                    <mat-checkbox class="example-margin" formControlName="defaultCustomer">Set as Default for Customers</mat-checkbox>
+                    <mat-checkbox class="example-margin" formControlName="defaultCustomer">Set as Default for
+                      Customers</mat-checkbox>
                   </div>
                 </div>
                 <div class="row">
@@ -112,13 +110,14 @@
                           <input type="text" matInput formControlName="approvalby" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="approvalCodeData"
-                        (newRowClick)="ApprovalCodeSelected($event)">
-                    </master-search>
+                          (newRowClick)="ApprovalCodeSelected($event)">
+                        </master-search>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-5 pt-3">
-                    <mat-checkbox class="example-margin" formControlName="defaultVendor">Set as Default for Vendors</mat-checkbox>
+                    <mat-checkbox class="example-margin" formControlName="defaultVendor">Set as Default for
+                      Vendors</mat-checkbox>
                   </div>
                 </div>
                 <div class="row">
@@ -127,7 +126,7 @@
                       <label for="inputPassword" class="col-sm-5 col-form-label">Labour type * :</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <mat-select >
+                          <mat-select>
                             <mat-option value="1">None</mat-option>
                             <mat-option value="2">Making Charge</mat-option>
                             <mat-option value="3">Wastage</mat-option>
@@ -154,7 +153,7 @@
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput />
                         </mat-form-field>
-      
+
                       </div>
                     </div>
                   </div>
@@ -162,13 +161,14 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="row form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" [(ngModel)]="text" (click)="change($event)">
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                        [(ngModel)]="text" (click)="change($event)">
                       <label class="col-sm-5" for="flexSwitchCheckChecked">{{text}}</label>
                       <div class="col-md-7">
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput />
                         </mat-form-field>
-                    
+
                       </div>
                     </div>
                   </div>
@@ -179,11 +179,10 @@
                       <label for="inputPassword" class="col-sm-5 col-form-label">Apply On:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <mat-select  #select multiple>
+                          <mat-select #select multiple>
                             <div class="select-all">
-                                <mat-checkbox [(ngModel)]="allSelected"
-                                                [ngModelOptions]="{standalone: true}"
-                                                (change)="toggleAllSelection()">Select All</mat-checkbox>
+                              <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
+                                (change)="toggleAllSelection()">Select All</mat-checkbox>
                             </div>
                             <mat-option (click)="optionClick()" *ngFor="let applys of apply" [value]="applys.value">
                               {{applys.viewValue}}
@@ -197,8 +196,12 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="row align-items-center mb-1">
-                      <div class="col-md-4 pt-2"><mat-radio-button value="1">By Value</mat-radio-button></div>
-                      <div class="col-md-3 pt-2"><mat-radio-button value="2" class="pl-1">By %</mat-radio-button></div>
+                      <div class="col-md-4"> 
+                        <mat-radio-group aria-label="Select an option" formControlName="byValue">
+                          <mat-radio-button value="1" class="mx-2" class="pt-3">By Value</mat-radio-button>
+                          <mat-radio-button value="2" class="mx-2" class="pt-3">By %</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
                       <div class="col-md-5">
                         <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
                           Change Value
@@ -223,9 +226,16 @@
                 </dx-data-grid>
                 <div class="row">
                   <div class="col-md-4"><label for="inputPassword" class="col-sm-8 col-form-label">Apply in
-                      Branches</label></div>
-                  <div class="col-md-4"><mat-radio-button value="1" class="pt-3">By Value</mat-radio-button></div>
-                  <div class="col-md-2"><mat-radio-button value="2" class="pt-3">By %</mat-radio-button></div>
+                      Branches</label>
+                  <div class="col-md-4"> 
+                    <mat-radio-group aria-label="Select an option" formControlName="byValue">
+                      <mat-radio-button value="1" class="mx-2" class="pt-3">By Value</mat-radio-button>
+                      <mat-radio-button value="2" class="mx-2" class="pt-3">By %</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                  <!-- <div class="col-md-4"><mat-radio-button formControlName="byValue" value="1" class="pt-3">By Value</mat-radio-button></div>
+                  <div class="col-md-2"><mat-radio-button formControlName="bypercentage" value="2" class="pt-3">By %</mat-radio-button></div> -->
                 </div>
               </div>
             </div>
@@ -255,9 +265,8 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="currency" />
                     </mat-form-field>
-                    <master-search [MasterSearchData]="currencyCodeData"
-                    (newRowClick)="currencyCodeSelected($event)">
-                </master-search>
+                    <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyCodeSelected($event)">
+                    </master-search>
                   </div>
                 </div>
               </div>
@@ -313,8 +322,8 @@
                     <dxo-selection mode="multiple"></dxo-selection>
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                    <dxi-column *ngFor="let data of columnheaderTransaction" dataField="{{ data }}"
-                      caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                    <dxi-column *ngFor="let data of columnheaderTransaction" dataField="{{ data }}" caption="{{ data }}"
+                      [allowEditing]="true" alignment="center" backgroundcolor="#000">
                     </dxi-column>
                   </dx-data-grid>
 

@@ -150,7 +150,7 @@
           <label for="inputPassword" class="col-sm-1 col-form-label">Pieces : </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="number" matInput formControlName="pieces" maxlength="15" />
+              <input type="text" matInput formControlName="pieces" maxlength="15" class="text-right"  AmountDecimalInput/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Shape : </label>
@@ -170,7 +170,7 @@
           <label for="inputPassword" class="col-sm-1 col-form-label">Carat * : </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="number" matInput formControlName="carat" AmountDecimalInput maxlength="15" style="text-align: right;" />
+              <input type="text" matInput formControlName="carat" ThreeDecimalInput maxlength="15" style="text-align: right;" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Size: </label>
@@ -190,7 +190,7 @@
           <label for="inputPassword" class="col-sm-1 col-form-label">Unit Rate:</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="number" matInput formControlName="unitrate" AmountDecimalInput readonly />
+              <input type="text" matInput formControlName="unitrate" SixDecimalInput readonly  class="text-right"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Sieve: </label>
@@ -209,7 +209,7 @@
           <label for="inputPassword" class="col-sm-1 col-form-label">Amount: </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="number" matInput formControlName="amount" AmountDecimalInput readonly style="text-align: right;" />
+              <input type="text" matInput formControlName="amount" AmountDecimalInput readonly style="text-align: right;" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Color: </label>
@@ -227,7 +227,7 @@
           <label for="inputPassword" class="col-sm-1 col-form-label">Pointer Wt: </label>
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
-              <input type="number" matInput formControlName="pointerwt" maxlength="15" AmountDecimalInput style="text-align: right;" />
+              <input type="text" matInput formControlName="pointerwt" maxlength="15" AmountDecimalInput style="text-align: right;" />
             </mat-form-field>
           </div>
         </div>

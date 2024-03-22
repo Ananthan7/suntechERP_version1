@@ -246,7 +246,7 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput #codeInput id="metallabour_code" maxlength="15" [readonly]="editMode || viewMode"
+                  <input type="text" matInput #codeInput  maxlength="15" [readonly]="editMode || viewMode"
                     formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
@@ -393,8 +393,8 @@
               <label for="input" class="col-sm-2 col-form-label">Purity :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" [readonly]="viewMode" formControlName="purity"
-                    style="text-align: right;" NumberOnly>
+                  <input matInput type="text" [readonly]="viewMode" formControlName="purity"
+                    style="text-align: right;" SixDecimalInput>
                 </mat-form-field>
               </div>
             </div>

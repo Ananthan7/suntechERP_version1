@@ -93,7 +93,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
                                         <input type="text" matInput style="text-align: right;"
-                                            formControlName="trayWeight" maxlength="12" [readonly]="viewMode" />
+                                            formControlName="trayWeight"  [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="StockProcessData"
-                                        (newRowClick)="StockProcesSelected($event)" *ngIf="searchModeAllow == false">
+                                        (newRowClick)="StockProcesSelected($event)" >
                                     </master-search>
                                 </div>
                                 <div class="col-sm-3">

@@ -97,9 +97,8 @@
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput AmountDecimalInput
                                     class="text-right"
-                                    autocomplete="LossAllowed"
                                     formControlName="LossAllowed" maxlength="12"
-                                    [readonly]="viewMode || codeEnable" />
+                                    />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Password
@@ -119,7 +118,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" MetalDecimalInput matInput
-                                    maxlength="12"    [readonly]="viewMode || codeEnable" 
+                                    maxlength="12"   
                                     class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
@@ -128,8 +127,8 @@
                             :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="text" class="text-right" matInput
-                                    maxlength="12"    [readonly]="viewMode || codeEnable" 
+                                <input type="text" class="text-right" matInput MetalDecimalInput
+                                    maxlength="12"    [readonly]="viewMode" 
                                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                                     NumberOnly formControlName="TargetPcs" />
                             </mat-form-field>
@@ -142,7 +141,7 @@
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput MetalDecimalInput
                                     maxlength="12" class="text-right"
-                                    [readonly]="viewMode || codeEnable" 
+                                    [readonly]="viewMode" 
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -152,7 +151,7 @@
                             <mat-form-field style="width: 100px">
                                 <input type="number" class="text-right"
                                     maxlength="12" matInput MetalDecimalInput
-                                    [readonly]="viewMode || codeEnable" 
+                                    [readonly]="viewMode" 
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -163,7 +162,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput maxlength="12"
-                                [readonly]="viewMode || codeEnable"  class="text-right"
+                                [readonly]="viewMode"  class="text-right"
                                     MetalDecimalInput
                                     formControlName="TargetWeight" />
                             </mat-form-field>

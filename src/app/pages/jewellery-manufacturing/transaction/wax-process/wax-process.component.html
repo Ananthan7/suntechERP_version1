@@ -172,16 +172,16 @@
                     <input type="date" (change)="DelDatetextevent($event,data)"  />
                   </div>
                   <div *dxTemplate="let data of 'GrossWttemp'">
-                    <input type="number" (change)="GrossWttextevent($event,data)"  style="text-align: right;" />
+                    <input type="number" (change)="GrossWttextevent($event,data)"  class="text-right"  ThreeDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'MetalWttemp'">
-                    <input type="number" (change)="MetalWttextevent($event,data)"  style="text-align: right;" />
+                    <input type="number" (change)="MetalWttextevent($event,data)"  class="text-right"  ThreeDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'StoneWttemp'">
-                    <input type="number" (change)="StoneWttextevent($event,data)"  style="text-align: right;"  />
+                    <input type="number" (change)="StoneWttextevent($event,data)"  class="text-right"  ThreeDecimalInput  />
                   </div>
                   <div *dxTemplate="let data of 'OrdPcstemp'">
-                    <input type="number" (change)="OrderPcstextevent($event,data)"  style="text-align: right;" />
+                    <input type="number" (change)="OrderPcstextevent($event,data)" class="text-right"  ThreeDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'IssuePcstemp'">
                     <input type="number" (change)="IssuePcstextevent($event,data)"  style="text-align: right;" />
