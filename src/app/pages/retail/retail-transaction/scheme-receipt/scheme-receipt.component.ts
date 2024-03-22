@@ -64,6 +64,7 @@ export class SchemeReceiptComponent implements OnInit {
   disableAddBtnGrid: boolean = true;
   VIEWEDITFLAG: string = '';
   dataIndex: any;
+
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -143,6 +144,7 @@ export class SchemeReceiptComponent implements OnInit {
     POS_TAX_CRACCODE: [''],
     TotalAmount: [0],
     TotalTax: [0],
+    TotalTax_FC: [0],
     SchemeBalance: [0],
   });
   private subscriptions: Subscription[] = [];
@@ -217,13 +219,11 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH);
     this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
     this.receiptDetailsForm.controls.POS_TAX_CRACCODE.setValue(this.content.POS_TAX_CRACCODE);
-    // this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
-    // this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTCC);
-    // this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTCC);
 
     this.setFormControlAmount('PartyAmount',this.content.TOTAL_AMOUNTCC)
     this.setFormControlAmount('TotalAmount',this.content.TOTAL_AMOUNTCC)
     this.setFormControlAmount('TotalTax',this.content.GST_TOTALFC)
+    this.setFormControlAmount('TotalTax_FC',this.content.GST_TOTALFC)
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
@@ -267,7 +267,7 @@ export class SchemeReceiptComponent implements OnInit {
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex
-    this.openNewReceiptDetails(event.data)
+    this.openNewReceiptDetails(this.content)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -311,7 +311,8 @@ export class SchemeReceiptComponent implements OnInit {
               item.CurrCode = item.CURRENCY_CODE
               item.AC_Description = item.HDACCOUNT_HEAD
               item.CurrRate = this.commonService.decimalQuantityFormat(item.CURRENCY_RATE,'RATE')
-              item.AMOUNT_VAT = item.AMOUNTFC
+              item.AMOUNT_VAT = item.AMOUNTCC
+              item.AMOUNT_VATFC = item.AMOUNTFC
             });
           }
           this.calculateTotalonView();
@@ -706,6 +707,7 @@ export class SchemeReceiptComponent implements OnInit {
       return
     }
     if (data) {
+      data.FLAG = 'VIEW'
       this.dataToEditrow = data;
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
@@ -728,10 +730,7 @@ export class SchemeReceiptComponent implements OnInit {
       }
     );
   }
-  convertFCTOCC(amount: any) {
-    amount = this.commonService.emptyToZero(amount)
-    return this.commonService.FCToCC(this.commonService.compCurrency, amount)
-  }
+
   setDetailData() {
     let detailsArray: any = [];
     let datas: any = {};
@@ -748,7 +747,7 @@ export class SchemeReceiptComponent implements OnInit {
         "CURRENCY_CODE": item.CurrCode || "",
         "CURRENCY_RATE": this.commonService.emptyToZero(item.CurrRate) || 0,
         "AMOUNTFC": this.commonService.emptyToZero(item.AMOUNT_VAT),
-        "AMOUNTCC": this.convertFCTOCC(item.AMOUNT_VAT),
+        "AMOUNTCC": this.commonService.emptyToZero(item.AMOUNT_VATFC),
         "HEADER_AMOUNT": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CHEQUE_NO": "",
         "CHEQUE_DATE": this.commonService.formatDateTime(this.currentDate),
@@ -778,7 +777,7 @@ export class SchemeReceiptComponent implements OnInit {
         "SGST_AMOUNTFC": 0,
         "SGST_AMOUNTCC": 0,
         "IGST_PER": item.TRN_Per,
-        "IGST_AMOUNTFC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
+        "IGST_AMOUNTFC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax_FC),
         "IGST_AMOUNTCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CGST_ACCODE": this.commonService.nullToString(item.CGST_ACCODE),
         "SGST_ACCODE": this.commonService.nullToString(item.SGST_ACCODE),
@@ -871,7 +870,7 @@ export class SchemeReceiptComponent implements OnInit {
       "GST_STATE_CODE": "",
       "GST_NUMBER": "",
       "GST_TYPE": "",
-      "GST_TOTALFC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
+      "GST_TOTALFC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax_FC),
       "GST_TOTALCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
       "REC_STATUS": "",
       "CUSTOMER_NAME": this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerName),
@@ -1027,14 +1026,18 @@ export class SchemeReceiptComponent implements OnInit {
       this.totalValue_FC = 0;
       this.totalValueInText = "";
       let vatTotal = 0
+      let vatTotalFC = 0
       let SchemeBalance = 0
       this.orderedItems.forEach((item: any) => {
         item.SchemeBalance = this.commonService.emptyToZero(item.SchemeBalance)
         item.Amount_FC = this.commonService.emptyToZero(item.Amount_FC)
         item.Amount_LC = this.commonService.emptyToZero(item.Amount_LC)
         item.AMOUNT_VAT = ((parseInt(item.Amount_LC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
+        item.AMOUNT_VATFC = ((parseInt(item.Amount_FC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
         item.VAT_AMT = parseInt(item.Amount_LC) - item.AMOUNT_VAT
+        item.VAT_AMTFC = parseInt(item.Amount_FC) - item.AMOUNT_VATFC
         vatTotal += item.VAT_AMT;
+        vatTotalFC += item.VAT_AMTFC;
         this.totalAmount_LC += parseInt(item.Amount_LC);
         this.totalAmount_FC += parseInt(item.Amount_FC);
         this.VATAmount += parseInt(item.VAT_AMT);
@@ -1048,6 +1051,7 @@ export class SchemeReceiptComponent implements OnInit {
       //   this.commonService.commaSeperation(this.totalAmount_LC.toFixed(2))
       // )
       this.setFormControlAmount('TotalTax',vatTotal)
+      this.setFormControlAmount('TotalTax_FC',vatTotalFC)
       this.setFormControlAmount('TotalAmount',this.totalAmount_LC)
       let PartyAmount = (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_LC).toFixed(2)
       // this.receiptDetailsForm.controls.PartyAmount.setValue(

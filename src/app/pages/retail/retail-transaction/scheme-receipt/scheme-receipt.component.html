@@ -302,8 +302,9 @@
                                     [showColumnLines]="true"
                                     [showRowLines]="true"
                                     [showBorders]="true"
-                                    [columnAutoWidth]="true">
-                                    <!-- <dxo-filter-row visible="true" (onRowClick)="onRowClickHandler($event)"></dxo-filter-row> keyExpr="Id"-->
+                                    [columnAutoWidth]="true"
+                                    (onRowClick)="onRowClickHandler($event)">
+                                    <!-- <dxo-filter-row visible="true" ></dxo-filter-row> keyExpr="Id"-->
                                     <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
                                     <dxo-paging [enabled]="true" [pageSize]="10"
                                         [pageIndex]="1"></dxo-paging>
@@ -316,39 +317,39 @@
                                     </dxi-column> -->
                                     <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
                                     <dxi-column dataField="SRNO" caption="SRNO"
-                                        alignment="center">
+                                        alignment="right">
                                     </dxi-column>
                                     <dxi-column dataField="Branch"
                                         caption="Branch"
-                                        alignment="center">
+                                        alignment="left">
                                     </dxi-column>
                                     <dxi-column dataField="Type" caption="Mode"
-                                        alignment="center">
+                                        alignment="left">
                                     </dxi-column>
                                     <dxi-column dataField="AC_Code"
-                                        caption="A/C Code" alignment="center">
+                                        caption="A/C Code" alignment="left">
                                     </dxi-column>
                                     <dxi-column dataField="CurrCode"
-                                        caption="Currency" alignment="center">
+                                        caption="Currency" alignment="left">
                                     </dxi-column>
                                     <dxi-column dataField="AC_Description"
                                         caption="Account Head"
-                                        alignment="center">
+                                        alignment="left">
                                     </dxi-column>
                                     <dxi-column dataField="CurrRate"
-                                        caption="Currency Rate" alignment="center">
+                                        caption="Currency Rate" alignment="right">
                                     </dxi-column>
-                                    <dxi-column dataField="AMOUNT_VAT"
-                                        caption="Amount" alignment="center">
+                                    <dxi-column dataField="AMOUNT_VATFC"
+                                        caption="Amount" alignment="right">
                                     </dxi-column>
                                     <dxo-summary>
                                         <dxi-total-item column="SRNO"
                                             summaryType="count"
-                                            [valueFormat]="gridAmountDecimalFormat"
+                                            alignment="right"
                                             displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="AMOUNT_VAT"
-                                            summaryType="sum"
+                                        <dxi-total-item column="AMOUNT_VATFC"
+                                            summaryType="sum" alignment="right"
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
@@ -374,7 +375,7 @@
                                         <mat-form-field style="width: 100%">
                                             <input type="text" matInput readonly
                                                 class="text-right"
-                                                formControlName="TotalTax" />
+                                                formControlName="TotalTax_FC" />
                                         </mat-form-field>
                                     </span>
                                 </div>

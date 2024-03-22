@@ -27,6 +27,7 @@ export class AddReceiptComponent implements OnInit {
   schemeFlag: boolean = false;
   viewMode: boolean = false;
   disableAmountFC: boolean = false;
+  dateFormat: any = this.commonService.allbranchMaster?.BDATEFORMAT
 
   /**serach modal data */
   branchMasterData: any = {
@@ -128,6 +129,10 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
     if (this.content) {
+      if (this.content.FLAG == 'VIEW') {
+        this.loadSavedContent()
+        return
+      }
       this.setFormValues()
     }
     this.paymentTypeChange({ ENGLISH: 'Cash' })
@@ -142,40 +147,47 @@ export class AddReceiptComponent implements OnInit {
     this.setFormControlAmount('SchemeTotalAmount', this.content.SCHEME_AMOUNT)
     this.setGridData()
   }
-  // setInitialValues() {
-  //   let data = this.content.details[0]
-  //   this.getPaymentType(data.RECPAY_TYPE || data.Type)
-  //   this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
-  //   this.receiptEntryForm.controls.SchemeCode.setValue(data.SchemeID)
-  //   // this.receiptEntryForm.controls.AC_Code.setValue(data.CurrCode)
-  //   this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
-  //   this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
-  //   this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
-  //   this.receiptEntryForm.controls.Amount_FC.setValue(data.AMOUNTFC || data.Amount_FC)
-  //   this.receiptEntryForm.controls.Amount_LC.setValue(data.AMOUNTCC || data.Amount_LC)
-  //   this.receiptEntryForm.controls.Header_Amount.setValue(
-  //     this.commonService.commaSeperation(data.HEADER_AMOUNT) || data.Header_Amount)
-  //   this.receiptEntryForm.controls.AmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.AmountWithTRN)
-  //   this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.HeaderAmountWithTRN)
-  //   this.receiptEntryForm.controls.TRN_Amount_FC.setValue(data.VAT_AMOUNTFC || data.TRN_Amount_FC)
-  //   this.receiptEntryForm.controls.TRN_Amount_LC.setValue(data.VAT_AMOUNTCC || data.TRN_Amount_LC)
-  //   this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER || data.TRN_Per)
-  //   this.receiptEntryForm.controls.SRNO.setValue(data.SRNO)
 
-  //   this.receiptEntryForm.controls.TypeCode.setValue(data.TypeCode)
-  //   this.receiptEntryForm.controls.TypeCodeDESC.setValue(data.TypeCodeDESC)
-  //   this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_AC)
-  //   this.receiptEntryForm.controls.TRN_No.setValue(data.TRN_No)
-  //   this.receiptEntryForm.controls.TRN_Inv.setValue(data.TRN_Inv)
-  //   this.receiptEntryForm.controls.TRN_Inv_Date.setValue(data.TRN_Inv_Date)
-  //   this.receiptEntryForm.controls.TRN_Inv_Date.setValue(data.TRN_Inv_Date)
-  //   this.receiptEntryForm.controls.TRN_Ref.setValue(data.TRN_Ref)
-  //   this.receiptEntryForm.controls.Exp.setValue(data.Exp)
-  //   this.receiptEntryForm.controls.ValidId.setValue(data.ValidId)
-  //   this.receiptEntryForm.controls.SourceofFunds.setValue(data.SourceofFunds)
-  //   this.receiptEntryForm.controls.TransactionType.setValue(data.TransactionType)
-  //   this.receiptEntryForm.controls.Narration.setValue(data.Narration)
-  // }
+  loadSavedContent() {
+    console.log(this.content, 'this.content');
+    let data: any = this.content || {}
+    this.getPaymentType(data.RECPAY_TYPE)
+    this.getSchemeDetailView()
+    this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
+    this.receiptEntryForm.controls.AC_Code.setValue(data.CurrCode)
+    this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
+    this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
+    this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
+    this.setFormControlAmount('Amount_FC',data.TOTAL_AMOUNTFC)
+    this.setFormControlAmount('Amount_LC',data.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('Header_Amount',data.TOTAL_AMOUNTCC)
+    this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER || data.TRN_Per)
+    this.receiptEntryForm.controls.schemeID.setValue(data.SCH_CUSTOMER_ID)
+    this.receiptEntryForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
+  }
+  getSchemeDetailView() {
+    let param = {
+      SCH_CUSTOMER_CODE: this.content.POSCUSTOMERCODE || '',
+      SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID || '',
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeDetails', param)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.gridDataSource = result.dynamicData[0]
+          this.gridDataSource.forEach((item:any)=>{
+            item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC,'AMOUNT')
+            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
+            item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+          })
+          this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
+        } else {
+          this.viewMode = true;
+          this.commonService.toastErrorByMsgId('grid data not found')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
   setGridData() {
     let param = {
       SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || '',
@@ -248,6 +260,9 @@ export class AddReceiptComponent implements OnInit {
     if (formValue.Type == 'Cheque' && formValue.ChequeNumber == '') {
       this.commonService.toastErrorByMsgId('Cheque Number Required')
       return
+    }
+    if (formValue.Type == 'Cheque' && formValue.DrawnBank == '') {
+      this.commonService.toastErrorByMsgId('Drawn Bank Not Added')
     }
     if (Number(formValue.Amount_FC) == 0 || Number(formValue.Amount_LC) == 0) {
       this.commonService.toastErrorByMsgId('Amount cannot be zero')
@@ -440,11 +455,15 @@ export class AddReceiptComponent implements OnInit {
         this.receiptEntryForm.controls.CurrRate.setValue(
           this.commonService.decimalQuantityFormat(form.CONV_RATE, 'RATE')
         )
+        let amount = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.CurrRate)
+        this.setFormControlAmount('Amount_FC', amount.toFixed(2))
       } else if (currencyRate < form.MIN_CONV_RATE) {
         this.commonService.toastErrorByMsgId('Currency Rate cannot be less than ' + form.MIN_CONV_RATE)
         this.receiptEntryForm.controls.CurrRate.setValue(
           this.commonService.decimalQuantityFormat(form.CONV_RATE, 'RATE')
         )
+        let amount = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.CurrRate)
+        this.setFormControlAmount('Amount_FC', amount.toFixed(2))
       } else {
         this.receiptEntryForm.controls.CurrRate.setValue(
           this.commonService.decimalQuantityFormat(currencyRate, 'RATE')
@@ -485,7 +504,7 @@ export class AddReceiptComponent implements OnInit {
       this.setGridData()
     }
   }
-  CLfired:number = 0
+  CLfired: number = 0
   extraBalance: number = 0
 
   /**calculate amount and split to rows in grid*/
@@ -500,8 +519,8 @@ export class AddReceiptComponent implements OnInit {
     this.gridDataSource.forEach((item: any, index: any) => {
       payAmountSum += parseInt(item.PAY_AMOUNT_FC)
       if (index != 0) {
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'THREE')
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'THREE')
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
       }
     })
     this.setFormControlAmount('SchemeBalance', payAmountSum)
@@ -517,12 +536,12 @@ export class AddReceiptComponent implements OnInit {
     let totalRowsToUpdate = Math.floor(Amount_LC / InstallmentAmount)
     let flag = 0
     let amts = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
-    if(amts != 0 && amts < Header_Amount && this.CLfired != 1){
+    if (amts != 0 && amts < Header_Amount && this.CLfired != 1) {
       this.extraBalance = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
       this.gridDataSource[1].RCVD_AMOUNTFC = this.gridDataSource[0].RCVD_AMOUNTFC
       this.gridDataSource[1].RCVD_AMOUNTCC = this.gridDataSource[0].RCVD_AMOUNTCC
-      this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
-      this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
+      this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
+      this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
       flag = 1
       return
     }
@@ -530,21 +549,21 @@ export class AddReceiptComponent implements OnInit {
     //calculating amount and spliting to each rows
     this.gridDataSource.forEach((item: any, index: any) => {
       if (balanceAmount <= 0 && this.gridDataSource[0].RCVD_AMOUNTFC == '0.000') {
-        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
-        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'THREE')
+        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
+        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
         flag = 1
       }
       if (flag == 1) return
       if (totalRowsToUpdate >= index + 1) {
         item.RCVD_AMOUNTFC = InstallmentAmount
         item.RCVD_AMOUNTCC = InstallmentAmount
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((item.RCVD_AMOUNTCC), 'THREE')
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((item.RCVD_AMOUNTCC), 'AMOUNT')
       } else {
-        item.RCVD_AMOUNTFC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+this.extraBalance
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
-        item.RCVD_AMOUNTCC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount))+this.extraBalance
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
+        item.RCVD_AMOUNTFC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount)) + this.extraBalance
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
+        item.RCVD_AMOUNTCC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount)) + this.extraBalance
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
         flag = 1
       }
       if (flag == 1) return

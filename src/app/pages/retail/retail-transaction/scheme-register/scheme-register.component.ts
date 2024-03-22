@@ -264,13 +264,14 @@ export class SchemeRegisterComponent implements OnInit {
 
           this.schemeRegistrationForm.controls.MobileNo.setValue(data.SCH_ALERT_MOBILE)
           this.schemeRegistrationForm.controls.Email.setValue(data.SCH_ALERT_EMAIL)
-          this.schemeRegistrationForm.controls.BonusInstallment.setValue(
-            this.commonService.commaSeperation(data.SCHEME_BONUS))
+          // this.schemeRegistrationForm.controls.BonusInstallment.setValue(
+          //   this.commonService.commaSeperation(data.SCHEME_BONUS))
           let totalAMT = data.SCH_INST_AMOUNT_FC * data.SCH_SCHEME_PERIOD
           this.setFormControlAmount('TotalAmountToPay', totalAMT)
           this.setFormControlAmount('InstallmentAmount', data.SCH_INST_AMOUNT_CC)
           this.setFormControlAmount('CancellationCharge', data.SCH_CANCEL_AMT)
           this.setFormControlAmount('SumAssured', data.SCH_ASSURED_AMT_FC)
+          this.setFormControlAmount('BonusInstallment', data.SCHEME_BONUS)
           //amounts used for calculating number of units
           this.initialLoadedAmounts = {
             InstallmentAmount: data.SCH_INST_AMOUNT_CC,
@@ -481,13 +482,14 @@ export class SchemeRegisterComponent implements OnInit {
           // this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.START_DATE)
           // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCHEME_PERIOD)
-          this.schemeRegistrationForm.controls.BonusInstallment.setValue(
-            this.commonService.commaSeperation(data.SCHEME_BONUS)
-          )
+          // this.schemeRegistrationForm.controls.BonusInstallment.setValue(
+          //   this.commonService.commaSeperation(data.SCHEME_BONUS)
+          // )
           let total = data.SCHEME_AMOUNT * data.SCHEME_PERIOD
           this.setFormControlAmount('TotalAmountToPay', total)
           this.setFormControlAmount('InstallmentAmount', data.SCHEME_AMOUNT)
           this.setFormControlAmount('CancellationCharge', data.CANCEL_CHARGE)
+          this.setFormControlAmount('BonusInstallment', data.SCHEME_BONUS)
           this.setFormControlAmount('SumAssured', (total + data.SCHEME_BONUS))
           this.initialLoadedAmounts = {
             InstallmentAmount: data.SCHEME_AMOUNT,
