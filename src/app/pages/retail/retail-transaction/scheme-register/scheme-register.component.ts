@@ -25,13 +25,13 @@ export class SchemeRegisterComponent implements OnInit {
   formdata = new FormData();
   isLoading: boolean = false
   viewMode: boolean = false;
-  processMode: boolean = false;
   editMode: boolean = false;
   editUNITS: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
   disableCancelBtn: boolean = true;
   viewPorcessBtn: boolean = true;
   viewDeleteBtn: boolean = false;
+  viewSaveBtn: boolean = false;
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
 
@@ -183,6 +183,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.setInitialValues()
   }
+ 
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
   }
@@ -234,13 +235,20 @@ export class SchemeRegisterComponent implements OnInit {
             let schemeReceipts: any[] = this.SchemeMasterDetails.filter((item: any) => item.RCVD_VOCTYPE != '')
             if (schemeReceipts.length == 0) {
               this.viewDeleteBtn = true;
-              if (this.content.FLAG == 'DELETE') this.deleteBtnClicked();
+              this.viewSaveBtn = true;
+              if (this.content.FLAG == 'EDIT') this.viewMode = false;
+              if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
             } else {
+              this.viewDeleteBtn = false;
               this.viewMode = true;
             }
           }
+          if(this.content?.FLAG == 'VIEW'){
+            this.viewMode = true;
+          }
           if (data.SCH_CANCEL) {
             this.viewMode = true
+            this.commonService.toastErrorByMsgId('Scheme is canceled')
           }
 
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
@@ -432,9 +440,9 @@ export class SchemeRegisterComponent implements OnInit {
       return
     }
     this.commonService.showSnackBarMsg('MSG81447')
-    let API = `SchemeRegistration/DeleteSchemeRegistration/` + this.content?.SCH_CUSTOMER_ID
+    let API = `SchemeRegistration/CancelSchemeRegistration/` + this.content?.SCH_CUSTOMER_ID
     let param = { SCH_CUSTOMER_ID: this.content?.SCH_CUSTOMER_ID || '' }
-    let Sub: Subscription = this.dataService.deleteDynamicAPI(API, param)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, param)
       .subscribe((result: any) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
@@ -449,7 +457,8 @@ export class SchemeRegisterComponent implements OnInit {
     this.isViewSchemeMasterGrid = false
   }
   fetchSchemeWithCustCode() {
-    if (this.schemeRegistrationForm.value.SchemeId == '' || this.content?.FLAG == 'VIEW') return
+    if (this.viewMode == true || this.content?.FLAG == 'VIEW') return
+    if (this.schemeRegistrationForm.value.SchemeId == '') return
     this.SchemeMasterDetails = []
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
@@ -463,7 +472,6 @@ export class SchemeRegisterComponent implements OnInit {
             return
           }
           this.viewPorcessBtn = false
-          this.processMode = false
           this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCHEME_CODE)
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
@@ -509,7 +517,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.SchemeMasterDetails[value.data.SRNO - 1].PAY_STATUS = data.PAY_STATUS ? true : false;
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
-  addrowsWithAPI() {
+  processSchemeAPI() {
     let formValue = this.schemeRegistrationForm.value
     let joindate = this.commonService.formatYYMMDD(new Date(formValue.DateOfJoining))
     let params = {
@@ -523,7 +531,8 @@ export class SchemeRegisterComponent implements OnInit {
     let sub: Subscription = this.dataService.getDynamicAPIwithParams(API, params)
       .subscribe((resp: any) => {
         if (resp) {
-          this.processMode = true
+          this.viewMode = true;
+          this.viewSaveBtn = true;
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item: any) => {
             // item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch
@@ -743,7 +752,7 @@ export class SchemeRegisterComponent implements OnInit {
       "PAN_NUMBER": formValue.PanNo,
       "SCH_PAN_NUMBER": formValue.PanNo,
       "VOCDATE": formValue.VOCDATE,
-      "SCH_CANCEL": true,
+      "SCH_CANCEL": false,
       "SCH_REDEEM": true,
       "REDEEM_REFERENCE": "",
       "SCHEME_BRANCH": formValue.Branch,
@@ -972,12 +981,12 @@ export class SchemeRegisterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.deleteSchemeRegistration(this.content?.SCH_CUSTOMER_ID)
+        this.deleteSchemeRegistration()
       }
     })
   }
-  deleteSchemeRegistration(SCH_CUSTOMER_ID: string) {
-    let API = `SchemeRegistration/DeleteSchemeRegistration/${SCH_CUSTOMER_ID}`
+  deleteSchemeRegistration() {
+    let API = `SchemeRegistration/DeleteSchemeRegistration/${this.content?.MID}`
     let Sub: Subscription = this.dataService.deleteDynamicAPI(API).subscribe((result) => {
       if (result.status == "Success") {
         this.close()

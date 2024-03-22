@@ -11,8 +11,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmitWithAttachment()" 
-    [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode"
-    (cancelClick)="close()"></modal-header>
+    [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode && !viewSaveBtn"
+    (cancelClick)="close()" (deleteClick)="deleteBtnClicked()"></modal-header>
 <auth-checker (authSubmit)="cancelScheme($event)"></auth-checker>
 <!-- content section -->
 <div class="row">
@@ -79,7 +79,7 @@
                         <label class="matlabels">Date Of Joining :
                         </label>
                         <mat-form-field style="width: 50%;" >
-                            <input matInput [disabled]="viewMode  || processMode"
+                            <input matInput [disabled]="viewMode"
                                 DateValidation
                                 name="DOJ"
                                 [matDatepicker]="DOJ"
@@ -90,7 +90,7 @@
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="DOJ"></mat-datepicker-toggle>
-                            <mat-datepicker [disabled]="viewMode  || processMode"
+                            <mat-datepicker [disabled]="viewMode"
                                 #DOJ></mat-datepicker>
                             <!-- <mat-error
                                         *ngIf="receiptDetailsForm.controls.VocDate.touched 
@@ -115,7 +115,7 @@
                         </label>
                         <mat-form-field style="width: 50%">
                             <input type="text" matInput (focusout)="emailIdChange($event)"
-                                formControlName="Email" [readonly]="viewMode  || processMode" />
+                                formControlName="Email" [readonly]="viewMode" />
                             <mat-error
                                 *ngIf="schemeRegistrationForm.controls.Email.touched 
                                     && schemeRegistrationForm.controls.Email.hasError('required')">
@@ -133,7 +133,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput
-                                formControlName="PanNo" [readonly]="viewMode  || processMode" />
+                                formControlName="PanNo" [readonly]="viewMode" />
                         </mat-form-field>
 
                     </div>
@@ -143,7 +143,7 @@
                         <label class="matlabels">Customer Code* :
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" [readonly]="viewMode  || processMode" matInput
+                            <input type="text" [readonly]="viewMode" matInput
                                 formControlName="Code" UppercaseDirective
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
@@ -156,7 +156,7 @@
                         <label class="matlabels">Alert Before (Days):
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput [readonly]="viewMode  || processMode"
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="AlertBeforeDays" NumberOnly
                                 class="text-right" />
                         </mat-form-field>
@@ -165,7 +165,7 @@
                         <label class="matlabels">Mobile Number:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput [readonly]="viewMode  || processMode"
+                            <input type="number" matInput [readonly]="viewMode"
                                 formControlName="MobileNo" />
                         </mat-form-field>
                     </div>
@@ -174,7 +174,7 @@
                             <label class="matlabels">Alert:
                             </label>
                             <span>
-                                <input type="checkbox" [readonly]="viewMode  || processMode"
+                                <input type="checkbox" [readonly]="viewMode"
                                     formControlName="SendAlert"> Send Alert
                             </span>
                         </div>
@@ -185,11 +185,11 @@
                         <label class="matlabels">Scheme Code* :
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput [readonly]="viewMode  || processMode"
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="SchemeId" UppercaseDirective
                                 (focusout)="fetchSchemeWithCustCode()" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode || !processMode"
+                        <master-search *ngIf="!viewMode"
                             [MasterSearchData]="SCHEMEMasterData"
                             (newRowClick)="selectedScheme($event)">
                         </master-search>
@@ -284,16 +284,16 @@
                         <label style="width: 20%;">Salesman* :
                         </label>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput [readonly]="viewMode || processMode"
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="Salesman" 
                                 (focusout)="salesmanChange($event)" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode || !processMode"
+                        <master-search *ngIf="!viewMode"
                             [MasterSearchData]="SalesmanData"
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput [readonly]="viewMode  || processMode"
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="SalesmanName" />
                         </mat-form-field>
                     </div>
@@ -312,7 +312,7 @@
                         <label style="width: 20%;">Remarks:
                         </label>
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput [readonly]="viewMode || processMode"
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="Remarks" />
                         </mat-form-field>
                     </div>
@@ -321,7 +321,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         <div class="d-flex align-items-center">
                             <button mat-raised-button style="color: #1d5592;"
-                                (click)="addrowsWithAPI()" [disabled]="viewMode || processMode||viewPorcessBtn">
+                                (click)="processSchemeAPI()" [disabled]="viewMode||viewPorcessBtn">
                                 Process
                             </button>
                             <button mat-raised-button style="color: #1d5592;margin-left: 6px;"
