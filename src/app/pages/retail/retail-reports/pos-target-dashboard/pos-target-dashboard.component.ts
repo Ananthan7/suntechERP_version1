@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -25,7 +26,8 @@ export class PosTargetDashboardComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
-  tableData: any[] = []; 
+  tableData: any[] = [];
+  currentDate = new Date(); 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -34,6 +36,7 @@ export class PosTargetDashboardComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -63,6 +66,19 @@ export class PosTargetDashboardComponent implements OnInit {
 
   });
 
+  formatDate(event: any) {
+    const inputDate = event.target.value;
+    const parsedDate = new Date(inputDate);
+  
+    if (!isNaN(parsedDate.getTime())) {
+      const formattedDate = this.datePipe.transform(parsedDate, 'dd/MM/yyyy');
+      event.target.value = formattedDate;
+    } else {
+      event.target.value = ''; 
+      console.error('Invalid date input');
+    }
+  }
+
   formSubmit(){
     
 
@@ -74,7 +90,7 @@ export class PosTargetDashboardComponent implements OnInit {
     let postData = {
     
         "str_CurrFyear": this.POSTargetStatusForm.value.POSTargetAnalysis,
-        "strAsOnDate":  this.POSTargetStatusForm.value.date,
+        "strAsOnDate":  this.datePipe.transform(this.POSTargetStatusForm.value.date, 'dd/MM/yyyy'),
         "StrBranchList":  this.POSTargetStatusForm.value.branch,
         "intShowSummary": true
    
