@@ -340,14 +340,14 @@ export class SchemeRegisterComponent implements OnInit {
     let form = this.schemeRegistrationForm.value
     if (form.Units) {
       let InstallmentAmount: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.InstallmentAmount)
-      let CancellationCharge: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.CancellationCharge)
-      let BonusInstallment: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.BonusInstallment)
+      // let CancellationCharge: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.CancellationCharge)
+      // let BonusInstallment: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.BonusInstallment)
       let TotalAmountToPay: number = InstallmentAmount * this.commonService.emptyToZero(form.TenurePeriod)
-      let SumAssured: number = TotalAmountToPay + BonusInstallment;
+      let SumAssured: number = TotalAmountToPay + this.initialLoadedAmounts.BonusInstallment;
 
       this.setFormControlAmount('InstallmentAmount', InstallmentAmount);
-      this.setFormControlAmount('CancellationCharge', CancellationCharge);
-      this.setFormControlAmount('BonusInstallment', BonusInstallment);
+      // this.setFormControlAmount('CancellationCharge', CancellationCharge);
+      // this.setFormControlAmount('BonusInstallment', BonusInstallment);
       this.setFormControlAmount('TotalAmountToPay', TotalAmountToPay);
       this.setFormControlAmount('SumAssured', SumAssured);
     }
