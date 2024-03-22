@@ -204,7 +204,7 @@ export class AddReceiptComponent implements OnInit {
             item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
           })
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
-          this.calculateGridAmount()
+          this.calculateGridAmount(1)
         } else {
           this.disableAmountFC = true;
           this.viewMode = true;
@@ -510,11 +510,10 @@ export class AddReceiptComponent implements OnInit {
       this.setGridData()
     }
   }
-  CLfired: number = 0
   extraBalance: number = 0
 
   /**calculate amount and split to rows in grid*/
-  calculateGridAmount() {
+  calculateGridAmount(MODE?: number) {
     let formData = this.receiptEntryForm.value
     let Amount_LC = this.commonService.emptyToZero(formData.Amount_LC)
     let Amount_FC = this.commonService.emptyToZero(formData.Amount_FC)
@@ -538,11 +537,12 @@ export class AddReceiptComponent implements OnInit {
       this.setFormControlAmount('Header_Amount', 0)
       return
     }
+
     let balanceAmount: number = Amount_LC - InstallmentAmount
     let totalRowsToUpdate = Math.floor(Amount_LC / InstallmentAmount)
     let flag = 0
-    let amts = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
-    if (amts != 0 && amts < Header_Amount && this.CLfired != 1) {
+    let amts = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTCC)
+    if (amts != 0 && amts < Header_Amount && MODE == 1) {
       this.extraBalance = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
       this.gridDataSource[1].RCVD_AMOUNTFC = this.gridDataSource[0].RCVD_AMOUNTFC
       this.gridDataSource[1].RCVD_AMOUNTCC = this.gridDataSource[0].RCVD_AMOUNTCC
@@ -551,10 +551,9 @@ export class AddReceiptComponent implements OnInit {
       flag = 1
       return
     }
-    this.CLfired = 1;
     //calculating amount and spliting to each rows
     this.gridDataSource.forEach((item: any, index: any) => {
-      if (balanceAmount <= 0 && this.gridDataSource[0].RCVD_AMOUNTFC == '0.000') {
+      if (balanceAmount <= 0 && amts == 0) {
         this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
         this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
         flag = 1
