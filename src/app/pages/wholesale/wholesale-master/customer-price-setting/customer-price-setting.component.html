@@ -100,10 +100,10 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Approved By:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput [readonly]=" codeEnable" formControlName="approvedby" />
+                      <input type="text" matInput   [readonly]="enableUpdate" formControlName="approvedby" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="approvedbyCodeData"
-                        (newRowClick)="ApprovedbyCodeSelected($event)">
+                        (newRowClick)="ApprovedbyCodeSelected($event)"  *ngIf=" approveDisable == false">
                     </master-search>
                   </div>
                 </div>

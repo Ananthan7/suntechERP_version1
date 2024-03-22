@@ -169,7 +169,7 @@ export class WorkerMasterComponent implements OnInit {
     let postData = {
       "MID": this.content?.MID ? this.content.MID : 0,
       "WORKER_CODE": this.commonService.nullToString((this.workerMasterForm.value.WorkerCode).toUpperCase()),
-      "DESCRIPTION": this.commonService.nullToString((this.workerMasterForm.value.WorkerDESCRIPTION).toUpperCase()),
+      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION,
       "DEPARTMENT_CODE": "",
       "NETSAL": 0,
       "PERKS": 0,
@@ -202,11 +202,11 @@ export class WorkerMasterComponent implements OnInit {
       this.updateWorkerMaster()
       return
     }
-    if (this.workerMasterForm.invalid && this.selectedProcessArr) {
-      this.toastr.error('select all required fields & Process')
-      return
-    }
-    if (this.workerMasterForm.value.description == '') {
+    // if (this.workerMasterForm.invalid && this.selectedProcessArr) {
+    //   this.toastr.error('select all required fields & Process')
+    //   return
+    // }
+    if (this.workerMasterForm.value.WorkerDESCRIPTION == '') {
       this.toastr.error("Description cannot be empty")
     }
     this.selectedProcessArr.forEach((item: any, i: any) => {
