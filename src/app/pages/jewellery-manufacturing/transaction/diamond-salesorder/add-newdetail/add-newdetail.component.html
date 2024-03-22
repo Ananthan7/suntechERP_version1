@@ -100,10 +100,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Delivery On :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput DateValidation [matDatepicker]="DeliveryOn"
-                                        formControlName="DeliveryOnDate" />
-                                    <mat-datepicker-toggle matSuffix [for]="DeliveryOn"></mat-datepicker-toggle>
-                                    <mat-datepicker #DeliveryOn></mat-datepicker>
+                                    <input matInput AmountDecimalInput
+                                        formControlName="DeliveryOn" class="text-right" />
+                                    <!-- <mat-datepicker-toggle matSuffix [for]="DeliveryOn"></mat-datepicker-toggle>
+                                    <mat-datepicker #DeliveryOn></mat-datepicker> -->
                                 </mat-form-field>
                             </div>
                         </div>

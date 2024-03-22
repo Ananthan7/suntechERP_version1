@@ -119,6 +119,7 @@ export class DesignMasterComponent implements OnInit {
    // this.images = ['assets/images/transparentImg.png'] ;
 
     this.setAllInitialValues()
+    this.setFormValues()
   }
 
   
@@ -233,9 +234,17 @@ export class DesignMasterComponent implements OnInit {
 
 
   });
+  
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
+  }
+  onInputChange(event: any, controlName: string, maxLength: number) {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > maxLength) {
+      this.designmasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
+    }
   }
 
   openaddDesignSequence() {
@@ -1058,7 +1067,7 @@ onFileChangedimage(event: any) {
     this.designmasterForm.controls.color.setValue(this.content.COLOR);
     this.designmasterForm.controls.stockCode.setValue(this.content.STOCK_CODE);
     this.tableData = this.content.MELTING_TYPE_DETAIL;
-
+    
   }
 
  updateMeltingType() {
