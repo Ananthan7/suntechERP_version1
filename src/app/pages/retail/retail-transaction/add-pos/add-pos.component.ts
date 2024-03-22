@@ -5661,8 +5661,8 @@ export class AddPosComponent implements OnInit {
           _exchangeItem[0].STOCK_DESCRIPTION
         );
         this.exchangeForm.controls['fcn_exchange_purity'].setValue(
-      this.comFunc.decimalQuantityFormat(_exchangeItem[0].PURITY, 'PURITY')
-          
+          this.comFunc.decimalQuantityFormat(_exchangeItem[0].PURITY, 'PURITY')
+
           // _exchangeItem[0].PURITY
         );
         this.standardPurity = this._exchangeItemchange.PURITY;
@@ -9031,10 +9031,10 @@ export class AddPosComponent implements OnInit {
           this.comFunc.decimalQuantityFormat(this.standardPurity, 'PURITY')
 
         );
-      }else{
-         this.exchangeForm.controls.fcn_exchange_purity.setValue(
-      this.comFunc.decimalQuantityFormat(value, 'PURITY')
-    );
+      } else {
+        this.exchangeForm.controls.fcn_exchange_purity.setValue(
+          this.comFunc.decimalQuantityFormat(value, 'PURITY')
+        );
       }
       this.setExchangePureWt();
       this.setExPurityDiff();
