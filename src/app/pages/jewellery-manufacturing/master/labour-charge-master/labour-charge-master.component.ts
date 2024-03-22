@@ -53,14 +53,13 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
 
-  // @ViewChild('codeInput') codeInput!: ElementRef;
-  // ngAfterViewInit(): void {
-  //   this.codeInput.nativeElement.focus();
-  // }
+  @ViewChild('codeInput') codeInput!: ElementRef;
+  ngAfterViewInit(): void {
+    this.codeInput.nativeElement.focus();
+  }
 
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#metallabour_code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;

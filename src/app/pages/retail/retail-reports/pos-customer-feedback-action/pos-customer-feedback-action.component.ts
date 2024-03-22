@@ -17,6 +17,7 @@ export class PosCustomerFeedbackActionComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
+  currentDate = new Date();
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -93,19 +94,19 @@ export class PosCustomerFeedbackActionComponent implements OnInit {
     let API = 'POSAction/InsertPOSAction'
     let postData ={
       "MID": 0,
-      "CODE": " ",
+      "CODE": "Mb3",
       "FEEDBACKMID": 0,
       "PHONECALL": this.posActionForm.value.phone_call,
       "SMS": this.posActionForm.value.sms,
       "EMAIL": this.posActionForm.value.email,
       "VISIT": this.posActionForm.value.visit,
       "REMARKS": this.posActionForm.value.remarks,
-      "COMPLETIONDATE": "2024-03-12T08:31:39.525Z",
+      "COMPLETIONDATE": this.posActionForm.value.completion_date,
       "SALESPERSONCODE": " ",
       "COMPLAINMID": " ",
       "COMPLETEDBY": this.posActionForm.value.completed_by,
       "COMPLETEDREMARKS": this.posActionForm.value.completed_details,
-      "COMPLETEDDATE": "2024-03-12T08:31:39.525Z",
+      "COMPLETEDDATE": this.posActionForm.value.completed_date,
       "ASSIGN_BY": this.posActionForm.value.assigned_by,
       "REFNO": " ",
       "MOBILE": this.posActionForm.value.mobile,

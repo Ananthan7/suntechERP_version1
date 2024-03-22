@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -17,21 +17,23 @@ import { MatOption } from '@angular/material/core';
   styleUrls: ['./customer-pricing-master.component.scss']
 })
 export class CustomerPricingMasterComponent implements OnInit {
+
   @ViewChild('select')
-  select!: MatSelect; 
+  select!: MatSelect;
   divisionMS: any = 'ID';
-  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On U','Mkg On %','Std Mkg','Mkg Rate','Variance'];
-  columnheader1:any[] = ['Branch','Making','Wastage', 'Apply',];
-  columnheaderweightRange:any[] = ['SrNo','Division','Apply on Unit', 'From Weight','To Weight','Making Rate'];
-  columnheaderTransaction : any[] = ['SrNo','Karat','Std Purity','Sales Purity','Purchase Purity'];
+  columnheader: any[] = ['SrNo', 'Group 1', 'Group 2', 'Group 3', 'Group 4', 'Group 5', 'Group 6', 'Apply On U', 'Mkg On %', 'Std Mkg', 'Mkg Rate', 'Variance'];
+  columnheader1: any[] = ['Branch', 'Making', 'Wastage', 'Apply',];
+  columnheaderweightRange: any[] = ['SrNo', 'Division', 'Apply on Unit', 'From Weight', 'To Weight', 'Making Rate'];
+  columnheaderTransaction: any[] = ['SrNo', 'Karat', 'Std Purity', 'Sales Purity', 'Purchase Purity'];
   subscriptions: any;
-  @Input() content!: any; 
-  Add:boolean= true;
-  Deduct:boolean= true;
+  @Input() content!: any;
+  Add: boolean = true;
+  Deduct: boolean = true;
   tableData: any[] = [];
   currentDate = new FormControl(new Date());
-  flexSwitchCheckChecked:boolean= true;
-  text="Deduct";
+  flexSwitchCheckChecked: boolean = true;
+  text = "Deduct";
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -41,59 +43,71 @@ export class CustomerPricingMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
- 
+
   ngOnInit(): void {
+    console.log(this.content.FLAG);
+    if (this.content.FLAG == 'VIEW') {
+
+    }
+    else (this.content.FLAG == 'EDIT')
+    {
+
+    }
+
   }
 
-  allSelected=false;
+  allSelected = false;
   apply: any[] = [
-   {value: 'Std Making Rate', viewValue: 'Std Making Rate'},
-   {value: 'Min Rate', viewValue: 'Min Rate'},
-   {value: 'Max Rate', viewValue: 'Max Rate'},
-   {value: 'Wastage %', viewValue: 'Wastage %'}
- ];
+    { value: 'Std Making Rate', viewValue: 'Std Making Rate' },
+    { value: 'Min Rate', viewValue: 'Min Rate' },
+    { value: 'Max Rate', viewValue: 'Max Rate' },
+    { value: 'Wastage %', viewValue: 'Wastage %' }
+  ];
 
- toggleAllSelection() {
-   if (this.allSelected) {
-     this.select.options.forEach((item: MatOption) => item.select());
-   } else {
-     this.select.options.forEach((item: MatOption) => item.deselect());
-   }
- }
-  optionClick() {
-   let newStatus = true;
-   this.select.options.forEach((item: MatOption) => {
-     if (!item.selected) {
-       newStatus = false;
-     }
-   });
-   this.allSelected = newStatus;
- }
-
- change(event:any){
-  console.log(event);
-  this.text = event.target.value;
-  if(event.target.checked == true){
-     this.text="Add";
-  }else{
-    this.text="Deduct";
+  toggleAllSelection() {
+    if (this.allSelected) {
+      this.select.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.select.options.forEach((item: MatOption) => item.deselect());
+    }
   }
-}
+  optionClick() {
+    let newStatus = true;
+    this.select.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+    });
+    this.allSelected = newStatus;
+  }
 
- 
+  change(event: any) {
+    console.log(event);
+    this.text = event.target.value;
+    if (event.target.checked == true) {
+      this.text = "Add";
+    } else {
+      this.text = "Deduct";
+    }
+  }
+
+
   customerpricemasterForm: FormGroup = this.formBuilder.group({
-    division:['',[Validators.required]],
-    date:[new Date(),''],
-    approvalby:[''],
-    enteredBy:['',[Validators.required]],
-    price:['',[Validators.required]],
-    currency:['',[Validators.required]],
-    customername:['',[Validators.required]],  
-    customercode:['',[Validators.required]],
-    labourtype:['',[Validators.required]],
-    pricedesc:['',[Validators.required]],
-    defaultCustomer:[''],
-    defaultVendor:[''],
+    division: ['', [Validators.required]],
+    date: [new Date(), ''],
+    approvalby: [''],
+    enteredBy: ['', [Validators.required]],
+    price: ['', [Validators.required]],
+    currency: ['AED', [Validators.required]],
+    customername: ['', [Validators.required]],
+    customercode: ['', [Validators.required]],
+    labourtype: ['', [Validators.required]],
+    pricedesc: ['', [Validators.required]],
+    defaultCustomer: [''],
+    defaultVendor: [''],
+    customercodeDesc: ['', [Validators.required]],
+    byValue: ['1'],
+    bypercentage: [''],
   })
 
   user: MasterSearchModel = {
@@ -103,14 +117,14 @@ export class CustomerPricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'UsersName',
     SEARCH_HEADING: 'User',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "USERSNAME <> 'SUNTECH'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
   userDataSelected(value: any) {
     console.log(value);
-       this.customerpricemasterForm.controls.enteredBy.setValue(value.UsersName);
+    this.customerpricemasterForm.controls.enteredBy.setValue(value.UsersName);
   }
 
   divisionCodeData: MasterSearchModel = {
@@ -120,12 +134,12 @@ export class CustomerPricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<> ''",
+    WHERECONDITION: "DIVISION in ('M')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(e:any){
-    console.log(e); 
+  divisionCodeSelected(e: any) {
+    console.log(e);
     this.customerpricemasterForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
@@ -136,13 +150,14 @@ export class CustomerPricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Cust/Supp Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "ACCOUNT_MODE IN ('P','R') and AC_OnHold = 0",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  custsuppCodeSelected(e:any){
-    console.log(e); 
+  custsuppCodeSelected(e: any) {
+    console.log(e);
     this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
+    this.customerpricemasterForm.controls.customercodeDesc.setValue(e['ACCOUNT HEAD']);
   }
 
   approvalCodeData: MasterSearchModel = {
@@ -152,7 +167,7 @@ export class CustomerPricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'UsersName',
     SEARCH_HEADING: 'Approval Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "USERSNAME <> 'SUNTECH'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -161,7 +176,6 @@ export class CustomerPricingMasterComponent implements OnInit {
     this.customerpricemasterForm.controls.approvalby.setValue(e.UsersName);
   }
 
-  
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -169,11 +183,13 @@ export class CustomerPricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'PRICE_CODE',
     SEARCH_HEADING: 'Price Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PRICE_CODE<> ''",
+    WHERECONDITION: "APPROVED_BY <> '' AND DIVISION = '" + this.customerpricemasterForm.value.division + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
-  priceCodeSelected(e:any){
+    LOAD_ONCLICK:true,
+  };
+  
+  priceCodeSelected(e: any) {
     console.log(e);
     this.customerpricemasterForm.controls.price.setValue(e.PRICE_CODE);
   }
@@ -189,8 +205,8 @@ export class CustomerPricingMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  currencyCodeSelected(e:any){
-    console.log(e); 
+  currencyCodeSelected(e: any) {
+    console.log(e);
     this.customerpricemasterForm.controls.currency.setValue(e.CURRENCY_CODE);
   }
 
@@ -198,9 +214,9 @@ export class CustomerPricingMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -208,16 +224,16 @@ export class CustomerPricingMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'CustomerVendorPricingMaster/InsertCustomerVendorPricingMaster'
     let postData = {
       "MID": 0,
       "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
       "CUSTOMER_NAME": this.customerpricemasterForm.value.customername || "",
       "PRICE_CODE": this.customerpricemasterForm.value.price || "",
-      "PRICE_DESCRIPTION":this.customerpricemasterForm.value.pricedesc || "",
+      "PRICE_DESCRIPTION": this.customerpricemasterForm.value.pricedesc || "",
       "LABOUR_TYPE": this.customerpricemasterForm.value.labourtype || "",
-      "DIVISION":this.customerpricemasterForm.value.division || "",
+      "DIVISION": this.customerpricemasterForm.value.division || "",
       "CREATED_DATE": this.customerpricemasterForm.value.date || "",
       "ENTERED_BY": this.customerpricemasterForm.value.enteredby || "",
       "IS_STOCK_CODE": true,
@@ -314,11 +330,11 @@ export class CustomerPricingMasterComponent implements OnInit {
         }
       ]
     }
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -339,22 +355,22 @@ export class CustomerPricingMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  update(){
+  update() {
     if (this.customerpricemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'CustomerVendorPricingMaster/UpdateCustomerVendorPricingMaster/'+this.content.CUSTOMER_CODE
-    let postData = 
+
+    let API = 'CustomerVendorPricingMaster/UpdateCustomerVendorPricingMaster/' + this.content.CUSTOMER_CODE
+    let postData =
     {
       "MID": 0,
       "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
       "CUSTOMER_NAME": this.customerpricemasterForm.value.customername || "",
       "PRICE_CODE": this.customerpricemasterForm.value.price || "",
-      "PRICE_DESCRIPTION":this.customerpricemasterForm.value.pricedesc || "",
+      "PRICE_DESCRIPTION": this.customerpricemasterForm.value.pricedesc || "",
       "LABOUR_TYPE": this.customerpricemasterForm.value.labourtype || "",
-      "DIVISION":this.customerpricemasterForm.value.division || "",
+      "DIVISION": this.customerpricemasterForm.value.division || "",
       "CREATED_DATE": "2023-11-27T09:27:28.005Z",
       "ENTERED_BY": this.customerpricemasterForm.value.enteredby || "",
       "IS_STOCK_CODE": true,
@@ -451,12 +467,12 @@ export class CustomerPricingMasterComponent implements OnInit {
         }
       ]
     }
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

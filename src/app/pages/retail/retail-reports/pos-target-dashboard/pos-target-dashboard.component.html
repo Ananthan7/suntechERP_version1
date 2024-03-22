@@ -27,7 +27,7 @@
           <div class="col-sm-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%;">
-                <input matInput [matDatepicker]="date" formControlName="date" placeholder="DD/MM/YYYY" DateValidation />
+                <input matInput [matDatepicker]="date" formControlName="date" placeholder="DD/MM/YYYY" (blur)="formatDate($event)" DateValidation />
                 <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                 <mat-datepicker #date></mat-datepicker>
               </mat-form-field>

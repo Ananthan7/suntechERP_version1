@@ -31,6 +31,8 @@ export class CustomerPriceSettingComponent implements OnInit {
   userbranch = localStorage.getItem('userbranch');
   disableSelect = false;
   codeEnable :  boolean = true;
+  enableUpdate: boolean = true;
+  approveDisable: boolean = true;
 
   groups = [
     { type: 'None', value: 'None' },
@@ -62,6 +64,8 @@ export class CustomerPriceSettingComponent implements OnInit {
     
     } else if (this.content.FLAG == 'EDIT') {
       this.codeEnable = false;
+      this.enableUpdate = false;
+      this.approveDisable = false;
     }
   }
 
@@ -87,13 +91,13 @@ export class CustomerPriceSettingComponent implements OnInit {
     approvedby:[''],
     enteredBy:['',[Validators.required]],
     stockCode:[''],
-    designCode:[''],
+    designCode:[false],
     group1:['',[Validators.required]],
-    group2:['',[Validators.required]],
-    group3:['',[Validators.required]],
-    group4:['',[Validators.required]],
-    group5:['',[Validators.required]],
-    group6:['',[Validators.required]],
+    group2:[''],
+    group3:[''],
+    group4:[''],
+    group5:[''],
+    group6:[''],
   })
 
   codeEnabled(){
@@ -131,7 +135,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<> ''",
+    WHERECONDITION: "DIVISION in ('M')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -145,16 +149,17 @@ export class CustomerPriceSettingComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 176,
-    SEARCH_FIELD: 'CURRENCYCODE',
+    SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CMBRANCH_CODE = '" + this.commonService.branchCode + "'",
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   currencyCodeSelected(e:any){
     console.log(e); 
-    this.customerpricesettingForm.controls.currency.setValue(e.CURRENCYCODE);
+    this.customerpricesettingForm.controls.currency.setValue(e.CURRENCY_CODE);
   }
 
   approvedbyCodeData: MasterSearchModel = {
@@ -197,12 +202,12 @@ export class CustomerPriceSettingComponent implements OnInit {
     let API = 'CustomerVendorPricingMaster/InsertCustomerVendorPricingMaster'
     let postData = {
       "MID": 0,
-      "CUSTOMER_CODE":"",
+      "CUSTOMER_CODE":this.customerpricesettingForm.value.pricecode || "",
       "CUSTOMER_NAME": "",
       "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
       "PRICE_DESCRIPTION": this.customerpricesettingForm.value.description || "",
       "LABOUR_TYPE": "",
-      "DIVISION": this.customerpricesettingForm.value.division || "",
+      "DIVISION": this.customerpricesettingForm.value.division,
       "CREATED_DATE": this.customerpricesettingForm.value.date || "",
       "ENTERED_BY":this.customerpricesettingForm.value.enteredby || "",
       "IS_STOCK_CODE": this.customerpricesettingForm.value.stockCode,
@@ -230,7 +235,7 @@ export class CustomerPriceSettingComponent implements OnInit {
           "CUSTOMER_CODE": "string",
           "PRICE_CODE": "string",
           "DESCRIPTION": "string",
-          "DIVISION_CODE": "string",
+          "DIVISION_CODE": "s",
           "SEARCH_CRITERIA": "string",
           "SEARCH_VALUE": "string",
           "GROUP1": "string",
@@ -261,7 +266,7 @@ export class CustomerPriceSettingComponent implements OnInit {
           "UNIQUE_ITEM_ID": 0,
           "CUSTOMER_CODE": "string",
           "PRICE_CODE": "string",
-          "DIVISION_CODE": "string",
+          "DIVISION_CODE": "s",
           "WT_RANGE_FROM": 0,
           "WT_RANGE_TO": 0,
           "STD_MKGRATE": 0,
@@ -277,7 +282,7 @@ export class CustomerPriceSettingComponent implements OnInit {
           "UNIQUE_ITEM_ID": 0,
           "PRICE_CODE": "string",
           "CUSTOMER_CODE": "string",
-          "KARAT_CODE": "string",
+          "KARAT_CODE": "str",
           "STD_PURITY": 0,
           "SALE_PURITY": 0,
           "PURC_PURITY": 0
@@ -529,23 +534,35 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
 
 
-  onSelectionChange(selectedValue: any, groupName: string) {
-    const formValue = this.customerpricesettingForm.value;
+  // onSelectionChange(selectedValue: any, groupName: string) {
+  //   const formValue = this.customerpricesettingForm.value;
   
     
-    for (let groupKey in formValue) {
-      if (groupKey !== groupName && formValue[groupKey] === selectedValue) {
+  //   for (let groupKey in formValue) {
+  //     if (groupKey !== groupName && formValue[groupKey] === selectedValue) {
        
-        if (selectedValue !== null) {
-          this.toastr.error('The same value cannot be repeated in different groups.');
+  //       if (selectedValue !== null) {
+  //         this.toastr.error('The same value cannot be repeated in different groups.');
      
-          this.customerpricesettingForm.get(groupName)?.setValue(null);
-          return; 
+  //         this.customerpricesettingForm.get(groupName)?.setValue(null);
+  //         return; 
+  //       }
+  //     }
+  //   }
+  // }
+  
+  onSelectionChange(selectedValue: any, groupName: string) {
+    const formValue = this.customerpricesettingForm.value;
+    
+    for (let groupKey in formValue) {
+        if (groupKey !== groupName && formValue[groupKey] === selectedValue && selectedValue !== 'None') {
+            // Check if the value is repeated in a different group and is not 'None'
+            this.toastr.error('The same value cannot be repeated in different groups.');
+            this.customerpricesettingForm.get(groupName)?.setValue(null);
+            return; 
         }
-      }
     }
-  }
-  
-  
+}
+
   
 }
