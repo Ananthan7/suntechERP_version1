@@ -1,7 +1,13 @@
 ::ng-deep {
+  .searchDropdown {
+    position: absolute;
+    z-index: 1080;
+    min-width: 46rem;
+    min-height: 20rem;
+    padding: 6px;
+  }
   .p-overlaypanel {
     z-index: 1070 !important;
-    display: fixed !important;
   }
   .mat-input-element {
     font-size: 12px !important;
@@ -10,30 +16,32 @@
     font-size: 13px !important;
   }
 }
+.search-btn{
+  font-weight: 13px;
+}
 .arrow-icon {
   font-size: 24px;
   transition: transform 0.3s ease; /* Animation transition */
 }
 .search-btn:hover{
-  background-color: grey;
-  color: red;
+  cursor: pointer;
 }
 .arrow-icon.rotate-up {
   transform: rotate(180deg);
 }
 .lazyTable {
-  min-width: 40vw;
+  min-width: 43vw;
   th {
     position: sticky; /* make the table heads sticky */
     top: 0px; /* table head will be placed from the top of the table and sticks to it */
-    font-size: 14px;
+    font-size: 15px;
     padding: 5px;
     border: 1px solid #e1e1e1;
     color: #fff;
     background-color: #778da9;
   }
   td {
-    font-size: 13px;
+    font-size: 14px;
     padding: 5px;
     padding: 3px;
     border: 1px solid #e1e1e1;
