@@ -125,8 +125,8 @@ export class LabourChargeMasterComponent implements OnInit {
     selling_rate: [''],
     sieve_desc: [''],
     selling: [''],
-    ctWtFrom: ['.000'],
-    ctWtTo: ['.000'],
+    ctWtFrom: [''],
+    ctWtTo: [''],
     settingType: [''],
     labourType: ['', [Validators.required]],
     unitList: [''],
@@ -159,8 +159,8 @@ export class LabourChargeMasterComponent implements OnInit {
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
-    wtFrom: ['.000'],
-    wtTo: ['.000'],
+    wtFrom: [''],
+    wtTo: [''],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
@@ -1070,30 +1070,51 @@ export class LabourChargeMasterComponent implements OnInit {
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  onweighttto(event: any) {
-    if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
-      Swal.fire({
-        title: event.message || 'Weight From should be lesser than Weight To',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+  onweighttto(event: any,data:String) {
+    let wtf = this.metallabourMasterForm.value.wtFrom;
+      let wtt = this.metallabourMasterForm.value.wtTo;
+    if(data != 'wtfrom'){
+      if (wtf > wtt) {
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })}
     }
+    
+    
   }
 
-
-  onCtweighttto(event: any) {
-    if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
-      Swal.fire({
-        title: event.message || 'Ct Weight From should be lesser than Weight To',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+  onCtweighttto(event: any,data:String) {
+    let Ctwtf = this.diamondlabourMasterForm.value.ctWtFrom;
+      let Ctwtt = this.diamondlabourMasterForm.value.ctWtTo;
+    if(data != 'wtfrom'){
+      if (Ctwtf > Ctwtt) {
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })}
     }
+    
+    
   }
+
+  // onCtweighttto(event: any) {
+  //   if (this.diamondlabourMasterForm.value.ctWtFrom < this.diamondlabourMasterForm.value.ctWtTo) {
+  //     Swal.fire({
+  //       title: event.message || 'Ct Weight From should be lesser than Weight To',
+  //       text: '',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     })
+  //   }
+  // }
 
 
 }
