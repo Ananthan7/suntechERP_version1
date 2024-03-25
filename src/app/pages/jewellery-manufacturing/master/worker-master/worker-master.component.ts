@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -31,6 +31,16 @@ export class WorkerMasterComponent implements OnInit {
   readonlyMode: boolean = false;
   editMode: boolean = false;
   codeEnable :  boolean = true;
+
+
+  @ViewChild('codeInput')
+  codeInput!: ElementRef;
+
+  ngAfterViewInit(): void {
+    this.codeInput.nativeElement.focus();
+  }
+
+
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -202,13 +212,22 @@ export class WorkerMasterComponent implements OnInit {
       this.updateWorkerMaster()
       return
     }
-    // if (this.workerMasterForm.invalid && this.selectedProcessArr) {
+
+    if (this.workerMasterForm.value.WorkerCode == '' && this.workerMasterForm.invalid ) {
+      this.toastr.error("Worker Code cannot be empty")
+      return
+    }
+    else if (this.workerMasterForm.value.WorkerDESCRIPTION == '' && this.workerMasterForm.invalid ) {
+      this.toastr.error("Description cannot be empty")
+      return
+    }
+    
+    // if(this.workerMasterForm.invalid && this.selectedProcessArr) {
     //   this.toastr.error('select all required fields & Process')
     //   return
     // }
-    if (this.workerMasterForm.value.WorkerDESCRIPTION == '') {
-      this.toastr.error("Description cannot be empty")
-    }
+
+   
     this.selectedProcessArr.forEach((item: any, i: any) => {
       item.SRNO = i + 1;
     });
@@ -456,7 +475,8 @@ export class WorkerMasterComponent implements OnInit {
             if (result.value) {
             }
           });
-         // this.workerMasterForm.controls.WorkerCode.setValue('')
+         this.workerMasterForm.controls.WorkerCode.setValue('')
+          this.codeInput.nativeElement.focus();
         }
       }, err => {
         this.workerMasterForm.reset()
