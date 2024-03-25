@@ -98,15 +98,17 @@ export class CustomerPriceMasterComponent implements OnInit {
           data.forEach((item: any, i: any) => {
             item.SELECT1 = false
             item.SRNO = i + 1;
+            item.SELLING_PER = item.SELLING_PER + "%";
           });
-          this.tableDatastone = data
+          this.tableDatastone = data;
+          
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
 
 
-    this.commonService.toastSuccessByMsgId('MSG81447');
+    // this.commonService.toastSuccessByMsgId('MSG81447');
     let API1 = 'LabourChargeMasterDj/GetLabourChargeMasterList'
     let Sub1: Subscription = this.dataService.getDynamicAPI(API1)
       .subscribe((result) => {

@@ -140,8 +140,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" [readonly]="viewMode" SixDecimalInput matInput NumberOnly CommaSeparatedNumber
-                     style="text-align: right;"
-                    formControlName="cost_rate" />
+                    style="text-align: right;" formControlName="cost_rate" />
                 </mat-form-field>
               </div>
             </div>
@@ -157,7 +156,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode" SixDecimalInput matInput                  
+                  <input type="text" [readonly]="viewMode" NumberOnly CommaSeparatedNumber matInput
                     (keypress)="salesChangesDia('selling_rate')" style="text-align: right;"
                     formControlName="selling_rate" />
                 </mat-form-field>
@@ -167,7 +166,7 @@
               <label for="input" class="col-sm-2 col-form-label">Sieve Desc :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"  formControlName="sieve_desc" />
+                  <input type="text" matInput [readonly]="viewMode" formControlName="sieve_desc" />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Selling % *:</label>
@@ -182,9 +181,8 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode" matInput 
-                    style="text-align: right;"  MetalDecimalInput
-                    formControlName="ctWtFrom" />
+                  <input type="text" matInput [readonly]="viewMode" matInput style="text-align: right;"
+                    MetalDecimalInput formControlName="ctWtFrom"   (keypress)="onCtweighttto($event,'Ctwtfrom')"/>
                 </mat-form-field>
               </div>
 
@@ -204,13 +202,13 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode" matInput 
-                    (change)="onCtweighttto($event)"  MetalDecimalInput
-                    style="text-align: right;" formControlName="ctWtTo" />
+                  <input type="text" matInput [readonly]="viewMode" matInput (keypress)="onCtweighttto($event,'Ctwtto')"
+                    MetalDecimalInput style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
-                <mat-checkbox class="example-margin" [disabled]="viewMode" formControlName="accessories">Accessories</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]="viewMode"
+                  formControlName="accessories">Accessories</mat-checkbox>
               </div>
             </div>
           </form>
@@ -236,7 +234,7 @@
               <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"  formControlName="stock_code" />
+                  <input type="text" matInput [readonly]="viewMode" formControlName="stock_code" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"
                   *ngIf=" viewDisable == false"></master-search>
@@ -246,7 +244,7 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput #codeInput  maxlength="15" [readonly]="editMode || viewMode"
+                  <input type="text" matInput #codeInput maxlength="15" [readonly]="editMode || viewMode"
                     formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
@@ -309,10 +307,8 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode" SixDecimalInput matInput 
-                     formControlName="metalcost_rate"
-                     class="text-right"
-                    />
+                  <input matInput type="text" [readonly]="viewMode" NumberOnly SixDecimalInput matInput CommaSeparatedNumber
+                    formControlName="metalcost_rate" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -328,7 +324,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode" SixDecimalInput  matInput
+                  <input matInput type="text" [readonly]="viewMode" NumberOnly matInput CommaSeparatedNumber
                     formControlName="metalselling_rate" (keypress)="salesChangesMetal('metalselling_rate')"
                     style="text-align: right;" />
                 </mat-form-field>
@@ -364,7 +360,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="number" [readonly]="viewMode" formControlName="wastage"
-                    style="text-align: right;" AmountDecimalInput/>
+                    style="text-align: right;" AmountDecimalInput />
                 </mat-form-field>
               </div>
             </div>
@@ -402,9 +398,8 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="text" [readonly]="viewMode"  matInput 
-                  formControlName="wtFrom" MetalDecimalInput 
-                    style="text-align: right;" />
+                  <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" MetalDecimalInput
+                    style="text-align: right;" (keyup)="onweighttto($event,'wtfrom')"/>
                 </mat-form-field>
               </div>
             </div>
@@ -412,14 +407,13 @@
               <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="text" [readonly]="viewMode"  matInput 
-                  (change)="onweighttto($event)" formControlName="wtTo"
-                  NumberOnly
-                    style="text-align: right;"  MetalDecimalInput/>
+                  <input matInput type="text" [readonly]="viewMode" matInput (keyup)="onweighttto($event,'wtto')"
+                    formControlName="wtTo" MetalDecimalInput style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">
-                <mat-checkbox class="example-margin mx-2" [disabled]="viewMode" formControlName="onGrossWt"> On Gross Wt</mat-checkbox>
+                <mat-checkbox class="example-margin mx-2" [disabled]="viewMode" formControlName="onGrossWt"> On Gross
+                  Wt</mat-checkbox>
                 <mat-checkbox class="example-margin mx-2" [disabled]="viewMode" formControlName="forDesignOnly"
                   (change)="onforDesignOnlyChange($event)">For Design Only</mat-checkbox>
                 <!-- <mat-radio-group aria-label="Select an option">
