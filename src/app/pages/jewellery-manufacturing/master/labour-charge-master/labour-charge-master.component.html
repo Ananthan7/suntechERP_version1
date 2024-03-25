@@ -139,8 +139,9 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode" SixDecimalInput matInput NumberOnly CommaSeparatedNumber
-                    style="text-align: right;" formControlName="cost_rate" />
+                  <input type="text" [readonly]="viewMode"  matInput CommaSeparatedNumber
+                     style="text-align: right;"
+                    formControlName="cost_rate" />
                 </mat-form-field>
               </div>
             </div>
@@ -156,7 +157,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode" NumberOnly CommaSeparatedNumber matInput
+                  <input type="text" [readonly]="viewMode" CommaSeparatedNumber matInput                  
                     (keypress)="salesChangesDia('selling_rate')" style="text-align: right;"
                     formControlName="selling_rate" />
                 </mat-form-field>

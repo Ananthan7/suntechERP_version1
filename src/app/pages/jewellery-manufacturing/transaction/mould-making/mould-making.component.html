@@ -270,7 +270,7 @@
                 </div>
                 <div *dxTemplate="let data of 'gross_weighttemp'">
                   <input type="number" (change)="gross_weighttemp($event,data)" style="width: 100%;  text-align: right;"
-                    [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
+                    [value]="data.value" [readonly]="viewMode" ThreeDecimalInput/>
                 </div>
                 <div *dxTemplate="let data of 'ratetemp'" >
                   <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
