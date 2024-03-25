@@ -27,33 +27,6 @@ export class PosSalesDiaDetailsIGSTIndComponent implements OnInit {
   url: any;
 
 
-  currencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 176,
-    SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'CURRENCY CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  enteredByCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'Users',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
- 
-
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -65,6 +38,67 @@ export class PosSalesDiaDetailsIGSTIndComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeSelected(e: any) {
+    console.log(e);
+    this.PossalesdiadetailsgstINDForm.controls.Stockdiv.setValue(e.DIVISION_CODE);
+    this.PossalesdiadetailsgstINDForm.controls.stockcode.setValue(e.STOCK_CODE);
+    this.PossalesdiadetailsgstINDForm.controls.stockdes.setValue(e.DESCRIPTION );
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationCodeSelected(e: any) {
+    console.log(e);
+    this.PossalesdiadetailsgstINDForm.controls.location.setValue(e.LOCATION_CODE);
+  }
+
+  salesCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  salesCodeSelected(e: any) {
+    console.log(e);
+    this.PossalesdiadetailsgstINDForm.controls.salesman.setValue(e.SALESPERSON_CODE);
+  }
+
+  PossalesdiadetailsgstINDForm: FormGroup = this.formBuilder.group({
+    Stockdiv: [''],
+    stockcode: [''],
+    stockdes: [''],
+    location: [''],
+    salesman: [''],
+   
+  });
+
+
 
   close(data?: any) {
     //TODO reset forms and data before closing

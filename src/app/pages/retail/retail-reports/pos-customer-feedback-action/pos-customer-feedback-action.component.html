@@ -38,12 +38,11 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Completion Date :</label>
             <div class="col-sm-5">
               <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%;">
-                    <input matInput [matDatepicker]="vocdate"  
-                    placeholder="DD/MM/YYYY"  DateValidation formControlName="completion_date"/>
-                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                  <mat-datepicker #vocdate></mat-datepicker>
-                  </mat-form-field>
+                <mat-form-field style="width: 100%">
+                  <input matInput [matDatepicker]="completion_date" name="completion_date" formControlName="completion_date" placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="completion_date"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #completion_date></mat-datepicker>
+                </mat-form-field>
               </div>
             </div>
           </div>
@@ -54,7 +53,8 @@
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput  formControlName="assigned_to"/>
                 </mat-form-field>
-                <master-search ></master-search>
+                <master-search [MasterSearchData]="assignedtoCodeData"
+                (newRowClick)="assignedtoCodeSelected($event)"></master-search>
               </div>
             </div>
           </div>
@@ -65,7 +65,8 @@
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="assigned_by"/>
                 </mat-form-field>
-                <master-search ></master-search>
+                <master-search [MasterSearchData]="assignedbyCodeData"
+                (newRowClick)="assignedbyCodeSelected($event)"></master-search>
               </div>
             </div>
           </div>
@@ -150,12 +151,11 @@
                       Completed Date :</label>
                     <div class="col-sm-8">
                       <div class="position-relative d-flex">
-                        <mat-form-field style="width: 100%;">
-                            <input matInput [matDatepicker]="vocdate"  
-                            placeholder="DD/MM/YYYY"  DateValidation formControlName="completed_date"/>
-                          <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                          <mat-datepicker #vocdate></mat-datepicker>
-                          </mat-form-field>
+                        <mat-form-field style="width: 100%">
+                          <input matInput [matDatepicker]="completed_date" name="completed_date" formControlName="completed_date" placeholder="DD/MM/YYYY" DateValidation />
+                          <mat-datepicker-toggle matSuffix [for]="completed_date"></mat-datepicker-toggle>
+                          <mat-datepicker [startAt]="currentDate" #completed_date></mat-datepicker>
+                        </mat-form-field>
                         
                         &nbsp;
                         

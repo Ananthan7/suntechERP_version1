@@ -9,7 +9,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid pt-3">
-    <form >
+    <form [formGroup]="PossalesdiadetailsgstINDForm">
         <div class="col-md-12">
             <div class="row">
 
@@ -19,9 +19,10 @@
                         <label for="inputPassword" class="col-sm-5 col-form-label">Sales Man Code:</label>
                         <div class="col-md-7">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput  />
+                                <input type="text" matInput formControlName="salesman" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="salesCodeData"
+                            (newRowClick)="salesCodeSelected($event)"></master-search>
                         </div>
                     </div>
                     
@@ -70,18 +71,19 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Stock Code :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput  />
+                            <input type="text" matInput formControlName="Stockdiv" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-3">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput  />
+                            <input type="text" matInput formControlName="stockcode" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="stockCodeData"
+                        (newRowClick)="stockCodeSelected($event)"></master-search>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput  />
+                            <input type="text" matInput formControlName="stockdes" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -93,9 +95,10 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Location :</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput  />
+                            <input type="text" matInput formControlName="location" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="locationCodeData"
+                        (newRowClick)="locationCodeSelected($event)"></master-search>
                     </div>
                 </div>
               </div>

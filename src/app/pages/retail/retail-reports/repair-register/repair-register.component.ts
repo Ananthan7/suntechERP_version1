@@ -32,6 +32,22 @@ export class RepairRegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  partyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Party Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  partyCodeSelected(e: any) {
+    console.log(e);
+    this.repairRegisterForm.controls.partyCode.setValue(e.ACCODE);
+  }
+
   repairRegisterForm: FormGroup = this.formBuilder.group({
     
     fromDate: [''],

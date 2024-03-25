@@ -10,7 +10,7 @@
 <div class="container-fluid pt-3">
     <div class="row">
         <div class="col-md-12">
-            <form>
+            <form [formGroup]="jobworkallocationForm">
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <div class="row mb-1 ">
@@ -38,9 +38,10 @@
                             <label for="inputPassword" class="col-sm-3">Entered By :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput   />
+                                    <input type="text" matInput formControlName="entered_by"  />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="enteredCodeData"
+                                (newRowClick)="enteredCodeSelected($event)"></master-search>
                             </div>
                         </div>
                        

@@ -39,7 +39,48 @@ export class RepairMetalPurchaseDetailsComponent implements OnInit {
   }
 
 
-  
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeSelected(e: any) {
+    console.log(e);
+    this.repairmetalpurchasedetailsForm.controls.Stockdiv.setValue(e.DIVISION_CODE);
+    this.repairmetalpurchasedetailsForm.controls.stockcode.setValue(e.STOCK_CODE);
+    this.repairmetalpurchasedetailsForm.controls.stockdes.setValue(e.DESCRIPTION );
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationCodeSelected(e: any) {
+    console.log(e);
+    this.repairmetalpurchasedetailsForm.controls.location.setValue(e.LOCATION_CODE);
+  }
+
+ 
+
+  repairmetalpurchasedetailsForm: FormGroup = this.formBuilder.group({
+    Stockdiv: [''],
+    stockcode: [''],
+    stockdes: [''],
+    location: [''],
+    
+  });
   
   
   close(data?: any) {

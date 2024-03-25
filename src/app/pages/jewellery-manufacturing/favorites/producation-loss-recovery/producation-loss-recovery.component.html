@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (cancelClick)="close()"></modal-header>
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="productionlossrecoveryForm">
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="row">
@@ -118,16 +118,18 @@
                             <label for="inputPassword" class="col-md-3 col-form-label">Worker:</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="worker" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="workerCodeData"
+                                    (newRowClick)="workerCodeSelected($event)"></master-search>
                             </div>
                             <label for="inputPassword" class="col-md-3 col-form-label">Process:</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="process" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="processCodeData"
+                                (newRowClick)="processCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row">

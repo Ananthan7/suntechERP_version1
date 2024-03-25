@@ -100,10 +100,10 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Approved By:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput [readonly]=" codeEnable" formControlName="approvedby" />
+                      <input type="text" matInput   [readonly]="enableUpdate" formControlName="approvedby" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="approvedbyCodeData"
-                        (newRowClick)="ApprovedbyCodeSelected($event)">
+                        (newRowClick)="ApprovedbyCodeSelected($event)"  *ngIf=" approveDisable == false">
                     </master-search>
                   </div>
                 </div>
@@ -123,12 +123,12 @@
 
             </div>
             <div class="row pt-5">
-              <div class="col-2"><label>Group 1 *</label></div>
-              <div class="col-2"><label>Group 2 *</label></div>
-              <div class="col-2"><label>Group 3 *</label></div>
-              <div class="col-2"><label>Group 4 *</label></div>
-              <div class="col-2"><label>Group 5 *</label></div>
-              <div class="col-2"><label>Group 6 *</label></div>
+              <div class="col-2"><label>Group 1</label></div>
+              <div class="col-2"><label>Group 2 </label></div>
+              <div class="col-2"><label>Group 3 </label></div>
+              <div class="col-2"><label>Group 4 </label></div>
+              <div class="col-2"><label>Group 5 </label></div>
+              <div class="col-2"><label>Group 6 </label></div>
             </div>
             <div class="row">
               <div class="col-2">

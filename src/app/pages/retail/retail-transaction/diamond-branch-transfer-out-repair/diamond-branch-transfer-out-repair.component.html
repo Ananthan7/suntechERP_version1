@@ -62,8 +62,8 @@
                   <mat-form-field style="width: 85%;">
                     <input type="text" matInput formControlName="branchfrom" />
                   </mat-form-field>
-                  <master-search>
-                  </master-search>
+                  <master-search [MasterSearchData]="branchCodeData"
+                            (newRowClick)="branchCodeSelected($event)"></master-search>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field style="width: 85%;">
@@ -78,8 +78,8 @@
                   <mat-form-field style="width: 85%;">
                     <input type="text" matInput formControlName="enteredby" />
                   </mat-form-field>
-                  <master-search>
-                  </master-search>
+                  <master-search [MasterSearchData]="enteredCodeData"
+                  (newRowClick)="enteredCodeSelected($event)"></master-search>
                 </div>
                 <label for="inputPassword" class="col-sm-2">Status : </label>
                 <div class="col-sm-4">
@@ -155,16 +155,16 @@
                   <mat-form-field style="width: 70%;">
                     <input type="text" matInput formControlName="locationfrom" />
                   </mat-form-field>
-                  <master-search>
-                </master-search>
+                  <master-search [MasterSearchData]="locationCodeData"
+                  (newRowClick)="locationCodeSelected($event)"></master-search>
                 </div>
                 <label for="inputPassword" class="col-sm-1">To: </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 70%;">
                     <input type="text" matInput formControlName="locationto" />
                   </mat-form-field>
-                  <master-search>
-                </master-search>
+                  <master-search [MasterSearchData]="locationtoCodeData"
+                  (newRowClick)="locationtoCodeSelected($event)"></master-search>
                 </div>
               </div>
 
@@ -197,8 +197,8 @@
                             <mat-form-field style="width: 70%;">
                                 <input type="text" matInput formControlName="stockcode" />
                             </mat-form-field>
-                            <master-search>
-                            </master-search>
+                            <master-search [MasterSearchData]="stockCodeData"
+                  (newRowClick)="stockCodeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-3">

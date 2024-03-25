@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';  
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -16,6 +17,7 @@ export class PosCustomerFeedbackActionComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
+  currentDate = new Date();
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -27,6 +29,38 @@ export class PosCustomerFeedbackActionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  assignedtoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Assigned To Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  assignedtoCodeSelected(e: any) {
+    console.log(e);
+    this.posActionForm.controls.assigned_to.setValue(e.UsersName);
+  }
+
+  assignedbyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Assigned By Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  assignedbyCodeSelected(e: any) {
+    console.log(e);
+    this.posActionForm.controls.assigned_by.setValue(e.UsersName);
   }
 
   posActionForm: FormGroup = this.formBuilder.group({
@@ -60,19 +94,19 @@ export class PosCustomerFeedbackActionComponent implements OnInit {
     let API = 'POSAction/InsertPOSAction'
     let postData ={
       "MID": 0,
-      "CODE": " ",
+      "CODE": "Mb3",
       "FEEDBACKMID": 0,
       "PHONECALL": this.posActionForm.value.phone_call,
       "SMS": this.posActionForm.value.sms,
       "EMAIL": this.posActionForm.value.email,
       "VISIT": this.posActionForm.value.visit,
       "REMARKS": this.posActionForm.value.remarks,
-      "COMPLETIONDATE": "2024-03-12T08:31:39.525Z",
+      "COMPLETIONDATE": this.posActionForm.value.completion_date,
       "SALESPERSONCODE": " ",
       "COMPLAINMID": " ",
       "COMPLETEDBY": this.posActionForm.value.completed_by,
       "COMPLETEDREMARKS": this.posActionForm.value.completed_details,
-      "COMPLETEDDATE": "2024-03-12T08:31:39.525Z",
+      "COMPLETEDDATE": this.posActionForm.value.completed_date,
       "ASSIGN_BY": this.posActionForm.value.assigned_by,
       "REFNO": " ",
       "MOBILE": this.posActionForm.value.mobile,
