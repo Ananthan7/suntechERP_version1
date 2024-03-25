@@ -594,7 +594,7 @@ export class AddReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           this.receiptEntryForm.controls.AC_Code.setValue(data.PDC_ISSUEAC)
-          this.receiptEntryForm.controls.AC_Description.setValue(data.account_head)
+          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
         }
       },
       (err) => this.commonService.toastErrorByMsgId("Server Error")
