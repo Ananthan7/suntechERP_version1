@@ -40,7 +40,8 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-3 d-flex mb-2" >
-                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                                    <menu-buttons  [viewAddBtn]="true"  [viewDeleteBtn]="true " [viewImportBtn]="false"  [viewAddBtn]="!viewMode"
+                                    [viewDeleteBtn]="!viewMode"
                                         (addClick)="adddata()" (deleteClick)="removedata()">
                                     </menu-buttons>
                                 </div>
