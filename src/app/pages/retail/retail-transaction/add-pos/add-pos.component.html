@@ -95,21 +95,21 @@
             {{ cli.rate | number : "1.2" }}
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
-            {{ cli.gross_amt | number : "1.2" }}
+            {{ cli.gross_amt | decimalFormat : 'AMOUNT' }}
             <!-- {{ cli.mkg_amount| number:'1.2' }} -->
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
-            {{ cli.dis_amt | number : "1.2" }}
+            {{ cli.dis_amt | decimalFormat : 'AMOUNT' }}
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
-            {{ cli.taxPer | number : "1.2" }}
+            {{ cli.taxPer | decimalFormat : 'AMOUNT' }}
             <!-- {{ branch_tax_percentage }} -->
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
-            {{ cli.tax_amount | number : "1.2" }}
+            {{ cli.tax_amount | decimalFormat : 'AMOUNT' }}
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
-            {{ cli.net_amount | number : "1.2" }}
+            {{ cli.net_amount | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <!-- <tr>
@@ -162,16 +162,16 @@
             <!-- {{order_items_total_amount | number:'1.2' }} -->
           </td>
           <td style="font-weight: 600; text-align-last: right">
-            {{ prnt_inv_total_gross_amt | number : "1.2" }}
+            {{ prnt_inv_total_gross_amt | decimalFormat : 'AMOUNT' }}
             <!-- {{ prnt_inv_net_total_without_tax }} -->
           </td>
           <td style="font-weight: 600; text-align-last: right">&nbsp;</td>
           <td style="font-weight: 600; text-align-last: right">
-            {{ prnt_inv_total_tax_amount | number : "1.2" }}
+            {{ prnt_inv_total_tax_amount | decimalFormat : 'AMOUNT' }}
           </td>
           <td style="font-weight: 600; text-align-last: right">
             <!-- {{ prnt_inv_net_total_with_tax }} -->
-            {{ order_items_total_gross_amount | number : "1.2" }}
+            {{ order_items_total_gross_amount | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <tr>
@@ -179,7 +179,7 @@
             Total Before VAT
           </td>
           <td style="text-align-last: right">
-            {{ prnt_inv_total_gross_amt | number : "1.2" }}
+            {{ prnt_inv_total_gross_amt | decimalFormat : 'AMOUNT' }}
             <!-- {{ prnt_inv_net_total_without_tax }} -->
           </td>
         </tr>
@@ -188,7 +188,7 @@
             Total Discount
           </td>
           <td style="text-align-last: right">
-            {{ order_items_total_discount_amount | number : "1.2" }}
+            {{ order_items_total_discount_amount | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <tr>
@@ -196,7 +196,7 @@
             Total VAT 5%
           </td>
           <td style="text-align-last: right">
-            {{ prnt_inv_total_tax_amount | number : "1.2" }}
+            {{ prnt_inv_total_tax_amount | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <tr>
@@ -204,7 +204,7 @@
             Net Amount
           </td>
           <td style="text-align-last: right">
-            {{ order_items_total_gross_amount | number : "1.2" }}
+            {{ order_items_total_gross_amount | decimalFormat : 'AMOUNT' }}
             <!-- {{ prnt_inv_net_total_with_tax }} -->
           </td>
         </tr>
@@ -214,17 +214,17 @@
           *ngIf="invReturnSalesTotalNetTotal != 0"
         >
           <td colspan="10" style="font-weight: 600">
-            Sales Return : {{ invReturnSalesTotalNetTotal | number : "1.2" }}
+            Sales Return : {{ invReturnSalesTotalNetTotal | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <tr style="border-bottom: hidden" *ngIf="order_total_exchange != 0">
           <td colspan="10" style="font-weight: 600">
-            Exchange : {{ order_total_exchange | number : "1.2" }}
+            Exchange : {{ order_total_exchange | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <tr style="border-bottom: hidden">
           <td colspan="10" style="font-weight: 600">
-            Received : {{ prnt_received_amount | number : "1.2" }}
+            Received : {{ prnt_received_amount | decimalFormat : 'AMOUNT' }}
           </td>
         </tr>
         <tr>
@@ -484,7 +484,7 @@
             </div>
             <!-- <div style="font-size: 22px; font-weight: 500">AED {{this.lineItemForm.value.fcn_li_total_amount}}</div> -->
             <div style="font-size: 22px; font-weight: 500">
-              AED {{ order_items_total_net_amount | number : "1.2" }}
+              AED {{ order_items_total_net_amount | decimalFormat : 'AMOUNT' }}
             </div>
           </div>
         </div>
@@ -2675,6 +2675,7 @@
                   formControlName="fcn_exchange_gross_wt"
                   (focusout)="getExchangeNwtWt($event)"
                   [readonly]="viewOnly"
+                  MetalDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2693,6 +2694,7 @@
                   (change)="changeExchangeStoneWt($event)"
                   id="fcn_exchange_stone_wt"
                   [readonly]="viewOnly"
+                  StoneDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2711,6 +2713,7 @@
                   id="fcn_exchange_net_wt"
                   [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
                   (change)="changeExchangeNettWt($event)"
+                  MetalDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2733,6 +2736,7 @@
                   [readonly]="viewOnly"
                   id="fcn_exchange_chargeable_wt"
                   [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
+                  MetalDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2767,6 +2771,7 @@
                   formControlName="fcn_exchange_pure_weight"
                   id="fcn_exchange_pure_weight"
                   [readonly]="true"
+                  MetalDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2798,6 +2803,8 @@
                   formControlName="fcn_exchange_stone_rate"
                   id="fcn_exchange_stone_rate"
                   (change)="changeExchangeStoneRate($event)"
+                  AmountDecimalInput
+
                 />
               </mat-form-field>
             </div>
@@ -2815,6 +2822,7 @@
                   formControlName="fcn_exchange_stone_amount"
                   id="fcn_exchange_stone_amount"
                   [readonly]="true"
+                  AmountDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2846,6 +2854,7 @@
                   formControlName="fcn_exchange_making_rate"
                   [readonly]="viewOnly"
                   (change)="changeExMakingRate($event)"
+                  AmountDecimalInput
                 />
               </mat-form-field>
             </div>
@@ -2861,6 +2870,7 @@
                   matInput
                   formControlName="fcn_exchange_making_amt"
                   [readonly]="true"
+                  
                 />
               </mat-form-field>
             </div>
@@ -2877,6 +2887,7 @@
                   formControlName="fcn_exchange_metal_amount"
                   (change)="changeExchangeMetalAmt($event)"
                   [readonly]="viewOnly"
+                  
                 />
               </mat-form-field>
             </div>
@@ -2893,6 +2904,7 @@
                   formControlName="fcn_exchange_net_amount"
                   [readonly]="true"
                   (change)="changeExNetAmt($event)"
+                  
                 />
               </mat-form-field>
             </div>
@@ -3302,9 +3314,9 @@
               <td style="text-align: center">{{ slsReturn.DIVISION_CODE }}</td>
               <td>{{ slsReturn.STOCK_CODE }}</td>
               <td>{{ slsReturn.STOCK_DOCDESC }}</td>
-              <td style="text-align: center">{{ slsReturn.GROSSWT }}</td>
+              <td style="text-align: center">{{ slsReturn.GROSSWT | decimalFormat : 'METAL' }}</td>
               <td style="text-align: right">
-                {{ slsReturn.TOTAL_AMOUNTFC }}
+                {{ slsReturn.TOTAL_AMOUNTFC | decimalFormat : 'AMOUNT' }}
               </td>
               <td style="text-align: center">
                 <input
@@ -3328,7 +3340,7 @@
       </div>
       <div class="col-md-12 text-right">
         <div>
-          <h6>Total : {{ sales_returns_total_amt | number : "1.2" }}</h6>
+          <h6>Total : {{ sales_returns_total_amt | decimalFormat : 'AMOUNT' }}</h6>
         </div>
       </div>
       <div class="col-md-12" style="padding-bottom: 20px">
@@ -4556,7 +4568,7 @@
                         <input
                           class="st_txt_right"
                           type="number"
-                          AmountDecimalInput
+                          
                           [min]="0"
                           [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4568,6 +4580,7 @@
                           (focus)="
                             setValToLocalStorage($event, 'fcn_li_gross_amount')
                           "
+                          AmountDecimalInput
                         />
                         <mat-error
                           *ngIf="

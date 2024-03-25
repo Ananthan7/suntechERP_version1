@@ -33,7 +33,9 @@ export class CustomerPricingMasterComponent implements OnInit {
   currentDate = new FormControl(new Date());
   flexSwitchCheckChecked: boolean = true;
   text = "Deduct";
-
+  approveDisable: boolean = true;
+  codeEnable :  boolean = true;
+  enableUpdate: boolean = true;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -51,7 +53,9 @@ export class CustomerPricingMasterComponent implements OnInit {
     }
     else (this.content.FLAG == 'EDIT')
     {
-
+      this.approveDisable = false;
+      this.codeEnable = false;
+      this.enableUpdate = false;
     }
 
   }
@@ -102,10 +106,10 @@ export class CustomerPricingMasterComponent implements OnInit {
     customername: ['', [Validators.required]],
     customercode: ['', [Validators.required]],
     labourtype: ['', [Validators.required]],
-    pricedesc: ['', [Validators.required]],
+    pricedesc: [''],
     defaultCustomer: [''],
     defaultVendor: [''],
-    customercodeDesc: ['', [Validators.required]],
+    customercodeDesc: [''],
     byValue: ['1'],
     bypercentage: [''],
   })
@@ -220,6 +224,12 @@ export class CustomerPricingMasterComponent implements OnInit {
       this.update()
       return
     }
+
+    if( this.customerpricemasterForm.value.labourtype =='None'){
+      this.toastr.error('Labour type cannot be none')
+    }
+    else{
+
     if (this.customerpricemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -355,6 +365,12 @@ export class CustomerPricingMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+}
+
+
+
+
+
   update() {
     if (this.customerpricemasterForm.invalid) {
       this.toastr.error('select all required fields')

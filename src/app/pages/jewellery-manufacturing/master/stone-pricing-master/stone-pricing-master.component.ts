@@ -188,7 +188,7 @@ export class StonePricingMasterComponent implements OnInit {
     color: [''],
     clarity: ['', [Validators.required]],
     sieve_from: [''],
-    currency: ['', [Validators.required]],
+    currency: ['AED', [Validators.required]],
     carat_wt: ['', [Validators.required]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
