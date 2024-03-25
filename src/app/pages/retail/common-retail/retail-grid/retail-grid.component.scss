@@ -3,8 +3,8 @@
     background: #778da9;
     padding: 4px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    max-height: 40px;
     .btn-white {
       background: #fff;
       padding: 2px 8px;
@@ -31,7 +31,11 @@
       }
     }
   }
+  
   .skeltonLoading{
     width: 100% !important;
     height: 100% !important;
+  }
+  .header-item{
+    padding: 0px !important;
   }

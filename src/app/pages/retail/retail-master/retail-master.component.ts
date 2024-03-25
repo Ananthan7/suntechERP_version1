@@ -101,7 +101,7 @@ export class RetailMasterComponent implements OnInit {
       size: 'xl',
       backdrop: 'static',
       keyboard: false,
-      windowClass: 'modal-full-width'
+      windowClass: 'modal-full-width',
     });
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {

@@ -6,6 +6,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'master-search',
@@ -13,8 +14,9 @@ import { DxDataGridComponent } from 'devextreme-angular';
   styleUrls: ['./master-search.component.scss']
 })
 export class MasterSearchComponent implements OnInit {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid!: DxDataGridComponent;
-  @ViewChild('overlayPanel') overlayPanel!: OverlayPanel
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid!: DxDataGridComponent;
+  @ViewChild('overlayPanel') overlayPanels!: OverlayPanel
+  @ViewChild('dropdown') dropDown!: NgbDropdown;
   @Output() newRowClick = new EventEmitter();
   @Input() MasterSearchData!: MasterSearchModel;
   searchFieldLabel: any;
@@ -43,6 +45,8 @@ export class MasterSearchComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    console.log('///////////////');
+    
     if(!this.MasterSearchData.LOAD_ONCLICK){
       this.loadData();
     }
@@ -151,7 +155,7 @@ export class MasterSearchComponent implements OnInit {
     if(this.MasterSearchData.SEARCH_VALUE){
       this.loadData();
     }
-    this.overlayPanel.show(event);
+    this.overlayPanels.show(event);
   }
   onHidePanel(){
     if(this.MasterSearchData.SEARCH_VALUE != ''){
@@ -168,12 +172,14 @@ export class MasterSearchComponent implements OnInit {
     }
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
-    this.overlayPanel.hide();
+    this.overlayPanels.hide();
   }
   //handle Row Click of table
   handleRowClick(event: any) {
+    console.log(';;;;;;;;;');
     this.newRowClick.emit(event)
-    this.closeOverlayPanel()
+    console.log(';;;;;;;;;');
+    this.dropDown.close()
   }
 
   //search Value Change
@@ -201,6 +207,14 @@ export class MasterSearchComponent implements OnInit {
   /**USE: close modal window */
   close() {
 
+  }
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Check if the pressed key is Enter
+    if (event.key === 'Enter') {
+      // Call your function here
+      this.closeOverlayPanel();
+    }
   }
   //unsubscriptions of streams
   ngOnDestroy(): void {
