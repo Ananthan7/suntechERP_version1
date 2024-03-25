@@ -40,7 +40,7 @@ export class AlloyMasterComponent implements OnInit {
     currency: ['', [Validators.required]],
     currencyRate: [''],
     createdOn: [new Date(), ''],
-    createdBy: ['SUNTECH', ''],
+    createdBy: [''],
     priceScheme: [''],
     price1code: [''],
     price1per: ['0'],
@@ -97,7 +97,9 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.alloyMastereForm.controls.createdBy.setValue(this.userName);
+    console.log(this.userName);
+    
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
@@ -111,7 +113,7 @@ export class AlloyMasterComponent implements OnInit {
       this.setInitialValues()
     }
 
-    
+  
   }
   setInitialValues() {
     console.log(this.content, 'content');
@@ -399,7 +401,7 @@ export class AlloyMasterComponent implements OnInit {
     //   return true;
     // }else{
     if (this.alloyMastereForm.value.code == '') {
-      this.commonService.toastErrorByMsgId('please enter stockcode')
+      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
       return true
     }
     return false
