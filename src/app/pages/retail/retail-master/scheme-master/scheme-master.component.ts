@@ -216,31 +216,31 @@ export class SchemeMasterComponent implements OnInit {
       flag = true
     }
     if(form.prefix == ''){
-      this.comService.toastErrorByMsgId('prefix is required')
+      this.comService.toastErrorByMsgId('Prefix is required')
       flag = true
     }
     if(form.description == ''){
-      this.comService.toastErrorByMsgId('description is required')
+      this.comService.toastErrorByMsgId('Description is required')
       flag = true
     }
     if(form.frequency == ''){
-      this.comService.toastErrorByMsgId('frequency is required')
+      this.comService.toastErrorByMsgId('Frequency is required')
       flag = true
     }
     if(form.installmentAmount == ''){
-      this.comService.toastErrorByMsgId('Installment Amount is required')
+      this.comService.toastErrorByMsgId('Installment amount is required')
       flag = true
     }
     if(this.comService.emptyToZero(form.installmentAmount) != 0 && !form.receiptModeone){
-      this.comService.toastErrorByMsgId('Receipt Mode is required for Installment Amount')
+      this.comService.toastErrorByMsgId('Receipt Mode is required for installment Amount')
       flag = true
     }
     if(this.comService.emptyToZero(form.bonusInstallment) != 0 && !form.receiptModeTwo){
-      this.comService.toastErrorByMsgId('Receipt Mode is required for bonus Installment')
+      this.comService.toastErrorByMsgId('Receipt Mode is required for bonus installment')
       flag = true
     }
     if(this.comService.emptyToZero(form.cancelCharges) != 0 && !form.receiptModeThree){
-      this.comService.toastErrorByMsgId('Receipt Mode is required for cancelCharges')
+      this.comService.toastErrorByMsgId('Receipt Mode is required for cancel charges')
       flag = true
     }
     return flag

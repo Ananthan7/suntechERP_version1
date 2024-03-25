@@ -45,8 +45,6 @@ export class MasterSearchComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    console.log('///////////////');
-    
     if(!this.MasterSearchData.LOAD_ONCLICK){
       this.loadData();
     }
@@ -176,10 +174,9 @@ export class MasterSearchComponent implements OnInit {
   }
   //handle Row Click of table
   handleRowClick(event: any) {
-    console.log(';;;;;;;;;');
     this.newRowClick.emit(event)
-    console.log(';;;;;;;;;');
-    this.dropDown.close()
+    this.closeOverlayPanel()
+    // this.dropDown.close()
   }
 
   //search Value Change

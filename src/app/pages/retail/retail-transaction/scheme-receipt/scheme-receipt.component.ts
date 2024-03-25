@@ -34,6 +34,7 @@ export class SchemeReceiptComponent implements OnInit {
   disablePostBtn: boolean = true;
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
+  detailArray: any[] = [];
   rightSideHeader: string = "";
   isViewSchemeMasterGrid: boolean = true;
   disableDelete: boolean = true;
@@ -64,7 +65,9 @@ export class SchemeReceiptComponent implements OnInit {
   disableAddBtnGrid: boolean = true;
   VIEWEDITFLAG: string = '';
   dataIndex: any;
-
+  Attachedfile: any[] = [];
+  formdata = new FormData();
+  postedDateString:any
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -113,7 +116,7 @@ export class SchemeReceiptComponent implements OnInit {
     PartyDescription: [""],
     VocType: [""],
     VocDate: [""],
-    VocNo: [""],
+    VocNo: [0],
     CurrCode: [""],
     CurrRate: [""],
     RefNo: [""],
@@ -132,9 +135,9 @@ export class SchemeReceiptComponent implements OnInit {
     POSCustomerEmail: [""],
     Narration: [""],
     MID: [""],
-    SCHEME_AMOUNT: [0],
-    SCH_CUSTOMER_CODE: [0],
-    SCH_INST_AMOUNT_FC: [0],
+    SCHEME_AMOUNT: [""],
+    SCH_CUSTOMER_CODE: [""],
+    SCH_INST_AMOUNT_FC: [""],
     PartyAmount: [''],
     PartyAmtCode: [''],
     PartyAddress: [''],
@@ -142,10 +145,11 @@ export class SchemeReceiptComponent implements OnInit {
     SGST_ACCODE: [''],
     CGST_ACCODE: [''],
     POS_TAX_CRACCODE: [''],
-    TotalAmount: [0],
+    TotalAmount: [''],
     TotalTax: [0],
     TotalTax_FC: [0],
     SchemeBalance: [0],
+    Attachedfile: [null],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -192,10 +196,12 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
       return
     }
+    this.isSaved = true;
     this.receiptDetailsForm.controls.Branch.setValue(this.content.BRANCH_CODE);
     this.receiptDetailsForm.controls.VocType.setValue(this.content.VOCTYPE);
 
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
+    
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);
 
@@ -220,12 +226,15 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.MID.setValue(this.content.MID);
     this.receiptDetailsForm.controls.POS_TAX_CRACCODE.setValue(this.content.POS_TAX_CRACCODE);
 
-    this.setFormControlAmount('PartyAmount',this.content.TOTAL_AMOUNTCC)
-    this.setFormControlAmount('TotalAmount',this.content.TOTAL_AMOUNTCC)
-    this.setFormControlAmount('TotalTax',this.content.GST_TOTALFC)
-    this.setFormControlAmount('TotalTax_FC',this.content.GST_TOTALFC)
+    this.setFormControlAmount('PartyAmount', this.content.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('TotalAmount', this.content.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('TotalTax', this.content.GST_TOTALFC)
+    this.setFormControlAmount('TotalTax_FC', this.content.GST_TOTALFC)
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
+    if (this.receiptDetailsForm.value.PostedDate != '') {
+      this.postedDateString = this.commonService.formatDate(this.receiptDetailsForm.value.PostedDate)
+    }
   }
   //USE: account posting click fn 
   AccountPosting() {
@@ -310,7 +319,7 @@ export class SchemeReceiptComponent implements OnInit {
               item.AC_Code = item.ACCODE
               item.CurrCode = item.CURRENCY_CODE
               item.AC_Description = item.HDACCOUNT_HEAD
-              item.CurrRate = this.commonService.decimalQuantityFormat(item.CURRENCY_RATE,'RATE')
+              item.CurrRate = this.commonService.decimalQuantityFormat(item.CURRENCY_RATE, 'RATE')
               item.AMOUNT_VAT = item.AMOUNTCC
               item.AMOUNT_VATFC = item.AMOUNTFC
             });
@@ -410,6 +419,16 @@ export class SchemeReceiptComponent implements OnInit {
       }
     });
   }
+  onFileChange(input: any) {
+    if (input.target.files.length > 0) {
+      const file: File = input.target.files[0];
+      for (let x = 0; x < input.target.files.length; x++) {
+        this.Attachedfile.push(file);
+        this.receiptDetailsForm.controls.Attachedfile.setValue(this.Attachedfile);
+        // this.formdata.append("Images[" + x + "].Image.File", file);
+      }
+    }
+  }
 
   selectedSalesman(data: any) {
     this.receiptDetailsForm.controls.Salesman.setValue(data.SALESPERSON_CODE);
@@ -507,6 +526,7 @@ export class SchemeReceiptComponent implements OnInit {
     );
     this.subscriptions.push(Sub);
   }
+
   //fetch from CreditCardMaster
   fetchCreditCardMaster() {
     let API = `CreditCardMaster/GetCreditCardMaster`;
@@ -585,7 +605,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.resetSchemeDetails()
     this.fetchSchemeWithCustCode(this.receiptDetailsForm.value.POSCustomerCode);
   }
-  
+
   resetSchemeDetails() {
     this.receiptDetailsForm.controls.SchemeCode.setValue('');
     this.receiptDetailsForm.controls.SchemeID.setValue('');
@@ -781,7 +801,7 @@ export class SchemeReceiptComponent implements OnInit {
         "IGST_AMOUNTCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CGST_ACCODE": this.commonService.nullToString(item.CGST_ACCODE),
         "SGST_ACCODE": this.commonService.nullToString(item.SGST_ACCODE),
-        "IGST_ACCODE": this.commonService.nullToString(item.POS_TAX_CRACCODE),
+        "IGST_ACCODE": this.commonService.nullToString(item.IGST_ACCODE),
         "GST_HEADER_AMOUNT": this.commonService.emptyToZero(this.TOTAL_AMOUNTLC),
         "GST_NUMBER": "",
         "INVOICE_NUMBER": item.TRN_No,
@@ -822,12 +842,13 @@ export class SchemeReceiptComponent implements OnInit {
     return detailsArray
   }
   setPostDateToSave() {
-    return {
+    this.detailArray = []
+    let data = {
       "MID": 1,
-      "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
-      "VOCTYPE": this.receiptDetailsForm.value.VocType || "PCR",
-      "VOCNO": this.receiptDetailsForm.value.VocNo || 0,
-      "VOCDATE": this.commonService.formatDate(this.receiptDetailsForm.value.VocDate),
+      "BRANCH_CODE": this.receiptDetailsForm.value.Branch ,
+      "VOCTYPE": this.receiptDetailsForm.value.VocType ,
+      "VOCNO": this.receiptDetailsForm.value.VocNo ,
+      "VOCDATE": this.commonService.formatDateTime(this.receiptDetailsForm.value.VocDate),
       "VALUE_DATE": this.commonService.formatDateTime(this.currentDate),
       "YEARMONTH": this.receiptDetailsForm.value.YEARMONTH,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",
@@ -898,9 +919,9 @@ export class SchemeReceiptComponent implements OnInit {
       "POSORDER_REF": "",
       "Details": this.setDetailData(),
     };
+    this.detailArray.push(data)
   }
   formSubmit() {
-    console.log(this.receiptDetailsForm.value.Salesman);
     if (this.orderedItems.length == 0) {
       this.commonService.toastErrorByMsgId("Add new receipt to save");
       return;
@@ -913,15 +934,15 @@ export class SchemeReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId("Select all required fields");
       return;
     }
-
-    let postData = this.setPostDateToSave()
+    this.setFormData()
+    
     if (this.editFlag) {
-      this.submitEditedForm(postData);
+      this.submitEditedForm(this.formdata);
       return;
     }
 
     this.commonService.showSnackBarMsg('MSG81447');
-    this.dataService.postDynamicAPI("SchemeCurrencyReceipt", postData)
+    this.dataService.postDynamicAPI("SchemeCurrencyReceipt/SchemeCurrencyReceipt/InsertWithAttachments", this.formdata)
       .subscribe((result: any) => {
         this.commonService.closeSnackBarMsg;
         if (result["status"] == "Success" || result.response) {
@@ -952,6 +973,199 @@ export class SchemeReceiptComponent implements OnInit {
       }, (err) => {
         this.commonService.closeSnackBarMsg;
       });
+  }
+  private objectToFormData(obj?:any) {
+    const formData = new FormData();
+    this.setPostDateToSave()
+    obj = this.detailArray[0]
+    // Iterate through the object's properties
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        // Append each property to the FormData instance
+        formData.append(key, obj[key]);
+      }
+    }
+     console.log(formData);
+  }
+
+  setFormData() {
+    this.objectToFormData()
+    this.setPostDateToSave();
+    let formValue = this.receiptDetailsForm.value
+    this.detailArray.forEach((item: any, i: any) => {
+      // delete item.schemeData['ID'];
+      this.formdata.append(`Model.model.receiptdata.MID`, this.content ? this.content.MID : '0');
+      this.formdata.append(`Model.model.receiptdata.BRANCH_CODE`, item.BRANCH_CODE);
+      this.formdata.append(`Model.model.receiptdata.VOCTYPE`, item.VOCTYPE);
+      this.formdata.append(`Model.model.receiptdata.VOCNO`, item.VOCNO);
+      this.formdata.append(`Model.model.receiptdata.VOCDATE`, item.VOCDATE);
+      this.formdata.append(`Model.model.receiptdata.VALUE_DATE`, item.VALUE_DATE);
+      this.formdata.append(`Model.model.receiptdata.YEARMONTH`, item.YEARMONTH);
+      this.formdata.append(`Model.model.receiptdata.PARTYCODE`, item.PARTYCODE);
+      this.formdata.append(`Model.model.receiptdata.PARTY_CURRENCY`, item.PARTY_CURRENCY);
+      this.formdata.append(`Model.model.receiptdata.PARTY_CURR_RATE`, item.PARTY_CURR_RATE);
+      this.formdata.append(`Model.model.receiptdata.TOTAL_AMOUNTFC`, item.TOTAL_AMOUNTFC);
+      this.formdata.append(`Model.model.receiptdata.TOTAL_AMOUNTCC`, item.TOTAL_AMOUNTCC);
+      this.formdata.append(`Model.model.receiptdata.REMARKS`, item.REMARKS);
+      this.formdata.append(`Model.model.receiptdata.SYSTEM_DATE`, item.SYSTEM_DATE);
+      this.formdata.append(`Model.model.receiptdata.NAVSEQNO`, item.NAVSEQNO);
+      this.formdata.append(`Model.model.receiptdata.HAWALACOMMCODE`, item.HAWALACOMMCODE);
+      this.formdata.append(`Model.model.receiptdata.HAWALACOMMPER`, item.HAWALACOMMPER);
+      this.formdata.append(`Model.model.receiptdata.FLAG_UPDATED`, item.FLAG_UPDATED);
+      this.formdata.append(`Model.model.receiptdata.FLAG_INPROCESS`, item.FLAG_INPROCESS);
+      this.formdata.append(`Model.model.receiptdata.SUPINVNO`, item.SUPINVNO);
+      this.formdata.append(`Model.model.receiptdata.SUPINVDATE`, item.SUPINVDATE);
+      this.formdata.append(`Model.model.receiptdata.HHACCOUNT_HEAD`, item.HHACCOUNT_HEAD);
+      this.formdata.append(`Model.model.receiptdata.SALESPERSON_CODE`, item.SALESPERSON_CODE);
+      this.formdata.append(`Model.model.receiptdata.BALANCE_FC`, item.BALANCE_FC);
+      this.formdata.append(`Model.model.receiptdata.BALANCE_CC`, item.BALANCE_CC);
+      this.formdata.append(`Model.model.receiptdata.AUTHORIZEDPOSTING`, item.AUTHORIZEDPOSTING);
+      this.formdata.append(`Model.model.receiptdata.AUTOGENREF`, item.AUTOGENREF);
+      this.formdata.append(`Model.model.receiptdata.AUTOGENMID`, item.AUTOGENMID);
+      this.formdata.append(`Model.model.receiptdata.AUTOGENVOCTYPE`,item.AUTOGENVOCTYPE);
+      this.formdata.append(`Model.model.receiptdata.OUSTATUSNEW`, item.OUSTATUSNEW);
+      this.formdata.append(`Model.model.receiptdata.POSCUSTOMERCODE`, item.POSCUSTOMERCODE);
+      this.formdata.append(`Model.model.receiptdata.D2DTRANSFER`, item.D2DTRANSFER);
+      this.formdata.append(`Model.model.receiptdata.DRAFT_FLAG`, item.DRAFT_FLAG);
+      this.formdata.append(`Model.model.receiptdata.POSSCHEMEID`, item.POSSCHEMEID);
+      this.formdata.append(`Model.model.receiptdata.PARTY_ADDRESS`, item.PARTY_ADDRESS);
+      this.formdata.append(`Model.model.receiptdata.AUTOPOSTING`, item.AUTOPOSTING);
+      this.formdata.append(`Model.model.receiptdata.POSTDATE`, item.POSTDATE);
+      this.formdata.append(`Model.model.receiptdata.FLAG_EDIT_ALLOW`, item.FLAG_EDIT_ALLOW);
+      this.formdata.append(`Model.model.receiptdata.BASE_CURRENCY`, item.BASE_CURRENCY);
+      this.formdata.append(`Model.model.receiptdata.BASE_CURR_RATE`, item.BASE_CURR_RATE);
+      this.formdata.append(`Model.model.receiptdata.BASE_CONV_RATE`, item.BASE_CONV_RATE);
+      this.formdata.append(`Model.model.receiptdata.PRINT_COUNT`, item.PRINT_COUNT);
+      this.formdata.append(`Model.model.receiptdata.DOC_REF`, item.DOC_REF);
+      this.formdata.append(`Model.model.receiptdata.GST_REGISTERED`, item.GST_REGISTERED);
+      this.formdata.append(`Model.model.receiptdata.GST_STATE_CODE`, item.GST_STATE_CODE);
+      this.formdata.append(`Model.model.receiptdata.GST_NUMBER`, item.GST_NUMBER);
+      this.formdata.append(`Model.model.receiptdata.GST_TYPE`, item.GST_TYPE);
+      this.formdata.append(`Model.model.receiptdata.GST_TOTALFC`, item.GST_TOTALFC);
+      this.formdata.append(`Model.model.receiptdata.GST_TOTALCC`, item.GST_TOTALCC);
+      this.formdata.append(`Model.model.receiptdata.REC_STATUS`, item.REC_STATUS);
+      this.formdata.append(`Model.model.receiptdata.CUSTOMER_NAME`, item.CUSTOMER_NAME);
+      this.formdata.append(`Model.model.receiptdata.CUSTOMER_MOBILE`, item.CUSTOMER_MOBILE);
+      this.formdata.append(`Model.model.receiptdata.CUSTOMER_EMAIL`, item.CUSTOMER_EMAIL);
+      this.formdata.append(`Model.model.receiptdata.TDS_CODE`, item.TDS_CODE);
+      this.formdata.append(`Model.model.receiptdata.TDS_APPLICABLE`, item.TDS_APPLICABLE);
+      this.formdata.append(`Model.model.receiptdata.TDS_TOTALFC`, item.TDS_TOTALFC);
+      this.formdata.append(`Model.model.receiptdata.TDS_TOTALCC`, item.TDS_TOTALCC);
+      this.formdata.append(`Model.model.receiptdata.ADRRETURNREF`, item.ADRRETURNREF);
+      this.formdata.append(`Model.model.receiptdata.ADVRETURN`, item.ADVRETURN);
+      this.formdata.append(`Model.model.receiptdata.SCH_SCHEME_CODE`, item.SCH_SCHEME_CODE);
+      this.formdata.append(`Model.model.receiptdata.SCH_CUSTOMER_ID`, item.SCH_CUSTOMER_ID);
+      this.formdata.append(`Model.model.receiptdata.REFDOCNO`, item.REFDOCNO);
+      this.formdata.append(`Model.model.receiptdata.FROM_TOUCH`, item.FROM_TOUCH);
+      this.formdata.append(`Model.model.receiptdata.SL_CODE`, item.SL_CODE);
+      this.formdata.append(`Model.model.receiptdata.SL_DESCRIPTION`, item.SL_DESCRIPTION);
+      this.formdata.append(`Model.model.receiptdata.GIFT_CARDNO`, item.GIFT_CARDNO);
+      this.formdata.append(`Model.model.receiptdata.OT_TRANSFER_TIME`, item.OT_TRANSFER_TIME);
+      this.formdata.append(`Model.model.receiptdata.HTUSERNAME`, item.HTUSERNAME);
+      this.formdata.append(`Model.model.receiptdata.DUEDAYS`, item.DUEDAYS);
+      this.formdata.append(`Model.model.receiptdata.PRINT_COUNT_ACCOPY`, item.PRINT_COUNT_ACCOPY);
+      this.formdata.append(`Model.model.receiptdata.PRINT_COUNT_CNTLCOPY`, item.PRINT_COUNT_CNTLCOPY);
+      this.formdata.append(`Model.model.receiptdata.WOOCOMCARDID`, item.WOOCOMCARDID);
+      this.formdata.append(`Model.model.receiptdata.POSORDER_REF`, item.POSORDER_REF);
+      item.Details.forEach((data: any, index: any) => {
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].UNIQUEID`, data.UNIQUEID);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SRNO`, data.SRNO);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].BRANCH_CODE`, data.BRANCH_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].RECPAY_TYPE`, data.RECPAY_TYPE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].MODE`, data.MODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].ACCODE`, data.ACCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CURRENCY_CODE`, data.CURRENCY_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CURRENCY_RATE`, data.CURRENCY_RATE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].AMOUNTFC`, data.AMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].AMOUNTCC`, data.AMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].HEADER_AMOUNT`, data.HEADER_AMOUNT);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CHEQUE_NO`, data.CHEQUE_NO);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CHEQUE_DATE`, data.CHEQUE_DATE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CHEQUE_BANK`, data.CHEQUE_BANK);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].REMARKS`, data.REMARKS);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].BANKCODE`, data.BANKCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].PDCYN`, data.PDCYN);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].HDACCOUNT_HEAD`, data.HDACCOUNT_HEAD);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].MODEDESC`, data.MODEDESC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].D_POSSCHEMEID`, data.D_POSSCHEMEID);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].D_POSSCHEMEUNITS`, data.D_POSSCHEMEUNITS);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_BRANCH_CODE`, data.DT_BRANCH_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_VOCTYPE`, data.DT_VOCTYPE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_VOCNO`, data.DT_VOCNO);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_YEARMONTH`, data.DT_YEARMONTH);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_NO`, data.CARD_NO);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_HOLDER`, data.CARD_HOLDER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_EXPIRY`, data.CHEQUE_BANK);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].BASE_CONV_RATE`, data.BASE_CONV_RATE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SUBLEDJER_CODE`, data.SUBLEDJER_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].TOTAL_AMOUNTFC`, data.TOTAL_AMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].TOTAL_AMOUNTCC`, data.TOTAL_AMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CGST_PER`, data.CGST_PER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CGST_AMOUNTFC`, data.CGST_AMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CGST_AMOUNTCC`, data.CGST_AMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SGST_PER`, data.SGST_PER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SGST_AMOUNTFC`, data.SGST_AMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SGST_AMOUNTCC`, data.SGST_AMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].IGST_PER`, data.IGST_PER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].IGST_AMOUNTFC`, data.IGST_AMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].IGST_AMOUNTCC`, data.IGST_AMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CGST_ACCODE`, data.CGST_ACCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SGST_ACCODE`, data.SGST_ACCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].IGST_ACCODE`, data.IGST_ACCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].GST_HEADER_AMOUNT`, data.GST_HEADER_AMOUNT);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].GST_NUMBER`, data.GST_NUMBER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].INVOICE_NUMBER`, data.INVOICE_NUMBER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].INVOICE_DATE`, data.INVOICE_DATE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].MIDPCR`, data.MIDPCR);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SGST_CTRLACCODE`, data.SGST_CTRLACCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].IGST_CTRLACCODE`, data.IGST_CTRLACCODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].HSN_CODE`, data.HSN_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_GST_TYPE`, data.DT_GST_TYPE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_GST_CODE`, data.DT_GST_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_GST_GROUP`, data.DT_GST_GROUP);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_GST_STATE_CODE`, data.DT_GST_STATE_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].INCLUSIVE`, data.INCLUSIVE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].COMM_PER`, data.COMM_PER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].COMM_AMOUNTCC`, data.COMM_AMOUNTCC.toString());
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].COMM_AMOUNTFC`, data.COMM_AMOUNTFC.toString());
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].COMM_TAXPER`, data.COMM_TAXPER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].COMM_TAXAMOUNTCC`, data.COMM_TAXAMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].COMM_TAXAMOUNTFC`, data.COMM_TAXAMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_TDS_CODE`, data.DT_TDS_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].TDS_PER`, data.TDS_PER);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].TDS_AMOUNTFC`, data.TDS_AMOUNTFC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].TDS_AMOUNTCC`, data.TDS_AMOUNTCC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].PDC_WALLETAC`, data.PDC_WALLETAC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].WALLET_YN`, data.WALLET_YN);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SL_CODE`, data.SL_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].SL_DESCRIPTION`, data.SL_DESCRIPTION);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].OT_TRANSFER_TIME`, data.OT_TRANSFER_TIME);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].VAT_EXPENSE_CODE`, data.VAT_EXPENSE_CODE);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].VAT_EXPENSE_CODE_DESC`, data.VAT_EXPENSE_CODE_DESC);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].AMLVALIDID`, data.AMLVALIDID);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].AMLSOURCEOFFUNDS`, data.AMLSOURCEOFFUNDS);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].AMLTRANSACTION_TYPE`, data.AMLTRANSACTION_TYPE);
+      })
+      if (this.Attachedfile.length > 0) {
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.UNIQUEID`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.SRNO`, formValue.UNIQUEID);
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.VOCDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.REMARKS`, formValue.Remarks);
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.CODE`, formValue.Code);
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.EXPIRE_DATE`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.ATTACH_TYPE`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_ACTIVESTATUS`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_LASTRENEWBY`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_LASTRENEWDATE`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_NEXTRENEWDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOCUMENT_DATE`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOCUMENT_NO`, '');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.FROM_KYC`, '');
+        for (let i: number = 0; i < this.Attachedfile.length; i++) {
+          this.formdata.append("Model.model.receiptdata.Details[0].imagedetails.Images[" + i + "].Image", this.Attachedfile[i]);
+        }
+      }
+    })
   }
   submitEditedForm(postData: any) {
     this.snackBar.open("Loading ...");
@@ -1036,28 +1250,29 @@ export class SchemeReceiptComponent implements OnInit {
         item.AMOUNT_VATFC = ((parseInt(item.Amount_FC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
         item.VAT_AMT = parseInt(item.Amount_LC) - item.AMOUNT_VAT
         item.VAT_AMTFC = parseInt(item.Amount_FC) - item.AMOUNT_VATFC
-        vatTotal += item.VAT_AMT;
-        vatTotalFC += item.VAT_AMTFC;
-        this.totalAmount_LC += parseInt(item.Amount_LC);
-        this.totalAmount_FC += parseInt(item.Amount_FC);
-        this.VATAmount += parseInt(item.VAT_AMT);
-        this.VATAmount_FC += parseInt(item.VAT_AMT);
-        this.TOTAL_AMOUNTFC += parseInt(item.Amount_FC);
-        this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
+        vatTotal = item.VAT_AMT;
+        vatTotalFC = item.VAT_AMTFC;
+        this.totalAmount_LC = item.Amount_LC;
+        this.totalAmount_FC = item.Amount_FC;
+        this.VATAmount = item.VAT_AMT;
+        this.VATAmount_FC = item.VAT_AMTFC;
+        this.TOTAL_AMOUNTFC = item.Amount_FC;
+        this.TOTAL_AMOUNTLC = item.Amount_LC;
       });
       this.receiptDetailsForm.controls.SchemeBalance.setValue(SchemeBalance)
       // this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
       // this.receiptDetailsForm.controls.TotalAmount.setValue(
       //   this.commonService.commaSeperation(this.totalAmount_LC.toFixed(2))
       // )
-      this.setFormControlAmount('TotalTax',vatTotal)
-      this.setFormControlAmount('TotalTax_FC',vatTotalFC)
-      this.setFormControlAmount('TotalAmount',this.totalAmount_LC)
+      console.log(this.orderedItems[0].Amount_LC,'Amount_LC');
+      console.log(this.totalAmount_LC);
+      
+      this.setFormControlAmount('TotalTax', vatTotal)
+      this.setFormControlAmount('TotalTax_FC', vatTotalFC)
+      this.setFormControlAmount('TotalAmount', this.totalAmount_LC)
       let PartyAmount = (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_LC).toFixed(2)
-      // this.receiptDetailsForm.controls.PartyAmount.setValue(
-      //   this.commonService.commaSeperation(PartyAmount))
 
-      this.setFormControlAmount('PartyAmount',PartyAmount)
+      this.setFormControlAmount('PartyAmount', PartyAmount)
 
       this.receiptDetailsForm.controls.PartyAmtCode.setValue(
         this.receiptDetailsForm.value.CurrCode

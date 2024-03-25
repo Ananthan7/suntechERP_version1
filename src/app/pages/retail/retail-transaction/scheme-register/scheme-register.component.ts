@@ -319,7 +319,7 @@ export class SchemeRegisterComponent implements OnInit {
             "schemeData": params,
             // "ImageData": {
             //   "BRANCH_CODE": this.commonService.branchCode || "",
-            //   "VOCTYPE": "PCR",
+            //   "VOCTYPE": "",
             //   "YEARMONTH": this.commonService.yearSelected,
             //   "VOCNO": 0
             // },
@@ -685,7 +685,7 @@ export class SchemeRegisterComponent implements OnInit {
       "schemeData": params,
       // "ImageData": {
       //   "BRANCH_CODE": this.commonService.branchCode || "",
-      //   "VOCTYPE": "PCR",
+      //   "VOCTYPE": "",
       //   "YEARMONTH": this.commonService.yearSelected,
       //   "VOCNO": 0
       // },

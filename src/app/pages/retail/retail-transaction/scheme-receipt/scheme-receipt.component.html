@@ -9,6 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
     (auditTrailClick)="auditTrailClick()"
     (postClick)="AccountPosting()"
+    (printClick)="printClicked()"
     [isViewDelete]="false" [isViewPost]="true"
     [isViewAuditTrail]="true" [disablePostBtn]="disablePostBtn"
     [disableSaveBtn]="viewMode"></modal-header>
@@ -65,7 +66,8 @@
                                                     <mat-datepicker-toggle
                                                         matSuffix
                                                         [for]="dob"></mat-datepicker-toggle>
-                                                    <mat-datepicker [disabled]="true"
+                                                    <mat-datepicker
+                                                        [disabled]="true"
                                                         #dob></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
@@ -337,7 +339,8 @@
                                         alignment="left">
                                     </dxi-column>
                                     <dxi-column dataField="CurrRate"
-                                        caption="Currency Rate" alignment="right">
+                                        caption="Currency Rate"
+                                        alignment="right">
                                     </dxi-column>
                                     <dxi-column dataField="AMOUNT_VATFC"
                                         caption="Amount" alignment="right">
@@ -379,6 +382,28 @@
                                         </mat-form-field>
                                     </span>
                                 </div>
+                                <!-- <div class="row">
+                                    <span class="matlabels"> Total
+                                    </span>
+                                    <span style="width: 65%">
+                                        <mat-form-field style="width: 100%">
+                                            <input type="text" matInput readonly
+                                                class="text-right"
+                                                formControlName="TotalAmount" />
+                                        </mat-form-field>
+                                    </span>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
+                                <span class="matlabels">Attachment
+                                </span>
+                                <input class="fileAttach pt-2"
+                                    type="file" (change)="onFileChange($event)"
+                                    [disabled]="viewMode" />
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-sm-12">
                                 <div class="row">
                                     <span class="matlabels"> Total
                                     </span>
@@ -402,3 +427,226 @@
         </div>
     </div>
 </div>
+
+
+<section style="width: 100%; padding: 30px 20px;display: none;" id="print_invoice">
+    <div>
+        <div style="display: flex; flex-direction: row; justify-content: center; text-align: center;">
+            <div class="logo" style="margin: 10px;">
+                <img src="../../../assets/images/bhima-logo.jpg" alt="logo" height="50px">
+            </div>
+        </div>
+        <div style="font-family: sans-serif;font-size: 10px;position: relative;bottom: 15px;">TRN: </div>
+        <div style="margin:10px 0px;font-family: sans-serif">
+            <div style="text-align: center; margin-bottom: 15px; 
+                margin-top: 8px;display: flex;
+                justify-content: space-between; 
+                align-items: center;">
+                <div style="width: 5%;">
+                    <div style="width: 100%; height: 6px;border-top: 3px solid #1d1d1d;
+                    border-bottom: 1px solid #1d1d1d;"></div>
+                </div>
+                <div style="border-top: 1px solid #000; 
+                    width: 60%; border-bottom: 1px solid #000; 
+                    text-align: center; display: flex; flex-direction: column;">
+                    <div style="width: 100%; height: 2px;border-top: 1px solid #000;margin-top: 3px;"></div>
+                    <h5 style="font-weight: 600; padding: 10px 0px; font-family: sans-serif;
+                        margin: 0;">
+                        POINT OF SALE RECEIPT CURRENCY
+                    </h5>
+                </div>
+                <div style="width: 100%;">
+                    <div style="width: 100%; height: 6px;border-top: 3px solid #1d1d1d;
+                    border-bottom: 1px solid #1d1d1d;"></div>
+                </div>
+            </div>
+            <div style="font-weight: 600; text-align: end;color: #8e8e8e;
+                position: relative;bottom: 15px;font-family: sans-serif;font-size: 13px;">
+                ACCOUNTS COPY</div>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <div style="width: 50%;font-weight: 600;color: black; border: 1px solid #747474;">
+                <h6 style="border-bottom: 1px solid #747474; margin: 0; padding: 5px;font-family: sans-serif;">
+                    Name -
+                    {{receiptDetailsForm.value.POSCustomerCode}}-{{receiptDetailsForm.value.POSCustomerName}}
+                </h6>
+                <h6 style="border-bottom: 1px solid #747474;  margin: 0; padding: 5px;font-family: sans-serif;">
+                    Moblie No - {{receiptDetailsForm.value.POSCustomerMobile}}
+                </h6>
+                <h6 style="border-bottom: 1px solid #747474; margin: 0; padding: 5px;font-family: sans-serif;">
+                    Scheme Id - {{receiptDetailsForm.value.SchemeID}}
+                </h6>
+                <h6 style="margin: 0; padding: 5px;">
+                    &nbsp;
+                </h6>
+            </div>
+            <div style="font-weight: 600; color: #282828;width: 30%; border: 1px solid #747474;">
+                <h6 style="border-bottom: 1px solid #747474; margin: 0; padding: 5px;font-family: sans-serif;">
+                    PCR NO - {{receiptDetailsForm.value.VocNo}}
+                </h6>
+                <h6 style="border-bottom: 1px solid #747474;  margin: 0; padding: 5px;font-family: sans-serif;">
+                    Date- {{postedDateString}}
+                </h6>
+                <h6 style="border-bottom: 1px solid #747474;  margin: 0; padding: 5px;font-family: sans-serif;">
+                    Perpared By - {{receiptDetailsForm.value.SalesmanName}}
+                </h6>
+            </div>
+        </div>
+
+        <table style="width: 100%;height: 50%; border: 1px solid #000;">
+            <thead style="background-color: #bbbbbb;font-family: sans-serif;">
+                <tr>
+                    <th
+                        style="font-size: 12px;text-align: center;border: 1px solid #000;border-right: 1px solid #d1d1d1;font-family: sans-serif;  border-collapse: collapse; padding: 5px 20px 5px 0px">
+                        No </th>
+                    <th
+                        style="font-size: 12px;text-align: center;border: 1px solid #000;border-right: 1px solid #d1d1d1;font-family: sans-serif;  border-collapse: collapse; padding: 5px 20px 5px 0px">
+                        Branch</th>
+                    <th
+                        style="font-size: 12px;text-align: center;border: 1px solid #000;border-right: 1px solid #d1d1d1;font-family: sans-serif;  border-collapse: collapse; padding: 5px 20px 5px 0px">
+                        Account Description </th>
+                    <th
+                        style="font-size: 12px;text-align: center;border: 1px solid #000;border-right: 1px solid #d1d1d1;font-family: sans-serif;  border-collapse: collapse; padding: 5px 20px 5px 0px">
+                        Type </th>
+                    <th
+                        style="font-size: 12px;text-align: center;border: 1px solid #000;border-right: 1px solid #d1d1d1;font-family: sans-serif;  border-collapse: collapse; padding: 5px 20px 5px 0px">
+                        Amount FC</th>
+                    <th
+                        style="font-size: 12px;text-align: center;border: 1px solid #000;  border-collapse: collapse; padding: 5px 20px 5px 0px">
+                        Amount (AED) </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of orderedItems">
+                    <td
+                        style="max-height: 30px;border-right: 1px solid #d1d1d1;border-top: none; border-bottom: none;font-size: 12px;font-family: sans-serif; padding: 2px;">
+                        {{item.SRNO}}</td>
+                    <td
+                        style="max-height: 30px;border-right: 1px solid #d1d1d1;border-top: none; border-bottom: none;font-size: 12px;font-family: sans-serif; padding: 2px;">
+                        {{item.Branch? item.Branch: item.BRANCH_CODE}}</td>
+                    <td
+                        style="max-height: 30px;border-right: 1px solid #d1d1d1;border-top: none; border-bottom: none;font-size: 12px;font-family: sans-serif; padding: 2px;">
+                        {{item.AC_Code ? item.AC_Code : item.ACCODE}} - {{item.AC_Description || item.HDACCOUNT_HEAD}} </td>
+                    <td
+                        style="max-height: 30px;border-right: 1px solid #d1d1d1;border-top: none; border-bottom: none;font-size: 12px;font-family: sans-serif; padding: 2px;">
+                        {{item.Type || item.RECPAY_TYPE}}</td>
+                    <td
+                        style="max-height: 30px;border-right: 1px solid #d1d1d1;border-top: none; border-bottom: none;font-size: 12px;font-family: sans-serif; padding: 2px; text-align: end;">
+                        {{item.Amount_FC || item.AMOUNTFC}}</td>
+                    <td
+                        style="max-height: 30px;border-top: none;border-bottom: none;font-size: 12px;font-family: sans-serif; padding: 2px;  text-align: end;">
+                        {{item.Amount_LC || item.AMOUNTCC}}</td>
+                </tr>
+                <tr style="border-bottom: none;border-top: none;">
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-bottom: none;border-top: none;"></td>
+                </tr>
+                <tr style="border-bottom: none;border-top: none;">
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-bottom: none;border-top: none;"></td>
+                </tr>
+                <tr style="border-bottom: none;border-top: none;">
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-bottom: none;border-top: none;"></td>
+                </tr>
+                <tr style="border-bottom: none;border-top: none;">
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-right: 1px solid #d1d1d1;border-bottom: none;border-top: none;">&nbsp;</td>
+                    <td style="border-bottom: none;border-top: none;"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr style="background-color: #bbbbbb;">
+                    <td colspan="2"
+                        style="border-right: 1px solid #d1d1d1;font-size: 10px;font-family: sans-serif; border-top: 1px solid #000; padding: 3px 2px;">
+                        ({{orderedItems.length}} Records)</td>
+                    <td
+                        style="border-right: 1px solid #d1d1d1;font-size: 12px;font-family: sans-serif; border-top: 1px solid #000; padding: 3px 2px; text-align: end;">
+                        Total(AED)</td>
+                    <td colspan="3"
+                        style="font-size: 12px;font-family: sans-serif;  border-top: 1px solid #000; padding: 3px 2px; text-align: end;">
+                        {{totalAmount_LC | number : "1.2"}}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"
+                        style="font-size: 12px;font-weight: 600;font-family: sans-serif;text-align: end;border-right: 1px solid #d1d1d1;">
+                        VAT Amount (AED)</td>
+                    <td colspan="3" style="font-size: 12px;font-weight: 600;font-family: sans-serif;text-align: end;">
+                        {{VATAmount |
+                        number : "1.2"}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"
+                        style="font-size: 12px;font-weight: 600;font-family: sans-serif;text-align: end;border-right: 1px solid #d1d1d1;">
+                        Total Value (AED)</td>
+                    <td colspan="3" style="font-size: 13px;font-weight: 600;font-family: sans-serif;text-align: end;">
+                        {{totalValue |
+                        number : "1.2"}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"
+                        style="font-size: 12px;font-weight: 600;font-family: sans-serif;text-align: end;border-right: 1px solid #d1d1d1;">
+                        Total Party Value
+                        (AED)</td>
+                    <td colspan="3" style="font-size: 12px;font-weight: 600;font-family: sans-serif;text-align: end;">
+                        {{totalPartyValue |
+                        number : "1.2"}}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div>
+            <p style="font-size: 11px;font-family: sans-serif;margin: 5px 0px;">Your Account has been Update With :</p>
+            <table style="width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="font-size: 13px;font-style: italic;font-family: sans-serif;padding: 5px 2px;"><b>AED {{totalPartyValue |
+                                number : "1.2"}} DEBITED</b></td>
+                        <td style="font-size: 13px;font-style: italic;font-family: sans-serif;padding: 5px 2px;">{{totalValueInText}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <p style="font-family: sans-serif;margin:8px 0px 2px; font-size: 12px; font-weight: 500;">
+                    Confirmed for & on behalf of</p>
+                <h5 style="font-family: sans-serif;font-size: 12px; margin: 0;">
+                    {{receiptDetailsForm.value.SalesmanName}}</h5>
+            </div>
+            <div>
+                <p style="font-family: sans-serif;margin:8px 0px 2px; font-size: 13px; font-weight: 500;">
+                    CORPORATE OFFICE</p>
+                <h5 style="font-family: sans-serif;font-size: 18px;">{{receiptDetailsForm.value.Branch}}</h5>
+            </div>
+        </div>
+        <div style="font-family: sans-serif;display: flex; justify-content: space-between;  position: fixed;
+            bottom: 0; width: 100%;">
+            <h4
+                style="font-family: sans-serif;text-transform: uppercase;padding: 5px; font-size: 13px; margin: 0; border-top: 2px solid #000;">
+                Reciever's Signature</h4>
+            <h4
+                style="font-family: sans-serif;text-transform: uppercase;padding: 5px; font-size: 13px; margin: 0; border-top: 2px solid #000;">
+                Check By</h4>
+            <h4
+                style="font-family: sans-serif;text-transform: uppercase;padding: 5px; font-size: 13px; margin: 0; border-top: 2px solid #000;">
+                Authorised Signature</h4>
+        </div>
+    </div>
+</section>

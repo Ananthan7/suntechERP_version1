@@ -15,6 +15,7 @@ export class ModalHeaderComponent implements OnInit {
   @Output() changeJobClick = new EventEmitter();
   @Output() auditTrailClick = new EventEmitter();
   @Output() postClick = new EventEmitter();
+  @Output() printClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
@@ -70,6 +71,9 @@ export class ModalHeaderComponent implements OnInit {
   }
   PostClicked() {
     this.postClick.emit();
+  }
+  PrintClicked() {
+    this.printClick.emit();
   }
   ExportClicked() {
   }

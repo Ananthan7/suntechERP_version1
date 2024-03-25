@@ -457,7 +457,7 @@ export class AddReceiptComponent implements OnInit {
     if (this.commonService.emptyToZero(form.Amount_FC) > 0 && form.CurrCode != this.commonService.compCurrency) {
       let currencyRate = this.commonService.emptyToZero(form.Amount_LC) / this.commonService.emptyToZero(form.Amount_FC)
       if (currencyRate > form.MAX_CONV_RATE) {
-        this.commonService.toastErrorByMsgId('Currency Rate cannot be more than ' + form.MAX_CONV_RATE)
+        // this.commonService.toastErrorByMsgId('Currency Rate cannot be more than ' + form.MAX_CONV_RATE)
         this.receiptEntryForm.controls.CurrRate.setValue(
           this.commonService.decimalQuantityFormat(form.CONV_RATE, 'RATE')
         )
@@ -549,6 +549,7 @@ export class AddReceiptComponent implements OnInit {
       this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
       this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
       flag = 1
+      this.setNarrationString() //narration add
       return
     }
     //calculating amount and spliting to each rows
@@ -583,6 +584,22 @@ export class AddReceiptComponent implements OnInit {
       }
     })
     this.receiptEntryForm.controls.Narration.setValue(narrationStr)
+  }
+  getPDCAccount(event:any) {
+    let param = {
+      strAccode: this.receiptEntryForm.value.AC_Code
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountMaster/GetPDCAccount',param).subscribe(
+      (result) => {
+        if (result.response) {
+          let data = result.response;
+          this.receiptEntryForm.controls.AC_Code.setValue(data.PDC_ISSUEAC)
+          this.receiptEntryForm.controls.AC_Description.setValue('POSTED DATED CHEQUES RECEIVED')
+        }
+      },
+      (err) => this.commonService.toastErrorByMsgId("Server Error")
+    );
+    this.subscriptions.push(Sub);
   }
   //currency Code Change
   currencyCodeChange(value: string) {

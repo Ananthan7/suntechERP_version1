@@ -167,7 +167,7 @@
                     </span>
                     <mat-form-field
                         style="width: 50%;margin-left: 4px;">
-                        <input matInput
+                        <input matInput (dateChange)="getPDCAccount($event)"
                             DateValidation [readonly]="isViewCheckDetail"
                             [matDatepicker]="RefDate"
                             formControlName="ChequeDate" />
