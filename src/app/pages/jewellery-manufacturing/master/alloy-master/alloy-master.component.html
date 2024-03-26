@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()"></modal-header>
+<modal-header [isViewDelete]="isDisabled" (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -25,7 +25,8 @@
                                             id="code"
                                              matInput
                                             (focusout)="prefixCodeValidate()"
-                                            formControlName="code" [readonly]="viewMode"/>
+                                            formControlName="code" [readonly]="viewMode"
+                                             />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode"
                                         [MasterSearchData]="codeData"
