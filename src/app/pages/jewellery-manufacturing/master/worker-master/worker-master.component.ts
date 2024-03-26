@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -34,19 +34,19 @@ export class WorkerMasterComponent implements OnInit {
   codeEnable: boolean = true;
 
 
-  @ViewChild('codeInput')
-  codeInput!: ElementRef;
+  // @ViewChild('codeInput')
+  // codeInput!: ElementRef;
 
-  focusOnWorkerCodeInput() {
-    if (this.codeInput && this.codeInput.nativeElement) {
-      this.codeInput.nativeElement.focus();
-      return;
-    }
-  }
+  // focusOnWorkerCodeInput() {
+  //   if (this.codeInput && this.workerMasterForm.value.WorkerCode ==='') {
+  //     this.codeInput.nativeElement.focus();
+  //     return;
+  //   }
+  // }
 
-  ngAfterViewInit(): void {
-    this.focusOnWorkerCodeInput();
-  }
+  // ngAfterViewInit(): void {
+  //   this.focusOnWorkerCodeInput();
+  // }
 
 
   accountMasterData: MasterSearchModel = {
@@ -107,6 +107,7 @@ export class WorkerMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private cdr: ChangeDetectorRef,
+    private renderer: Renderer2,
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.setInitialValues()
@@ -114,6 +115,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -524,10 +526,12 @@ export class WorkerMasterComponent implements OnInit {
           }).then(() => {
             // Clear the input value
             this.workerMasterForm.controls.WorkerCode.setValue('');
-            // Focus on the worker code input field with a short delay
-
-            this.codeInput.nativeElement.focus();
-            // Using a short delay of 0 milliseconds
+           
+            this.codeEnable = true;
+            setTimeout(() => {
+              this.renderer.selectRootElement('#code').focus();
+            },500);
+            
           });
         }
       }, err => {
