@@ -31,7 +31,7 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput id="labour_code" maxlength="15" [readonly]="editMode || viewMode"
+                  <input type="text" matInput id="code" maxlength="15" [readonly]="editMode || viewMode"
                     formControlName="labour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
@@ -139,7 +139,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode"  matInput CommaSeparatedNumber
+                  <input type="text" [readonly]="viewMode"  AmountDecimalInput matInput CommaSeparatedNumber
                      style="text-align: right;"
                     formControlName="cost_rate" />
                 </mat-form-field>
@@ -157,7 +157,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode" CommaSeparatedNumber matInput                  
+                  <input type="text" [readonly]="viewMode" AmountDecimalInput CommaSeparatedNumber matInput                  
                     (keypress)="salesChangesDia('selling_rate')" style="text-align: right;"
                     formControlName="selling_rate" />
                 </mat-form-field>
@@ -203,7 +203,7 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode" matInput (keypress)="onCtweighttto($event,'Ctwtto')"
+                  <input type="text" matInput [readonly]="viewMode" matInput (change)="onCtweighttto($event,'Ctwtto')"
                     MetalDecimalInput style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
@@ -308,7 +308,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode" NumberOnly SixDecimalInput matInput CommaSeparatedNumber
+                  <input matInput type="text" [readonly]="viewMode" NumberOnly AmountDecimalInput matInput CommaSeparatedNumber
                     formControlName="metalcost_rate" class="text-right" />
                 </mat-form-field>
               </div>
@@ -325,7 +325,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode" NumberOnly matInput CommaSeparatedNumber
+                  <input matInput type="text" AmountDecimalInput [readonly]="viewMode" NumberOnly matInput CommaSeparatedNumber
                     formControlName="metalselling_rate" (keypress)="salesChangesMetal('metalselling_rate')"
                     style="text-align: right;" />
                 </mat-form-field>
@@ -400,7 +400,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
                   <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" MetalDecimalInput
-                    style="text-align: right;" (keyup)="onweighttto($event,'wtfrom')"/>
+                    style="text-align: right;" (keyup)="onweightto($event,'wtfrom')"/>
                 </mat-form-field>
               </div>
             </div>
@@ -408,7 +408,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="text" [readonly]="viewMode" matInput (keyup)="onweighttto($event,'wtto')"
+                  <input matInput type="text" [readonly]="viewMode" matInput (change)="onweightto($event,'wtto')"
                     formControlName="wtTo" MetalDecimalInput style="text-align: right;" />
                 </mat-form-field>
               </div>

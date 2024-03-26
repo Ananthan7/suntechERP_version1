@@ -61,6 +61,8 @@ export class LabourChargeMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.renderer.selectRootElement('#code')?.focus();
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -97,7 +99,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   }
 
-  
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -105,7 +107,7 @@ export class LabourChargeMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
-  ) { }
+  ) {}
 
 
 
@@ -136,7 +138,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   });
- 
+
 
   metallabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -528,11 +530,6 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
     this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
     this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
-    //this.diamondlabourMasterForm.controls.cost_rate.setValue(this.content.COST_RATE);
-    // this.diamondlabourMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE);
-    // this.diamondlabourMasterForm.controls.selling.setValue(this.content.SELLING_PER);
-    // this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.content.CARATWT_FROM);
-    // this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.content.CARATWT_TO);
     this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
     this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
@@ -596,10 +593,10 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.LAST_COST_RATE));
 
-        this.metallabourMasterForm.controls.metalselling.setValue(
-          this.commonService.transformDecimalVB(
-            this.commonService.allbranchMaster?.BMQTYDECIMALS,
-            this.content.METALSTONE));
+    this.metallabourMasterForm.controls.metalselling.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.METALSTONE));
 
   }
 
@@ -724,51 +721,6 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
 
-
-  // salesChange(data: any) {
-  //   this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
-  //   this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
-
-  //   if (this.salesRate === '') {
-  //     this.diamondlabourMasterForm.controls.selling_rate.disable();
-  //     this.diamondlabourMasterForm.controls.selling.enable();
-  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
-  //   }
-  //   else if (this.salesRatePercentage === '') {
-  //     this.diamondlabourMasterForm.controls.selling.disable();
-  //     this.diamondlabourMasterForm.controls.selling_rate.enable();
-  //     this.diamondlabourMasterForm.controls.selling.setValue('');
-
-  //   }
-  //   else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
-  //     this.toastr.error('Enter values either Selling % or Selling Rate');
-  //     return;
-  //   }
-  // }
-
-  // salesChangeMetal() {
-  //   this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
-  //   this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
-
-  //   if (this.salesRateMetal === '') {
-  //     this.metallabourMasterForm.controls.metalselling_rate.disable();
-  //     this.metallabourMasterForm.controls.metalSelling.enable();
-  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
-  //   }
-  //   else if (this.salesRatePercentageMetal === '') {
-  //     this.metallabourMasterForm.controls.metalSelling.disable();
-  //     this.metallabourMasterForm.controls.metalselling_rate.enable();
-  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
-
-  //   }
-  //   else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
-  //     this.toastr.error('Enter values either Selling % or Selling Rate');
-  //     return;
-  //   }
-  // }
-
-
-
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -796,7 +748,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData =
-     {
+    {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code,
@@ -830,7 +782,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE":  this.metallabourMasterForm.value.metalselling_rate || "",
+      "METALSTONE": this.metallabourMasterForm.value.metalselling_rate || "",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
@@ -843,37 +795,37 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log('start')
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
-        console.log('Server Response:', result); 
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result?.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.diamondlabourMasterForm.reset()
-                this.metallabourMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
+      console.log('Server Response:', result);
+      if (result.response) {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result?.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.diamondlabourMasterForm.reset()
+              this.metallabourMasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         }
+      } else {
+        this.toastr.error('Not saved')
       }
-       , err => alert('save '+err)
-      )
+    }
+      , err => alert('save ' + err)
+    )
     this.subscriptions.push(Sub)
   }
 
   updatelabourChargeMaster() {
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
     let postData =
-     {
+    {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code,
@@ -907,7 +859,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE":  this.metallabourMasterForm.value.metalselling_rate || "",
+      "METALSTONE": this.metallabourMasterForm.value.metalselling_rate || "",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
@@ -937,7 +889,7 @@ export class LabourChargeMasterComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert('update '+err))
+      }, err => alert('update ' + err))
     this.subscriptions.push(Sub)
   }
 
@@ -1005,7 +957,7 @@ export class LabourChargeMasterComponent implements OnInit {
             } else {
               this.toastr.error('Not deleted')
             }
-          }, err => alert('delete '+err))
+          }, err => alert('delete ' + err))
         this.subscriptions.push(Sub)
       }
     });
@@ -1070,10 +1022,10 @@ export class LabourChargeMasterComponent implements OnInit {
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  onweighttto(event: any,data:String) {
+  onweightto(event: any, data: String) {
     let wtf = this.metallabourMasterForm.value.wtFrom;
-      let wtt = this.metallabourMasterForm.value.wtTo;
-    if(data != 'wtfrom'){
+    let wtt = this.metallabourMasterForm.value.wtTo;
+    if (data != 'wtfrom') {
       if (wtf > wtt) {
         Swal.fire({
           title: event.message || 'Weight From should be lesser than Weight To',
@@ -1081,16 +1033,17 @@ export class LabourChargeMasterComponent implements OnInit {
           icon: 'error',
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
-        })}
+        })
+      }
     }
-    
-    
+
+
   }
 
-  onCtweighttto(event: any,data:String) {
+  onCtweighttto(event: any, data: String) {
     let Ctwtf = this.diamondlabourMasterForm.value.ctWtFrom;
-      let Ctwtt = this.diamondlabourMasterForm.value.ctWtTo;
-    if(data != 'wtfrom'){
+    let Ctwtt = this.diamondlabourMasterForm.value.ctWtTo;
+    if (data != 'Ctwtfrom') {
       if (Ctwtf > Ctwtt) {
         Swal.fire({
           title: event.message || 'Weight From should be lesser than Weight To',
@@ -1098,10 +1051,11 @@ export class LabourChargeMasterComponent implements OnInit {
           icon: 'error',
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
-        })}
+        })
+      }
     }
-    
-    
+
+
   }
 
   // onCtweighttto(event: any) {
