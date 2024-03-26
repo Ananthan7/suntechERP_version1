@@ -18,16 +18,17 @@
                 </div>
             </div>
         </div>
-        <form>
+        <div>
             <div class="search-box">
                 <div class="position-relative">
-                    <input type="text"
+                    <input type="text" [(ngModel)]="SEARCH_VALUE" (keydown.enter)="getMasterGridData()"
+                        (focusout)="getMasterGridData()"
                         class="form-control rounded bg-light border-0"
                         placeholder="Search...">
                     <i class="mdi mdi-magnify search-icon"></i>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
     <!-- common data grid -->
     <dx-data-grid width="100%" #gridContainer id="gridContainer"

@@ -11,8 +11,10 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmitWithAttachment()" 
+    (attachmentClick)="attachmentClicked()"
     [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode && !disableSaveBtn"
     (cancelClick)="close()" (deleteClick)="deleteBtnClicked()"></modal-header>
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [Attachedfile]="Attachedfile"></attachment-upload>
 <auth-checker (authSubmit)="cancelScheme($event)"></auth-checker>
 <!-- content section -->
 <div class="row">

@@ -82,7 +82,7 @@
                 </span>
                 <ng-select [items]="payTypeArray"
                     style="width: 40%;margin-left: 15px;"
-                    bindLabel="ENGLISH"
+                    bindLabel="ENGLISH" [disabled]="viewMode"
                     bindValue="ENGLISH" (change)="paymentTypeChange($event)"
                     formControlName="Type">
                 </ng-select>
@@ -120,8 +120,8 @@
                     <input type="text" matInput readonly
                         formControlName="AC_Description" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="accountMasterData"
-                    *ngIf="receiptEntryForm.value.Type != 'Credit Card' && receiptEntryForm.value.Type != ''"
+                <master-search [MasterSearchData]="accountMasterData" 
+                    *ngIf="(receiptEntryForm.value.Type != 'Credit Card' && receiptEntryForm.value.Type != '')&&!viewMode"
                     (newRowClick)="selectedAcCode($event)">
                 </master-search>
             </div>
@@ -260,6 +260,13 @@
                     <input type="text" matInput
                         formControlName="Narration" />
                 </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
+                <span >Attachment
+                </span>
+                <input class="fileAttach pt-2"
+                    type="file" (change)="onFileChange($event)"
+                    [disabled]="viewMode" />
             </div>
         </div>
         <div class="row">

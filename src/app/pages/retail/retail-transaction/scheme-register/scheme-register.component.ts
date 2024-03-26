@@ -10,6 +10,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-scheme-register',
@@ -21,6 +22,7 @@ export class SchemeRegisterComponent implements OnInit {
   @ViewChild('add_scheme') add_scheme: any;
   @ViewChild('pos_customer_search') pos_customer_search: any;
   @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
   formdata = new FormData();
   isLoading: boolean = false
@@ -190,6 +192,9 @@ export class SchemeRegisterComponent implements OnInit {
  
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
+  }
+  attachmentClicked(){
+    this.attachmentUploadComponent?.showDialog()
   }
   SalesmanSelected(event: any) {
     this.schemeRegistrationForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
@@ -470,6 +475,9 @@ export class SchemeRegisterComponent implements OnInit {
   addScheme() {
     this.isViewSchemeMasterGrid = false
   }
+  uploadSubmited(file:any){
+    this.Attachedfile = file
+  }
   fetchSchemeWithCustCode() {
     if (this.viewMode == true || this.content?.FLAG == 'VIEW') return
     if (this.schemeRegistrationForm.value.SchemeId == '') return
@@ -490,7 +498,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
           this.schemeRegistrationForm.controls.Remarks.setValue(data.SCHEME_REMARKS)
-          this.schemeRegistrationForm.controls.Units.setValue(data.SCHEME_UNIT)
+          this.schemeRegistrationForm.controls.Units.setValue(1)
           // this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.START_DATE)
           // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCHEME_PERIOD)

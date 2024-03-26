@@ -16,6 +16,7 @@ export class ModalHeaderComponent implements OnInit {
   @Output() auditTrailClick = new EventEmitter();
   @Output() postClick = new EventEmitter();
   @Output() printClick = new EventEmitter();
+  @Output() attachmentClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
@@ -76,6 +77,9 @@ export class ModalHeaderComponent implements OnInit {
     this.printClick.emit();
   }
   ExportClicked() {
+  }
+  AttachmentClicked(){
+    this.attachmentClick.emit();
   }
   PreviewClicked() {
 

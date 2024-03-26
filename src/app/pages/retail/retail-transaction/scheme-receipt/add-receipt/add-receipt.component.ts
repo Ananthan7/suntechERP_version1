@@ -28,6 +28,7 @@ export class AddReceiptComponent implements OnInit {
   viewMode: boolean = false;
   disableAmountFC: boolean = false;
   dateFormat: any = this.commonService.allbranchMaster?.BDATEFORMAT
+  Attachedfile: any[] = [];
 
   /**serach modal data */
   branchMasterData: any = {
@@ -124,12 +125,13 @@ export class AddReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPaymentType('')
+    this.getPaymentType('Cash')
     this.getCreditCardMaster()
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
     if (this.content) {
       if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true
         this.loadSavedContent()
         return
       }
@@ -156,30 +158,33 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.AC_Code.setValue(data.CurrCode)
     this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
-    this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
+    this.receiptEntryForm.controls.CurrRate.setValue(
+      this.commonService.decimalQuantityFormat(data.CurrRate,'RATE'))
     this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
-    this.setFormControlAmount('Amount_FC',data.TOTAL_AMOUNTFC)
-    this.setFormControlAmount('Amount_LC',data.TOTAL_AMOUNTCC)
-    this.setFormControlAmount('Header_Amount',data.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('Amount_FC', data.TOTAL_AMOUNTFC)
+    this.setFormControlAmount('Amount_LC', data.TOTAL_AMOUNTCC)
+    this.setFormControlAmount('Header_Amount', data.TOTAL_AMOUNTCC)
     this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER || data.TRN_Per)
-    this.receiptEntryForm.controls.schemeID.setValue(data.SCH_CUSTOMER_ID)
-    this.receiptEntryForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
+    this.receiptEntryForm.controls.SchemeId.setValue(data.D_POSSCHEMEID)
+    this.receiptEntryForm.controls.SchemeCode.setValue(data.POSCUSTOMERCODE)
+    this.receiptEntryForm.controls.SchemeBalance.setValue(data.BALANCE_CC)
   }
   getSchemeDetailView() {
     let param = {
       SCH_CUSTOMER_CODE: this.content.POSCUSTOMERCODE || '',
-      SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID || '',
+      SCH_CUSTOMER_ID: this.content.D_POSSCHEMEID || '',
     }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeDetails', param)
       .subscribe((result) => {
         if (result.status == "Success") {
           this.gridDataSource = result.dynamicData[0]
-          this.gridDataSource.forEach((item:any)=>{
-            item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC,'AMOUNT')
-            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
-            item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'AMOUNT')
-            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+          this.gridDataSource.forEach((item: any) => {
+            item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC, 'AMOUNT')
+            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC, 'AMOUNT')
+            item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC, 'AMOUNT')
           })
+          this.receiptEntryForm.controls.InstallmentAmount.setValue(this.gridDataSource[0].PAY_AMOUNT_CC)
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
         } else {
           this.viewMode = true;
@@ -197,11 +202,11 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.gridDataSource = result.dynamicData[1]
-          this.gridDataSource.forEach((item:any)=>{
-            item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC,'AMOUNT')
-            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
-            item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'AMOUNT')
-            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+          this.gridDataSource.forEach((item: any) => {
+            item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC, 'AMOUNT')
+            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC, 'AMOUNT')
+            item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC, 'AMOUNT')
           })
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
           this.calculateGridAmount(1)
@@ -212,6 +217,15 @@ export class AddReceiptComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+  onFileChange(input: any) {
+    if (input.target.files.length > 0) {
+      const file: File = input.target.files[0];
+      for (let x = 0; x < input.target.files.length; x++) {
+        this.Attachedfile.push(file);
+        // this.formdata.append("Images[" + x + "].Image.File", file);
+      }
+    }
   }
   //selected Branch from search
   selectedBranch(data: any) {
@@ -286,7 +300,9 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('select all required details!');
       return;
     } else {
-      this.close(this.receiptEntryForm.value)
+      let Details = this.receiptEntryForm.value 
+      Details.Attachedfile = this.Attachedfile
+      this.close(Details)
     }
   }
 
@@ -585,21 +601,25 @@ export class AddReceiptComponent implements OnInit {
     })
     this.receiptEntryForm.controls.Narration.setValue(narrationStr)
   }
-  getPDCAccount(event:any) {
-    let param = {
-      strAccode: this.receiptEntryForm.value.AC_Code
+  getPDCAccount(event: any) {
+    const selectedDate = event.value;
+    const currentDate = new Date();
+    if (selectedDate > currentDate) {
+      let param = {
+        strAccode: this.receiptEntryForm.value.AC_Code
+      }
+      let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountMaster/GetPDCAccount', param).subscribe(
+        (result) => {
+          if (result.response) {
+            let data = result.response;
+            this.receiptEntryForm.controls.AC_Code.setValue(data.PDC_ISSUEAC)
+            this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
+          }
+        },
+        (err) => this.commonService.toastErrorByMsgId("Server Error")
+      );
+      this.subscriptions.push(Sub);
     }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountMaster/GetPDCAccount',param).subscribe(
-      (result) => {
-        if (result.response) {
-          let data = result.response;
-          this.receiptEntryForm.controls.AC_Code.setValue(data.PDC_ISSUEAC)
-          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
-        }
-      },
-      (err) => this.commonService.toastErrorByMsgId("Server Error")
-    );
-    this.subscriptions.push(Sub);
   }
   //currency Code Change
   currencyCodeChange(value: string) {
@@ -665,7 +685,7 @@ export class AddReceiptComponent implements OnInit {
       { ENGLISH: 'Others' },
       // { ENGLISH: 'VAT' },
     ]
-    this.receiptEntryForm.controls.Type.setValue('Cash')
+    this.receiptEntryForm.controls.Type.setValue(value)
     //     } else {
     //       this.commonService.toastErrorByMsgId('Receipt Mode not found')
     //     }

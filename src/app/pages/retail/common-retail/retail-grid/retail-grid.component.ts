@@ -23,6 +23,7 @@ export class RetailGridComponent implements OnInit {
   mainVocType: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
+  SEARCH_VALUE: string = ''
   //PAGINATION
   totalDataCount: number = 10000; // Total number of items hardcoded 10k will reassign on API call
   pageSize: number = 10; // Number of items per page
@@ -79,8 +80,6 @@ export class RetailGridComponent implements OnInit {
   // next data call
   nextPage() {
     if (this.pageSize <= this.totalDataCount) {
-      console.log('fored');
-
       this.pageIndex = this.pageIndex + 1;
       this.getMasterGridData();
     }
@@ -118,6 +117,10 @@ export class RetailGridComponent implements OnInit {
       this.mainVocType = data.MAIN_VOCTYPE || this.CommonService.getqueryParamMainVocType();
       this.tableName = data.HEADER_TABLE || this.CommonService.getqueryParamTable()
     } else {
+      if(this.SEARCH_VALUE != '') {
+        this.pageIndex = 1 
+        this.pageSize = 10
+      }
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
@@ -141,16 +144,17 @@ export class RetailGridComponent implements OnInit {
         "FILTER": {
           "YEARMONTH": this.CommonService.nullToString(this.yearSelected),
           "BRANCH_CODE": this.branchCode,
-          "VOCTYPE": this.CommonService.nullToString(this.vocType)
+          "VOCTYPE": this.CommonService.nullToString(this.vocType),
         },
         "TRANSACTION": {
           "VOCTYPE": this.CommonService.nullToString(this.vocType),
           "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+        },
+        "SEARCH": {
+          "SEARCH_VALUE": this.CommonService.nullToString(this.SEARCH_VALUE)
         }
       }
     }
-    console.log(params, ';params');
-
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();

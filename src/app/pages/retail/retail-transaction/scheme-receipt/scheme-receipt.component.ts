@@ -276,7 +276,7 @@ export class SchemeReceiptComponent implements OnInit {
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex
-    this.openNewReceiptDetails(this.content)
+    this.openNewReceiptDetails(this.dataToEditrow[0])
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -311,6 +311,7 @@ export class SchemeReceiptComponent implements OnInit {
             let result = resp.response;
             this.disablePostBtn = result.AUTOPOSTING == true ? true : false;
             this.receiptDetailsForm.controls.VocDate.setValue(result.VOCDATE);
+            this.dataToEditrow = result.Details;
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
@@ -419,16 +420,7 @@ export class SchemeReceiptComponent implements OnInit {
       }
     });
   }
-  onFileChange(input: any) {
-    if (input.target.files.length > 0) {
-      const file: File = input.target.files[0];
-      for (let x = 0; x < input.target.files.length; x++) {
-        this.Attachedfile.push(file);
-        this.receiptDetailsForm.controls.Attachedfile.setValue(this.Attachedfile);
-        // this.formdata.append("Images[" + x + "].Image.File", file);
-      }
-    }
-  }
+
 
   selectedSalesman(data: any) {
     this.receiptDetailsForm.controls.Salesman.setValue(data.SALESPERSON_CODE);
@@ -728,6 +720,8 @@ export class SchemeReceiptComponent implements OnInit {
     }
     if (data) {
       data.FLAG = 'VIEW'
+      data.POSCUSTOMERCODE = this.content.POSCUSTOMERCODE
+      data.BALANCE_CC = this.content.BALANCE_CC
       this.dataToEditrow = data;
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
@@ -1223,7 +1217,9 @@ export class SchemeReceiptComponent implements OnInit {
       if (item.TRN_Inv_Date != "")
         item.TRN_Inv_Date = item.TRN_Inv_Date.toISOString();
     });
-
+    if(data.Attachedfile){
+      this.Attachedfile = data.Attachedfile
+    }
     this.calculateTotalValues();
   }
   /**use: caluculate the total values for printing */
