@@ -159,7 +159,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Loss Qty :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="LOSS_WT" />
+                    <input type="text" matInput formControlName="LOSS_WT" CommaSeparatedNumber class="text-right"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -174,8 +174,8 @@
                 <label for="input" class="col-sm-2 col-form-label">Stone Pcs :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="STONE_PCS" NumberOnly/>
+                    <input type="text" matInput 
+                    class="text-right" formControlName="STONE_PCS" CommaSeparatedNumber/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Time Taken :</label>
@@ -425,7 +425,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="metalpcs" NumberOnly/>
+                    <input type="text" matInput formControlName="metalpcs" NumberOnly class="text-right"/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Gross Wt :</label>
@@ -437,7 +437,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Stone Wt :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;" >
-                    <input type="text" matInput  formControlName="stoneWt" ThreeDecimalInput class="text-right"/>
+                    <input type="text" matInput  formControlName="stoneWt" CommaSeparatedNumber class="text-right"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -451,7 +451,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Net Wt :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="netWt" ThreeDecimalInput class="text-right"/>
+                    <input type="text" matInput formControlName="netWt" CommaSeparatedNumber class="text-right"/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Chargable Wt :</label>
@@ -471,7 +471,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Pure Wt :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="PUREWT" ThreeDecimalInput class="text-right"/>
+                    <input type="text" matInput formControlName="PUREWT" CommaSeparatedNumber class="text-right"/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Purity Diff :</label>
@@ -597,12 +597,12 @@
                 <div class="row mb-1">
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>

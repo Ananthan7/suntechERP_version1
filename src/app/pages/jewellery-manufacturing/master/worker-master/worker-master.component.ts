@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-worker-master',
@@ -30,16 +31,22 @@ export class WorkerMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   readonlyMode: boolean = false;
   editMode: boolean = false;
-  codeEnable :  boolean = true;
+  codeEnable: boolean = true;
 
 
-  @ViewChild('codeInput')
-  codeInput!: ElementRef;
+  // @ViewChild('codeInput')
+  // codeInput!: ElementRef;
 
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
-  }
+  // focusOnWorkerCodeInput() {
+  //   if (this.codeInput && this.workerMasterForm.value.WorkerCode ==='') {
+  //     this.codeInput.nativeElement.focus();
+  //     return;
+  //   }
+  // }
 
+  // ngAfterViewInit(): void {
+  //   this.focusOnWorkerCodeInput();
+  // }
 
 
   accountMasterData: MasterSearchModel = {
@@ -99,12 +106,16 @@ export class WorkerMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2,
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.setInitialValues()
+
   }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -129,14 +140,14 @@ export class WorkerMasterComponent implements OnInit {
     return false
   }
 
-  codeEnabled(){
+  codeEnabled() {
     if (this.workerMasterForm.value.WorkerCode == '') {
-    this.codeEnable = true;
+      this.codeEnable = true;
     }
-    else{
+    else {
       this.codeEnable = false;
     }
-   
+
   }
 
   setInitialValues() {
@@ -214,21 +225,21 @@ export class WorkerMasterComponent implements OnInit {
       return
     }
 
-    if (this.workerMasterForm.value.WorkerCode == '' && this.workerMasterForm.invalid ) {
+    if (this.workerMasterForm.value.WorkerCode == '' && this.workerMasterForm.invalid) {
       this.toastr.error("Worker Code cannot be empty")
       return
     }
-    else if (this.workerMasterForm.value.WorkerDESCRIPTION == '' && this.workerMasterForm.invalid ) {
+    else if (this.workerMasterForm.value.WorkerDESCRIPTION == '' && this.workerMasterForm.invalid) {
       this.toastr.error("Description cannot be empty")
       return
     }
-    
+
     // if(this.workerMasterForm.invalid && this.selectedProcessArr) {
     //   this.toastr.error('select all required fields & Process')
     //   return
     // }
 
-   
+
     this.selectedProcessArr.forEach((item: any, i: any) => {
       item.SRNO = i + 1;
     });
@@ -458,12 +469,53 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**use: to check worker exists in db */
+  // /**use: to check worker exists in db */
+  // checkWorkerExists(event: any) {
+  //   if (this.content && this.content.FLAG == 'EDIT') { } else {
+  //     if (event.target.value == '' || this.viewMode == true) return
+  //     let API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value
+  //     let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //       .subscribe((result) => {
+  //         if (result.checkifExists) {
+  //           Swal.fire({
+  //             title: '',
+  //             text: result.message || 'Worker Already Exists!',
+  //             icon: 'warning',
+  //             confirmButtonColor: '#336699',
+  //             confirmButtonText: 'Ok'
+  //           }).then((result: any) => {
+  //             if (result.value) {
+
+
+  //             }
+  //           });
+  //           this.focusOnWorkerCodeInput();
+  //           this.workerMasterForm.controls.WorkerCode.setValue('');
+  //           //  this.codeInput.nativeElement.focus();
+
+  //         }
+  //       }, err => {
+  //         this.workerMasterForm.reset()
+  //       })
+
+  //     this.subscriptions.push(Sub)
+  //   }
+  // }
+
+
+
+
   checkWorkerExists(event: any) {
-    if (this.content && this.content.FLAG == 'EDIT') {}else{
-    if (event.target.value == '' || this.viewMode == true ) return
-    let API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+    const API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.checkifExists) {
           Swal.fire({
@@ -472,20 +524,24 @@ export class WorkerMasterComponent implements OnInit {
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-            }
+          }).then(() => {
+            // Clear the input value
+            this.workerMasterForm.controls.WorkerCode.setValue('');
+           
+            this.codeEnable = true;
+            setTimeout(() => {
+              this.renderer.selectRootElement('#code').focus();
+            },500);
+            
           });
-         this.workerMasterForm.controls.WorkerCode.setValue('')
-          this.codeInput.nativeElement.focus();
         }
       }, err => {
-        this.workerMasterForm.reset()
-      })
-    
-    this.subscriptions.push(Sub)
+        this.workerMasterForm.reset();
+      });
+
+    this.subscriptions.push(sub);
   }
-  }
+
 
   /**use: to check worker exists in db */
   workerCodeChange(event: any, flag: any) {

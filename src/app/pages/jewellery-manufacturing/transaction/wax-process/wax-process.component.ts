@@ -433,4 +433,6 @@ export class WaxProcessComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
+
 }
+

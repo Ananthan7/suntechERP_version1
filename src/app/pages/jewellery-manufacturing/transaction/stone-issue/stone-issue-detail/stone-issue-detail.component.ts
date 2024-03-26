@@ -26,6 +26,8 @@ export class StoneIssueDetailComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
+  jobNumberDetailData: any[] = [];
+  viewMode: boolean = false;
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -149,7 +151,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     // this.srNo= srNo;
     console.log(this.content);
-    this.serialNo = this.content;
+    
     
   }
 
@@ -178,6 +180,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subJobNo=`${e.job_number}/${this.serialNo}`;
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.subJobNo);
     this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
+    this.jobNumberValidate({ target: { value: e.job_number } })
     // this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
     // this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
   }
@@ -275,7 +278,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "VOCDATE": "2023-10-19T06:55:16.030Z",
       "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobNumber,
       "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber,
+      "JOB_SO_NUMBER": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.subjobnumber),
       "UNQ_JOB_ID": "",
       "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobDes,
       "BRANCH_CODE": this.branchCode,
@@ -289,14 +292,14 @@ export class StoneIssueDetailComponent implements OnInit {
       "CLARITY": this.stoneissuedetailsFrom.value.clarity,
       "SIZE": this.stoneissuedetailsFrom.value.size,
       "JOB_PCS": 0,
-      "PCS": this.stoneissuedetailsFrom.value.pieces,
+      "PCS": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.pieces),
       "GROSS_WT": 0,
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "RATEFC": 0,
       "RATELC": 0,
-      "AMOUNTFC": this.stoneissuedetailsFrom.value.unitrate,
-      "AMOUNTLC": this.stoneissuedetailsFrom.value.amount,
+      "AMOUNTFC": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.unitrate),
+      "AMOUNTLC": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.amount),
       "PROCESS_CODE": this.stoneissuedetailsFrom.value.process,
       "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname,
       "WORKER_CODE": this.stoneissuedetailsFrom.value.worker,
@@ -314,12 +317,12 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
       "CONSIGNMENT": this.onchangeCheckBox(this.stoneissuedetailsFrom.value.consignment),
-      "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
+      "SIEVE_SET": this.comService.nullToString(this.stoneissuedetailsFrom.value.SIEVE_SET),
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
+      "D_REMARKS": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.remarks),
       "SIEVE_DESC": this.stoneissuedetailsFrom.value.sieveset,
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt,
+      "OTHER_ATTR": this.comService.nullToString(this.stoneissuedetailsFrom.value.otheratt),
     }
     // if (postData.reopen=true) {
     //   this.closed(postData);
@@ -519,6 +522,87 @@ export class StoneIssueDetailComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.stoneissuedetailsFrom.value.subjobnumber,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
+  
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        console.log(postData, 'uuu')
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.stoneissuedetailsFrom.controls.process.setValue(data[0].PROCESS)
+          this.stoneissuedetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
+          this.stoneissuedetailsFrom.controls.worker.setValue(data[0].WORKER)
+          this.stoneissuedetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.stoneissuedetailsFrom.controls.stock.setValue(data[0].STOCK_CODE)
+          this.stoneissuedetailsFrom.controls.stockDes.setValue(data[0].STOCK_DESCRIPTION)
+          this.stoneissuedetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+          // this.stoneissuedetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
+          // this.stoneissuedetailsFrom.controls.pieces.setValue(data[0].pieces)
+          // this.stoneissuedetailsFrom.controls.size.setValue(data[0].SIZE)
+          // this.stoneissuedetailsFrom.controls.sieve.setValue(data[0].SIEVE)
+          // this.stoneissuedetailsFrom.controls.carat.setValue(data[0].KARAT_CODE)
+          // this.stoneissuedetailsFrom.controls.sieveDesc.setValue(data[0].COLOR)
+          // this.stoneissuedetailsFrom.controls.pieces.setValue(data[0].unitrate)
+          // this.stoneissuedetailsFrom.controls.shape.setValue(data[0].SHAPE)
+          // this.stoneissuedetailsFrom.controls.stockbal.setValue(data[0].SIEVE_SET)
+         
+  
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
+  
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            console.log(data, 'pppp')
+            this.jobNumberDetailData = data
+            this.stoneissuedetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
+            this.stoneissuedetailsFrom.controls.subjobDes.setValue(data[0].JOB_DESCRIPTION)
+  
+  
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
 }

@@ -75,14 +75,14 @@
               <label for="input" class="col-sm-3 col-form-label">Base Currency :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="basecurrency" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="basecurrency" [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
                   (newRowClick)="baseCurrencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="basecurrencyrate" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="basecurrencyrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
                 </mat-form-field>
               </div>
             </div>
@@ -97,7 +97,7 @@
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="currencyrate" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="currencyrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
                 </mat-form-field>
               </div>
             </div>
