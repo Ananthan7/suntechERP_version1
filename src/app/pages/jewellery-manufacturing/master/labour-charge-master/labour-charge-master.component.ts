@@ -107,7 +107,7 @@ export class LabourChargeMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
 
 

@@ -139,9 +139,8 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode"  AmountDecimalInput matInput CommaSeparatedNumber
-                     style="text-align: right;"
-                    formControlName="cost_rate" />
+                  <input type="text" [readonly]="viewMode" AmountDecimalInput matInput CommaSeparatedNumber
+                    style="text-align: right;" formControlName="cost_rate" />
                 </mat-form-field>
               </div>
             </div>
@@ -157,7 +156,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode" AmountDecimalInput CommaSeparatedNumber matInput                  
+                  <input type="text" [readonly]="viewMode" AmountDecimalInput CommaSeparatedNumber matInput
                     (keypress)="salesChangesDia('selling_rate')" style="text-align: right;"
                     formControlName="selling_rate" />
                 </mat-form-field>
@@ -183,7 +182,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput style="text-align: right;"
-                    MetalDecimalInput formControlName="ctWtFrom"   (keypress)="onCtweighttto($event,'Ctwtfrom')"/>
+                    MetalDecimalInput formControlName="ctWtFrom" (keypress)="onCtweighttto($event,'Ctwtfrom')" />
                 </mat-form-field>
               </div>
 
@@ -308,8 +307,8 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode" NumberOnly AmountDecimalInput matInput CommaSeparatedNumber
-                    formControlName="metalcost_rate" class="text-right" />
+                  <input matInput type="text" [readonly]="viewMode" NumberOnly AmountDecimalInput matInput
+                    CommaSeparatedNumber formControlName="metalcost_rate" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -325,9 +324,9 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" AmountDecimalInput [readonly]="viewMode" NumberOnly matInput CommaSeparatedNumber
-                    formControlName="metalselling_rate" (keypress)="salesChangesMetal('metalselling_rate')"
-                    style="text-align: right;" />
+                  <input matInput type="text" AmountDecimalInput [readonly]="viewMode" NumberOnly matInput
+                    CommaSeparatedNumber formControlName="metalselling_rate"
+                    (keypress)="salesChangesMetal('metalselling_rate')" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -390,8 +389,8 @@
               <label for="input" class="col-sm-2 col-form-label">Purity :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode" formControlName="purity"
-                    style="text-align: right;" SixDecimalInput>
+                  <input matInput type="text" [readonly]="viewMode" formControlName="purity" style="text-align: right;"
+                    SixDecimalInput>
                 </mat-form-field>
               </div>
             </div>
@@ -400,7 +399,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
                   <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" MetalDecimalInput
-                    style="text-align: right;" (keyup)="onweightto($event,'wtfrom')"/>
+                    style="text-align: right;" (keyup)="onweightto($event,'wtfrom')" />
                 </mat-form-field>
               </div>
             </div>
