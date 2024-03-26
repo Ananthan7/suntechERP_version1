@@ -159,6 +159,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   setFormValues() {
     if (!this.content) return
+    this.buttonField = false;
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
