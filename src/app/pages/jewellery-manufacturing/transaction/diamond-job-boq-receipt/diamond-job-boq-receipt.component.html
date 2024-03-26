@@ -82,25 +82,28 @@
                                 <mat-form-field style="width: 80%">
                                     <input type="text" matInput formControlName="currency" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyDataSelected($event)">
+                                <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="currencyDataSelected($event)">
                                 </master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput  formControlName="currencyDesc"  style="text-align: right;" />
+                                    <input type="text" matInput  formControlName="currencyDesc" SixDecimalInput class="text-right" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Base Currency</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="baseCurrency" />
+                                <mat-form-field style="width: 80%">
+                                    <input type="text" matInput formControlName="baseCurrency"/>
                                 </mat-form-field>
+                                    <master-search [MasterSearchData]="CurrencyCodeData"
+                                    (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
+                               
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="baseCurrencyDesc"  style="text-align: right;"  />
+                                    <input type="text" matInput formControlName="baseCurrencyDesc"   SixDecimalInput class="text-right"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -163,7 +166,7 @@
                                                     Wt</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="number"  matInput formControlName="grossWt"  style="text-align: right;" />
+                                                        <input type="text"  matInput formControlName="grossWt"  style="text-align: right;" ThreeDecimalInput/>
                                                     </mat-form-field>
                                                 </div>
                                             </div>
@@ -172,7 +175,7 @@
                                                     class="col-sm-6 col-form-label pt-4">Job Number</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="jobNumber" />
+                                                        <input type="text" matInput formControlName="jobNumber" class="text-right" NumberOnly/>
                                                     </mat-form-field>
                                             
                                                 <master-search>
@@ -242,10 +245,9 @@
                                                     class="col-sm-6 col-form-label pt-3">Wastage Wt</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="wastageWt" />
+                                                        <input type="text" matInput formControlName="wastageWt" MetalDecimalInput class="text-right"/>
                                                     </mat-form-field>
-                                                    <master-search>
-                                                    </master-search>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="row justify-content-end">

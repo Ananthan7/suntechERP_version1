@@ -72,7 +72,7 @@
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%">
-                      <input type="text" matInput formControlName="currencyrate"  style="text-align: right;" readonly />
+                      <input type="text" matInput formControlName="currencyrate"  style="text-align: right;" readonly SixDecimalInput/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="CurrencyCodeSelected($event)">
                     </master-search>
@@ -146,11 +146,11 @@
                       <dxi-total-item column="Amount"> </dxi-total-item>
                     </dxo-summary>
                   </dx-data-grid> -->
-                <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData" keyExpr="ID" [showBorders]="true" >
+                <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData"  [showBorders]="true" >
                   <!-- <dxo-selection mode="single"></dxo-selection> -->
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
+                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing> -->
                     <dxo-selection mode="multiple"></dxo-selection>
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
                   <dxi-column dataField="SRNO" dataType="SR_NO"></dxi-column>

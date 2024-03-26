@@ -65,7 +65,17 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   //   WHERECONDITION: "WORKER_CODE<> ''",
   //   VIEW_INPUT: true,
   //   VIEW_TABLE: true,
-  // }
+   rateTypeMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'RATE TYPE MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
  
   CurrencyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -197,7 +207,17 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
+  rateTypeSelected(event: any) {
+    this.diamondJobBoqIssue.controls.metalRateType.setValue(event.RATE_TYPE)
+    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.RATE_TYPE == event.RATE_TYPE)
 
+    data.forEach((element: any) => {
+      if (element.RATE_TYPE == event.RATE_TYPE) {
+        let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
+        this.diamondJobBoqIssue.controls.metalRateNo.setValue(WHOLESALE_RATE)
+      }
+    });
+  }
 
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;

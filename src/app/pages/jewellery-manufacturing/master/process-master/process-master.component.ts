@@ -316,6 +316,11 @@ export class ProcessMasterComponent implements OnInit {
   private setInitialValues() {
     this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.processMasterForm.controls.loss_standard.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.processMasterForm.controls.loss_min.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.processMasterForm.controls.loss_max.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.processMasterForm.controls.standard_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.processMasterForm.controls.min_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
 
