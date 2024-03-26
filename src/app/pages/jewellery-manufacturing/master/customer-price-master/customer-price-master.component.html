@@ -196,7 +196,7 @@
         <div class="col-md-12 pt-3">
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="Stone Pricing">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatastone" [showRowLines]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatastone" [allowColumnResizing]="true" [showRowLines]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -208,7 +208,7 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatalabour" [height]="200" [showRowLines]="true">
+              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatalabour" [height]="200" [allowColumnResizing]="true" [showRowLines]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -220,7 +220,7 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Design Wise Labour">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [height]="250" [showBorders]="true"  [showRowLines]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [height]="250" [showBorders]="true" [allowColumnResizing]="true"  [showRowLines]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing> -->

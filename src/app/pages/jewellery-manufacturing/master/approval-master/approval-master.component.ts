@@ -1,4 +1,4 @@
-import { Input, OnInit, Component, ViewChild, ElementRef } from '@angular/core';
+import { Input, OnInit, Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -35,12 +35,14 @@ export class ApprovalMasterComponent implements OnInit {
 
 
 
-  @ViewChild('codeInput')
-  codeInput!: ElementRef;
+  // @ViewChild('codeInput')
+  // codeInput!: ElementRef;
 
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
-  }
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
+  // }
+
+
 
 
 
@@ -77,6 +79,7 @@ export class ApprovalMasterComponent implements OnInit {
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
@@ -84,6 +87,8 @@ export class ApprovalMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+
     if (this.content.FLAG == 'VIEW') {
       this.userCodeEnable = true;
       this.isDisabled = true;
@@ -109,31 +114,47 @@ export class ApprovalMasterComponent implements OnInit {
         }
       });
   }
-  checkCodeExists(event: any) {
-    if (this.content && this.content.FLAG == 'EDIT') {}else{
-    if (event.target.value == '' || this.viewMode == true) return
-    let API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.checkifExists) {
-          Swal.fire({
-            title: '',
-            text: result.message || 'Approval Code Already Exists!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-            }
-          });
-          //  this.approvalMasterForm.controls.code.setValue('')
-        }
-      }, err => {
-        //  this.approvalMasterForm.controls.code.setValue('')
-      })
-    this.subscriptions.push(Sub)
+
+
+
+checkCodeExists(event: any) {
+  if (this.content && this.content.FLAG == 'EDIT') {
+    return; // Exit the function if in edit mode
   }
+
+  if (event.target.value === '' || this.viewMode) {
+    return; // Exit the function if the input is empty or in view mode
+  }
+
+  const API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value;
+  const sub = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      if (result.checkifExists) {
+        Swal.fire({
+          title: '',
+          text: result.message || 'Approval Already Exists!',
+          icon: 'warning',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          // Clear the input value
+          this.approvalMasterForm.controls.code.setValue('');
+         
+          setTimeout(() => {
+            this.renderer.selectRootElement('#code').focus();
+          },500);
+          
+        });
+      }
+    }, err => {
+      this.approvalMasterForm.reset();
+    });
+
+  this.subscriptions.push(sub);
 }
+
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
