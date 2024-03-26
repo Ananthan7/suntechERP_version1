@@ -420,14 +420,16 @@
               value="{{ currentDate }}"
               placeholder="DD/MM/YYYY"
               [max]="currentDate"
-              [readonly]="viewOnly"
+              [readonly]="viewOnly || this.ordered_items.length > 0 "
               (dateChange)="getFinancialYear()"
             />
             <mat-datepicker-toggle
               matSuffix
               [for]="vocDate"
+              [disabled]="viewOnly || this.ordered_items.length > 0 "
             ></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+            <mat-datepicker [startAt]="currentDate" #vocDate
+            ></mat-datepicker>
             <mat-error
               *ngIf="vocDataForm.controls.vocdate.hasError('required')"
             >
@@ -827,21 +829,21 @@
                             alignment="center"
                           >
                           </dxi-column>
-                          <dxi-column
-                            dataField="weight"
-                            caption="Weight"
-                            [width]="100"
-                            [format]="weightDecimalFormat"
-                            [allowEditing]="false"
-                          >
-                          </dxi-column>
+                        
                           <dxi-column
                             dataField="pcs"
                             caption="Pcs"
                             [width]="100"
                             [allowEditing]="false"
                           ></dxi-column>
-
+                          <dxi-column
+                          dataField="weight"
+                          caption="Weight"
+                          [width]="100"
+                          [format]="weightDecimalFormat"
+                          [allowEditing]="false"
+                        >
+                        </dxi-column>
                           <dxi-column
                             dataField="metal_rate"
                             caption="Metal Value"
@@ -888,21 +890,24 @@
                               [customizeText]="customizeDate"
                             >
                             </dxi-total-item>
-                            <dxi-total-item
-                              column="weight"
-                              summaryType="sum"
-                              caption="Weight"
-                              [valueFormat]="weightDecimalFormat"
-                              displayFormat="Wt: {0}"
-                            >
-                              <!-- [customizeText]="customizeWeight" -->
-                            </dxi-total-item>
+                         
                             <dxi-total-item
                               column="pcs"
                               summaryType="sum"
                               [customizeText]="customizeQty"
                             >
                             </dxi-total-item>
+                          
+                            <dxi-total-item
+                            column="weight"
+                            summaryType="sum"
+                            caption="Weight"
+                            [valueFormat]="weightDecimalFormat"
+                            displayFormat="Wt: {0}"
+                          >
+                            <!-- [customizeText]="customizeWeight" -->
+                          </dxi-total-item>
+
                             <dxi-total-item
                               column="total_amount"
                               summaryType="sum"
@@ -1002,21 +1007,23 @@
                             [width]="200"
                             [allowEditing]="false"
                           ></dxi-column>
-                          <dxi-column
-                            dataField="weight"
-                            caption="Weight"
-                            [width]="100"
-                            [allowEditing]="false"
-                            displayFormat="Wt: {0}"
-                            [format]="weightDecimalFormat"
-                          >
-                          </dxi-column>
+                        
                           <dxi-column
                             dataField="pcs"
                             caption="Pcs"
                             [width]="100"
                             [allowEditing]="false"
                           ></dxi-column>
+                          <dxi-column
+                          dataField="weight"
+                          caption="Weight"
+                          [width]="100"
+                          [allowEditing]="false"
+                          displayFormat="Wt: {0}"
+                          [format]="weightDecimalFormat"
+                        >
+                        </dxi-column>
+
                           <dxi-column
                             dataField="mkg_amount"
                             alignment="right"
@@ -1051,21 +1058,24 @@
                               [customizeText]="customizeDate"
                             >
                             </dxi-total-item>
-                            <dxi-total-item
-                              column="weight"
-                              summaryType="sum"
-                              caption="Total Wt"
-                              [valueFormat]="weightDecimalFormat"
-                              displayFormat="Wt: {0}"
-                            >
-                              <!-- [customizeText]="customizeWeight" -->
-                            </dxi-total-item>
+                          
                             <dxi-total-item
                               column="pcs"
                               summaryType="sum"
                               [customizeText]="customizeQty"
                             >
                             </dxi-total-item>
+
+                            <dxi-total-item
+                            column="weight"
+                            summaryType="sum"
+                            caption="Total Wt"
+                            [valueFormat]="weightDecimalFormat"
+                            displayFormat="Wt: {0}"
+                          >
+                            <!-- [customizeText]="customizeWeight" -->
+                          </dxi-total-item>
+
                             <dxi-total-item
                               column="mkg_amount"
                               summaryType="sum"
@@ -1157,6 +1167,14 @@
                             [width]="200"
                             [allowEditing]="false"
                           ></dxi-column>
+                          
+                          <dxi-column
+                            dataField="pcs"
+                            caption="Pcs"
+                            [width]="100"
+                            [allowEditing]="false"
+                          ></dxi-column>
+
                           <dxi-column
                             dataField="weight"
                             caption="Weight"
@@ -1165,12 +1183,7 @@
                             [format]="weightDecimalFormat"
                           >
                           </dxi-column>
-                          <dxi-column
-                            dataField="pcs"
-                            caption="Pcs"
-                            [width]="100"
-                            [allowEditing]="false"
-                          ></dxi-column>
+
                           <dxi-column
                             dataField="net_amount"
                             alignment="right"
@@ -1195,21 +1208,24 @@
                               [customizeText]="customizeDate"
                             >
                             </dxi-total-item>
-                            <dxi-total-item
-                              column="weight"
-                              summaryType="sum"
-                              caption="Total Wt"
-                              [valueFormat]="weightDecimalFormat"
-                              displayFormat="Wt: {0}"
-                            >
-                              <!-- [customizeText]="customizeWeight" -->
-                            </dxi-total-item>
+                           
                             <dxi-total-item
                               column="pcs"
                               summaryType="sum"
                               [customizeText]="customizeQty"
                             >
                             </dxi-total-item>
+
+                            <dxi-total-item
+                            column="weight"
+                            summaryType="sum"
+                            caption="Total Wt"
+                            [valueFormat]="weightDecimalFormat"
+                            displayFormat="Wt: {0}"
+                          >
+                            <!-- [customizeText]="customizeWeight" -->
+                          </dxi-total-item>
+
                             <dxi-total-item
                               column="net_amount"
                               summaryType="sum"
@@ -4544,8 +4560,8 @@
                           >Tag Details</label
                         >
                         <textarea
-                          class="form-control"
-                          style="height: 140px"
+                          class="form-control "
+                          style="height: 140px; border: 2px solid #bebebe !important;"
                           formControllName="fcn_tab_details"
                           [readonly]="viewOnly"
                         ></textarea>
@@ -4580,7 +4596,7 @@
                           (focus)="
                             setValToLocalStorage($event, 'fcn_li_gross_amount')
                           "
-                          AmountDecimalInput
+                          
                         />
                         <mat-error
                           *ngIf="
