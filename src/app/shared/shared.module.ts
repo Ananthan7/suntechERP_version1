@@ -76,6 +76,7 @@ import { FormatThreeDecimalDirective } from './directives/format-three-decimal.d
 import { CommaSeparatedNumberDirective } from './directives/comma-separated-number.directive';
 import { AuditTrailComponent } from './common/audit-trail/audit-trail.component';
 import { AuthCheckerComponent } from './common/auth-checker/auth-checker.component';
+import { AttachmentUploadComponent } from './common/attachment-upload/attachment-upload.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -108,6 +109,7 @@ import { AuthCheckerComponent } from './common/auth-checker/auth-checker.compone
     CommaSeparatedNumberDirective,
     AuditTrailComponent,
     AuthCheckerComponent,
+    AttachmentUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -169,6 +171,7 @@ import { AuthCheckerComponent } from './common/auth-checker/auth-checker.compone
     MenuButtonsComponent,
     DurationPickerComponent,
     AuthCheckerComponent,
+    AttachmentUploadComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     CamelCasePipe,

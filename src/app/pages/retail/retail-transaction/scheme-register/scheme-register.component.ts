@@ -25,6 +25,7 @@ export class SchemeRegisterComponent implements OnInit {
   formdata = new FormData();
   isLoading: boolean = false
   viewMode: boolean = false;
+  usedSchemeMode: boolean = false;
   editMode: boolean = false;
   editUNITS: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
@@ -170,12 +171,15 @@ export class SchemeRegisterComponent implements OnInit {
   ngOnInit(): void {
     if (this.content?.FLAG == 'VIEW') {
       this.viewMode = true
+      this.usedSchemeMode = true;
     }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editMode = true
       this.disableCancelBtn = false
     }
-
+    // if (this.content && this.content.FLAG == 'DELETE') {
+    //  this.authCheckerComponent?.openAuthModal()
+    // }
     this.schemeRegistrationForm.controls.SchemeType.setValue('AMOUNT');
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.DateOfJoining.setValue(this.currentDate)
@@ -236,11 +240,18 @@ export class SchemeRegisterComponent implements OnInit {
             if (schemeReceipts.length == 0) {
               this.viewDeleteBtn = true;
               this.disableSaveBtn = true;
+              this.usedSchemeMode = false;
               if (this.content.FLAG == 'EDIT') this.viewMode = false;
               if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
             } else {
               this.viewDeleteBtn = false;
               this.viewMode = true;
+              if (this.content.FLAG == 'DELETE'){
+                this.commonService.toastErrorByMsgId('Scheme is in use!, cannot delete')
+              }else{
+                this.disableSaveBtn = true;
+                this.usedSchemeMode = false;
+              }
             }
           }
           if(this.content?.FLAG == 'VIEW'){
@@ -249,6 +260,7 @@ export class SchemeRegisterComponent implements OnInit {
           if (data.SCH_CANCEL) {
             this.viewMode = true
             this.disableSaveBtn = false;
+            this.usedSchemeMode = true;
             this.commonService.toastErrorByMsgId('Scheme is canceled')
           }
 
@@ -521,6 +533,14 @@ export class SchemeRegisterComponent implements OnInit {
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
   processSchemeAPI() {
+    if(this.schemeRegistrationForm.value.Code == ''){
+      this.commonService.toastErrorByMsgId('Customer code required')
+      return
+    }
+    if(this.schemeRegistrationForm.value.Salesman == ''){
+      this.commonService.toastErrorByMsgId('Salesman required')
+      return
+    }
     let formValue = this.schemeRegistrationForm.value
     let joindate = this.commonService.formatYYMMDD(new Date(formValue.DateOfJoining))
     let params = {
@@ -536,11 +556,10 @@ export class SchemeRegisterComponent implements OnInit {
         if (resp) {
           this.viewMode = true;
           this.disableSaveBtn = true;
+          this.usedSchemeMode = true;
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item: any) => {
-            // item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch
-            // item.RCVD_VOCTYPE = this.schemeRegistrationForm.value.VOCTYPE
-            // item.RCVD_YEARMONTH = this.commonService.yearSelected
+            item.PAY_AMOUNT_CC = this.schemeRegistrationForm.value.InstallmentAmount
             item.RCVD_VOCNO = item.RCVD_VOCNO.toString()
             if (item.REMAINDER_SEND.toString() == '0') {
               item.REMAINDER_SEND = false

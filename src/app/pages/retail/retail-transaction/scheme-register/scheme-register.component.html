@@ -284,16 +284,16 @@
                         <label style="width: 20%;">Salesman* :
                         </label>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput [readonly]="viewMode && !disableSaveBtn"
+                            <input type="text" matInput [readonly]="usedSchemeMode"
                                 formControlName="Salesman" 
                                 (focusout)="salesmanChange($event)" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode || disableSaveBtn"
+                        <master-search *ngIf="!usedSchemeMode"
                             [MasterSearchData]="SalesmanData"
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput readonly="viewMode"
+                            <input type="text" matInput readonly
                                 formControlName="SalesmanName" />
                         </mat-form-field>
                     </div>
@@ -312,7 +312,7 @@
                         <label style="width: 20%;">Remarks:
                         </label>
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput [readonly]="usedSchemeMode"
                                 formControlName="Remarks" />
                         </mat-form-field>
                     </div>
