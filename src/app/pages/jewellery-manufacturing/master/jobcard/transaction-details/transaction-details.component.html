@@ -18,7 +18,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1">Issue</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDataProcess" >
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [allowColumnResizing]="true" [dataSource]="tableDataProcess" >
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -48,7 +48,7 @@
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1">Return</h6>
                     <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                      [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                      [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" [allowColumnResizing]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -66,7 +66,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1">Issue</h6>
-                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
+                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true" [allowColumnResizing]="true">
                       <dxo-selection mode="single"></dxo-selection>
 
                       <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
@@ -115,7 +115,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1">Return</h6>
-                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
+                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true" [allowColumnResizing]="true">
                       <dxo-selection mode="single"></dxo-selection>
 
                       <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>

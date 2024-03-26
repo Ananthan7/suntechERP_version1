@@ -21,7 +21,6 @@ export class PricelistMasterComponent implements OnInit {
   viewMode: boolean = false;
   required : boolean = false;
 
-
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -78,7 +77,7 @@ export class PricelistMasterComponent implements OnInit {
       addlValue: [''],
       priceRoundoff: [false],
       dontCalculate: [false],
-      roundoff_digit: [''],
+      roundoff_digit: ['' ,[Validators.required]],
     });
     this.initializeForm();
     if (this.content.FLAG == 'VIEW') {
