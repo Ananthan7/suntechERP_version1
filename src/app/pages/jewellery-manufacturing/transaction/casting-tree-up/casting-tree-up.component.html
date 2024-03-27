@@ -99,7 +99,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Stone Wt * :</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-right: -10px;">
-                  <input type="number" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
+                  <input type="text" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode" StoneDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -146,7 +146,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt * : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 124%; margin-top: -5px;">
-                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)" ThreeDecimalInput/>
+                  <input type="text" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>

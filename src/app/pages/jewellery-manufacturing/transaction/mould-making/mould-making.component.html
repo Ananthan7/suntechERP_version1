@@ -276,7 +276,7 @@
                   <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
                 </div>
                 <div *dxTemplate="let data of 'amounttemp'">
-                  <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
+                  <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" AmountDecimalInput/>
                 </div>
                 <div *dxTemplate="let data of 'locationtemp'">
                   <input type="text" (change)="locationtemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
