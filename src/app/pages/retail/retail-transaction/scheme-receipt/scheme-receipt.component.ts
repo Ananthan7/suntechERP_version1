@@ -722,6 +722,7 @@ export class SchemeReceiptComponent implements OnInit {
       data.FLAG = 'VIEW'
       data.POSCUSTOMERCODE = this.content.POSCUSTOMERCODE
       data.BALANCE_CC = this.content.BALANCE_CC
+      data.MID = this.content.MID
       this.dataToEditrow = data;
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
@@ -1142,16 +1143,16 @@ export class SchemeReceiptComponent implements OnInit {
       })
       if (this.Attachedfile.length > 0) {
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.UNIQUEID`, '');
-        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.SRNO`, formValue.UNIQUEID);
-        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.VOCDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
-        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.REMARKS`, formValue.Remarks);
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.SRNO`, '1');
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.VOCDATE`, this.commonService.formatDate(new Date(formValue.VocDate)));
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.REMARKS`, formValue.Narration);
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.CODE`, formValue.Code);
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.EXPIRE_DATE`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.ATTACH_TYPE`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_ACTIVESTATUS`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_LASTRENEWBY`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_LASTRENEWDATE`, '');
-        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_NEXTRENEWDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
+        this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOC_NEXTRENEWDATE`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOCUMENT_DATE`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.DOCUMENT_NO`, '');
         this.formdata.append(`Model.model.receiptdata.Details[0].imagedetails.imageData.FROM_KYC`, '');

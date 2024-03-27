@@ -262,11 +262,11 @@
                 </mat-form-field>
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
-                <span >Attachment
-                </span>
-                <input class="fileAttach pt-2"
+                <input class="fileAttach pt-2" *ngIf="!viewMode"
                     type="file" (change)="onFileChange($event)"
                     [disabled]="viewMode" />
+                <a  *ngIf="viewMode && Attachedfile.length>0" (click)="openAttach()"
+                    style="cursor: pointer;">Attachments</a>
             </div>
         </div>
         <div class="row">

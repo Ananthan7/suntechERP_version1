@@ -132,7 +132,7 @@ export class AddReceiptComponent implements OnInit {
     if (this.content) {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true
-        this.loadSavedContent()
+        this.setInitialValues()
         return
       }
       this.setFormValues()
@@ -150,7 +150,7 @@ export class AddReceiptComponent implements OnInit {
     this.setGridData()
   }
 
-  loadSavedContent() {
+  setInitialValues() {
     console.log(this.content, 'this.content');
     let data: any = this.content || {}
     this.getPaymentType(data.RECPAY_TYPE)
@@ -168,6 +168,7 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.SchemeId.setValue(data.D_POSSCHEMEID)
     this.receiptEntryForm.controls.SchemeCode.setValue(data.POSCUSTOMERCODE)
     this.receiptEntryForm.controls.SchemeBalance.setValue(data.BALANCE_CC)
+    this.openAttchments()
   }
   getSchemeDetailView() {
     let param = {
@@ -404,9 +405,8 @@ export class AddReceiptComponent implements OnInit {
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
-
-          // let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
-        } else {
+          this.calculateGridAmount()
+         } else {
           this.commonService.toastErrorByMsgId('Accode not found in credit master')
         }
       }, err => this.commonService.toastErrorByMsgId(err))
@@ -757,6 +757,32 @@ export class AddReceiptComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+  openAttach(){
+    for (let j = 0; j < this.Attachedfile.length; j++) {
+      window.open(
+        this.Attachedfile[j],
+        '_blank' // <- This is what makes it open in a new window.
+      );
+    }
+  }
+  // use: open file
+  openAttchments() {
+    // Handle the cell click event based on the column and value
+    // if (columnName === 'IS_ATTACHMENT_PRESENT') {
+      // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
+      let API = `SchemeCurrencyReceipt/SchemeCurrencyReceipt/GetReceiptAttachments?MID=`+this.content.MID
+      let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
+      let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+        .subscribe((result: any) => {
+          console.log(result,'result');
+          if (result.fileCount > 0) {
+            this.Attachedfile = result.file
+          } else {
+            this.commonService.toastErrorByMsgId(result.message)
+          }
+        })
+    // }
   }
   branchCodeChange(event: any) {
     if (event.option.value) {

@@ -37,7 +37,7 @@ export class SchemeRegisterComponent implements OnInit {
   disableSaveBtn: boolean = false;
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
-
+  
   schemeReceiptList: any[] = [];
   schemeReceiptListHead: any[] = [];
   newSchemeItems: any[] = [];
@@ -46,6 +46,7 @@ export class SchemeRegisterComponent implements OnInit {
   schemeArray: any[] = []
   dataToEditrow: any[] = [];
   detailArray: any[] = []
+  savedAttachments: any[] = []
   newSchemeLength: number = 0
   dataIndex: any;
   currentDate: any = new Date();
@@ -229,6 +230,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
     this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
     this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
+    this.openAttchments()
     this.getSchemeRegistrationDetail(this.content.SCH_CUSTOMER_ID)
   }
   //schemeid EDIT and VIEW Value Change
@@ -246,7 +248,9 @@ export class SchemeRegisterComponent implements OnInit {
               this.viewDeleteBtn = true;
               this.disableSaveBtn = true;
               this.usedSchemeMode = false;
-              if (this.content.FLAG == 'EDIT') this.viewMode = false;
+              if (this.content.FLAG == 'EDIT') {
+                this.viewMode = false;
+              }
               if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
             } else {
               this.viewDeleteBtn = false;
@@ -425,30 +429,31 @@ export class SchemeRegisterComponent implements OnInit {
     if (!data.value) return
     return data.value.slice(0, 10)
   }
-  openAttchments(e: any) {
-    const columnName = e.column?.dataField;
-    const cellValue = e.data[columnName];
+  openAttchments(e?: any) {
+    // const columnName = e.column?.dataField;
+    // const cellValue = e.data[columnName];
 
     // Handle the cell click event based on the column and value
-    if (columnName === 'IS_ATTACHMENT_PRESENT') {
+    // if (columnName === 'IS_ATTACHMENT_PRESENT') {
       // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
       let API = `SchemeRegistration/GetSchemeAttachments`
       let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
       let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
         .subscribe((result: any) => {
           if (result.fileCount > 0) {
-
+            this.savedAttachments = []
             for (let j = 0; j < result.file.length; j++) {
-              window.open(
-                result.file[j],
-                '_blank' // <- This is what makes it open in a new window.
-              );
+              this.savedAttachments.push({file: result.file[j]})
+              // window.open(
+              //   result.file[j],
+              //   '_blank' // <- This is what makes it open in a new window.
+              // );
             }
           } else {
             this.commonService.toastErrorByMsgId(result.message)
           }
         })
-    }
+    // }
   }
   cancelSchemeClick() {
     this.authCheckerComponent?.openAuthModal()

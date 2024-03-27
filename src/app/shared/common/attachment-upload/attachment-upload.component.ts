@@ -17,7 +17,8 @@ export class AttachmentUploadComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   modalRef!: NgbModalRef;
   Remarks: any;
-  @Input() Attachedfile: any[] = [];
+  Attachedfile: any[] = [];
+  @Input() savedAttachment: any[] = [];
 
   constructor(
     private modalService: NgbModal,
@@ -26,6 +27,10 @@ export class AttachmentUploadComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+  openAttachment(e: any) {
+    console.log(e.data, 'e');
+    window.open(e.data.file, '_blank'); // <- This is what makes it open in a new window.
   }
   onFileChange(input: any) {
     if (input.target.files.length > 0) {
@@ -39,7 +44,7 @@ export class AttachmentUploadComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     // Add a class to indicate the drag over state
-    if(event) event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    if (event) event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
   }
 
   onDragLeave(event: DragEvent): void {
@@ -52,7 +57,7 @@ export class AttachmentUploadComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     // Remove the class for drag over state
-    const files:any = event.dataTransfer?.files;
+    const files: any = event.dataTransfer?.files;
     if (files.length > 0) {
       // Handle the dropped files
       this.handleFiles(files);
@@ -66,7 +71,7 @@ export class AttachmentUploadComponent implements OnInit {
       this.Attachedfile.push(file);
     }
   }
-  uploadSubmited(){
+  uploadSubmited() {
     this.uploadSubmit.emit(this.Attachedfile)
     this.modalRef.close()
   }

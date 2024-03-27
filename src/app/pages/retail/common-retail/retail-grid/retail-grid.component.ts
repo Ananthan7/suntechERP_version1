@@ -59,6 +59,12 @@ export class RetailGridComponent implements OnInit {
     this.editRowClick.emit(e);
   }
   deleteRowDetails(e: any) {
+    console.log(e.row.data);
+    let data = e.row.data
+    if(data.FLAG == 1){
+      this.CommonService.toastErrorByMsgId('Cannot delete data in use')
+      return
+    }
     this.deleteBtnClick.emit(e);
   }
   /**USE: grid on scroll event */
@@ -149,6 +155,7 @@ export class RetailGridComponent implements OnInit {
         "TRANSACTION": {
           "VOCTYPE": this.CommonService.nullToString(this.vocType),
           "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+          "FILTERVAL": this.CommonService.nullToString(this.vocType),
         },
         "SEARCH": {
           "SEARCH_VALUE": this.CommonService.nullToString(this.SEARCH_VALUE)
@@ -160,6 +167,10 @@ export class RetailGridComponent implements OnInit {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
         if (resp.dynamicData && resp.dynamicData[0].length > 0) {
+          if(this.SEARCH_VALUE != '') {
+            this.orderedItems = []
+            this.SEARCH_VALUE = ''
+          }
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
           // Replace empty object with an empty string
