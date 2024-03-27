@@ -152,31 +152,31 @@ export class WaxProcessComponent implements OnInit {
   }
 
   partytextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].party = data.party;
+     this.tableData[value.data.SRNO - 1].party = data.target.value;
    }
 
   Sotextevent(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].So = data.So;
+    this.tableData[value.data.SRNO - 1].So = data.target.value;
   }
 
   SoDatetextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].SoDate = data.SoDate;
+     this.tableData[value.data.SRNO - 1].SoDate = data.target.value;
   }
 
   DelDatetextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].DelDate = data.DelDate;
+     this.tableData[value.data.SRNO - 1].DelDate = data.target.value;
   }
 
   GrossWttextevent(data: any, value: any) {
-   this.tableData[value.data.SRNO - 1].GrossWt = data.GrossWt;
+   this.tableData[value.data.SRNO - 1].GrossWt = data.target.value;
    }
 
   MetalWttextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].MetalWt = data.MetalWt;
+     this.tableData[value.data.SRNO - 1].MetalWt = data.target.value;
   }
 
   StoneWttextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].StoneWt = data.StoneWt;
+     this.tableData[value.data.SRNO - 1].StoneWt = data.target.value;
   }
 
   OrderPcstextevent(data: any, value: any) {

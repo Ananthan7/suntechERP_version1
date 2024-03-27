@@ -22,7 +22,8 @@ export class ProcessMasterComponent implements OnInit {
   searchModeLoss: boolean = true;
   searchModeRecov: boolean = true;
   searchModeAllow: boolean = true;
-
+  codeEnable: boolean = true;
+  editMode: boolean = false;
 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -134,6 +135,23 @@ export class ProcessMasterComponent implements OnInit {
 
   })
 
+  codeEnabled() {
+    if (this.processMasterForm.value.processCode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
+
+  checkCode(): boolean {
+    if (this.processMasterForm.value.processCode == '') {
+      this.commonService.toastErrorByMsgId('please enter code')
+      return true
+    }
+    return false
+  }
 
 
 

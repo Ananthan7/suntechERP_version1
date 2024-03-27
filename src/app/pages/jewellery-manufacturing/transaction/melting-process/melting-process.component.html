@@ -131,7 +131,7 @@
           <div class="row">
             <div class="col-md-12">
               <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
-                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" [allowColumnReordering]="true"
+                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" [allowColumnResizing]="true" [allowColumnReordering]="true"
                 height="200" [dataSource]="tableData">
                 <!-- <dxo-paging [enabled]="false"></dxo-paging> -->
                 <dxo-editing mode="cell" [allowUpdating]="true">

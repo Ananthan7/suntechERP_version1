@@ -168,7 +168,7 @@
                             </dx-data-grid>
                         </mat-tab>
                         <mat-tab label="Details">
-                            <dx-data-grid class="mt-3" #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                            <dx-data-grid class="mt-3" #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID" [showBorders]="true">
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                 </dxo-editing>

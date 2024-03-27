@@ -132,6 +132,7 @@
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" 
                         [dataSource]="metalIssueDetailsData"
                         [showBorders]="true"
+                        [allowColumnResizing]="true"
                         (onSelectionChanged)="onSelectionChanged($event)"
                         (onRowClick)="onRowClickHandler($event)"
                         >

@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-md-4">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                            [allowColumnReordering]="true" [allowColumnResizing]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
@@ -129,7 +129,7 @@
                     <div class="col-md-12">
                         <dx-data-grid id="gridContainer" [dataSource]="metalReturnDetailsData" [showBorders]="true"
                             (onRowClick)="onRowClickHandler($event)" [selectedRowKeys]="selectedKey"
-                            (onSelectionChanged)="onSelectionChanged($event)">
+                            (onSelectionChanged)="onSelectionChanged($event)" [allowColumnResizing]="true">
                             <dxo-selection mode="multiple"></dxo-selection>
 
                             <dxi-column dataField="SRNO" caption="SRNO"></dxi-column>

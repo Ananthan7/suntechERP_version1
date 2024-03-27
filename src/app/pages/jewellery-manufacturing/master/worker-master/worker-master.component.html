@@ -230,6 +230,7 @@
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO"
                             [selectedRowKeys]="selectedKey"
+                            [allowColumnResizing]="true"
                             (onSelectionChanged)="changedCheckbox($event)"
                             [showBorders]="true">
                             <!-- <dxo-filter-row [visible]="showFilterRow"
