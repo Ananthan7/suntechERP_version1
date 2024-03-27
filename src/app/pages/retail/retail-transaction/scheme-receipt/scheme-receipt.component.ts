@@ -232,6 +232,9 @@ export class SchemeReceiptComponent implements OnInit {
     this.setFormControlAmount('TotalTax_FC', this.content.GST_TOTALFC)
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
+    this.totalValueInText = this.commonService
+        .priceToTextWithCurrency(this.content.TOTAL_AMOUNTCC, "UNITED ARAB EMIRATES DIRHAM")
+        ?.toUpperCase();
     if (this.receiptDetailsForm.value.PostedDate != '') {
       this.postedDateString = this.commonService.formatDate(this.receiptDetailsForm.value.PostedDate)
     }
