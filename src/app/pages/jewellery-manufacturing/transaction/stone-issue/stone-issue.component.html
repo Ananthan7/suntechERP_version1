@@ -147,7 +147,8 @@
                       <dxi-total-item column="Amount"> </dxi-total-item>
                     </dxo-summary>
                   </dx-data-grid> -->
-                <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData" [showBorders]="true"
+                <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData" [allowColumnResizing]="true"  [showBorders]="true" >
+                
                   (onRowClick)="onRowClickHandler($event)">
                   <!-- <dxo-selection mode="single"></dxo-selection> -->
                   <dxo-paging [enabled]="false"></dxo-paging>

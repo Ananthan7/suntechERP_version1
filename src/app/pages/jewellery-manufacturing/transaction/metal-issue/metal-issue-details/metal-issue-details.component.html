@@ -144,7 +144,7 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Job Purity :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="jobPurity" style="text-align: right;" [readonly]="viewMode" NumberOnly/>
+                                            <input type="number" matInput formControlName="jobPurity" style="text-align: right;" [readonly]="viewMode" AmountDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -181,13 +181,13 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Gross Weight :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="grossWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
+                                            <input type="text" matInput formControlName="grossWeight" [readonly]="viewMode" style="text-align: right;" MetalDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Net Weight : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="netWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
+                                            <input type="text" matInput formControlName="netWeight" [readonly]="viewMode" style="text-align: right;" MetalDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -195,13 +195,13 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="stoneWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
+                                            <input type="text" matInput formControlName="stoneWeight" [readonly]="viewMode" style="text-align: right;" StoneDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="pureWeight" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
+                                            <input type="text" matInput formControlName="pureWeight" [readonly]="viewMode" style="text-align: right;" MetalDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -257,7 +257,7 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Purity Diff : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="purityDiff" [readonly]="viewMode" style="text-align: right;" ThreeDecimalInput/>
+                                            <input type="number" matInput formControlName="purityDiff" [readonly]="viewMode" style="text-align: right;" MetalDecimalInput/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 offset-3">
@@ -270,7 +270,7 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Job Pcs : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="jobPcs" [readonly]="viewMode"style="text-align: right;" />
+                                            <input type="text" matInput formControlName="jobPcs" [readonly]="viewMode"style="text-align: right;" NumberOnly/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 offset-3">

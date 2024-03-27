@@ -4442,7 +4442,6 @@
                           <!-- : "Total Amount" -->
                           <input
                             class="st_txt_right"
-                            type="number"
                             [min]="0"
                             [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4452,7 +4451,7 @@
                             (change)="changeTotalAmt($event)"
                             id="fcn_li_total_amount"
                             readonly="{{ viewOnly }}"
-                            
+                            AmountDecimalInput
                           />
                           <!-- readonly="{{
                               viewOnly || divisionMS == 'S' ? true : false
@@ -4702,7 +4701,7 @@
                         <mat-label>Net Amount</mat-label>
                         <input
                           class="st_txt_right"
-                          type="number"
+                          
                           (focus)="
                             setValToLocalStorage($event, 'fcn_li_net_amount')
                           "
@@ -4714,6 +4713,8 @@
                           id="fcn_li_net_amount"
                           (change)="changeNettAmt($event)"
                           [readonly]="viewOnly"
+                          AmountDecimalInput
+                        
                         />
                         <mat-error
                           *ngIf="

@@ -131,7 +131,7 @@
           <div class="row">
             <div class="col-md-12">
               <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
-                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" [allowColumnReordering]="true"
+                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" [allowColumnResizing]="true" [allowColumnReordering]="true"
                 height="200" [dataSource]="tableData">
                 <!-- <dxo-paging [enabled]="false"></dxo-paging> -->
                 <dxo-editing mode="cell" [allowUpdating]="true">
@@ -251,7 +251,7 @@
                     <label for="inputPassword" class="col-sm-6 col-form-label">Stone Weight * :</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneWeight" style="text-align: right;"ThreeDecimalInput />
+                        <input type="text" matInput formControlName="stoneWeight" style="text-align: right;"StoneDecimalInput />
                       </mat-form-field>
                     </div>
                   </div>
@@ -303,7 +303,7 @@
                 <label for="inputPassword" class="col-sm-4"> Gross Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="TotalgrossWt" style="text-align: right;" ThreeDecimalInput />
+                    <input type="text" matInput formControlName="TotalgrossWt" style="text-align: right;" MetalDecimalInput />
                   </mat-form-field>
                 </div>
               </div>
@@ -319,7 +319,7 @@
                 <label for="inputPassword" class="col-sm-4">Pure Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="TotalpureWt" style="text-align: right;" ThreeDecimalInput />
+                    <input type="text" matInput formControlName="TotalpureWt" style="text-align: right;" MetalDecimalInput />
                   </mat-form-field>
                 </div>
               </div>
@@ -355,13 +355,13 @@
                 <label for="inputPassword" class="col-sm-3"> Gross Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="textt" matInput formControlName="RETgrossWt" style="text-align: right;"  ThreeDecimalInput />
+                    <input type="textt" matInput formControlName="RETgrossWt" style="text-align: right;"  MetalDecimalInput />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Pure Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;" ThreeDecimalInput />
+                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;" MetalDecimalInput />
                   </mat-form-field>
                 </div>
               </div>
@@ -383,7 +383,7 @@
                 <label for="inputPassword" class="col-sm-3">Pure Wt : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;"  ThreeDecimalInput />
+                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;"  MetalDecimalInput />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Bal Pure * : </label>

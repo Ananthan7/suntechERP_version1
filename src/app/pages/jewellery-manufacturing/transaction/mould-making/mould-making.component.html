@@ -237,7 +237,7 @@
                   (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
               </div>
-              <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
+              <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
                 [showRowLines]="true" class="mt-3" keyExpr="SN" (onSelectionChanged)="onSelectionChanged($event)">
 <!--               
                 <dxo-editing [allowUpdating]="true" [allowUpdating]="!viewMode"></dxo-editing> -->
@@ -276,7 +276,7 @@
                   <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
                 </div>
                 <div *dxTemplate="let data of 'amounttemp'">
-                  <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>
+                  <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" AmountDecimalInput/>
                 </div>
                 <div *dxTemplate="let data of 'locationtemp'">
                   <input type="text" (change)="locationtemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" SixDecimalInput/>

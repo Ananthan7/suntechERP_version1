@@ -28,7 +28,7 @@
                                 <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
-                                    Worker Code <strong>required</strong>
+                                  Worker Code <strong>required</strong>
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field
@@ -230,6 +230,7 @@
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO"
                             [selectedRowKeys]="selectedKey"
+                            [allowColumnResizing]="true"
                             (onSelectionChanged)="changedCheckbox($event)"
                             [showBorders]="true">
                             <!-- <dxo-filter-row [visible]="showFilterRow"
@@ -275,4 +276,4 @@
             </div>
         </form>
     </div>
-</div>
+</div>  

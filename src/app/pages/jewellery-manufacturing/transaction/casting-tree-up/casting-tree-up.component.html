@@ -99,7 +99,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Stone Wt * :</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-right: -10px;">
-                  <input type="number" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode" ThreeDecimalInput/>
+                  <input type="text" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode" StoneDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -146,7 +146,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt * : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 124%; margin-top: -5px;">
-                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)" ThreeDecimalInput/>
+                  <input type="text" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -334,7 +334,7 @@
             <div class="row mt-2">
               <div class="col-md-12">
                 <dx-data-grid id="gridContainer" [dataSource]="tableData1" [showBorders]="true"
-                [showColumnLines]="true" [showRowLines]="true" class="mt-3">
+                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3">
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
                 <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
