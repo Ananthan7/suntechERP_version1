@@ -313,7 +313,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Req Metal:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" class="text-right" matInput ThreeDecimalInput />
+                                <input type="text" class="text-right" matInput MetalDecimalInput />
                               </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -593,13 +593,13 @@
                 <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" style="text-align: right;" matInput formControlName="height" />
+                    <input type="text" style="text-align: right;" matInput formControlName="height" NumberOnly/>
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" style="text-align: right;" matInput formControlName="length" />
+                    <input type="text" style="text-align: right;" matInput formControlName="length" NumberOnly/>
                   </mat-form-field>
                 </div>
               </div>
@@ -613,7 +613,7 @@
                 <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" style="text-align: right;" matInput formControlName="radius" />
+                    <input type="number" style="text-align: right;" matInput formControlName="radius" NumberOnly/>
                   </mat-form-field>
                 </div>
               </div>

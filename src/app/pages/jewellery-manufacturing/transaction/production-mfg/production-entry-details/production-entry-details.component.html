@@ -167,7 +167,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Gross Weight :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput MetalDecimalInput 
+                    <input type="TEXT" matInput MetalDecimalInput 
                      class="text-right" formControlName="GROSS_WT" />
                   </mat-form-field>
                 </div>
@@ -190,14 +190,14 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput 
-                      class="text-right" formControlName="METAL_WT" ThreeDecimalInput/>
+                      class="text-right" formControlName="METAL_WT" MetalDecimalInput/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Stone Weight :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput 
-                      class="text-right" formControlName="STONE_WT" ThreeDecimalInput/>
+                      class="text-right" formControlName="STONE_WT" StoneDecimalInput/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Price 1 :</label>
@@ -303,7 +303,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput 
-                    class="text-right" formControlName="PURE_WT" ThreeDecimalInput/>
+                    class="text-right" formControlName="PURE_WT" MetalDecimalInput/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Start Date :</label>
@@ -431,7 +431,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Gross Wt :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;" >
-                    <input type="text" matInput formControlName="grossWt" ThreeDecimalInput class="text-right"/>
+                    <input type="text" matInput formControlName="grossWt" MetalDecimalInput class="text-right"/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Stone Wt :</label>
@@ -457,7 +457,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Chargable Wt :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="chargableWt" class="text-right" ThreeDecimalInput/>
+                    <input type="text" matInput formControlName="chargableWt" class="text-right" MetalDecimalInput/>
                   </mat-form-field>
                 </div>
               </div>

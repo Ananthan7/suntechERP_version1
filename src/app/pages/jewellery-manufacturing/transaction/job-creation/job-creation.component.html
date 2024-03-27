@@ -32,8 +32,11 @@
                     Date:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%;">
-                      <input type="date" matInput formControlName="vocDate" />
-                    </mat-form-field>
+                      <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                      placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker  #vocDate></mat-datepicker>
+                   </mat-form-field>
                   </div>
                 </div>
                 <div class=" row">
@@ -124,7 +127,7 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Remarks:</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="narration" />
+                      <input type="text" matInput formControlName="narration" maxlength="40"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2 bd-highlight pt-1 ml-2">
