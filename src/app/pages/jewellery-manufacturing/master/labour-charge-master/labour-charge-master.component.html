@@ -139,7 +139,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode"  matInput NumberOnly CommaSeparatedNumber
+                  <input type="text" [readonly]="viewMode"  matInput  SixDecimalInput
                      style="text-align: right;"
                     formControlName="cost_rate" />
                 </mat-form-field>
@@ -157,8 +157,8 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode" CommaSeparatedNumber matInput                  
-                    (keypress)="salesChangesDia('selling_rate')" style="text-align: right;"
+                  <input type="text" [readonly]="viewMode" SixDecimalInput matInput                  
+                     style="text-align: right;"
                     formControlName="selling_rate" />
                 </mat-form-field>
               </div>
@@ -173,8 +173,8 @@
               <label for="input" class="col-sm-2 col-form-label">Selling % *:</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput [readonly]="viewMode" maxlength="6" AmountDecimalInput
-                    (keypress)="salesChangesDia('selling')" style="text-align: right;" formControlName="selling" />
+                  <input type="text" matInput [readonly]="viewMode" maxlength="6" AmountDecimalInput
+                     style="text-align: right;" formControlName="selling" />
                 </mat-form-field>
               </div>
             </div>
@@ -183,7 +183,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput 
-                    style="text-align: right;"  MetalDecimalInput
+                    style="text-align: right;"  StoneDecimalInput
                     formControlName="ctWtFrom" />
                 </mat-form-field>
               </div>
@@ -205,7 +205,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput 
-                    (change)="onCtweighttto($event)"  MetalDecimalInput
+                    (change)="onCtweighttto($event)"  StoneDecimalInput
                     style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
@@ -329,7 +329,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode" SixDecimalInput  matInput
-                    formControlName="metalselling_rate" (keypress)="salesChangesMetal('metalselling_rate')"
+                    formControlName="metalselling_rate" 
                     style="text-align: right;" />
                 </mat-form-field>
               </div>
@@ -346,8 +346,8 @@
               <label for="input" class="col-sm-2 col-form-label">Selling % * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="number" matInput [readonly]="viewMode" AmountDecimalInput formControlName="metalSelling"
-                    (keypress)="salesChangesMetal('metalSelling')" style="text-align: right;" />
+                  <input type="text" matInput [readonly]="viewMode" AmountDecimalInput formControlName="metalSelling"
+                    style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
