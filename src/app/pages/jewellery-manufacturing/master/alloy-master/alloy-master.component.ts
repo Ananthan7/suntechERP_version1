@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } from '@angular/forms';
@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 export class AlloyMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
+  isDisabled: boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   currentDate = new Date();
@@ -25,7 +26,6 @@ export class AlloyMasterComponent implements OnInit {
   url: any;
   numericValue!: number;
   branchCode:any = localStorage.getItem('userbranch');
-
   currencyDt:any;
 
   alloyMastereForm: FormGroup = this.formBuilder.group({
@@ -40,7 +40,7 @@ export class AlloyMasterComponent implements OnInit {
     currency: ['', [Validators.required]],
     currencyRate: [''],
     createdOn: [new Date(), ''],
-    createdBy: ['SUNTECH', ''],
+    createdBy: [''],
     priceScheme: [''],
     price1code: [''],
     price1per: ['0'],
@@ -97,22 +97,34 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.alloyMastereForm.controls.createdBy.setValue(this.userName);
+    console.log(this.userName);
+    
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
     console.log(this.content.FLAG);
     
     if (this.content.FLAG == 'EDIT') {
+      this.viewMode = true;
+      this.isDisabled = !this.isDisabled;
       this.setInitialValues()
     } else if (this.content.FLAG == 'VIEW') {
       // this.alloyMastereForm.disable()
       this.viewMode = true
+      this.isDisabled = true;
       this.setInitialValues()
     }
 
-    
   }
+
+  @ViewChild('codeInput')
+  codeInput!: ElementRef;
+
+  ngAfterViewInit(): void {
+    this.codeInput.nativeElement.focus();
+  }
+  
   setInitialValues() {
     console.log(this.content, 'content');
     // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
@@ -127,6 +139,12 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
+    this.alloyMastereForm.controls.price1code.setValue(this.content.PRICE1PER)
+    this.alloyMastereForm.controls.price2code.setValue(this.content.PRICE2PER)
+    this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
+    this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
+    this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
+    this.alloyMastereForm.controls.hsncode.setValue(this.content.HSN_CODE)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -384,11 +402,11 @@ export class AlloyMasterComponent implements OnInit {
           this.alloyMastereForm.controls.subCategory.setValue(data.SUBCATEGORY_CODE)
           this.alloyMastereForm.controls.brand.setValue(data.BRAND_CODE)
         } else {
-          this.alloyMastereForm.controls.code.setValue('')
+          // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.alloyMastereForm.controls.code.setValue('')
+        // this.alloyMastereForm.controls.code.setValue('')
         this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
@@ -399,7 +417,7 @@ export class AlloyMasterComponent implements OnInit {
     //   return true;
     // }else{
     if (this.alloyMastereForm.value.code == '') {
-      this.commonService.toastErrorByMsgId('please enter stockcode')
+      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
       return true
     }
     return false
@@ -518,11 +536,11 @@ export class AlloyMasterComponent implements OnInit {
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: 0,
       STOCK_LCCOST: 0,
-      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
-      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
-      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
-      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
-      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
+      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1code),
+      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
+      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
+      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4code),
+      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5code),
       PRICE1FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1FC),
       PRICE1LC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1LC),
       PRICE2FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price2FC),
@@ -941,16 +959,31 @@ export class AlloyMasterComponent implements OnInit {
               this.close('reloadMainGrid')
             }
           });
-        } else {
+        } else if(result.status == "Failed"){
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2239') || 'Code Already Exists',
+            text: '',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+        }
+        else {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
 
+  
+
   updateMeltingType() {
-    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.alloyMastereForm.value.code;
-    let postdata = this.setPostData()
+    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/'+ this.content.STOCK_CODE;
+    let postdata
+    postdata = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
         if (result.status == "Success") {
@@ -977,7 +1010,6 @@ export class AlloyMasterComponent implements OnInit {
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
- 
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

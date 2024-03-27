@@ -92,8 +92,10 @@
                                     :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput style="text-align: right;"
-                                            formControlName="trayWeight"  [readonly]="viewMode" />
+                                        <input type="text" matInput style="text-align: right;" NumberOnly 
+                                            formControlName="trayWeight" maxlength="12" [readonly]="viewMode" />
+                                        <!-- <input type="number" matInput style="text-align: right;"
+                                            formControlName="trayWeight"  [readonly]="viewMode" /> -->
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -189,14 +191,14 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput style="text-align: right;"
-                                            formControlName="loss_standard" [readonly]="islossReadOnly"
+                                            formControlName="loss_standard" AmountDecimalInput [readonly]="islossReadOnly"
                                             (input)="onInput($event)" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput style="text-align: right;" [readonly]="viewMode"
-                                            formControlName="standard_end" [readonly]="isRecovReadOnly"
+                                            formControlName="standard_end" AmountDecimalInput [readonly]="isRecovReadOnly"
                                             (input)="onInput($event)" />
                                     </mat-form-field>
                                 </div>
@@ -209,14 +211,14 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput style="text-align: right;"
-                                            formControlName="loss_min" [readonly]="islossReadOnly"
+                                            formControlName="loss_min" AmountDecimalInput [readonly]="islossReadOnly"
                                             (input)="onInput($event)" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput style="text-align: right;"
-                                            formControlName="min_end" [readonly]="isRecovReadOnly"
+                                            formControlName="min_end" AmountDecimalInput [readonly]="isRecovReadOnly"
                                             (input)="onInput($event)" />
                                     </mat-form-field>
                                 </div>
@@ -228,7 +230,7 @@
                                     :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput maxlength="3" formControlName="loss_max"
+                                        <input type="number" matInput AmountDecimalInput maxlength="3" formControlName="loss_max"
                                             style="text-align: right;" [readonly]="islossReadOnly"
                                             (input)="onInput($event)" />
                                     </mat-form-field>

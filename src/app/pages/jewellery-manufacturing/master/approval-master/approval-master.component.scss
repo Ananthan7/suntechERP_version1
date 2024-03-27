@@ -26,3 +26,17 @@
   text-transform: none;
 }
 
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #ffff !important;
+  }
+
+  .mat-form-field {
+    font-weight: 600 !important;
+  }
+}
