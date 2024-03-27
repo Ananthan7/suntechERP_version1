@@ -33,6 +33,11 @@ export class StoneIssueComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   currentDate = new FormControl(new Date());
   vocMaxDate = new Date();
+  tableRowCount: number = 0;
+  detailData: any[] = [];
+  selectRowIndex: any;
+  selectedKey: number[] = [];
+  selectedIndexes: any = [];
 
     user: MasterSearchModel = {
       PAGENO: 1,
@@ -83,13 +88,60 @@ export class StoneIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.setCompanyCurrency()
+    this.setAllInitialValues()
     this.setvalues()
+  }
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobStoneIssueMasterDJ/GetJobStoneIssueMasterDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      if (result.response) {
+        let data = result.response
+        this.detailData= data.Details
+        console.log(data,'collection')
+        data.Details.forEach((element: any) => {
+          this.stoneIssueData.push({
+            SRNO: element.SRNO,
+            JOB_NUMBER: element.JOB_NUMBER,
+            UNQ_JOB_ID: element.UNQ_JOB_ID,
+            DESIGN_CODE: element.DESIGN_CODE,
+            STOCK_CODE: element.STOCK_CODE,
+            DIVCODE: element.DIVCODE,
+            STOCK_DESCRIPTION: element.STOCK_DESCRIPTION,
+            Carat: element.JOB_DESCRIPTION,
+            Rate: element.RATEFC,
+            PROCESS_CODE: element.PROCESS_CODE,
+            AMOUNTLC: element.AMOUNTFC,
+            WORKER_CODE: element.WORKER_CODE,
+            SIEVE_SET: element.SIEVE_SET,
+              })
+            });
+          this.stoneissueFrom.controls.currency.setValue(data.CURRENCY_CODE)
+          this.stoneissueFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
+          this.stoneissueFrom.controls.worker.setValue(data.WORKER)
+          this.stoneissueFrom.controls.workername.setValue(data.WORKER_NAME)
+          this.stoneissueFrom.controls.enteredBy.setValue(data.SMAN)
+          this.stoneissueFrom.controls.narration.setValue(data.REMARKS)
+          this.stoneissueFrom.controls.caratTotal.setValue(data.REMARKS)
+
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+
   }
 
   close(data?: any) {
@@ -126,29 +178,29 @@ export class StoneIssueComponent implements OnInit {
     this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION);
   }
 
-  openaddstoneissuedetail() {
-    // let i = 0;
-    this.srNo= this.srNo+1;
-    const modalRef: NgbModalRef = this.modalService.open(StoneIssueDetailComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
+  // openaddstoneissuedetail() {
+  //   // let i = 0;
+  //   this.srNo= this.srNo+1;
+  //   const modalRef: NgbModalRef = this.modalService.open(StoneIssueDetailComponent, {
+  //     size: 'xl',
+  //     backdrop: true,//'static'
+  //     keyboard: false,
+  //     windowClass: 'modal-full-width',
+  //   });
 
-    modalRef.result.then((postData) => {
-      // console.log(postData);      
-      if (postData) {
-        console.log('Data from modal:', postData);    
-        if (postData.reopen= true) {
-          this.openaddstoneissuedetail();
-        }   
-        this.stoneIssueData.push(postData);
+  //   modalRef.result.then((postData) => {
+  //     // console.log(postData);      
+  //     if (postData) {
+  //       console.log('Data from modal:', postData);    
+  //       if (postData.reopen= true) {
+  //         this.openaddstoneissuedetail();
+  //       }   
+  //       this.stoneIssueData.push(postData);
 
-      }
-    });
-    modalRef.componentInstance.content = this.srNo;
-  }
+  //     }
+  //   });
+  //   modalRef.componentInstance.content = this.srNo;
+  // }
 
   deleteTableData(){
    
@@ -192,6 +244,57 @@ export class StoneIssueComponent implements OnInit {
       this.stoneissueFrom.controls.currency.setValue('')
       this.stoneissueFrom.controls.currencyrate.setValue('')
       this.comService.toastErrorByMsgId('MSG1531')
+    }
+  }
+  openaddstoneissuedetail(data?: any) {
+    // console.log(data,'data to child')
+    // if (data) {
+    //   data[0] = this.stoneissueFrom.value;
+    // } else {
+    //   data = [{ HEADERDETAILS: this.stoneissueFrom.value }]
+    // }
+    const modalRef: NgbModalRef = this.modalService.open(StoneIssueDetailComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+    console.log(data, 'data')
+    modalRef.componentInstance.content = data
+    modalRef.result.then((postData) => {
+      if (postData) {
+        console.log('Data from child:', postData);
+        this.stoneIssueData.push(postData);
+        this.setValuesToHeaderGrid(postData);
+      }
+    });
+  }
+
+  onRowClickHandler(event: any) {
+    this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
+    this.openaddstoneissuedetail(detailRow)
+  }
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    if (detailDataToParent.SRNO) {
+      this.swapObjects(this.stoneIssueData, [detailDataToParent], (detailDataToParent.SRNO - 1))
+    } else {
+      this.tableRowCount += 1
+      detailDataToParent.SRNO = this.tableRowCount
+      // this.tableRowCount += 1
+      // this.content.SRNO = this.tableRowCount
+    }
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+  }
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
     }
   }
   // addRow(): void {
@@ -251,7 +354,7 @@ export class StoneIssueComponent implements OnInit {
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "SMAN": this.stoneissueFrom.value.enteredBy,
+      "SMAN": this.comService.nullToString(this.stoneissueFrom.value.SMAN),
       "REMARKS": this.stoneissueFrom.value.narration || "",
       "NAVSEQNO": 0,
       "BASE_CURRENCY": "",
@@ -311,7 +414,7 @@ export class StoneIssueComponent implements OnInit {
       return
     }
   
-    let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/'+ this.stoneissueFrom.value.branchCode + this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.yearMonth
+    let API = `JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/${this.branchCode}/${this.stoneissueFrom.value.voctype}/${this.stoneissueFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
       "MID": 0,
       "VOCTYPE": this.stoneissueFrom.value.voctype || "",
@@ -342,53 +445,53 @@ export class StoneIssueComponent implements OnInit {
         {
           "SRNO": 0,
           "VOCNO": 0,
-          "VOCTYPE": "str",
+          "VOCTYPE": "",
           "VOCDATE": "2023-10-19T06:55:16.030Z",
-          "JOB_NUMBER": "string",
+          "JOB_NUMBER": "",
           "JOB_DATE": "2023-10-19T06:55:16.030Z",
           "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "string",
-          "JOB_DESCRIPTION": "string",
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
+          "UNQ_JOB_ID": "",
+          "JOB_DESCRIPTION": "",
+          "BRANCH_CODE": "",
+          "DESIGN_CODE": "",
           "DIVCODE": "s",
-          "STOCK_CODE": "string",
-          "STOCK_DESCRIPTION": "string",
-          "SIEVE": "string",
-          "SHAPE": "string",
-          "COLOR": "string",
-          "CLARITY": "string",
-          "SIZE": "string",
+          "STOCK_CODE": "",
+          "STOCK_DESCRIPTION": "",
+          "SIEVE": "",
+          "SHAPE": "",
+          "COLOR": "",
+          "CLARITY": "",
+          "SIZE": "",
           "JOB_PCS": 0,
           "PCS": 0,
           "GROSS_WT": 0,
-          "CURRENCY_CODE": "stri",
+          "CURRENCY_CODE": "",
           "CURRENCY_RATE": 0,
           "RATEFC": 0,
           "RATELC": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,
-          "PROCESS_CODE": "string",
-          "PROCESS_NAME": "string",
-          "WORKER_CODE": "string",
-          "WORKER_NAME": "string",
-          "UNQ_DESIGN_ID": "string",
-          "WIP_ACCODE": "string",
+          "PROCESS_CODE": "",
+          "PROCESS_NAME": "",
+          "WORKER_CODE": "",
+          "WORKER_NAME": "",
+          "UNQ_DESIGN_ID": "",
+          "WIP_ACCODE": "",
           "UNIQUEID": 0,
-          "LOCTYPE_CODE": "string",
-          "PICTURE_NAME": "string",
-          "PART_CODE": "string",
+          "LOCTYPE_CODE": "",
+          "PICTURE_NAME": "",
+          "PART_CODE": "",
           "REPAIRJOB": 0,
           "BASE_CONV_RATE": 0,
           "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE": "STI",
           "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string",
+          "DT_YEARMONTH": this.yearMonth,
           "CONSIGNMENT": 0,
           "SIEVE_SET": "string",
           "SUB_STOCK_CODE": "string",
           "D_REMARKS": "string",
-          "SIEVE_DESC": "string",
+          "SIEVE_DESC": "",
           "EXCLUDE_TRANSFER_WT": true,
           "OTHER_ATTR": "string"
         }

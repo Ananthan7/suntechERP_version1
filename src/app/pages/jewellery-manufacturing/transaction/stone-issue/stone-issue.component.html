@@ -13,7 +13,7 @@
       <form [formGroup]="stoneissueFrom">
         <div class=" row">
           <h6>{{branchCode}} - {{companyName}}</h6>
-      </div>
+        </div>
         <div class="row">
           <div class="col-md-10">
             <div class="row m-2">
@@ -22,12 +22,12 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Voucher * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="voctype" readonly/>
+                      <input type="text" matInput formControlName="voctype" readonly />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 70%">
-                      <input type="text" matInput formControlName="vocno"  style="text-align: right;" readonly/>
+                      <input type="text" matInput formControlName="vocno" style="text-align: right;" readonly />
                     </mat-form-field>
                   </div>
                 </div>
@@ -55,10 +55,10 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
                       <input matInput [matDatepicker]="vocDate" [max]="vocMaxDate" name="vocDate"
-                          formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation />
+                        formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation />
                       <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                       <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                  </mat-form-field>
+                    </mat-form-field>
                   </div>
                 </div>
               </div>
@@ -67,12 +67,13 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Currency * :</label>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%">
-                      <input type="text" matInput formControlName="currency" readonly/>
+                      <input type="text" matInput formControlName="currency" readonly />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%">
-                      <input type="text" matInput formControlName="currencyrate"  style="text-align: right;" readonly SixDecimalInput/>
+                      <input type="text" matInput formControlName="currencyrate" style="text-align: right;" readonly
+                        SixDecimalInput />
                     </mat-form-field>
                     <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="CurrencyCodeSelected($event)">
                     </master-search>
@@ -147,12 +148,14 @@
                     </dxo-summary>
                   </dx-data-grid> -->
                 <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData" [allowColumnResizing]="true"  [showBorders]="true" >
+                
+                  (onRowClick)="onRowClickHandler($event)">
                   <!-- <dxo-selection mode="single"></dxo-selection> -->
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing> -->
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
                   <dxi-column dataField="SRNO" dataType="SR_NO"></dxi-column>
                   <dxi-column dataField="JOB_NUMBER" caption="JOB_NO"></dxi-column>
                   <dxi-column dataField="UNQ_JOB_ID" caption="UNQ_JOD_ID"></dxi-column>
@@ -173,7 +176,7 @@
                     <dxi-total-item column="Carat">
                     </dxi-total-item>
                     <dxi-total-item column="Amount">
-                    </dxi-total-item>                 
+                    </dxi-total-item>
 
                   </dxo-summary>
                 </dx-data-grid>
