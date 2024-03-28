@@ -246,7 +246,9 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  formSubmit() {}
+  formSubmit() {
+    
+  }
 
   update() {}
 

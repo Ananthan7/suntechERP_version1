@@ -24,14 +24,14 @@
                                 <input type="text" matInput placeholder="Code"
                                     maxlength="6" 
                                     formControlName="sequenceCode"
-                                    [readonly]="viewMode"
+                                    [readonly]="viewMode || editMode"
                                     oninput="this.value = this.value.toUpperCase()"
-                                    (focusout)="checkCodeExists($event)" />
+                                    (focusout)="checkCodeExists($event)" (keyup)="codeEnabled()" />
                             </mat-form-field>
                             <mat-form-field
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
-                                    placeholder="Description" [readonly]="viewMode"
+                                    placeholder="Description" [readonly]="viewMode || editMode"
                                     formControlName="sequenceDESCRIPTION"
                                     oninput="this.value = this.value.toUpperCase()" />
                             </mat-form-field>
@@ -46,10 +46,10 @@
                                 Prefix :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput readonly
-                                    [readonly]="viewMode"
+                                    [readonly]="viewMode || codeEnable"
                                     placeholder="Prefix Code" maxlength="6"
                                     (change)="PrefixCodeChange($event)"
-                                    formControlName="sequencePrefixCode" />
+                                    formControlName="sequencePrefixCode"  />
                             </mat-form-field>
                             <master-search *ngIf="!viewMode"
                                 [MasterSearchData]="sequenceMasterData"

@@ -4393,7 +4393,7 @@
                           }}</mat-label>
                           <input
                             class="st_txt_right"
-                            type="number"
+                            
                             [min]="0"
                             [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4495,7 +4495,7 @@
                           <mat-label>Discount %</mat-label>
                           <input
                             class="st_txt_right"
-                            type="number"
+                         
                             [min]="0"
                             [max]="100"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4503,6 +4503,8 @@
                             formControlName="fcn_li_discount_percentage"
                             (change)="changeDisPer($event)"
                             id="fcn_li_discount_percentage"
+                            (focus)="setValToLocalStorage($event, 'fcn_li_discount_percentage')"
+
                             [readonly]="viewOnly"
                             AmountDecimalInput
                           />
@@ -4513,7 +4515,6 @@
                           <mat-label>Discount Amount</mat-label>
                           <input
                             class="st_txt_right"
-                            type="number"
                             [min]="0"
                             [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4522,6 +4523,7 @@
                             id="fcn_li_discount_amount"
                             (change)="changeDisAmount($event)"
                             [readonly]="viewOnly"
+                            (focus)="setValToLocalStorage($event, 'fcn_li_discount_amount')"
                             AmountDecimalInput
                           />
                         </mat-form-field>
@@ -4582,7 +4584,6 @@
                         <!-- <mat-label>Gross Amount</mat-label> -->
                         <input
                           class="st_txt_right"
-                          type="number"
                           
                           [min]="0"
                           [maxLength]="14"
@@ -4595,7 +4596,7 @@
                           (focus)="
                             setValToLocalStorage($event, 'fcn_li_gross_amount')
                           "
-                          
+                          AmountDecimalInput
                         />
                         <mat-error
                           *ngIf="
@@ -4664,13 +4665,14 @@
                         <mat-label>Tax Amount</mat-label>
                         <input
                           class="st_txt_right"
-                          type="number"
+                         
                           [min]="0"
                           [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)"
                           matInput
                           formControlName="fcn_li_tax_amount"
                           id="fcn_li_tax_amount"
+                          AmountDecimalInput
                           readonly
                         />
                       </mat-form-field>
