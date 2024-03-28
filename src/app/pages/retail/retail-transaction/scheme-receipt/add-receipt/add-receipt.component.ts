@@ -112,6 +112,7 @@ export class AddReceiptComponent implements OnInit {
     MIN_CONV_RATE: [''],
     MAX_CONV_RATE: [''],
     CONV_RATE: [''],
+    paidBalance: [0],
   })
   private subscriptions: Subscription[] = [];
   constructor(
@@ -129,16 +130,38 @@ export class AddReceiptComponent implements OnInit {
     this.getCreditCardMaster()
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
-    if (this.content) {
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true
-        this.setInitialValues()
-        return
-      }
-      this.setFormValues()
+    console.log(this.content);
+    
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true
+      this.setInitialValues()
+      return
     }
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.setvaluesEdited()
+      this.viewMode = true
+      return
+    }
+    this.setFormValues()
     this.paymentTypeChange({ ENGLISH: 'Cash' })
   }
+  setvaluesEdited(){
+    this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
+    this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
+    this.receiptEntryForm.controls.AC_Code.setValue(this.content.AC_Code)
+    this.receiptEntryForm.controls.AC_Description.setValue(this.content.AC_Description)
+    this.receiptEntryForm.controls.Type.setValue(this.content.Type)
+    this.receiptEntryForm.controls.CurrCode.setValue(this.content.CurrCode)
+    this.receiptEntryForm.controls.CurrRate.setValue(this.content.CurrRate)
+    this.receiptEntryForm.controls.TRN_Per.setValue(this.content.TRN_Per)
+    this.receiptEntryForm.controls.Narration.setValue(this.content.Narration)
+    this.setFormControlAmount('InstallmentAmount', this.content.InstallmentAmount)
+    this.setFormControlAmount('Header_Amount', this.content.Header_Amount)
+    this.setFormControlAmount('Amount_LC', this.content.Amount_LC)
+    this.setFormControlAmount('Amount_FC', this.content.Amount_FC)
+    this.setFormControlAmount('SchemeTotalAmount', this.content.SchemeTotalAmount)
+  }
+
   setFormValues() {
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
@@ -159,7 +182,7 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.AC_Code.setValue(data.CurrCode)
     this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
     this.receiptEntryForm.controls.CurrRate.setValue(
-      this.commonService.decimalQuantityFormat(data.CurrRate,'RATE'))
+      this.commonService.decimalQuantityFormat(data.CurrRate, 'RATE'))
     this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
     this.setFormControlAmount('Amount_FC', data.TOTAL_AMOUNTFC)
     this.setFormControlAmount('Amount_LC', data.TOTAL_AMOUNTCC)
@@ -202,7 +225,12 @@ export class AddReceiptComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts', param)
       .subscribe((result) => {
         if (result.status == "Success") {
+          let totaAMounts = result.dynamicData[0]
+          this.receiptEntryForm.controls.InstallmentAmount.setValue(totaAMounts[0].PAY_AMOUNT_CC)
           this.gridDataSource = result.dynamicData[1]
+          this.receiptEntryForm.controls.paidBalance.setValue(
+            this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTCC)
+          )
           this.gridDataSource.forEach((item: any) => {
             item.PAY_AMOUNT_FC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_FC, 'AMOUNT')
             item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC, 'AMOUNT')
@@ -301,7 +329,7 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('select all required details!');
       return;
     } else {
-      let Details = this.receiptEntryForm.value 
+      let Details = this.receiptEntryForm.value
       Details.Attachedfile = this.Attachedfile
       this.close(Details)
     }
@@ -343,6 +371,15 @@ export class AddReceiptComponent implements OnInit {
             this.setFormControlAmount('Amount_LC', 0)
             this.setFormControlAmount('Amount_FC', 0)
             this.setFormControlAmount('Header_Amount', 0)
+            this.gridDataSource.forEach((item: any, index: any) => {
+              if (index != 0) {
+                item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
+                item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
+              } else {
+                item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(this.receiptEntryForm.value.paidBalance, 'AMOUNT')
+                item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(this.receiptEntryForm.value.paidBalance, 'AMOUNT')
+              }
+            })
           }
           this.currencyCodeChange(this.receiptEntryForm.value.CurrCode);
 
@@ -405,8 +442,8 @@ export class AddReceiptComponent implements OnInit {
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
-          this.calculateGridAmount()
-         } else {
+          // this.calculateGridAmount()
+        } else {
           this.commonService.toastErrorByMsgId('Accode not found in credit master')
         }
       }, err => this.commonService.toastErrorByMsgId(err))
@@ -527,7 +564,6 @@ export class AddReceiptComponent implements OnInit {
     }
   }
   extraBalance: number = 0
-
   /**calculate amount and split to rows in grid*/
   calculateGridAmount(MODE?: number) {
     let formData = this.receiptEntryForm.value
@@ -535,6 +571,7 @@ export class AddReceiptComponent implements OnInit {
     let Amount_FC = this.commonService.emptyToZero(formData.Amount_FC)
     let Header_Amount = this.commonService.emptyToZero(formData.Header_Amount)
     let InstallmentAmount = this.commonService.emptyToZero(formData.InstallmentAmount)
+
     let payAmountSum: number = 0
     // calculating total scheme balancesetFormControlAmount
     this.gridDataSource.forEach((item: any, index: any) => {
@@ -554,44 +591,35 @@ export class AddReceiptComponent implements OnInit {
       return
     }
 
-    let balanceAmount: number = Amount_LC - InstallmentAmount
-    let totalRowsToUpdate = Math.floor(Amount_LC / InstallmentAmount)
-    let flag = 0
-    let amts = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTCC)
-    if (amts != 0 && amts < Header_Amount && MODE == 1) {
-      this.extraBalance = this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTFC)
-      this.gridDataSource[1].RCVD_AMOUNTFC = this.gridDataSource[0].RCVD_AMOUNTFC
-      this.gridDataSource[1].RCVD_AMOUNTCC = this.gridDataSource[0].RCVD_AMOUNTCC
-      this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
-      this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
-      flag = 1
-      this.setNarrationString() //narration add
-      return
-    }
-    //calculating amount and spliting to each rows
-    this.gridDataSource.forEach((item: any, index: any) => {
-      if (balanceAmount <= 0 && amts == 0) {
-        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
-        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Header_Amount, 'AMOUNT')
-        flag = 1
-      }
-      if (flag == 1) return
-      if (totalRowsToUpdate >= index + 1) {
-        item.RCVD_AMOUNTFC = InstallmentAmount
-        item.RCVD_AMOUNTCC = InstallmentAmount
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((item.RCVD_AMOUNTCC), 'AMOUNT')
-      } else {
-        item.RCVD_AMOUNTFC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount)) + this.extraBalance
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
-        item.RCVD_AMOUNTCC = (Header_Amount - (totalRowsToUpdate * InstallmentAmount)) + this.extraBalance
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
-        flag = 1
-      }
-      if (flag == 1) return
+    let totalSpiltAmt = formData.paidBalance + Header_Amount
+    // fn to calculate and split amount to rows
+    let FixedArr = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmt)
+
+    this.gridDataSource.forEach((item: any, index: number) => {
+      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArr[index].AMOUNT, 'AMOUNT')
+      item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArr[index].AMOUNT, 'AMOUNT')
     })
     this.setNarrationString() //narration add
   }
+
+  distributeAmounts(totalObjects: number, maxAmount: number, inputAmount: number): any[] {
+    const objects: any[] = [];
+
+    let remainingAmount = inputAmount;
+    for (let i = 1; i <= totalObjects; i++) {
+      let currentAmount = Math.min(maxAmount, remainingAmount);
+      if (currentAmount > 0) {
+        objects.push({ ID: i, AMOUNT: currentAmount });
+        remainingAmount -= currentAmount;
+      } else {
+        objects.push({ ID: i, AMOUNT: 0 });
+      }
+    }
+
+    return objects;
+  }
+
+
   setNarrationString() {
     let narrationStr: string = ''
     this.gridDataSource.forEach((item: any, index: any) => {
@@ -758,7 +786,7 @@ export class AddReceiptComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  openAttach(){
+  openAttach() {
     for (let j = 0; j < this.Attachedfile.length; j++) {
       window.open(
         this.Attachedfile[j],
@@ -770,18 +798,18 @@ export class AddReceiptComponent implements OnInit {
   openAttchments() {
     // Handle the cell click event based on the column and value
     // if (columnName === 'IS_ATTACHMENT_PRESENT') {
-      // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
-      let API = `SchemeCurrencyReceipt/SchemeCurrencyReceipt/GetReceiptAttachments?MID=`+this.content.MID
-      let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
-      let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
-        .subscribe((result: any) => {
-          console.log(result,'result');
-          if (result.fileCount > 0) {
-            this.Attachedfile = result.file
-          } else {
-            this.commonService.toastErrorByMsgId(result.message)
-          }
-        })
+    // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
+    let API = `SchemeCurrencyReceipt/SchemeCurrencyReceipt/GetReceiptAttachments?MID=` + this.content.MID
+    let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result: any) => {
+        console.log(result, 'result');
+        if (result.fileCount > 0) {
+          this.Attachedfile = result.file
+        } else {
+          this.commonService.toastErrorByMsgId(result.message)
+        }
+      })
     // }
   }
   branchCodeChange(event: any) {

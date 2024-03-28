@@ -279,7 +279,7 @@ export class SchemeReceiptComponent implements OnInit {
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex
-    this.openNewReceiptDetails(this.dataToEditrow[0])
+    this.openNewReceiptDetails(this.dataToEditrow[0] || this.orderedItems[0])
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -722,10 +722,10 @@ export class SchemeReceiptComponent implements OnInit {
       return
     }
     if (data) {
-      data.FLAG = 'VIEW'
-      data.POSCUSTOMERCODE = this.content.POSCUSTOMERCODE
-      data.BALANCE_CC = this.content.BALANCE_CC
-      data.MID = this.content.MID
+      data.FLAG = this.content?.MID ? 'VIEW' : 'EDIT'
+      data.POSCUSTOMERCODE = this.content?.POSCUSTOMERCODE
+      data.BALANCE_CC = this.content?.BALANCE_CC
+      data.MID = this.content?.MID
       this.dataToEditrow = data;
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
@@ -764,8 +764,8 @@ export class SchemeReceiptComponent implements OnInit {
         "ACCODE": item.AC_Code || "",
         "CURRENCY_CODE": item.CurrCode || "",
         "CURRENCY_RATE": this.commonService.emptyToZero(item.CurrRate) || 0,
-        "AMOUNTFC": this.commonService.emptyToZero(item.AMOUNT_VAT),
-        "AMOUNTCC": this.commonService.emptyToZero(item.AMOUNT_VATFC),
+        "AMOUNTFC": this.commonService.emptyToZero(item.Amount_FC),
+        "AMOUNTCC": this.commonService.emptyToZero(item.Amount_LC),
         "HEADER_AMOUNT": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CHEQUE_NO": "",
         "CHEQUE_DATE": this.commonService.formatDateTime(this.currentDate),
@@ -1242,6 +1242,8 @@ export class SchemeReceiptComponent implements OnInit {
       let vatTotal = 0
       let vatTotalFC = 0
       let SchemeBalance = 0
+      console.log(this.orderedItems,'this.orderedItems');
+      
       this.orderedItems.forEach((item: any) => {
         item.SchemeBalance = this.commonService.emptyToZero(item.SchemeBalance)
         item.Amount_FC = this.commonService.emptyToZero(item.Amount_FC)
@@ -1250,8 +1252,8 @@ export class SchemeReceiptComponent implements OnInit {
         item.AMOUNT_VATFC = ((parseInt(item.Amount_FC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)
         item.VAT_AMT = parseInt(item.Amount_LC) - item.AMOUNT_VAT
         item.VAT_AMTFC = parseInt(item.Amount_FC) - item.AMOUNT_VATFC
-        vatTotal = item.VAT_AMT;
-        vatTotalFC = item.VAT_AMTFC;
+        vatTotal = (parseInt(item.Amount_LC)* parseInt(item.TRN_Per)) / (100 + parseInt(item.TRN_Per))
+        vatTotalFC = (parseInt(item.Amount_LC)* parseInt(item.TRN_Per)) / (100 + parseInt(item.TRN_Per))
         this.totalAmount_LC = item.Amount_LC;
         this.totalAmount_FC = item.Amount_FC;
         this.VATAmount = item.VAT_AMT;
@@ -1260,13 +1262,7 @@ export class SchemeReceiptComponent implements OnInit {
         this.TOTAL_AMOUNTLC = item.Amount_LC;
       });
       this.receiptDetailsForm.controls.SchemeBalance.setValue(SchemeBalance)
-      // this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
-      // this.receiptDetailsForm.controls.TotalAmount.setValue(
-      //   this.commonService.commaSeperation(this.totalAmount_LC.toFixed(2))
-      // )
-      console.log(this.orderedItems[0].Amount_LC,'Amount_LC');
-      console.log(this.totalAmount_LC);
-      
+
       this.setFormControlAmount('TotalTax', vatTotal)
       this.setFormControlAmount('TotalTax_FC', vatTotalFC)
       this.setFormControlAmount('TotalAmount', this.totalAmount_LC)
