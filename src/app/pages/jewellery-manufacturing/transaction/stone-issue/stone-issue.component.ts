@@ -38,6 +38,7 @@ export class StoneIssueComponent implements OnInit {
   selectRowIndex: any;
   selectedKey: number[] = [];
   selectedIndexes: any = [];
+  viewMode: boolean = false;
 
     user: MasterSearchModel = {
       PAGENO: 1,
@@ -96,6 +97,13 @@ export class StoneIssueComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.setCompanyCurrency()
     this.setAllInitialValues()
+    
+      if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
+    if (this.content?.FLAG) {
+      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
+    }
     this.setvalues()
   }
   setAllInitialValues() {
@@ -107,8 +115,9 @@ export class StoneIssueComponent implements OnInit {
       if (result.response) {
         let data = result.response
         this.detailData= data.Details
-        console.log(data,'collection')
-        data.Details.forEach((element: any) => {
+        if (this.detailData.length > 0) {
+          this.detailData.forEach((element: any) => {
+            element.FLAG = this.content ? this.content.FLAG : null
           this.stoneIssueData.push({
             SRNO: element.SRNO,
             JOB_NUMBER: element.JOB_NUMBER,
@@ -123,8 +132,11 @@ export class StoneIssueComponent implements OnInit {
             AMOUNTLC: element.AMOUNTFC,
             WORKER_CODE: element.WORKER_CODE,
             SIEVE_SET: element.SIEVE_SET,
-              })
-            });
+          })
+        });
+       } else {
+              this.comService.toastErrorByMsgId('Detail data not found')
+            }
           this.stoneissueFrom.controls.currency.setValue(data.CURRENCY_CODE)
           this.stoneissueFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
           this.stoneissueFrom.controls.worker.setValue(data.WORKER)
@@ -141,8 +153,9 @@ export class StoneIssueComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-
+    
   }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -202,15 +215,30 @@ export class StoneIssueComponent implements OnInit {
   //   modalRef.componentInstance.content = this.srNo;
   // }
 
-  deleteTableData(){
-   
+  deleteTableData(): void {
+    console.log(this.selectedKey, 'data')
+    this.selectedKey.forEach((element: any) => {
+      this.stoneIssueData.splice(element.SRNO - 1, 1)
+    })
+  }
+  onSelectionChanged(event: any) {
+    this.selectedKey = event.selectedRowKeys;
+    console.log(this.selectedKey, 'srno')
+    let indexes: Number[] = [];
+    this.stoneIssueData.reduce((acc, value, index) => {
+      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
   }
 
  
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:['',[Validators.required]],
-    vocno:['0',[Validators.required]],
+    vocno:['1',[Validators.required]],
     vocDate:[],
     enteredBy:[''],
     currency:[''],
