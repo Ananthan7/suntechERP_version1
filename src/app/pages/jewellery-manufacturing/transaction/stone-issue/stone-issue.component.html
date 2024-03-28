@@ -22,12 +22,12 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Voucher * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="voctype" readonly />
+                      <input type="text" matInput formControlName="voctype" readonly [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 70%">
-                      <input type="text" matInput formControlName="vocno" style="text-align: right;" readonly />
+                      <input type="text" matInput formControlName="vocno" style="text-align: right;" readonly [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -55,7 +55,7 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
                       <input matInput [matDatepicker]="vocDate" [max]="vocMaxDate" name="vocDate"
-                        formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation />
+                        formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode"/>
                       <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                       <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                     </mat-form-field>
@@ -67,15 +67,15 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Currency * :</label>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%">
-                      <input type="text" matInput formControlName="currency" readonly />
+                      <input type="text" matInput formControlName="currency" readonly [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%">
                       <input type="text" matInput formControlName="currencyrate" style="text-align: right;" readonly
-                        SixDecimalInput />
+                        SixDecimalInput [readonly]="viewMode"/>
                     </mat-form-field>
-                    <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="CurrencyCodeSelected($event)">
+                    <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="CurrencyCodeSelected($event)" *ngIf="!viewMode">
                     </master-search>
                   </div>
                 </div>
@@ -86,9 +86,9 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Entered By:</label>
                     <div class="col-md-8">
                       <mat-form-field style="width: 70%">
-                        <input type="text" matInput formControlName="enteredBy" />
+                        <input type="text" matInput formControlName="enteredBy" [readonly]="viewMode"/>
                       </mat-form-field>
-                      <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                      <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                       </master-search>
                     </div>
                   </div>
@@ -98,14 +98,14 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Worker :</label>
                     <div class="col-md-4">
                       <mat-form-field style="width: 80%">
-                        <input type="text" matInput formControlName="worker" />
+                        <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
                       </mat-form-field>
-                      <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                      <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
                       </master-search>
                     </div>
                     <div class="col-md-4">
                       <mat-form-field style="width: 80%">
-                        <input type="text" matInput formControlName="workername" />
+                        <input type="text" matInput formControlName="workername" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -148,7 +148,7 @@
                     </dxo-summary>
                   </dx-data-grid> -->
                 <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData" [showBorders]="true"
-                  (onRowClick)="onRowClickHandler($event)">
+                  (onRowClick)="onRowClickHandler($event)" [selectedRowKeys]="selectedKey" (onSelectionChanged)="onSelectionChanged($event)">
                   <!-- <dxo-selection mode="single"></dxo-selection> -->
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <!-- <dxo-editing mode="cell" [allowUpdating]="true">
