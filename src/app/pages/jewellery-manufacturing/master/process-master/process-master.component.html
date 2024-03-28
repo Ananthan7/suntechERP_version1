@@ -23,7 +23,7 @@
                                     <mat-form-field style="width: 85%; margin-left: 7px;">
                                         <input type="text" matInput #code placeholder="CODE"
                                             (focusout)="checkCodeExists($event)"
-                                            (input)="code.value = code.value.toUpperCase()"
+                                            oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode" maxlength="6" [readonly]="viewMode || editMode" (keyup)="codeEnabled()" />
                                         <mat-error *ngIf="processMasterForm.controls.processCode.touched 
                                             && processMasterForm.controls.processCode.hasError('required')">
@@ -34,7 +34,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
                                         <input type="text" matInput #codeDes [readonly]="viewMode"
-                                            (input)="codeDes.value = codeDes.value.toUpperCase()"
+                                        oninput="this.value = this.value.toUpperCase()"
                                             placeholder="DESCRIPTION" formControlName="processDesc" maxlength="40" [readonly]="viewMode || editMode" />
                                     </mat-form-field>
                                 </div>
