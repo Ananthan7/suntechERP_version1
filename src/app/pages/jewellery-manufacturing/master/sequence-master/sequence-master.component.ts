@@ -23,6 +23,8 @@ export class SequenceMasterComponent implements OnInit {
   showHeaderFilter!: boolean;
   selectAll: boolean = false;
   viewMode: boolean = false;
+  codeEnable: boolean = true;
+  editMode: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -72,6 +74,26 @@ export class SequenceMasterComponent implements OnInit {
       this.setFormValues();
     }
   }
+
+  codeEnabled() {
+    if (this.sequenceMasterForm.value.sequenceCode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
+
+  checkCode(): boolean {
+    if (this.sequenceMasterForm.value.sequenceCode == '') {
+      this.commonService.toastErrorByMsgId('please enter code')
+      return true
+    }
+    return false
+  }
+
+
   /**use:  search component selection changes*/
   wipAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].WIP_ACCODE = event.ACCODE;
@@ -440,6 +462,7 @@ export class SequenceMasterComponent implements OnInit {
 
   //selected field value setting
   sequencePrefixCodeSelected(data: any) {
+    if (this.checkCode()) return
     this.sequenceMasterForm.controls.sequencePrefixCode.setValue(data.PREFIX_CODE)
   }
   supervisorSelected(data: any) {
