@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -27,6 +27,7 @@ export class JobCreationComponent implements OnInit {
   yearMonth?: String;
   userName = localStorage.getItem("username");
   private subscriptions: Subscription[] = [];
+  currentDate = new FormControl(new Date());
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -58,13 +59,15 @@ export class JobCreationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private comService: CommonServiceService,
   ) {}
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;    
     this.userName = this.commonService.userName; 
     this.yearMonth = this.commonService.yearSelected;
+    this.setvaluesdata()
   }
 
   close(data?: any) {
@@ -82,7 +85,13 @@ export class JobCreationComponent implements OnInit {
     narration: [""],
   });
 
-
+  setvaluesdata(){
+    console.log(this.comService);
+    this.jobCreationFrom.controls.vocType.setValue(this.comService.getqueryParamVocType())
+    this.jobCreationFrom.controls.vocNo.setValue('1')
+    this.jobCreationFrom.controls.vocDate.setValue(this.comService.currentDate)
+  
+  }
 
   removedata() {
     this.tableData.pop();
