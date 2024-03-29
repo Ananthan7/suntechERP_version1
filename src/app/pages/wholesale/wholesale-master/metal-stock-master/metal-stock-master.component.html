@@ -65,11 +65,13 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Making Charge * :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 80%;">
-                      <mat-select formControlName="makingcharge">
-                        <mat-option *ngFor="let option of makingchargeTypeList" [value]="option.value">
-                          {{ option.name }}
-                        </mat-option>
+                    <mat-form-field style="width: 70%;">
+                      <mat-select>
+                        <mat-option value="GMS">GMS</mat-option>
+                        <mat-option value="PCS">PCS</mat-option>
+                        <mat-option value="LENGTH">LENGTH</mat-option>
+                        <mat-option value="GOZ">GOZ</mat-option>
+                        <mat-option value="%">%</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>

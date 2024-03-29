@@ -134,6 +134,7 @@ export class StoneIssueDetailComponent implements OnInit {
     otheratt: [],
     remarks: [''],
     consignment:[false],
+    FLAG: [null]
   });
 
 
@@ -151,9 +152,16 @@ export class StoneIssueDetailComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     // this.srNo= srNo;
     console.log(this.content);
-    this.setFormValues()
-    
+    this.setFormValues() 
+    if (this.content) {
+      this.stoneissuedetailsFrom.controls.FLAG.setValue(this.content[0].FLAG)
+    }
+    if (this.content[0].FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
   }
+    
+  
 
   onFileChanged(event:any) {
     this.url = event.target.files[0].name
