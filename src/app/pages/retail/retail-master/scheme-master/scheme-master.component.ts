@@ -49,6 +49,7 @@ export class SchemeMasterComponent implements OnInit {
     code: ["", Validators.required],
     branch: [""],
     prefix: ["", Validators.required],
+    prefixCode: [""],
     description: ["", Validators.required],
     frequency: ["", Validators.required],
     tenurePeriod: [""],
@@ -202,32 +203,43 @@ export class SchemeMasterComponent implements OnInit {
 
   prefixSelected(e: any) {
     this.schemeMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
+    this.schemeMasterForm.controls.prefixCode.setValue(e.PREFIX_CODE);
   }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  checkReceiptModeExist(amt:string,mode:string){
+    if(this.comService.emptyToZero(this.schemeMasterForm.value[amt]) == 0){
+      this.schemeMasterForm.controls[mode].setValue('')
+      this.schemeMasterForm.controls[amt].setValue('')
+    }
+  }
   private submitFormValidation(): boolean{
     let flag = false;
     let form = this.schemeMasterForm.value;
-    if(form.code == ''){
+    if(this.comService.nullToString(form.code) == ''){
       this.comService.toastErrorByMsgId('Code is required')
       flag = true
     }
-    if(form.prefix == ''){
+    if(this.comService.nullToString(form.prefix) == ''){
       this.comService.toastErrorByMsgId('Prefix is required')
       flag = true
     }
-    if(form.description == ''){
+    if(this.comService.nullToString(form.description) == ''){
       this.comService.toastErrorByMsgId('Description is required')
       flag = true
     }
-    if(form.frequency == ''){
+    if(this.comService.nullToString(form.frequency) == ''){
       this.comService.toastErrorByMsgId('Frequency is required')
       flag = true
     }
-    if(form.installmentAmount == ''){
+    if(this.comService.nullToString(form.depositIn) == ''){
+      this.comService.toastErrorByMsgId('Deposit In is required')
+      flag = true
+    }
+    if(this.comService.emptyToZero(form.installmentAmount) == 0){
       this.comService.toastErrorByMsgId('Installment amount is required')
       flag = true
     }
@@ -235,12 +247,24 @@ export class SchemeMasterComponent implements OnInit {
       this.comService.toastErrorByMsgId('Receipt Mode is required for installment Amount')
       flag = true
     }
+    if(this.comService.emptyToZero(form.installmentAmount) == 0 && form.receiptModeone != ''){
+      this.comService.toastErrorByMsgId('Installment Amount is required')
+      flag = true
+    }
     if(this.comService.emptyToZero(form.bonusInstallment) != 0 && !form.receiptModeTwo){
       this.comService.toastErrorByMsgId('Receipt Mode is required for bonus installment')
       flag = true
     }
+    if(this.comService.emptyToZero(form.bonusInstallment) == 0 && form.receiptModeTwo != ''){
+      this.comService.toastErrorByMsgId('Bonus installment is required')
+      flag = true
+    }
     if(this.comService.emptyToZero(form.cancelCharges) != 0 && !form.receiptModeThree){
       this.comService.toastErrorByMsgId('Receipt Mode is required for cancel charges')
+      flag = true
+    }
+    if(this.comService.emptyToZero(form.cancelCharges) == 0 && form.receiptModeThree != ''){
+      this.comService.toastErrorByMsgId('Cancel charges is required')
       flag = true
     }
     return flag
@@ -367,13 +391,17 @@ export class SchemeMasterComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-  prefixCodeValidate() {
-    let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.schemeMasterForm.value.prefix
+  prefixCodeValidate(event:any) {
+    let API = 'PrefixMaster/GetPrefixMasterDetail/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
         if (resp.status == 'Failed') {
           this.comService.toastErrorByMsgId('Prefix code not found')
           this.schemeMasterForm.controls.prefix.setValue('')
+          this.schemeMasterForm.controls.prefixCode.setValue('')
+        }else{
+          let data = resp.response
+          this.schemeMasterForm.controls.prefix.setValue(data.PREFIX_CODE)
         }
       });
     this.subscriptions.push(Sub);

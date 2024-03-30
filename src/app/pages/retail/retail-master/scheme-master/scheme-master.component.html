@@ -7,7 +7,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [disableSaveBtn]="viewMode && usedSchemeEditMode" [disableDeleteBtn]="viewMode" 
+<modal-header [disableSaveBtn]="viewMode && usedSchemeEditMode"
+    [disableDeleteBtn]="viewMode"
     (cancelClick)="close()" (saveClick)="formSubmit()"
     (deleteClick)="deleteSchemeMaster()"></modal-header>
 <!-- content section -->
@@ -20,18 +21,30 @@
                         class="col-sm-2 col-form-label">Code*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" [readonly]="viewMode || codeEditMode"
+                            <input type="text"
+                                [readonly]="viewMode || codeEditMode"
                                 UppercaseDirective
                                 (focusout)="getSchemeMasterList()" maxlength="6"
                                 matInput formControlName="code" />
+                            <mat-error
+                                *ngIf="schemeMasterForm.controls.code.touched 
+                                    && schemeMasterForm.controls.code.hasError('required')">
+                                Code <strong>required</strong>
+                            </mat-error>
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <label class="col-form-label m-2">Prefix*</label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                (focusout)="prefixCodeValidate()"
-                                formControlName="prefix" />
+                                UppercaseDirective
+                                formControlName="prefixCode"
+                                (change)="prefixCodeValidate($event)"/>
+                            <mat-error
+                                *ngIf="schemeMasterForm.controls.prefix.touched 
+                                    && schemeMasterForm.controls.prefix.hasError('required')">
+                                Prefix Code <strong>required</strong>
+                            </mat-error>
                         </mat-form-field>
                         <master-search [MasterSearchData]="prefixCodeData"
                             *ngIf="!viewMode"
@@ -39,7 +52,8 @@
                     </div>
                     <div class="col-md-4">
                         <label class="col-form-label me-2">Status</label>
-                        <mat-checkbox class="mt-2" [disabled]="viewMode && usedSchemeEditMode"
+                        <mat-checkbox class="mt-2"
+                            [disabled]="viewMode && usedSchemeEditMode"
                             formControlName="schemeStatus">Active</mat-checkbox>
                     </div>
                 </div>
@@ -48,10 +62,16 @@
                         class="col-sm-2 col-form-label">Description*</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input [readonly]="viewMode && usedSchemeEditMode" type="text" matInput
+                            <input [readonly]="viewMode && usedSchemeEditMode"
+                                type="text" matInput
                                 oninput="this.value = this.value.toUpperCase()"
                                 (onkeypress)="handleKeyPress($event)"
-                                formControlName="description" maxlength="40"/>
+                                formControlName="description" maxlength="40" />
+                            <mat-error
+                                *ngIf="schemeMasterForm.controls.description.touched 
+                                && schemeMasterForm.controls.description.hasError('required')">
+                                Description <strong>required</strong>
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -59,7 +79,8 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Frequency*</label>
                     <div class="col-md-2">
-                        <ng-select [readonly]="viewMode" [items]="frequencyList"
+                        <ng-select [readonly]="viewMode"
+                            [items]="frequencyList"
                             bindLabel="ENGLISH"
                             bindValue="ENGLISH"
                             formControlName="frequency"></ng-select>
@@ -70,7 +91,7 @@
                         class="col-sm-2 col-form-label">Tenure/Period*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput maxlength="5" 
+                            <input type="text" matInput maxlength="5"
                                 (keypress)="isNumeric($event)"
                                 class="text-right" [readonly]="viewMode"
                                 formControlName="tenurePeriod" />
@@ -84,15 +105,19 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" [readonly]="viewMode"
-                                class="text-right" maxlength="15" 
+                                class="text-right" maxlength="15"
                                 AmountDecimalInput
-                                matInput formControlName="installmentAmount" />
+                                (focusout)="checkReceiptModeExist('installmentAmount','receiptModeone')"
+                                matInput
+                                formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Receipt Mode*</label>
+                        class="col-sm-2 col-form-label">Receipt
+                        Mode*</label>
                     <div class="col-md-2">
-                        <ng-select [items]="receipt1List" [readonly]="viewMode"
+                        <ng-select [items]="receipt1List"
+                            [readonly]="viewMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeone"></ng-select>
                     </div>
@@ -104,37 +129,43 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" class="text-right"
-                                [readonly]="viewMode" maxlength="5" 
-                                (keypress)="isNumeric($event)" 
+                                [readonly]="viewMode" maxlength="5"
+                                (keypress)="isNumeric($event)"
                                 AmountDecimalInput
-                                matInput formControlName="bonusInstallment" />
+                                (focusout)="checkReceiptModeExist('bonusInstallment','receiptModeTwo')"
+                                matInput
+                                formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <ng-select [items]="receipt2List" [readonly]="viewMode && usedSchemeEditMode"
+                        <ng-select [items]="receipt2List"
+                            [readonly]="viewMode && usedSchemeEditMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeTwo"></ng-select>
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Cancel Charges </label>
+                        class="col-sm-2 col-form-label">Cancel Charges
+                    </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" maxlength="15" 
+                            <input type="text" maxlength="15"
                                 (keypress)="isNumeric($event)"
                                 class="text-right"
                                 [readonly]="viewMode"
                                 AmountDecimalInput
+                                (focusout)="checkReceiptModeExist('cancelCharges','receiptModeThree')"
                                 matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <ng-select [items]="receipt2List" [readonly]="viewMode && usedSchemeEditMode"
+                        <ng-select [items]="receipt2List"
+                            [readonly]="viewMode && usedSchemeEditMode"
                             bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
                             formControlName="receiptModeThree"></ng-select>
                         <!-- <mat-form-field style="width: 100%;">
@@ -151,7 +182,8 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Deposit In</label>
                     <div class="col-md-2">
-                        <ng-select [items]="depositinList" bindLabel="ENGLISH"
+                        <ng-select [items]="depositinList"
+                            bindLabel="ENGLISH"
                             bindValue="ENGLISH" [readonly]="viewMode"
                             formControlName="depositIn"></ng-select>
                         <!-- <mat-form-field style="width: 100%;">
@@ -193,7 +225,8 @@
                         class="col-sm-2 col-form-label">Remarks</label>
                     <div class="col-md-10">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput
+                                [readonly]="viewMode"
                                 formControlName="remarks" maxlength="100" />
                         </mat-form-field>
                     </div>
