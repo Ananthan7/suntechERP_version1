@@ -95,9 +95,9 @@
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" matInput AmountDecimalInput
+                                <input type="number" matInput 
                                     class="text-right"
-                                    [readonly]="viewMode|| codeEnable"
+                                    [readonly]="viewMode" NumberOnly
                                     formControlName="LossAllowed" maxlength="12"
                                     />
                             </mat-form-field>
@@ -118,10 +118,10 @@
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" MetalDecimalInput matInput
+                                <input type="number"  matInput
                                     maxlength="12"   
                                     class="text-right"
-                                    [readonly]="viewMode|| codeEnable" 
+                                    [readonly]="viewMode" NumberOnly
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
