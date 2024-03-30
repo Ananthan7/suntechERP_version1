@@ -5106,7 +5106,7 @@ export class AddPosComponent implements OnInit {
           this.exchangeForm.value.fcn_exchange_stone_amount
         ), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC: this.exchangeForm.value.fcn_exchange_net_amount,
+      NETVALUEFC: this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_net_amount), 
       NETVALUECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(
@@ -5544,7 +5544,7 @@ export class AddPosComponent implements OnInit {
       let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
       let _exchangeMetalAmt = this.exchangeForm.value.fcn_exchange_metal_amount;
       let _exchangeMkgAmt = this.exchangeForm.value.fcn_exchange_making_amt;
-      let _exchangeNetAmt = this.exchangeForm.value.fcn_exchange_net_amount;
+      let _exchangeNetAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_amount);
 
       let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
       let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
@@ -5556,8 +5556,9 @@ export class AddPosComponent implements OnInit {
         this.exchangeForm.value.fcn_exchange_item_code != '' &&
         _exchangeMetalAmt > 0 &&
         _exchangeMetalAmt != '' &&
-        _exchangeNetAmt > 0 &&
-        _exchangeNetAmt != ''
+        _exchangeNetAmt > 0
+        //  &&
+        // _exchangeNetAmt != ''
       ) {
         // if (items_length == 0) this.exchange_items_slno_length = 1;
         // else
@@ -5673,7 +5674,8 @@ export class AddPosComponent implements OnInit {
         }
         if (_exchangeMetalAmt == '' || 0)
           this.openDialog('Warning', 'Invalid Metal Amount', true);
-        if (_exchangeNetAmt == '' || 0)
+        if (_exchangeNetAmt == 0)
+        // if (_exchangeNetAmt == '' || 0)
           this.openDialog('Warning', 'Invalid Net Amount', true);
       }
 
@@ -9244,6 +9246,12 @@ export class AddPosComponent implements OnInit {
         parseFloat(this.exchangeForm.value.fcn_exchange_making_amt || 0) +
         parseFloat(this.exchangeForm.value.fcn_exchange_stone_amount || 0)
       )
+    );
+    this.setExchangeCommaSep();
+  }
+  setExchangeCommaSep(){
+    this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
+    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_net_amount)
     );
   }
   changeExchangeNettWt(event: any) {

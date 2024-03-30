@@ -2911,7 +2911,6 @@
               <mat-form-field>
                 <mat-label>Net Amount</mat-label>
                 <input
-                  type="number"
                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2920,7 +2919,7 @@
                   formControlName="fcn_exchange_net_amount"
                   [readonly]="true"
                   (change)="changeExNetAmt($event)"
-                  
+                  AmountDecimalInput
                 />
               </mat-form-field>
             </div>
