@@ -38,8 +38,9 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
                                 UppercaseDirective
-                                formControlName="prefixCode"
-                                (change)="prefixCodeValidate($event)"/>
+                                formControlName="prefix"
+                                (keypress)="removePrefixCode()"
+                                (change)="prefixCodeValidate($event)" />
                             <mat-error
                                 *ngIf="schemeMasterForm.controls.prefix.touched 
                                     && schemeMasterForm.controls.prefix.hasError('required')">
@@ -92,9 +93,14 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput maxlength="5"
-                                (keypress)="isNumeric($event)"
+                                NumberOnly
                                 class="text-right" [readonly]="viewMode"
                                 formControlName="tenurePeriod" />
+                            <mat-error
+                                *ngIf="schemeMasterForm.controls.tenurePeriod.touched 
+                                    && schemeMasterForm.controls.tenurePeriod.hasError('required')">
+                                Period <strong>required</strong>
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -110,6 +116,11 @@
                                 (focusout)="checkReceiptModeExist('installmentAmount','receiptModeone')"
                                 matInput
                                 formControlName="installmentAmount" />
+                            <mat-error
+                                *ngIf="schemeMasterForm.controls.tenurePeriod.touched 
+                                    && schemeMasterForm.controls.tenurePeriod.hasError('required')">
+                                Period <strong>required</strong>
+                            </mat-error>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
@@ -180,7 +191,7 @@
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Deposit In</label>
+                        class="col-sm-2 col-form-label">Deposit In*</label>
                     <div class="col-md-2">
                         <ng-select [items]="depositinList"
                             bindLabel="ENGLISH"
@@ -202,15 +213,14 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input matInput DateValidation
-                                name="startDate"
-                                [readonly]="viewMode"
+                                name="startDate" readonly
                                 [matDatepicker]="StartDate"
                                 formControlName="startDate"
                                 (dateChange)="formatDate($event)" />
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="StartDate"></mat-datepicker-toggle>
-                            <mat-datepicker [disabled]="viewMode"
+                            <mat-datepicker disabled="true"
                                 #StartDate></mat-datepicker>
                         </mat-form-field>
                     </div>

@@ -88,6 +88,7 @@ export class SchemeMasterComponent implements OnInit {
       }
       if(this.content.FLAG == 'EDIT'){
         this.codeEditMode = true
+        this.viewMode = false;
         this.schemeRegistrationWithParameter()
         this.getAllSelectOptions()
       }
@@ -219,15 +220,15 @@ export class SchemeMasterComponent implements OnInit {
   private submitFormValidation(): boolean{
     let flag = false;
     let form = this.schemeMasterForm.value;
-    if(this.comService.nullToString(form.code) == ''){
+    if(this.comService.nullToString(form.code).trim() == ''){
       this.comService.toastErrorByMsgId('Code is required')
       flag = true
     }
-    if(this.comService.nullToString(form.prefix) == ''){
+    if(this.comService.nullToString(form.prefixCode).trim() == ''){
       this.comService.toastErrorByMsgId('Prefix is required')
       flag = true
     }
-    if(this.comService.nullToString(form.description) == ''){
+    if(this.comService.nullToString(form.description).trim() == ''){
       this.comService.toastErrorByMsgId('Description is required')
       flag = true
     }
@@ -237,6 +238,10 @@ export class SchemeMasterComponent implements OnInit {
     }
     if(this.comService.nullToString(form.depositIn) == ''){
       this.comService.toastErrorByMsgId('Deposit In is required')
+      flag = true
+    }
+    if(this.comService.emptyToZero(form.tenurePeriod) == 0){
+      this.comService.toastErrorByMsgId('Period is required')
       flag = true
     }
     if(this.comService.emptyToZero(form.installmentAmount) == 0){
@@ -344,6 +349,7 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.remarks.setValue(this.content.SCHEME_REMARKS);
     this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
     this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
+    this.schemeMasterForm.controls.prefixCode.setValue(this.content.PREFIX_CODE);
     this.schemeMasterForm.controls.receiptModeTwo.setValue(this.content.BONUS_RECTYPE);
     this.schemeMasterForm.controls.receiptModeThree.setValue(this.content.CANCEL_RECTYPE);
     this.schemeMasterForm.controls.receiptModeone.setValue(this.content.INST_RECTYPE);
@@ -357,6 +363,9 @@ export class SchemeMasterComponent implements OnInit {
     this.setFormControlAmount('cancelCharges',this.content.CANCEL_CHARGE)
     this.setFormControlAmount('bonusInstallment',this.content.SCHEME_BONUS)
     this.getSchemeMasterList()
+  }
+  removePrefixCode(){
+    this.schemeMasterForm.controls.prefixCode.setValue('');
   }
   handleKeyPress(event:any) {
     // Check if the key pressed is Enter (key code 13)
@@ -402,6 +411,7 @@ export class SchemeMasterComponent implements OnInit {
         }else{
           let data = resp.response
           this.schemeMasterForm.controls.prefix.setValue(data.PREFIX_CODE)
+          this.schemeMasterForm.controls.prefixCode.setValue(data.PREFIX_CODE)
         }
       });
     this.subscriptions.push(Sub);
