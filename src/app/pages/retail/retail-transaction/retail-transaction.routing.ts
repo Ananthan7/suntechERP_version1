@@ -4,6 +4,8 @@ import { RetailTransactionComponent } from './retail-transaction.component';
 import { PreciousStonePurchaseComponent } from './precious-stone-purchase/precious-stone-purchase.component';
 import { RepairPurchaseComponent } from './repair-purchase/repair-purchase.component';
 import { PosReturnComponent } from './pos-return/pos-return.component';
+import { RetailRepairMenuComponent } from './retail-repair-menu/retail-repair-menu.component';
+import { RepairSaleComponent } from './repair-sale/repair-sale.component';
 
 const routes: Routes = [
   {
@@ -23,6 +25,16 @@ const routes: Routes = [
   {
     path: 'Pos-Return-Component',
      component: PosReturnComponent,
+   
+  },
+  {
+    path: 'retail-repair-menu',
+     component: RetailRepairMenuComponent,
+   
+  },
+  {
+    path: 'Repair-sale',
+     component: RepairSaleComponent,
    
   }
   
