@@ -112,7 +112,7 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <span class="matlabels">A/C Code
                 </span>
-                <mat-form-field style="width: 30%;margin-left: 38px;">
+                <mat-form-field style="width: 30%;margin-left: 45px;">
                     <input type="text" matInput readonly
                         formControlName="AC_Code" />
                 </mat-form-field>
@@ -120,7 +120,7 @@
                     <input type="text" matInput readonly
                         formControlName="AC_Description" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="accountMasterData" 
+                <master-search [MasterSearchData]="accountMasterData"
                     *ngIf="(receiptEntryForm.value.Type != 'Credit Card' && receiptEntryForm.value.Type != '')&&!viewMode"
                     (newRowClick)="selectedAcCode($event)">
                 </master-search>
@@ -142,10 +142,16 @@
                 <div class="row">
                     <span class="matlabels">Curr Code
                     </span>
-                    <mat-form-field style="width: 45%">
+                    <!-- <mat-form-field style="width: 45%">
                         <input type="text" matInput readonly
                             formControlName="CurrCode" />
-                    </mat-form-field>
+                    </mat-form-field> -->
+                    <div style="width: 45%">
+                        <ng-select [items]="currencyCodeArr"
+                        [readonly]="viewMode && currencyCodeArr.length == 0"
+                        bindLabel="CURRENCY_CODE" bindValue="CURRENCY_CODE"
+                        formControlName="CurrCode"></ng-select>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12">
@@ -265,7 +271,8 @@
                 <input class="fileAttach pt-2" *ngIf="!viewMode"
                     type="file" (change)="onFileChange($event)"
                     [disabled]="viewMode" />
-                <a  *ngIf="viewMode && Attachedfile.length>0" (click)="openAttach()"
+                <a *ngIf="viewMode && Attachedfile.length>0"
+                    (click)="openAttach()"
                     style="cursor: pointer;">Attachments</a>
             </div>
         </div>

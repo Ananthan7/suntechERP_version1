@@ -63,7 +63,6 @@ export class SchemeReceiptComponent implements OnInit {
   branchName: any = localStorage.getItem("BRANCH_PARAMETER");
   schemeDataFlag: boolean = false;
   disableAddBtnGrid: boolean = true;
-  VIEWEDITFLAG: string = '';
   dataIndex: any;
   Attachedfile: any[] = [];
   formdata = new FormData();
@@ -277,7 +276,6 @@ export class SchemeReceiptComponent implements OnInit {
     this.auditTrailComponent?.showDialog(params)
   }
   onRowClickHandler(event: any) {
-    this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex
     this.openNewReceiptDetails(this.dataToEditrow[0] || this.orderedItems[0])
   }

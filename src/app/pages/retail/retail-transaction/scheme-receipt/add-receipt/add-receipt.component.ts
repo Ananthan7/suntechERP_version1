@@ -24,6 +24,7 @@ export class AddReceiptComponent implements OnInit {
   currencyRate: any;
   payTypeArray: any[] = [];
   gridDataSource: any[] = [];
+  currencyCodeArr: any[] = [];
   schemeFlag: boolean = false;
   viewMode: boolean = false;
   disableAmountFC: boolean = false;
@@ -331,6 +332,7 @@ export class AddReceiptComponent implements OnInit {
     } else {
       let Details = this.receiptEntryForm.value
       Details.Attachedfile = this.Attachedfile
+      Details.GRID_DATA = this.gridDataSource
       this.close(Details)
     }
   }
@@ -400,6 +402,8 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
           this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
           if (data.CURRENCY_CODE) {
+            this.currencyCodeArr = []
+            this.currencyCodeArr.push({CURRENCY_CODE: data.CURRENCY_CODE})
             this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
             this.currencyCodeChange(data.CURRENCY_CODE);
           } else {
@@ -591,13 +595,16 @@ export class AddReceiptComponent implements OnInit {
       return
     }
 
-    let totalSpiltAmt = formData.paidBalance + Header_Amount
+    let totalSpiltAmtLC = formData.paidBalance + Amount_LC
+    let totalSpiltAmtFC = formData.paidBalance + Amount_FC
     // fn to calculate and split amount to rows
-    let FixedArr = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmt)
-
+    let FixedArrLC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtLC)
+    let FixedArrFC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtFC)
+    console.log(this.commonService.compCurrency, formData.CurrCode,'curr');
+    
     this.gridDataSource.forEach((item: any, index: number) => {
-      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArr[index].AMOUNT, 'AMOUNT')
-      item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArr[index].AMOUNT, 'AMOUNT')
+      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
+      item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
     })
     this.setNarrationString() //narration add
   }
