@@ -81,7 +81,7 @@
                         <label class="matlabels">Date Of Joining :
                         </label>
                         <mat-form-field style="width: 50%;" >
-                            <input matInput [disabled]="viewMode"
+                            <input matInput [disabled]="viewMode || disableDOJ"
                                 DateValidation
                                 name="DOJ"
                                 [matDatepicker]="DOJ"
@@ -92,7 +92,7 @@
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="DOJ"></mat-datepicker-toggle>
-                            <mat-datepicker [disabled]="viewMode"
+                            <mat-datepicker [disabled]="viewMode || disableDOJ"
                                 #DOJ></mat-datepicker>
                             <!-- <mat-error
                                         *ngIf="receiptDetailsForm.controls.VocDate.touched 
@@ -135,9 +135,10 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput
+                                UppercaseDirective
+                                (keypress)="validateInput($event)"
                                 formControlName="PanNo" [readonly]="viewMode" />
                         </mat-form-field>
-
                     </div>
                 </div>
                 <div class="row">
@@ -176,7 +177,7 @@
                             <label class="matlabels">Alert:
                             </label>
                             <span>
-                                <input type="checkbox" [readonly]="viewMode"
+                                <input type="checkbox" [disabled]="viewMode"
                                     formControlName="SendAlert"> Send Alert
                             </span>
                         </div>

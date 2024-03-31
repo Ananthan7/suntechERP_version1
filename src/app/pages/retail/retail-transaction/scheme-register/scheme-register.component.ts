@@ -27,6 +27,7 @@ export class SchemeRegisterComponent implements OnInit {
   formdata = new FormData();
   isLoading: boolean = false
   viewMode: boolean = false;
+  disableDOJ: boolean = true;
   usedSchemeMode: boolean = false;
   editMode: boolean = false;
   editUNITS: boolean = false;
@@ -175,6 +176,7 @@ export class SchemeRegisterComponent implements OnInit {
     if (this.content?.FLAG == 'VIEW') {
       this.viewMode = true
       this.usedSchemeMode = true;
+      this.schemeRegistrationForm.controls.SendAlert.disable()
     }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editMode = true
@@ -249,6 +251,7 @@ export class SchemeRegisterComponent implements OnInit {
               this.disableSaveBtn = true;
               this.usedSchemeMode = false;
               if (this.content.FLAG == 'EDIT') {
+                this.disableDOJ = false;
                 this.viewMode = false;
               }
               if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
@@ -361,7 +364,7 @@ export class SchemeRegisterComponent implements OnInit {
   /**USE: change fn to calculate no of units and amount */
   numberOfUnitCalculate() {
     let form = this.schemeRegistrationForm.value
-    if (form.Units) {
+    if (form.Units && this.content?.FLAG != 'VIEW') {
       let InstallmentAmount: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.InstallmentAmount)
       // let CancellationCharge: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.CancellationCharge)
       // let BonusInstallment: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.BonusInstallment)
@@ -415,6 +418,14 @@ export class SchemeRegisterComponent implements OnInit {
         }
       });
     this.subscriptions.push(Sub);
+  }
+  validateInput(event: any): void {
+    const allowedChars = /[a-zA-Z0-9]/;
+    const inputChar = String.fromCharCode(event.charCode);
+    
+    if (!allowedChars.test(inputChar)) {
+      event.preventDefault();
+    }
   }
   customizeText(data: any) {
     let num = Number(data.value).toFixed(2)
@@ -498,6 +509,7 @@ export class SchemeRegisterComponent implements OnInit {
             this.schemeRegistrationForm.controls.SchemeId.setValue('')
             return
           }
+          this.disableDOJ = false;
           this.viewPorcessBtn = false
           this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCHEME_CODE)
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
@@ -531,6 +543,7 @@ export class SchemeRegisterComponent implements OnInit {
           }
           this.schemeRegistrationForm.controls.MaturingDate.setValue(maturingdate)
         } else {
+          this.disableDOJ = true;
           this.schemeRegistrationForm.controls.SchemeId.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -545,16 +558,21 @@ export class SchemeRegisterComponent implements OnInit {
     this.SchemeMasterDetails[value.data.SRNO - 1].PAY_STATUS = data.PAY_STATUS ? true : false;
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
+  /**USE: funtion used to process grid  */
   processSchemeAPI() {
-    if(this.schemeRegistrationForm.value.Code == ''){
+    let formValue = this.schemeRegistrationForm.value
+    if(formValue.Code == ''){
       this.commonService.toastErrorByMsgId('Customer code required')
       return
     }
-    if(this.schemeRegistrationForm.value.Salesman == ''){
+    if(formValue.Salesman == ''){
       this.commonService.toastErrorByMsgId('Salesman required')
       return
     }
-    let formValue = this.schemeRegistrationForm.value
+    if(formValue.SchemeId == ''){
+      this.commonService.toastErrorByMsgId('Scheme Code required')
+      return
+    }
     let joindate = this.commonService.formatYYMMDD(new Date(formValue.DateOfJoining))
     let params = {
       BRANCH_CODE: formValue.Branch || this.commonService.branchCode,
@@ -572,7 +590,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.usedSchemeMode = true;
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item: any) => {
-            item.PAY_AMOUNT_CC = this.schemeRegistrationForm.value.InstallmentAmount
+            item.PAY_AMOUNT_CC = formValue.InstallmentAmount
             item.RCVD_VOCNO = item.RCVD_VOCNO.toString()
             if (item.REMAINDER_SEND.toString() == '0') {
               item.REMAINDER_SEND = false
