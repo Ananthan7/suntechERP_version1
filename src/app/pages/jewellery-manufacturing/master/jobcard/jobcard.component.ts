@@ -42,6 +42,9 @@ export class JobcardComponent implements OnInit {
   serialNo: any;
   JobNo: any;
   private subscriptions: Subscription[] = [];
+  selectedValue: string = 'singleMetal';
+
+
 
   lengthCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -332,10 +335,10 @@ export class JobcardComponent implements OnInit {
     time: [''],
     range: [''],
     seqcode: ['',[Validators.required]],
-    totalpcs: ['',[Validators.required]],
-    pending: ['',[Validators.required]],
-    pending1: ['',[Validators.required]],
-    parts: ['',[Validators.required]],
+    totalpcs: ['1',[Validators.required]],
+    pending: ['1',[Validators.required]],
+    pending1: ['1',[Validators.required]],
+    parts: ['1',[Validators.required]],
     srewFiled: [''],
     instruction: [''],
     picture_name: [''],
@@ -366,6 +369,7 @@ export class JobcardComponent implements OnInit {
     }
     console.log(this.content);
     this.serialNo = this.content;
+    
 
   }
 
@@ -652,6 +656,11 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_DESC)
     this.jobCardFrom.controls.purity.setValue(this.content.JOB_PURITY)
     this.jobCardFrom.controls.customername.setValue(this.content.CUSTOMER_NAME)
+    this.jobCardFrom.controls.lossbooking.setValue(this.content.LOSS_QTY_BOOKED)
+    this.jobCardFrom.controls.mainmetal.setValue(this.content.mainmetal)
+    this.jobCardFrom.controls.jobdate.setValue(this.content.JOB_DATE)
+    this.jobCardFrom.controls.deldate.setValue(this.content.DEL_DATE)
+    this.jobCardFrom.controls.type.setValue(this.content.TYPE)
   }
 
 

@@ -23,6 +23,8 @@ export class JobStickerPrintComponent implements OnInit {
   showFilterRow: boolean;
   allMode: string;
   checkBoxesMode: string;
+  selectedValue: string = 'PREVIEW';
+ 
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
