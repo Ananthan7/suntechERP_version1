@@ -7571,6 +7571,8 @@ export class SalesEstimationComponent implements OnInit {
 
     }
     validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt = null) {
+        const preRateVal = localStorage.getItem('fcn_li_rates');
+        const preTotalVal = localStorage.getItem('fcn_li_total_amnt');
         // alert(this.lineItemForm.value.fcn_li_net_amount)
         if (value != '') {
 
@@ -7644,6 +7646,7 @@ export class SalesEstimationComponent implements OnInit {
                 this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
+                        if(this.divisionMS=='M'){
                         this.lineItemForm.controls.fcn_li_rate.setValue(
                             this.makingRate
                             // this.comFunc.transformDecimalVB(
@@ -7669,6 +7672,17 @@ export class SalesEstimationComponent implements OnInit {
 
                         this.renderer.selectRootElement('#fcn_li_rate').focus();
                     }
+                    else if(this.divisionMS=='S'){
+                        this.lineItemForm.controls.fcn_li_rate.setValue(
+                            preRateVal
+                          );
+                       
+                          this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                            preTotalVal
+                          );
+                    }
+                }
+                  
                 });
             }
         } else {
@@ -7913,7 +7927,7 @@ export class SalesEstimationComponent implements OnInit {
         }
     }
     changeRate(event: any) {
-        const preVal = localStorage.getItem('fcn_li_rate');
+        const preVal = localStorage.getItem('fcn_li_rates');
         const value = event.target.value;
         if (event.target.value != '') {
 
@@ -7994,7 +8008,7 @@ export class SalesEstimationComponent implements OnInit {
             // this.lineItemForm.controls.fcn_li_rate.setValue(value);
             // this.manageCalculations();
             // alert(value);
-            const lsTotalAmt: any = localStorage.getItem('fcn_li_total_amount');
+            const lsTotalAmt: any = localStorage.getItem('fcn_li_total_amnt');
             this.validateMinSalePriceByTotalAmt(
                 value,
                 val,
@@ -8747,14 +8761,14 @@ export class SalesEstimationComponent implements OnInit {
 
         // set localstorage for get value
         localStorage.setItem(
-            'fcn_li_total_amount',
+            'fcn_li_total_amnt',
             // Math.round(parseFloat(mkgvalue)).toFixed(2)
             this.comFunc
                 .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, mkgvalue)
                 .toString()
         );
 
-        localStorage.setItem('fcn_li_rate', this.lineItemForm.value.fcn_li_rate);
+        localStorage.setItem('fcn_li_rates', this.lineItemForm.value.fcn_li_rate);
 
         /** set all total amount */
         let stoneAmt = this.comFunc.emptyToZero(
