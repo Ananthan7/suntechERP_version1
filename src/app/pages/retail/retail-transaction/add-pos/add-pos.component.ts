@@ -2319,7 +2319,7 @@ export class AddPosComponent implements OnInit {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
 
-  open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false) {
+  open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false) {
     this.lineItemModalForSalesReturn = false;
     this.updateBtn = false;
     if (!this.viewOnly && !this.editOnly) {
@@ -2992,6 +2992,9 @@ export class AddPosComponent implements OnInit {
     // this.salesReturnEditCode = value.STOCK_CODE;
     // this.salesReturnEditAmt = value.NETVALUEFC;
     // this.searchVocNoSalRet();
+
+    this.setExchangeCommaSep();
+
   }
   getSalesPersonMaster() {
     this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList')
@@ -5054,10 +5057,10 @@ export class AddPosComponent implements OnInit {
       PUREWT: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
 
       CHARGABLEWT: this.exchangeForm.value.fcn_exchange_chargeable_wt || 0, // net weight
-      MKG_RATEFC: this.exchangeForm.value.fcn_exchange_making_rate || 0, //need
+      MKG_RATEFC: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate) || 0, //need
       MKG_RATECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
-        this.exchangeForm.value.fcn_exchange_making_rate, this.vocDataForm.value.txtCurRate
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate), this.vocDataForm.value.txtCurRate
       ),
 
       // this.comFunc.CCToFC(
@@ -5065,10 +5068,10 @@ export class AddPosComponent implements OnInit {
       //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
       // ), // cctofc rate
 
-      MKGVALUEFC: this.exchangeForm.value.fcn_exchange_making_amt, // metal amount
+      MKGVALUEFC: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_amt), // metal amount
       MKGVALUECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
-        this.exchangeForm.value.fcn_exchange_making_amt, this.vocDataForm.value.txtCurRate
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_amt), this.vocDataForm.value.txtCurRate
       ), // metal amount
       // MKGVALUEFC: this.comFunc.emptyToZero(data.mkg_amount), // metal amount
       // MKGVALUECC: this.comFunc.FCToCC(
@@ -5092,14 +5095,14 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(data.metalAmt), this.vocDataForm.value.txtCurRate
       ),
-      STONE_RATEFC: this.exchangeForm.value.fcn_exchange_stone_rate || 0,
+      STONE_RATEFC: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_rate) || 0,
       STONE_RATECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(
           this.exchangeForm.value.fcn_exchange_stone_rate
         ), this.vocDataForm.value.txtCurRate
       ),
-      STONEVALUEFC: this.exchangeForm.value.fcn_exchange_stone_amount || 0,
+      STONEVALUEFC: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount) || 0,
       STONEVALUECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(
@@ -5542,8 +5545,8 @@ export class AddPosComponent implements OnInit {
       let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
       let _exchangePurity = this.exchangeForm.value.fcn_exchange_purity;
       let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
-      let _exchangeMetalAmt = this.exchangeForm.value.fcn_exchange_metal_amount;
-      let _exchangeMkgAmt = this.exchangeForm.value.fcn_exchange_making_amt;
+      let _exchangeMetalAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount);
+      let _exchangeMkgAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_amt);
       let _exchangeNetAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_amount);
 
       let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
@@ -5555,7 +5558,7 @@ export class AddPosComponent implements OnInit {
       if (
         this.exchangeForm.value.fcn_exchange_item_code != '' &&
         _exchangeMetalAmt > 0 &&
-        _exchangeMetalAmt != '' &&
+        // _exchangeMetalAmt != '' &&
         _exchangeNetAmt > 0
         //  &&
         // _exchangeNetAmt != ''
@@ -5594,7 +5597,7 @@ export class AddPosComponent implements OnInit {
           // need to update
           gross_wt: this.exchangeForm.value.fcn_exchange_gross_wt || 0,
           pure_wt: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
-          stone_amt: this.exchangeForm.value.fcn_exchange_stone_amount || 0,
+          stone_amt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount) || 0,
           purity_diff: this.exchangeForm.value.fcn_exchange_purity_diff || 0,
           // gross_amt: this.lineItemForm.value.fcn_li_gross_amount || 0,
           METAL_RATE_TYPE: this._exchangeItemchange.METAL_RATE_TYPE,
@@ -5672,7 +5675,7 @@ export class AddPosComponent implements OnInit {
         if (this.exchangeForm.value.fcn_exchange_item_code == '') {
           this.openDialog('Warning', 'Stock code should not be empty', true);
         }
-        if (_exchangeMetalAmt == '' || 0)
+        if (_exchangeMetalAmt ==  0)
           this.openDialog('Warning', 'Invalid Metal Amount', true);
         if (_exchangeNetAmt == 0)
         // if (_exchangeNetAmt == '' || 0)
@@ -9074,8 +9077,8 @@ export class AddPosComponent implements OnInit {
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         // _exchangeMetalRate * _exchangeNetWt
-        this.exchangeForm.value.fcn_exchange_metal_rate *
-        this.exchangeForm.value.fcn_exchange_pure_weight
+        this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_metal_rate) *
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
       )
     );
   }
@@ -9099,9 +9102,9 @@ export class AddPosComponent implements OnInit {
   }
 
   setExchangeMakingAmt() {
-    let _exchangeGrossWt = this.exchangeForm.value.fcn_exchange_gross_wt;
-    let _exchangeNetWt = this.exchangeForm.value.fcn_exchange_net_wt;
-    let _exchangeMakingRate = this.exchangeForm.value.fcn_exchange_making_rate;
+    let _exchangeGrossWt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt);
+    let _exchangeNetWt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt);
+    let _exchangeMakingRate = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate);
 
     if (!this.comFunc.allbranchMaster?.MAKINGCHARGESONNET) {
       this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
@@ -9173,6 +9176,33 @@ export class AddPosComponent implements OnInit {
       this.setExMetalAmt();
     }
   }
+  changeExStoneAmount(event: any){
+    const value = event.target.value;
+
+    if (event.target.value != '') {
+
+      const res = this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        this.comFunc.emptyToZero(value) /
+        this.comFunc.emptyToZero(
+          this.exchangeForm.value.fcn_exchange_stone_wt
+        ) 
+      );
+      
+      this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(res);
+      this.setExNetAmt();
+
+
+    }else{
+      const value = this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        0
+      );
+      this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(value);
+      this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(value);
+      this.setExNetAmt();
+    }
+  }
   changeExchangeStoneRate(event: any) {
     const value = event.target.value;
     if (event.target.value != '') {
@@ -9211,15 +9241,15 @@ export class AddPosComponent implements OnInit {
       this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
         this.comFunc.transformDecimalVB(
           this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          event.target.value
+          this.comFunc.emptyToZero( event.target.value)
         )
       );
       const value =
 
         this.comFunc.decimalQuantityFormat(
-          this.exchangeForm.value.fcn_exchange_metal_amount /
+          this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_metal_amount )/
           // this.exchangeForm.value.fcn_exchange_net_wt
-          this.exchangeForm.value.fcn_exchange_pure_weight
+          this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_pure_weight)
           , 'METAL_RATE')
 
 
@@ -9242,16 +9272,34 @@ export class AddPosComponent implements OnInit {
     this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        parseFloat(this.exchangeForm.value.fcn_exchange_metal_amount || 0) +
-        parseFloat(this.exchangeForm.value.fcn_exchange_making_amt || 0) +
-        parseFloat(this.exchangeForm.value.fcn_exchange_stone_amount || 0)
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount || 0) +
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_amt || 0) +
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount || 0)
       )
     );
     this.setExchangeCommaSep();
   }
   setExchangeCommaSep(){
+    this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
+    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_stone_rate ?? this.zeroAmtVal)
+    );
+    this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(
+    this.comFunc.commaSeperation(  this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount)) ?? this.zeroAmtVal)
+    );
+    this.exchangeForm.controls.fcn_exchange_making_rate.setValue(
+    this.comFunc.commaSeperation( 
+      this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate)) )
+    );
+    this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
+    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_making_amt ?? this.zeroAmtVal)
+    );
+    this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_metal_amount ?? this.zeroAmtVal)
+    );
     this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
-    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_net_amount)
+    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_net_amount ?? this.zeroAmtVal)
     );
   }
   changeExchangeNettWt(event: any) {
@@ -12281,6 +12329,9 @@ export class AddPosComponent implements OnInit {
   }
 
   changeFinalDiscount(event: any) {
+    // this.order_items_total_discount_amount =
+    // this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(event.target.value))
+  
     event.target.value = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(event.target.value))
     const value = event.target.value;
 
@@ -12298,6 +12349,8 @@ export class AddPosComponent implements OnInit {
       this.order_items_total_net_amount = this.order_items_total_net_amount_org
       this.sumReceiptItem();
     }
+    // this.order_items_total_discount_amount = this.comFunc.commaSeperation(this.order_items_total_discount_amount);
+
   }
 
   getBranchCurrencyList() {

@@ -23,6 +23,7 @@ export class DecimalFormatPipe implements PipeTransform {
       return '0.00';
     }
 
-    return this.commonService.decimalQuantityFormat(normalizedValue, flag);
+    
+    return this.commonService.commaSeperation(this.commonService.decimalQuantityFormat(normalizedValue, flag));
   }
 }
