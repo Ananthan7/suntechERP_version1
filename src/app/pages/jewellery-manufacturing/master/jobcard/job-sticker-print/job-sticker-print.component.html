@@ -89,7 +89,8 @@
                         </div>
                         <div class="col-md-5">
                             <mat-form-field style="width: 100%;">
-                                <mat-select>
+                                
+                                <mat-select [(ngModel)]="selectedValue" name="selectedValue">
                                   <mat-option value="PREVIEW">PREVIEW</mat-option>
                                   <mat-option value="PRINT">PRINT</mat-option>
                                   <mat-option value="CATALOGUE">CATALOGUE</mat-option>

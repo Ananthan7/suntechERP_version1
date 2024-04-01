@@ -7,9 +7,6 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
 import themes from 'devextreme/ui/themes';
 
 
@@ -198,29 +195,29 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  onInput(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value;
+//   onInput(event: Event): void {
+//     const inputValue = (event.target as HTMLInputElement).value;
 
-    // Remove any non-digit characters except for the first decimal point
-    const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
+//     // Remove any non-digit characters except for the first decimal point
+//     const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
 
-    // Extract the integer part and the decimal part
-    const parts = sanitizedValue.split('.');
-    let integerPart = parts[0];
-    const decimalPart = parts[1] || '';
+//     // Extract the integer part and the decimal part
+//     const parts = sanitizedValue.split('.');
+//     let integerPart = parts[0];
+//     const decimalPart = parts[1] || '';
 
-    // Take only the first 3 characters for the integer part
-    integerPart = integerPart.slice(0, 3);
+//     // Take only the first 3 characters for the integer part
+//     integerPart = integerPart.slice(0, 3);
 
-    // Combine integer part and decimal part
-    let limitedValue = integerPart;
-    if (decimalPart.length > 0) {
-        limitedValue += '.' + decimalPart.slice(0, 3 - integerPart.length);
-    }
+//     // Combine integer part and decimal part
+//     let limitedValue = integerPart;
+//     if (decimalPart.length > 0) {
+//         limitedValue += '.' + decimalPart.slice(0, 3 - integerPart.length);
+//     }
 
-    // Update the input value
-    (event.target as HTMLInputElement).value = limitedValue;
-}
+//     // Update the input value
+//     (event.target as HTMLInputElement).value = limitedValue;
+// }
 
 formatNumber(): void {
   let numericValue = parseFloat(this.myNumber.replace(/,/g, '.'));

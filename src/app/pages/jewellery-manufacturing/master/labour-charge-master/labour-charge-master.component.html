@@ -183,8 +183,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput 
-                    style="text-align: right;"  MetalDecimalInput
-                    formControlName="ctWtFrom" />
+                    style="text-align: right;"  
+                    formControlName="ctWtFrom" (change)="onCtweighttto($event,'Ctwtfrom')" />
                 </mat-form-field>
               </div>
 
@@ -205,8 +205,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput 
-                     MetalDecimalInput
-                    style="text-align: right;" formControlName="ctWtTo" />
+                     
+                    style="text-align: right;" formControlName="ctWtTo"  (change)="onCtweighttto($event,'Ctwtto')"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
@@ -401,7 +401,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" MetalDecimalInput
+                  <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" 
                     style="text-align: right;" (keyup)="onweightto($event,'wtfrom')" />
                 </mat-form-field>
               </div>
@@ -411,7 +411,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
                   <input matInput type="text" [readonly]="viewMode" matInput (change)="onweightto($event,'wtto')"
-                    formControlName="wtTo" MetalDecimalInput style="text-align: right;" />
+                    formControlName="wtTo"  style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">

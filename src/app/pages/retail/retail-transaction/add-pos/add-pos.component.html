@@ -1274,7 +1274,7 @@
             <div class="card m-t-10">
               <div class="card-header">
                 <b
-                  (click)="!viewOnly ? open(sales_payment_modal) : ''"
+                  (click)="!viewOnly ? open(sales_payment_modal, false, null, false, true) : ''"
                   style="
                     color: #0861a9;
                     cursor: pointer;
@@ -1632,6 +1632,7 @@
                     aria-describedby
                     [placeholder]="zeroAmtVal"
                     [readonly]="viewOnly"
+                    
                   />
                 </td>
                 <!-- <td>
@@ -2810,7 +2811,7 @@
               <mat-form-field>
                 <mat-label>Stone Rate</mat-label>
                 <input
-                  type="number"
+                
                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2828,7 +2829,7 @@
               <mat-form-field>
                 <mat-label>Stone Amount</mat-label>
                 <input
-                  type="number"
+                 
                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2837,6 +2838,7 @@
                   matInput
                   formControlName="fcn_exchange_stone_amount"
                   id="fcn_exchange_stone_amount"
+                  (change)="changeExStoneAmount($event)"
                   [readonly]="true"
                   AmountDecimalInput
                 />
@@ -2861,8 +2863,7 @@
               <mat-form-field>
                 <mat-label>Making Rate </mat-label>
                 <input
-                  type="number"
-                  [min]="0"
+                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right"
@@ -2878,14 +2879,14 @@
               <mat-form-field>
                 <mat-label>Making Amount </mat-label>
                 <input
-                  type="number"
-                  [min]="0"
+                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right"
                   matInput
                   formControlName="fcn_exchange_making_amt"
                   [readonly]="true"
+                  AmountDecimalInput
                   
                 />
               </mat-form-field>
@@ -2894,7 +2895,6 @@
               <mat-form-field>
                 <mat-label>Metal Amount</mat-label>
                 <input
-                  type="number"
                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2903,6 +2903,7 @@
                   formControlName="fcn_exchange_metal_amount"
                   (change)="changeExchangeMetalAmt($event)"
                   [readonly]="viewOnly"
+                  AmountDecimalInput
                   
                 />
               </mat-form-field>

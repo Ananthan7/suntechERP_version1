@@ -359,8 +359,6 @@ sieveFromtemp(data:any,value: any){
   this.tableData[value.data.SRNO - 1].SieveFrom = data.target.value;
 }
 
-
-
 SieveTotemp(data:any,value: any){
   this.tableData[value.data.SRNO - 1].Sieve_To = data.target.value;
 }
