@@ -459,34 +459,44 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
-  // deleteTableData() {
-  //   console.log(this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-  //     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  //   } else {
-  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  //   }
-  // }
+//   deleteTableData() {
+//     console.log(this.selectedIndexes);
+//     if (this.selectedIndexes.length > 0) {
+//         this.selectedIndexes.sort((a:number, b:number) => b - a);
 
-  deleteTableData() {
-    console.log(this.selectedIndexes);
-    if (this.selectedIndexes.length > 0) {
-        this.selectedIndexes.sort((a:number, b:number) => b - a);
+//         this.selectedIndexes.forEach((indexToRemove:number) => {
+//             this.tableData.splice(indexToRemove, 2);
+//         });
+//         this.selectedIndexes = [];
+//     } else {
+//         this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+//     }
+// }
 
-        this.selectedIndexes.forEach((indexToRemove:number) => {
-            this.tableData.splice(indexToRemove, 2);
-        });
-        this.selectedIndexes = [];
-    } else {
-        this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-    }
+deleteTableData() {
+  console.log('Selected indexes:', this.selectedIndexes);
+  if (this.selectedIndexes.length > 0) {
+      this.selectedIndexes.sort((a: number, b: number) => b - a);
+
+      console.log('Before deletion - tableData:', this.tableData);
+
+      this.selectedIndexes.forEach((indexToRemove: number) => {
+          console.log('Deleting index:', indexToRemove);
+          this.tableData.splice(indexToRemove,2);
+      });
+
+      console.log('After deletion - tableData:', this.tableData);
+
+      this.selectedIndexes = [];
+  } else {
+      this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  }
 }
+
 
 
 setFormValues() {
   if (!this.content) return
-
-
 
   this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
   this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
