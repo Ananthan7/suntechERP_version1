@@ -231,7 +231,7 @@ export class RetailTransactionComponent implements OnInit {
 
 
   openAuthModal() {
-    
+    this.reseForm()
     return new Promise((resolve) => {
 
       this.modalReferenceUserAuth = this.modalService.open(
@@ -250,7 +250,7 @@ export class RetailTransactionComponent implements OnInit {
 
       this.modalReferenceUserAuth.result.then((result) => {
         if (result) {
-          this.reseForm()
+          console.log("Result :", result);
           resolve(true);
         } else {
           resolve(false);
