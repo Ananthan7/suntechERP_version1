@@ -231,12 +231,13 @@ export class SchemeReceiptComponent implements OnInit {
     this.setFormControlAmount('TotalTax_FC', this.content.GST_TOTALFC)
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
+    
+    let amt = this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalAmount)
     this.totalValueInText = this.commonService
-        .priceToTextWithCurrency(this.content.TOTAL_AMOUNTCC, "UNITED ARAB EMIRATES DIRHAM")
+        .priceToTextWithCurrency(amt, "UNITED ARAB EMIRATES DIRHAM")
         ?.toUpperCase();
-    if (this.receiptDetailsForm.value.PostedDate != '') {
-      this.postedDateString = this.commonService.formatDate(this.receiptDetailsForm.value.PostedDate)
-    }
+      
+    
   }
   //USE: account posting click fn 
   AccountPosting() {
@@ -312,6 +313,14 @@ export class SchemeReceiptComponent implements OnInit {
             let result = resp.response;
             this.disablePostBtn = result.AUTOPOSTING == true ? true : false;
             this.receiptDetailsForm.controls.VocDate.setValue(result.VOCDATE);
+            this.receiptDetailsForm.controls.PostedDate.setValue(result.POSTDATE);
+            
+            if (this.receiptDetailsForm.value.PostedDate != '') {
+              this.postedDateString = this.commonService.formatDDMMYY(
+                new Date(this.receiptDetailsForm.value.PostedDate)
+              )
+            }
+
             this.dataToEditrow = result.Details;
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
@@ -330,13 +339,7 @@ export class SchemeReceiptComponent implements OnInit {
 
           // this.ChangeDetector.detectChanges()
         } else {
-          this.toastr.error(
-            "No Response Found",
-            resp.Message ? resp.Message : "",
-            {
-              timeOut: 2000,
-            }
-          );
+          this.commonService.toastErrorByMsgId( "No Response Found"||  resp.Message);
         }
       }, (err) => {
         this.commonService.closeSnackBarMsg();
@@ -714,18 +717,20 @@ export class SchemeReceiptComponent implements OnInit {
   }
 
   /**use: open new scheme details */
-  openNewReceiptDetails(data?: any) {
+  openNewReceiptDetails(dataToChild?: any) {
     if (this.receiptDetailsForm.value.SchemeID == '') {
       this.commonService.toastErrorByMsgId('select a scheme')
       return
     }
-    if (data) {
-      data.FLAG = this.content?.MID ? 'VIEW' : 'EDIT'
-      data.POSCUSTOMERCODE = this.content?.POSCUSTOMERCODE
-      data.BALANCE_CC = this.content?.BALANCE_CC
-      data.MID = this.content?.MID
-      data.GRID_DATA = this.content?.GRID_DATA
-      this.dataToEditrow = data;
+    if (dataToChild) {
+      console.log(dataToChild,'datatochild');
+      
+      dataToChild.FLAG = this.content?.MID ? 'VIEW' : 'EDIT'
+      dataToChild.POSCUSTOMERCODE = this.content?.POSCUSTOMERCODE
+      dataToChild.BALANCE_CC = this.content?.BALANCE_CC
+      dataToChild.MID = this.content?.MID
+      dataToChild.GRID_DATA = this.unsavedGridData || []
+      this.dataToEditrow = dataToChild;
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
     }
@@ -1202,10 +1207,11 @@ export class SchemeReceiptComponent implements OnInit {
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
   }
+  unsavedGridData: any[] = [];
   /**use: add new row to grid */
   addNewRow(data: any) {
     this.disableAddBtnGrid = true;
-    this.content.GRID_DATA = data.GRID_DATA ? data.GRID_DATA : []
+    this.unsavedGridData = data.GRID_DATA ? data.GRID_DATA : []
     this.orderedItems = [];
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
@@ -1277,9 +1283,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.totalValue = this.totalAmount_LC + this.VATAmount;
       this.totalValue_FC = this.totalAmount_FC + this.VATAmount_FC;
       this.totalPartyValue = this.totalAmount_LC + this.VATAmount;
-      this.totalValueInText = this.commonService
-        .priceToTextWithCurrency(this.totalValue, "UNITED ARAB EMIRATES DIRHAM")
-        ?.toUpperCase();
+      // this.totalValueInText = this.commonService
+      //   .priceToTextWithCurrency(this.totalPartyValue, "UNITED ARAB EMIRATES DIRHAM")
+      //   ?.toUpperCase();
     }
   }
   setFormControlAmount(controlName: string, amount: any) {
@@ -1319,8 +1325,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.totalValue = this.totalAmount_LC + this.VATAmount;
       this.totalValue_FC = this.totalAmount_FC + this.VATAmount_FC;
       this.totalPartyValue = this.totalAmount_LC + this.VATAmount;
+      let totalAmt = this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalAmount)
       this.totalValueInText = this.commonService
-        .priceToTextWithCurrency(this.totalValue, "UNITED ARAB EMIRATES DIRHAM")
+        .priceToTextWithCurrency(totalAmt, "UNITED ARAB EMIRATES DIRHAM")
         ?.toUpperCase();
     }
   }

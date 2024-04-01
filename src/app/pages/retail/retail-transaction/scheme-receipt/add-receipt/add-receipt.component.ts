@@ -146,9 +146,8 @@ export class AddReceiptComponent implements OnInit {
     this.setFormValues()
     this.paymentTypeChange({ ENGLISH: 'Cash' })
   }
+  /**use: funtion for set values for edited entry */
   setvaluesEdited(){
-    console.log(this.content,'this.content');
-    
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeId)
     this.receiptEntryForm.controls.AC_Code.setValue(this.content.AC_Code)
@@ -165,8 +164,18 @@ export class AddReceiptComponent implements OnInit {
     this.setFormControlAmount('SchemeTotalAmount', this.content.SchemeTotalAmount)
     // this.setGridData()
     this.gridDataSource = this.content.GRID_DATA
+    this.calculateSchemeBalance()
   }
-
+  calculateSchemeBalance(){
+    if(this.gridDataSource.length>0){
+      let SchemeBalance = 0
+      this.gridDataSource.forEach((item:any)=>{
+        SchemeBalance += item.PAY_AMOUNT_CC
+      })
+      this.receiptEntryForm.controls.SchemeBalance.setValue(SchemeBalance)
+    }
+  }
+  /**use: funtion for set values for new entry */
   setFormValues() {
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
@@ -177,7 +186,7 @@ export class AddReceiptComponent implements OnInit {
     this.setFormControlAmount('SchemeTotalAmount', this.content.SCHEME_AMOUNT)
     this.setGridData()
   }
-
+  /**use: funtion for set values for view mode  */
   setInitialValues() {
     console.log(this.content, 'this.content');
     let data: any = this.content || {}
@@ -335,6 +344,8 @@ export class AddReceiptComponent implements OnInit {
       return;
     } else {
       let Details = this.receiptEntryForm.value
+      console.log(Details,'data to parent');
+      
       Details.Attachedfile = this.Attachedfile
       Details.GRID_DATA = this.gridDataSource
       this.close(Details)
