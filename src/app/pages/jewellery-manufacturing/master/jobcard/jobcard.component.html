@@ -31,7 +31,7 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Job
-                                Number :</label>
+                                Number * :</label>
                             <div class="col-sm-3">
                                 <!-- <input class="form-control" type="text" /> -->
                                 <mat-form-field style="width: 100%;">
@@ -282,6 +282,7 @@
                                             placeholder="DD/MM/YYYY" />
                                         <mat-datepicker-toggle matSuffix [for]="deldate"></mat-datepicker-toggle>
                                         <mat-datepicker #deldate></mat-datepicker>
+                                        
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -321,10 +322,11 @@
                         </div>
                         <div class="row align-items-center mb-2">
                             <label for="input" class="col-sm-5 col-form-label">Loss
-                                Booking : </label>
+                                Booking * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 150px;">
-                                    <mat-select formControlName="lossbooking">
+                                    
+                                    <mat-select formControlName="lossbooking" [(ngModel)]="selectedValue" name="selectedValue">
                                         <mat-option value="singleMetal">Single Metal</mat-option>
                                         <mat-option value="multipleMetal">Multiple Metal</mat-option>
                                         <mat-option value="highestWeight">Highest Weight</mat-option>
@@ -427,12 +429,23 @@
                                 <div class="upload-btn-wrapper">
                                     <button class="btn btnnew border-dark">
                                         <img src={{urls}} style="width:200px;height:185px">
-                                        
+                                        <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                      </button>
+                                      <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                      </button>
+                                  
                                     </button>
-                                    <input type="file" formControlName="picture_name" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
+                                   <input type="file" formControlName="picture_name" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="m-3 row">
                             <button class="btn btn-primary rounded-pill my-2" (click)="openaddcomponent()">Components</button>
                             <button class="btn btn-primary rounded-pill my-2" (click)="openaddtransactiondetails()">Transactions</button>
@@ -477,23 +490,23 @@
 
                           
                         <div *dxTemplate="let data of 'Pcstemp'">
-                            <input  type="text" (change)="Pcstemp($event,data)" style="width: 100%;" [value]="data.value" />
+                            <input  type="text" (change)="Pcstemp($event,data)" style="width: 100%;" [value]="data.value" class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'metal_colortemp'">
-                            <input  type="text" (change)="metal_colortemp($event,data)" style="width: 100%;" [value]="data.value" />
+                            <input  type="text" (change)="metal_colortemp($event,data)" style="width: 100%;" [value]="data.value" class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'metal_wttemp'">
-                            <input  type="text" (change)="metal_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput/>
+                            <input  type="text" (change)="metal_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'stone_wttemp'">
-                            <input  type="text" (change)="stone_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput/>
+                            <input  type="text" (change)="stone_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'gross_wttemp'">
-                            <input  type="text" (change)="gross_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput/>
+                            <input  type="text" (change)="gross_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput class="text-right"/>
                           </div>
 
                       </dx-data-grid>
