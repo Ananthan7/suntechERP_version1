@@ -250,7 +250,7 @@ export class RetailTransactionComponent implements OnInit {
 
       this.modalReferenceUserAuth.result.then((result) => {
         if (result) {
-          console.log("Result :", result);
+          this.reseForm()
           resolve(true);
         } else {
           resolve(false);
@@ -266,7 +266,11 @@ export class RetailTransactionComponent implements OnInit {
 
 
   }
-
+  reseForm() {
+    this.authForm.controls.password.setValue('')
+    this.authForm.controls.reason.setValue('')
+    this.authForm.controls.description.setValue('')
+  }
   reasonSelected(e: any) {
     // this.authForm.controls.reason.setValue(e.CODE);
     this.authForm.controls.reason.setValue(e.DESCRIPTION);
