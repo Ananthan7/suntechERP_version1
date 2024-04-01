@@ -184,7 +184,7 @@
                     <input type="number" [value]="data.value" (change)="OrderPcstextevent($event,data)" class="text-right"  MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'IssuePcstemp'">
-                    <input type="number" [value]="data.value" (change)="IssuePcstextevent($event,data)"  style="text-align: right;" />
+                    <input type="number" (change)="IssuePcstextevent($event,data)"  class="text-right"  MetalDecimalInput/>
                   </div>
 
                   <dxo-summary>

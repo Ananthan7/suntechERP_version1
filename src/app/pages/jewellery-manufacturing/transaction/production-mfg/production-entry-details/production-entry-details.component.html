@@ -175,7 +175,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput 
-                    class="text-right" formControlName="STONE_PCS" CommaSeparatedNumber/>
+                    class="text-right" formControlName="STONE_PCS" StoneDecimalInput />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Time Taken :</label>
@@ -537,7 +537,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Prod % :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="prod" />
+                    <input type="text" matInput formControlName="prod" CommaSeparatedNumber class="text-right"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -553,7 +553,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Bal Pcs :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="balPcs" NumberOnly/>
+                    <input type="text" matInput formControlName="balPcs" NumberOnly class="text-right"/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Job Purity :</label>
