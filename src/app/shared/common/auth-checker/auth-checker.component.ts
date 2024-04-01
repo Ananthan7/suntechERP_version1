@@ -104,6 +104,10 @@ export class AuthCheckerComponent implements OnInit {
   }
 
   submitAuth() {
+    if(!this.authForm.value.reason){
+      this.CommonService.toastErrorByMsgId('Reason required')
+      return
+    }
     if (!this.authForm.invalid) {
       let API = 'ValidatePassword/ValidateEditDelete';
       const postData = {
