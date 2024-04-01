@@ -147,8 +147,10 @@ export class AddReceiptComponent implements OnInit {
     this.paymentTypeChange({ ENGLISH: 'Cash' })
   }
   setvaluesEdited(){
+    console.log(this.content,'this.content');
+    
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
-    this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
+    this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeId)
     this.receiptEntryForm.controls.AC_Code.setValue(this.content.AC_Code)
     this.receiptEntryForm.controls.AC_Description.setValue(this.content.AC_Description)
     this.receiptEntryForm.controls.Type.setValue(this.content.Type)
@@ -161,6 +163,8 @@ export class AddReceiptComponent implements OnInit {
     this.setFormControlAmount('Amount_LC', this.content.Amount_LC)
     this.setFormControlAmount('Amount_FC', this.content.Amount_FC)
     this.setFormControlAmount('SchemeTotalAmount', this.content.SchemeTotalAmount)
+    // this.setGridData()
+    this.gridDataSource = this.content.GRID_DATA
   }
 
   setFormValues() {
@@ -220,8 +224,8 @@ export class AddReceiptComponent implements OnInit {
   }
   setGridData() {
     let param = {
-      SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || '',
-      SCH_CUSTOMER_ID: this.content.SchemeID || '',
+      SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || this.content.POSCUSTOMERCODE,
+      SCH_CUSTOMER_ID: this.content.SchemeID || this.content.SchemeId,
     }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts', param)
       .subscribe((result) => {

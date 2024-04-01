@@ -724,6 +724,7 @@ export class SchemeReceiptComponent implements OnInit {
       data.POSCUSTOMERCODE = this.content?.POSCUSTOMERCODE
       data.BALANCE_CC = this.content?.BALANCE_CC
       data.MID = this.content?.MID
+      data.GRID_DATA = this.content?.GRID_DATA
       this.dataToEditrow = data;
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
@@ -1204,6 +1205,8 @@ export class SchemeReceiptComponent implements OnInit {
   /**use: add new row to grid */
   addNewRow(data: any) {
     this.disableAddBtnGrid = true;
+    this.content.GRID_DATA = data.GRID_DATA ? data.GRID_DATA : []
+    this.orderedItems = [];
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
         (item: any) => item.SRNO != data.SRNO
@@ -1323,11 +1326,15 @@ export class SchemeReceiptComponent implements OnInit {
   }
   // print button click
   printClicked() {
+    this.orderedItems.forEach((item:any)=>{
+      item.AMOUNTFC = this.commonService.decimalQuantityFormat(item.AMOUNTFC,'AMOUNT')
+      item.AMOUNTCC = this.commonService.decimalQuantityFormat(item.AMOUNTCC,'AMOUNT')
+    })
+    console.log(this.orderedItems,'this.orderedItems');
+    
     //this.validateBeforePrint()
     if (!this.isSaved) {
-      this.toastr.error("Receipt Not Saved", "", {
-        timeOut: 3000,
-      });
+      this.commonService.toastErrorByMsgId("Receipt Not Saved");
       return;
     }
     let _validate: any[] = ["val"];
