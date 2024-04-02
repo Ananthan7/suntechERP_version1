@@ -10,7 +10,9 @@
 <modal-header [disableSaveBtn]="viewMode && usedSchemeEditMode"
     [disableDeleteBtn]="viewMode"
     (cancelClick)="close()" (saveClick)="formSubmit()"
-    (deleteClick)="deleteSchemeMaster()"></modal-header>
+    (deleteClick)="deleteSchemeClick()"></modal-header>
+<!-- authentication component -->
+<auth-checker (authSubmit)="deleteSchemeMaster()"></auth-checker>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="schemeMasterForm" class="p-1">

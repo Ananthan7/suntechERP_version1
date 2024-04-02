@@ -11,6 +11,7 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { AuthCheckerComponent } from "src/app/shared/common/auth-checker/auth-checker.component";
 
 
 @Component({
@@ -20,6 +21,8 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 })
 export class SchemeMasterComponent implements OnInit {
   @ViewChild(MasterSearchComponent) masterSearchComponent?: MasterSearchComponent;
+  @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
+
   @Input() content!: any;
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
@@ -448,7 +451,9 @@ export class SchemeMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
+  deleteSchemeClick(){
+    this.authCheckerComponent?.openAuthModal()
+  }
   // SchemeMaster/UpdateSchemeMaster
 
   deleteSchemeMaster() {

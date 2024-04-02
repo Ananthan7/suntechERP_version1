@@ -14,7 +14,9 @@
     (attachmentClick)="attachmentClicked()"
     [isViewDelete]="viewDeleteBtn" [disableSaveBtn]="viewMode && !disableSaveBtn"
     (cancelClick)="close()" (deleteClick)="deleteBtnClicked()"></modal-header>
+<!-- component to upload attachment -->
 <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+<!-- authentication component -->
 <auth-checker (authSubmit)="cancelScheme($event)"></auth-checker>
 <!-- content section -->
 <div class="row">
