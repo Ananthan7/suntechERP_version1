@@ -2552,7 +2552,7 @@
           color="accent"
           *ngIf="!viewOnly"
           class="btn-m-r-10"
-          [disabled]="viewOnly"
+          [disabled]="viewOnly || this.receiptDetailView"
           (click)="saveReceipt('Continue')"
         >
           Continue
@@ -2562,7 +2562,7 @@
           color="primary"
           *ngIf="!viewOnly"
           class="btn-m-r-10"
-          [disabled]="viewOnly"
+          [disabled]="viewOnly || this.receiptDetailView"
           (click)="saveReceipt()"
         >
           SAVE

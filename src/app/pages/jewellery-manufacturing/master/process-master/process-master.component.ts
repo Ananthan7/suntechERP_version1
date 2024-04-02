@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,  } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -60,6 +60,7 @@ export class ProcessMasterComponent implements OnInit {
   indeterminate = false;
   labelPosition: 'before' | 'after' = 'after';
   disabled = false;
+  codeInput: any;
 
   ngOnInit(): void {
     // this.islossReadOnly = true;
@@ -288,8 +289,6 @@ export class ProcessMasterComponent implements OnInit {
 
   maxInputLength: number = 2
 
-
-
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -298,6 +297,7 @@ export class ProcessMasterComponent implements OnInit {
     private commonService: CommonServiceService,
   ) {
     // this.setInitialValues()
+  
   }
 
 
@@ -441,19 +441,19 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.loss == 1) {
       this.validateLossRange();
     }
-    if (this.lossData == false) {
-      this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
-    }
-    else {
+    // if (this.lossData == false) {
+    //   this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
+    // }
+    // else {
 
-      if (this.formattedTime > this.formattedMaxTime) {
-        this.toastr.error('Maximum time should not be less than Standard time');
-      }
-      else {
-        if (this.content && this.content.FLAG == 'EDIT') {
-          this.updateProcessMaster()
-          return
-        }
+    //   if (this.formattedTime > this.formattedMaxTime) {
+    //     this.toastr.error('Maximum time should not be less than Standard time');
+    //   }
+    //   else {
+    //     if (this.content && this.content.FLAG == 'EDIT') {
+    //       this.updateProcessMaster()
+    //       return
+        
 
         if (this.processMasterForm.invalid) {
           this.toastr.error('select all required fields')
@@ -557,8 +557,8 @@ export class ProcessMasterComponent implements OnInit {
 
         console.log(this.processMasterForm.value.stand_time);
       }
-    }
-  }
+    
+  
 
   close(data?: any) {
     //TODO reset forms and data before closing
