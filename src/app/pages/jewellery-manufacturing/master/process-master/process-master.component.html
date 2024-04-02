@@ -21,7 +21,7 @@
                                     Code* :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 85%; margin-left: 7px;">
-                                        <input type="text" matInput #code placeholder="CODE"
+                                        <input type="text" matInput #code placeholder="CODE" #codeInput
                                             (focusout)="checkCodeExists($event)"
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode" maxlength="6" [readonly]="viewMode || editMode" (keyup)="codeEnabled()" />
@@ -41,7 +41,7 @@
                             </div>
                             <div class="row mb-2">
                                 <label for="input" class="col-sm-2 col-form-label ">Process
-                                    Type :</label>
+                                    Type * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 85%; margin-left: 7px;">
                                         <mat-select formControlName="processType">
@@ -132,7 +132,7 @@
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="StockProcessData"
-                                        (newRowClick)="StockProcesSelected($event)" >
+                                        (newRowClick)="StockProcesSelected($event)" *ngIf="!viewMode">
                                     </master-search>
                                 </div>
                                 <div class="col-sm-3">
@@ -157,7 +157,7 @@
                         <div class="col-md-2">
                             <div class="form-check mt-md-5">
                                 <mat-checkbox formControlName="loss" class="example-margin"
-                                    (change)="onlossChange($event)"  [(ngModel)]="checked" [disabled]="viewMode">
+                                    (change)="onlossChange($event)" [disabled]="viewMode">
                                     Loss *</mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
                                     (change)="onlossChange($event)">
@@ -275,7 +275,7 @@
                                 <mat-checkbox formControlName="loss_on_gross"  [(ngModel)]="checked"
                                 [(indeterminate)]="indeterminate"
                                 [labelPosition]="labelPosition"
-                                [disabled]="disabled"
+                                [disabled]="viewMode"
                                     class="example-margin">
                                     Loss on Gross only</mat-checkbox>
                             </div>
