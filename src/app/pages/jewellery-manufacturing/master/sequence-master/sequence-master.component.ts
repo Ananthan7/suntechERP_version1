@@ -479,6 +479,24 @@ export class SequenceMasterComponent implements OnInit {
   PrefixCodeChange(event: any) {
     this.sequenceMasterData.SEARCH_VALUE = event.target.value
   }
+  // stdLoss Change
+  stdLossChanged(data:any){
+    console.log(data,'data');
+    this.checkLossCondition(data)
+  }
+  checkLossCondition(data:any){
+    let max = this.commonService.emptyToZero(data['MAX_LOSS'])
+    let std = this.commonService.emptyToZero(data['STD_LOSS'])
+    if(max < std){
+      this.commonService.toastErrorByMsgId('Maximum loss cannot be less than std loss')
+      this.dataSource[data.SRNO].MAX_LOSS = 0
+    }
+  }
+  // maxLoss Change
+  maxLossChanged(data:any){
+    console.log(data,'data');
+    this.checkLossCondition(data)
+  }
 
   /**USE: close modal window */
   close(data?: any) {

@@ -68,9 +68,9 @@
                     <div class="d-flex w-100"
                         style="background-color: #427dae;color: #fff;text-align: center;">
                         <div
-                            style="width: 38.5%; border-right: 1px solid #fff;">Sequence</div>
+                            style="width: 36%; border-right: 1px solid #fff;">Sequence</div>
                         <div
-                            style="width: 25.5%; border-right: 1px solid #fff;">Labour
+                            style="width: 26%; border-right: 1px solid #fff;">Labour
                             Account</div>
                         <div style="width: 35%;">Manufacturing Loss</div>
                     </div>
@@ -186,12 +186,14 @@
                                 <td>
                                     <input type="number" [disabled]="!data['isChecked']"
                                         [(ngModel)]="data['STD_LOSS']"
+                                        (change)="stdLossChanged(data)"
                                         MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right; width: 86px;" />
                                 </td>
                                 <td>
                                     <input type="number" [disabled]="!data['isChecked']"
                                         [(ngModel)]="data['MAX_LOSS']"
+                                        (change)="maxLossChanged(data)"
                                         MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right;width: 86px;" />
                                 </td>
