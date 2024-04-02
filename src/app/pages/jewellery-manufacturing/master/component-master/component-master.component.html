@@ -17,15 +17,16 @@
                             <label for="input" class="col-sm-2 col-form-label">Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()" />
+                                    <input type="text" matInput formControlName="code" id="code"
+                                    [readonly]="viewMode || editMode" #code oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" />
+                                    <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="codeCodeData"
-                                    (newRowClick)="codeCodeSelected($event)">
+                                *ngIf="viewMode == false"  (newRowClick)="codeCodeSelected($event)">
                                 </master-search>
                             </div>
                         </div>
@@ -35,19 +36,19 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="sizeSet" />
+                                    <input type="text" matInput formControlName="sizeSet" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeSetCodeData"
-                                    (newRowClick)="sizeSetCodeSelected($event)">
+                                *ngIf="viewMode == false" (newRowClick)="sizeSetCodeSelected($event)">
                                 </master-search>
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Type :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="type" />
+                                    <input type="text" matInput formControlName="type" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="typeCodeData"
-                                    (newRowClick)="typeCodeSelected($event)"></master-search>
+                                *ngIf="viewMode == false" (newRowClick)="typeCodeSelected($event)"></master-search>
                             </div>
                         </div>
 
@@ -55,17 +56,17 @@
                             <label for="input" class="col-sm-2 col-form-label">Size :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="size" />
+                                    <input type="text" matInput formControlName="size" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeCodeData"
-                                    (newRowClick)="sizeCodeSelected($event)">
+                                *ngIf="viewMode == false"  (newRowClick)="sizeCodeSelected($event)">
                                 </master-search>
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Category
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="category" />
+                                    <input type="text" matInput formControlName="category" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="categoryCodeData"
                                     (newRowClick)="categoryCodeSelected($event)"></master-search>
@@ -76,7 +77,7 @@
                             <label for="input" class="col-sm-2 col-form-label">Shape :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="shape" />
+                                    <input type="text" matInput formControlName="shape"  [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="shapeCodeData"
                                     (newRowClick)="shapeCodeSelected($event)">
@@ -86,7 +87,7 @@
                                 Type:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="settingType" />
+                                    <input type="text" matInput formControlName="settingType" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="settingTypeCodeData"
                                     (newRowClick)="settingTypeCodeSelected($event)">
@@ -99,7 +100,7 @@
                                 :</label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" />
+                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
 
                             </div>
@@ -114,7 +115,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
-                                        formControlName="height" />
+                                        formControlName="height" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
 
                             </div>
@@ -122,7 +123,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
-                                        formControlName="length" />
+                                        formControlName="length" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
 
                             </div>
@@ -133,7 +134,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
-                                        formControlName="width" />
+                                        formControlName="width" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
 
                             </div>
@@ -141,7 +142,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
-                                        formControlName="radius" />
+                                        formControlName="radius" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
 
                             </div>
@@ -152,7 +153,7 @@
                                 :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="processSeq" />
+                                    <input type="text" matInput formControlName="processSeq" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="processSeqCodeData"
                                     (newRowClick)="processSeqCodeSelected($event)">
@@ -165,7 +166,7 @@
                                 :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="costCenter" />
+                                    <input type="text" matInput formControlName="costCenter" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="costCenterCodeData"
                                     (newRowClick)="costCenterCodeSelected($event)">

@@ -26,7 +26,9 @@ export class ComponentMasterComponent implements OnInit {
   url: any;
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
-  
+  codeEnable: boolean = true;
+  viewMode: boolean = false;
+  editMode: boolean = false;
 
   images: any[] = [];
   constructor(
@@ -48,6 +50,7 @@ export class ComponentMasterComponent implements OnInit {
       this.setFormValues();
     } else (this.content.FLAG == 'EDIT')
     {
+   
       this.setFormValues();
     }
 
@@ -56,6 +59,8 @@ export class ComponentMasterComponent implements OnInit {
     let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
   }
+
+ 
 
 
   divisionCode: MasterSearchModel = {
@@ -129,6 +134,24 @@ export class ComponentMasterComponent implements OnInit {
     currencyRate: [""],
   });
 
+  codeEnabled() {
+    if (this.componentmasterForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
+
+  checkCode(): boolean {
+    if (this.componentmasterForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('please enter code')
+      return true
+    }
+    return false
+  }
+
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -141,6 +164,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   categoryCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
@@ -158,7 +182,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   karatCodeSelected(value: any, data: any, controlName: string){
-
+    if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
     //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
@@ -196,6 +220,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   typeCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
@@ -212,6 +237,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   sizeSetCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
   }
@@ -228,6 +254,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   sizeCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
 
     const apiDescription = e.DESCRIPTION;
@@ -318,6 +345,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   shapeCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.shape.setValue(e.CODE);
   }
@@ -334,6 +362,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   settingTypeCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.settingType.setValue(e.CODE);
   }
@@ -350,6 +379,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   processSeqCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.processSeq.setValue(e.SEQ_CODE);
   }
@@ -366,6 +396,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   costCenterCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.costCenter.setValue(e.COST_CODE);
   }
@@ -376,6 +407,8 @@ export class ComponentMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+ 
 
   addTableData() {
     let length = this.tableData.length;
@@ -426,34 +459,44 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
-  // deleteTableData() {
-  //   console.log(this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-  //     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  //   } else {
-  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  //   }
-  // }
+//   deleteTableData() {
+//     console.log(this.selectedIndexes);
+//     if (this.selectedIndexes.length > 0) {
+//         this.selectedIndexes.sort((a:number, b:number) => b - a);
 
-  deleteTableData() {
-    console.log(this.selectedIndexes);
-    if (this.selectedIndexes.length > 0) {
-        this.selectedIndexes.sort((a:number, b:number) => b - a);
+//         this.selectedIndexes.forEach((indexToRemove:number) => {
+//             this.tableData.splice(indexToRemove, 2);
+//         });
+//         this.selectedIndexes = [];
+//     } else {
+//         this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+//     }
+// }
 
-        this.selectedIndexes.forEach((indexToRemove:number) => {
-            this.tableData.splice(indexToRemove, 2);
-        });
-        this.selectedIndexes = [];
-    } else {
-        this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-    }
+deleteTableData() {
+  console.log('Selected indexes:', this.selectedIndexes);
+  if (this.selectedIndexes.length > 0) {
+      this.selectedIndexes.sort((a: number, b: number) => b - a);
+
+      console.log('Before deletion - tableData:', this.tableData);
+
+      this.selectedIndexes.forEach((indexToRemove: number) => {
+          console.log('Deleting index:', indexToRemove);
+          this.tableData.splice(indexToRemove,2);
+      });
+
+      console.log('After deletion - tableData:', this.tableData);
+
+      this.selectedIndexes = [];
+  } else {
+      this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  }
 }
+
 
 
 setFormValues() {
   if (!this.content) return
-
-
 
   this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
   this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)

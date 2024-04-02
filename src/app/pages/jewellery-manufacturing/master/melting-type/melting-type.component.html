@@ -116,7 +116,7 @@
                         </menu-buttons>
 
                         <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                            [showColumnLines]="true" [showRowLines]="true" class="mt-3" keyExpr="SRNO"
+                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3" keyExpr="SRNO"
                             (onSelectionChanged)="onSelectionChanged($event)">
                             <dxo-selection mode="single"></dxo-selection>
                             <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>

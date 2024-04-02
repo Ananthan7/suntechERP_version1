@@ -113,7 +113,7 @@
             <div class="col-md-4">
                 <div class="row justify-content-end mt-2">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
@@ -140,7 +140,7 @@
                         <div class="row mt-2">
                             <div class="col-md-8">
                                 <h6 class="bg-light p-2 mb-0">Components Details</h6>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell">
                                     </dxo-editing>
@@ -275,7 +275,7 @@
                         <div class="row my-2">
                             <div class="col-md-8">
                                 <h6 class="bg-light p-2 mb-0">Stock Details</h6>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true"
                                     width="100%">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true">
@@ -291,7 +291,7 @@
                             </div>
                             <div class="col-md-4">
                                 <h6 class="bg-light p-2 mb-0">Labour</h6>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true"
                                     width="100%">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true">
@@ -310,7 +310,7 @@
                     <mat-tab label="Labour Charges">
                         <div class="row my-2">
                             <div class="col-md-12">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true"
                                     width="100%">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true">

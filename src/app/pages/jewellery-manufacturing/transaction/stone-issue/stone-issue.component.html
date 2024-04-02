@@ -148,6 +148,7 @@
                     </dxo-summary>
                   </dx-data-grid> -->
                 <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData" [showBorders]="true"
+                  [allowColumnResizing]="true"
                   (onRowClick)="onRowClickHandler($event)" [selectedRowKeys]="selectedKey" (onSelectionChanged)="onSelectionChanged($event)">
                   <!-- <dxo-selection mode="single"></dxo-selection> -->
                   <dxo-paging [enabled]="false"></dxo-paging>

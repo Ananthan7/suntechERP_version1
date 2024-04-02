@@ -128,7 +128,7 @@
                     </dxi-column>
                     <dxi-column dataField="design" caption="Design" cellTemplate="designtemp">
                     </dxi-column>
-                    <dxi-column dataField="Party" caption="Party" cellTemplate="partytemp"> </dxi-column>
+                    <dxi-column dataField="party" caption="Party" cellTemplate="partytemp"> </dxi-column>
                     <dxi-column dataField="So" caption="S.O " cellTemplate="Sotemp">
                     </dxi-column>
 
@@ -158,30 +158,30 @@
                   </div>
 
                   <div *dxTemplate="let data of 'partytemp'">
-                    <input type="text" (change)="partytextevent($event,data)"  />
+                    <input type="text" [value]="data.value" (change)="partytextevent($event,data)"  />
                   </div>
 
                   <div *dxTemplate="let data of 'Sotemp'">
-                    <input type="text" (change)="Sotextevent($event,data)" />
+                    <input type="text" [value]="data.value" (change)="Sotextevent($event,data)" />
                   </div>
 
                   <div *dxTemplate="let data of 'SoDatetemp'">
-                    <input type="date" (change)="SoDatetextevent($event,data)"  />
+                    <input type="date" [value]="data.value" (change)="SoDatetextevent($event,data)"  />
                   </div>
                   <div *dxTemplate="let data of 'DelDatetemp'">
-                    <input type="date" (change)="DelDatetextevent($event,data)"  />
+                    <input type="date" [value]="data.value" (change)="DelDatetextevent($event,data)"  />
                   </div>
                   <div *dxTemplate="let data of 'GrossWttemp'">
-                    <input type="number" (change)="GrossWttextevent($event,data)"  class="text-right"  MetalDecimalInput />
+                    <input type="number" [value]="data.value" (change)="GrossWttextevent($event,data)"  class="text-right"  MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'MetalWttemp'">
-                    <input type="number" (change)="MetalWttextevent($event,data)"  class="text-right"  MetalDecimalInput />
+                    <input type="number" [value]="data.value" (change)="MetalWttextevent($event,data)"  class="text-right"  MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'StoneWttemp'">
-                    <input type="number" (change)="StoneWttextevent($event,data)"  class="text-right"  MetalDecimalInput  />
+                    <input type="number" [value]="data.value" (change)="StoneWttextevent($event,data)"  class="text-right"  MetalDecimalInput  />
                   </div>
                   <div *dxTemplate="let data of 'OrdPcstemp'">
-                    <input type="number" (change)="OrderPcstextevent($event,data)" class="text-right"  MetalDecimalInput />
+                    <input type="number" [value]="data.value" (change)="OrderPcstextevent($event,data)" class="text-right"  MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'IssuePcstemp'">
                     <input type="number" (change)="IssuePcstextevent($event,data)"  class="text-right"  MetalDecimalInput/>

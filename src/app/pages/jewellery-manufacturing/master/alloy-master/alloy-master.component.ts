@@ -97,6 +97,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+      this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
     console.log(this.userName);
     
@@ -117,6 +118,39 @@ export class AlloyMasterComponent implements OnInit {
     }
 
   }
+
+  setupFormSubscription(): void {
+    if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
+        this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
+            // Update value of price1Fc whenever price1Lc changes
+            this.alloyMastereForm.get('price1Fc')!.setValue(value);
+        });
+    }
+    if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
+      this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
+          // Update value of price1Fc whenever price1Lc changes
+          this.alloyMastereForm.get('price2Fc')!.setValue(value);
+      });
+  } 
+  if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
+    this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
+        // Update value of price1Fc whenever price1Lc changes
+        this.alloyMastereForm.get('price3Fc')!.setValue(value);
+    });
+} 
+  if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
+    this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
+        // Update value of price1Fc whenever price1Lc changes
+        this.alloyMastereForm.get('price4Fc')!.setValue(value);
+    });
+  }
+  if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
+    this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
+        // Update value of price1Fc whenever price1Lc changes
+        this.alloyMastereForm.get('price5Fc')!.setValue(value);
+    });
+  }
+}
 
   @ViewChild('codeInput')
   codeInput!: ElementRef;

@@ -237,7 +237,7 @@
                   (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
               </div>
-              <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
+              <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
                 [showRowLines]="true" class="mt-3" keyExpr="SN" (onSelectionChanged)="onSelectionChanged($event)">
 <!--               
                 <dxo-editing [allowUpdating]="true" [allowUpdating]="!viewMode"></dxo-editing> -->

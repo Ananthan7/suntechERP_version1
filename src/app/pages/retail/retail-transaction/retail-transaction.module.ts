@@ -76,6 +76,14 @@ import { VoucherRedeemComponent } from './pos-credit-sale-recipt/voucher-redeem/
 import { MetalBranchTransferInAutoRepairDetailsComponent } from './metal-branch-transfer-in-auto-repair/metal-branch-transfer-in-auto-repair-details/metal-branch-transfer-in-auto-repair-details.component';
 import { PreciousStonePurchaseComponent } from './precious-stone-purchase/precious-stone-purchase.component';
 import { RepairPurchaseComponent } from './repair-purchase/repair-purchase.component';
+import { RetailRepairMenuComponent } from './retail-repair-menu/retail-repair-menu.component';
+import { SalesDiaDetailGstComponent } from './repair-sale/sales-dia-detail-gst/sales-dia-detail-gst.component';
+import { SalesDiaDetailGstIndComponent } from './repair-sale/sales-dia-detail-gst-ind/sales-dia-detail-gst-ind.component';
+import { SalesDiaUnfixDetailGstComponent } from './repair-sale/sales-dia-unfix-detail-gst/sales-dia-unfix-detail-gst.component';
+import { SaleReciptDetailsComponent } from './repair-sale/sale-recipt-details/sale-recipt-details.component';
+import { SalesPullPosComponent } from './repair-sale/sales-pull-pos/sales-pull-pos.component';
+import { SalesVoucherRedeemComponent } from './repair-sale/sales-voucher-redeem/sales-voucher-redeem.component';
+import { RepairPurchaseDetailsComponent } from './repair-purchase/repair-purchase-details/repair-purchase-details.component';
 
 
 @NgModule({
@@ -157,7 +165,15 @@ import { RepairPurchaseComponent } from './repair-purchase/repair-purchase.compo
     VoucherRedeemComponent,
     MetalBranchTransferInAutoRepairDetailsComponent,
     PreciousStonePurchaseComponent,
-    RepairPurchaseComponent
+    RepairPurchaseComponent,
+    RetailRepairMenuComponent,
+    SalesDiaDetailGstComponent,
+    SalesDiaDetailGstIndComponent,
+    SalesDiaUnfixDetailGstComponent,
+    SaleReciptDetailsComponent,
+    SalesPullPosComponent,
+    SalesVoucherRedeemComponent,
+    RepairPurchaseDetailsComponent
   ],
   imports: [
     CommonModule,

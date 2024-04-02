@@ -768,6 +768,7 @@
             <dx-data-grid #dataGrid id="gridContainer"
               [showBorders]="true" [dataSource]="metalDetailData"
               [columnAutoWidth]="true"
+              [allowColumnResizing]="true"
               (onRowUpdated)="formatMetalDetailDataGrid()"
               [showRowLines]="true">
               <dxo-paging [enabled]="false"></dxo-paging>

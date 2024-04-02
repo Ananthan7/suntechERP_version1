@@ -53,15 +53,27 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
 
-  @ViewChild('codeInput') codeInput!: ElementRef;
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
+  // @ViewChild('codeInput') codeInput!: ElementRef;
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
+  // }
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
+  @ViewChild('codeInput2') codeInput2!: ElementRef;
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      this.codeInput1.nativeElement.focus();
+    }
+    setTimeout(() => {
+      if (this.codeInput2) {
+        this.codeInput2.nativeElement.focus();
+      }
+    }, 2000); // Adjust the delay as needed
   }
-
 
   ngOnInit(): void {
 
-    this.renderer.selectRootElement('#code')?.focus();
+  //  this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;

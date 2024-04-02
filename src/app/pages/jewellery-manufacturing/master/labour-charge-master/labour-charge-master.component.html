@@ -11,7 +11,7 @@
   <!-- content section -->
   <div class="row">
     <!-- <div class="container-fluid pt-3"> -->
-    <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
+    <mat-tab-group [selectedIndex]="this.divisionMS == 'ID'? 1 : 0">
       <mat-tab label="Diamond Labour Master">
         <div class="container-fluid">
           <!-- <div class="card metal-sales-card">
@@ -31,8 +31,8 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput id="code" maxlength="15" [readonly]="editMode || viewMode"
-                    formControlName="labour_code" oninput="this.value = this.value.toUpperCase()" />
+                  <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" [readonly]="editMode || viewMode"
+                  formControlName="labour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
@@ -183,8 +183,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput 
-                    style="text-align: right;"  MetalDecimalInput
-                    formControlName="ctWtFrom" />
+                    style="text-align: right;"  
+                    formControlName="ctWtFrom" (change)="onCtweighttto($event,'Ctwtfrom')" />
                 </mat-form-field>
               </div>
 
@@ -205,8 +205,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput 
-                     MetalDecimalInput
-                    style="text-align: right;" formControlName="ctWtTo" />
+                     
+                    style="text-align: right;" formControlName="ctWtTo"  (change)="onCtweighttto($event,'Ctwtto')"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
@@ -247,8 +247,8 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput #codeInput maxlength="15" [readonly]="editMode || viewMode"
-                    formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
+                  <input type="text" matInput #codeInput1 id="codeInput1" maxlength="15" [readonly]="editMode || viewMode"
+                  formControlName="metallabour_code" oninput="this.value = this.value.toUpperCase()" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
@@ -401,7 +401,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" MetalDecimalInput
+                  <input matInput type="text" [readonly]="viewMode" matInput formControlName="wtFrom" 
                     style="text-align: right;" (keyup)="onweightto($event,'wtfrom')" />
                 </mat-form-field>
               </div>
@@ -411,7 +411,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
                   <input matInput type="text" [readonly]="viewMode" matInput (change)="onweightto($event,'wtto')"
-                    formControlName="wtTo" MetalDecimalInput style="text-align: right;" />
+                    formControlName="wtTo"  style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">

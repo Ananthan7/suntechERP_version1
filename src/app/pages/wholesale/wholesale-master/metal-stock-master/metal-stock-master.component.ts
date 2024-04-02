@@ -24,6 +24,13 @@ export class MetalStockMasterComponent implements OnInit {
   disabled: boolean = true;
   isdisabled: boolean = false;
   
+  makingchargeType = [
+    { type: 'GMS', value: 'GMS' },
+    { type: 'PCS', value: 'PCS' },
+    { type: 'LENGTH', value: 'LENGTH' },
+    { type: 'GOZ', value: 'GOZ' },
+    { type: '%', value: '%' },
+  ];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -39,30 +46,6 @@ export class MetalStockMasterComponent implements OnInit {
     this.metalstockForm.controls['PcGms'].disable();
     this.metalstockForm.controls['prefix'].disable();
 
-    
-    this.makingchargeTypeList =[
-      {
-        'name':'GMS',
-        'value':'GMS'
-      },
-      {
-        'name':'PCS',
-        'value':'PCS'
-      },
-      {
-        'name':'LENGTH',
-        'value':'LENGTH'
-      },
-      {
-        'name':'GOZ',
-        'value':'GOZ'
-      },
-      {
-        'name':'%',
-        'value':'%'
-      }
-  
-    ]
   }
 
   showHideText() {
