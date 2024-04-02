@@ -136,9 +136,9 @@
 
                             <div *dxTemplate="let data of 'defaultAlloy'">
                                 <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                <master-search [MasterSearchData]="defaultAlloy"
+                                <master-search [MasterSearchData]="defaultAlloy" *ngIf="!viewMode"
                                     (newRowClick)="defaultAlloySelected($event,data,'defaultAlloy')"
-                                    *ngIf="SearchDisable == false" style="width: 60%;">
+                                    style="width: 60%;">
                                 </master-search>
                             </div>
 
