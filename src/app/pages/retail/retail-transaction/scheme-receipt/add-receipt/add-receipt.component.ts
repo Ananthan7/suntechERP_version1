@@ -370,6 +370,7 @@ export class AddReceiptComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+  callcount: number = 0;
   //Account master
   getAccountMaster(accountCode: string) {
     this.commonService.toastInfoByMsgId('MSG81447');
@@ -383,10 +384,15 @@ export class AddReceiptComponent implements OnInit {
             //   console.log(data.CURRENCY_CODE);
             this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
           }
-          if (this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency) {
+          if(this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency){
             this.disableAmountFC = true
-          } else {
+          }else{
             this.disableAmountFC = false
+          }
+          if ((this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency) && this.callcount == 0) {
+            this.callcount = 1
+          } else {
+            this.callcount = 1
             this.setFormControlAmount('Amount_LC', 0)
             this.setFormControlAmount('Amount_FC', 0)
             this.setFormControlAmount('Header_Amount', 0)
@@ -613,12 +619,20 @@ export class AddReceiptComponent implements OnInit {
     }
 
     let totalSpiltAmtLC = formData.paidBalance + Amount_LC
-    let totalSpiltAmtFC = formData.paidBalance + Amount_FC
+    let totalSpiltAmtFC = this.commonService.CCToFC(this.commonService.compCurrency,totalSpiltAmtLC)
     // fn to calculate and split amount to rows
     let FixedArrLC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtLC)
     let FixedArrFC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtFC)
     console.log(this.commonService.compCurrency, formData.CurrCode,'curr');
-    
+    if(this.commonService.nullToString(formData.CurrCode) != ''){
+      this.gridDataSource.forEach((item: any, index: number) => {
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
+        item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
+      })
+      this.setNarrationString() //narration add
+      return
+    }
     this.gridDataSource.forEach((item: any, index: number) => {
       item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
       item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
