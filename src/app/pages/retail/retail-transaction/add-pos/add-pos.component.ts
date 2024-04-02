@@ -92,6 +92,7 @@ export class AddPosComponent implements OnInit {
   isSaved: boolean = false;
 
   selectedTabIndex = 0;
+  receiptDetailView: boolean = false;
 
   showBoarding: boolean = false;
 
@@ -1395,8 +1396,8 @@ export class AddPosComponent implements OnInit {
               rate: data.MKG_RATECC || 0,
               metal_rate: data.METAL_RATE || 0,
               taxPer: data.VAT_PER || 0,
-              metal_amt: this.comFunc.emptyToZero( this.lineItemForm.value.fcn_ad_metal_amount ) || 0,
-              stone_amt: this.comFunc.emptyToZero( this.lineItemForm.value.fcn_ad_stone_amount ) || 0,
+              metal_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
+              stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
             };
 
             // this.newLineItem.pcs = data.PCS;
@@ -2400,6 +2401,7 @@ export class AddPosComponent implements OnInit {
       ) {
 
         // this.setReceiptVal();
+        this.receiptDetailView = receiptDetailView;
         if (receiptItemData == null) {
           this.selectedTabIndex = 0;
         }
@@ -2417,12 +2419,15 @@ export class AddPosComponent implements OnInit {
         this.salesReturnEditId = '';
         this.orderedItemEditId = '';
         this.exchangeItemEditId = '';
+        this.receiptDetailView = false;
       },
       (reason: any) => {
         this.salesReturnEditId = '';
         this.orderedItemEditId = '';
         this.exchangeItemEditId = '';
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        this.receiptDetailView = false;
+
       }
     );
 
@@ -2720,7 +2725,7 @@ export class AddPosComponent implements OnInit {
     );
     this.lineItemForm.controls.fcn_ad_metal_amount.setValue(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.METALVALUEFC ));
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.METALVALUEFC));
 
     if (this.editOnly || this.viewOnly) {
       const divisionMS = this.comFunc.getDivisionMS(value.DIVISION_CODE);
@@ -5109,7 +5114,7 @@ export class AddPosComponent implements OnInit {
           this.exchangeForm.value.fcn_exchange_stone_amount
         ), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC: this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_net_amount), 
+      NETVALUEFC: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_amount),
       NETVALUECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(
@@ -5675,10 +5680,10 @@ export class AddPosComponent implements OnInit {
         if (this.exchangeForm.value.fcn_exchange_item_code == '') {
           this.openDialog('Warning', 'Stock code should not be empty', true);
         }
-        if (_exchangeMetalAmt ==  0)
+        if (_exchangeMetalAmt == 0)
           this.openDialog('Warning', 'Invalid Metal Amount', true);
         if (_exchangeNetAmt == 0)
-        // if (_exchangeNetAmt == '' || 0)
+          // if (_exchangeNetAmt == '' || 0)
           this.openDialog('Warning', 'Invalid Net Amount', true);
       }
 
@@ -6093,10 +6098,10 @@ export class AddPosComponent implements OnInit {
       SGST_AMOUNTFC: '0.000',
       SGST_AMOUNTCC: '0.000',
       IGST_PER: this.lineItemForm.value.fcn_li_tax_percentage || 0,
-      IGST_AMOUNTFC:  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount) || 0,
+      IGST_AMOUNTFC: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount) || 0,
       IGST_AMOUNTCC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
-        this.comFunc.emptyToZero( this.lineItemForm.value.fcn_li_tax_amount), this.vocDataForm.value.txtCurRate
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount), this.vocDataForm.value.txtCurRate
       ),
       CGST_ACCODE: '',
       SGST_ACCODE: '',
@@ -6759,13 +6764,13 @@ export class AddPosComponent implements OnInit {
             pcs: this.lineItemForm.value.fcn_li_pcs,
             weight: this.lineItemForm.value.fcn_li_gross_wt,
             description: this.lineItemForm.value.fcn_li_item_desc,
-            tax_amount:  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount),
+            tax_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount),
             net_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount),
             pure_wt: this.lineItemForm.value.fcn_li_pure_wt,
             making_amt: this.lineItemForm.value.total_amount || 0,
             // making_amt: this.lineItemForm.value.fcn_ad_making_amount || 0,
             metal_rate: this.lineItemForm.value.fcn_ad_metal_rate || 0,
-            metal_amt: this.comFunc.emptyToZero( this.lineItemForm.value.fcn_ad_metal_amount) || 0,
+            metal_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
             stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
             dis_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) || 0,
             gross_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
@@ -7057,9 +7062,9 @@ export class AddPosComponent implements OnInit {
                   );
 
                   this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
-                   this.zeroAmtVal
-                   );
-                   this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                    this.zeroAmtVal
+                  );
+                  this.lineItemForm.controls.fcn_li_discount_amount.setValue(
                     this.zeroAmtVal
                   );
 
@@ -9077,7 +9082,7 @@ export class AddPosComponent implements OnInit {
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         // _exchangeMetalRate * _exchangeNetWt
-        this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_metal_rate) *
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_rate) *
         this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
       )
     );
@@ -9176,7 +9181,7 @@ export class AddPosComponent implements OnInit {
       this.setExMetalAmt();
     }
   }
-  changeExStoneAmount(event: any){
+  changeExStoneAmount(event: any) {
     const value = event.target.value;
 
     if (event.target.value != '') {
@@ -9186,14 +9191,14 @@ export class AddPosComponent implements OnInit {
         this.comFunc.emptyToZero(value) /
         this.comFunc.emptyToZero(
           this.exchangeForm.value.fcn_exchange_stone_wt
-        ) 
+        )
       );
-      
+
       this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(res);
       this.setExNetAmt();
 
 
-    }else{
+    } else {
       const value = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         0
@@ -9241,15 +9246,15 @@ export class AddPosComponent implements OnInit {
       this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
         this.comFunc.transformDecimalVB(
           this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          this.comFunc.emptyToZero( event.target.value)
+          this.comFunc.emptyToZero(event.target.value)
         )
       );
       const value =
 
         this.comFunc.decimalQuantityFormat(
-          this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_metal_amount )/
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount) /
           // this.exchangeForm.value.fcn_exchange_net_wt
-          this.comFunc.emptyToZero( this.exchangeForm.value.fcn_exchange_pure_weight)
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
           , 'METAL_RATE')
 
 
@@ -9279,27 +9284,27 @@ export class AddPosComponent implements OnInit {
     );
     this.setExchangeCommaSep();
   }
-  setExchangeCommaSep(){
+  setExchangeCommaSep() {
     this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
-    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_stone_rate ?? this.zeroAmtVal)
+      this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_stone_rate ?? this.zeroAmtVal)
     );
     this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(
-    this.comFunc.commaSeperation(  this.comFunc.transformDecimalVB(
-      this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount)) ?? this.zeroAmtVal)
+      this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount)) ?? this.zeroAmtVal)
     );
     this.exchangeForm.controls.fcn_exchange_making_rate.setValue(
-    this.comFunc.commaSeperation( 
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate)) )
+      this.comFunc.commaSeperation(
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate)))
     );
     this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
-    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_making_amt ?? this.zeroAmtVal)
+      this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_making_amt ?? this.zeroAmtVal)
     );
     this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
-    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_metal_amount ?? this.zeroAmtVal)
+      this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_metal_amount ?? this.zeroAmtVal)
     );
     this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
-    this.comFunc.commaSeperation( this.exchangeForm.value.fcn_exchange_net_amount ?? this.zeroAmtVal)
+      this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_net_amount ?? this.zeroAmtVal)
     );
   }
   changeExchangeNettWt(event: any) {
@@ -9566,7 +9571,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         parseFloat(grossAmt) -
         (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount || 0) +
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
       );
     } else {
       totalAmt = this.comFunc.transformDecimalVB(
@@ -9657,10 +9662,10 @@ export class AddPosComponent implements OnInit {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
                 this.comFunc.commaSeperation(
-                this.comFunc.transformDecimalVB(
-                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                  preVal
-                )
+                  this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    preVal
+                  )
                 )
               );
             }
@@ -11492,147 +11497,182 @@ export class AddPosComponent implements OnInit {
     //   data['AMOUNT_FC'] = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, data['AMOUNT_FC'] );
     // }
 
+    if (this.receiptDetailView) {
 
-    if (this.receiptModesList?.BTN_CASH == true && this.selectedTabIndex == 0) {
-      if (data != null && data != undefined && data != undefined) {
-        this.cashreceiptForm.controls.paymentsCash.setValue(
-          data['RECEIPT_MODE'].toString());
-        this.cashreceiptForm.controls.cashAmtFC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-        this.cashreceiptForm.controls.cashAmtLC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
+      let modeIndex: number;
+
+      switch (this.selectedTabIndex) {
+        case 0:
+          modeIndex = 0;
+          break;
+        case 1:
+          modeIndex = 1;
+          break;
+        case 2:
+          modeIndex = 3;
+          break;
+        case 3:
+          modeIndex = 2;
+          break;
+        case 4:
+          modeIndex = 4;
+          break;
+        default:
+          modeIndex = 5;
       }
-      else {
-        if (this.balanceAmount != null) {
+
+      const filteredReceipts = this.receiptDetailsList.filter((data: any) =>
+        this.receiptModesTypes.some((modeType: any) =>
+          (data.RECEIPT_MODE.toString() == modeType.CREDIT_CODE.toString()) &&
+          (modeType.MODE == modeIndex)
+        )
+      );
+      data =  filteredReceipts[0];
+      // console.log('receiptModeListData ', filteredReceipts);
+
+    }
+
+
+
+      if (this.receiptModesList?.BTN_CASH == true && this.selectedTabIndex == 0) {
+        if (data != null && data != undefined && data != undefined) {
+          this.cashreceiptForm.controls.paymentsCash.setValue(
+            data['RECEIPT_MODE'].toString());
           this.cashreceiptForm.controls.cashAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
           this.cashreceiptForm.controls.cashAmtLC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-        } else {
-          this.cashreceiptForm.controls.cashAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-          this.cashreceiptForm.controls.cashAmtLC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
+        }
+        else {
+          if (this.balanceAmount != null) {
+            this.cashreceiptForm.controls.cashAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+            this.cashreceiptForm.controls.cashAmtLC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+          } else {
+            this.cashreceiptForm.controls.cashAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+            this.cashreceiptForm.controls.cashAmtLC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+          }
+
         }
 
+        this.renderer.selectRootElement('#cashAmtFC').focus();
+
+
       }
-
-      this.renderer.selectRootElement('#cashAmtFC').focus();
-
-
-    }
-    if (this.receiptModesList?.['BTN_CREDITCARD'] == true && this.selectedTabIndex == 1) {
-      if (data != null && data != undefined) {
-        this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
-          data['RECEIPT_MODE'].toString());
-        this.creditCardReceiptForm.controls.cardCCNo.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['CARD_NO'].toString())));
-        this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-      }
-      else {
-        if (this.balanceAmount != null) {
+      if (this.receiptModesList?.['BTN_CREDITCARD'] == true && this.selectedTabIndex == 1) {
+        if (data != null && data != undefined) {
+          this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
+            data['RECEIPT_MODE'].toString());
+          this.creditCardReceiptForm.controls.cardCCNo.setValue(data['CARD_NO'].toString());
           this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-        } else {
-          this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
         }
+        else {
+          if (this.balanceAmount != null) {
+            this.creditCardReceiptForm.controls.cardAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+          } else {
+            this.creditCardReceiptForm.controls.cardAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+          }
+        }
+        this.renderer.selectRootElement('#cardCCNo').focus();
       }
-      this.renderer.selectRootElement('#cardCCNo').focus();
-    }
-    if (this.receiptModesList?.['BTN_ADVANCE'] == true && this.selectedTabIndex == 2) {
+      if (this.receiptModesList?.['BTN_ADVANCE'] == true && this.selectedTabIndex == 2) {
 
-      if (data != null && data != undefined) {
-        this.advanceReceiptForm.controls.paymentsAdvance.setValue(
-          data['RECEIPT_MODE'].toString());
-        this.advanceReceiptForm.controls.advanceYear.setValue(
-          this.comFunc.emptyToZero(data['FYEARCODE'].toString()));
-        this.advanceReceiptForm.controls.advanceBranch.setValue(
-          data['REC_BRANCHCODE'].toString());
+        if (data != null && data != undefined) {
+          this.advanceReceiptForm.controls.paymentsAdvance.setValue(
+            data['RECEIPT_MODE'].toString());
+          this.advanceReceiptForm.controls.advanceYear.setValue(
+            this.comFunc.emptyToZero(data['FYEARCODE'].toString()));
+          this.advanceReceiptForm.controls.advanceBranch.setValue(
+            data['REC_BRANCHCODE'].toString());
 
-        this.advanceReceiptForm.controls.advanceRecNo.setValue(
-          this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+          this.advanceReceiptForm.controls.advanceRecNo.setValue(
+            this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
 
-        this.advanceReceiptForm.controls.advanceAmount.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
+          this.advanceReceiptForm.controls.advanceAmount.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
 
-        this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-          data['IGST_AMOUNTFC']);
-        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-          data['IGST_AMOUNTCC']);
-      } else {
-        this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-          this.zeroAmtVal);
-        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-          this.zeroAmtVal);
+          this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+            data['IGST_AMOUNTFC']);
+          this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+            data['IGST_AMOUNTCC']);
+        } else {
+          this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+            this.zeroAmtVal);
+          this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+            this.zeroAmtVal);
+        }
+
+
+        this.renderer.selectRootElement('#advanceRecNo').focus();
+
+
       }
-
-
-      this.renderer.selectRootElement('#advanceRecNo').focus();
-
-
-    }
-    if (this.receiptModesList?.['BTN_OTHERS'] == true && this.selectedTabIndex == 3) {
-      if (data != null && data != undefined) {
-        this.othersReceiptForm.controls.paymentsOthers.setValue(
-          data['RECEIPT_MODE'].toString());
-        this.othersReceiptForm.controls.othersAmtFC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-      }
-      else {
-        if (this.balanceAmount != null) {
+      if (this.receiptModesList?.['BTN_OTHERS'] == true && this.selectedTabIndex == 3) {
+        if (data != null && data != undefined) {
+          this.othersReceiptForm.controls.paymentsOthers.setValue(
+            data['RECEIPT_MODE'].toString());
           this.othersReceiptForm.controls.othersAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-        } else {
-          this.othersReceiptForm.controls.othersAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
         }
+        else {
+          if (this.balanceAmount != null) {
+            this.othersReceiptForm.controls.othersAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+          } else {
+            this.othersReceiptForm.controls.othersAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+          }
 
-      }
-    }
-
-    if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
-      if (data != null && data != undefined) {
-
-        this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
-          this.comFunc.emptyToZero(data?.RECEIPT_MODE).toString());
-
-        this.advanceReceiptForm.controls.giftBranch.setValue(
-          data['REC_BRANCHCODE'].toString());
-
-        this.advanceReceiptForm.controls.advanceRecNo.setValue(
-          this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
-
-        this.giftReceiptForm.controls.giftAmtFC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-      }
-    }
-    if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
-      if (data != null && data != undefined) {
-        this.customerReceiptForm.controls.customAcCodeList.setValue(
-          data['RECEIPT_MODE'].toString());
-        this.customerReceiptForm.controls.customerAmtFC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-        this.customerReceiptForm.controls.customerAmtLC.setValue(
-          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
-      }
-      else {
-
-        if (this.balanceAmount != null) {
-          this.customerReceiptForm.controls.customerAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-          this.customerReceiptForm.controls.customerAmtLC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-        } else {
-          this.customerReceiptForm.controls.customerAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-          this.customerReceiptForm.controls.customerAmtLC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
-
       }
-    }
+
+      if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
+        if (data != null && data != undefined) {
+
+          this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
+            this.comFunc.emptyToZero(data?.RECEIPT_MODE).toString());
+
+          this.advanceReceiptForm.controls.giftBranch.setValue(
+            data['REC_BRANCHCODE'].toString());
+
+          this.advanceReceiptForm.controls.advanceRecNo.setValue(
+            this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+
+          this.giftReceiptForm.controls.giftAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+        }
+      }
+      if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
+        if (data != null && data != undefined) {
+          this.customerReceiptForm.controls.customAcCodeList.setValue(
+            data['RECEIPT_MODE'].toString());
+          this.customerReceiptForm.controls.customerAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+          this.customerReceiptForm.controls.customerAmtLC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
+        }
+        else {
+
+          if (this.balanceAmount != null) {
+            this.customerReceiptForm.controls.customerAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+            this.customerReceiptForm.controls.customerAmtLC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+          } else {
+            this.customerReceiptForm.controls.customerAmtFC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+            this.customerReceiptForm.controls.customerAmtLC.setValue(
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+          }
+
+        }
+      }
 
   }
 
@@ -12331,7 +12371,7 @@ export class AddPosComponent implements OnInit {
   changeFinalDiscount(event: any) {
     // this.order_items_total_discount_amount =
     // this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(event.target.value))
-  
+
     event.target.value = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(event.target.value))
     const value = event.target.value;
 
