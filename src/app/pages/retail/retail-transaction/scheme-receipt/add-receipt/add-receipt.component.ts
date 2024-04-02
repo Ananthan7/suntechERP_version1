@@ -170,9 +170,9 @@ export class AddReceiptComponent implements OnInit {
     if(this.gridDataSource.length>0){
       let SchemeBalance = 0
       this.gridDataSource.forEach((item:any)=>{
-        SchemeBalance += item.PAY_AMOUNT_CC
+        SchemeBalance += this.commonService.emptyToZero(item.PAY_AMOUNT_CC)
       })
-      this.receiptEntryForm.controls.SchemeBalance.setValue(SchemeBalance)
+      this.setFormControlAmount('SchemeBalance', SchemeBalance)
     }
   }
   /**use: funtion for set values for new entry */
@@ -190,8 +190,7 @@ export class AddReceiptComponent implements OnInit {
   setInitialValues() {
     console.log(this.content, 'this.content');
     let data: any = this.content || {}
-    this.getPaymentType(data.RECPAY_TYPE)
-    this.getSchemeDetailView()
+    
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.AC_Code.setValue(data.CurrCode)
     this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
@@ -202,15 +201,17 @@ export class AddReceiptComponent implements OnInit {
     this.setFormControlAmount('Amount_LC', data.TOTAL_AMOUNTCC)
     this.setFormControlAmount('Header_Amount', data.TOTAL_AMOUNTCC)
     this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER || data.TRN_Per)
-    this.receiptEntryForm.controls.SchemeId.setValue(data.D_POSSCHEMEID)
+    this.receiptEntryForm.controls.SchemeId.setValue(data.SchemeID)
     this.receiptEntryForm.controls.SchemeCode.setValue(data.POSCUSTOMERCODE)
     this.receiptEntryForm.controls.SchemeBalance.setValue(data.BALANCE_CC)
+    this.getPaymentType(data.RECPAY_TYPE)
+    this.getSchemeDetailView()
     this.openAttchments()
   }
   getSchemeDetailView() {
     let param = {
       SCH_CUSTOMER_CODE: this.content.POSCUSTOMERCODE || '',
-      SCH_CUSTOMER_ID: this.content.D_POSSCHEMEID || '',
+      SCH_CUSTOMER_ID: this.content.SchemeID || '',
     }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeDetails', param)
       .subscribe((result) => {
@@ -224,6 +225,7 @@ export class AddReceiptComponent implements OnInit {
           })
           this.receiptEntryForm.controls.InstallmentAmount.setValue(this.gridDataSource[0].PAY_AMOUNT_CC)
           this.gridDataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
+          this.calculateSchemeBalance()
         } else {
           this.viewMode = true;
           this.commonService.toastErrorByMsgId('grid data not found')
@@ -822,7 +824,7 @@ export class AddReceiptComponent implements OnInit {
     // if (columnName === 'IS_ATTACHMENT_PRESENT') {
     // let SCHEME_UNIQUEID = e.row.dtoastErrorByMsgId('Mata.SCHEME_UNIQUEID;
     let API = `SchemeCurrencyReceipt/SchemeCurrencyReceipt/GetReceiptAttachments?MID=` + this.content.MID
-    let param = { SCH_CUSTOMER_ID: this.content.D_POSSCHEMEID }
+    let param = { SCH_CUSTOMER_ID: this.content.SchemeID }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result: any) => {
         if(result){

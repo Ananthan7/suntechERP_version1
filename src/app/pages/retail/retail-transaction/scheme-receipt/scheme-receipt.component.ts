@@ -727,6 +727,7 @@ export class SchemeReceiptComponent implements OnInit {
       
       dataToChild.FLAG = this.content?.MID ? 'VIEW' : 'EDIT'
       dataToChild.POSCUSTOMERCODE = this.content?.POSCUSTOMERCODE
+      dataToChild.SchemeID = this.receiptDetailsForm.value.SchemeID
       dataToChild.BALANCE_CC = this.content?.BALANCE_CC
       dataToChild.MID = this.content?.MID
       dataToChild.GRID_DATA = this.unsavedGridData || []
