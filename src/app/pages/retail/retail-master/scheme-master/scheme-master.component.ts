@@ -263,7 +263,7 @@ export class SchemeMasterComponent implements OnInit {
       this.comService.toastErrorByMsgId('Receipt Mode is required for bonus installment')
       flag = true
     }
-    if(this.comService.emptyToZero(form.bonusInstallment) == 0 && form.receiptModeTwo != ''){
+    if(this.comService.emptyToZero(form.bonusInstallment) == 0 && this.comService.nullToString(form.receiptModeTwo) != ''){
       this.comService.toastErrorByMsgId('Bonus installment is required')
       flag = true
     }
@@ -271,7 +271,7 @@ export class SchemeMasterComponent implements OnInit {
       this.comService.toastErrorByMsgId('Receipt Mode is required for cancel charges')
       flag = true
     }
-    if(this.comService.emptyToZero(form.cancelCharges) == 0 && form.receiptModeThree != ''){
+    if(this.comService.emptyToZero(form.cancelCharges) == 0 && this.comService.nullToString(form.receiptModeThree) != ''){
       this.comService.toastErrorByMsgId('Cancel charges is required')
       flag = true
     }
