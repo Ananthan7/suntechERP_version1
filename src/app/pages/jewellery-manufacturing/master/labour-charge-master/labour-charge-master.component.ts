@@ -52,6 +52,9 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrate: boolean = false;
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
+  viewModeSetting :boolean = false;
+  ViewModemethod :boolean = false;
+  
 
   // @ViewChild('codeInput') codeInput!: ElementRef;
   // ngAfterViewInit(): void {
@@ -88,19 +91,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.setInitialValues();
     }
 
-    this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
-      const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
-      const methodControl = this.diamondlabourMasterForm.get('method');
-
-      if (selectedLabourType === 'SETTING') {
-        settingTypeControl?.enable();
-        methodControl?.enable();
-      } else {
-        settingTypeControl?.disable();
-        methodControl?.disable();
-      }
-      console.log(this.settingTypeList);
-    });
+   
 
 
     this.metallabourMasterForm.controls['stock_code'].enable();
@@ -120,6 +111,7 @@ export class LabourChargeMasterComponent implements OnInit {
     private commonService: CommonServiceService,
     private renderer: Renderer2,
   ) { }
+
 
 
 
@@ -201,7 +193,6 @@ export class LabourChargeMasterComponent implements OnInit {
 
   salesChangesMetal(data: any) {
     console.log(data);
-
     if (data == 'metalSelling') {
       this.viewsellingrateMetal = true;
       this.viewsellingMetal = false;
@@ -529,6 +520,26 @@ export class LabourChargeMasterComponent implements OnInit {
     },
 
   ];
+
+  onlabourtypeChange(){
+    console.log(' Hi' +this.settingTypeList);
+    this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
+      const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
+      const methodControl = this.diamondlabourMasterForm.get('method');
+      if (selectedLabourType === 'SETTING') {
+        this.viewModeSetting = false;
+        this.ViewModemethod = false;
+        // settingTypeControl;
+        // methodControl?.enable();
+      } else {
+        // settingTypeControl?.disable();
+        // methodControl?.disable();
+        this.viewModeSetting = true;
+        this.ViewModemethod = true;
+      }
+      console.log(this.settingTypeList);
+    });
+  }
 
   setFormValues() {
     if (!this.content) return

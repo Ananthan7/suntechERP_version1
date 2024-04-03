@@ -101,10 +101,14 @@
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
-
+                 
                   <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                    [allowEditing]="false" alignment="center" backgroundcolor="#000">
                   </dxi-column>
+                    <dxi-column dataField="Extra Pcs" caption="Extra Pcs" [allowEditing]="true"> </dxi-column>
+                    <dxi-column dataField="Pcs/Bag" caption="Pcs/Bag" [allowEditing]="true"> </dxi-column>
+                    
+                 
                 </dx-data-grid>
               </mat-tab>
               <mat-tab label="Job">

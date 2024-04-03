@@ -7573,6 +7573,7 @@ export class AddPosComponent implements OnInit {
     if (type == 'continue') {
       this.addNew();
     }
+    this.close('reloadMainGrid');
   }
   postRetailSalesMaster(type: any) {
     console.log('====================this.karatRateDetails================');
@@ -8198,11 +8199,13 @@ export class AddPosComponent implements OnInit {
     let _validate: any = this.validateBeforePrint();
     if (_validate[0]) {
       const printContent: any = document.getElementById('print_invoice');
-      var WindowPrt: any = window.open(
-        '',
-        '_blank',
-        `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 1.5}`
-      );
+      var WindowPrt: any = window.
+        open(
+          '',
+          '_blank',
+          `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 1.5}`
+        )
+        ;
       /* WindowPrt.document.write(
         '<html><title>SunTech</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"><style>.anim-rotate {animation: anim-rotate 1s linear infinite;}@keyframes anim-rotate {100% {transform: rotate(360deg);}}.anim-close-card {animation: anim-close-card 1.4s linear;}@keyframes anim-close-card {100% {opacity: 0.3;transform: scale3d(.3, .3, .3);}}.card {box-shadow: $card-shadow;margin-bottom: 30px;transition: all 0.3s ease-in-out;&:hover {box-shadow: 0 0 25px -5px #9e9c9e;}.card-header {border-bottom: $card-header-border;position: relative;+.card-body {padding-top: 0;}h5 {margin-bottom: 0;color: $theme-heading-color;font-size: 14px;font-weight: 700;display: inline-block;margin-right: 10px;line-height: 1.1;position: relative;}.card-header-right {right: 10px;top: 10px;display: inline-block;float: right;padding: 0;position: absolute;@media only screen and (max-width: 575px) {display: none;}.dropdown-menu {margin-top: 0;li {cursor: pointer;a {font-size: 14px;text-transform: capitalize;}}}.btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;color: #888;i {margin-right: 0;}&:after {display: none;}&:focus {box-shadow: none;outline: none;}}// custom toggler .btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;padding: 0;width: 20px;height: 20px;right: 8px;top: 8px;&.mobile-menu span {background-color: #888;height: 2px;border-radius: 5px;&:after, &:before {border-radius: 5px;height: 2px;background-color: #888;}}}.nav-pills {padding: 0;box-shadow: none;background: transparent;}}}.card-footer {padding: 0px !important;background-color: none !important ;border-top: 0px !important}}.card-block, .card-body {padding: 20px 25px;}&.card-load {position: relative;overflow: hidden;.card-loader {position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: flex;align-items: center;background-color: rgba(256, 256, 256,0.7);z-index: 999;i {margin: 0 auto;color: $primary-color;font-size: 24px;align-items: center;display: flex;}}}&.full-card {z-index: 99999;border-radius: 0;}}h4 {margin-bottom: 5px;}.btn-sm, .btn-group-sm>.btn {font-size: 12px;}.view-group {display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;padding-left: 0;margin-bottom: 0;}.thumbnail {height: 180px;margin-bottom: 30px;padding: 0px;-webkit-border-radius: 0px;-moz-border-radius: 0px;border-radius: 0px;}.item.list-group-item {float: none;width: 100%;background-color: #fff;margin-bottom: 30px;-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;padding: 0 1rem;border: 0;}.item.list-group-item .img-event {float: left;width: 30%;}.item.list-group-item .list-group-image {margin-right: 10px;}.item.list-group-item .thumbnail {margin-bottom: 0px;width: 100%;display: inline-block;}.item.list-group-item .caption {float: left;width: 70%;margin: 0;}.item.list-group-item:before, .item.list-group-item:after {display: table;content: " ";}.item.list-group-item:after {clear: both;}.card-title {margin-bottom: 5px;}h4 {font-size: 18px;}.card .card-block, .card .card-body {padding: 10px;}.caption p {margin-bottom: 5px;}.price {font-weight: 500;font-size: 1.25rem;color: #826d22;}.list-group-item .img-fluid {max-width: 75% !important;height: auto;}.list-group-item .img-event {text-align: center;}@media (min-width: 400px) {.list-group-item .table_comp_w {width: 50%;margin-top: -20%;margin-left: 35%;}}:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {padding: .5em 0 .5em 0 !important;}:host ::ng-deep .mat-form-field-wrapper {padding-bottom: 0.34375em;}.prod_weight td, .prod_weight th {padding: 5px 0px;font-size: 12px;}.prod_weight th {background-color: #ededf1;}.prod_weight td {color: #b3852d;}    table, th, td {border: 1px solid black; border-collapse: collapse;  }    th, td {    padding: 5px;    text-align: left;    }</style><body><div>'
       );*/
@@ -8232,7 +8235,8 @@ export class AddPosComponent implements OnInit {
     }
   }
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
-    this.dialogBox = this.dialog.open(DialogboxComponent, {
+    this.dialogBox = this.dialog.open(
+      DialogboxComponent, {
       width: '40%',
       disableClose: true,
       data: { title, msg, okBtn, swapColor },
@@ -11527,152 +11531,152 @@ export class AddPosComponent implements OnInit {
           (modeType.MODE == modeIndex)
         )
       );
-      data =  filteredReceipts[0];
+      data = filteredReceipts[0];
       // console.log('receiptModeListData ', filteredReceipts);
 
     }
 
 
 
-      if (this.receiptModesList?.BTN_CASH == true && this.selectedTabIndex == 0) {
-        if (data != null && data != undefined && data != undefined) {
-          this.cashreceiptForm.controls.paymentsCash.setValue(
-            data['RECEIPT_MODE'].toString());
+    if (this.receiptModesList?.BTN_CASH == true && this.selectedTabIndex == 0) {
+      if (data != null && data != undefined && data != undefined) {
+        this.cashreceiptForm.controls.paymentsCash.setValue(
+          data['RECEIPT_MODE'].toString());
+        this.cashreceiptForm.controls.cashAmtFC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+        this.cashreceiptForm.controls.cashAmtLC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
+      }
+      else {
+        if (this.balanceAmount != null) {
           this.cashreceiptForm.controls.cashAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
           this.cashreceiptForm.controls.cashAmtLC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
-        }
-        else {
-          if (this.balanceAmount != null) {
-            this.cashreceiptForm.controls.cashAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-            this.cashreceiptForm.controls.cashAmtLC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-          } else {
-            this.cashreceiptForm.controls.cashAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-            this.cashreceiptForm.controls.cashAmtLC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-          }
-
-        }
-
-        this.renderer.selectRootElement('#cashAmtFC').focus();
-
-
-      }
-      if (this.receiptModesList?.['BTN_CREDITCARD'] == true && this.selectedTabIndex == 1) {
-        if (data != null && data != undefined) {
-          this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
-            data['RECEIPT_MODE'].toString());
-          this.creditCardReceiptForm.controls.cardCCNo.setValue(data['CARD_NO'].toString());
-          this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-        }
-        else {
-          if (this.balanceAmount != null) {
-            this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-          } else {
-            this.creditCardReceiptForm.controls.cardAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-          }
-        }
-        this.renderer.selectRootElement('#cardCCNo').focus();
-      }
-      if (this.receiptModesList?.['BTN_ADVANCE'] == true && this.selectedTabIndex == 2) {
-
-        if (data != null && data != undefined) {
-          this.advanceReceiptForm.controls.paymentsAdvance.setValue(
-            data['RECEIPT_MODE'].toString());
-          this.advanceReceiptForm.controls.advanceYear.setValue(
-            this.comFunc.emptyToZero(data['FYEARCODE'].toString()));
-          this.advanceReceiptForm.controls.advanceBranch.setValue(
-            data['REC_BRANCHCODE'].toString());
-
-          this.advanceReceiptForm.controls.advanceRecNo.setValue(
-            this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
-
-          this.advanceReceiptForm.controls.advanceAmount.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
-
-          this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-            data['IGST_AMOUNTFC']);
-          this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-            data['IGST_AMOUNTCC']);
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
         } else {
-          this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-            this.zeroAmtVal);
-          this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-            this.zeroAmtVal);
+          this.cashreceiptForm.controls.cashAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+          this.cashreceiptForm.controls.cashAmtLC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
 
-
-        this.renderer.selectRootElement('#advanceRecNo').focus();
-
-
       }
-      if (this.receiptModesList?.['BTN_OTHERS'] == true && this.selectedTabIndex == 3) {
-        if (data != null && data != undefined) {
-          this.othersReceiptForm.controls.paymentsOthers.setValue(
-            data['RECEIPT_MODE'].toString());
+
+      this.renderer.selectRootElement('#cashAmtFC').focus();
+
+
+    }
+    if (this.receiptModesList?.['BTN_CREDITCARD'] == true && this.selectedTabIndex == 1) {
+      if (data != null && data != undefined) {
+        this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
+          data['RECEIPT_MODE'].toString());
+        this.creditCardReceiptForm.controls.cardCCNo.setValue(data['CARD_NO'].toString());
+        this.creditCardReceiptForm.controls.cardAmtFC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+      }
+      else {
+        if (this.balanceAmount != null) {
+          this.creditCardReceiptForm.controls.cardAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+        } else {
+          this.creditCardReceiptForm.controls.cardAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+        }
+      }
+      this.renderer.selectRootElement('#cardCCNo').focus();
+    }
+    if (this.receiptModesList?.['BTN_ADVANCE'] == true && this.selectedTabIndex == 2) {
+
+      if (data != null && data != undefined) {
+        this.advanceReceiptForm.controls.paymentsAdvance.setValue(
+          data['RECEIPT_MODE'].toString());
+        this.advanceReceiptForm.controls.advanceYear.setValue(
+          this.comFunc.emptyToZero(data['FYEARCODE'].toString()));
+        this.advanceReceiptForm.controls.advanceBranch.setValue(
+          data['REC_BRANCHCODE'].toString());
+
+        this.advanceReceiptForm.controls.advanceRecNo.setValue(
+          this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+
+        this.advanceReceiptForm.controls.advanceAmount.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
+
+        this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+          data['IGST_AMOUNTFC']);
+        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+          data['IGST_AMOUNTCC']);
+      } else {
+        this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+          this.zeroAmtVal);
+        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+          this.zeroAmtVal);
+      }
+
+
+      this.renderer.selectRootElement('#advanceRecNo').focus();
+
+
+    }
+    if (this.receiptModesList?.['BTN_OTHERS'] == true && this.selectedTabIndex == 3) {
+      if (data != null && data != undefined) {
+        this.othersReceiptForm.controls.paymentsOthers.setValue(
+          data['RECEIPT_MODE'].toString());
+        this.othersReceiptForm.controls.othersAmtFC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+      }
+      else {
+        if (this.balanceAmount != null) {
           this.othersReceiptForm.controls.othersAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+        } else {
+          this.othersReceiptForm.controls.othersAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
-        else {
-          if (this.balanceAmount != null) {
-            this.othersReceiptForm.controls.othersAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-          } else {
-            this.othersReceiptForm.controls.othersAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-          }
 
-        }
       }
+    }
 
-      if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
-        if (data != null && data != undefined) {
+    if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
+      if (data != null && data != undefined) {
 
-          this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
-            this.comFunc.emptyToZero(data?.RECEIPT_MODE).toString());
+        this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
+          this.comFunc.emptyToZero(data?.RECEIPT_MODE).toString());
 
-          this.advanceReceiptForm.controls.giftBranch.setValue(
-            data['REC_BRANCHCODE'].toString());
+        this.advanceReceiptForm.controls.giftBranch.setValue(
+          data['REC_BRANCHCODE'].toString());
 
-          this.advanceReceiptForm.controls.advanceRecNo.setValue(
-            this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+        this.advanceReceiptForm.controls.advanceRecNo.setValue(
+          this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
 
-          this.giftReceiptForm.controls.giftAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-        }
+        this.giftReceiptForm.controls.giftAmtFC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
       }
-      if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
-        if (data != null && data != undefined) {
-          this.customerReceiptForm.controls.customAcCodeList.setValue(
-            data['RECEIPT_MODE'].toString());
+    }
+    if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
+      if (data != null && data != undefined) {
+        this.customerReceiptForm.controls.customAcCodeList.setValue(
+          data['RECEIPT_MODE'].toString());
+        this.customerReceiptForm.controls.customerAmtFC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+        this.customerReceiptForm.controls.customerAmtLC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
+      }
+      else {
+
+        if (this.balanceAmount != null) {
           this.customerReceiptForm.controls.customerAmtFC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
           this.customerReceiptForm.controls.customerAmtLC.setValue(
-            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_CC']).toString()));
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+        } else {
+          this.customerReceiptForm.controls.customerAmtFC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+          this.customerReceiptForm.controls.customerAmtLC.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
         }
-        else {
 
-          if (this.balanceAmount != null) {
-            this.customerReceiptForm.controls.customerAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-            this.customerReceiptForm.controls.customerAmtLC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
-          } else {
-            this.customerReceiptForm.controls.customerAmtFC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-            this.customerReceiptForm.controls.customerAmtLC.setValue(
-              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
-          }
-
-        }
       }
+    }
 
   }
 

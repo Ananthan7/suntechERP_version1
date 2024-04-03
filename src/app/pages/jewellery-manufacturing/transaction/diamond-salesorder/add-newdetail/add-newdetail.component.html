@@ -80,10 +80,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Delivery Type :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 50%;">
-                                    <input type="text" matInput formControlName="DeliveryType" />
+                                    <input type="text" matInput formControlName="DeliveryType" NumberOnly class="text-right"/>
                                 </mat-form-field>
                                 <mat-form-field style="width: 40%;margin-left: 3px;">
-                                    <input type="text" matInput formControlName="DeliveryType2" />
+                                    <input type="text" matInput formControlName="DeliveryType2" NumberOnly class="text-right"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Production Date :</label>
@@ -173,7 +173,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput [readOnly]="true" formControlName="RATEFC"
-                                            class="text-right" SixDecimalInput/>
+                                            class="text-right" AmountDecimalInput maxlength="13"/>
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight :</label>
