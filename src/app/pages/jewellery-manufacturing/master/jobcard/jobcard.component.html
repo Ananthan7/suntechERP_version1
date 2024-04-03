@@ -279,7 +279,7 @@
                                     <mat-form-field style="width: 100%">
                                         <input matInput DateValidation (dateChange)="formatDate($event)"
                                             [matDatepicker]="deldate" formControlName="deldate"
-                                            placeholder="DD/MM/YYYY" />
+                                            placeholder="DD/MM/YYYY" [min]="jobCardFrom.value.jobdate"/>
                                         <mat-datepicker-toggle matSuffix [for]="deldate"></mat-datepicker-toggle>
                                         <mat-datepicker #deldate></mat-datepicker>
                                         

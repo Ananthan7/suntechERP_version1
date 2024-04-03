@@ -139,8 +139,8 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" [readonly]="viewMode"  matInput  CommaSeparatedNumber
-                     style="text-align: right;"
+                  <input type="text" [readonly]="viewMode"  matInput  AmountDecimalInput
+                    class="text-right"
                     formControlName="cost_rate" />
                 </mat-form-field>
               </div>
@@ -311,7 +311,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode"   matInput
-                    CommaSeparatedNumber formControlName="metalcost_rate" class="text-right" />
+                  AmountDecimalInput formControlName="metalcost_rate" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
