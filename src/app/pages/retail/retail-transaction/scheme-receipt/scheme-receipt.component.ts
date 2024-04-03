@@ -195,6 +195,8 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
       return
     }
+    console.log(this.content,'content');
+
     this.isSaved = true;
     this.receiptDetailsForm.controls.Branch.setValue(this.content.BRANCH_CODE);
     this.receiptDetailsForm.controls.VocType.setValue(this.content.VOCTYPE);

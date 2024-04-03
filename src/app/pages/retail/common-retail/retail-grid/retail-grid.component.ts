@@ -23,6 +23,7 @@ export class RetailGridComponent implements OnInit {
   mainVocType: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
+  visibleFields: any[] = [];
   SEARCH_VALUE: string = ''
   //PAGINATION
   totalDataCount: number = 10000; // Total number of items hardcoded 10k will reassign on API call
@@ -47,6 +48,9 @@ export class RetailGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.vocType =  this.CommonService.getqueryParamVocType();
+    this.mainVocType =  this.CommonService.getqueryParamMainVocType();
+    this.getGridVisibleSettings();
   }
 
   addButtonClick() {
@@ -61,7 +65,7 @@ export class RetailGridComponent implements OnInit {
   deleteRowDetails(e: any) {
     console.log(e.row.data);
     let data = e.row.data
-    if(data.FLAG == 1){
+    if (data.FLAG == 1) {
       this.CommonService.toastErrorByMsgId('Cannot delete data in use')
       return
     }
@@ -123,8 +127,8 @@ export class RetailGridComponent implements OnInit {
       this.mainVocType = data.MAIN_VOCTYPE || this.CommonService.getqueryParamMainVocType();
       this.tableName = data.HEADER_TABLE || this.CommonService.getqueryParamTable()
     } else {
-      if(this.SEARCH_VALUE != '') {
-        this.pageIndex = 1 
+      if (this.SEARCH_VALUE != '') {
+        this.pageIndex = 1
         this.pageSize = 10
       }
       this.tableName = this.CommonService.getqueryParamTable()
@@ -167,7 +171,7 @@ export class RetailGridComponent implements OnInit {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
         if (resp.dynamicData && resp.dynamicData[0].length > 0) {
-          if(this.SEARCH_VALUE != '') {
+          if (this.SEARCH_VALUE != '') {
             this.orderedItems = []
             this.SEARCH_VALUE = ''
           }
@@ -184,19 +188,58 @@ export class RetailGridComponent implements OnInit {
               this.nextPage()
             }
           }
+          // FUNTION FOR SETTING COLOUMN NAMES IF NOT IN API
+          if (this.visibleFields.length == 0) {
+            if (this.vocType == 'MASSCH') {
+              this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
+              this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_CURRENCY_CODE')
+              this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
+              this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
+              this.orderedItemsHead = this.setSchemeMasterGridData()
+              return
+            }
+            if (this.vocType == 'SCR' && this.tableName == 'SCHEME_REGISTRATION') {
+              this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
+              this.orderedItemsHead = this.setSchemeRegistrationGridData()
+              return
+            }
+            if (this.vocType == 'SCR' && this.mainVocType == 'PCR') {
+              this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
+              this.orderedItemsHead = this.setSchemeReceiptGridData()
+              return
+            }
+            let headers = Object.keys(this.orderedItems[0]);
+            this.orderedItemsHead = Object.keys(this.orderedItems[0])
+              .map((key) => {
+                return { FIELD_NAME: key, DISPLAY_NAME: key };
+              });
+            return
+          }
 
-          if (this.vocType == 'MASSCH') {
-            this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
-            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_CURRENCY_CODE')
-            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
-            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
-          }
-          if (this.vocType == 'SCR') {
-            this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
-          }
-          let headers = Object.keys(this.orderedItems[0]);
-          this.orderedItemsHead = this.filterArrayValues(headers, 'MID')
-          // this.ChangeDetector.detectChanges()
+          this.orderedItemsHead = Object.keys(this.orderedItems[0])
+            .map((key) => {
+              return { FIELD_NAME: key };
+            });
+
+          this.orderedItemsHead = this.visibleFields.filter((data: any) => {
+            if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
+              data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
+            }
+
+            if (data.DATA_TYPE == 'datetime') {
+              data.FORMAT = 'dd-MM-yyyy';
+              data.DATATYPE = 'date';
+            }
+            if (data.DATA_TYPE == 'bit') {
+              data.DATATYPE = 'boolean';
+            }
+
+            const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);
+            const isVisible = data.VISIBLE == true;
+
+            return isSpecialField || (isVisible && this.orderedItemsHead.some(val => data.FIELD_NAME.toString().toLowerCase() === val.FIELD_NAME.toString().toLowerCase()));
+          });
+
         } else {
           this.snackBar.open('Data not available!', 'Close', {
             duration: 3000,
@@ -210,6 +253,31 @@ export class RetailGridComponent implements OnInit {
         });
       });
     this.subscriptions$.push(sub)
+  }
+  getGridVisibleSettings() {
+    let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
+      .subscribe((resp: any) => {
+        this.snackBar.dismiss();
+        this.skeltonLoading = false;
+        if (resp != null) {
+          if (resp.status == 'Success') {
+            this.visibleFields = resp.response || [];
+            this.visibleFields.forEach((item: any, i) => {
+              item.Id = i + 1;
+            });
+            this.getMasterGridData()
+
+          }
+          else {
+            this.visibleFields = [];
+          }
+        } else {
+          this.visibleFields = [];
+        }
+
+      });
+    this.subscriptions$.push(sub)
+
   }
   removeKeyValueFromArray(arrayOfObjects: any, keyToRemove: any) {
     return arrayOfObjects.map((obj: any) => {
@@ -243,4 +311,196 @@ export class RetailGridComponent implements OnInit {
     }
   }
 
+  setSchemeMasterGridData() {
+    return [
+      {
+        FIELD_NAME: 'SCHEME_CODE',
+        DISPLAY_NAME: 'SCHEME CODE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCHEME_NAME',
+        DISPLAY_NAME: 'SCHEME NAME',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCHEME_PERIOD',
+        DISPLAY_NAME: 'SCHEME PERIOD',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCHEME_FREQUENCY',
+        DISPLAY_NAME: 'SCHEME FREQUENCY',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'STATUS',
+        DISPLAY_NAME: 'STATUS',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCHEME_AMOUNT',
+        DISPLAY_NAME: 'SCHEME AMOUNT',
+        ALLIGNMENT: 'right',
+        FORMAT: {
+          type: 'fixedPoint',
+          precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
+          currency: 'AED'
+        }
+      }
+    ]
+  }
+
+  setSchemeRegistrationGridData() {
+    return [
+      {
+        FIELD_NAME: 'SCH_CUSTOMER_ID',
+        DISPLAY_NAME: 'SCH CUSTOMER ID',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_CUSTOMER_CODE',
+        DISPLAY_NAME: 'SCH CUSTOMER CODE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_CUSTOMER_NAME',
+        DISPLAY_NAME: 'SCH CUSTOMER NAME',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_SCHEME_CODE',
+        DISPLAY_NAME: 'SCH SCHEME CODE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_JOIN_DATE',
+        DISPLAY_NAME: 'JOIN DATE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_SCHEME_PERIOD',
+        DISPLAY_NAME: 'SCHEME PERIOD',
+        ALLIGNMENT: 'right',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_FREQUENCY',
+        DISPLAY_NAME: 'SCHEME FREQUENCY',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'SCH_INST_AMOUNT_CC',
+        DISPLAY_NAME: 'INSTALLMENT AMOUNT',
+        ALLIGNMENT: 'right',
+        FORMAT: {
+          type: 'fixedPoint',
+          precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
+          currency: 'AED'
+        }
+      },
+      {
+        FIELD_NAME: 'PAY_DATE',
+        DISPLAY_NAME: 'PAY DATE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'PAY_AMOUNTCC',
+        DISPLAY_NAME: 'PAY AMOUNTCC',
+        ALLIGNMENT: 'right',
+        FORMAT: {
+          type: 'fixedPoint',
+          precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
+          currency: 'AED'
+        }
+      },
+      {
+        FIELD_NAME: 'SALESMAN_NAME',
+        DISPLAY_NAME: 'SALESMAN',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'REMARKS',
+        DISPLAY_NAME: 'REMARKS',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+    ]
+  }
+  setSchemeReceiptGridData() {
+    return [
+      {
+        FIELD_NAME: 'BRANCH_CODE',
+        DISPLAY_NAME: 'BRANCH CODE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'VOCTYPE',
+        DISPLAY_NAME: 'VOCTYPE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'VOCNO',
+        DISPLAY_NAME: 'VOCNO',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'VOCDATE',
+        DISPLAY_NAME: 'VOCDATE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'PARTYCODE',
+        DISPLAY_NAME: 'PARTY CODE',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'HHACCOUNT_HEAD',
+        DISPLAY_NAME: 'PARTY NAME',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'TOTAL_AMOUNTCC',
+        DISPLAY_NAME: 'TOTAL AMOUNTLC',
+        ALLIGNMENT: 'right',
+        FORMAT: {
+          type: 'fixedPoint',
+          precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
+          currency: 'AED'
+        }
+      },
+      {
+        FIELD_NAME: 'AUTOPOSTING',
+        DISPLAY_NAME: 'STATUS',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+      {
+        FIELD_NAME: 'REMARKS',
+        DISPLAY_NAME: 'REMARKS',
+        ALLIGNMENT: 'left',
+        FORMAT: {}
+      },
+    ]
+  }
 }
+

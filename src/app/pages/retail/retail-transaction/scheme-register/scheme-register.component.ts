@@ -225,7 +225,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Branch.setValue(event.BRANCH_CODE)
   }
   setInitialValues() {
-    if (!this.content) return;
+    if (!this.content) return;    
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
     this.schemeRegistrationForm.controls.Code.setValue(this.content.SCH_CUSTOMER_CODE)
     this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)

@@ -21,7 +21,8 @@
         <div>
             <div class="search-box">
                 <div class="position-relative">
-                    <input type="text" [(ngModel)]="SEARCH_VALUE" (keydown.enter)="getMasterGridData()"
+                    <input type="text" [(ngModel)]="SEARCH_VALUE"
+                        (keydown.enter)="getMasterGridData()"
                         (focusout)="getMasterGridData()"
                         class="form-control rounded bg-light border-0"
                         placeholder="Search...">
@@ -53,7 +54,14 @@
         </dxi-column>
 
         <dxi-column *ngFor="let data of orderedItemsHead"
-            dataField="{{data}}" caption="{{data}}" width="auto">
+            dataField="{{data.FIELD_NAME}}"
+            caption="{{data.DISPLAY_NAME}}" [allowEditing]="true"
+            [format]="data.FORMAT" [alignment]="data.ALLIGNMENT"
+            [visible]="data.FIELD_NAME != 'Id' || data.FIELD_NAME != 'MID'">
         </dxi-column>
+<!--   -->
+        <!-- <dxi-column *ngFor="let data of orderedItemsHead"
+            dataField="{{data}}" caption="{{data}}" >
+        </dxi-column> -->
     </dx-data-grid>
 </ng-container>
