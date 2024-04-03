@@ -113,7 +113,8 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <span class="matlabels">A/C Code
                 </span>
-                <mat-form-field style="width: 30%;margin-left: 45px;">
+                &nbsp;
+                <mat-form-field style="width: 25%;">
                     <input type="text" matInput readonly
                         formControlName="AC_Code" />
                 </mat-form-field>
@@ -122,7 +123,7 @@
                         formControlName="AC_Description" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="accountMasterData"
-                    *ngIf="(receiptEntryForm.value.Type != 'Credit Card' && receiptEntryForm.value.Type != '')&&!viewMode"
+                    *ngIf="(receiptEntryForm.value.Type != 'Credit Card' && receiptEntryForm.value.Type != '')&&!editableInputs"
                     (newRowClick)="selectedAcCode($event)">
                 </master-search>
             </div>
@@ -141,7 +142,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12 border-left">
                 <div class="row">
-                    <span class="matlabels">Curr Code
+                    <span class="matlabels">Currency Code
                     </span>
                     <!-- <mat-form-field style="width: 45%">
                         <input type="text" matInput readonly
@@ -151,7 +152,7 @@
                         <ng-select [items]="currencyCodeArr"
                         [readonly]="disableCurrCode"
                         [clearable]="false"
-                        [readonly]="viewMode && currencyCodeArr.length == 0"
+                        [readonly]="editableInputs && currencyCodeArr.length == 0"
                         bindLabel="CURRENCY_CODE" bindValue="CURRENCY_CODE"
                         formControlName="CurrCode"></ng-select>
                     </div>
@@ -159,7 +160,7 @@
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <div class="row">
-                    <span class="matlabels">Curr Rate*
+                    <span class="matlabels">Currency Rate*
                     </span>
                     <mat-form-field style="width: 45%">
                         <input type="text" matInput [readonly]="disableAmountFC"
@@ -238,7 +239,7 @@
                     </span>
                     <span style="width: 45%">
                         <mat-form-field>
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput [readonly]="editableInputs"
                                 class="text-right" AmountDecimalInput
                                 formControlName="Amount_LC"
                                 (change)="calculateAmountLC()"
@@ -283,9 +284,10 @@
             <div class="col-md-12">
                 <dx-data-grid width="100%" [dataSource]="gridDataSource"
                     [showColumnLines]="true" [showRowLines]="true"
-                    [showBorders]="true" [columnAutoWidth]="true">
-                    <dxo-paging [enabled]="true" [pageSize]="10"
-                        [pageIndex]="1"></dxo-paging>
+                    [showBorders]="true" [columnAutoWidth]="true"
+                    height="300">
+                    <!-- <dxo-paging [enabled]="true" [pageSize]="10"
+                        [pageIndex]="1"></dxo-paging> -->
                     <dxo-selection mode="single"></dxo-selection>
                     <!-- <dxi-column type="buttons" caption [visible]="disableDelete" [fixed]="true"
                         fixedPosition="right">
@@ -296,24 +298,23 @@
                     <dxi-column dataField="SRNO" caption="SRNO"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCH_CUSTOMER_CODE" caption="CUST"
+                    <dxi-column dataField="SCH_CUSTOMER_CODE" caption="CUSTOMER CODE"
                         alignment="left">
                     </dxi-column>
-                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUST ID"
+                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUSTOMER ID"
                         alignment="left">
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" caption="PAY DATE"
-                        dataType="date" [format]="dateFormat"
                         alignment="left">
                     </dxi-column>
-                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY AMT"
+                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY AMOUNT"
                         alignment="right">
                     </dxi-column>
                     <dxi-column dataField="PAY_AMOUNT_CC"
                         caption="PAY AMOUNT CC" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTFC"
-                        caption="RCVD AMOUNT" alignment="right">
+                        caption="RCVD AMOUNTFC" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTCC"
                         caption="RCVD_AMOUNTCC"
