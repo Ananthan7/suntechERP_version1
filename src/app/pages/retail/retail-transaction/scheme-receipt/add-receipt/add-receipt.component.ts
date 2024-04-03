@@ -21,6 +21,7 @@ export class AddReceiptComponent implements OnInit {
   selectedTypeArray: any[] = [];
   isViewTypeCode: boolean = false;
   isViewCheckDetail: boolean = true;
+  disableCurrCode: boolean = true;
   currencyRate: any;
   payTypeArray: any[] = [];
   gridDataSource: any[] = [];
@@ -374,15 +375,21 @@ export class AddReceiptComponent implements OnInit {
   //Account master
   getAccountMaster(accountCode: string) {
     this.commonService.toastInfoByMsgId('MSG81447');
-    let Sub: Subscription = this.dataService.getDynamicAPI(`AccountMaster/${accountCode}`)
+    let Sub: Subscription = this.dataService.getDynamicAPI(`AccountMaster/GetAccodeDetails/${accountCode}/${this.commonService.branchCode}`)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-
-          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
+          this.currencyCodeArr = []
+          this.receiptEntryForm.controls.AC_Description.setValue(data[0].ACCOUNT_HEAD);
+          
+          if(data.length>1){
+            this.disableCurrCode = false;
+          }
+          data.forEach((item:any)=> {
+            this.currencyCodeArr.push({CURRENCY_CODE: item.CURRENCY_CODE})
+          })
           if (this.receiptEntryForm.value.CurrCode == '') {
-            //   console.log(data.CURRENCY_CODE);
-            this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
+            this.receiptEntryForm.controls.CurrCode.setValue(data[0].CURRENCY_CODE);
           }
           if(this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency){
             this.disableAmountFC = true

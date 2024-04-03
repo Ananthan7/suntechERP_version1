@@ -82,6 +82,7 @@
                 </span>
                 <ng-select [items]="payTypeArray"
                     style="width: 40%;margin-left: 15px;"
+                    [clearable]="false"
                     bindLabel="ENGLISH" [disabled]="viewMode"
                     bindValue="ENGLISH" (change)="paymentTypeChange($event)"
                     formControlName="Type">
@@ -148,6 +149,8 @@
                     </mat-form-field> -->
                     <div style="width: 45%">
                         <ng-select [items]="currencyCodeArr"
+                        [readonly]="disableCurrCode"
+                        [clearable]="false"
                         [readonly]="viewMode && currencyCodeArr.length == 0"
                         bindLabel="CURRENCY_CODE" bindValue="CURRENCY_CODE"
                         formControlName="CurrCode"></ng-select>

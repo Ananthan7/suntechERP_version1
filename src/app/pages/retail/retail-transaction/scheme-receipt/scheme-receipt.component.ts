@@ -323,6 +323,8 @@ export class SchemeReceiptComponent implements OnInit {
 
             this.dataToEditrow = result.Details;
             this.orderedItems = result.Details;
+            console.log(this.orderedItems,'this.orderedItems');
+            
             this.orderedItems.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
               item.Branch = item.BRANCH_CODE
@@ -332,7 +334,8 @@ export class SchemeReceiptComponent implements OnInit {
               item.AC_Description = item.HDACCOUNT_HEAD
               item.CurrRate = this.commonService.decimalQuantityFormat(item.CURRENCY_RATE, 'RATE')
               item.AMOUNT_VAT = item.AMOUNTCC
-              item.AMOUNT_VATFC = item.AMOUNTFC
+              // item.AMOUNT_VATFC = item.AMOUNTFC - item.IGST_AMOUNTFC
+              item.AMOUNT_VATFC = this.commonService.decimalQuantityFormat(item.AMOUNTFC, 'AMOUNT')
             });
           }
           this.calculateTotalonView();
@@ -769,8 +772,8 @@ export class SchemeReceiptComponent implements OnInit {
         "ACCODE": item.AC_Code || "",
         "CURRENCY_CODE": item.CurrCode || "",
         "CURRENCY_RATE": this.commonService.emptyToZero(item.CurrRate) || 0,
-        "AMOUNTFC": this.commonService.emptyToZero(item.Amount_FC),
-        "AMOUNTCC": this.commonService.emptyToZero(item.Amount_LC),
+        "AMOUNTFC": this.commonService.emptyToZero(item.AMOUNT_VATFC),
+        "AMOUNTCC": this.commonService.emptyToZero(item.AMOUNT_VAT),
         "HEADER_AMOUNT": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CHEQUE_NO": "",
         "CHEQUE_DATE": this.commonService.formatDateTime(this.currentDate),
