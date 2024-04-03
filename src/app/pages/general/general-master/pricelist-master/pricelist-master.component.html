@@ -113,8 +113,8 @@
                                         </section>
                                         <div class="col-md-2" style="margin-left: 20px;">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="number" (input)="onInputChange($event,'roundoff_digit', 1)"
-                                                    matInput  formControlName="roundoff_digit" [readonly]="viewMode" style="text-align: right;" maxlength="1" NumberOnly/>
+                                                <input type="text" 
+                                                    matInput  formControlName="roundoff_digit" [readonly]="viewMode" class="text-right" NumberOnly/>
                                             </mat-form-field>
                                         </div>
                                     </div>
