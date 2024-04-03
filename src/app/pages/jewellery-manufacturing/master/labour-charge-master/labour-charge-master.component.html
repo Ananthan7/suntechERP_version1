@@ -51,7 +51,7 @@
                 <mat-form-field>
                   <mat-label>Select</mat-label>
                   <mat-select formControlName="labourType">
-                    <mat-option *ngFor="let option of DialabourTypeList" [disabled]="viewMode" [value]="option.value">
+                    <mat-option *ngFor="let option of DialabourTypeList" [disabled]="viewMode" [value]="option.value" (onSelectionChange)="onlabourtypeChange()">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -74,8 +74,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="method">
-                    <mat-option *ngFor="let option of methodList" [disabled]="viewMode" [value]="option.value">
+                  <mat-select formControlName="method" >
+                    <mat-option *ngFor="let option of methodList" [disabled]="ViewModemethod" [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -192,8 +192,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="settingType">
-                    <mat-option *ngFor="let option of settingTypeList" [disabled]="viewMode" [value]="option.value">
+                  <mat-select formControlName="settingType" >
+                    <mat-option *ngFor="let option of settingTypeList" [disabled]="viewModeSetting" [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -237,7 +237,7 @@
               <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode" formControlName="stock_code" />
+                  <input type="text" matInput [readonly]="viewMode" formControlName="stock_code"  />
                 </mat-form-field>
                 <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"
                   *ngIf=" viewDisable == false"></master-search>
