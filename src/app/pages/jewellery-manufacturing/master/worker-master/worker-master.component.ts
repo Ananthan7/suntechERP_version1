@@ -157,9 +157,10 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
+
   setFormValues() {
     if (!this.content) return
-    this.buttonField = false;
+    this.buttonField = true;
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
