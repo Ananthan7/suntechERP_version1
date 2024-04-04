@@ -325,9 +325,9 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="price1per" CommaSeparatedNumber
-                                            class="text-right" max="100" [readonly]="viewMode"/>
+                                        <input type="number" matInput
+                                            formControlName="price1per" (keypress)="isNumeric($event)"
+                                            style="text-align: right;" max="100" [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -362,9 +362,9 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="price2per" CommaSeparatedNumber
-                                            [dir]="'rtl'" class="text-right" [readonly]="viewMode"/>
+                                        <input type="number" matInput
+                                            formControlName="price2per" 
+                                            [dir]="'rtl'" style="text-align: right;" [readonly]="viewMode" (keypress)="isNumeric($event)"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -399,9 +399,9 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput CommaSeparatedNumber
+                                        <input type="number" matInput 
                                             formControlName="price3per"
-                                            class="text-right" [readonly]="viewMode"/>
+                                            style="text-align: right;" [readonly]="viewMode" (keypress)="isNumeric($event)"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -436,9 +436,9 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput CommaSeparatedNumber
+                                        <input type="number" matInput 
                                             formControlName="price4per"
-                                            class="text-right" [readonly]="viewMode"/>
+                                            style="text-align: right;" [readonly]="viewMode" (keypress)="isNumeric($event)"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -473,9 +473,9 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput CommaSeparatedNumber
+                                        <input type="number" matInput 
                                             formControlName="price5per"
-                                            class="text-right" [readonly]="viewMode"/>
+                                            style="text-align: right;" [readonly]="viewMode" (keypress)="isNumeric($event)"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

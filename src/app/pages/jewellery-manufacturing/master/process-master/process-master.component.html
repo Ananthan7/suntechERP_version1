@@ -21,7 +21,7 @@
                                     Code* :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 85%; margin-left: 7px;">
-                                        <input type="text" matInput #code placeholder="CODE" #codeInput
+                                        <input type="text" matInput #code placeholder="CODE" #codeInput1
                                             (focusout)="checkCodeExists($event)"
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode" maxlength="6" [readonly]="viewMode || editMode" (keyup)="codeEnabled()" />
