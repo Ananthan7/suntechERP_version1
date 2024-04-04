@@ -15,10 +15,10 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class DurationPickerComponent implements OnInit {
 
   @Input() content!: any;
-  @Input() duration1!: any;
-  @Input() duration2!: any;
-  @Input() viewMode:  boolean = false;
-  
+  @Input() durationToSplit!: any;
+  // @Input() duration2!: any;
+  @Input() viewMode: boolean = false;
+
 
   @Output() updateDuration = new EventEmitter<any>();
   durationPickerForm!: FormGroup;
@@ -42,61 +42,55 @@ export class DurationPickerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   
-    console.log(this.duration1)
-    
+
+    console.log(this.durationToSplit)
+
     this.durationPickerForm = this.formBuilder.group({
       days: [''],
       hours: [''],
       minutes: [''],
     });
 
-    if (this.duration2 && this.duration2.STD_TIME !== "") {
-      this.timeConvert(this.duration2.STD_TIME);
+    if (this.durationToSplit && this.durationToSplit !== "") {
+      this.timeConvert(Number(this.durationToSplit));
       this.durationPickerForm.controls.days.setValue(this.daystime);
       this.durationPickerForm.controls.hours.setValue(this.hoursTime);
       this.durationPickerForm.controls.minutes.setValue(this.minutesTime);
     }
 
-    if (this.duration1 && this.duration1.MAX_TIME !== "") {
-      this.timeConvert1(this.duration1.MAX_TIME);
-      this.durationPickerForm.controls.days.setValue(this.daystime2);
-      this.durationPickerForm.controls.hours.setValue(this.hoursTime2);
-      this.durationPickerForm.controls.minutes.setValue(this.minutesTime2);
-    }
+    // if (this.duration1 && this.duration1.MAX_TIME !== "") {
+    //   this.timeConvert1(this.duration1.MAX_TIME);
+    //   this.durationPickerForm.controls.days.setValue(this.daystime2);
+    //   this.durationPickerForm.controls.hours.setValue(this.hoursTime2);
+    //   this.durationPickerForm.controls.minutes.setValue(this.minutesTime2);
+    // }
 
   }
 
 
   timeConvert(time: any) {
-    const daysTime = Math.floor( time/24/60);
-    const hoursTime = Math.floor(time/60%24);
-    const minutesTime = Math.floor(time%60);
+    const daysTime = Math.floor(time / 24 / 60);
+    const hoursTime = Math.floor(time / 60 % 24);
+    const minutesTime = Math.floor(time % 60);
 
     this.daystime = daysTime
     this.hoursTime = hoursTime
     this.minutesTime = minutesTime
 
-    console.log(daysTime);
-    console.log(hoursTime);
-    console.log(minutesTime);
     return daysTime + ":" + hoursTime + ':' + minutesTime;
-}
+  }
 
-timeConvert1(time: any) {
-  const daysTime = Math.floor( time/24/60);
-  const hoursTime = Math.floor(time/60%24);
-  const minutesTime = Math.floor(time%60);
+  // timeConvert1(time: any) {
+  //   const daysTime = Math.floor(time / 24 / 60);
+  //   const hoursTime = Math.floor(time / 60 % 24);
+  //   const minutesTime = Math.floor(time % 60);
 
-  this.daystime2 = daysTime
-  this.hoursTime2 = hoursTime
-  this.minutesTime2 = minutesTime
+  //   this.daystime2 = daysTime
+  //   this.hoursTime2 = hoursTime
+  //   this.minutesTime2 = minutesTime
 
-  console.log(daysTime);
-  console.log(hoursTime);
-  console.log(minutesTime);
-  return daysTime + ":" + hoursTime + ':' + minutesTime;
-}
+  //   return daysTime + ":" + hoursTime + ':' + minutesTime;
+  // }
 
 
   days: any[] = [

@@ -319,6 +319,13 @@ export class CommonServiceService {
     // this.el.nativeElement.value = value;
     return value
   }
+  convertTimeMinutesToDHM(time: any) {
+    time = parseInt(time)
+    const daysTime = Math.floor(time / 24 / 60);
+    const hoursTime = Math.floor(time / 60 % 24);
+    const minutesTime = Math.floor(time % 60);
+    return daysTime + ":" + hoursTime + ':' + minutesTime;
+  }
   getTime() {
     // Get the current time components
     let hours = this.currentDate.getHours();
