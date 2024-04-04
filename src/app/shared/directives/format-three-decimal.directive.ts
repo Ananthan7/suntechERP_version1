@@ -1,4 +1,5 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 @Directive({
   selector: '[ThreeDecimalInput]'
 })
@@ -7,6 +8,7 @@ export class FormatThreeDecimalDirective {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
+    private commonService: CommonServiceService,
   ) {
   }
   decimalCount: number = 0
@@ -83,6 +85,7 @@ export class FormatThreeDecimalDirective {
     }
     // Reconstruct the value and set it back to the input field
     value = `${integerPart}.${fractionalPart}`;
+    value = this.commonService.commaSeperation(value)
     // this.el.nativeElement.value = value;
     this.renderer.setProperty(input, 'value', value);
   }

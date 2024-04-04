@@ -186,6 +186,7 @@ import { DecimalFormatPipe } from './pipes/decimal-format.pipe';
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
     UppercaseDirective,
+    DecimalInputDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

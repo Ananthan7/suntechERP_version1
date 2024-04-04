@@ -1,11 +1,12 @@
 import { Directive, HostListener, ElementRef } from '@angular/core';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Directive({
-  selector: '[NumberDecimalInput]'
+  selector: '[LimitlessDecimalInput]'
 })
 export class DecimalInputDirective {
 
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef,private commonService: CommonServiceService) { }
   decimalCount: number = 0
   @HostListener('keypress', ['$event']) onKeyPress(event: any) {
     console.log('Key pressed:', event.target.value);
@@ -17,20 +18,15 @@ export class DecimalInputDirective {
     return isValid;  
   }
   @HostListener('input', ['$event']) onInputChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value;
-
-    // Remove non-numeric and non-decimal characters except for one decimal point
-    value = value.replace(/[^0-9.]/g, '');
-
-    // Ensure there is at most one decimal point
-    const decimalCount = value.split('.').length - 1;
-    if (decimalCount > 1) {
-      const parts = value.split('.');
-      value = `${parts[0]}.${parts.slice(1).join('')}`;
+    const input = this.el.nativeElement as HTMLInputElement;
+    const value = input.value;
+    const sanitizedValue = value.replace(/[^0-9.]/g, '')
+    let num = input.value;
+    if (value !== sanitizedValue) {
+      num = sanitizedValue; // Update the input field with the sanitized value
     }
-
-    // Set the cleaned value back to the input field
-    input.value = value;
+    num = this.commonService.commaSeperation(num)
+    input.value = num
+    input.dispatchEvent(new Event('input')); // Trigger an input event to propagate changes
   }
 }

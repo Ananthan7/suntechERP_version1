@@ -80,6 +80,7 @@ export class FormatSixDecimalDirective {
     }
     // Reconstruct the value and set it back to the input field
     value = `${integerPart}.${fractionalPart}`;
+    value = this.commonService.commaSeperation(value)
     // this.el.nativeElement.value = value;
     this.renderer.setProperty(input, 'value', value);
   }
