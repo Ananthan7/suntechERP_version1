@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -44,8 +44,15 @@ export class JobcardComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   selectedValue: string = 'singleMetal';
 
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      this.codeInput1.nativeElement.focus();
+    }
+  }
   lengthCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
