@@ -10,10 +10,14 @@ export class FormatSixDecimalDirective {
     private commonService: CommonServiceService,
   ) {
   }
+  decimalCount: number = 0
   @HostListener('keypress', ['$event']) onKeyPress(event: any) {
-    console.log('Key pressed:', event);
+    console.log('Key pressed:', event.target.value);
     var keyCode = event.which ? event.which : event.keyCode;
-    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode === 46;
+    if(keyCode === 46){
+      this.decimalCount+=1
+    }
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && this.decimalCount==1);
     return isValid;  
   }
   @HostListener('input', ['$event']) onInput(event: Event) {
