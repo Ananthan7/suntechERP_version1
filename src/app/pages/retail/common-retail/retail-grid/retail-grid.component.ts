@@ -43,13 +43,13 @@ export class RetailGridComponent implements OnInit {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
     this.deleteRowDetails = this.deleteRowDetails.bind(this);
-    this.tableName = this.CommonService.getqueryParamTable()
     this.getMasterGridData()
   }
 
   ngOnInit(): void {
     this.vocType =  this.CommonService.getqueryParamVocType();
     this.mainVocType =  this.CommonService.getqueryParamMainVocType();
+    this.tableName = this.CommonService.getqueryParamTable()
     this.getGridVisibleSettings();
   }
 
@@ -198,7 +198,11 @@ export class RetailGridComponent implements OnInit {
               this.orderedItemsHead = this.setSchemeMasterGridData()
               return
             }
-            if (this.vocType == 'SCR' && this.tableName == 'SCHEME_REGISTRATION') {
+            console.log(this.vocType,'......vocType......?');
+            console.log(this.tableName,'......tableName......?');
+            console.log(this.mainVocType,'.....mainVocType.......?');
+            
+            if (this.vocType == 'SCR' && this.mainVocType == 'SCHR') {
               this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
               this.orderedItemsHead = this.setSchemeRegistrationGridData()
               return
