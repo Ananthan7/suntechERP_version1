@@ -33,6 +33,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   codeEnable :  boolean = true;
   enableUpdate: boolean = true;
   approveDisable: boolean = true;
+  selectedValue: string = 'None';
 
   groups = [
     { type: 'None', value: 'None' },

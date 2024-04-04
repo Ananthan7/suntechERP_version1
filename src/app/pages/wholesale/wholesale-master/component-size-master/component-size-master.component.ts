@@ -35,8 +35,8 @@ export class ComponentSizeMasterComponent implements OnInit {
     this.componentsizemasterForm = this.formBuilder.group({
       code: ['', [Validators.required]],
       desc: ['', [Validators.required]],
-      height: [''],
-      width: [''],
+      height: ['',[Validators.required]],
+      width: ['',[Validators.required]],
       length: [''],
       radius: ['']
     });
@@ -107,7 +107,8 @@ export class ComponentSizeMasterComponent implements OnInit {
   formSubmit() {
     console.log(this.componentsizemasterForm.value);
 
-    if (this.content && this.content.FLAG == 'EDIT') {
+    if (this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'EDIT') {
       this.update()
       return
     }

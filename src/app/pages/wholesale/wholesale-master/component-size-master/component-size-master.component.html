@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header  (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="container-fluid pt-3">
   <form [formGroup]="componentsizemasterForm">
     <div class="row">
@@ -44,8 +44,8 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="height" id="height"   [readonly]="viewMode"  (key)="getValues()" MetalDecimalInput
-                      (input)="onInputChange($event,'height', 7)" />
+                      <input type="number" matInput class="text-left" formControlName="height" id="height"  ThreeDecimalInput [readonly]="viewMode"  (key)="getValues()" 
+                      />
                     </mat-form-field>
                   </div>
                 </div>
