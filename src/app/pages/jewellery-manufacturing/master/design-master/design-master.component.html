@@ -239,7 +239,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" class="text-right"  matInput (input)="onInputChange($event,'width', 12)" (keypress)="isNumeric($event)"/>
+                                <input type="text" class="text-right"  matInput maxlength="16" (keypress)="isNumeric($event)"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -253,7 +253,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Thickness:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" class="text-right"  matInput  (input)="onInputChange($event,'thickness', 12)" (keypress)="isNumeric($event)"/>
+                                <input type="text" class="text-right"  matInput NumberOnly maxlength="16"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -267,7 +267,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Metal Wt :</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" class="text-right" matInput  MetalDecimalInput (input)="onInputChange($event,'metal_wt', 12)" (keypress)="isNumeric($event)"/>
+                                <input type="number" class="text-right" matInput  MetalDecimalInput (input)="onInputChange($event,'metal_wt', 12)" (keypress)="isNumeric($event)"/>
                               </mat-form-field>
                             </div>
                           </div>
