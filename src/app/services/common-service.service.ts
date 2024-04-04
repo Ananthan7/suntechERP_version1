@@ -321,6 +321,7 @@ export class CommonServiceService {
     }
     // Reconstruct the value and set it back to the input field
     value = `${integerPart}.${fractionalPart}`;
+    value = this.commaSeperation(value)
     // this.el.nativeElement.value = value;
     return value
   }

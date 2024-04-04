@@ -338,6 +338,8 @@ export class SchemeReceiptComponent implements OnInit {
               item.AMOUNT_VAT = item.AMOUNTCC
               // item.AMOUNT_VATFC = item.AMOUNTFC - item.IGST_AMOUNTFC
               item.AMOUNT_VATFC = this.commonService.decimalQuantityFormat(item.AMOUNTFC, 'AMOUNT')
+              item.AMOUNTFC = this.commonService.decimalQuantityFormat(item.AMOUNTFC,'AMOUNT')
+              item.AMOUNTCC = this.commonService.decimalQuantityFormat(item.AMOUNTCC,'AMOUNT')
             });
           }
           this.calculateTotalonView();
@@ -1339,10 +1341,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   // print button click
   printClicked() {
-    this.orderedItems.forEach((item:any)=>{
-      item.AMOUNTFC = this.commonService.decimalQuantityFormat(item.AMOUNTFC,'AMOUNT')
-      item.AMOUNTCC = this.commonService.decimalQuantityFormat(item.AMOUNTCC,'AMOUNT')
-    })
+    
     console.log(this.orderedItems,'this.orderedItems');
     
     //this.validateBeforePrint()

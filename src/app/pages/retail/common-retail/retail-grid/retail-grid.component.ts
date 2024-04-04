@@ -195,21 +195,20 @@ export class RetailGridComponent implements OnInit {
               this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_CURRENCY_CODE')
               this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
               this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
-              this.orderedItemsHead = this.setSchemeMasterGridData()
+              let headers = this.setSchemeMasterGridData()
+              this.orderedItemsHead = headers.sort((a:any, b:any) => a.DISPLAY_ORDER - b.DISPLAY_ORDER);
               return
             }
-            console.log(this.vocType,'......vocType......?');
-            console.log(this.tableName,'......tableName......?');
-            console.log(this.mainVocType,'.....mainVocType.......?');
-            
             if (this.vocType == 'SCR' && this.mainVocType == 'SCHR') {
               this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
-              this.orderedItemsHead = this.setSchemeRegistrationGridData()
+              let headers = this.setSchemeRegistrationGridData()
+              this.orderedItemsHead = headers.sort((a:any, b:any) => a.DISPLAY_ORDER - b.DISPLAY_ORDER);
               return
             }
             if (this.vocType == 'SCR' && this.mainVocType == 'PCR') {
               this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
-              this.orderedItemsHead = this.setSchemeReceiptGridData()
+              let headers = this.setSchemeReceiptGridData()
+              this.orderedItemsHead = headers.sort((a:any, b:any) => a.DISPLAY_ORDER - b.DISPLAY_ORDER);
               return
             }
             // let headers = Object.keys(this.orderedItems[0]);
@@ -321,36 +320,42 @@ export class RetailGridComponent implements OnInit {
         FIELD_NAME: 'SCHEME_CODE',
         DISPLAY_NAME: 'SCHEME CODE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 1,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCHEME_NAME',
         DISPLAY_NAME: 'SCHEME NAME',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 2,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCHEME_PERIOD',
         DISPLAY_NAME: 'SCHEME PERIOD',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 3,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCHEME_FREQUENCY',
         DISPLAY_NAME: 'SCHEME FREQUENCY',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 4,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'STATUS',
         DISPLAY_NAME: 'STATUS',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 5,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCHEME_AMOUNT',
         DISPLAY_NAME: 'SCHEME AMOUNT',
         ALLIGNMENT: 'right',
+        DISPLAY_ORDER: 6,
         FORMAT: {
           type: 'fixedPoint',
           precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
@@ -366,48 +371,56 @@ export class RetailGridComponent implements OnInit {
         FIELD_NAME: 'SCH_CUSTOMER_ID',
         DISPLAY_NAME: 'SCH CUSTOMER ID',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 1,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_CUSTOMER_CODE',
         DISPLAY_NAME: 'SCH CUSTOMER CODE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 2,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_CUSTOMER_NAME',
         DISPLAY_NAME: 'SCH CUSTOMER NAME',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 3,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_SCHEME_CODE',
         DISPLAY_NAME: 'SCH SCHEME CODE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 4,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_JOIN_DATE',
         DISPLAY_NAME: 'JOIN DATE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 5,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_SCHEME_PERIOD',
         DISPLAY_NAME: 'SCHEME PERIOD',
         ALLIGNMENT: 'right',
+        DISPLAY_ORDER: 6,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_FREQUENCY',
         DISPLAY_NAME: 'SCHEME FREQUENCY',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 7,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'SCH_INST_AMOUNT_CC',
         DISPLAY_NAME: 'INSTALLMENT AMOUNT',
         ALLIGNMENT: 'right',
+        DISPLAY_ORDER: 8,
         FORMAT: {
           type: 'fixedPoint',
           precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
@@ -418,12 +431,14 @@ export class RetailGridComponent implements OnInit {
         FIELD_NAME: 'PAY_DATE',
         DISPLAY_NAME: 'PAY DATE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 9,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'PAY_AMOUNTCC',
         DISPLAY_NAME: 'PAY AMOUNTCC',
         ALLIGNMENT: 'right',
+        DISPLAY_ORDER: 10,
         FORMAT: {
           type: 'fixedPoint',
           precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
@@ -434,12 +449,14 @@ export class RetailGridComponent implements OnInit {
         FIELD_NAME: 'SALESMAN_NAME',
         DISPLAY_NAME: 'SALESMAN',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 11,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'REMARKS',
         DISPLAY_NAME: 'REMARKS',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 12,
         FORMAT: {}
       },
     ]
@@ -450,42 +467,49 @@ export class RetailGridComponent implements OnInit {
         FIELD_NAME: 'BRANCH_CODE',
         DISPLAY_NAME: 'BRANCH CODE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 1,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'VOCTYPE',
         DISPLAY_NAME: 'VOCTYPE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 2,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'VOCNO',
         DISPLAY_NAME: 'VOCNO',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 3,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'VOCDATE',
         DISPLAY_NAME: 'VOCDATE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 4,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'PARTYCODE',
         DISPLAY_NAME: 'PARTY CODE',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 5,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'HHACCOUNT_HEAD',
         DISPLAY_NAME: 'PARTY NAME',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 6,
         FORMAT: {}
       },
       {
         FIELD_NAME: 'TOTAL_AMOUNTCC',
         DISPLAY_NAME: 'TOTAL AMOUNTLC',
         ALLIGNMENT: 'right',
+        DISPLAY_ORDER: 7,
         FORMAT: {
           type: 'fixedPoint',
           precision: this.CommonService.allbranchMaster?.BAMTDECIMALS,
@@ -495,6 +519,7 @@ export class RetailGridComponent implements OnInit {
       {
         FIELD_NAME: 'AUTOPOSTING',
         DISPLAY_NAME: 'STATUS',
+        DISPLAY_ORDER: 8,
         ALLIGNMENT: 'left',
         FORMAT: {}
       },
@@ -502,6 +527,7 @@ export class RetailGridComponent implements OnInit {
         FIELD_NAME: 'REMARKS',
         DISPLAY_NAME: 'REMARKS',
         ALLIGNMENT: 'left',
+        DISPLAY_ORDER: 9,
         FORMAT: {}
       },
     ]
