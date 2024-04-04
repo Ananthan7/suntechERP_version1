@@ -23,7 +23,7 @@
                                 Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="orderType" />
+                                    <input type="text" matInput #codeInput1 formControlName="orderType" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="ordertypeCodeData"
                                     (newRowClick)="ordertypeCodeSelected($event)"></master-search>

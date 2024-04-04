@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,  } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild,  } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -60,7 +60,15 @@ export class ProcessMasterComponent implements OnInit {
   indeterminate = false;
   labelPosition: 'before' | 'after' = 'after';
   disabled = false;
-  codeInput: any;
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
+
+
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      this.codeInput1.nativeElement.focus();
+    }
+  }
 
   ngOnInit(): void {
     // this.islossReadOnly = true;
