@@ -1276,18 +1276,19 @@
             <div class="card m-t-10">
               <div class="card-header">
                 <b
-                  (click)="
-                    !viewOnly
-                      ? open(sales_payment_modal, false, null, false, true)
-                      : ''
+                  style="
+                    color: #0861a9;
                   "
+                  >Receipt Details</b>
+                <!-- <b
+                  (click)="         !viewOnly       ? open(sales_payment_modal, false, null, false, false)   : ''                  "
                   style="
                     color: #0861a9;
                     cursor: pointer;
                     text-decoration: underline;
                   "
-                  >Receipt Details</b
-                >
+                  >Receipt Details</b> -->
+
                 <span style="float: right">
                   <button
                     type="submit"
@@ -4102,7 +4103,7 @@
                       matInput
                       formControlName="fcn_li_item_desc"
                       id="fcn_li_item_desc"
-                      [readonly]="true"
+                      [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION"
                     />
                   </mat-form-field>
                 </div>
@@ -4114,8 +4115,9 @@
                       matInput
                       formControlName="fcn_li_location"
                       id="fcn_li_location"
-                      readonly
+                      [readonly]="viewOnly"
                     />
+                    <!-- BUG_01711 - Should be able to enter location.-->
                   </mat-form-field>
                 </div>
                 <div class="col-md-2" *ngIf="!newLineItem.GIFT_VOUCHER">

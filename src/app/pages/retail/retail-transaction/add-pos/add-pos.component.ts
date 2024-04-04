@@ -2610,6 +2610,7 @@ export class AddPosComponent implements OnInit {
               this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
               this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
               this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
+              this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
               this.disableSaveBtn = false;
               this.validatePCS = stockInfos.VALIDATE_PCS;
               this.managePcsGrossWt();
@@ -7572,8 +7573,9 @@ export class AddPosComponent implements OnInit {
   saveAndContinue(type: any) {
     if (type == 'continue') {
       this.addNew();
+    }else{
+      this.close('reloadMainGrid');
     }
-    this.close('reloadMainGrid');
   }
   postRetailSalesMaster(type: any) {
     console.log('====================this.karatRateDetails================');
@@ -11501,40 +11503,40 @@ export class AddPosComponent implements OnInit {
     //   data['AMOUNT_FC'] = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, data['AMOUNT_FC'] );
     // }
 
-    if (this.receiptDetailView) {
+    // if (this.receiptDetailView) {
 
-      let modeIndex: number;
+    //   let modeIndex: number;
 
-      switch (this.selectedTabIndex) {
-        case 0:
-          modeIndex = 0;
-          break;
-        case 1:
-          modeIndex = 1;
-          break;
-        case 2:
-          modeIndex = 3;
-          break;
-        case 3:
-          modeIndex = 2;
-          break;
-        case 4:
-          modeIndex = 4;
-          break;
-        default:
-          modeIndex = 5;
-      }
+    //   switch (this.selectedTabIndex) {
+    //     case 0:
+    //       modeIndex = 0;
+    //       break;
+    //     case 1:
+    //       modeIndex = 1;
+    //       break;
+    //     case 2:
+    //       modeIndex = 3;
+    //       break;
+    //     case 3:
+    //       modeIndex = 2;
+    //       break;
+    //     case 4:
+    //       modeIndex = 4;
+    //       break;
+    //     default:
+    //       modeIndex = 5;
+    //   }
 
-      const filteredReceipts = this.receiptDetailsList.filter((data: any) =>
-        this.receiptModesTypes.some((modeType: any) =>
-          (data.RECEIPT_MODE.toString() == modeType.CREDIT_CODE.toString()) &&
-          (modeType.MODE == modeIndex)
-        )
-      );
-      data = filteredReceipts[0];
-      // console.log('receiptModeListData ', filteredReceipts);
+    //   const filteredReceipts = this.receiptDetailsList.filter((data: any) =>
+    //     this.receiptModesTypes.some((modeType: any) =>
+    //       (data.RECEIPT_MODE.toString() == modeType.CREDIT_CODE.toString()) &&
+    //       (modeType.MODE == modeIndex)
+    //     )
+    //   );
+    //   data = filteredReceipts[0];
+    //   // console.log('receiptModeListData ', filteredReceipts);
 
-    }
+    // }
 
 
 

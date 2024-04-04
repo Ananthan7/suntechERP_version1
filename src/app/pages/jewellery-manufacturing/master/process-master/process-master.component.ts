@@ -19,11 +19,11 @@ export class ProcessMasterComponent implements OnInit {
 
   @Input() content!: any;
   viewMode: boolean = false;
+  codeMode: boolean = false;
   searchModeLoss: boolean = true;
   searchModeRecov: boolean = true;
   searchModeAllow: boolean = true;
   codeEnable: boolean = true;
-  editMode: boolean = false;
 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -65,7 +65,7 @@ export class ProcessMasterComponent implements OnInit {
 
   ngAfterViewInit() {
     // Focus on the first input
-    if (this.codeInput1) {
+    if (!this.content && this.codeInput1) {
       this.codeInput1.nativeElement.focus();
     }
   }
@@ -79,9 +79,11 @@ export class ProcessMasterComponent implements OnInit {
     this.getProcessTypeOptions()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
+      this.codeMode = true;
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
+      this.codeMode = true;
       this.setFormValues();
 
     }
@@ -411,9 +413,8 @@ export class ProcessMasterComponent implements OnInit {
     // this.formattedMaxTime.controls.setValue(this.content.MAX_TIME);
 
     //this.maxTime = this.content.MAX_TIME;
-    this.standTime = this.content
-
-    this.maxTime = this.content
+    this.standTime = this.content.STD_TIME;
+    this.maxTime = this.content.MAX_TIME;
 
     this.formattedTime = this.content.STD_TIME;
 
