@@ -30,8 +30,7 @@ export class WaxProcessComponent implements OnInit {
   userName = localStorage.getItem('username');
   userbranch = localStorage.getItem('userbranch');
   branchParmeter:any= localStorage.getItem('BRANCH_PARAMETER');
-
-  
+  strBranchcode:any= '';
 
   
   user: MasterSearchModel = {
@@ -95,26 +94,37 @@ export class WaxProcessComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+    private suntechApi: SuntechAPIService,
+  ) { 
+    this.strBranchcode = localStorage.getItem('userbranch');
+  }
 
   ngOnInit(): void {
     this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.waxprocessFrom.controls.vocdate.setValue(this.commonService.currentDate)
     this.waxprocessFrom.controls.vocno.setValue('1')
-    console.log(this.branchParmeter);
+    // console.log(this.branchParmeter);
     let data = this.branchParmeter.split(',');
     this.description = data[4].substring(15);
   
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-
+    
+    this.getJobNumberDetails();
     // console.log(this.content);
     if (this.content) {
       this.setFormValues()
     }
-    
-    
 
+  }
+
+  getJobNumberDetails() {   
+    this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=14158`).subscribe((result) => {
+      console.log(this.tableData);
+      if (result.response) {
+        this.tableData = result.response;
+      }
+    });
   }
 
   userDataSelected(value: any) {
