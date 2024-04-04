@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header  (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header  (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [disableDeleteBtn]="viewMode"></modal-header>
 <div class="container-fluid pt-3">
   <form [formGroup]="componentsizemasterForm">
     <div class="row">
@@ -16,7 +16,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Code * :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput class="text-left" formControlName="code"   [readonly]="viewMode"  oninput="this.value = this.value.toUpperCase()"/>
+                  <input type="text" matInput class="text-left" formControlName="code"   [readonly]="viewMode"  oninput="this.value = this.value.toUpperCase()" maxlength="6" #codeInput1/>
                 </mat-form-field>
               </div>
             </div>
@@ -44,7 +44,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="height" id="height"  ThreeDecimalInput [readonly]="viewMode"  (key)="getValues()" 
+                      <input type="number" matInput class="text-left" formControlName="height"   ThreeDecimalInput [readonly]="viewMode" 
                       />
                     </mat-form-field>
                   </div>
@@ -55,7 +55,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="length" id="length"   [readonly]="viewMode"  MetalDecimalInput
+                      <input type="number" matInput class="text-left" formControlName="length"   [readonly]="viewMode"  MetalDecimalInput
                       (input)="onInputChange($event,'length', 7)"/>
                     </mat-form-field>
                   </div>
@@ -69,7 +69,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="width"  id="width"   [readonly]="viewMode" MetalDecimalInput
+                      <input type="number" matInput class="text-left" formControlName="width"   [readonly]="viewMode" MetalDecimalInput
                       (input)="onInputChange($event,'width', 7)"/>
                     </mat-form-field>
                   </div>
