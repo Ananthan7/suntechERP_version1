@@ -189,7 +189,7 @@ export class RetailGridComponent implements OnInit {
             }
           }
           // FUNTION FOR SETTING COLOUMN NAMES IF NOT IN API
-          if (this.visibleFields.length == 0) {
+          // if (this.visibleFields.length == 0) {
             if (this.vocType == 'MASSCH') {
               this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
               this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_CURRENCY_CODE')
@@ -212,13 +212,13 @@ export class RetailGridComponent implements OnInit {
               this.orderedItemsHead = this.setSchemeReceiptGridData()
               return
             }
-            let headers = Object.keys(this.orderedItems[0]);
-            this.orderedItemsHead = Object.keys(this.orderedItems[0])
-              .map((key) => {
-                return { FIELD_NAME: key, DISPLAY_NAME: key };
-              });
-            return
-          }
+            // let headers = Object.keys(this.orderedItems[0]);
+            // this.orderedItemsHead = Object.keys(this.orderedItems[0])
+            //   .map((key) => {
+            //     return { FIELD_NAME: key, DISPLAY_NAME: key };
+            //   });
+            // return
+          // }
 
           this.orderedItemsHead = Object.keys(this.orderedItems[0])
             .map((key) => {
