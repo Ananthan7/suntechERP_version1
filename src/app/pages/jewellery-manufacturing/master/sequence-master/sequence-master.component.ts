@@ -82,7 +82,9 @@ export class SequenceMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
-
+  }
+  getTime() {
+    // convertTimeMinutesToDHM
   }
 
   checkCode(): boolean {
@@ -120,6 +122,8 @@ export class SequenceMasterComponent implements OnInit {
             item.SRNO = index + 1
             item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
             item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
+            item.STD_TIME = this.commonService.convertTimeMinutesToDHM(item.STD_TIME)
+            item.MAX_TIME = this.commonService.convertTimeMinutesToDHM(item.MAX_TIME)
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
@@ -185,8 +189,13 @@ export class SequenceMasterComponent implements OnInit {
                   obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
                   obj.GAIN_AC = "",
                   obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+
               }
             });
+          })
+          this.dataSource.forEach((obj: any) => {
+            obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
+            obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
           })
           this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
           this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
@@ -438,8 +447,8 @@ export class SequenceMasterComponent implements OnInit {
           "UNIT_RATE": item.UNIT_RATE || 0,
           "UNIT": this.commonService.nullToString(item.UNIT),
           "NO_OF_UNITS": item.NO_OF_UNITS || 0,
-          "STD_TIME": this.commonService.timeToMinutes(item.STD_TIME) || 0,
-          "MAX_TIME": this.commonService.timeToMinutes(item.MAX_TIME) || 0,
+          "STD_TIME": this.handleDurationUpdate(item.STD_TIME),
+          "MAX_TIME": this.handleDurationUpdate(item.MAX_TIME),
           "STD_LOSS": item.STD_LOSS || 0,
           "MIN_LOSS": item.MIN_LOSS || 0,
           "MAX_LOSS": item.MAX_LOSS || 0,
@@ -458,6 +467,16 @@ export class SequenceMasterComponent implements OnInit {
       }
     })
     return this.selectedSequence
+  }
+  private handleDurationUpdate(value: any): number {
+    if (value == '' || !value) return 0;
+    let duration = value.split(':')
+    let totalDays = (Number(duration[0]) * 24) * 60
+    let totalHours = (Number(duration[1]) * 60)
+    let totalMinutes = (Number(duration[2]))
+    let total = totalDays + totalHours + totalMinutes
+    console.log(`Total Minutes: ${total}`);
+    return total
   }
 
   //selected field value setting
@@ -480,21 +499,20 @@ export class SequenceMasterComponent implements OnInit {
     this.sequenceMasterData.SEARCH_VALUE = event.target.value
   }
   // stdLoss Change
-  stdLossChanged(data:any){
-    console.log(data,'data');
+  stdLossChanged(data: any) {
     this.checkLossCondition(data)
   }
-  checkLossCondition(data:any){
+  checkLossCondition(data: any) {
     let max = this.commonService.emptyToZero(data['MAX_LOSS'])
     let std = this.commonService.emptyToZero(data['STD_LOSS'])
-    if(max < std){
+    if (max < std) {
       this.commonService.toastErrorByMsgId('Maximum loss cannot be less than std loss')
       this.dataSource[data.SRNO].MAX_LOSS = 0
     }
   }
   // maxLoss Change
-  maxLossChanged(data:any){
-    console.log(data,'data');
+  maxLossChanged(data: any) {
+    console.log(data, 'data');
     this.checkLossCondition(data)
   }
 

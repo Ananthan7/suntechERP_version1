@@ -128,10 +128,10 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.WIP_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode && data['isChecked']"
+                                        <!-- <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="wipAccodeSelected($event,data)">
-                                        </master-search>
+                                        </master-search> -->
                                     </div>
                                 </td>
                                 <td>
@@ -144,10 +144,10 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.GAIN_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode && data['isChecked']"
+                                        <!-- <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="gainAccodeSelected($event,data)">
-                                        </master-search>
+                                        </master-search> -->
                                     </div>
                                 </td>
                                 <td>
@@ -160,10 +160,10 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.LAB_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode && data['isChecked']"
+                                        <!-- <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="labAccodeSelected($event,data)">
-                                        </master-search>
+                                        </master-search> -->
                                     </div>
                                 </td>
                                 <td>
@@ -176,10 +176,10 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.LOSS_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode && data['isChecked']"
+                                        <!-- <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="lossAccodeSelected($event,data)">
-                                        </master-search>
+                                        </master-search> -->
                                     </div>
                                 </td>
                                 
@@ -198,14 +198,14 @@
                                         style="text-align: right;width: 86px;" />
                                 </td>
                                 <td>
-                                    <input type="time" style="width: 100%;"
-                                        [readonly]="viewMode" [disabled]="!data['isChecked']"
-                                        [(ngModel)]="data['STD_TIME']" step="2" />
+                                    <input type="text" style="width: 100%;"
+                                        readonly [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['STD_TIME']" />
                                 </td>
                                 <td>
-                                    <input type="time" [readonly]="viewMode"
+                                    <input type="text" readonly
                                         style="width: 100%;" [disabled]="!data['isChecked']"
-                                        [(ngModel)]="data['MAX_TIME']" step="2" />
+                                        [(ngModel)]="data['MAX_TIME']"/>
                                 </td>
                                 <td>
                                     <input type="checkbox" 
