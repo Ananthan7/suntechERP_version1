@@ -632,6 +632,7 @@ export class AddReceiptComponent implements OnInit {
       return
     }
     let amount = this.commonService.FCToCC(form.CurrCode,form.Amount_FC) //fc to cc conv
+    
     this.setFormControlAmount('Amount_LC', amount)
     this.setFormControlAmount('Header_Amount', amount)
     this.setFormControlAmount('Amount_FC', form.Amount_FC)
@@ -652,7 +653,7 @@ export class AddReceiptComponent implements OnInit {
     let payAmountSum: number = 0
     // calculating total scheme balancesetFormControlAmount
     this.gridDataSource.forEach((item: any, index: any) => {
-      payAmountSum += parseInt(item.PAY_AMOUNT_FC)
+      payAmountSum += parseInt(item.PAY_AMOUNT_CC)
       if (index != 0) {
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
