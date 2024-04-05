@@ -5054,15 +5054,15 @@ export class AddPosComponent implements OnInit {
       DIVISION_CODE: this.exchangeForm.value.fcn_exchange_division,
       STOCK_CODE: data.stock_code || '', // m
       PCS: this.exchangeForm.value.fcn_exchange_pcs || 0, //m
-      GROSSWT: this.exchangeForm.value.fcn_exchange_gross_wt || 0,
-      STONEWT: this.exchangeForm.value.fcn_exchange_stone_wt || 0, // m
-      NETWT: this.exchangeForm.value.fcn_exchange_net_wt || 0, // m
+      GROSSWT: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt) || 0,
+      STONEWT: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_wt) || 0, // m
+      NETWT: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt) || 0, // m
       PURITY: this.exchangeForm.value.fcn_exchange_purity || 0, // m
       // PUREWT: (this.exchangeForm.value.fcn_exchange_purity || 0), // m
       // PUDIFF: 0.0,
-      PUREWT: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
+      PUREWT: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight) || 0,
 
-      CHARGABLEWT: this.exchangeForm.value.fcn_exchange_chargeable_wt || 0, // net weight
+      CHARGABLEWT: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_chargeable_wt) || 0, // net weight
       MKG_RATEFC: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate) || 0, //need
       MKG_RATECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
@@ -5122,7 +5122,7 @@ export class AddPosComponent implements OnInit {
           this.exchangeForm.value.fcn_exchange_net_amount
         ), this.vocDataForm.value.txtCurRate
       ),
-      PUDIFF: this.exchangeForm.value.fcn_exchange_purity_diff || 0, // need_input
+      PUDIFF: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_purity_diff) || 0, // need_input
       STONEDIFF: 0.0, //need_input
       PONO: 0, // need_input
       LOCTYPE_CODE: this.exchangeForm.value.fcn_exchange_location || '', // need_input
@@ -5556,7 +5556,7 @@ export class AddPosComponent implements OnInit {
       let _exchangeNetAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_amount);
 
       let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
-      let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
+      let _exchangeWeight = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt);
 
       console.log(_exchangeMetalAmt);
 
@@ -5601,10 +5601,10 @@ export class AddPosComponent implements OnInit {
           metalAmt: _exchangeMetalAmt,
 
           // need to update
-          gross_wt: this.exchangeForm.value.fcn_exchange_gross_wt || 0,
-          pure_wt: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
+          gross_wt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt) || 0,
+          pure_wt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight) || 0,
           stone_amt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount) || 0,
-          purity_diff: this.exchangeForm.value.fcn_exchange_purity_diff || 0,
+          purity_diff: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_purity_diff) || 0,
           // gross_amt: this.lineItemForm.value.fcn_li_gross_amount || 0,
           METAL_RATE_TYPE: this._exchangeItemchange.METAL_RATE_TYPE,
           METAL_RATE: this._exchangeItemchange.METAL_RATE,
@@ -5872,12 +5872,12 @@ export class AddPosComponent implements OnInit {
       STOCK_CODE: data.STOCK_CODE, // m
       GROSS_AMT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
       PCS: data.pcs, //m
-      GROSSWT: this.lineItemForm.value.fcn_li_gross_wt,
+      GROSSWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
       STONEWT: data.STONE_WT, // m
-      NETWT: this.lineItemForm.value.fcn_li_net_wt, // m
+      NETWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt), // m
       PURITY: data.PURITY, // m
       PUREWT: data.pure_wt, // m
-      CHARGABLEWT: this.lineItemForm.value.fcn_li_net_wt, // net weight
+      CHARGABLEWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt), // net weight
       // CHARGABLEWT: data.NET_WT, // net weight
       MKG_RATEFC: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0, //need
       MKG_RATECC: this.comFunc.FCToCC(
@@ -6316,9 +6316,9 @@ export class AddPosComponent implements OnInit {
       STOCK_CODE: data.STOCK_CODE,
       GROSS_AMT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
       PCS: this.lineItemForm.value.fcn_li_pcs || 1,
-      GROSSWT: this.lineItemForm.value.fcn_li_gross_wt,
+      GROSSWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
       STONEWT: data.STONEWT,
-      NETWT: this.lineItemForm.value.fcn_li_net_wt,
+      NETWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt),
       PURITY: data.PURITY,
       PUREWT: data.PUREWT,
       CHARGABLEWT: data.NET_WT,
@@ -6763,11 +6763,11 @@ export class AddPosComponent implements OnInit {
             mkg_amount: this.lineItemForm.value.fcn_ad_making_amount || 0,
             // total_amount: temp_resp.PRICE1LC,
             pcs: this.lineItemForm.value.fcn_li_pcs,
-            weight: this.lineItemForm.value.fcn_li_gross_wt,
+            weight: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
             description: this.lineItemForm.value.fcn_li_item_desc,
             tax_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount),
             net_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount),
-            pure_wt: this.lineItemForm.value.fcn_li_pure_wt,
+            pure_wt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
             making_amt: this.lineItemForm.value.total_amount || 0,
             // making_amt: this.lineItemForm.value.fcn_ad_making_amount || 0,
             metal_rate: this.lineItemForm.value.fcn_ad_metal_rate || 0,
@@ -6784,8 +6784,8 @@ export class AddPosComponent implements OnInit {
           this.newLineItem.HSN_CODE = this.newLineItem.HSN_CODE;
           this.newLineItem.GST_CODE = this.newLineItem.GST_CODE;
           this.newLineItem.pcs = this.lineItemForm.value.fcn_li_pcs;
-          this.newLineItem.pure_wt = this.lineItemForm.value.fcn_li_pure_wt;
-          this.newLineItem.STONE_WT = this.lineItemForm.value.fcn_li_stone_wt;
+          this.newLineItem.pure_wt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt);
+          this.newLineItem.STONE_WT = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt);
           this.newLineItem.total_amount =
             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
           this.newLineItem.divisionMS = this.divisionMS;
@@ -7573,7 +7573,7 @@ export class AddPosComponent implements OnInit {
   saveAndContinue(type: any) {
     if (type == 'continue') {
       this.addNew();
-    }else{
+    } else {
       this.close('reloadMainGrid');
     }
   }
@@ -8327,7 +8327,7 @@ export class AddPosComponent implements OnInit {
       }
     } else {
       if (this.validatePCS == true)
-        this.lineItemForm.controls['fcn_li_gross_wt'].setValue(0);
+        this.lineItemForm.controls['fcn_li_gross_wt'].setValue(this.zeroMQtyVal);
       this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
 
       // this.setGrossAmt();
@@ -8351,8 +8351,9 @@ export class AddPosComponent implements OnInit {
       )
     );
     console.log('====================================');
-    const value = event.target.value;
-    if (value != '' && this.validatePCS == false) {
+    const value = this.comFunc.emptyToZero(event.target.value);
+    // this.lineItemGrossWt =  this.comFunc.emptyToZero(event.target.value);
+    if (this.validatePCS == false) {
       if (this.blockNegativeStock == 'B') {
         if (this.lineItemGrossWt < value) {
           this.openDialog(
@@ -8987,7 +8988,7 @@ export class AddPosComponent implements OnInit {
       }
       let checkStockCostVal =
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
-        parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
       if (this.divisionMS == 'S') {
         if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
@@ -9054,11 +9055,11 @@ export class AddPosComponent implements OnInit {
   getExchangeNwtWt(event: any) {
     const value = event.target.value;
     if (value != '' && value != 0) {
-      let _exchangeGrossWt = this.exchangeForm.value.fcn_exchange_gross_wt;
-      let _exchangeStoneWt = this.exchangeForm.value.fcn_exchange_stone_wt;
-      let _exchangePureWt = this.exchangeForm.value.fcn_exchange_pure_weight;
+      let _exchangeGrossWt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt);
+      let _exchangeStoneWt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_wt);
+      let _exchangePureWt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight);
       let _exchangeNetWt = _exchangeGrossWt - _exchangeStoneWt;
-      let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
+      let _exchangeMetalRate = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_rate);
       this.exchangeForm.controls['fcn_exchange_net_wt'].setValue(
         this.comFunc.decimalQuantityFormat(
           _exchangeNetWt, 'METAL'
@@ -9066,7 +9067,7 @@ export class AddPosComponent implements OnInit {
       );
       this.exchangeForm.controls['fcn_exchange_chargeable_wt'].setValue(
         this.comFunc.decimalQuantityFormat(
-          event.target.value, 'METAL'
+          this.comFunc.emptyToZero( event.target.value), 'METAL'
         )
       );
 
@@ -9097,7 +9098,7 @@ export class AddPosComponent implements OnInit {
   setOzWt() {
     this.ozWeight = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
-      parseFloat(this.exchangeForm.value.fcn_exchange_pure_weight || 0) /
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight || 0) /
       31.1035
     );
     return this.ozWeight;
@@ -9291,6 +9292,39 @@ export class AddPosComponent implements OnInit {
     this.setExchangeCommaSep();
   }
   setExchangeCommaSep() {
+
+    this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt), 'METAL'))
+    );
+    this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_wt),
+          'STONE')
+      )
+    );
+    this.exchangeForm.controls.fcn_exchange_net_wt.setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt),
+          'METAL')));
+    this.exchangeForm.controls.fcn_exchange_chargeable_wt.setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_chargeable_wt ),
+          'METAL')));
+    this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight),
+          'METAL')));
+    this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_purity_diff ),
+          'METAL')));
     this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
       this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_stone_rate ?? this.zeroAmtVal)
     );
@@ -9355,7 +9389,7 @@ export class AddPosComponent implements OnInit {
 
     } else {
       this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(
-        this.zeroMQtyVal
+        this.zeroSQtyVal
       );
     }
   }
@@ -9363,37 +9397,40 @@ export class AddPosComponent implements OnInit {
   setExchangeStoneWt() {
     const stoneWt = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-      this.exchangeForm.value.fcn_exchange_gross_wt -
-      this.exchangeForm.value.fcn_exchange_net_wt
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt) -
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt)
     );
     this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(stoneWt);
   }
   setExchangeNettWt() {
     const stoneWt = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-      this.exchangeForm.value.fcn_exchange_gross_wt -
-      this.exchangeForm.value.fcn_exchange_stone_wt
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt) -
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_wt)
     );
     this.exchangeForm.controls.fcn_exchange_net_wt.setValue(stoneWt);
+    this.setExPurityDiff();
+
   }
   setExchangePureWt() {
     const value = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-      this.exchangeForm.value.fcn_exchange_net_wt *
-      this.exchangeForm.value.fcn_exchange_purity
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt) *
+     parseFloat(this.exchangeForm.value.fcn_exchange_purity)
     );
     this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(value);
+    this.setExPurityDiff();
   }
   setExPurityDiff() {
     const standardValue = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-      this.exchangeForm.value.fcn_exchange_net_wt * this.standardPurity
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt) * parseFloat(this.standardPurity)
     );
     // console.log('')
     const pureWeight = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BMQTYDECIMALS,
       parseFloat(standardValue) -
-      parseFloat(this.exchangeForm.value.fcn_exchange_pure_weight)
+      this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
     );
 
     this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(pureWeight);
@@ -9415,7 +9452,7 @@ export class AddPosComponent implements OnInit {
   setValToLocalStorage(event: any, name: any) {
     let checkStockCostVal =
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
-      parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
     if (name == 'fcn_li_net_amount') {
       if (this.divisionMS == 'M') {
@@ -9495,8 +9532,8 @@ export class AddPosComponent implements OnInit {
         // alert(`grossAmt ${grossAmt} value ${value} nettAmt ${nettAmt} `);
 
         let checkStockCostVal =
-          parseFloat(nettAmt) /
-          parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
+          this.comFunc.emptyToZero(nettAmt) /
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
         if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
 
@@ -9650,7 +9687,7 @@ export class AddPosComponent implements OnInit {
     if (event.target.value != '') {
       let checkStockCostVal =
         netAmtVal /
-        parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
       // alert('checkStockCostVal '+ checkStockCostVal +' STOCK_COST' + parseFloat(this.newLineItem.STOCK_COST));
 
       if (this.divisionMS == 'M') {
@@ -9766,7 +9803,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.allbranchMaster?.BMQTYDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
         this.comFunc.emptyToZero(
-          parseFloat(this.lineItemForm.value.fcn_li_stone_wt)
+          this.lineItemForm.value.fcn_li_stone_wt
         )
       )
     );
@@ -9775,7 +9812,7 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_pure_wt.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        this.lineItemForm.value.fcn_li_net_wt *
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
         this.lineItemForm.value.fcn_li_purity
       )
     );
@@ -10002,6 +10039,34 @@ export class AddPosComponent implements OnInit {
       this.comFunc.commaSeperation(this.comFunc
         .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
     );
+    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
+          'METAL')
+      )
+    );
+    this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt),
+          'STONE')
+      )
+    );
+    this.lineItemForm.controls['fcn_li_net_wt'].setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt),
+          'METAL')
+      )
+    );
+    this.lineItemForm.controls['fcn_li_pure_wt'].setValue(
+      this.comFunc.commaSeperation(
+        this.comFunc.decimalQuantityFormat(
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
+          'METAL')
+      )
+    );
     this.lineItemForm.controls['fcn_li_total_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_total_amount)
     );
@@ -10066,7 +10131,7 @@ export class AddPosComponent implements OnInit {
       (
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
         this.comFunc.emptyToZero(
-          parseInt(this.lineItemForm.value.fcn_li_stone_wt)
+          this.lineItemForm.value.fcn_li_stone_wt
         )
       ).toFixed(2)
     );
@@ -10114,7 +10179,7 @@ export class AddPosComponent implements OnInit {
   setPurityWeight() {
     this.lineItemForm.controls.fcn_li_pure_wt.setValue(
       (
-        this.lineItemForm.value.fcn_li_net_wt *
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
         this.lineItemForm.value.fcn_li_purity
       ).toFixed(2)
     );
@@ -10152,7 +10217,7 @@ export class AddPosComponent implements OnInit {
   setRate() {
     const value = (
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) /
-      this.lineItemForm.value.fcn_li_gross_wt
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt)
     ).toFixed(2);
     this.lineItemForm.controls.fcn_li_rate.setValue(value);
     // this.setGrossAmt();
@@ -10210,7 +10275,7 @@ export class AddPosComponent implements OnInit {
     // alert(value + '_' + this.lineItemForm.value.fcn_li_gross_wt);
     if (value != '') {
       if (
-        parseFloat(value) > parseFloat(this.lineItemForm.value.fcn_li_gross_wt)
+        this.comFunc.emptyToZero(value) > this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt)
       ) {
         this.openDialog(
           'Warning',
@@ -10283,8 +10348,8 @@ export class AddPosComponent implements OnInit {
     if (event.target.value != '') {
       const value = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        this.lineItemForm.value.fcn_li_gross_wt -
-        this.lineItemForm.value.fcn_li_net_wt
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt)
       );
       this.lineItemForm.controls.fcn_li_stone_wt.setValue(value);
       // this.setStoneAmt();
@@ -10306,7 +10371,7 @@ export class AddPosComponent implements OnInit {
       } else {
         let value = (
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) /
-          parseFloat(this.lineItemForm.value.fcn_li_stone_wt)
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt)
         );
         value = this.comFunc.emptyToZero(value);
         this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
