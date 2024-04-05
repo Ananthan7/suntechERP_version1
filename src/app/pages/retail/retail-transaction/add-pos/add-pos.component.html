@@ -2688,7 +2688,7 @@
               <mat-form-field>
                 <mat-label>Gross Wt</mat-label>
                 <input
-                  type="number"
+                  type="text"
                   [min]="0"
                   [maxLength]="10"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2706,11 +2706,11 @@
               <mat-form-field>
                 <mat-label>Stone Wt</mat-label>
                 <input
-                  type="number"
+                  type="text"
                   [min]="0"
                   [maxLength]="10"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
+                  [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
                   class="st_txt_right"
                   matInput
                   formControlName="fcn_exchange_stone_wt"
@@ -2725,7 +2725,7 @@
               <mat-form-field>
                 <mat-label>Net Wt </mat-label>
                 <input
-                  type="number"
+                  type="text"
                   [min]="0"
                   [maxLength]="10"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2734,7 +2734,7 @@
                   formControlName="fcn_exchange_net_wt"
                   [readonly]="viewOnly"
                   id="fcn_exchange_net_wt"
-                  [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
+                  [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
                   (change)="changeExchangeNettWt($event)"
                   MetalDecimalInput
                 />
@@ -2749,7 +2749,7 @@
               <mat-form-field>
                 <mat-label>Chargeable wt </mat-label>
                 <input
-                  type="number"
+                  type="text"
                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2758,7 +2758,7 @@
                   formControlName="fcn_exchange_chargeable_wt"
                   [readonly]="viewOnly"
                   id="fcn_exchange_chargeable_wt"
-                  [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
+                  [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
                   MetalDecimalInput
                 />
               </mat-form-field>
@@ -2786,7 +2786,7 @@
                 <mat-label>Pure Weight</mat-label>
                 <input
                   class="st_txt_right"
-                  type="number"
+                  type="text"
                   [min]="0"
                   [maxLength]="14"
                   (change)="this.comFunc.enforceMinMax($event.target)"
@@ -2802,7 +2802,7 @@
               <mat-form-field>
                 <mat-label>Purity Difference</mat-label>
                 <input
-                  type="number"
+                  type="text"
                   [min]="0"
                   [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2810,6 +2810,8 @@
                   matInput
                   formControlName="fcn_exchange_purity_diff"
                   [readonly]="true"
+                  MetalDecimalInput
+
                 />
               </mat-form-field>
             </div>
@@ -4181,9 +4183,10 @@
                       <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
                       <input
                         class="st_txt_right"
-                        type="number"
                         [min]="0"
                         [maxLength]="14"
+                    type="text"
+
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput
                         formControlName="fcn_li_gross_wt"
@@ -4220,7 +4223,7 @@
                       }}</mat-label>
                       <input
                         class="st_txt_right"
-                        type="number"
+                    type="text"
                         [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4229,7 +4232,7 @@
                         id="fcn_li_stone_wt"
                         (change)="changeStoneWt($event)"
                         [readonly]="viewOnly"
-                        MetalDecimalInput
+                        StoneDecimalInput
                       />
                     </mat-form-field>
                   </div>
@@ -4240,12 +4243,13 @@
                     <mat-form-field>
                       <mat-label>Net Wt </mat-label>
                       <input
+                    type="text"
+
                         class="st_txt_right"
-                        type="number"
                         [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        max="{{ this.lineItemForm.value.fcn_li_gross_wt }}"
+                        max="{{ this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) }}"
                         matInput
                         formControlName="fcn_li_net_wt"
                         id="fcn_li_net_wt"
@@ -4279,7 +4283,7 @@
                       <mat-label>Pure Weight</mat-label>
                       <input
                         class="st_txt_right"
-                        type="number"
+                        type="text"
                         [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -4287,6 +4291,7 @@
                         formControlName="fcn_li_pure_wt"
                         id="fcn_li_pure_wt"
                         readonly
+                        MetalDecimalInput
                       />
                     </mat-form-field>
                   </div>
