@@ -479,9 +479,10 @@ export class SchemeRegisterComponent implements OnInit {
               //   '_blank' // <- This is what makes it open in a new window.
               // );
             }
-          } else {
-            this.commonService.toastErrorByMsgId(result.message)
-          }
+          } 
+          // else {
+          //   this.commonService.toastErrorByMsgId(result.message)
+          // }
         })
     // }
   }
@@ -833,8 +834,8 @@ export class SchemeRegisterComponent implements OnInit {
       "SCH_ALERT_EMAIL": formValue.Email,
       "SCH_ALERT_MOBILE": formValue.MobileNo,
       "SCH_SEND_ALERT": formValue.SendAlert,
-      "PAN_NUMBER": formValue.PanNo,
-      "SCH_PAN_NUMBER": formValue.PanNo,
+      "PAN_NUMBER": formValue.PanNo.toUpperCase(),
+      "SCH_PAN_NUMBER": formValue.PanNo.toUpperCase(),
       "VOCDATE": formValue.VOCDATE,
       "SCH_CANCEL": false,
       "SCH_REDEEM": true,
@@ -879,7 +880,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.PAY_DATE`, this.commonService.formatDate(new Date(formValue.DateOfJoining)));
       this.formdata.append(`Model.model[${i}].schemeData.PAY_BRANCH_CODE`, this.commonService.nullToString(this.commonService.branchCode));
       this.formdata.append(`Model.model[${i}].schemeData.PAY_VOCTYPE`, formValue.VOCTYPE);
-      this.formdata.append(`Model.model[${i}].schemeData.PAY_VOCNO`, '0');
+      this.formdata.append(`Model.model[${i}].scheformValue.PanNomeData.PAY_VOCNO`, '0');
       this.formdata.append(`Model.model[${i}].schemeData.PAY_YEARMONTH`, this.commonService.nullToString(this.commonService.yearSelected));
       this.formdata.append(`Model.model[${i}].schemeData.PAY_AMOUNTFC`, item.PAY_AMOUNTFC || 0);
       //TODO PAY_AMOUNTFC = installment amount * schemeperiod
@@ -887,8 +888,8 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SCH_ALERT_EMAIL`, formValue.Email);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_ALERT_MOBILE`, formValue.MobileNo);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_SEND_ALERT`, formValue.SendAlert);
-      this.formdata.append(`Model.model[${i}].schemeData.PAN_NUMBER`, formValue.PanNo);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_PAN_NUMBER`, formValue.PanNo);
+      this.formdata.append(`Model.model[${i}].schemeData.PAN_NUMBER`, item.PAN_NUMBER);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_PAN_NUMBER`, item.SCH_PAN_NUMBER);
       this.formdata.append(`Model.model[${i}].schemeData.VOCDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
       this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL`, formValue.SCH_CANCEL);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_REDEEM`, formValue.SCH_REDEEM);
