@@ -18,7 +18,6 @@ export class ModalHeaderComponent implements OnInit {
   @Output() printClick = new EventEmitter();
   @Output() attachmentClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
-  @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
   @Input() isViewContinue: boolean = false;
   @Input() isViewSaveGridData: boolean = false;
@@ -30,6 +29,13 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+
+  @Input() isViewMore: boolean = true;
+  @Input() isViewPrint: boolean = true;
+  @Input() isViewAttachment: boolean = true;
+  @Input() isViewCopy: boolean = true;
+  @Input() isViewLog: boolean = true;
+  
   @Input() disableSaveBtn: boolean = false;
   @Input() disableDeleteBtn: boolean = false;
   @Input() disablePostBtn: boolean = false;

@@ -121,16 +121,16 @@
                         <button ngbDropdownItem>
                             Branch: <b>{{branchCode}}</b>
                         </button>
-                        <button ngbDropdownItem (click)="PrintClicked()">
+                        <button ngbDropdownItem (click)="PrintClicked()" *ngIf="isViewPrint">
                             <!-- <i class="fa fa-print"></i>  -->
                             Print</button>
-                        <button ngbDropdownItem (click)="AttachmentClicked()">
+                        <button ngbDropdownItem (click)="AttachmentClicked()" *ngIf="isViewAttachment">
                             <!-- <i class="fa fa-envelopes-bulk icon-common"></i> -->
                             Attachment</button>
-                        <button ngbDropdownItem>
+                        <button ngbDropdownItem *ngIf="isViewCopy">
                             <!-- <i class="fa fa-copy icon-common"></i> -->
                             Copy</button>
-                        <button ngbDropdownItem>
+                        <button ngbDropdownItem *ngIf="isViewLog">
                             <!-- <i class="fa fa-file-lines icon-common"></i> -->
                             Log</button>
                     </div>

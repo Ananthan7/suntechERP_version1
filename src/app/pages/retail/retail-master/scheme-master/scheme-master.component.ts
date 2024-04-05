@@ -83,25 +83,28 @@ export class SchemeMasterComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.checkInitialConditions()
   }
-  checkInitialConditions(){
+  checkInitialConditions() {
     if (this.content) {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.codeEditMode = true
         this.usedSchemeEditMode = true;
       }
-      if(this.content.FLAG == 'EDIT'){
+      if (this.content.FLAG == 'EDIT') {
         this.codeEditMode = true
         this.viewMode = false;
         this.schemeRegistrationWithParameter()
         this.getAllSelectOptions()
       }
-      if(this.content.FLAG == 'DELETE'){
+      if (this.content.FLAG == 'DELETE') {
+        this.codeEditMode = false
         this.viewMode = true;
         this.usedSchemeEditMode = true;
         this.schemeRegistrationWithParameter()
       }
       this.setInitialValues()
     } else {
+      this.codeEditMode = true
       this.getAllSelectOptions()
       this.setFormValues()
     }
@@ -109,12 +112,12 @@ export class SchemeMasterComponent implements OnInit {
   //number validation
   isNumeric(event: any) {
     var keyCode = event.which ? event.which : event.keyCode;
-    console.log(event.keyCode,'event.keyCode');
-    
+    console.log(event.keyCode, 'event.keyCode');
+
     var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode == 46;
     return isValid;
   }
-  addCommaSeperation(event:any){
+  addCommaSeperation(event: any) {
     event.target.value = this.comService.commaSeperation(event.target.value)
   }
   setFormControlAmount(controlName: string, amount: any) {
@@ -124,7 +127,7 @@ export class SchemeMasterComponent implements OnInit {
       this.comService.commaSeperation(amount)
     )
   }
- 
+  /**use: load all conditions for select */
   getAllSelectOptions() {
     let frequencyAPI = 'ComboFilter/scheme%20frequency';
     let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
@@ -148,13 +151,11 @@ export class SchemeMasterComponent implements OnInit {
     let receipts1: Subscription = this.dataService.getDynamicAPI(receiptAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         this.receipt1List = resp.response
-        let scheme:any[] = this.receipt1List.filter((item:any)=> item.CREDIT_CODE == 'SCHEME')
-        if(!this.content){
-          if(scheme.length>0){
-            this.schemeMasterForm.controls.receiptModeone.setValue('SCHEME');
-          } else{
-            this.schemeMasterForm.controls.receiptModeone.setValue(this.receipt1List[0].CREDIT_CODE);
-          }
+        let scheme: any[] = this.receipt1List.filter((item: any) => item.CREDIT_CODE == 'SCHEME')
+        if (scheme.length > 0) {
+          this.schemeMasterForm.controls.receiptModeone.setValue('SCHEME');
+        } else {
+          this.schemeMasterForm.controls.receiptModeone.setValue(this.receipt1List[0].CREDIT_CODE);
         }
       }
     });
@@ -214,64 +215,64 @@ export class SchemeMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  checkReceiptModeExist(amt:string,mode:string){
-    if(this.comService.emptyToZero(this.schemeMasterForm.value[amt]) == 0){
+  checkReceiptModeExist(amt: string, mode: string) {
+    if (this.comService.emptyToZero(this.schemeMasterForm.value[amt]) == 0) {
       this.schemeMasterForm.controls[mode].setValue('')
       this.schemeMasterForm.controls[amt].setValue('')
     }
   }
-  private submitFormValidation(): boolean{
+  private submitFormValidation(): boolean {
     let flag = false;
     let form = this.schemeMasterForm.value;
-    if(this.comService.nullToString(form.code).trim() == ''){
+    if (this.comService.nullToString(form.code).trim() == '') {
       this.comService.toastErrorByMsgId('Code is required')
       flag = true
     }
-    if(this.comService.nullToString(form.prefixCode).trim() == ''){
+    if (this.comService.nullToString(form.prefixCode).trim() == '') {
       this.comService.toastErrorByMsgId('Prefix is required')
       flag = true
     }
-    if(this.comService.nullToString(form.description).trim() == ''){
+    if (this.comService.nullToString(form.description).trim() == '') {
       this.comService.toastErrorByMsgId('Description is required')
       flag = true
     }
-    if(this.comService.nullToString(form.frequency) == ''){
+    if (this.comService.nullToString(form.frequency) == '') {
       this.comService.toastErrorByMsgId('Frequency is required')
       flag = true
     }
-    if(this.comService.nullToString(form.depositIn) == ''){
+    if (this.comService.nullToString(form.depositIn) == '') {
       this.comService.toastErrorByMsgId('Deposit In is required')
       flag = true
     }
-    if(this.comService.emptyToZero(form.tenurePeriod) == 0){
+    if (this.comService.emptyToZero(form.tenurePeriod) == 0) {
       this.comService.toastErrorByMsgId('Period is required')
       flag = true
     }
-    if(this.comService.emptyToZero(form.installmentAmount) == 0){
+    if (this.comService.emptyToZero(form.installmentAmount) == 0) {
       this.comService.toastErrorByMsgId('Installment amount is required')
       flag = true
     }
-    if(this.comService.emptyToZero(form.installmentAmount) != 0 && !form.receiptModeone){
+    if (this.comService.emptyToZero(form.installmentAmount) != 0 && !form.receiptModeone) {
       this.comService.toastErrorByMsgId('Receipt Mode is required for installment Amount')
       flag = true
     }
-    if(this.comService.emptyToZero(form.installmentAmount) == 0 && form.receiptModeone != ''){
+    if (this.comService.emptyToZero(form.installmentAmount) == 0 && form.receiptModeone != '') {
       this.comService.toastErrorByMsgId('Installment Amount is required')
       flag = true
     }
-    if(this.comService.emptyToZero(form.bonusInstallment) != 0 && !form.receiptModeTwo){
+    if (this.comService.emptyToZero(form.bonusInstallment) != 0 && !form.receiptModeTwo) {
       this.comService.toastErrorByMsgId('Receipt Mode is required for bonus installment')
       flag = true
     }
-    if(this.comService.emptyToZero(form.bonusInstallment) == 0 && this.comService.nullToString(form.receiptModeTwo) != ''){
+    if (this.comService.emptyToZero(form.bonusInstallment) == 0 && this.comService.nullToString(form.receiptModeTwo) != '') {
       this.comService.toastErrorByMsgId('Bonus installment is required')
       flag = true
     }
-    if(this.comService.emptyToZero(form.cancelCharges) != 0 && !form.receiptModeThree){
+    if (this.comService.emptyToZero(form.cancelCharges) != 0 && !form.receiptModeThree) {
       this.comService.toastErrorByMsgId('Receipt Mode is required for cancel charges')
       flag = true
     }
-    if(this.comService.emptyToZero(form.cancelCharges) == 0 && this.comService.nullToString(form.receiptModeThree) != ''){
+    if (this.comService.emptyToZero(form.cancelCharges) == 0 && this.comService.nullToString(form.receiptModeThree) != '') {
       this.comService.toastErrorByMsgId('Cancel charges is required')
       flag = true
     }
@@ -295,7 +296,7 @@ export class SchemeMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -307,7 +308,7 @@ export class SchemeMasterComponent implements OnInit {
               }
             });
             this.viewMode = true
-          }else {
+          } else {
             this.comService.toastErrorByMsgId(result.message)
           }
         } else {
@@ -362,19 +363,19 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
     this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
 
-    this.setFormControlAmount('installmentAmount',this.content.SCHEME_AMOUNT)
-    this.setFormControlAmount('cancelCharges',this.content.CANCEL_CHARGE)
-    this.setFormControlAmount('bonusInstallment',this.content.SCHEME_BONUS)
+    this.setFormControlAmount('installmentAmount', this.content.SCHEME_AMOUNT)
+    this.setFormControlAmount('cancelCharges', this.content.CANCEL_CHARGE)
+    this.setFormControlAmount('bonusInstallment', this.content.SCHEME_BONUS)
     this.getSchemeMasterList()
   }
-  removePrefixCode(){
+  removePrefixCode() {
     this.schemeMasterForm.controls.prefixCode.setValue('');
   }
-  handleKeyPress(event:any) {
+  handleKeyPress(event: any) {
     // Check if the key pressed is Enter (key code 13)
     if (event.keyCode === 13) {
       this.masterSearchComponent?.showOverlayPanel()
-    } else   if (event.keyCode === 9) {
+    } else if (event.keyCode === 9) {
       this.masterSearchComponent?.showOverlayPanel()
     }
   }
@@ -384,26 +385,26 @@ export class SchemeMasterComponent implements OnInit {
       "SCH_SCHEME_CODE": this.content.SCHEME_CODE
     }
     this.comService.showSnackBarMsg('MSG81447')
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,data)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, data)
       .subscribe((resp: any) => {
         this.comService.closeSnackBarMsg()
         if (resp.status == 'Success') {
           // this.comService.toastErrorByMsgId('Cannot Edit Registered Scheme')
           this.viewMode = true
-          if(this.content?.FLAG == 'DELETE'){
+          if (this.content?.FLAG == 'DELETE') {
             this.comService.toastErrorByMsgId('Scheme Already Registered')
             return
           }
           this.usedSchemeEditMode = false
-        }else{
-          if(this.content?.FLAG == 'DELETE'){
+        } else {
+          if (this.content?.FLAG == 'DELETE') {
             this.deleteSchemeMaster()
           }
         }
       });
     this.subscriptions.push(Sub);
   }
-  prefixCodeValidate(event:any) {
+  prefixCodeValidate(event: any) {
     let API = 'PrefixMaster/GetPrefixMasterDetail/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
@@ -411,7 +412,7 @@ export class SchemeMasterComponent implements OnInit {
           this.comService.toastErrorByMsgId('Prefix code not found')
           this.schemeMasterForm.controls.prefix.setValue('')
           this.schemeMasterForm.controls.prefixCode.setValue('')
-        }else{
+        } else {
           let data = resp.response
           this.schemeMasterForm.controls.prefix.setValue(data.PREFIX_CODE)
           this.schemeMasterForm.controls.prefixCode.setValue(data.PREFIX_CODE)
@@ -431,7 +432,7 @@ export class SchemeMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -442,7 +443,7 @@ export class SchemeMasterComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
-          }else {
+          } else {
             this.comService.toastErrorByMsgId(result.message)
           }
         } else {
@@ -451,7 +452,7 @@ export class SchemeMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  deleteSchemeClick(){
+  deleteSchemeClick() {
     this.authCheckerComponent?.openAuthModal()
   }
   // SchemeMaster/UpdateSchemeMaster
@@ -487,7 +488,7 @@ export class SchemeMasterComponent implements OnInit {
             if (result) {
               if (result.status == "Success") {
                 Swal.fire({
-                  title: result.message || 'Success',
+                  title: this.comService.getMsgByID('MSG3588') || 'Success',
                   text: '',
                   icon: 'success',
                   confirmButtonColor: '#336699',

@@ -8,7 +8,9 @@
 </div>
 <!-- modal header component -->
 <modal-header [disableSaveBtn]="viewMode && usedSchemeEditMode"
-    [disableDeleteBtn]="viewMode"
+    [disableDeleteBtn]="codeEditMode" 
+    [isViewLog]="false" [isViewAttachment]="false"
+    [isViewCopy]="false" [isViewPrint]="false"
     (cancelClick)="close()" (saveClick)="formSubmit()"
     (deleteClick)="deleteSchemeClick()"></modal-header>
 <!-- authentication component -->
@@ -24,7 +26,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text"
-                                [readonly]="viewMode || codeEditMode"
+                                [readonly]="viewMode"
                                 UppercaseDirective
                                 (focusout)="getSchemeMasterList()" maxlength="6"
                                 matInput formControlName="code" />
@@ -227,7 +229,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
-                        <mat-checkbox formControlName="SCHEMEFIXEDAMT"
+                        <mat-checkbox formControlName="SCHEMEFIXEDAMT" style="display: none;"
                             [disabled]="viewMode">
                             Scheme Amt Not Fixed</mat-checkbox>
                     </div>

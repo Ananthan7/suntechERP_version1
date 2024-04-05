@@ -51,12 +51,11 @@ export class RetailMasterComponent implements OnInit {
  
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
-    if (data) {
-      this.menuTitle = data.MENU_CAPTION_ENG;
-      this.PERMISSIONS = data.PERMISSION;
-    } else {
-      this.menuTitle = this.CommonService.getModuleName()
-    }
+    // if (data) {
+    //   this.menuTitle = data.MENU_CAPTION_ENG;
+    //   this.PERMISSIONS = data.PERMISSION;
+    // } 
+    this.menuTitle = this.CommonService.getModuleName()
     this.masterGridComponent?.getMasterGridData(data)
   }
 

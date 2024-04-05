@@ -134,7 +134,6 @@ export class AddReceiptComponent implements OnInit {
     this.getCreditCardMaster()
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
-    console.log(this.content);
 
     if (this.content && this.content.FLAG == 'VIEW') {
       this.viewMode = true

@@ -39,7 +39,6 @@ export class SchemeReceiptComponent implements OnInit {
   isViewSchemeMasterGrid: boolean = true;
   disableDelete: boolean = true;
   isSaved: boolean = false;
-  editFlag: boolean = false;
   isViewAddbtn: boolean = true;
   viewMode: boolean = false;
   gridAmountDecimalFormat: any;
@@ -393,20 +392,6 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
 
-  /** Add new Receipt */
-  addPOSreceipt() {
-    this.snackBar.dismiss();
-    let branch = localStorage.getItem("userbranch");
-    if (branch) {
-      this.receiptDetailsForm.controls.Branch.setValue(branch);
-    }
-    this.receiptDetailsForm.controls.VocDate.setValue(this.currentDate);
-    this.receiptDetailsForm.controls.PostedDate.setValue(this.currentDate);
-    this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
-    this.fetchPartyCode();
-    this.editFlag = false;
-    this.isViewSchemeMasterGrid = false;
-  }
   //USE: delete row
   deleteRow(e: any) {
     Swal.fire({
@@ -946,11 +931,10 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.setFormData()
     
-    if (this.editFlag) {
-      this.submitEditedForm(this.formdata);
-      return;
-    }
-
+    // if (this.editFlag) {
+    //   this.submitEditedForm(this.formdata);
+    //   return;
+    // }
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI("SchemeCurrencyReceipt/SchemeCurrencyReceipt/InsertWithAttachments", this.formdata)
       .subscribe((result: any) => {
@@ -960,8 +944,8 @@ export class SchemeReceiptComponent implements OnInit {
           let respData = result.response;
           this.receiptDetailsForm.controls.VocNo.setValue(respData?.VOCNO);
           Swal.fire({
-            title: result["status"] ? result["status"] : result.status,
-            text: result["message"] ? result["message"] : result.Message,
+            title: this.commonService.getMsgByID('MSG2255') || result.status,
+            text: this.commonService.getMsgByID('MSG2255') || result.Message,
             icon: "success",
             showCancelButton: false,
             confirmButtonColor: "#3085d6",
@@ -984,22 +968,8 @@ export class SchemeReceiptComponent implements OnInit {
         this.commonService.closeSnackBarMsg;
       });
   }
-  private objectToFormData(obj?:any) {
-    const formData = new FormData();
-    this.setPostDateToSave()
-    obj = this.detailArray[0]
-    // Iterate through the object's properties
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        // Append each property to the FormData instance
-        formData.append(key, obj[key]);
-      }
-    }
-     console.log(formData);
-  }
 
   setFormData() {
-    this.objectToFormData()
     this.setPostDateToSave();
     let formValue = this.receiptDetailsForm.value
     this.detailArray.forEach((item: any, i: any) => {

@@ -179,6 +179,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.schemeRegistrationForm.controls.SendAlert.disable()
     }
     if (this.content && this.content.FLAG == 'EDIT') {
+      this.editUNITS = true
       this.editMode = true
       this.disableCancelBtn = false
     }
@@ -204,7 +205,12 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.SalesmanName.setValue(event.DESCRIPTION)
   }
   salesmanChange(event: any) {
-    if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
+    if (event.target.value == ""){
+      this.schemeRegistrationForm.controls.SalesmanName.setValue('');
+      return
+    };
+    if (this.content?.FLAG == 'VIEW') return;
+
     let inputValue = event.target.value;
     inputValue = inputValue.toUpperCase();
     let data = this.commonService.SalespersonMasterData.filter((item: any) => item.SALESPERSON_CODE == inputValue);
@@ -244,6 +250,12 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.SchemeMasterDetails = data.Details
+          this.SchemeMasterDetails.forEach((item: any) => {
+            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
+            item.PAY_AMOUNT_CC = this.commonService.commaSeperation(item.PAY_AMOUNT_CC)
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
+          })
           if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'DELETE') {
             let schemeReceipts: any[] = this.SchemeMasterDetails.filter((item: any) => item.RCVD_VOCTYPE != '')
             if (schemeReceipts.length == 0) {
@@ -253,6 +265,7 @@ export class SchemeRegisterComponent implements OnInit {
               if (this.content.FLAG == 'EDIT') {
                 this.disableDOJ = false;
                 this.viewMode = false;
+                this.viewDeleteBtn = false;
               }
               if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
             } else {
@@ -361,10 +374,16 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  validateNoOfUnitLimit(event:any){
+    if(this.commonService.emptyToZero(event.target.value)>12){
+      this.commonService.toastErrorByMsgId('No of Unit cannot be more than 12')
+      this.schemeRegistrationForm.controls.Units.setValue(12)
+    }
+  }
   /**USE: change fn to calculate no of units and amount */
   numberOfUnitCalculate() {
     let form = this.schemeRegistrationForm.value
-    if (form.Units && this.content?.FLAG != 'VIEW') {
+    if (form.Units && this.content?.FLAG != 'VIEW' && !this.editUNITS) {
       let InstallmentAmount: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.InstallmentAmount)
       // let CancellationCharge: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.CancellationCharge)
       // let BonusInstallment: number = this.commonService.emptyToZero(form.Units) * this.commonService.emptyToZero(this.initialLoadedAmounts.BonusInstallment)
@@ -496,13 +515,16 @@ export class SchemeRegisterComponent implements OnInit {
   }
   fetchSchemeWithCustCode() {
     if (this.viewMode == true || this.content?.FLAG == 'VIEW') return
-    if (this.schemeRegistrationForm.value.SchemeId == '') return
+    if (this.schemeRegistrationForm.value.SchemeId == ''){
+      return
+    }
     this.SchemeMasterDetails = []
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
         if (result.response) {
+          this.editUNITS = false;
           let data = result.response
           if (data.STATUS == false) {
             this.commonService.toastErrorByMsgId('Selected Scheme is Inactive')
@@ -516,8 +538,6 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
           this.schemeRegistrationForm.controls.Remarks.setValue(data.SCHEME_REMARKS)
           this.schemeRegistrationForm.controls.Units.setValue(1)
-          // this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.START_DATE)
-          // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCHEME_PERIOD)
           // this.schemeRegistrationForm.controls.BonusInstallment.setValue(
           //   this.commonService.commaSeperation(data.SCHEME_BONUS)
@@ -589,8 +609,12 @@ export class SchemeRegisterComponent implements OnInit {
           this.disableSaveBtn = true;
           this.usedSchemeMode = true;
           this.SchemeMasterDetails = resp.response
+          let amountcc = this.commonService.emptyToZero(formValue.InstallmentAmount)
+          amountcc = this.commonService.decimalQuantityFormat(amountcc,'AMOUNT')
           this.SchemeMasterDetails.forEach((item: any) => {
-            item.PAY_AMOUNT_CC = formValue.InstallmentAmount
+            item.PAY_AMOUNT_CC = this.commonService.commaSeperation(amountcc)
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
             item.RCVD_VOCNO = item.RCVD_VOCNO.toString()
             if (item.REMAINDER_SEND.toString() == '0') {
               item.REMAINDER_SEND = false
@@ -621,23 +645,30 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   emailIdChange(event: any) {
-    if (event.target.value == '') return
     if (this.schemeRegistrationForm.controls.Email.hasError('pattern')) {
+      this.commonService.toastErrorByMsgId('Email Format Not Correct')
       this.schemeRegistrationForm.controls.Email.setValue('')
     }
   }
+  restCustomer(){
+    this.schemeRegistrationForm.controls.Code.setValue('')
+    this.schemeRegistrationForm.controls.MobileNo.setValue('')
+    this.schemeRegistrationForm.controls.Name.setValue('')
+    this.schemeRegistrationForm.controls.Email.setValue('')
+  }
   //search Value Change SCHEME_CUSTCODE
   searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
-    if (event.target.value == '' || this.content?.FLAG == 'VIEW') return
+    if(event.target.value == '') this.restCustomer();
+    if (event.target.value == '' || this.content?.FLAG == 'VIEW') return;
     let API = `PosCustomerMaster/GetCustomerByCode/${searchFlag}=${event.target.value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         this.selectedCustomer(result.response, schemeFlag)
       } else {
         this.reset()
-        this.commonService.toastErrorByMsgId('Customer Not Found!')
+        this.commonService.toastErrorByMsgId('MSG1531')
       }
-    }, err => alert(err))
+    }, err => this.commonService.toastErrorByMsgId('MSG1531'))
     this.subscriptions.push(Sub)
   }
 
@@ -866,7 +897,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SALESPERSON_CODE`, formValue.Salesman);
       this.formdata.append(`Model.model[${i}].schemeData.SALESMAN_NAME`, formValue.SalesmanName);
       this.SchemeMasterDetails.forEach((data: any, index: any) => {
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`, '0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`, data.UNIQUEID ? data.UNIQUEID : '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_CODE`, formValue.Code);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_ID`, '');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SRNO`, data.SRNO || '0');
@@ -963,8 +994,8 @@ export class SchemeRegisterComponent implements OnInit {
           this.detailArray = []
           this.formdata = new FormData();
           Swal.fire({
-            title: result.status,
-            text: result.message || "",
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text:  "",
             icon: 'success',
             showCancelButton: false,
             confirmButtonColor: '#3085d6',
@@ -993,8 +1024,8 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           Swal.fire({
-            title: result.status || 'updated',
-            text: result.message || "",
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text:  "",
             icon: 'success',
             showCancelButton: false,
             confirmButtonColor: '#3085d6',
@@ -1044,7 +1075,7 @@ export class SchemeRegisterComponent implements OnInit {
       if (result.status == "Success") {
         this.close()
         Swal.fire({
-          title: result.message || 'Scheme Deleted!',
+          title: this.commonService.getMsgByID('MSG3588') || 'Deleted',
           text: "",
           icon: 'success',
           showCancelButton: false,

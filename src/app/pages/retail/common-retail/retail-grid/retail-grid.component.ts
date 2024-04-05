@@ -333,7 +333,7 @@ export class RetailGridComponent implements OnInit {
       {
         FIELD_NAME: 'SCHEME_PERIOD',
         DISPLAY_NAME: 'SCHEME PERIOD',
-        ALLIGNMENT: 'left',
+        ALLIGNMENT: 'right',
         DISPLAY_ORDER: 3,
         FORMAT: {}
       },
@@ -480,7 +480,7 @@ export class RetailGridComponent implements OnInit {
       {
         FIELD_NAME: 'VOCNO',
         DISPLAY_NAME: 'VOCNO',
-        ALLIGNMENT: 'left',
+        ALLIGNMENT: 'right',
         DISPLAY_ORDER: 3,
         FORMAT: {}
       },
