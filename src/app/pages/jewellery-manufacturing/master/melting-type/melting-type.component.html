@@ -65,7 +65,7 @@
                             <input type="text"  [readonly]="viewMode || codeEnable"  matInput formControlName="karat" 
                              />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="karatCodeData" (newRowClick)="KaratCodeSelected($event)"
+                        <master-search [MasterSearchData]="karatcodeData" (newRowClick)="karatcodeSelected($event)"
                             *ngIf="SearchDisable == viewMode">
                         </master-search>
                     </div>

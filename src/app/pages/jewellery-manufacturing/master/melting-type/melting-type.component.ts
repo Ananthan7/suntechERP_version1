@@ -72,6 +72,8 @@ export class MeltingTypeComponent implements OnInit {
 
   }
 
+
+
   meltingTypeForm: FormGroup = this.formBuilder.group({
     mid: [],
     code: ['', [Validators.required]],
@@ -169,10 +171,18 @@ export class MeltingTypeComponent implements OnInit {
     }
     else {
 
-      if (this.content && this.content.FLAG == 'EDIT') {
+      if (this.content?.FLAG == 'VIEW') return
+      if (this.content?.FLAG == 'EDIT') { 
         this.updateMeltingType();
         return;
       }
+    
+        // Check if the Default Alloy is empty
+        if (!this.defaultAlloy) {
+          // Display an alert message if Default Alloy is empty
+          alert('Default Alloy cannot be empty');
+          return; // Stop further execution
+        }
 
       if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
         let API = 'MeltingType/InsertMeltingType';
@@ -255,24 +265,25 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.color.setValue(data.CODE)
   }
 
-  karatCodeData: MasterSearchModel = {
+  karatcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 84,
+    LOOKUPID: 17,
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-
   }
 
-  KaratCodeSelected(e: any) {
+  karatcodeSelected(e: any) {
     console.log(e);
+    this.meltingTypeForm.controls.karat.setValue(e.KARAT_CODE);
+  
    
 
-    this.meltingTypeForm.controls.karat.setValue(e['Karat Code']);
+    
     this.meltingTypeForm.controls.purity.setValue(e.STD_PURITY);
 
     console.log(this.meltingTypeForm.value.karat);
