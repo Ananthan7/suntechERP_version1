@@ -285,7 +285,7 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           let totaAMounts = result.dynamicData[0]
-          this.receiptEntryForm.controls.InstallmentAmount.setValue(totaAMounts[0].PAY_AMOUNT_CC)
+          this.setFormControlAmount('InstallmentAmount', totaAMounts[0].PAY_AMOUNT_CC)
           this.gridDataSource = result.dynamicData[1]
           this.receiptEntryForm.controls.paidBalance.setValue(
             this.commonService.emptyToZero(this.gridDataSource[0].RCVD_AMOUNTCC)
@@ -608,7 +608,7 @@ export class AddReceiptComponent implements OnInit {
       }
     } else {
       let amount = this.commonService.CCToFC(form.CurrCode,form.Amount_LC) //amount fc conversion
-      this.setFormControlAmount('Amount_FC', amount.toFixed(2))
+      this.setFormControlAmount('Amount_FC', amount)
     }
     this.setFormControlAmount('Amount_LC', form.Amount_LC)
     this.setFormControlAmount('Header_Amount', form.Amount_LC)
@@ -632,6 +632,7 @@ export class AddReceiptComponent implements OnInit {
       return
     }
     let amount = this.commonService.FCToCC(form.CurrCode,form.Amount_FC) //fc to cc conv
+    // let amount = form.Amount_FC * form.CurrCode  //fc to cc conv
     
     this.setFormControlAmount('Amount_LC', amount)
     this.setFormControlAmount('Header_Amount', amount)
@@ -653,7 +654,7 @@ export class AddReceiptComponent implements OnInit {
     let payAmountSum: number = 0
     // calculating total scheme balancesetFormControlAmount
     this.gridDataSource.forEach((item: any, index: any) => {
-      payAmountSum += parseInt(item.PAY_AMOUNT_CC)
+      payAmountSum += this.commonService.emptyToZero(item.PAY_AMOUNT_CC)
       if (index != 0) {
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'AMOUNT')
@@ -681,6 +682,7 @@ export class AddReceiptComponent implements OnInit {
         item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
       })
+      this.setCommaInGrid()
       this.setNarrationString() //narration add and return
       return
     }
@@ -688,7 +690,16 @@ export class AddReceiptComponent implements OnInit {
       item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
       item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
     })
+    this.setCommaInGrid()
     this.setNarrationString() //narration add
+  }
+  setCommaInGrid(){
+    this.gridDataSource.forEach((item: any, index: number) => {
+      item.PAY_AMOUNT_FC = this.commonService.commaSeperation(item.PAY_AMOUNT_FC)
+      item.PAY_AMOUNT_CC = this.commonService.commaSeperation(item.PAY_AMOUNT_CC)
+      item.RCVD_AMOUNTFC = this.commonService.commaSeperation(item.RCVD_AMOUNTFC)
+      item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTFC)
+    })
   }
   // function to distribute amount to multiple rows in a grid
   distributeAmounts(totalObjects: number, maxAmount: number, inputAmount: number): any[] {

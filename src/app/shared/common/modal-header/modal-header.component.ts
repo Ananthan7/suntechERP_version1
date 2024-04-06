@@ -38,6 +38,7 @@ export class ModalHeaderComponent implements OnInit {
   
   @Input() disableSaveBtn: boolean = false;
   @Input() disableDeleteBtn: boolean = false;
+  @Input() disableAuditTrail: boolean = false;
   @Input() disablePostBtn: boolean = false;
   @Input() isSelectAll: boolean = false;
   @Input() isSelectNone: boolean = false;

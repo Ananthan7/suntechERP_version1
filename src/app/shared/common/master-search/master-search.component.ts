@@ -83,6 +83,7 @@ export class MasterSearchComponent implements OnInit {
   }
   /**use: first call to load data */
   loadData() {
+    this.dataSource = []
     if (this.MasterSearchData.API_VALUE && this.MasterSearchData.API_VALUE != '') {
       this.getAPIValue()
       return

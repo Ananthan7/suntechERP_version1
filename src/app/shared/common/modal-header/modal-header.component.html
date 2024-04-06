@@ -54,6 +54,7 @@
             </div>
             <div class="p-1" *ngIf="isViewAuditTrail">
                 <button type="button" class="btn btn-danger text-center"
+                    [disabled]="disableAuditTrail"
                     (click)="auditTrailClicked()">
                     Audit Trail
                 </button>

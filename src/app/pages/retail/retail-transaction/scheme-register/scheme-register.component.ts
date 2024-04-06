@@ -613,6 +613,7 @@ export class SchemeRegisterComponent implements OnInit {
           let amountcc = this.commonService.emptyToZero(formValue.InstallmentAmount)
           amountcc = this.commonService.decimalQuantityFormat(amountcc,'AMOUNT')
           this.SchemeMasterDetails.forEach((item: any) => {
+            item.PAY_AMOUNT_FC = this.commonService.commaSeperation(amountcc)
             item.PAY_AMOUNT_CC = this.commonService.commaSeperation(amountcc)
             item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
             item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
