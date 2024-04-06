@@ -18,6 +18,7 @@ import Swal from 'sweetalert2';
 export class LabourChargeMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
+  grossWt: boolean = false;
   buttonField: boolean = true;
   forDesignOnlyTrue: boolean = true;
   tableData: any[] = [];
@@ -52,9 +53,10 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrate: boolean = false;
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
-  viewModeSetting :boolean = false;
-  ViewModemethod :boolean = false;
-  
+  viewModeSetting: boolean = false;
+  ViewModemethod: boolean = false;
+  codeEnable1: boolean = true;
+  codeEnable2: boolean = true;
 
   // @ViewChild('codeInput') codeInput!: ElementRef;
   // ngAfterViewInit(): void {
@@ -76,8 +78,9 @@ export class LabourChargeMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
-  //  this.renderer.selectRootElement('#code')?.focus();
-
+    //  this.renderer.selectRootElement('#code')?.focus();
+    this.grossWt = true;
+    this.codeEnable1 = true;
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -91,7 +94,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.setInitialValues();
     }
 
-   
+    // this.metallabourMasterForm.value.onGrossWt.disable();
 
 
     this.metallabourMasterForm.controls['stock_code'].enable();
@@ -521,8 +524,8 @@ export class LabourChargeMasterComponent implements OnInit {
 
   ];
 
-  onlabourtypeChange(){
-    console.log(' Hi' +this.settingTypeList);
+  onlabourtypeChange() {
+    console.log(' Hi' + this.settingTypeList);
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
       const methodControl = this.diamondlabourMasterForm.get('method');
@@ -768,6 +771,16 @@ export class LabourChargeMasterComponent implements OnInit {
     //   this.toastr.error('select all required fields')
     //   return
     // }
+
+    if(this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo)
+      {
+        this.toastr.error('Weight From should be lesser than Weight To')
+      }
+
+      if(this.metallabourMasterForm.value.ctWtFrom > this.metallabourMasterForm.value.ctWtTo)
+        {
+          this.toastr.error('Weight From should be lesser than Weight To')
+        }
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData =
@@ -1057,7 +1070,9 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         })
+        this.metallabourMasterForm.controls.wtTo.setValue('');
       }
+     
     }
 
 
@@ -1075,23 +1090,45 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         })
+        this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
       }
+     
     }
 
 
   }
 
-  // onCtweighttto(event: any) {
-  //   if (this.diamondlabourMasterForm.value.ctWtFrom < this.diamondlabourMasterForm.value.ctWtTo) {
-  //     Swal.fire({
-  //       title: event.message || 'Ct Weight From should be lesser than Weight To',
-  //       text: '',
-  //       icon: 'error',
-  //       confirmButtonColor: '#336699',
-  //       confirmButtonText: 'Ok'
-  //     })
-  //   }
-  // }
+  unitSelected() {
+    console.log(' Hi' + this.unitList);
+    this.metallabourMasterForm.get('metalunitList')?.valueChanges.subscribe((selectedLabourType) => {
+      const settingTypeControl = this.metallabourMasterForm.get('metalunitList');
+      const methodControl = this.metallabourMasterForm.get('onGrossWt');
+      if (selectedLabourType === 'Grams') {
+        this.grossWt = false;
+      } else {
+        this.grossWt = true;
+      }
+      console.log(this.unitList);
+    });
+  }
 
+  WtcodeEnabled() {
+    if (this.metallabourMasterForm.value.wtFrom == '') {
+      this.codeEnable1 = true;
+    }
+    else {
+      this.codeEnable1 = false;
+    }
 
+  }
+
+  CtWtcodeEnabled() {
+    if (this.diamondlabourMasterForm.value.ctWtFrom == '') {
+      this.codeEnable2 = true;
+    }
+    else {
+      this.codeEnable2 = false;
+    }
+
+  }
 }
