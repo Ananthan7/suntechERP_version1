@@ -956,7 +956,7 @@ export class SchemeReceiptComponent implements OnInit {
           this.receiptDetailsForm.controls.VocNo.setValue(respData?.VOCNO);
           Swal.fire({
             title: this.commonService.getMsgByID('MSG2255') || result.status,
-            text: this.commonService.getMsgByID('MSG2255') || result.Message,
+            text: '',
             icon: "success",
             showCancelButton: false,
             confirmButtonColor: "#3085d6",

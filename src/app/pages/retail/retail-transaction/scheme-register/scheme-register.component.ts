@@ -249,13 +249,14 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.SchemeMasterDetails = data.Details
-          this.SchemeMasterDetails.forEach((item: any) => {
+          let detail = data.Details
+          detail.forEach((item: any) => {
             item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
             item.PAY_AMOUNT_CC = this.commonService.commaSeperation(item.PAY_AMOUNT_CC)
             item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
             item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
           })
+          this.SchemeMasterDetails = detail.sort((a:any, b:any) => a.SRNO - b.SRNO);
           if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'DELETE') {
             let schemeReceipts: any[] = this.SchemeMasterDetails.filter((item: any) => item.RCVD_VOCTYPE != '')
             if (schemeReceipts.length == 0) {
