@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header  [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceListMasterForm">
@@ -19,9 +19,9 @@
                                         Code * :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput [readonly]="viewMode" maxlength="6" 
-                                                formControlName="priceCode"  id="code" #code
-                                                (input)="code.value = code.value.toUpperCase()" />
+                                            <input type="text" matInput [readonly]="viewMode" maxlength="6" #priceCode
+                                                formControlName="priceCode"
+                                                (input)="priceCode.value = priceCode.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
                                 </div>
