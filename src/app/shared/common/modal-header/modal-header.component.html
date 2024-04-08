@@ -54,6 +54,7 @@
             </div>
             <div class="p-1" *ngIf="isViewAuditTrail">
                 <button type="button" class="btn btn-danger text-center"
+                    [disabled]="disableAuditTrail"
                     (click)="auditTrailClicked()">
                     Audit Trail
                 </button>
@@ -77,7 +78,7 @@
                     Export
                 </button>
             </div>
-<div class="p-1" *ngIf="isSelectAll">
+            <div class="p-1" *ngIf="isSelectAll">
                 <button type="button" class="btn btn-danger text-center"
                     (click)="selectallClicked()">
                     Select All
@@ -121,16 +122,16 @@
                         <button ngbDropdownItem>
                             Branch: <b>{{branchCode}}</b>
                         </button>
-                        <button ngbDropdownItem>
+                        <button ngbDropdownItem (click)="PrintClicked()" *ngIf="isViewPrint">
                             <!-- <i class="fa fa-print"></i>  -->
                             Print</button>
-                        <button ngbDropdownItem>
+                        <button ngbDropdownItem (click)="AttachmentClicked()" *ngIf="isViewAttachment">
                             <!-- <i class="fa fa-envelopes-bulk icon-common"></i> -->
                             Attachment</button>
-                        <button ngbDropdownItem>
+                        <button ngbDropdownItem *ngIf="isViewCopy">
                             <!-- <i class="fa fa-copy icon-common"></i> -->
                             Copy</button>
-                        <button ngbDropdownItem>
+                        <button ngbDropdownItem *ngIf="isViewLog">
                             <!-- <i class="fa fa-file-lines icon-common"></i> -->
                             Log</button>
                     </div>
