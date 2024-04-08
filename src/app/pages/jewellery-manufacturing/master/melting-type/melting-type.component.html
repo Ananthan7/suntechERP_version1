@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
+<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
         <form [formGroup]="meltingTypeForm">
@@ -17,7 +17,7 @@
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Code * :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 100%; margin-left:-54px; margin-top:-5px;">
                                     <input type="text" #codeInput maxlength="15" [readonly]="editCode" matInput
                                         formControlName="code" oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
                                 </mat-form-field>
@@ -30,7 +30,7 @@
                 <div class="row mb-2">
                     <label for="input" class="col-md-2 col-form-label">Description * :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 100%">
+                        <mat-form-field style="width: 140%; margin-left:-121px; margin-top:-5px;">
                             <input type="text" maxlength="85" matInput [readonly]="viewMode || codeEnable"
                                 formControlName="description" oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
@@ -38,7 +38,7 @@
 
                     <label for="input" class="col-sm-2 col-form-label" >Metal % :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 150%; margin-left:-159px; margin-top:-5px;">
                             <input type="number" matInput [readonly]="viewModeField || codeEnable" step="0.001" min="0"
                                 formControlName="metal" (input)="onInput($event)" style="text-align: right;" />
                         </mat-form-field>
@@ -46,7 +46,7 @@
 
                     <label for="input" class="col-sm-2 col-form-label">Color * :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 70%;">
+                        <mat-form-field style="width: 150%; margin-left:-164px; margin-top:-5px;">
                             <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode || codeEnable" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"
@@ -61,7 +61,7 @@
 
                     <label for="input" class="col-sm-1 col-form-label">Karat :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 70%;">
+                        <mat-form-field style="width: 111%; margin-left:-60px; margin-top:-6px;">
                             <input type="text"  [readonly]="viewMode || codeEnable"  matInput formControlName="karat" 
                              />
                         </mat-form-field>
@@ -72,7 +72,7 @@
 
                     <label for="input" class="col-sm-1 col-form-label">Purity :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 120%; margin-left:-60px; margin-top:-6px;">
                             <input type="number" matInput [readonly]="viewModeField || codeEnable" formControlName="purity"
                                 style="text-align: right;" />
                         </mat-form-field>
@@ -84,7 +84,7 @@
 
                     <label for="input" class="col-sm-1 col-form-label">Alloy % :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 123%; margin-left:-46px; margin-top:-6px;">
                             <input type="number" matInput [readonly]="viewModeField || codeEnable" formControlName="alloy"
                                 (input)="onInput($event)" style="text-align: right;" />
                         </mat-form-field>
@@ -93,7 +93,7 @@
 
                     <label for="input" class="col-sm-1 col-form-label">Stock Code :</label>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 70%;">
+                        <mat-form-field style="width: 86%; margin-left:-20px; margin-top:-6px;">
                             <input type="text" matInput formControlName="stockCode" [readonly]="viewMode || codeEnable" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="stockCodeData" (newRowClick)="StockCodeSelected($event)"
@@ -111,7 +111,7 @@
                     <h6>Alloy Details</h6>
                     <div class="col-md-12">
 
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        <menu-buttons [viewAddBtn]="false" [viewDeleteBtn]="false" [viewImportBtn]="false"
                             (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                         </menu-buttons>
 
@@ -124,6 +124,9 @@
                             </dxi-column>
                             <dxi-column dataField="DEF_ALLOY_STOCK" caption="Default Alloy" cellTemplate="defaultAlloy">
                             </dxi-column>
+                            <!-- <div *ngIf="!rowData.DEF_ALLOY_STOCK">
+                                <p>Default Alloy cannot be empty</p>
+                            </div> -->
                             <dxi-column dataField="MELTYPE_DESCRIPTION" caption="Description"> </dxi-column>
                             <dxi-column dataField="ALLOY_PER" caption="Alloy %" cellTemplate="alloyper">
                             </dxi-column>

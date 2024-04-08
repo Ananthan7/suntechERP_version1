@@ -36,6 +36,7 @@ export class MeltingTypeComponent implements OnInit {
   allStockCodes: any;
   filteredStockCodes: any[] | undefined;
   codeEnable :  boolean = true;
+  rowData: any;
 
   karatval: any;
   purityval: any;
@@ -68,10 +69,7 @@ export class MeltingTypeComponent implements OnInit {
       this.viewMode = false;
       this.setFormValues();
     }
-
-
-  }
-
+}
 
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
@@ -149,11 +147,11 @@ export class MeltingTypeComponent implements OnInit {
       };
       this.tableData.push(data);
       console.log(data);
-    }
+   }
     else {
       this.toastr.error('Please Fill all Mandatory Fields')
     }
-  }
+  }  
 
 
   formSubmit() {
@@ -175,14 +173,8 @@ export class MeltingTypeComponent implements OnInit {
       if (this.content?.FLAG == 'EDIT') { 
         this.updateMeltingType();
         return;
+
       }
-    
-        // Check if the Default Alloy is empty
-        if (!this.defaultAlloy) {
-          // Display an alert message if Default Alloy is empty
-          alert('Default Alloy cannot be empty');
-          return; // Stop further execution
-        }
 
       if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
         let API = 'MeltingType/InsertMeltingType';
@@ -229,6 +221,9 @@ export class MeltingTypeComponent implements OnInit {
         this.toastr.error('Fill All Mandatory Field and provide table data');
       }
     }
+  }
+  getRowDataForColumn(arg0: string) {
+    throw new Error('Method not implemented.');
   }
 
   onInput(event: Event): void {

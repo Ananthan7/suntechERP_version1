@@ -61,15 +61,35 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+    this.setFormValues()
     if (this.content.FLAG == 'VIEW') {
     
     } else if (this.content.FLAG == 'EDIT') {
       this.codeEnable = false;
       this.enableUpdate = false;
       this.approveDisable = false;
+     this.setFormValues()
     }
   }
-
+  setFormValues() {
+    console.log(this.content);
+    if (!this.content) return
+    this.customerpricesettingForm.controls.pricecode.setValue(this.content.PRICE_CODE)
+    this.customerpricesettingForm.controls.date.setValue(this.content.DEL_DATE)
+    this.customerpricesettingForm.controls.description.setValue(this.content.DESCRIPTION)
+    this.customerpricesettingForm.controls.division.setValue(this.content.DIVISION_CODE)
+    this.customerpricesettingForm.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.customerpricesettingForm.controls.approvedby.setValue(this.content.APPROVED_BY)
+    this.customerpricesettingForm.controls.enteredBy.setValue(this.content.ENTERED_BY)
+    this.customerpricesettingForm.controls.stockCode.setValue(this.content.STOCK_CODE)
+    this.customerpricesettingForm.controls.designCode.setValue(this.content.DESIGN_CODE)
+    this.customerpricesettingForm.controls.group1.setValue(this.content.GROUP1)
+    this.customerpricesettingForm.controls.group2.setValue(this.content.GROUP2)
+    this.customerpricesettingForm.controls.group3.setValue(this.content.GROUP3)
+    this.customerpricesettingForm.controls.group4.setValue(this.content.GROUP4)
+    this.customerpricesettingForm.controls.group5.setValue(this.content.GROUP5)
+    this.customerpricesettingForm.controls.group6.setValue(this.content.GROUP6)
+  }
   selectStock() {
     this.checkboxvalue = !this.checkboxvalue;
   }
