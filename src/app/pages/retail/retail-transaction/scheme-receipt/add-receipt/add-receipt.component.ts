@@ -669,18 +669,24 @@ export class AddReceiptComponent implements OnInit {
       this.setFormControlAmount('Header_Amount', 0)
       return
     }
-
     let totalSpiltAmtLC = formData.paidBalance + Amount_LC
     let totalSpiltAmtFC = this.commonService.CCToFC(this.commonService.compCurrency, totalSpiltAmtLC)
+    console.log(totalSpiltAmtLC,'totalSpiltAmtLC');
+    console.log(totalSpiltAmtFC,'totalSpiltAmtFC');
+    
     // function call to calculate and split amount to rows
     let FixedArrLC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtLC)
     let FixedArrFC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtFC)
     
     if (this.commonService.nullToString(formData.CurrCode) != '') {
+     totalSpiltAmtFC = this.commonService.CCToFC(formData.CurrCode, totalSpiltAmtLC)
+     FixedArrFC = this.distributeAmounts(this.gridDataSource.length, InstallmentAmount, totalSpiltAmtFC)
+      
       this.gridDataSource.forEach((item: any, index: number) => {
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
-        item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
+        // item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
+        // item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
       })
       this.setCommaInGrid()
       this.setNarrationString() //narration add and return
@@ -698,7 +704,7 @@ export class AddReceiptComponent implements OnInit {
       item.PAY_AMOUNT_FC = this.commonService.commaSeperation(item.PAY_AMOUNT_FC)
       item.PAY_AMOUNT_CC = this.commonService.commaSeperation(item.PAY_AMOUNT_CC)
       item.RCVD_AMOUNTFC = this.commonService.commaSeperation(item.RCVD_AMOUNTFC)
-      item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTFC)
+      item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
     })
   }
   // function to distribute amount to multiple rows in a grid

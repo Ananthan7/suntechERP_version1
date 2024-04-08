@@ -128,17 +128,19 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-lg-5 col-md-6 col-sm-12 d-flex">
-                                <span class="matlabels">Mobile
-                                </span>
-                                <span style="width: 70%">
-                                    <mat-form-field style="width: 80%">
-                                        <input type="text" matInput
-                                            [readonly]="viewMode"
-                                            (focusout)="customerChange($event,'PosCustomerMaster/GetCustomerMaster/Mobile')"
-                                            formControlName="POSCustomerMobile" />
-                                    </mat-form-field>
-                                </span>
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">Mobile
+                                    </span>
+                                    <span style="width: 70%">
+                                        <mat-form-field style="width: 80%">
+                                            <input type="text" matInput
+                                                [readonly]="viewMode"
+                                                (focusout)="customerChange($event,'PosCustomerMaster/GetCustomerMaster/Mobile')"
+                                                formControlName="POSCustomerMobile" />
+                                        </mat-form-field>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -229,7 +231,7 @@
                                     </span>
                                     <span style="width: 70%">
                                         <mat-form-field
-                                            style="width: 75%">
+                                            style="width: 80%">
                                             <input type="text" readonly
                                                 matInput
                                                 formControlName="SchemeCode"
