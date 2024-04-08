@@ -119,11 +119,10 @@ export class WaxProcessComponent implements OnInit {
   }
 
   getJobNumberDetails() {   
-    this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=14158`).subscribe((result) => {
-      console.log(this.tableData);
-      if (result.response) {
-        this.tableData = result.response;
-      }
+    this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=14529`).subscribe((result) => {
+      // console.log(this.tableData);
+      console.log(result.dynamicData);
+      this.tableData = result.dynamicData
     });
   }
 
