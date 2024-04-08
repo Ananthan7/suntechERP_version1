@@ -171,7 +171,7 @@ export class MasterSearchComponent implements OnInit {
     }
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
-    this.overlayPanels.hide();
+    // this.overlayPanels.hide();
   }
   //handle Row Click of table
   handleRowClick(event: any) {

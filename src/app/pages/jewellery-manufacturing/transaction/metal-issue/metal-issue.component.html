@@ -81,16 +81,18 @@
                                         class="col-sm-4 col-form-label">Entered
                                         By:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="enteredBy"
-                                                [readonly]="viewMode" />
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="enteredByCodeData"
-                                            (newRowClick)="enteredByCodeSelected($event)"
-                                            *ngIf="!viewMode">
-                                        </master-search>
+                                        <span>
+                                            <mat-form-field style="width: 90%;">
+                                                <input type="text" matInput
+                                                    formControlName="enteredBy"
+                                                    [readonly]="viewMode" />
+                                            </mat-form-field>
+                                            <master-search
+                                                [MasterSearchData]="enteredByCodeData"
+                                                (newRowClick)="enteredByCodeSelected($event)"
+                                                *ngIf="!viewMode">
+                                            </master-search>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +107,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 class="text-right"
-                                                formControlName="vocno" readonly />
+                                                formControlName="vocno"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -116,21 +119,24 @@
                                         class="col-sm-4 col-form-label">Worker
                                         :</label>
                                     <div class="col-md-7 d-flex">
-                                        <mat-form-field style="width: 30%;">
-                                            <input type="text" matInput
-                                                formControlName="worker"
-                                                [readonly]="viewMode" />
-                                        </mat-form-field>
-                                        <mat-form-field style="width: 70%;margin-left: 4px;">
-                                            <input type="text" matInput
-                                                formControlName="workerDes"
-                                                [readonly]="viewMode" />
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="workerCodeData"
-                                            (newRowClick)="workerCodeSelected($event)"
-                                            *ngIf="!viewMode">
-                                        </master-search>
+                                        <span>
+                                            <mat-form-field style="width: 30%;">
+                                                <input type="text" matInput
+                                                    formControlName="worker"
+                                                    [readonly]="viewMode" />
+                                            </mat-form-field>
+                                            <mat-form-field
+                                                style="width: 60%;margin-left: 4px;">
+                                                <input type="text" matInput
+                                                    formControlName="workerDes"
+                                                    [readonly]="viewMode" />
+                                            </mat-form-field>
+                                            <master-search
+                                                [MasterSearchData]="workerCodeData"
+                                                (newRowClick)="workerCodeSelected($event)"
+                                                *ngIf="!viewMode">
+                                            </master-search>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
