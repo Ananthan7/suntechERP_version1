@@ -22,6 +22,7 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   buttonField: boolean = true;
   viewMode: boolean = false;
+  viewModeBtn:boolean = true;
   isViewMode: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
@@ -160,7 +161,7 @@ export class WorkerMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    this.buttonField = true;
+    this.viewModeBtn = false;
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
@@ -275,6 +276,8 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   updateWorkerMaster() {
+    this.viewModeBtn=false;
+     
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return

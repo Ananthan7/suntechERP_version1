@@ -142,8 +142,7 @@
                     <dxi-column dataField="OrdPcs" caption="Ord Pcs" cellTemplate="OrdPcstemp">
                     </dxi-column>
                     <dxi-column dataField="IssuePcs" caption="Issue Pcs" cellTemplate="IssuePcstemp">
-                    </dxi-column>
-              
+                    </dxi-column>             
 
                   <div *dxTemplate="let data of 'jobNumbertemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
@@ -151,20 +150,15 @@
                       (newRowClick)="jobNumberDataSelected($event,data)">
                     </master-search>
                   </div>
-
                   <div *dxTemplate="let data of 'designtemp'">
-
                     <input type="text" [value]="data.value" (change)="designtextevent($event,data)" [attr.readonly]= "isReadOnly"  />
                   </div>
-
                   <div *dxTemplate="let data of 'partytemp'">
                     <input type="text" [value]="data.value" (change)="partytextevent($event,data)"  />
                   </div>
-
                   <div *dxTemplate="let data of 'Sotemp'">
                     <input type="text" [value]="data.value" (change)="Sotextevent($event,data)" />
                   </div>
-
                   <div *dxTemplate="let data of 'SoDatetemp'">
                     <input type="date" [value]="data.value" (change)="SoDatetextevent($event,data)"  />
                   </div>
@@ -186,18 +180,15 @@
                   <div *dxTemplate="let data of 'IssuePcstemp'">
                     <input type="number" (change)="IssuePcstextevent($event,data)"  class="text-right"  MetalDecimalInput/>
                   </div>
-
                   <dxo-summary>
                     <dxi-total-item column="GrossWt">
                     </dxi-total-item>
                     <dxi-total-item column="OrdPcs">
                     </dxi-total-item>
                     <dxi-total-item column="IssuePcs">
-                    </dxi-total-item>                 
-
+                    </dxi-total-item>               
                   </dxo-summary>
                 </dx-data-grid>
-
               </div>
                <div class="col-md-4">
                 <div class="row my-2">

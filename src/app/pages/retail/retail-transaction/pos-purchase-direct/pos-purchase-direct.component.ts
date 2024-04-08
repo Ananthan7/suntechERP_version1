@@ -199,8 +199,6 @@ export class PosPurchaseDirectComponent implements OnInit {
     }
 
     const saveApi = 'OldGoldPurchase/InsertMetalPurchase';
-
-
     let postData = {
       "MID": 0,
       "BRANCH_CODE": "string",
