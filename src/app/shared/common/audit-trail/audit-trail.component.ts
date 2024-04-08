@@ -15,6 +15,7 @@ export class AuditTrailComponent implements OnInit {
   @Input() gridData: any[] = [];
   @ViewChild('content') public content!: NgbModal;
   private subscriptions: Subscription[] = [];
+  gridAmountDecimalFormat: any;
 
   constructor(
     private modalService: NgbModal,
@@ -23,10 +24,14 @@ export class AuditTrailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+      currency: 'AED'
+    };
   }
 
-  showDialog(formData:any) {
+  showDialog(formData: any) {
     const modalRef: NgbModalRef = this.modalService.open(this.content, {
       size: "lg",
       backdrop: true, //'static'
@@ -46,17 +51,23 @@ export class AuditTrailComponent implements OnInit {
     );
     this.getPostedData(formData)
   }
-
-  getPostedData(formData:any) {
-    let API = `SchemeCurrencyReceipt/GetAuditTrial`+
-    `/${formData.BRANCH_CODE}`+
-    `/${formData.VOCTYPE}/${formData.VOCNO}`+
-    `/${formData.MID}/${formData.YEARMONTH}`+
-    `/n`
+ 
+  getPostedData(formData: any) {
+    let API = `SchemeCurrencyReceipt/GetAuditTrial` +
+      `/${formData.BRANCH_CODE}` +
+      `/${formData.VOCTYPE}/${formData.VOCNO}` +
+      `/${formData.MID}/${formData.YEARMONTH}` +
+      `/n`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.dynamicData) {
           this.gridData = result.dynamicData[0]
+          if (this.gridData.length > 0) {
+            this.gridData.forEach((item: any) => {
+              item.AMOUNTCC_DEBIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_DEBIT, 'AMOUNT')
+              item.AMOUNTCC_CREDIT = this.commonService.decimalQuantityFormat(item.AMOUNTCC_CREDIT, 'AMOUNT')
+            })
+          }
         } else {
           this.commonService.toastErrorByMsgId('not found')
         }
