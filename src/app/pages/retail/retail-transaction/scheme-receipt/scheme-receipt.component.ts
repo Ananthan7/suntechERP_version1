@@ -345,7 +345,7 @@ export class SchemeReceiptComponent implements OnInit {
             });
           }
           this.calculateTotalonView();
-
+          this.setCommaInGrid()
           // this.ChangeDetector.detectChanges()
         } else {
           this.commonService.toastErrorByMsgId("No Response Found" || resp.Message);
@@ -355,6 +355,12 @@ export class SchemeReceiptComponent implements OnInit {
       }
       );
     this.subscriptions.push(Sub);
+  }
+  setCommaInGrid(){
+    this.orderedItems.forEach((item: any, index: number) => {
+      item.AMOUNTFC = this.commonService.commaSeperation(item.AMOUNTFC)
+      item.AMOUNTCC = this.commonService.commaSeperation(item.AMOUNTCC)
+    })
   }
   calculateDueDays() {
     let date = this.commonService.addDaysToDate(this.receiptDetailsForm.value.RefDate, this.receiptDetailsForm.value.DueDays)
