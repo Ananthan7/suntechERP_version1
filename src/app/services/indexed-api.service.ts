@@ -40,6 +40,13 @@ export class IndexedApiService {
         // this.comFunc.setCompParaValues();
       }
     });
+    this.inDb.getAllData('ReasonMaster').subscribe((data) => {
+      if (data.length == 0) {
+        this.getReasonMasterList();
+      } else {
+        this.comFunc.reasonMasterList = data;
+      }
+    });
     this.inDb.getAllData('compparams').subscribe((data) => {
       if (data.length == 0) {
         this.getAllCompanyParameters();
@@ -367,6 +374,14 @@ export class IndexedApiService {
       if (resp.status == 'Success') {
         this.comFunc.LocationMasterData = resp.response;
         this.inDb.bulkInsert('LocationMaster', resp.response);
+      }
+    });
+  }
+  getReasonMasterList() {
+    this.suntechApi.getDynamicAPI('GeneralMaster/GetGeneralMasterList/reason%20master').subscribe((resp) => {
+      if (resp.status == 'Success') {
+        this.comFunc.reasonMasterList = resp.response;
+        this.inDb.bulkInsert('ReasonMaster', resp.response);
       }
     });
   }

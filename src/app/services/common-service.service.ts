@@ -61,6 +61,7 @@ export class CommonServiceService {
   public SalespersonMasterData: any = [];
   public VocTypeMasterData: any = [];
   private DECIMAL_CONSTANTS_FLAG: any = {};
+  public reasonMasterList: any = [];
 
   constructor(
     private route: ActivatedRoute,

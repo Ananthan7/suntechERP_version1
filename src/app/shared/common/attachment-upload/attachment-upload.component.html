@@ -1,1 +1,100 @@
-<p>attachment-upload works!</p>
+<ng-template #content let-modal>
+    <div class="card">
+        <div class="modal-header">
+            <h4 class="modal-title">Attachment</h4>
+            <button type="button" class="btn-close" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body" *ngIf="savedAttachment.length > 0">
+            <div class="row">
+                <dx-data-grid id="gridContainer"
+                    [dataSource]="savedAttachment"
+                    [showRowLines]="true"
+                    height="150" [columnAutoWidth]="true"
+                    [showBorders]="true"
+                    [allowColumnResizing]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <!-- <dxi-column dataField="BRANCH_CODE" caption="Remarks"
+                    alignment="left">
+                </dxi-column> -->
+                    <dxi-column dataField="file"
+                        cellTemplate="attachmentTemp" caption="Attachment"
+                        [allowEditing]="true"
+                        alignment="center">
+                    </dxi-column>
+                    <div *dxTemplate="let data of 'attachmentTemp'">
+                        <a (click)="openAttachment(data)"
+                            [hidden]="data.value === false">
+                            <i class="fa fa-paperclip"
+                                style="color: #337ab7"></i></a>
+                        <dxi-button icon="fa fa-paperclip"></dxi-button>
+                    </div>
+                </dx-data-grid>
+            </div>
+        </div>
+        <div class="modal-body" *ngIf="savedAttachment.length == 0">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 ">
+                    <div class="drop-area"
+                        (dragover)="onDragOver($event)"
+                        (dragleave)="onDragLeave($event)"
+                        (drop)="onDrop($event)">
+                        Drag & Drop files here
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12"
+                    style="border-left: 2px dashed #d3d3d3;">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2">
+                            <input class="fileAttach pt-2"
+                                type="file" (change)="onFileChange($event)"
+                                [disabled]="viewMode" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <dx-data-grid id="gridContainer"
+                    [dataSource]="Attachedfile"
+                    [showRowLines]="true"
+                    height="150" [columnAutoWidth]="true"
+                    [showBorders]="true"
+                    [allowColumnResizing]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <!-- <dxi-column dataField="BRANCH_CODE" caption="Remarks"
+                    alignment="left">
+                </dxi-column> -->
+                    <dxi-column dataField="name"
+                        caption="Name"
+                        alignment="left">
+                    </dxi-column>
+                </dx-data-grid>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <button
+                        type="submit"
+                        mat-flat-button
+                        color="primary"
+                        class="btn-m-r-10"
+                        (click)="uploadSubmited()">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- <div class="row">
+                    <div class="col-md-12 col-sm-12 d-flex">
+                        <span>
+                            <mat-form-field style="width: 100%">
+                                <input type="text" matInput
+                                    placeholder="Remarks"
+                                    class="text-right" [(ngModel)]="Remarks" />
+                            </mat-form-field>
+                        </span>
+                    </div>
+                </div> -->
