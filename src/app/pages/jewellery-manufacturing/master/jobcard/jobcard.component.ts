@@ -369,7 +369,7 @@ export class JobcardComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
-    this.jobCardFrom.controls['date'].disable()
+    // this.jobCardFrom.controls['date'].disable()
     console.log(this.content);
     if (this.content) {
       this.setFormValues()
@@ -947,7 +947,7 @@ export class JobcardComponent implements OnInit {
     let postData = {
       "JOB_NUMBER": this.jobCardFrom.value.jobno || "",
       "BRANCH_CODE": this.branchCode,
-      "JOB_DATE": this.jobCardFrom.value.jobdate || "",
+      "JOB_DATE": this.jobCardFrom.value.JOB_DATE || "",
       "JOB_DESCRIPTION": "",
       "JOB_PREFIX": "",
       "CURRENCY_CODE": this.jobCardFrom.value.currency || "",
@@ -997,7 +997,7 @@ export class JobcardComponent implements OnInit {
       "JOB_PCS_PENDING": 0,
       "OUTSIDEJOB": true,
       "TREE_CODE": "",
-      "DEL_DATE": this.jobCardFrom.value.deldate || "",
+      "DEL_DATE": this.jobCardFrom.value.JOB_DATE || "",
       "REP_STOCK_CODE": "",
       "REPAIRJOB": 0,
       "METAL_STOCK_CODE": "",

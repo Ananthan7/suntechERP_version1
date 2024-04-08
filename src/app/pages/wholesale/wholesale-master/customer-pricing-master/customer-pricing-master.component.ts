@@ -114,6 +114,7 @@ export class CustomerPricingMasterComponent implements OnInit {
     bypercentage: [''],
   })
 
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,

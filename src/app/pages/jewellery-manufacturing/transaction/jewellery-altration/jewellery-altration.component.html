@@ -105,24 +105,23 @@
           </div>
           </div>
           <div class="col-md-4">
-
-            <div class=" row ">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Metal
-                Rate :</label>
-              <div class="col-md-3">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="metalrate"
-                    [readonly]="viewMode" SixDecimalInput class="text-right"/>
-                </mat-form-field>
+            <div class="row mb-4">
+              <label for="input" class="col-sm-3 col-form-label">Metal Rate:</label>
+              <div class="col-sm-3">
+                  <mat-form-field style="width: 70%;">
+                      <input type="text" matInput formControlName="metalrate" [readonly]="viewMode" SixDecimalInput/>
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="rateTypeMasterData"
+                  (newRowClick)="rateTypeSelected($event)"> </master-search>
               </div>
-              <div class="col-md-3">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="metalratetype"  SixDecimalInput
-                    style="text-align: right;"
-                    [readonly]="viewMode" />
-                </mat-form-field>
+              <div class="col-sm-2">
+                  <mat-form-field style="width: 140%;">
+                      <input type="text" matInput formControlName="metalratetype" [readonly]="viewMode" class="text-right"/>
+                  </mat-form-field>
+                 
               </div>
-            </div>
+          </div>
+           
             <div class="row">
               <label for="inputPassword" class="col-sm-4 col-form-label">Cost
                 Code :</label>

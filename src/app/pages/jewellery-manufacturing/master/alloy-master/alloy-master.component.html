@@ -326,8 +326,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
-                                            formControlName="price1per" (keypress)="isNumeric($event)"
-                                            style="text-align: right;" max="100" [readonly]="viewMode"/>
+                                            formControlName="price1per" 
+                                            class="text-right" maxlength="14" [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

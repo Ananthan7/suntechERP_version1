@@ -22,6 +22,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   tableData: any[] = [];
   radius!: number;
   viewMode: boolean = false;
+  editableMode: boolean = false;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -64,6 +65,7 @@ export class ComponentSizeMasterComponent implements OnInit {
       this.viewMode = true;
      
     } else if (this.content.FLAG == 'EDIT') {
+      this.editableMode = true;
       this.setFormValues()
     }
   }
@@ -119,6 +121,7 @@ export class ComponentSizeMasterComponent implements OnInit {
 
     if (this.content?.FLAG == 'VIEW') return
     if (this.content?.FLAG == 'EDIT') {
+      
       this.update()
       return
     }

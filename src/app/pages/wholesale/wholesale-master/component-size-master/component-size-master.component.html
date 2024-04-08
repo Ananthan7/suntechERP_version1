@@ -16,7 +16,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Code * :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput class="text-left" formControlName="code"   [readonly]="viewMode"  oninput="this.value = this.value.toUpperCase()" maxlength="6" #codeInput1/>
+                  <input type="text" matInput class="text-left" formControlName="code"   [readonly]="editableMode || viewMode"  oninput="this.value = this.value.toUpperCase()" maxlength="6" #codeInput1/>
                 </mat-form-field>
               </div>
             </div>

@@ -73,8 +73,28 @@ export class JewelleryAltrationComponent implements OnInit {
     this.jewelleryaltrationFrom.controls.itemcurrency.setValue(e.CURRENCY_CODE);
     this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(e.CONV_RATE);
   }
+  rateTypeMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'RATE TYPE MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  rateTypeSelected(event: any) {
+    this.jewelleryaltrationFrom.controls.metalrate.setValue(event.RATE_TYPE)
+    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.RATE_TYPE == event.RATE_TYPE)
 
-
+    data.forEach((element: any) => {
+      if (element.RATE_TYPE == event.RATE_TYPE) {
+        let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
+        this.jewelleryaltrationFrom.controls.metalratetype.setValue(WHOLESALE_RATE)
+      }
+    });
+  }
 
   constructor(
     private activeModal: NgbActiveModal,

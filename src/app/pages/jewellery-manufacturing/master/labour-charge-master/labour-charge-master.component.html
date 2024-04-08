@@ -157,7 +157,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" [readonly]="viewMode" CommaSeparatedNumber matInput                  
+                  <input type="number" [readonly]="viewMode" SixDecimalInput matInput                  
                     (keypress)="salesChangesDia('selling_rate')" style="text-align: right;"
                     formControlName="selling_rate" />
                 </mat-form-field>
@@ -310,8 +310,8 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" [readonly]="viewMode"   matInput
-                  AmountDecimalInput formControlName="metalcost_rate" class="text-right" />
+                  <input matInput type="text" [readonly]="viewMode"   matInput
+                  AmountDecimalInput formControlName="metalcost_rate" class="text-right" maxlength="16"/>
                 </mat-form-field>
               </div>
             </div>
@@ -327,7 +327,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" [readonly]="viewMode" SixDecimalInput  matInput
+                  <input matInput type="number" [readonly]="viewMode" AmountDecimalInput  matInput  maxlength="13"
                     formControlName="metalselling_rate" (keypress)="salesChangesMetal('metalselling_rate')"
                     style="text-align: right;" />
                 </mat-form-field>

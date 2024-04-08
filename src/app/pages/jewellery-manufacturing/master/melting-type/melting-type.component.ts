@@ -36,6 +36,7 @@ export class MeltingTypeComponent implements OnInit {
   allStockCodes: any;
   filteredStockCodes: any[] | undefined;
   codeEnable :  boolean = true;
+  rowData: any;
 
   karatval: any;
   purityval: any;
@@ -68,9 +69,8 @@ export class MeltingTypeComponent implements OnInit {
       this.viewMode = false;
       this.setFormValues();
     }
+}
 
-
-  }
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -147,11 +147,11 @@ export class MeltingTypeComponent implements OnInit {
       };
       this.tableData.push(data);
       console.log(data);
-    }
+   }
     else {
       this.toastr.error('Please Fill all Mandatory Fields')
     }
-  }
+  }  
 
 
   formSubmit() {
@@ -169,9 +169,11 @@ export class MeltingTypeComponent implements OnInit {
     }
     else {
 
-      if (this.content && this.content.FLAG == 'EDIT') {
+      if (this.content?.FLAG == 'VIEW') return
+      if (this.content?.FLAG == 'EDIT') { 
         this.updateMeltingType();
         return;
+
       }
 
       if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
@@ -220,6 +222,9 @@ export class MeltingTypeComponent implements OnInit {
       }
     }
   }
+  getRowDataForColumn(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
 
   onInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
@@ -255,24 +260,25 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.color.setValue(data.CODE)
   }
 
-  karatCodeData: MasterSearchModel = {
+  karatcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 84,
+    LOOKUPID: 17,
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-
   }
 
-  KaratCodeSelected(e: any) {
+  karatcodeSelected(e: any) {
     console.log(e);
+    this.meltingTypeForm.controls.karat.setValue(e.KARAT_CODE);
+  
    
 
-    this.meltingTypeForm.controls.karat.setValue(e['Karat Code']);
+    
     this.meltingTypeForm.controls.purity.setValue(e.STD_PURITY);
 
     console.log(this.meltingTypeForm.value.karat);

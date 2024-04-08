@@ -54,67 +54,6 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingMetal: boolean = false;
   viewModeSetting :boolean = false;
   ViewModemethod :boolean = false;
-  
-
-  // @ViewChild('codeInput') codeInput!: ElementRef;
-  // ngAfterViewInit(): void {
-  //   this.codeInput.nativeElement.focus();
-  // }
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
-  @ViewChild('codeInput2') codeInput2!: ElementRef;
-  ngAfterViewInit() {
-    // Focus on the first input
-    if (this.codeInput1) {
-      this.codeInput1.nativeElement.focus();
-    }
-    setTimeout(() => {
-      if (this.codeInput2) {
-        this.codeInput2.nativeElement.focus();
-      }
-    }, 2000); // Adjust the delay as needed
-  }
-
-  ngOnInit(): void {
-
-  //  this.renderer.selectRootElement('#code')?.focus();
-
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.viewDisable = true;
-      this.setFormValues();
-      this.setInitialValues();
-    }
-    else (this.content.FLAG == 'EDIT')
-    {
-      this.editMode = true;
-      this.setFormValues();
-      this.setInitialValues();
-    }
-
-   
-
-
-    this.metallabourMasterForm.controls['stock_code'].enable();
-    this.metallabourMasterForm.controls['color'].enable();
-    this.metallabourMasterForm.controls['metallabourType'].enable();
-
-    this.getcurrencyOptions()
-
-  }
-
-
-  constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService,
-    private renderer: Renderer2,
-  ) { }
-
-
-
-
 
   diamondlabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -126,7 +65,7 @@ export class LabourChargeMasterComponent implements OnInit {
     size_from: ['', [Validators.required]],
     labour_ac: ['', [Validators.required]],
     size_to: ['', [Validators.required]],
-    cost_rate: ['', [Validators.required]],
+    cost_rate: [0, [Validators.required]],
     sieve: ['', [Validators.required]],
     selling_rate: [''],
     sieve_desc: [''],
@@ -169,8 +108,59 @@ export class LabourChargeMasterComponent implements OnInit {
     wtTo: [''],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
-  });
+  }); 
 
+  // @ViewChild('codeInput') codeInput!: ElementRef;
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
+  // }
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
+  @ViewChild('codeInput2') codeInput2!: ElementRef;
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      this.codeInput1.nativeElement.focus();
+    }
+    setTimeout(() => {
+      if (this.codeInput2) {
+        this.codeInput2.nativeElement.focus();
+      }
+    }, 2000); // Adjust the delay as needed
+  }
+
+  ngOnInit(): void {
+
+  //  this.renderer.selectRootElement('#code')?.focus();
+
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.viewDisable = true;
+      this.setFormValues();
+      this.setInitialValues();
+    }
+    else (this.content.FLAG == 'EDIT')
+    {
+      this.editMode = true;
+      this.setFormValues();
+      this.setInitialValues();
+    }
+    this.metallabourMasterForm.controls['stock_code'].enable();
+    this.metallabourMasterForm.controls['color'].enable();
+    this.metallabourMasterForm.controls['metallabourType'].enable();
+
+    this.getcurrencyOptions()
+
+  }
+
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
+    private renderer: Renderer2,
+  ) { }
 
   salesChangesDia(data: any) {
     console.log(data);
@@ -627,6 +617,7 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log(this.commonService.amtFormat)
     this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
 

@@ -15,8 +15,9 @@ export class ModalHeaderComponent implements OnInit {
   @Output() changeJobClick = new EventEmitter();
   @Output() auditTrailClick = new EventEmitter();
   @Output() postClick = new EventEmitter();
+  @Output() printClick = new EventEmitter();
+  @Output() attachmentClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
-  @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
   @Input() isViewContinue: boolean = false;
   @Input() isViewSaveGridData: boolean = false;
@@ -28,8 +29,16 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+
+  @Input() isViewMore: boolean = true;
+  @Input() isViewPrint: boolean = true;
+  @Input() isViewAttachment: boolean = true;
+  @Input() isViewCopy: boolean = true;
+  @Input() isViewLog: boolean = true;
+  
   @Input() disableSaveBtn: boolean = false;
   @Input() disableDeleteBtn: boolean = false;
+  @Input() disableAuditTrail: boolean = false;
   @Input() disablePostBtn: boolean = false;
   @Input() isSelectAll: boolean = false;
   @Input() isSelectNone: boolean = false;
@@ -71,7 +80,13 @@ export class ModalHeaderComponent implements OnInit {
   PostClicked() {
     this.postClick.emit();
   }
+  PrintClicked() {
+    this.printClick.emit();
+  }
   ExportClicked() {
+  }
+  AttachmentClicked(){
+    this.attachmentClick.emit();
   }
   PreviewClicked() {
 
