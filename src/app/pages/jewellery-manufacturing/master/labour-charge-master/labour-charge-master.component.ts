@@ -1097,8 +1097,10 @@ export class LabourChargeMasterComponent implements OnInit {
       const methodControl = this.metallabourMasterForm.get('onGrossWt');
       if (selectedLabourType === 'Grams') {
         this.grossWt = false;
+
       } else {
         this.grossWt = true;
+        this.metallabourMasterForm.controls.onGrossWt.setValue(false);
       }
       console.log(this.unitList);
     });
