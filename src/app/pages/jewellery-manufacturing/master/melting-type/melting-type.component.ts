@@ -129,8 +129,22 @@ export class MeltingTypeComponent implements OnInit {
    
   }
 
-  addTableData() {
-    if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "" && this.meltingTypeForm.value.color != "") {
+    addTableData() {
+      const formValue = this.meltingTypeForm.value;
+    
+      if (!formValue.code) {
+        this.toastr.error('Code cannot be empty');
+        return;
+      }
+    
+      if (!formValue.description) {
+        this.toastr.error('Description cannot be empty');
+        return;
+      }
+      if (!formValue.color) {
+        this.toastr.error('Color cannot be empty');
+        return;
+      }
       let length = this.tableData.length;
       this.slNo = length + 1;
       let data = {
@@ -147,13 +161,7 @@ export class MeltingTypeComponent implements OnInit {
       };
       this.tableData.push(data);
       console.log(data);
-   }
-    else {
-      this.toastr.error('Please Fill all Mandatory Fields')
-    }
   }  
-
-
   formSubmit() {
 
     const totalAlloyPer = this.tableData
@@ -161,21 +169,29 @@ export class MeltingTypeComponent implements OnInit {
       .reduce((acc, val) => acc + val, 0);
     console.log("Total ALLOY_PER:", totalAlloyPer);
 
-    if (totalAlloyPer > 100) {
-      this.toastr.error('Alloy Percentage Should not be greater than 100');
+    if (totalAlloyPer !== 100) {
+      if (totalAlloyPer > 100) {
+        this.toastr.error('Alloy Percentage should not be greater than 100');
+      } else {
+        this.toastr.error('Alloy Percentage should not be lesser than 100');
+      }
+      return; // Exit the method if the total alloy percentage is not 100
     }
-    else if (totalAlloyPer < 100) {
-      this.toastr.error('Alloy Percentage Should not be lesser than 100');
+  
+    // Check if any Default Alloy is empty
+    const defaultAlloyEmpty = this.tableData.some(item => !item.DEF_ALLOY_STOCK);
+  
+    if (defaultAlloyEmpty) {
+      this.toastr.error('Default Alloy cannot be empty');
+      return; // Exit the method if any Default Alloy is empty
     }
-    else {
-
       if (this.content?.FLAG == 'VIEW') return
       if (this.content?.FLAG == 'EDIT') { 
         this.updateMeltingType();
         return;
-
       }
-
+      
+    
       if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
         let API = 'MeltingType/InsertMeltingType';
         let postData = {
@@ -220,8 +236,8 @@ export class MeltingTypeComponent implements OnInit {
       } else {
         this.toastr.error('Fill All Mandatory Field and provide table data');
       }
-    }
-  }
+}
+  
   getRowDataForColumn(arg0: string) {
     throw new Error('Method not implemented.');
   }

@@ -120,15 +120,22 @@ export class MetalReturnComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.setInitialValues()
-    this.setAllInitialValues()
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    }
     if (this.content?.FLAG) {
       this.metalReturnForm.controls.FLAG.setValue(this.content.FLAG)
     }
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.setAllInitialValues()
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setAllInitialValues()
+      return
+    }
+    this.setInitialValues()
   }
+ 
+  
 
 
   setInitialValues() {

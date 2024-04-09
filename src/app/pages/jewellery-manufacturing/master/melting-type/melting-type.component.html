@@ -111,7 +111,8 @@
                     <h6>Alloy Details</h6>
                     <div class="col-md-12">
 
-                        <menu-buttons [viewAddBtn]="false" [viewDeleteBtn]="false" [viewImportBtn]="false"
+                        <menu-buttons [viewAddBtn]="true"  [viewDeleteBtn]="true " [viewImportBtn]="false"  [viewAddBtn]="!viewMode"
+                        [viewDeleteBtn]="!viewMode"
                             (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                         </menu-buttons>
 
@@ -124,9 +125,6 @@
                             </dxi-column>
                             <dxi-column dataField="DEF_ALLOY_STOCK" caption="Default Alloy" cellTemplate="defaultAlloy">
                             </dxi-column>
-                            <!-- <div *ngIf="!rowData.DEF_ALLOY_STOCK">
-                                <p>Default Alloy cannot be empty</p>
-                            </div> -->
                             <dxi-column dataField="MELTYPE_DESCRIPTION" caption="Description"> </dxi-column>
                             <dxi-column dataField="ALLOY_PER" caption="Alloy %" cellTemplate="alloyper">
                             </dxi-column>
