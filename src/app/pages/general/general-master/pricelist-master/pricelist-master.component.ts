@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -19,6 +19,7 @@ export class PricelistMasterComponent implements OnInit {
   subscriptions: any;
   currentDate: any = new Date();
   viewMode: boolean = false;
+  editMode: boolean = false;
   required : boolean = false;
 
   priceListMasterForm!: FormGroup;
@@ -60,7 +61,8 @@ export class PricelistMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
@@ -77,7 +79,7 @@ export class PricelistMasterComponent implements OnInit {
       addlValue: [''],
       priceRoundoff: [false],
       dontCalculate: [false],
-      roundoff_digit: ['' ,[Validators.required]],
+      roundoff_digit: ['',[Validators.required]],
     });
     this.initializeForm();
     if (this.content.FLAG == 'VIEW') {
@@ -85,6 +87,7 @@ export class PricelistMasterComponent implements OnInit {
       this.setAllInitialValues();
     }
     if (this.content.FLAG == 'EDIT') {
+      this.editMode = true;
       this.setAllInitialValues();
     }
 
@@ -146,7 +149,7 @@ export class PricelistMasterComponent implements OnInit {
       this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
       this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
       this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-      this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    //  this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     } catch (error) {
       console.error('Error in initializeForm:', error);
     }
@@ -366,4 +369,42 @@ export class PricelistMasterComponent implements OnInit {
       this.priceListMasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
     }
   }
+
+  checkWorkerExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+    const API = 'PriceMaster/CheckIfPriceCodeExists/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Worker Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            // Clear the input value
+            this.priceListMasterForm.controls.priceCode.setValue('');
+           
+            //this.codeEnable = true;
+            setTimeout(() => {
+              this.renderer.selectRootElement('#priceCode').focus();
+            },500);
+            
+          });
+        }
+      }, err => {
+        this.priceListMasterForm.reset();
+      });
+
+    this.subscriptions.push(sub);
+  }
+  
 }

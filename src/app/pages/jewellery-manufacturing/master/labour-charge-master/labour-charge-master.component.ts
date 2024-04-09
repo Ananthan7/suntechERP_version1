@@ -778,7 +778,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
       "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
-      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate || 0,
+      "LAST_SELLING_RATE":  0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,

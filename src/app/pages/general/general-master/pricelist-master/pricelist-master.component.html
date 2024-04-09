@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceListMasterForm">
@@ -19,8 +19,8 @@
                                         Code * :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput [readonly]="viewMode" maxlength="6" #priceCode
-                                                formControlName="priceCode"
+                                            <input type="text" matInput [readonly]="viewMode || editMode" maxlength="6" #priceCode
+                                                formControlName="priceCode" (focusout)="checkWorkerExists($event)"
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
@@ -109,12 +109,12 @@
                                             <mat-checkbox class="example-margin" formControlName="priceRoundoff"
                                                 [disabled]="viewMode">Round
                                                 off
-                                                Digits</mat-checkbox>
+                                                Digits * </mat-checkbox>
                                         </section>
                                         <div class="col-md-2" style="margin-left: 20px;">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" 
-                                                    matInput  formControlName="roundoff_digit" [readonly]="viewMode" class="text-right" NumberOnly/>
+                                                <input type="number" 
+                                                    matInput  formControlName="roundoff_digit" [readonly]="viewMode" class="text-right" />
                                             </mat-form-field>
                                         </div>
                                     </div>
