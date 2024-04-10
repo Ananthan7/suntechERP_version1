@@ -50,7 +50,7 @@ export class SalesEstimationComponent implements OnInit {
 
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
     // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
-
+    vocTypeData:any;
     estMode: string = 'ADD';
 
     // baseImgUrl = baseImgUrl;
@@ -628,6 +628,7 @@ export class SalesEstimationComponent implements OnInit {
         });
 
         this.vocDataForm.controls['vocdate'].setValue(this.currentDate);
+        this.vocTypeData=this.vocDataForm.value.vocdate
 
         this.lineItemForm = this.formBuilder.group({
             fcn_li_item_code: [{ value: '', autofocus: true }, Validators.required],
@@ -7691,6 +7692,14 @@ export class SalesEstimationComponent implements OnInit {
             this.manageCalculations();
         }
     }
+
+    updateOrderedItems(newOrder: any[]) {
+        this.ordered_items = newOrder;
+      }
+
+      updateExchangeItems(newExchangeItem: any[]) {
+        this.exchange_items = newExchangeItem;
+      }
     validateMinSalePrice() {
         const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
         const grossWt = this.lineItemForm.value.fcn_li_gross_wt;
