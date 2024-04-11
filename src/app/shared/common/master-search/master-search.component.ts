@@ -172,6 +172,7 @@ export class MasterSearchComponent implements OnInit {
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
     // this.overlayPanels.hide();
+    this.dropDown.close()
   }
   //handle Row Click of table
   handleRowClick(event: any) {
@@ -182,7 +183,10 @@ export class MasterSearchComponent implements OnInit {
 
   //search Value Change
   searchValueChange(event: any) {
-    if (event.target.value == '') return
+    if (event.target.value == ''){
+      this.dataSource = []
+      this.dataSourceHead = []
+    }
     this.currentPage = 1
     let param = this.setPostdata()
     this.isLoading = true;
@@ -190,7 +194,6 @@ export class MasterSearchComponent implements OnInit {
       this.isLoading = false;
       if (result.dynamicData[0]) {
         this.dataSource = result.dynamicData[0]
-        
         this.dataSourceHead = Object.keys(this.dataSource[0]);
       } 
       // else {
