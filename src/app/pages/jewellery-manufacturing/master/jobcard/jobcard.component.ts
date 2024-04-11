@@ -368,11 +368,12 @@ export class JobcardComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.setInitialValues()
+   
     // this.jobCardFrom.controls['date'].disable()
     console.log(this.content);
     if (this.content) {
       this.setFormValues()
+      this.setInitialValues()
     }
     console.log(this.content);
     this.serialNo = this.content;
