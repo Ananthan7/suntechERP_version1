@@ -14,7 +14,8 @@
         <div class="row mb-3">
           <div class="col-5">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Voucher :</label>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Voucher
+                :</label>
               <div class="col-sm-2">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="vocType" />
@@ -22,7 +23,8 @@
               </div>
               <div class="col-sm-2">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="vocNo" style="text-align: right;" />
+                  <input type="number" matInput formControlName="vocNo"
+                    style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -35,7 +37,8 @@
           <div class="col-4">
             <div class="d-flex justify-content-end text-end">
               <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-primary metal-issue-add-btn">
+                <button type="button"
+                  class="btn btn-primary metal-issue-add-btn">
                   Refresh Data
                 </button>
               </div>
@@ -45,15 +48,18 @@
         <div class="row mb-3">
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Voc Date :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Voc
+                Date :</label>
               <div class="col-sm-5">
                 <!-- <mat-form-field style="width: 100%;">
                   <input type="date" matInput formControlName="vocDate" />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob"
+                  <input matInput DateValidation
+                    (dateChange)="formatDate($event)" [matDatepicker]="dob"
                     formControlName="vocDate" placeholder="DD/MM/YYYY" />
-                  <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix
+                    [for]="dob"></mat-datepicker-toggle>
                   <mat-datepicker #dob></mat-datepicker>
                 </mat-form-field>
               </div>
@@ -61,114 +67,136 @@
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Process * : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Process
+                * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="processCode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)">
+                <master-search [MasterSearchData]="processCodeData"
+                  (newRowClick)="processCodeSelected($event)">
                 </master-search>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Cylinder: </label>
+              <label for="inputPassword"
+                class="col-sm-5 col-form-label">Cylinder: </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="cylinder" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="cylinderCodeData"
-                (newRowClick)="cylinderCodeSelected($event)">
-            </master-search>
+                  (newRowClick)="cylinderCodeSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Tree :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">
+                Tree:</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="tree" MetalDecimalInput class="text-right" NumberOnly/>
+                  <input type="text" matInput formControlName="tree"
+                    MetalDecimalInput [max]="13" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Stone Wt :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Stone
+                Wt :</label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="stoneWt" StoneDecimalInput class="text-right" />
+                  <input type="text" matInput formControlName="stoneWt"
+                    StoneDecimalInput [max]="13" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
-            <label for="inputPassword" class="col-sm-5 col-form-label"><b>To</b></label>
+            <label for="inputPassword"
+              class="col-sm-5 col-form-label"><b>To</b></label>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Tree No : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Tree No
+                : </label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="treeNo" class="text-right" NumberOnly/>
+                  <input type="text" matInput
+                    formControlName="treeNo" maxlength="20"
+                    class="text-right" NumberOnly />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Worker * : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Worker
+                * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="worker" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                <master-search [MasterSearchData]="WorkerCodeData"
+                  (newRowClick)="WorkerCodeSelected($event)">
                 </master-search>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Conv.Fact : </label>
+              <label for="inputPassword"
+                class="col-sm-5 col-form-label">Conv.Fact : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="convFact" MetalDecimalInput class="text-right"/>
+                  <input type="text" matInput formControlName="convFact"
+                    MetalDecimalInput class="text-right" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt
+                : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="waxWt" MetalDecimalInput class="text-right" NumberOnly/>
+                  <input type="text" matInput 
+                    formControlName="waxWt"
+                    MetalDecimalInput max="13" class="text-right"/>
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Req Metal :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Req
+                Metal :</label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="reqMetal" MetalDecimalInput class="text-right" NumberOnly/>
+                  <input type="text" matInput formControlName="reqMetal"
+                    MetalDecimalInput [max]="13" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Process * : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Process
+                * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="toProcess" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCode1Selected($event)">
+                <master-search [MasterSearchData]="processCodeData"
+                  (newRowClick)="processCode1Selected($event)">
                 </master-search>
               </div>
             </div>
@@ -177,59 +205,67 @@
         <div class="row mb-3">
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Entered By :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Entered
+                By :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="enteredBy" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="user"
-                (newRowClick)="userDataSelected($event)">
-            </master-search>
+                  (newRowClick)="userDataSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
           <div class="col-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Karat * :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Karat *
+                :</label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="karatCode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="karatCodeData"
-                (newRowClick)="karatCodeSelected($event)">
-            </master-search>
+                  (newRowClick)="karatCodeSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
 
           <div class="col-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label offset-sm-4">Base :</label>
+              <label for="inputPassword"
+                class="col-sm-3 col-form-label offset-sm-4">Base :</label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="base" MetalDecimalInput class="text-right"/>
+                  <input type="text" matInput formControlName="base"
+                    MetalDecimalInput [max]="13" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Rec Metal :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Rec
+                Metal :</label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="recMetal" class="text-right"  MetalDecimalInput NumberOnly/>
+                  <input type="text" matInput formControlName="recMetal"
+                    class="text-right" MetalDecimalInput [max]="13" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Worker * : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Worker
+                * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="toWorker" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCode1Selected($event)">
+                <master-search [MasterSearchData]="WorkerCodeData"
+                  (newRowClick)="WorkerCode1Selected($event)">
                 </master-search>
               </div>
             </div>
@@ -238,46 +274,49 @@
         <div class="row mb-3">
           <div class="col-2 offset-sm-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Color * : </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Color *
+                : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="color" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData"
-                (newRowClick)="colorDataSelected($event)">
-            </master-search>
+                  (newRowClick)="colorDataSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
         </div>
 
-
         <div class="row">
           <div class="col-md-12">
             <div class="d-flex justify-content-start text-left">
               <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                          [viewImportBtn]="false"
-                          (addClick)="addTableData()"
-                          (deleteClick)="deleteTableData()"
-                          >
-                      </menu-buttons>
+                [viewImportBtn]="false"
+                (addClick)="addTableData()"
+                (deleteClick)="deleteTableData()">
+              </menu-buttons>
 
             </div>
           </div>
         </div>
-        <mat-tab-group [selectedIndex]="">
+        <mat-tab-group [selectedIndex]>
           <mat-tab label="Job Details">
             <div class="row mt-2">
               <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer"
+                  [allowColumnResizing]="true" keyExpr="ID"
+                  [showBorders]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  <dxi-column *ngFor="let data of columnhead"
+                    dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center"
+                    backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
               </div>
@@ -286,22 +325,25 @@
           <mat-tab label="Metal Issue Details">
             <div class="row mt-2">
               <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer"
+                  [allowColumnResizing]="true" keyExpr="ID"
+                  [showBorders]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  <dxi-column *ngFor="let data of columnheader"
+                    dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center"
+                    backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
               </div>
             </div>
           </mat-tab>
         </mat-tab-group>
-
 
       </form>
     </div>

@@ -28,3 +28,8 @@
   font-size: 100px;
   cursor: pointer;
 }
+::ng-deep {
+  .mat-form-field {
+    font-weight: 600 !important;
+  }
+}
