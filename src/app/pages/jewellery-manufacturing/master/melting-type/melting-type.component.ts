@@ -227,7 +227,7 @@ export class MeltingTypeComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not saved');
+              this.toastr.error('The Code Already Exists');
             }
           },
           (err) => alert(err)
