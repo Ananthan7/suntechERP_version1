@@ -225,7 +225,7 @@
                         </mat-form-field>
                       </td>
                       <th>Stock Code</th>
-                      <th>QTY</th>
+                      <th>QTY </th>
                       <th>Location</th>
                       <th>Std.Loss</th>
                       <th>
@@ -258,7 +258,7 @@
                       <!-- quantity -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput
+                          <input type="number" matInput class="text-right"
                             formControlName="scrapQuantity" />
                         </mat-form-field>
                       </td>
@@ -287,7 +287,7 @@
                       <td>
                         <mat-form-field style="width: 100px;">
                           <input type="text" matInput
-                            formControlName="Balance_WT" />
+                            formControlName="Balance_WT" NumberOnly class="text-right"/>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -492,14 +492,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          NumberOnly
                             formControlName="METAL_FromPCS" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          NumberOnly
                             formControlName="METAL_ToPCS" />
                         </mat-form-field>
                       </td>
@@ -507,14 +507,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          NumberOnly
                             formControlName="METAL_ScrapPCS" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          NumberOnly
                             formControlName="METAL_BalPCS" />
                         </mat-form-field>
                       </td>

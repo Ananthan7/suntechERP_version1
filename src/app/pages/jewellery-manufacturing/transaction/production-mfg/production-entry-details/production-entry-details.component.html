@@ -6,9 +6,9 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" 
-    (cancelClick)="close()"
-    [isViewDelete]="false">
+<modal-header (saveClick)="formSubmit()"
+  (cancelClick)="close()"
+  [isViewDelete]="false">
 </modal-header>
 
 <div class="container-fluid">
@@ -20,11 +20,11 @@
           <div class="col-sm-3">
             <mat-form-field style="width: 70%;">
               <input type="text" matInput
-              (focusout)="jobNumberValidate($event)"
-               formControlName="jobno" />
+                (focusout)="jobNumberValidate($event)"
+                formControlName="jobno" />
             </mat-form-field>
-            <master-search [MasterSearchData]="jobnoCodeData" 
-            (newRowClick)="jobnoCodeSelected($event)"></master-search>
+            <master-search [MasterSearchData]="jobnoCodeData"
+              (newRowClick)="jobnoCodeSelected($event)"></master-search>
           </div>
           <div class="col-sm-5">
             <mat-form-field style="width: 100%;">
@@ -40,15 +40,18 @@
 
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-3 col-form-label">Sub Job No :</label>
+          <label for="input" class="col-sm-3 col-form-label">Sub Job No
+            :</label>
           <div class="col-sm-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="subjobno" class="text-right"/>
+              <input type="text" matInput formControlName="subjobno"
+                class="text-right" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="subjobnoDesc" class="text-right"/>
+              <input type="text" matInput formControlName="subjobnoDesc"
+                class="text-right" />
             </mat-form-field>
           </div>
         </div>
@@ -109,7 +112,8 @@
       </div>
       <div class="col-md-2">
         <div class="p-1">
-          <button type="button" class="btn btn-primary add-btn" (click)="opennewdetails()">
+          <button type="button" class="btn btn-primary add-btn"
+            (click)="opennewdetails()">
             Stock
           </button>
         </div>
@@ -122,7 +126,8 @@
           <div class="row">
             <div class="col-md-8">
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Design :</label>
+                <label for="input" class="col-sm-2 col-form-label">Design
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="DESIGN_CODE" />
@@ -130,25 +135,30 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="DESIGN_DESCRIPTION" />
+                    <input type="text" matInput
+                      formControlName="DESIGN_DESCRIPTION" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Total PCS :</label>
+                <label for="input" class="col-sm-2 col-form-label">Total PCS
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="totalpcs" NumberOnly class="text-right"/>
+                    <input type="text" matInput formControlName="totalpcs"
+                      NumberOnly class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">No of Pcs :</label>
+                <label for="input" class="col-sm-2 col-form-label">No of Pcs
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                     class="text-right" formControlName="JOB_PCS" NumberOnly/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="JOB_PCS" NumberOnly />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Location :</label>
+                <label for="input" class="col-sm-2 col-form-label">Location
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
                     <input type="text" matInput formControlName="location" />
@@ -156,29 +166,35 @@
                   <master-search [MasterSearchData]="locationCodeData"
                     (newRowClick)="locationCodeSelected($event)"></master-search>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Loss Qty :</label>
+                <label for="input" class="col-sm-2 col-form-label">Loss Qty
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="LOSS_WT" SixDecimalInput class="text-right"/>
+                    <input type="text" matInput formControlName="LOSS_WT"
+                      SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Gross Weight :</label>
+                <label for="input" class="col-sm-2 col-form-label">Gross Weight
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="TEXT" matInput MetalDecimalInput 
-                     class="text-right" formControlName="GROSS_WT" />
+                    <input type="TEXT" matInput MetalDecimalInput
+                      class="text-right" formControlName="GROSS_WT" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Stone Pcs :</label>
+                <label for="input" class="col-sm-2 col-form-label">Stone Pcs
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput 
-                    class="text-right" formControlName="STONE_PCS" StoneDecimalInput />
+                    <input type="text" matInput
+                      class="text-right" formControlName="STONE_PCS"
+                      StoneDecimalInput />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Time Taken :</label>
+                <label for="input" class="col-sm-2 col-form-label">Time Taken
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="timetaken" />
@@ -186,158 +202,188 @@
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Metal Weight :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                      class="text-right" formControlName="METAL_WT" MetalDecimalInput/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Stone Weight :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                      class="text-right" formControlName="STONE_WT" StoneDecimalInput/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 1 :</label>
+                <label for="input" class="col-sm-2 col-form-label">Metal Weight
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput
-                    class="text-right" formControlName="price1" NumberOnly/>
+                      class="text-right" formControlName="METAL_WT"
+                      MetalDecimalInput />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Stone Weight
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number" matInput
+                      class="text-right" formControlName="STONE_WT"
+                      StoneDecimalInput />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Price 1
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number" matInput
+                      class="text-right" formControlName="price1" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Prefix :</label>
+                <label for="input" class="col-sm-2 col-form-label">Prefix
+                  :</label>
                 <div class="col-sm-2 d-flex">
                   <mat-form-field style="width: 50%;">
                     <input type="text" matInput formControlName="prefix" />
                   </mat-form-field>&nbsp;
                   <mat-form-field style="width: 50%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="prefixNo" NumberOnly/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="prefixNo"
+                      NumberOnly />
                   </mat-form-field>
                 </div>
 
-                <label for="input" class="col-sm-2 col-form-label">Other Stone :</label>
+                <label for="input" class="col-sm-2 col-form-label">Other Stone
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="otherstone" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 2 :</label>
+                <label for="input" class="col-sm-2 col-form-label">Price 2
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="price2" NumberOnly/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="price2" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Cost Code :</label>
+                <label for="input" class="col-sm-2 col-form-label">Cost Code
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="costcode" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Set Ref :</label>
+                <label for="input" class="col-sm-2 col-form-label">Set Ref
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="SETREF" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 3 :</label>
+                <label for="input" class="col-sm-2 col-form-label">Price 3
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="price3" NumberOnly/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="price3" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Karat :</label>
+                <label for="input" class="col-sm-2 col-form-label">Karat
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="KARAT" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Vender Ref :</label>
+                <label for="input" class="col-sm-2 col-form-label">Vender Ref
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="VenderRef" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 4 :</label>
+                <label for="input" class="col-sm-2 col-form-label">Price 4
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="price4" class="text-right" NumberOnly/>
+                    <input type="text" matInput formControlName="price4"
+                      class="text-right" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Purity :</label>
+                <label for="input" class="col-sm-2 col-form-label">Purity
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="PURITY" 
-                    class="text-right" SixDecimalInput />
+                    <input type="number" matInput formControlName="PURITY"
+                      class="text-right" SixDecimalInput />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Job Purity :</label>
+                <label for="input" class="col-sm-2 col-form-label">Job Purity
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput SixDecimalInput
                       class="text-right" formControlName="Job_Purity" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 5 :</label>
+                <label for="input" class="col-sm-2 col-form-label">Price 5
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="price4"  NumberOnly/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="price4" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Pure Weight :</label>
+                <label for="input" class="col-sm-2 col-form-label">Pure Weight
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="PURE_WT" MetalDecimalInput/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="PURE_WT"
+                      MetalDecimalInput />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Start Date :</label>
+                <label for="input" class="col-sm-2 col-form-label">Start Date
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%">
-                    <input matInput [matDatepicker]="startdate" name="startdate" 
+                    <input matInput [matDatepicker]="startdate" name="startdate"
                       formControlName="START_DATE"
                       placeholder="DD/MM/YYYY" DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
+                    <mat-datepicker-toggle matSuffix
+                      [for]="startdate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate"
+                      #startdate></mat-datepicker>
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Purity Diff :</label>
+                <label for="input" class="col-sm-2 col-form-label">Purity Diff
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput 
-                    class="text-right" formControlName="PurityDiff" SixDecimalInput/>
+                    <input type="number" matInput
+                      class="text-right" formControlName="PurityDiff"
+                      SixDecimalInput />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">End Date :</label>
+                <label for="input" class="col-sm-2 col-form-label">End Date
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%">
-                    <input matInput [matDatepicker]="endDate" name="endDate" 
+                    <input matInput [matDatepicker]="endDate" name="endDate"
                       formControlName="END_DATE"
                       placeholder="DD/MM/YYYY" DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
+                    <mat-datepicker-toggle matSuffix
+                      [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate"
+                      #endDate></mat-datepicker>
                   </mat-form-field>
                 </div>
               </div>
               <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Remarks :</label>
+                <label for="input" class="col-sm-2 col-form-label">Remarks
+                  :</label>
                 <div class="col-sm-10">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="remarks" />
@@ -347,21 +393,26 @@
             </div>
             <div class="col-md-4">
               <div class="row mb-2">
-                <label for="input" class="col-sm-3 col-form-label">Prod Pcs :</label>
+                <label for="input" class="col-sm-3 col-form-label">Prod Pcs
+                  :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="prodpcs" NumberOnly class="text-right"/>
+                    <input type="text" matInput formControlName="prodpcs"
+                      NumberOnly class="text-right" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-3 col-form-label">Pnd Pcs :</label>
+                <label for="input" class="col-sm-3 col-form-label">Pnd Pcs
+                  :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="pndpcs" NumberOnly class="text-right"/>
+                    <input type="text" matInput formControlName="pndpcs"
+                      NumberOnly class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row justify-content-end mb-2">
-                <label for="input" class="col-sm-3 col-form-label">Loss % :</label>
+                <label for="input" class="col-sm-3 col-form-label">Loss %
+                  :</label>
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="lossone" />
@@ -376,7 +427,9 @@
                 </div>
               </div>
               <div class="row justify-content-between">
-                <label for="input" class="col-sm-4 col-form-label text-primary">Price Scheme</label>
+                <label for="input"
+                  class="col-sm-4 col-form-label text-primary">Price
+                  Scheme</label>
                 <div class="col-md-8">
                   <div class="statusbox">
 
@@ -392,30 +445,36 @@
               <div class="row mb-2">
                 <div class="col-md-6">
                   <div class="row justify-content-end mb-2">
-                    <label for="input" class="col-sm-4 col-form-label">From Stock Code :</label>
+                    <label for="input" class="col-sm-4 col-form-label">From
+                      Stock Code :</label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="fromStockCode" />
+                        <input type="text" matInput
+                          formControlName="fromStockCode" />
                       </mat-form-field>
                     </div>
                     <div class="col-sm-5">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="fromStockCodeDesc" />
+                        <input type="text" matInput
+                          formControlName="fromStockCodeDesc" />
                       </mat-form-field>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="row justify-content-end mb-2">
-                    <label for="input" class="col-sm-4 col-form-label">To Stock Code :</label>
+                    <label for="input" class="col-sm-4 col-form-label">To Stock
+                      Code :</label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="toStockCode" />
+                        <input type="text" matInput
+                          formControlName="toStockCode" />
                       </mat-form-field>
                     </div>
                     <div class="col-sm-5">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="toStockCodeDesc" />
+                        <input type="text" matInput
+                          formControlName="toStockCodeDesc" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -425,169 +484,215 @@
                 <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="metalpcs" NumberOnly class="text-right"/>
+                    <input type="text" matInput formControlName="metalpcs"
+                      NumberOnly class="text-right" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Gross Wt :</label>
+                <label for="input" class="col-sm-2 col-form-label">Gross Wt
+                  :</label>
                 <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;" >
-                    <input type="text" matInput formControlName="grossWt" MetalDecimalInput class="text-right"/>
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="grossWt"
+                      MetalDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Stone Wt :</label>
+                <label for="input" class="col-sm-2 col-form-label">Stone Wt
+                  :</label>
                 <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;" >
-                    <input type="text" matInput  formControlName="stoneWt" CommaSeparatedNumber class="text-right"/>
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="stoneWt"
+                      CommaSeparatedNumber class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Purity :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;" >
-                    <input type="text" matInput formControlName="PURITY" SixDecimalInput class="text-right"/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Net Wt :</label>
+                <label for="input" class="col-sm-2 col-form-label">Purity
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="netWt" CommaSeparatedNumber class="text-right"/>
+                    <input type="text" matInput formControlName="PURITY"
+                      SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Chargable Wt :</label>
+                <label for="input" class="col-sm-2 col-form-label">Net Wt
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="chargableWt" class="text-right" MetalDecimalInput/>
+                    <input type="text" matInput formControlName="netWt"
+                      CommaSeparatedNumber class="text-right" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Chargable Wt
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="chargableWt"
+                      class="text-right" MetalDecimalInput />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Purity % :</label>
+                <label for="input" class="col-sm-2 col-form-label">Purity %
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="purityPer" SixDecimalInput class="text-right" NumberOnly/>
+                    <input type="text" matInput formControlName="purityPer"
+                      SixDecimalInput class="text-right" NumberOnly />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Pure Wt :</label>
+                <label for="input" class="col-sm-2 col-form-label">Pure Wt
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="PUREWT" CommaSeparatedNumber class="text-right"/>
+                    <input type="text" matInput formControlName="PUREWT"
+                      CommaSeparatedNumber class="text-right" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Purity Diff :</label>
+                <label for="input" class="col-sm-2 col-form-label">Purity Diff
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="purityDiff" SixDecimalInput class="text-right"/>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Stone Diff :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="stoneDiff" class="text-right" NumberOnly/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Loss :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="loss" class="text-right" NumberOnly/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Mkg Rate :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="mkgRate" class="text-right" SixDecimalInput/>
+                    <input type="text" matInput formControlName="purityDiff"
+                      SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Lot No :</label>
+                <label for="input" class="col-sm-2 col-form-label">Stone Diff
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="lotNo" class="text-right" NumberOnly/>
+                    <input type="text" matInput formControlName="stoneDiff"
+                      class="text-right" NumberOnly />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Bal Wt :</label>
+                <label for="input" class="col-sm-2 col-form-label">Loss
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="balwt" class="text-right" ThreeDecimalInput/>
+                    <input type="text" matInput formControlName="loss"
+                      class="text-right" NumberOnly />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Mkg Value :</label>
+                <label for="input" class="col-sm-2 col-form-label">Mkg Rate
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="mkgValue" class="text-right" ThreeDecimalInput/>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Bar No :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="barNo" class="text-right" NumberOnly/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Ticket No :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="ticketNo" class="text-right"  NumberOnly/>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Prod % :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="prod" AmountDecimalInput class="text-right" />
+                    <input type="text" matInput formControlName="mkgRate"
+                      class="text-right" SixDecimalInput />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Loaction :</label>
+                <label for="input" class="col-sm-2 col-form-label">Lot No
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="lotNo"
+                      class="text-right" NumberOnly />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Bal Wt
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="balwt"
+                      class="text-right" ThreeDecimalInput />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Mkg Value
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="mkgValue"
+                      class="text-right" ThreeDecimalInput />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Bar No
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number" matInput formControlName="barNo"
+                      class="text-right" NumberOnly />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Ticket No
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number" matInput formControlName="ticketNo"
+                      class="text-right" NumberOnly />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Prod %
+                  :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="prod"
+                      NumberOnly maxlength="26" class="text-right" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Loaction
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 70%;">
                     <input type="text" matInput formControlName="location" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="locationCodeData"
-                  (newRowClick)="locationCodeSelected($event)"></master-search>
+                    (newRowClick)="locationCodeSelected($event)"></master-search>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Bal Pcs :</label>
+                <label for="input" class="col-sm-2 col-form-label">Bal Pcs
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="balPcs" NumberOnly class="text-right"/>
+                    <input type="text" matInput formControlName="balPcs"
+                      NumberOnly class="text-right" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Job Purity :</label>
+                <label for="input" class="col-sm-2 col-form-label">Job Purity
+                  :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="jobPurity" SixDecimalInput class="text-right"/>
+                    <input type="text" matInput formControlName="jobPurity"
+                      SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="mt-2">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                  [showBorders]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column *ngFor="let data of columnheadTop" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  <dxi-column *ngFor="let data of columnheadTop"
+                    dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center"
+                    backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
               </div>
               <div class="mt-2">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                  [showBorders]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column *ngFor="let data of columnheadBottom" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  <dxi-column *ngFor="let data of columnheadBottom"
+                    dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center"
+                    backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
               </div>
@@ -597,12 +702,12 @@
                 <div class="row mb-1">
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput class="text-right"/>
+                      <input type="text" matInput class="text-right" />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput class="text-right"/>
+                      <input type="text" matInput class="text-right" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -610,7 +715,7 @@
               <div class="col-md-4">
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="form-check p-1">
-                    <input class="form-check-input" type="radio" >
+                    <input class="form-check-input" type="radio">
                     <label class="form-check-label">
                       Own
                     </label>

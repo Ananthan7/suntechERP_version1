@@ -295,14 +295,16 @@
                         <td>Stone Pcs</td>
                         <td>
                           <mat-form-field style="width: 110px;">
-                            <input type="number" matInput class="text-right"
-                              formControlName="StonePcsFrom" StoneDecimalInput/>
+                            <input type="text" matInput class="text-right"
+                              maxlength="12"
+                              formControlName="StonePcsFrom" NumberOnly/>
                           </mat-form-field>
                         </td>
                         <td>
                           <mat-form-field style="width: 110px;">
-                            <input type="number" matInput class="text-right"
-                              formControlName="StonePcsTo" StoneDecimalInput/>
+                            <input type="text" matInput class="text-right"
+                              maxlength="12"
+                              formControlName="StonePcsTo" NumberOnly/>
                           </mat-form-field>
                         </td>
                         <td></td>
