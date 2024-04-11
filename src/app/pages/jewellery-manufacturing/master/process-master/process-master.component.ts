@@ -77,9 +77,11 @@ export class ProcessMasterComponent implements OnInit {
 
     this.setInitialValues()
     this.getProcessTypeOptions()
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.codeMode = true;
+      console.log('fire')
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
@@ -369,22 +371,23 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.WaxProcess.setValue(this.onchangeCheckBoxNum(this.content.WAX_PROCESS));
     this.processMasterForm.controls.recovery.setValue(this.onchangeCheckBoxNum(this.content.RECOV_VAR2));
     this.processMasterForm.controls.DeductPureWeight.setValue(this.onchangeCheckBoxNum(this.content.DEDUCT_PURE_WT));
+    this.processMasterForm.controls.MergePices.setValue(this.onchangeCheckBoxNum(this.content.MERGE_BLOCK))
 
 
     this.processMasterForm.controls.loss.setValue(this.onchangeCheckBox(this.content.ALLOW_LOSS));
     this.processMasterForm.controls.loss_on_gross.setValue(this.onchangeCheckBox(this.content.LOSS_ON_GROSS));
     this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.onchangeCheckBox(this.content.TIMEON_PROCESS));
     this.processMasterForm.controls.RecoveryProcess.setValue(this.onchangeCheckBox(this.content.RECOVERY_PROCESS));
-    this.processMasterForm.controls.Metal.setValue(this.onchangeCheckBox(this.content.ALLOW_METAL));
-    this.processMasterForm.controls.Stone.setValue(this.onchangeCheckBox(this.content.ALLOW_STONE));
-    this.processMasterForm.controls.Consumable.setValue(this.onchangeCheckBox(this.content.ALLOW_CONSUMABLE));
+    this.processMasterForm.controls.Metal.setValue(this.viewchangeYorN(this.content.ALLOW_METAL));
+    this.processMasterForm.controls.Stone.setValue(this.viewchangeYorN(this.content.ALLOW_STONE));
+    this.processMasterForm.controls.Consumable.setValue(this.viewchangeYorN(this.content.ALLOW_CONSUMABLE));
     this.processMasterForm.controls.ApprovalRequired.setValue(this.onchangeCheckBox(this.content.APPROVAL_REQUIRED));
-    this.processMasterForm.controls.NonQuantity.setValue(this.onchangeCheckBox(this.content.NON_QUANTITY));
+    this.processMasterForm.controls.NonQuantity.setValue(this.viewchangeYorN(this.content.NON_QUANTITY));
     this.processMasterForm.controls.RefineryAutoProcess.setValue(this.onchangeCheckBox(this.content.DF_REFINERY));
     this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.onchangeCheckBox(this.content.AUTO_LOSS));
-    this.processMasterForm.controls.HaveTreeNo.setValue(this.onchangeCheckBox(this.content.TREE_NO));
-    this.processMasterForm.controls.allowGain.setValue(this.onchangeCheckBox(this.content.ALLOW_GAIN));
-    this.processMasterForm.controls.StoneIncluded.setValue(this.onchangeCheckBox(this.content.STONE_INCLUDED));
+    this.processMasterForm.controls.HaveTreeNo.setValue(this.viewchangeYorN(this.content.TREE_NO));
+    this.processMasterForm.controls.allowGain.setValue(this.viewchangeYorN(this.content.ALLOW_GAIN));
+    this.processMasterForm.controls.StoneIncluded.setValue(this.viewchangeYorN(this.content.STONE_INCLUDED));
 
 
 
@@ -443,6 +446,15 @@ export class ProcessMasterComponent implements OnInit {
       return 0;
     }
   }
+  viewchangeYorN(e: any) {
+    console.log(e);
+
+    if (e == 'Y') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   // final save
   formSubmit() {
@@ -459,10 +471,10 @@ export class ProcessMasterComponent implements OnInit {
     //     this.toastr.error('Maximum time should not be less than Standard time');
     //   }
     //   else {
-    //     if (this.content && this.content.FLAG == 'EDIT') {
-    //       this.updateProcessMaster()
-    //       return
-        
+        if (this.content && this.content.FLAG == 'EDIT') {
+          this.updateProcessMaster()
+          return
+        }
 
         if (this.processMasterForm.invalid) {
           this.toastr.error('select all required fields')
@@ -680,7 +692,7 @@ export class ProcessMasterComponent implements OnInit {
       "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
-      "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
+      "APPLY_SETTING": this.viewchangeYorN(this.processMasterForm.value.ApplySetting),
       "TIMEON_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
       "STONE_INCLUDED": this.onchangeCheckBox(this.processMasterForm.value.StoneIncluded),
       "RECOVERY_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
