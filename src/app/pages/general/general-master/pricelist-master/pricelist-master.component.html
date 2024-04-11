@@ -5,7 +5,10 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceListMasterForm">
@@ -15,21 +18,29 @@
                         <div class="row justify-content-between">
                             <div class="col-md-8">
                                 <div class="row align-items-center mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price
+                                    <label for="inputPassword"
+                                        class="col-sm-2 col-form-label">Price
                                         Code * :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput [readonly]="viewMode" maxlength="6" #priceCode
+                                            <input type="text" matInput
+                                                [readonly]="viewMode || editMode"
+                                                maxlength="6" #priceCode
                                                 formControlName="priceCode"
+                                                (focusout)="checkWorkerExists($event)"
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Description * :</label>
+                                    <label for="inputPassword"
+                                        class="col-sm-2 col-form-label">Description
+                                        * :</label>
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput #description formControlName="description"
+                                            <input type="text" matInput
+                                                #description
+                                                formControlName="description"
                                                 [readonly]="viewMode"
                                                 (input)="description.value = description.value.toUpperCase()"
                                                 maxlength="40" />
@@ -37,22 +48,33 @@
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-2">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
+                                    <label for="inputPassword"
+                                        class="col-sm-2 col-form-label">
                                         Price Type * :</label>
-                                    <div class="col-sm-10 d-flex align-items-center">
-                                        <mat-form-field style="width: 150px; margin-right: 10px;">
-                                            <mat-select (selectionChange)="onPriceTypeChange()"
+                                    <div
+                                        class="col-sm-10 d-flex align-items-center">
+                                        <mat-form-field
+                                            style="width: 150px; margin-right: 10px;">
+                                            <mat-select
+                                                (selectionChange)="onPriceTypeChange()"
                                                 formControlName="priceMethod">
-                                                <mat-option *ngFor="let priceType of priceTypeList"
-                                                    [value]="priceType.value" [disabled]="viewMode">
+                                                <mat-option
+                                                    *ngFor="let priceType of priceTypeList"
+                                                    [value]="priceType.value"
+                                                    [disabled]="viewMode">
                                                     {{ priceType.type }}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
-                                        <mat-form-field style="width: 80px; margin-right: 10px;">
-                                            <mat-select [disabled]="isDisabled" formControlName="priceSign" [required]="required">
-                                                <mat-option *ngFor="let option of allOperatorList"
-                                                    [value]="option.operator" [disabled]="viewMode">
+                                        <mat-form-field
+                                            style="width: 80px; margin-right: 10px;">
+                                            <mat-select [disabled]="isDisabled"
+                                                formControlName="priceSign"
+                                                [required]="required">
+                                                <mat-option
+                                                    *ngFor="let option of allOperatorList"
+                                                    [value]="option.operator"
+                                                    [disabled]="viewMode">
                                                     {{ option.operator }}
                                                 </mat-option>
                                             </mat-select>
@@ -62,33 +84,53 @@
                                             </mat-error> -->
 
                                         </mat-form-field>
-                                        <mat-form-field style="width: 100px; margin-right: 10px;">
-                                            <input type="number" style="text-align: right;"
-                                                matInput AmountDecimalInput formControlName="priceValue" [required]="required" [readonly]="viewMode"/>
+                                        <mat-form-field
+                                            style="width: 100px; margin-right: 10px;">
+                                            <input type="text"
+                                                class="text-right"
+                                                matInput AmountDecimalInput
+                                                formControlName="priceValue"
+                                                [required]="required"
+                                                [readonly]="viewMode" />
                                         </mat-form-field>
 
-                                        <mat-form-field style="width: 80px; margin-right: 10px;">
-                                            <mat-select formControlName="finalPriceSign">
-                                                <mat-option *ngFor="let option of operatorsList" [value]="option.value"
+                                        <mat-form-field
+                                            style="width: 80px; margin-right: 10px;">
+                                            <mat-select
+                                                formControlName="finalPriceSign">
+                                                <mat-option
+                                                    *ngFor="let option of operatorsList"
+                                                    [value]="option.value"
                                                     [disabled]="viewMode">
                                                     {{ option.operation }}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-form-field style="width: 100px;">
-                                            <input type="number" style="text-align: right;" matInput AmountDecimalInput
-                                                [readonly]="viewMode" formControlName="finalPriceValue" [required]="required"/>
+                                            <input type="text"
+                                                class="text-right" matInput
+                                                AmountDecimalInput
+                                                [readonly]="viewMode"
+                                                formControlName="finalPriceValue"
+                                                [required]="required" />
                                         </mat-form-field>
                                     </div>
                                 </div>
 
                                 <div class="row align-items-center mb-2">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Additional
+                                    <label for="inputPassword"
+                                        class="col-sm-2 col-form-label">Additional
                                         Value With Cost:</label>
-                                    <div class="col-sm-10 d-flex align-items-center">
-                                        <mat-form-field style="width: 150px; margin-right: 10px;">
-                                            <mat-select formControlName="addlValueSign" [required]="required" >
-                                                <mat-option *ngFor="let option of operatorsList" [value]="option.value"
+                                    <div
+                                        class="col-sm-10 d-flex align-items-center">
+                                        <mat-form-field
+                                            style="width: 150px; margin-right: 10px;">
+                                            <mat-select
+                                                formControlName="addlValueSign"
+                                                [required]="required">
+                                                <mat-option
+                                                    *ngFor="let option of operatorsList"
+                                                    [value]="option.value"
                                                     [disabled]="viewMode">
                                                     {{ option.operation }}
                                                 </mat-option>
@@ -96,33 +138,49 @@
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 100px;">
-                                            <input type="number" style="text-align: right;" matInput AmountDecimalInput
+                                            <input type="text"
+                                                class="text-right" matInput
+                                                AmountDecimalInput
                                                 (input)="onInputChange($event,'addlValue', 5)"
-                                                formControlName="addlValue" [readonly]="viewMode" [required]="required"/>
+                                                formControlName="addlValue"
+                                                [readonly]="viewMode"
+                                                [required]="required" />
                                         </mat-form-field>
                                     </div>
                                 </div>
 
                                 <div class="row mb-1">
-                                    <div class="col-sm-12 d-flex align-items-center">
+                                    <div
+                                        class="col-sm-12 d-flex align-items-center">
                                         <section class="example-section">
-                                            <mat-checkbox class="example-margin" formControlName="priceRoundoff"
+                                            <mat-checkbox class="example-margin"
+                                                formControlName="priceRoundoff"
                                                 [disabled]="viewMode">Round
                                                 off
-                                                Digits</mat-checkbox>
+                                                Digits * </mat-checkbox>
                                         </section>
-                                        <div class="col-md-2" style="margin-left: 20px;">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" 
-                                                    matInput  formControlName="roundoff_digit" [readonly]="viewMode" class="text-right" NumberOnly/>
+                                        <div class="col-md-2"
+                                            style="margin-left: 20px;">
+                                            <mat-form-field
+                                                style="width: 100%;">
+                                                <input type="text"
+                                                    AmountDecimalInput
+                                                    [max]="13"
+                                                    matInput
+                                                    formControlName="roundoff_digit"
+                                                    [readonly]="viewMode"
+                                                    class="text-right" />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <div class="col-sm-12 d-flex align-items-center">
+                                    <div
+                                        class="col-sm-12 d-flex align-items-center">
                                         <section class="example-section">
-                                            <mat-checkbox formControlName="dontCalculate" class="example-margin"
+                                            <mat-checkbox
+                                                formControlName="dontCalculate"
+                                                class="example-margin"
                                                 [disabled]="viewMode">Dont
                                                 Calculate On Cost
                                                 Change</mat-checkbox>

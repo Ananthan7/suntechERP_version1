@@ -84,6 +84,10 @@ import { SaleReciptDetailsComponent } from './repair-sale/sale-recipt-details/sa
 import { SalesPullPosComponent } from './repair-sale/sales-pull-pos/sales-pull-pos.component';
 import { SalesVoucherRedeemComponent } from './repair-sale/sales-voucher-redeem/sales-voucher-redeem.component';
 import { RepairPurchaseDetailsComponent } from './repair-purchase/repair-purchase-details/repair-purchase-details.component';
+import { ItemDetailTable } from '../common-retail/item-list-grid/item-detail.component';
+import { SalesReturnModal } from '../common-retail/sales-return-modal/sales-return.component';
+import { customerDetailsModal } from '../common-retail/customer-details-modal/item-list-grid/customer-details.component';
+import { ExchangeDetailModal } from '../common-retail/exchange-detail-modal/exchange-detail.component';
 
 
 @NgModule({
@@ -173,7 +177,11 @@ import { RepairPurchaseDetailsComponent } from './repair-purchase/repair-purchas
     SaleReciptDetailsComponent,
     SalesPullPosComponent,
     SalesVoucherRedeemComponent,
-    RepairPurchaseDetailsComponent
+    RepairPurchaseDetailsComponent,
+    ItemDetailTable,
+    SalesReturnModal,
+    customerDetailsModal,
+    ExchangeDetailModal
   ],
   imports: [
     CommonModule,

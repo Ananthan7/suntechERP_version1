@@ -13,7 +13,7 @@
             (deleteClick)="deleteClicked()"></modal-header>
     </div>
     <!-- content section -->
-    <div class="card m-1 p-2">
+    <div class=" m-1 p-2">
         <mat-tab-group>
             <!-- Party Details section starts -->
             <mat-tab label="Party Details">
@@ -51,7 +51,8 @@
                                                 placeholder="DD/MM/YYYY" />
                                             <mat-datepicker-toggle matSuffix
                                                 [for]="dob"></mat-datepicker-toggle>
-                                            <mat-datepicker #dob></mat-datepicker>
+                                            <mat-datepicker
+                                                #dob></mat-datepicker>
                                         </mat-form-field>
                                     </span>
                                 </div>
@@ -125,7 +126,8 @@
                                             formControlName="FixedMetal"
                                             class="example-margin"
                                             class="col-sm-4">
-                                            <label style="font-size: 0.9em;padding-top: 8px;">
+                                            <label
+                                                style="font-size: 0.9em;padding-top: 8px;">
                                                 <b>Fixed Metal</b></label>
                                         </mat-checkbox>
                                     </section>
@@ -158,7 +160,8 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput readonly
-                                                class="text-right" SixDecimalInput
+                                                class="text-right"
+                                                SixDecimalInput
                                                 (focusout)="partyCurrencyChange($event)"
                                                 formControlName="partyCurrencyRate" />
                                         </mat-form-field>
@@ -194,14 +197,16 @@
                                         Delivery Type</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="number" matInput
+                                            <input type="text" matInput
                                                 maxlength="6"
-                                                formControlName="DeliveryType" NumberOnly class="text-right"/>
+                                                formControlName="DeliveryType"
+                                                NumberOnly />
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
-                                            <input type="number" matInput
-                                                formControlName="DeliveryTypeDesc" NumberOnly class="text-right"/>
+                                            <input type="text" matInput
+                                                formControlName="DeliveryTypeDesc"
+                                                NumberOnly />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="deliveryTypeMaster"
@@ -214,8 +219,9 @@
                                         Delivery On</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="number" matInput
-                                                maxlength="6" (focusout)="addDays()"
+                                            <input type="text" matInput
+                                                maxlength="6" NumberOnly
+                                                (focusout)="addDays()"
                                                 formControlName="DeliveryOnDateType" />
                                         </mat-form-field>
                                         <mat-form-field
@@ -223,11 +229,12 @@
                                             <input matInput DateValidation
                                                 [matDatepicker]="DeliveryOn"
                                                 formControlName="DeliveryOnDate"
-                                                placeholder="DD/MM/YYYY" 
-                                                (dateChange)="dateDifference($event)"/>
-                                            <mat-datepicker-toggle matSuffix 
+                                                placeholder="DD/MM/YYYY"
+                                                (dateChange)="dateDifference($event)" />
+                                            <mat-datepicker-toggle matSuffix
                                                 [for]="DeliveryOn"></mat-datepicker-toggle>
-                                            <mat-datepicker #DeliveryOn></mat-datepicker>
+                                            <mat-datepicker
+                                                #DeliveryOn></mat-datepicker>
                                         </mat-form-field>
                                     </span>
                                 </div>
@@ -268,7 +275,8 @@
                                                                 matInput
                                                                 formControlName="BillToAccountHead" />
                                                         </mat-form-field>
-                                                        <textarea style="width: 100%;height: 100px;
+                                                        <textarea
+                                                            style="width: 100%;height: 100px;
                                                              margin-left: 7px;margin-top: 7px;"
                                                             formControlName="BillToAddress">
                                                         </textarea>
@@ -321,7 +329,8 @@
                                                         <div class="row">
                                                             <label
                                                                 class="col-sm-4 col-form-label">
-                                                                Referred By</label>
+                                                                Referred
+                                                                By</label>
                                                             <span
                                                                 class="col-sm-7">
                                                                 <mat-form-field>
@@ -351,7 +360,8 @@
                                                     <div class="row">
                                                         <label
                                                             class="col-sm-4 col-form-label">
-                                                            Payment Terms</label>
+                                                            Payment
+                                                            Terms</label>
                                                         <span
                                                             class="col-sm-7 p-1">
                                                             <mat-form-field>
@@ -391,171 +401,7 @@
                         </div>
                     </form>
                 </div>
-            </mat-tab>
-            <mat-tab label="Labour Details">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h6 class="let">Divisions for GrossWeight
-                            Calculations</h6>
-                        <div class="pt-2">
-                            <!-- Divisions grid -->
-                            <dx-data-grid id="gridContainer"
-                                [dataSource]="divisionDetailGrid"
-                                [showRowLines]="true"
-                                height="auto"
-                                [showBorders]="true"
-                                [allowColumnResizing]="true">
-                                <dxo-selection mode="single"></dxo-selection>
-                                <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell"
-                                    [allowUpdating]="true">
-                                </dxo-editing>
-                                <dxi-column width="40px"
-                                    cellTemplate="limitTemplate"
-                                    alignment="right">
-                                    <div
-                                        *dxTemplate="let cellInfo of 'limitTemplate'">
-                                        <input type="checkbox" (change)="selectDivisionGridData($event,cellInfo)"/>
-                                    </div>
-                                </dxi-column>
-                                <dxi-column
-                                    dataField="DIVISION_CODE"
-                                    width="auto" caption="Division"
-                                    [allowEditing]="true"
-                                    alignment="center">
-                                </dxi-column>
-                                <dxi-column dataField="DESCRIPTION"
-                                    width="auto"
-                                    caption="Description"
-                                    [allowEditing]="true"
-                                    alignment="center">
-                                </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="d-flex">
-                            <h6 class="lets pt-3">Labour Calculate on
-                            </h6>
-                            <div class="chbox pt-3">
-                                <mat-radio-group aria-label="Select an option">
-                                    <mat-radio-button [(ngModel)]="grossChecked"
-                                        value="1" style="font-size: 13px;">
-                                        Gross Weight</mat-radio-button>
-                                    &nbsp;
-                                    <mat-radio-button [(ngModel)]="NetWtChecked"
-                                        value="2" style="font-size: 13px;">
-                                        Net Weight</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
-                            <div class="d-flex ps-2">
-                                <label class="col-sm-4 col-form-label">
-                                    Margin %</label>
-                                <span class="col-sm-3">
-                                    <mat-form-field>
-                                        <input type="number" maxlength="6"
-                                            matInput AmountDecimalInput class="text-right"/>
-                                    </mat-form-field>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex">
-                            <!-- Labour detail grid -->
-                            <dx-data-grid id="gridContainer"
-                                [dataSource]="labourDetailGrid"
-                                [showRowLines]="true"
-                                [showBorders]="true"
-                                [allowColumnResizing]="true">
-                                <dxo-selection mode="single"></dxo-selection>
-                                <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell"
-                                    [allowUpdating]="true">
-                                </dxo-editing>
-                                <dxi-column width="40px"
-                                    cellTemplate="limitTemplate"
-                                    alignment="right">
-                                    <div
-                                        *dxTemplate="let cellInfo of 'limitTemplate'">
-                                        <input type="checkbox" (change)="selectLabourGridData($event,cellInfo)"/>
-                                    </div>
-                                </dxi-column>
-                                <dxi-column dataField="LABOUR_CODE"
-                                    width="auto" caption="Code"
-                                    [allowEditing]="false"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="DIVCODE"
-                                    width="auto" caption="Div"
-                                    [allowEditing]="false"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="Qty"
-                                    width="auto" caption="Qty"
-                                    [allowEditing]="false"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="SELLING_RATE"
-                                    width="auto" caption="Rate"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="WASTAGE_PER"
-                                    width="auto" caption="Wastage %"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="DIVISION"
-                                    width="auto" caption="Lab Type"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="LAB_ACCODE"
-                                    width="auto" caption="Lab A/c"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="UNITCODE"
-                                    width="auto" caption="Unit"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="SHAPE"
-                                    width="auto" caption="Shape"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="KARAT_CODE"
-                                    width="auto" caption="Karat"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="CURRENCYCODE"
-                                    width="auto" caption="Currency"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="CARATWT_FROM"
-                                    width="auto" caption="Wt From"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                                <dxi-column dataField="CARATWT_TO"
-                                    width="auto" caption="Wt To"
-                                    [allowEditing]="true"
-                                    alignment="left">
-                                </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-        </mat-tab-group>
-    </div>
-    <!-- Details section starts -->
-    <div class="card m-1">
-        <mat-tab-group style="width: 100%;">
-            <mat-tab label="Details">
+                <!-- Details section starts -->
                 <div class="p-2">
                     <div class="col-11">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
@@ -701,7 +547,8 @@
                             dataField="DSO_STOCK_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARKUP_PER" dataField="MarkupPercentage"
+                        <dxi-column caption="MARKUP_PER"
+                            dataField="MarkupPercentage"
                             width="auto" alignment="center">
                         </dxi-column>
                         <dxi-column caption="GOLD_LOSS_PER"
@@ -853,57 +700,218 @@
                         <dxi-column caption="PURITY" dataField="PURITY"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                        <dxo-scrolling
+                            columnRenderingMode="virtual"></dxo-scrolling>
                     </dx-data-grid>
                 </div>
-            </mat-tab>
-            <!-- <mat-tab label></mat-tab> -->
-        </mat-tab-group>
-
-        <div class="col-md-11 top">
-            <div class="d-flex flex-coloumn">
-                <div class="col-md-4">
-                    <label class="col-form-label rem">
-                        Narration</label>
-                    <mat-form-field class="col-sm-6">
-                        <input type="text" matInput name="narration"
-                            ([ngModel])="Narration" />
-                    </mat-form-field>
-                </div>
-                <div class="d-flex">
-                    <div>
-                        <button type="button" mat-flat-button
-                            (click)="addNewDetail()">
-                            <span>Price Recalc</span>
-                        </button>
-                    </div>
-                    <div class="ps-1">
-                        <button type="button" mat-flat-button>
-                            <span>Quot</span>
-                        </button>
-                    </div>
-                    <div class="ps-1">
-                        <button type="button" mat-flat-button>
-                            <span>MRQ Print</span>
-                        </button>
-                    </div>
-                    <div class="ps-1">
-                        <button type="button" mat-flat-button>
-                            <span>Sticker Print</span>
-                        </button>
-                    </div>
-                    <div class="ps-1">
-                        <button type="button" mat-flat-button>
-                            <span>Export</span>
-                        </button>
-                    </div>
-                    <div class="ps-1">
+                <div class="col-md-11 top">
+                    <div class="d-flex flex-coloumn">
+                        <div class="col-md-4">
+                            <label class="col-form-label rem">
+                                Narration</label>
+                            <mat-form-field class="col-sm-6">
+                                <input type="text" matInput name="narration"
+                                    ([ngModel])="Narration" />
+                            </mat-form-field>
+                        </div>
                         <div class="d-flex">
-                            <input type="radio" /> Summary
+                            <div>
+                                <button type="button" mat-flat-button
+                                    (click)="addNewDetail()">
+                                    <span>Price Recalc</span>
+                                </button>
+                            </div>
+                            <div class="ps-1">
+                                <button type="button" mat-flat-button>
+                                    <span>Quot</span>
+                                </button>
+                            </div>
+                            <div class="ps-1">
+                                <button type="button" mat-flat-button>
+                                    <span>MRQ Print</span>
+                                </button>
+                            </div>
+                            <div class="ps-1">
+                                <button type="button" mat-flat-button>
+                                    <span>Sticker Print</span>
+                                </button>
+                            </div>
+                            <div class="ps-1">
+                                <button type="button" mat-flat-button>
+                                    <span>Export</span>
+                                </button>
+                            </div>
+                            <div class="ps-1">
+                                <div class="d-flex">
+                                    <input type="radio" /> Summary
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </mat-tab>
+            <mat-tab label="Labour Details">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6 class="let">Divisions for GrossWeight
+                            Calculations</h6>
+                        <div class="pt-2">
+                            <!-- Divisions grid -->
+                            <dx-data-grid id="gridContainer"
+                                [dataSource]="divisionDetailGrid"
+                                [showRowLines]="true"
+                                height="auto"
+                                [showBorders]="true"
+                                [allowColumnResizing]="true">
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxo-paging [enabled]="false"></dxo-paging>
+                                <dxo-editing mode="cell"
+                                    [allowUpdating]="true">
+                                </dxo-editing>
+                                <dxi-column width="40px"
+                                    cellTemplate="limitTemplate"
+                                    alignment="right">
+                                    <div
+                                        *dxTemplate="let cellInfo of 'limitTemplate'">
+                                        <input type="checkbox"
+                                            (change)="selectDivisionGridData($event,cellInfo)" />
+                                    </div>
+                                </dxi-column>
+                                <dxi-column
+                                    dataField="DIVISION_CODE"
+                                    width="auto" caption="Division"
+                                    [allowEditing]="true"
+                                    alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="DESCRIPTION"
+                                    width="auto"
+                                    caption="Description"
+                                    [allowEditing]="true"
+                                    alignment="center">
+                                </dxi-column>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="d-flex">
+                            <h6 class="lets pt-3">Labour Calculate on
+                            </h6>
+                            <div class="chbox pt-3">
+                                <mat-radio-group aria-label="Select an option">
+                                    <mat-radio-button [(ngModel)]="grossChecked"
+                                        value="1" style="font-size: 13px;">
+                                        Gross Weight</mat-radio-button>
+                                    &nbsp;
+                                    <mat-radio-button [(ngModel)]="NetWtChecked"
+                                        value="2" style="font-size: 13px;">
+                                        Net Weight</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="d-flex ps-2">
+                                <label class="col-sm-4 col-form-label">
+                                    Margin %</label>
+                                <span class="col-sm-3">
+                                    <mat-form-field>
+                                        <input type="number" maxlength="6"
+                                            matInput AmountDecimalInput
+                                            class="text-right" />
+                                    </mat-form-field>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <!-- Labour detail grid -->
+                            <dx-data-grid id="gridContainer"
+                                [dataSource]="labourDetailGrid"
+                                [showRowLines]="true"
+                                [showBorders]="true"
+                                [allowColumnResizing]="true">
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxo-paging [enabled]="false"></dxo-paging>
+                                <dxo-editing mode="cell"
+                                    [allowUpdating]="true">
+                                </dxo-editing>
+                                <dxi-column width="40px"
+                                    cellTemplate="limitTemplate"
+                                    alignment="right">
+                                    <div
+                                        *dxTemplate="let cellInfo of 'limitTemplate'">
+                                        <input type="checkbox"
+                                            (change)="selectLabourGridData($event,cellInfo)" />
+                                    </div>
+                                </dxi-column>
+                                <dxi-column dataField="LABOUR_CODE"
+                                    width="auto" caption="Code"
+                                    [allowEditing]="false"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="DIVCODE"
+                                    width="auto" caption="Div"
+                                    [allowEditing]="false"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="Qty"
+                                    width="auto" caption="Qty"
+                                    [allowEditing]="false"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="SELLING_RATE"
+                                    width="auto" caption="Rate"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="WASTAGE_PER"
+                                    width="auto" caption="Wastage %"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="DIVISION"
+                                    width="auto" caption="Lab Type"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="LAB_ACCODE"
+                                    width="auto" caption="Lab A/c"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="UNITCODE"
+                                    width="auto" caption="Unit"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="SHAPE"
+                                    width="auto" caption="Shape"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="KARAT_CODE"
+                                    width="auto" caption="Karat"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="CURRENCYCODE"
+                                    width="auto" caption="Currency"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="CARATWT_FROM"
+                                    width="auto" caption="Wt From"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="CARATWT_TO"
+                                    width="auto" caption="Wt To"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
     </div>
 </div>

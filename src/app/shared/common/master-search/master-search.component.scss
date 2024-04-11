@@ -1,12 +1,11 @@
 ::ng-deep {
   .searchDropdown {
     position: absolute;
-    z-index: 1090 !important;
     min-width: 46rem;
     min-height: 20rem;
     padding: 6px;
-  // }
-  // .p-overlaypanel {
+    // }
+    // .p-overlaypanel {
     background: #ffffff;
     color: rgba(0, 0, 0, 0.87);
     border: 0 none;
@@ -25,6 +24,10 @@
   .mat-form-field {
     font-size: 13px !important;
   }
+}
+.searchDropdown {
+  // position: relative;
+  z-index: 9999 !important;
 }
 
 .search-btn {

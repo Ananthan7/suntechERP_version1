@@ -6,8 +6,9 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
-
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  (deleteClick)="deleteRecord()" [isViewAuditTrail]="true"
+  [isViewPost]="true"></modal-header>
 
 <div class="container-fluid">
   <form [formGroup]="jewelleryaltrationFrom">
@@ -84,44 +85,49 @@
             </div> -->
             <div class="row">
               <label class="col-sm-4 col-form-label">
-                  Item Currency*</label>
+                Item Currency*</label>
               <span class="col-sm-8">
-                  <mat-form-field style="width: 20%">
-                      <input type="text" matInput 
-                          formControlName="itemcurrency" [readonly]="viewMode"/>
-                  </mat-form-field>
-                  <mat-form-field
-                      style="width: 50%; margin-left: 7px;">
-                      <input type="ext" matInput
-                          SixDecimalInput
-                          class="text-right"
-                          formControlName="itemcurrencycc" SixDecimalInput/>
-                  </mat-form-field>
-                  <master-search
-                      [MasterSearchData]="itemCodeData"
-                      (newRowClick)="itemCodeSelected($event)">
-                  </master-search>
+                <mat-form-field style="width: 20%">
+                  <input type="text" matInput
+                    formControlName="itemcurrency" [readonly]="viewMode" />
+                </mat-form-field>
+                <mat-form-field
+                  style="width: 50%; margin-left: 7px;">
+                  <input type="ext" matInput
+                    SixDecimalInput
+                    class="text-right"
+                    formControlName="itemcurrencycc" />
+                </mat-form-field>
+                <master-search
+                  [MasterSearchData]="itemCodeData"
+                  (newRowClick)="itemCodeSelected($event)">
+                </master-search>
               </span>
-          </div>
+            </div>
           </div>
           <div class="col-md-4">
             <div class="row mb-4">
-              <label for="input" class="col-sm-3 col-form-label">Metal Rate:</label>
+              <label for="input" class="col-sm-3 col-form-label">Metal
+                Rate:</label>
               <div class="col-sm-3">
-                  <mat-form-field style="width: 70%;">
-                      <input type="text" matInput formControlName="metalrate" [readonly]="viewMode" SixDecimalInput/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="rateTypeMasterData"
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="metalrate"
+                    [readonly]="viewMode" placeholder="Rate type" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="rateTypeMasterData"
                   (newRowClick)="rateTypeSelected($event)"> </master-search>
               </div>
               <div class="col-sm-2">
-                  <mat-form-field style="width: 140%;">
-                      <input type="text" matInput formControlName="metalratetype" [readonly]="viewMode" class="text-right"/>
-                  </mat-form-field>
-                 
+                <mat-form-field style="width: 140%;">
+                  <input type="text" matInput 
+                    placeholder="Rate" SixDecimalInput [max]="12"
+                    formControlName="metalratetype"
+                    [readonly]="viewMode" class="text-right" />
+                </mat-form-field>
+
               </div>
-          </div>
-           
+            </div>
+
             <div class="row">
               <label for="inputPassword" class="col-sm-4 col-form-label">Cost
                 Code :</label>

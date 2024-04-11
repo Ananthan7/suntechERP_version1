@@ -37,6 +37,8 @@ export class LabourChargeMasterComponent implements OnInit {
   salesRateMetal: any;
   salesRatePercentageMetal: any;
   editMode: boolean = false;
+  grossWt: boolean = false;
+
 
   displayDiaCostRate: any;
   displayDiaSellingRate: any;
@@ -54,6 +56,8 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingMetal: boolean = false;
   viewModeSetting :boolean = false;
   ViewModemethod :boolean = false;
+  codeEnable1: boolean = true;
+  codeEnable2: boolean = true;
 
   diamondlabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -110,10 +114,7 @@ export class LabourChargeMasterComponent implements OnInit {
     forDesignOnly: [false, [Validators.required]]
   }); 
 
-  // @ViewChild('codeInput') codeInput!: ElementRef;
-  // ngAfterViewInit(): void {
-  //   this.codeInput.nativeElement.focus();
-  // }
+
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('codeInput2') codeInput2!: ElementRef;
   ngAfterViewInit() {
@@ -128,7 +129,10 @@ export class LabourChargeMasterComponent implements OnInit {
     }, 2000); // Adjust the delay as needed
   }
 
+
   ngOnInit(): void {
+    this.grossWt = true;
+    this.codeEnable1 = true;
 
   //  this.renderer.selectRootElement('#code')?.focus();
 
@@ -750,6 +754,17 @@ export class LabourChargeMasterComponent implements OnInit {
       return
     }
 
+    if(this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo)
+      {
+        this.toastr.error('Weight From should be lesser than Weight To')
+      }
+
+      if(this.metallabourMasterForm.value.ctWtFrom > this.metallabourMasterForm.value.ctWtTo)
+        {
+          this.toastr.error('Weight From should be lesser than Weight To')
+        }
+
+
     // if (this.diamondlabourMasterForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
@@ -778,7 +793,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
       "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
-      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate || 0,
+      "LAST_SELLING_RATE":  0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
@@ -1048,7 +1063,9 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         })
+        this.metallabourMasterForm.controls.wtTo.setValue('');
       }
+    
     }
 
 
@@ -1066,9 +1083,46 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         })
+        this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
       }
     }
 
+
+  }
+
+  unitSelected() {
+    console.log(' Hi' + this.unitList);
+    this.metallabourMasterForm.get('metalunitList')?.valueChanges.subscribe((selectedLabourType) => {
+      const settingTypeControl = this.metallabourMasterForm.get('metalunitList');
+      const methodControl = this.metallabourMasterForm.get('onGrossWt');
+      if (selectedLabourType === 'Grams') {
+        this.grossWt = false;
+
+      } else {
+        this.grossWt = true;
+        this.metallabourMasterForm.controls.onGrossWt.setValue(false);
+      }
+      console.log(this.unitList);
+    });
+  }
+
+  WtcodeEnabled() {
+    if (this.metallabourMasterForm.value.wtFrom == '') {
+      this.codeEnable1 = true;
+    }
+    else {
+      this.codeEnable1 = false;
+    }
+
+  }
+
+  CtWtcodeEnabled() {
+    if (this.diamondlabourMasterForm.value.ctWtFrom == '') {
+      this.codeEnable2 = true;
+    }
+    else {
+      this.codeEnable2 = false;
+    }
 
   }
 
