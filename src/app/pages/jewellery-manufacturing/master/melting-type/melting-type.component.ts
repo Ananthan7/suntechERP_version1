@@ -540,14 +540,21 @@ export class MeltingTypeComponent implements OnInit {
         if (result.isConfirmed) {
           // Proceed with deletion if user confirms
           this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+          this.resetSrNumber()
         }
+        
       });
+      
     } else {
       // Display error message if no record is selected
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-
+resetSrNumber(){
+ this.tableData.forEach((data, index) => {
+  data.SRNO = index+1
+ });
+}
 
   defaultAlloy: MasterSearchModel = {
     PAGENO: 1,

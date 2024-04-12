@@ -184,14 +184,14 @@
                                 </td>
                                 
                                 <td>
-                                    <input type="number" [disabled]="!data['isChecked']"
+                                    <input type="text" [disabled]="!data['isChecked']"
                                         [(ngModel)]="data['STD_LOSS']"
                                         (change)="stdLossChanged(data)"
                                         MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right; width: 86px;" />
                                 </td>
                                 <td>
-                                    <input type="number" [disabled]="!data['isChecked']"
+                                    <input type="text" [disabled]="!data['isChecked']"
                                         [(ngModel)]="data['MAX_LOSS']"
                                         (change)="maxLossChanged(data)"
                                         MetalDecimalInput [readonly]="viewMode"
