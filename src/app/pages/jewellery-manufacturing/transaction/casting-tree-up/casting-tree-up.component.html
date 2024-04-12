@@ -136,7 +136,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Conv.Fact:</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-left: -9px; margin-top:-4px;" >
-                  <input type="number" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"  (focusout)="calculateReqMetal($event)" SixDecimalInput/>
+                  <input type="text" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"  (focusout)="calculateReqMetal($event)" SixDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -156,7 +156,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Req Metal:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:130%;  margin-left:-1px; margin-top: -6px;">
-                  <input type="number" matInput formControlName="reqMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
+                  <input type="text" matInput formControlName="reqMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -215,7 +215,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Base:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:153%;  margin-left:-3px; margin-top: -7px;">
-                  <input type="number" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput (focusout)="calcualteBaseMode($event)" />
+                  <input type="text" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput (focusout)="calcualteBaseMode($event)" />
                 </mat-form-field>
               </div>
             </div>
@@ -225,7 +225,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Rec Metal *:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:130%;  margin-left:-1px; margin-top: -6px;">
-                  <input type="number" matInput formControlName="recMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
+                  <input type="text" matInput formControlName="recMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>

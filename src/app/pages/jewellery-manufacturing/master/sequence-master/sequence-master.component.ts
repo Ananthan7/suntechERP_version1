@@ -127,6 +127,8 @@ export class SequenceMasterComponent implements OnInit {
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
+          console.log(this.dataSource,'this.dataSource');
+          
           if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
             this.checkSequenceExists()
           }
@@ -193,6 +195,8 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           })
+          console.log(this.dataSource,'this.dataSource');
+          
           this.dataSource.forEach((obj: any) => {
             obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
             obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
@@ -239,7 +243,12 @@ export class SequenceMasterComponent implements OnInit {
     this.sequenceMasterForm.controls.sequenceDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
   }
-
+  timeConvert(time: any) {
+    const daysTime = Math.floor(time / 24 / 60);
+    const hoursTime = Math.floor(time / 60 % 24);
+    const minutesTime = Math.floor(time % 60);
+    return daysTime + ":" + hoursTime + ':' + minutesTime;
+  }
   /**USE:  final save API call*/
   formSubmit() {
     if (this.content?.FLAG == 'VIEW') return

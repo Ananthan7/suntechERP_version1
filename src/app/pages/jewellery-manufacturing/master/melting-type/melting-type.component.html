@@ -144,7 +144,7 @@
                             </div>
 
                             <div *dxTemplate="let data of 'alloyper'">
-                                <input type="number" style="text-align: right;" AmountDecimalInput
+                                <input type="text" style="text-align: right;" AmountDecimalInput
                                     (change)="alloyPer($event,data)" [value]="data.value" required
                                     [readonly]="viewMode" /><span>%</span>
                             </div>
