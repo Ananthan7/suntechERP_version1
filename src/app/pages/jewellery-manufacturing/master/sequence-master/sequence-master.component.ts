@@ -68,6 +68,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.content.FLAG == 'EDIT') {
+      this.editMode = true
       this.setFormValues();
     } else if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -138,7 +139,8 @@ export class SequenceMasterComponent implements OnInit {
   }
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '') return
+    if (this.editMode == true  || this.viewMode == true) return
     let API = 'SequenceMasterDJ/CheckIfSeqCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -177,8 +179,6 @@ export class SequenceMasterComponent implements OnInit {
                 obj.SRNO = itemNum
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
-                obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
-                obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
                 obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
                 obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
                 obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
@@ -194,7 +194,10 @@ export class SequenceMasterComponent implements OnInit {
             });
           })
           console.log(this.dataSource, 'this.dataSource');
-
+          this.dataSource.forEach((obj: any) => {
+            obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
+            obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
+          })
           this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
           this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
           this.reCalculateSRNO()
