@@ -138,6 +138,7 @@ export class AddReceiptComponent implements OnInit {
     if (this.content && this.content.FLAG == 'VIEW') {
       this.viewMode = true
       this.editableInputs = true;
+      this.disableAmountFC = true;
       this.setInitialValues()
       return
     }
@@ -152,6 +153,8 @@ export class AddReceiptComponent implements OnInit {
   }
   /**use: funtion for set values for edited entry before saving*/
   setvaluesEdited() {
+    console.log(this.content,'this.content in child');
+    
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeId)
     this.receiptEntryForm.controls.AC_Code.setValue(this.content.AC_Code)
@@ -397,10 +400,10 @@ export class AddReceiptComponent implements OnInit {
       return;
     } else {
       let Details = this.receiptEntryForm.value
-      console.log(Details, 'data to parent');
-
       Details.Attachedfile = this.Attachedfile
       Details.GRID_DATA = this.gridDataSource
+      console.log(Details,'Details to parent');
+      
       this.close(Details)
     }
   }
@@ -568,6 +571,8 @@ export class AddReceiptComponent implements OnInit {
     // this.setFormControlAmount('Amount_FC', this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
     let amount = this.commonService.emptyToZero(form.Amount_FC) * this.commonService.emptyToZero(form.CurrRate)
+    console.log(amount,'amount');
+    
     this.setFormControlAmount('Amount_LC', amount)
     this.setFormControlAmount('Header_Amount', amount)
     this.setFormControlAmount('Amount_FC', form.Amount_FC)
@@ -677,7 +682,7 @@ export class AddReceiptComponent implements OnInit {
       return
     }
     let totalSpiltAmtLC = formData.paidBalance + Amount_LC
-    let totalSpiltAmtFC = this.commonService.CCToFC(this.commonService.compCurrency, totalSpiltAmtLC)
+    let totalSpiltAmtFC = formData.paidBalance + Amount_FC
     console.log(totalSpiltAmtLC,'totalSpiltAmtLC');
     console.log(totalSpiltAmtFC,'totalSpiltAmtFC');
     
@@ -691,17 +696,17 @@ export class AddReceiptComponent implements OnInit {
       
       this.gridDataSource.forEach((item: any, index: number) => {
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
-        // item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
-        // item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode, item.RCVD_AMOUNTCC)
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
+        item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode,item.RCVD_AMOUNTCC)
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'AMOUNT')
       })
       this.setCommaInGrid()
       this.setNarrationString() //narration add and return
       return
     }
     this.gridDataSource.forEach((item: any, index: number) => {
-      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
       item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(FixedArrLC[index].AMOUNT, 'AMOUNT')
+      // item.RCVD_AMOUNTFC = this.commonService.CCToFC(formData.CurrCode,item.RCVD_AMOUNTCC)
+      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(FixedArrFC[index].AMOUNT, 'AMOUNT')
     })
     this.setCommaInGrid()
     this.setNarrationString() //narration add

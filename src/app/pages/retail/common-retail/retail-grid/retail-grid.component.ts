@@ -20,6 +20,10 @@ export class RetailGridComponent implements OnInit {
   @Input() tableName: any;
   vocType: any;
   skeltonLoading: boolean = true;
+  isDisableEdit: boolean = false;
+  isDisableView: boolean = false;
+  isDisableDelete: boolean = false;
+
   mainVocType: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
@@ -117,10 +121,17 @@ export class RetailGridComponent implements OnInit {
       }
     });
   }
+  resetGridAction(){
+    this.isDisableDelete = false;
+    this.isDisableEdit = false;
+    this.isDisableView = false;
+  }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
+    this.resetGridAction()
     if (data) {
       this.pageIndex = 1;
+      this.pageSize = 10
       this.orderedItems = [];
       this.orderedItemsHead = [];
       this.vocType = data.VOCTYPE || this.CommonService.getqueryParamVocType()
@@ -206,6 +217,8 @@ export class RetailGridComponent implements OnInit {
               return
             }
             if (this.vocType == 'SCR' && this.mainVocType == 'PCR') {
+              this.isDisableDelete = true;
+              this.isDisableEdit = true;
               this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
               let headers = this.setSchemeReceiptGridData()
               this.orderedItemsHead = headers.sort((a:any, b:any) => a.DISPLAY_ORDER - b.DISPLAY_ORDER);

@@ -45,11 +45,11 @@
         <!-- <dxo-selection mode="single"></dxo-selection> -->
         <dxi-column type="buttons" caption="Edit | View" [fixed]="true"
             fixedPosition="left">
-            <dxi-button [onClick]="editRowDetails"
+            <dxi-button [onClick]="editRowDetails" [disabled]="isDisableEdit"
                 icon="fa fa-edit"></dxi-button>
-            <dxi-button [onClick]="viewRowDetails"
+            <dxi-button [onClick]="viewRowDetails" [disabled]="isDisableView"
                 icon="fa fa-eye"></dxi-button>
-            <dxi-button [onClick]="deleteRowDetails"
+            <dxi-button [onClick]="deleteRowDetails" [disabled]="isDisableDelete"
                 icon="fa fa-trash"></dxi-button>
         </dxi-column>
 
