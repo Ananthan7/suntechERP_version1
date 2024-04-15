@@ -1,5 +1,6 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer(MFG) Details</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer(MFG)
+    Details</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -31,7 +32,8 @@
                     (change)="toggleSwitchChange($event)"
                     id="flexSwitchCheckDefault"
                     formControlName="toggleSwitchtIssue">
-                  <label class="form-check-label" for="flexSwitchCheckDefault">{{MetalorProcessFlag}}</label>
+                  <label class="form-check-label"
+                    for="flexSwitchCheckDefault">{{MetalorProcessFlag}}</label>
                 </div>
               </div>
             </div>
@@ -77,7 +79,8 @@
           <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;">
             <h6>Approval Details</h6>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Approved
+              <label for="inputPassword"
+                class="col-sm-4 col-form-label">Approved
                 By</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
@@ -86,7 +89,8 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Approved
+              <label for="inputPassword"
+                class="col-sm-4 col-form-label">Approved
                 Date</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
@@ -265,7 +269,8 @@
                       <!-- location -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="location" />
+                          <input type="text" matInput
+                            formControlName="location" />
                         </mat-form-field>
                       </td>
                       <!-- stdLoss -->
@@ -287,7 +292,8 @@
                       <td>
                         <mat-form-field style="width: 100px;">
                           <input type="text" matInput
-                            formControlName="Balance_WT" NumberOnly class="text-right"/>
+                            formControlName="Balance_WT" NumberOnly
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -296,13 +302,13 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            formControlName="StonePcsFrom" StoneDecimalInput/>
+                            formControlName="StonePcsFrom" StoneDecimalInput />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            formControlName="StonePcsTo" StoneDecimalInput/>
+                            formControlName="StonePcsTo" StoneDecimalInput />
                         </mat-form-field>
                       </td>
                       <td></td>
@@ -311,7 +317,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          StoneDecimalInput
+                            StoneDecimalInput
                             formControlName="StoneWeightTo" />
                         </mat-form-field>
                       </td>
@@ -321,14 +327,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          StoneDecimalInput
+                            StoneDecimalInput
                             formControlName="StoneWeighFrom" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          StoneDecimalInput
+                            StoneDecimalInput
                             formControlName="StoneWeightTo" />
                         </mat-form-field>
                       </td>
@@ -338,7 +344,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          StoneDecimalInput
+                            StoneDecimalInput
                             formControlName="StoneWeightTo" />
                         </mat-form-field>
                       </td>
@@ -384,9 +390,10 @@
                       <th rowspan="2">Transfer to Stock</th>
                       <th>Std Loss</th>
                       <td>
-                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="METAL_quantity" />
-                        </mat-form-field> 
+                        <mat-form-field style="width: 100px;">
+                          <input type="text" matInput
+                            formControlName="METAL_quantity" />
+                        </mat-form-field>
                       </td>
                     </tr>
                     <tr>
@@ -420,7 +427,8 @@
                       <td>Act. Loss</td>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="METAL_LossBooked" />
+                          <input type="text" matInput
+                            formControlName="METAL_LossBooked" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -458,7 +466,8 @@
                       <th>Gain</th>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="METAL_GainGrWt" />
+                          <input type="text" matInput
+                            formControlName="METAL_GainGrWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -492,14 +501,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="METAL_FromPCS" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="METAL_ToPCS" />
                         </mat-form-field>
                       </td>
@@ -507,14 +516,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="METAL_ScrapPCS" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="METAL_BalPCS" />
                         </mat-form-field>
                       </td>
@@ -537,7 +546,8 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_ScrapGrWt" />
+                          <input type="number" matInput
+                            formControlName="METAL_ScrapGrWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
@@ -574,7 +584,8 @@
                       <!-- BalStoneWt -->
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_BalStoneWt" />
+                          <input type="number" matInput
+                            formControlName="METAL_BalStoneWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -583,25 +594,31 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                            formControlName="METAL_FromIronWeight" MetalDecimalInput/>
+                            formControlName="METAL_FromIronWeight"
+                            MetalDecimalInput />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
-                            formControlName="METAL_ToIronWt" MetalDecimalInput/>
+                            formControlName="METAL_ToIronWt"
+                            MetalDecimalInput />
                         </mat-form-field>
                       </td>
                       <!-- ToIronScrapWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_ToIronScrapWt" MetalDecimalInput/>
+                          <input type="number" matInput
+                            formControlName="METAL_ToIronScrapWt"
+                            MetalDecimalInput />
                         </mat-form-field>
                       </td>
                       <!-- BalIronWt -->
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_BalIronWt" MetalDecimalInput/>
+                          <input type="number" matInput
+                            formControlName="METAL_BalIronWt"
+                            MetalDecimalInput />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -624,13 +641,15 @@
                       <!-- METAL_ScrapNetWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_ScrapNetWt" />
+                          <input type="number" matInput
+                            formControlName="METAL_ScrapNetWt" />
                         </mat-form-field>
                       </td>
                       <!-- BalNetWt -->
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_BalNetWt" />
+                          <input type="number" matInput
+                            formControlName="METAL_BalNetWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -653,12 +672,14 @@
                       <!-- ScrapPureWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_ScrapPureWt" />
+                          <input type="number" matInput
+                            formControlName="METAL_ScrapPureWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="number" matInput formControlName="METAL_BalPureWt" />
+                          <input type="number" matInput
+                            formControlName="METAL_BalPureWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -679,28 +700,34 @@
         <div class="row">
           <div class="col-md-3">
             <div class="row mb-2">
-              <label for="input" class="col-sm-4 col-form-label">Start Date</label>
+              <label for="input" class="col-sm-4 col-form-label">Start
+                Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="startdate" id="startdate"  (change)="onStartDateChange()"/>
+                  <input type="date" matInput formControlName="startdate"
+                    id="startdate" (change)="onStartDateChange()" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-4 col-form-label">End Date</label>
+              <label for="input" class="col-sm-4 col-form-label">End
+                Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="enddate" id="enddate" [min]="minEndDate"/>
+                  <input type="date" matInput formControlName="enddate"
+                    id="enddate" [min]="minEndDate" />
                 </mat-form-field>
               </div>
               <div *ngIf="processTransferdetailsForm.hasError('dateError')">
-                <p class="error-message">End date cannot be before the start date.</p>
+                <p class="error-message">End date cannot be before the start
+                  date.</p>
               </div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="row mb-2">
-              <label for="input" class="col-sm-4 col-form-label">Std Time</label>
+              <label for="input" class="col-sm-4 col-form-label">Std
+                Time</label>
               <div class="col-sm-7">
                 <mat-form-field>
                   <input type="time" matInput formControlName="stdtime" />
@@ -708,7 +735,8 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-4 col-form-label">Time Taken</label>
+              <label for="input" class="col-sm-4 col-form-label">Time
+                Taken</label>
               <div class="col-sm-7">
                 <mat-form-field>
                   <input type="time" matInput formControlName="timetaken" />
@@ -718,7 +746,8 @@
           </div>
           <div class="col-md-3">
             <div class="row mb-2">
-              <label for="input" class="col-sm-4 col-form-label">Consumed</label>
+              <label for="input"
+                class="col-sm-4 col-form-label">Consumed</label>
               <div class="col-sm-7">
                 <mat-form-field>
                   <input type="time" matInput
@@ -727,15 +756,18 @@
               </div>
             </div>
             <div class="row mb-3">
-              <label for="input" class="col-sm-4 col-form-label">Variance %</label>
+              <label for="input" class="col-sm-4 col-form-label">Variance
+                %</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="variance" class="text-right" ThreeDecimalInput/>
+                  <input type="text" matInput readonly formControlName="variance"
+                    class="text-right" AmountDecimalInput [max]="3"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="variance" class="text-right" ThreeDecimalInput/>
+                  <input type="text" matInput readonly formControlName="variance"
+                    class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -745,7 +777,8 @@
               <label for="input" class="col-sm-4 col-form-label">Tree No</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="treeno" class="text-right" CommaSeparatedNumber maxlength="14"/>
+                  <input type="text" matInput formControlName="treeno"
+                    class="text-right" NumberOnly maxlength="13" />
                 </mat-form-field>
               </div>
             </div>
@@ -779,28 +812,29 @@
                 [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_CODE" caption="Stock Code"
                 [allowEditing]="false" alignment="left"></dxi-column>
-              <dxi-column dataField="COLOR" caption="Color" 
+              <dxi-column dataField="COLOR" caption="Color"
                 [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="CLARITY" caption="Clarity"
                 [allowEditing]="false" alignment="left"></dxi-column>
-              <dxi-column dataField="SIZE" caption="Size" 
+              <dxi-column dataField="SIZE" caption="Size"
                 [allowEditing]="false" alignment="left"></dxi-column>
-              <dxi-column dataField="SHAPE" caption="Shape" 
+              <dxi-column dataField="SHAPE" caption="Shape"
                 [allowEditing]="false" alignment="left"></dxi-column>
-              <dxi-column dataField="PCS" caption="Pcs" 
-                  alignment="left"></dxi-column>
-              <dxi-column dataField="PCS" caption="Setted" alignment="center"></dxi-column>
+              <dxi-column dataField="PCS" caption="Pcs"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="PCS" caption="Setted"
+                alignment="center"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="Weight"
                 alignment="right"></dxi-column>
-              <dxi-column dataField="LOSS_QTY" caption="Loss" 
+              <dxi-column dataField="LOSS_QTY" caption="Loss"
                 [allowEditing]="false" alignment="right"></dxi-column>
-              <dxi-column dataField="Div" caption="Gain Wt" 
+              <dxi-column dataField="Div" caption="Gain Wt"
                 [allowEditing]="false" alignment="right"></dxi-column>
-              <dxi-column dataField="Type" caption="Type" 
+              <dxi-column dataField="Type" caption="Type"
                 [allowEditing]="false" alignment="right"></dxi-column>
-              <dxi-column dataField="Rate" caption="Rate" 
+              <dxi-column dataField="Rate" caption="Rate"
                 [allowEditing]="false" alignment="right"></dxi-column>
-              <dxi-column dataField="AMOUNTFC" caption="Amount" 
+              <dxi-column dataField="AMOUNTFC" caption="Amount"
                 [allowEditing]="false" alignment="right"></dxi-column>
               <dxi-column dataField="SETTED_FLAG" [allowEditing]="false"
                 caption="Setted" alignment="center"
@@ -827,7 +861,8 @@
                 alignment="right"></dxi-column>
               <dxi-column dataField="KARAT_CODE" caption="Karat"
                 alignment="left"></dxi-column>
-              <dxi-column dataField="PURITY" caption="Purity" alignment="right"></dxi-column>
+              <dxi-column dataField="PURITY" caption="Purity"
+                alignment="right"></dxi-column>
               <dxi-column dataField="PUREWT" caption="Gain Pure Wt"
                 alignment="right"></dxi-column>
               <dxi-column dataField="VOCNO" caption="Voucher Number"
@@ -850,28 +885,37 @@
                 alignment="left"></dxi-column>
               <dxi-column dataField="METALSTONE" caption="METALSTONE"
                 alignment="left"></dxi-column>
-              <dxi-column dataField="DIVCODE" caption="DIVCODE" alignment="left"></dxi-column>
+              <dxi-column dataField="DIVCODE" caption="DIVCODE"
+                alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"
                 alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_DESCRIPTION"
                 caption="STOCK_DESCRIPTION"
                 alignment="left"></dxi-column>
-              <dxi-column dataField="COLOR" caption="COLOR" alignment="left"></dxi-column>
-              <dxi-column dataField="CLARITY" caption="CLARITY" alignment="left"></dxi-column>
-              <dxi-column dataField="SHAPE" caption="SHAPE" alignment="left"></dxi-column>
-              <dxi-column dataField="SIZE" caption="SIZE" alignment="left"></dxi-column>
-              <dxi-column dataField="PCS" caption="PCS" alignment="left"></dxi-column>
+              <dxi-column dataField="COLOR" caption="COLOR"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="CLARITY" caption="CLARITY"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="SHAPE" caption="SHAPE"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="SIZE" caption="SIZE"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="PCS" caption="PCS"
+                alignment="left"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="GROSS WT"
                 alignment="right"></dxi-column>
-              <dxi-column dataField="Rate" caption="Rate" alignment="right"></dxi-column>
-              <dxi-column dataField="Amount" caption="Amount" alignment="right"></dxi-column>
+              <dxi-column dataField="Rate" caption="Rate"
+                alignment="right"></dxi-column>
+              <dxi-column dataField="Amount" caption="Amount"
+                alignment="right"></dxi-column>
               <dxi-column dataField="PROCESS_CODE" caption="Process Code"
                 alignment="center"></dxi-column>
               <dxi-column dataField="WORKER_CODE" caption="Worker Code"
                 alignment="center"></dxi-column>
               <dxi-column dataField="UNQ_DESIGN_ID" caption="Unq Design Id"
                 alignment="center"></dxi-column>
-              <dxi-column dataField="REFMID" caption="RefMID" alignment="center"></dxi-column>
+              <dxi-column dataField="REFMID" caption="RefMID"
+                alignment="center"></dxi-column>
               <dxi-column dataField="AMOUNTLC" caption="Amount LC"
                 alignment="right"></dxi-column>
               <dxi-column dataField="AMOUNTFC" caption="Amount FC"
@@ -930,13 +974,16 @@
                 alignment="right"></dxi-column>
               <dxi-column dataField="PRINTED" caption="Printed"
                 alignment="center"></dxi-column>
-              <dxi-column dataField="PUREWT" caption="PUREWT" alignment="center"></dxi-column>
+              <dxi-column dataField="PUREWT" caption="PUREWT"
+                alignment="center"></dxi-column>
               <dxi-column dataField="SQLID" caption="ISBROCKEN"
                 alignment="center"></dxi-column>
               <dxi-column dataField="TREE_NO" caption="TREE NO"
                 alignment="center"></dxi-column>
-              <dxi-column dataField="SETTED" caption="SETTED" alignment="center"></dxi-column>
-              <dxi-column dataField="SIEVE" caption="SIEVE" alignment="center"></dxi-column>
+              <dxi-column dataField="SETTED" caption="SETTED"
+                alignment="center"></dxi-column>
+              <dxi-column dataField="SIEVE" caption="SIEVE"
+                alignment="center"></dxi-column>
               <dxi-column dataField="FULL_RECOVERY" caption="FULL RECOVERY"
                 alignment="center"></dxi-column>
               <dxi-column dataField="RECOVERY_DATE" caption="RECOVERY DATE"
@@ -993,7 +1040,8 @@
                 alignment="center"></dxi-column>
               <dxi-column dataField="IS_REJECT" caption="IS_REJECT"
                 alignment="center"></dxi-column>
-              <dxi-column dataField="REASON" caption="REASON" alignment="center"></dxi-column>
+              <dxi-column dataField="REASON" caption="REASON"
+                alignment="center"></dxi-column>
               <dxi-column dataField="REJ_REMARKS" caption="REJ_REMARKS"
                 alignment="center"></dxi-column>
               <dxi-column dataField="ATTACHMENT_FILE" caption="ATTACHMENT_FILE"
