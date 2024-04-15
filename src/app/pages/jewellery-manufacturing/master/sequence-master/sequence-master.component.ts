@@ -118,17 +118,15 @@ export class SequenceMasterComponent implements OnInit {
         if (result.response) {
           this.dataSource = result.response
           this.sortWithMID()
+
           this.dataSource.forEach((item: any, index: any) => {
             item.SRNO = index + 1
             item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
             item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
-            item.STD_TIME = this.commonService.convertTimeMinutesToDHM(item.STD_TIME)
-            item.MAX_TIME = this.commonService.convertTimeMinutesToDHM(item.MAX_TIME)
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
-          console.log(this.dataSource,'this.dataSource');
-          
+
           if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
             this.checkSequenceExists()
           }
@@ -179,28 +177,24 @@ export class SequenceMasterComponent implements OnInit {
                 obj.SRNO = itemNum
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
-                obj.STD_TIME = this.commonService.MinutesToHours(item.STD_TIME) || 0,
-                  obj.MAX_TIME = this.commonService.MinutesToHours(item.MAX_TIME) || 0,
-                  obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                  obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                  obj.POINTS = item.POINTS || 0,
-                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                  obj.GAIN_AC = "",
-                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
+                obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
+                obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
+                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
+                obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
+                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                obj.POINTS = item.POINTS || 0,
+                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                obj.GAIN_AC = "",
+                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
             });
           })
-          console.log(this.dataSource,'this.dataSource');
-          
-          this.dataSource.forEach((obj: any) => {
-            obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
-            obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
-          })
+          console.log(this.dataSource, 'this.dataSource');
+
           this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
           this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
           this.reCalculateSRNO()
