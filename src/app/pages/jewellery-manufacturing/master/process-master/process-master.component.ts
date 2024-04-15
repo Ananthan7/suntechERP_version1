@@ -799,16 +799,11 @@ export class ProcessMasterComponent implements OnInit {
     this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
     this.searchModeLoss = !this.searchModeLoss;
-
-
-      // this.processMasterForm.controls.accountStart.setValue('');
-      // this.processMasterForm.controls.loss_standard.setValue('');
-      // this.processMasterForm.controls.loss_min.setValue('');
-      // this.processMasterForm.controls.loss_max.setValue('');
-    
-
-
-
+ this.processMasterForm.controls.loss_min.setValue(0);
+ this.processMasterForm.controls.loss_max.setValue(0);
+//  this.processMasterForm.controls.min_end.setValue(0);
+//       this.processMasterForm.controls.accountStart.setValue(0);
+//       this.processMasterForm.controls.loss_standard.setValue(0);
     // Update the validation status after setting or clearing validators
     //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
 
@@ -826,11 +821,11 @@ export class ProcessMasterComponent implements OnInit {
 
     this.isRecovReadOnly = !this.isRecovReadOnly;
     this.searchModeRecov = !this.searchModeRecov;
-
+    this.processMasterForm.controls.min_end.setValue(0);
  
       // this.processMasterForm.controls.accountMiddle.setValue('');
       // this.processMasterForm.controls.standard_end.setValue('');
-      // this.processMasterForm.controls.min_end.setValue('');
+     
 
     console.log(event);
 
