@@ -45,7 +45,7 @@
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
                       <input type="text" matInput class="text-left" formControlName="height"   ThreeDecimalInput [readonly]="viewMode" 
-                      />
+                       [max]="3"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -55,8 +55,8 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="length"   [readonly]="viewMode"  MetalDecimalInput
-                      (input)="onInputChange($event,'length', 7)"/>
+                      <input type="text" matInput class="text-left" formControlName="length"   [readonly]="viewMode"  ThreeDecimalInput
+                       [max]="3"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -69,8 +69,8 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="width"   [readonly]="viewMode" MetalDecimalInput
-                      (input)="onInputChange($event,'width', 7)"/>
+                      <input type="text" matInput class="text-left" formControlName="width"   [readonly]="viewMode" ThreeDecimalInput
+                       [max]="6"/>
                     </mat-form-field>
                   </div>
                 </div>
