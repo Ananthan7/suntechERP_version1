@@ -28,6 +28,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { ItemDetailService } from 'src/app/services/modal-service.service';
 
 @Component({
     selector: 'app-sales-estimation',
@@ -46,12 +47,12 @@ export class SalesEstimationComponent implements OnInit {
     @ViewChild('oldgoldmodal') public oldgoldmodal!: NgbModal;
     @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
     @ViewChild('more_customer_detail_modal')
-    isEditable:boolean=false;
+    isEditable: boolean = false;
     public more_customer_detail_modal!: NgbModal;
 
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
     // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
-    vocTypeData:any;
+    vocTypeData: any;
     estMode: string = 'ADD';
 
     // baseImgUrl = baseImgUrl;
@@ -430,9 +431,16 @@ export class SalesEstimationComponent implements OnInit {
     order_total_exchange: any;
     // order_received_amount: any;
     vatRoundOffAmt: any;
+    grossTotal: any;
+    totalTax: any;
+    itemTotal: any;
+    netTotal: any;
     receipt_items_slno_length: any;
 
     sales_returns_items: any = [];
+
+
+
     sales_returns_pre_items: any = [];
     sales_returns_items_slno_length: any = 0;
     sales_returns_total_amt: any = 0.0;
@@ -546,7 +554,8 @@ export class SalesEstimationComponent implements OnInit {
         // public service: NgxBarcodeScannerService,
         private acRoute: ActivatedRoute,
         private inDb: IndexedDbService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private lineItemService: ItemDetailService
 
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
@@ -565,7 +574,7 @@ export class SalesEstimationComponent implements OnInit {
         this.zeroAmtVal = this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS,
             0
-          );
+        );
 
 
         // this.getAllCompanyParameters();
@@ -626,10 +635,12 @@ export class SalesEstimationComponent implements OnInit {
             vocdate: ['', Validators.required],
             vocType: ['EST', Validators.required],
             vocCode: ['1', Validators.required],
+            txtCurrency: [],
+            txtCurRate: [],
         });
 
         this.vocDataForm.controls['vocdate'].setValue(this.currentDate);
-        this.vocTypeData=this.vocDataForm.value.vocdate
+        this.vocTypeData = this.vocDataForm.value.vocdate
 
         this.lineItemForm = this.formBuilder.group({
             fcn_li_item_code: [{ value: '', autofocus: true }, Validators.required],
@@ -1437,6 +1448,10 @@ export class SalesEstimationComponent implements OnInit {
     //   alert(this.barcode);
     //   // this.lineItemForm.controls.fcn_li_item_code.setValue(result.codeResult.code);
     // }
+    ngOnDestroy() {
+        this.currentLineItems = [];
+        this.lineItemService.setData(this.currentLineItems);
+    }
 
     ngAfterViewInit(): void {
         //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
@@ -1566,6 +1581,12 @@ export class SalesEstimationComponent implements OnInit {
             precision: this.comFunc.allbranchMaster?.BAMTDECIMALS,
             currency: 'AED'
         };
+        this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
+        this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
+
+        this.lineItemService.getData().subscribe(data => {
+            this.currentLineItems = data;
+        });
     }
     getKaratDetails() {
         if (!this.editOnly && !this.viewOnly) {
@@ -2028,16 +2049,15 @@ export class SalesEstimationComponent implements OnInit {
         // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
     }
 
-    open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false) {
-        // alert(this.salesReturnEditId)
+    open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, tableEdit = false) {
         this.lineItemModalForSalesReturn = false;
         this.updateBtn = false;
         console.log('====================================');
         console.log('content', content);
 
         console.log('====================================');
-        // this.sales_returns_items = [];
-        // enable
+        tableEdit ? this.isEditable = true : this.isEditable = false;
+
         this.salesReturnForm.reset();
         this.lineItemForm.reset();
         this.exchangeForm.reset();
@@ -2046,12 +2066,9 @@ export class SalesEstimationComponent implements OnInit {
             this.salesReturnForm.controls.fcn_returns_branch.setValue(this.strBranchcode);
             this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
             this.salesReturnForm.controls.fcn_returns_fin_year.setValue(this.baseYear);
-            // this.salesReturnEditCode = '';
-            // this.salesReturnEditAmt = '';
+
         }
-        // if (this.sales_returns_items.length == 0) {
-        //   this.salesReturnsItems_forVoc = [];
-        // }
+
         if (!salesReturnEdit) {
             this.salesReturnsItems_forVoc = [];
             this.salesReturnEditCode = '';
@@ -2106,24 +2123,19 @@ export class SalesEstimationComponent implements OnInit {
                 content._declarationTContainer.localNames[0] ==
                 'adjust_sale_return_modal'
             )
-                // setTimeout(() => {
-                //   this.renderer.selectRootElement('#fcn_returns_fin_year')?.focus();
-                // }, 100);
+
                 if (
                     content._declarationTContainer.localNames[0] ==
                     'sales_payment_modal'
                 ) {
 
-                    // this.setReceiptVal();
                     if (receiptItemData == null) {
                         this.selectedTabIndex = 0;
                     }
                     setTimeout(() => {
                         this.setTabByIndex(this.selectedTabIndex, receiptItemData);
                     }, 100);
-                    // setTimeout(() => {
-                    //   this.renderer.selectRootElement('#fcn_returns_fin_year')?.focus();
-                    // }, 100);
+
                 }
         }
         this.modalReference.result.then(
@@ -2193,6 +2205,8 @@ export class SalesEstimationComponent implements OnInit {
         this.currentLineItems = this.currentLineItems.filter(
             (data: any) => data.SRNO != event.data.sn_no
         );
+        this.lineItemService.setData(this.currentLineItems);
+
         if (this.comFunc.posKARATRATECHANGE.toString() == '0') {
             this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
         } else {
@@ -2201,12 +2215,26 @@ export class SalesEstimationComponent implements OnInit {
         }
 
 
-        // this.ordered_items.splice((event.data.ID - 1), 1);
-        // this.currentLineItems.splice((event.data.ID - 1), 1);
-        // this.order_items_slno_length = this.ordered_items.length;
+
         this.sumTotalValues();
 
         this.setRetailSalesDataPost();
+    }
+
+    updateGrossAmount(grossAmount: number) {
+        this.grossTotal = grossAmount;
+    }
+
+    updateTotalTax(totalTax: number) {
+        this.totalTax = totalTax;
+    }
+
+    updateItemTotal(itemTotal: number) {
+        this.itemTotal = itemTotal;
+    }
+
+    updateNetTotal(netTotal: number) {
+        this.netTotal = netTotal;
     }
     removeSalesReturnGrid(event: any) {
         // this.currentsalesReturnItems.splice(event.data.sn_no, 1);
@@ -2252,7 +2280,7 @@ export class SalesEstimationComponent implements OnInit {
         console.log(event.settings);
         this.newLineItem = event.data;
         event.cancel = true;
-        this.isEditable=true;
+        this.isEditable = true;
         //   event.settings.CommandButtonInitialize = (sender, e) =>
         //  {
         //      if ((e.ButtonType == event.settings.ColumnCommandButtonType.Update) || (e.ButtonType == event.settings.ColumnCommandButtonType.Cancel))
@@ -2287,12 +2315,12 @@ export class SalesEstimationComponent implements OnInit {
         // $('.dx-link-save').hide();
 
         // console.log(event.target.value)
-        this.open(this.mymodal);
+        this.open(this.mymodal, false, null, false, true);
 
         // this.updateBtn = true;
 
         // this.newLineItem = value;
-  
+
     }
     editTableSalesReturn(event: any) {
         this.salesReturnEditId = event.data.ID;
@@ -5952,31 +5980,18 @@ export class SalesEstimationComponent implements OnInit {
             this.invReturnSalesTotalNetTotal -
             total_exchange
         );
+
+        this.grossTotal = this.order_items_total_gross_amount;
+        this.totalTax = this.order_items_total_tax;
+        this.itemTotal = this.prnt_inv_total_gross_amt;
+        this.netTotal = this.order_items_total_net_amount;
+
+
+
+
+
         this.order_items_total_net_amount_org = this.order_items_total_net_amount;
         this.sumReceiptItem();
-        // this.prnt_inv_net_total_with_tax = this.order_items_total_net_amount;
-
-        // this.receiptTotalForm.controls['fcn_payment_total_bill'].setValue(
-        //   this.order_items_total_net_amount
-        // );
-        // this.receiptTotalForm.controls['fcn_payments_cr_amount'].setValue(
-        //   this.order_items_total_net_amount
-        // );
-        // this.receiptDetailsList.forEach(function (item) {
-        //   total_received_amount =
-        //     total_received_amount + parseFloat(item.AMOUNT_FC || 0);
-        // });
-
-        // this.receiptTotalNetAmt = total_received_amount.toFixed(2);
-        // // this.receiptTotalNetAmt = this.order_items_total_net_amount.toFixed(2);
-
-        // this.receiptTotalForm.controls['fcn_payment_total_paidamount'].setValue(
-        //   this.receiptTotalNetAmt
-        // );
-
-        // this.prnt_received_amount = this.receiptTotalNetAmt;
-        // this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
-        // console.log(this.prnt_received_amount_words);
     }
 
     addItemtoList(btn: any) {
@@ -6348,7 +6363,7 @@ export class SalesEstimationComponent implements OnInit {
                                 )
                                 this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
                                     this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
-                                  );
+                                );
 
                                 this.setMetalRate(stockInfos.KARAT_CODE);
                                 this.manageCalculations();
@@ -6725,9 +6740,9 @@ export class SalesEstimationComponent implements OnInit {
             ]);
             if (this.divisionMS == 'M') {
                 if (this.newLineItem.PCS_TO_GMS?.toString() == '0')
-                  this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+                    this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
                 else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-              }
+            }
         } else {
             this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
             this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
@@ -7528,43 +7543,43 @@ export class SalesEstimationComponent implements OnInit {
                 this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
-                        if(this.divisionMS=='M'){
-                        this.lineItemForm.controls.fcn_li_rate.setValue(
-                            this.makingRate
-                            // this.comFunc.transformDecimalVB(
-                            //   this.comFunc.amtDecimals,
-                            //   this.zeroAmtVal
-                            // )
-                        );
-                        this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                            this.defaultNetTotal
-                        );
+                        if (this.divisionMS == 'M') {
+                            this.lineItemForm.controls.fcn_li_rate.setValue(
+                                this.makingRate
+                                // this.comFunc.transformDecimalVB(
+                                //   this.comFunc.amtDecimals,
+                                //   this.zeroAmtVal
+                                // )
+                            );
+                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                                this.defaultNetTotal
+                            );
 
-                        this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                            this.defaultMakingCharge
-                        );
+                            this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                                this.defaultMakingCharge
+                            );
 
-                        this.lineItemForm.controls.fcn_li_tax_amount.setValue(
-                            this.defaultTaxTotal
-                        );
+                            this.lineItemForm.controls.fcn_li_tax_amount.setValue(
+                                this.defaultTaxTotal
+                            );
 
-                        this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-                            this.defaultGrossTotal
-                        );
+                            this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+                                this.defaultGrossTotal
+                            );
 
-                        this.renderer.selectRootElement('#fcn_li_rate').focus();
+                            this.renderer.selectRootElement('#fcn_li_rate').focus();
+                        }
+                        else if (this.divisionMS == 'S') {
+                            this.lineItemForm.controls.fcn_li_rate.setValue(
+                                preRateVal
+                            );
+
+                            this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                                preTotalVal
+                            );
+                        }
                     }
-                    else if(this.divisionMS=='S'){
-                        this.lineItemForm.controls.fcn_li_rate.setValue(
-                            preRateVal
-                          );
-                       
-                          this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                            preTotalVal
-                          );
-                    }
-                }
-                  
+
                 });
             }
         } else {
@@ -7576,11 +7591,11 @@ export class SalesEstimationComponent implements OnInit {
 
     updateOrderedItems(newOrder: any[]) {
         this.ordered_items = newOrder;
-      }
+    }
 
-      updateExchangeItems(newExchangeItem: any[]) {
+    updateExchangeItems(newExchangeItem: any[]) {
         this.exchange_items = newExchangeItem;
-      }
+    }
     validateMinSalePrice() {
         const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
         const grossWt = this.lineItemForm.value.fcn_li_gross_wt;
@@ -8563,11 +8578,11 @@ export class SalesEstimationComponent implements OnInit {
         (stonewtVal)
         if (stonewtVal == 0) {
             this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
-               
-                    this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
-                    this.comFunc.formControlSetReadOnly('fcn_ad_stone_rate', true);
-                    this.comFunc.formControlSetReadOnly('fcn_ad_stone_amount', true);
-           
+
+            this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
+            this.comFunc.formControlSetReadOnly('fcn_ad_stone_rate', true);
+            this.comFunc.formControlSetReadOnly('fcn_ad_stone_amount', true);
+
         }
 
         /** set stone amount */
@@ -8863,13 +8878,13 @@ export class SalesEstimationComponent implements OnInit {
     }
     setStoneAmt() {
         this.lineItemForm.controls['fcn_ad_stone_amount'].setValue(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) *
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) *
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
         );
         // this.getAllTotalAmt();
         if (this.divisionMS == 'M') this.getAllTotalAmt();
         else this.setTotalAmount();
-      }
+    }
     setMetalAmt() {
         this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
             this.comFunc.transformDecimalVB(
@@ -9039,27 +9054,27 @@ export class SalesEstimationComponent implements OnInit {
     }
     changeStoneAmt(event: any) {
         if (event.target.value != '') {
-          if (
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) == 0
-    
-          ) {
-            this.lineItemForm.controls.fcn_ad_stone_amount.setValue(this.zeroAmtVal);
-          } else {
-            const value = (
-              parseFloat(this.lineItemForm.value.fcn_ad_stone_amount) /
-              parseFloat(this.lineItemForm.value.fcn_li_stone_wt)
-            );
-            this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
-              this.comFunc.decimalQuantityFormat(value, 'AMOUNT')
-            );
-          }
-          // this.setStoneAmt();
+            if (
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) == 0
+
+            ) {
+                this.lineItemForm.controls.fcn_ad_stone_amount.setValue(this.zeroAmtVal);
+            } else {
+                const value = (
+                    parseFloat(this.lineItemForm.value.fcn_ad_stone_amount) /
+                    parseFloat(this.lineItemForm.value.fcn_li_stone_wt)
+                );
+                this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
+                    this.comFunc.decimalQuantityFormat(value, 'AMOUNT')
+                );
+            }
+            // this.setStoneAmt();
         } else {
-          // this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
-          this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
-          // this.setStoneAmt();
+            // this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
+            this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
+            // this.setStoneAmt();
         }
-      }
+    }
 
     setDetailsData() {
         if (this.retailSalesDataPost?.estimationDetail?.length > 0)
