@@ -1404,8 +1404,11 @@
 
 <!-- Line Item Modal -->
 <ng-template #mymodal let-modal modal-lg>
-  <app-item-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [vocTypeData]="vocTypeData"
-    [orderedItems]="ordered_items" (newItemEvent)="updateOrderedItems($event)"></app-item-detail></ng-template>
+  <app-item-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [newLineItem1]="newLineItem"
+    [vocTypeData]="vocTypeData" [vocDataForm]="vocDataForm" [orderedItems]="ordered_items" [vocType]="vocType"
+    [karatRateDetails]="karatRateDetails" [isEditable1]="isEditable"
+    (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
+</ng-template>
 
 <!-- Sales Return Modal -->
 <ng-template #adjust_sale_return_modal let-modal modal-lg>

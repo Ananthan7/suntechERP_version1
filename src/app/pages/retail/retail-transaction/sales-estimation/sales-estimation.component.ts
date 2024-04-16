@@ -46,6 +46,7 @@ export class SalesEstimationComponent implements OnInit {
     @ViewChild('oldgoldmodal') public oldgoldmodal!: NgbModal;
     @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
     @ViewChild('more_customer_detail_modal')
+    isEditable:boolean=false;
     public more_customer_detail_modal!: NgbModal;
 
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -2249,8 +2250,9 @@ export class SalesEstimationComponent implements OnInit {
         // console.log(event.component.state());
         console.log(event.data);
         console.log(event.settings);
-        this.orderedItemEditId = event.data.sn_no;
+        this.newLineItem = event.data;
         event.cancel = true;
+        this.isEditable=true;
         //   event.settings.CommandButtonInitialize = (sender, e) =>
         //  {
         //      if ((e.ButtonType == event.settings.ColumnCommandButtonType.Update) || (e.ButtonType == event.settings.ColumnCommandButtonType.Cancel))
@@ -2287,131 +2289,10 @@ export class SalesEstimationComponent implements OnInit {
         // console.log(event.target.value)
         this.open(this.mymodal);
 
-        this.updateBtn = true;
+        // this.updateBtn = true;
 
-        this.newLineItem = value;
-        this.newLineItem.STOCK_CODE = value.STOCK_CODE;
-        this.newLineItem.DIVISION = value.DIVISION_CODE;
-        this.newLineItem.HSN_CODE = value?.HSN_CODE;
-        this.newLineItem.GST_CODE = value.GST_CODE;
-        // this.newLineItem.GST_CODE = value.VATCODE;
-        this.newLineItem.IGST_ACCODE = value?.IGST_ACCODE;
-        // this.newLineItem.POS_TAX_ACCODE = value?.POS_TAX_ACCODE;
-
-        this.newLineItem.MAIN_STOCK_CODE = value.MAINSTOCKCODE;
-        this.newLineItem.STOCK_COST = value.STKTRANMKGCOST;
-        // this.divisionMS = value.divisionMS;
-        this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
-        this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
-        this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
-        this.lineItemForm.controls.fcn_li_location.setValue(value.LOCTYPE_CODE);
-        this.lineItemForm.controls.fcn_li_pcs.setValue(value.PCS);
-        this.lineItemForm.controls.fcn_li_gross_wt.setValue(value.GROSSWT);
-        this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
-        this.lineItemForm.controls.fcn_li_net_wt.setValue(value.NETWT);
-        this.lineItemForm.controls.fcn_li_rate.setValue(value.MKG_RATEFC);
-        this.lineItemForm.controls.fcn_li_total_amount.setValue(value.MKGVALUEFC);
-        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
-            value.DISCOUNT
-        );
-        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-            value.DISCOUNTVALUEFC
-        );
-        this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-            // value.GROSS_AMT
-            value.TOTAL_AMOUNTFC
-            // value.NETVALUEFC
-        );
-        // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
-        this.lineItemForm.controls.fcn_li_tax_percentage.setValue(value.IGST_PER);
-        // this.lineItemForm.controls.fcn_li_tax_percentage.setValue(value.VAT_PER);
-        this.lineItemForm.controls.fcn_li_tax_amount.setValue(value.IGST_AMOUNTFC);
-        // this.lineItemForm.controls.fcn_li_tax_amount.setValue(value.VAT_AMOUNTFC);
-        this.lineItemForm.controls.fcn_li_net_amount.setValue(value.NETVALUEFC);
-        // this.lineItemForm.controls.fcn_li_net_amount.setValue(value.TOTALWITHVATFC);
-        this.lineItemForm.controls.fcn_li_purity.setValue(value.PURITY);
-        this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
-        this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
-
-        this.lineItemForm.controls.fcn_ad_amount.setValue(
-            // value.TOTALWITHVATFC
-            value.MkgMtlNetRate
-        );
-        this.lineItemForm.controls.fcn_ad_rate_type.setValue(value.RATE_TYPE);
-        this.lineItemForm.controls.fcn_ad_rate.setValue(value.MkgMtlNetRate);
-        this.lineItemForm.controls.fcn_tab_details.setValue(value.SJEW_TAGLINES);
-        // this.lineItemForm.controls.fcn_ad_making_rate.setValue(value.PUREWT);
-        // this.lineItemForm.controls.fcn_ad_making_amount.setValue(value.PUREWT);
-        this.lineItemForm.controls.fcn_ad_stone_rate.setValue(value.STONE_RATEFC);
-        this.lineItemForm.controls.fcn_ad_stone_amount.setValue(value.STONEVALUEFC);
-        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(value.METAL_RATE);
-        this.lineItemForm.controls.fcn_ad_metal_amount.setValue(value.METALVALUEFC);
-
-        if (this.editOnly || this.viewOnly) {
-            const divisionMS = this.comFunc.getDivisionMS(value.DIVISION_CODE);
-            // this.currentLineItems.divisionMS = divisionMS;
-            this.divisionMS = divisionMS;
-        } else {
-            this.divisionMS = value.DIVISIONMS;
-        }
-        this.managePcsGrossWt();
-        if (!this.viewOnly) {
-            // this.currentLineItems.splice((value.SRNO - 1), 1);
-            // this.ordered_items.splice((value.SRNO - 1), 1);
-        }
-
-        // this.manageCalculations();
-        // this.sumTotalValues();
-        // this.li_division_val = '';
-        // this.li_item_desc_val = '';
-        // this.li_location_val = '';
-        // this.li_gross_wt_val = '';
-        // this.li_stone_wt_val = '';
-        // this.li_net_wt_val = '';
-        // this.li_making_rate_val = '';
-        // this.li_making_amount_val = '';
-        // this.li_stone_rate_val = '';
-        // this.li_stone_amount_val = '';
-        // this.li_metal_rate_val = '';
-        // this.li_metal_amount_val = '';
-        // this.li_rate_val = '';
-        // this.li_total_val = '';
-        // this.li_discount_percentage_val = '';
-        // this.li_discount_amount_val = '';
-        // this.li_gross_amount_val = '';
-        // this.li_tax_percentage_val = '';
-        // this.li_tax_amount_val = '';
-        // this.li_net_amount_val = '';
-        // this.li_tag_val = '';
-
-        /* this.updateBtn = true;
-    
-        if(this.showDivisionModal){
-        this.getSno = event.data['sNo'];
-        this.dataForm.controls['mkg_amt'].setValue(event.data['MkgAmount']);
-        this.dataForm.controls['net_amt'].setValue(event.data['TotalAmount']);
-        this.dataForm.controls['pcs'].setValue(event.data['Qty']);
-        this.dataForm.controls['net_wt'].setValue(event.data['Weight']);
-        }else{
-          this.getSno = event.data['sNo'];
-          this.divisionForm.controls['mkg_amt'].setValue(event.data['MkgAmount']);
-          this.divisionForm.controls['net_amt'].setValue(event.data['TotalAmount']);
-          this.divisionForm.controls['pcs'].setValue(event.data['Qty']);
-          this.divisionForm.controls['net_wt'].setValue(event.data['Weight']);
-        } */
-        // console.log(event.target.value)
-        // this.li_item_code_val = this.lineItemForm.value.fcn_li_item_code;
-        // // this.li_item_code_val = this.lineItemForm.value.fcn_li_item_code
-        // this.lineItemForm.controls['fcn_li_item_code'].setValue(
-        //   this.li_item_code_val
-        // );
-
-        // let events = {
-        //   target: { value: this.lineItemForm.value.fcn_li_item_code },
-        // };
-        // console.log(events);
-
-        // this.getStockDesc(events);
+        // this.newLineItem = value;
+  
     }
     editTableSalesReturn(event: any) {
         this.salesReturnEditId = event.data.ID;
