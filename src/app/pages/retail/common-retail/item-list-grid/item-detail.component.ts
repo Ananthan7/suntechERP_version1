@@ -11,26 +11,31 @@ import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.co
 
 
 @Component({
-  selector: 'app-item-detail',
-  templateUrl: './item-detail.component.html',
-  styleUrls: ['./item-detail.component.scss']
+    selector: 'app-item-detail',
+    templateUrl: './item-detail.component.html',
+    styleUrls: ['./item-detail.component.scss']
 })
 export class ItemDetailTable implements OnInit {
-  @Input() modalTitle: string = 'Default Title';
-  @Input() newLineItem1: any; 
-  @Input() modal!: NgbModalRef;
-  @Input() vocType: any; 
-   @Input() itemDetailsEdit: any;
-  @Input() vocDataForm!: FormGroup; 
-  @Input() isEditable1: any
-  @Output() newItemEvent = new EventEmitter<any>();
-  @Input() karatRateDetails!: any[]; 
-  salesReturnsItems_forVoc: any = [];
-   exchange_items: any[] = [];
-   sales_returns_items: any = [];
-  lineItemForm!: FormGroup;
-  branch_tax_percentage: any;
-  baseYear: any = '';
+    @Input() modalTitle: string = 'Default Title';
+    @Input() updatedLineItem: any;
+    @Input() modal!: NgbModalRef;
+    @Input() vocType: any;
+    @Input() itemDetailsEdit: any;
+    @Input() vocDataForm!: FormGroup;
+    @Input() editItemDetail: any
+    @Output() newItemEvent = new EventEmitter<any>();
+    @Output() grossAmountEvent = new EventEmitter<any>();
+    @Output() totalTaxEvent = new EventEmitter<any>();
+    @Output() itemTotalEvent = new EventEmitter<any>();
+    @Output() netTotalEvent = new EventEmitter<any>();
+
+    @Input() karatRateDetails!: any[];
+    salesReturnsItems_forVoc: any = [];
+    exchange_items: any[] = [];
+    sales_returns_items: any = [];
+    lineItemForm!: FormGroup;
+    branch_tax_percentage: any;
+    baseYear: any = '';
     li_stone_wt_val: any;
     li_net_wt_val: any;
     li_making_rate_val: any;
@@ -84,7 +89,7 @@ export class ItemDetailTable implements OnInit {
     all_branch: any;
     orderedItemEditId: any;
 
-    
+
     currentLineItems: any = [];
     salesReturnEditId: any;
     salesReturnEditCode: any = '';
@@ -100,3539 +105,3775 @@ export class ItemDetailTable implements OnInit {
     metalPurchaseDataMID: any = '0';
     standardPurity: any = 0;
     maritalStatusList: any = [];
-  lineItemModalForSalesReturn: boolean = false;
-  viewOnly: boolean = false;
-  zeroAmtVal!: any;
-  zeroMQtyVal!: any;
-  blockNegativeStock: any;
-  blockNegativeStockValue: any;
-  blockMinimumPrice: any;
-  blockMinimumPriceValue: any;
+    lineItemModalForSalesReturn: boolean = false;
+    viewOnly: boolean = false;
+    zeroAmtVal!: any;
+    zeroMQtyVal!: any;
+    blockNegativeStock: any;
+    blockNegativeStockValue: any;
+    blockMinimumPrice: any;
+    blockMinimumPriceValue: any;
 
 
-  invReturnSalesTotalPcs: any = 0;
-  invReturnSalesTotalWeight: any = 0;
-  invReturnSalesTotalPureWeight: any = 0;
-  invReturnSalesTotalMakingAmt: any = 0;
-  invReturnSalesTotalMetalAmt: any = 0;
-  invReturnSalesTotalStoneAmt: any = 0;
-  invReturnSalesTotalNetAmt: any = 0;
-  invReturnSalesTotalDisAmt: any = 0;
-  invReturnSalesTotalPurityDiff: any = 0;
-  invReturnSalesTotalStoneDiff: any = 0;
-  invReturnSalesTotalDisPer: any = 0;
-  invReturnSalesTotalTaxAmt: any = 0;
-  invReturnSalesTotalNetTotal: any = 0;
+    invReturnSalesTotalPcs: any = 0;
+    invReturnSalesTotalWeight: any = 0;
+    invReturnSalesTotalPureWeight: any = 0;
+    invReturnSalesTotalMakingAmt: any = 0;
+    invReturnSalesTotalMetalAmt: any = 0;
+    invReturnSalesTotalStoneAmt: any = 0;
+    invReturnSalesTotalNetAmt: any = 0;
+    invReturnSalesTotalDisAmt: any = 0;
+    invReturnSalesTotalPurityDiff: any = 0;
+    invReturnSalesTotalStoneDiff: any = 0;
+    invReturnSalesTotalDisPer: any = 0;
+    invReturnSalesTotalTaxAmt: any = 0;
+    invReturnSalesTotalNetTotal: any = 0;
 
-  defaultGrossTotal: any;
-  dialogBox: any;
-  dialogBoxResult: any;
-  defaultTaxTotal: any;
-  defaultNetTotal: any;
-  defaultMakingCharge: any;
-  validatePCS: any;
-  lineItemPcs: any;
-  makingRate: any;
-  totalGrossAmount: any;
-  totalTaxAmount: any;
-  totalMakingAmount: any;
-  totalNetAmount: any;
-  lineItemGrossWt: any;
-  public newDictionary: any;
-  public taxType = 1;
-  li_total_val: any;
-  li_discount_percentage_val: any;
-  li_discount_amount_val: any;
-  li_gross_amount_val: any;
-  li_tax_percentage_val: any;
-  li_tax_amount_val: any;
-  li_net_amount_val: any;
-  currentStockCode: any;
-  li_tag_val: any;
-  strBranchcode: any = '';
-  strUser: any = '';
-  isFieldReset: boolean = false;
-  divisionMS = 'M';
-  curr_line_item_images: any;
-  validateStoneWt: boolean = false;
-  validateGrossWt: boolean = false;
-  @Input() vocTypeData: any; 
+    defaultGrossTotal: any;
+    dialogBox: any;
+    dialogBoxResult: any;
+    defaultTaxTotal: any;
+    defaultNetTotal: any;
+    defaultMakingCharge: any;
+    validatePCS: any;
+    lineItemPcs: any;
+    makingRate: any;
+    totalGrossAmount: any;
+    totalTaxAmount: any;
+    totalMakingAmount: any;
+    totalNetAmount: any;
+    lineItemGrossWt: any;
+    public newDictionary: any;
+    public taxType = 1;
+    li_total_val: any;
+    li_discount_percentage_val: any;
+    li_discount_amount_val: any;
+    li_gross_amount_val: any;
+    li_tax_percentage_val: any;
+    li_tax_amount_val: any;
+    li_net_amount_val: any;
+    currentStockCode: any;
+    li_tag_val: any;
+    strBranchcode: any = '';
+    strUser: any = '';
+    isFieldReset: boolean = false;
+    divisionMS = 'M';
+    curr_line_item_images: any;
+    validateStoneWt: boolean = false;
+    validateGrossWt: boolean = false;
+    @Input() vocTypeData: any;
 
-  li_division_val: any;
-  li_item_code_val: any;
-  li_item_desc_val: any;
-  li_location_val: any;
-  li_pcs_val: any;
-  li_gross_wt_val: any;
-  order_items_slno_length: any;
-  order_items_total_amount: any;
-  order_items_total_tax: any;
-  order_items_total_net_amount: any;
-  order_items_total_net_amount_org: any;
-  order_items_total_gross_amount: any;
-  order_items_total_discount_amount: any;
-
-
-
- 
-  order_total_exchange: any;
+    li_division_val: any;
+    li_item_code_val: any;
+    li_item_desc_val: any;
+    li_location_val: any;
+    li_pcs_val: any;
+    li_gross_wt_val: any;
+    order_items_slno_length: any;
+    order_items_total_amount: any;
+    order_items_total_tax: any;
+    order_items_total_net_amount: any;
+    order_items_total_net_amount_org: any;
+    order_items_total_gross_amount: any;
+    order_items_total_discount_amount: any;
 
 
 
-  estMode: string = 'ADD';
 
-  // baseImgUrl = baseImgUrl;
-  maskVocDate: any = new Date();
-  amlNameValidationData = false;
-
-  value: any;
-  // barcode: string;
-  isSaved: boolean = false;
-
-  selectedTabIndex = 0;
-
-
-  editOnly: boolean = false;
-  public isCustProcessing = false;
-
-  salesReturnRowData: any;
-  salesReturnRowDataSRNO: any;
-
-  queryParams: any;
-
-  public mask = {
-      guide: true,
-      showMask: true,
-      // keepCharPositions : true,
-      mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
-  };
-  noWhiteSpacePattern = /^\S*$/;
-  dateValue: any;
-
-  ozWeight: any = 0;
-
-  vocMaxDate = new Date();
-
-  dummyDate = '1900-01-01T00:00:00';
-  dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
-
-  // dummyDate = '01-01-1753T00:00:00';
-  // zeroAmtVal;
-  // zeroMQtyVal;
-
-
-  salespersonName: string = '';
-  branchOptions: string[] = [''];
-
-
-  receiptModesTypes: any;
-  receiptModesList: any;
-  metalPurchaseDataPost: any = null;
-  retailSalesDataPost: any = null;
-  retailSReturnDataPost: any = null;
+    order_total_exchange: any;
 
 
 
-  // public noImage = environment._noImage;
-  selectedOption = '3';
-  title = 'appBootstrap';
+    estMode: string = 'ADD';
+
+    // baseImgUrl = baseImgUrl;
+    maskVocDate: any = new Date();
+    amlNameValidationData = false;
+
+    value: any;
+    // barcode: string;
+    isSaved: boolean = false;
+
+    selectedTabIndex = 0;
 
 
-  rs_WithReturnExchangeReceipt = {
-      _retailSales: {},
-      _retailReceipt: [],
-      _retailsReturn: {},
-      _metalPurchase: {},
-  };
+    editOnly: boolean = false;
+    public isCustProcessing = false;
 
-  vocTypesinExchange: any[] = [
-      // { value: 'POS', viewValue: 'POS' },
-      { value: 'POS', viewValue: 'POS' },
-      { value: 'PS1', viewValue: 'PS1' },
-  ];
+    salesReturnRowData: any;
+    salesReturnRowDataSRNO: any;
 
-  custDesignation: any = [
-      { value: '1', label: 'Mr' },
-      { value: '2', label: 'Mrs' },
-      { value: '3', label: 'Ms' },
-  ];
+    queryParams: any;
 
+    public mask = {
+        guide: true,
+        showMask: true,
+        // keepCharPositions : true,
+        mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
+    };
+    noWhiteSpacePattern = /^\S*$/;
+    dateValue: any;
 
-  itemcodeSelected(value: any) {
-      console.log(value);
-      this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
-      this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
-  }
+    ozWeight: any = 0;
 
+    vocMaxDate = new Date();
 
-  divisionCodeSelected(e: any) {
-      console.log(e);
-      this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
+    dummyDate = '1900-01-01T00:00:00';
+    dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
 
-  }
-  modalReference: any;
-  modalReferenceSalesReturn: any;
-  closeResult!: string;
-  orders: any[] = [];
-  receiptDetailsList: any = [];
-
-  receiptTotalNetAmt: any;
-  balanceAmount: any;
-  fcn_returns_cust_code_val: any;
-  fcn_exchange_division_val: any
-  fcn_exchange_item_desc_val: any
-  fcn_returns_voc_date_val: any
-  fcn_returns_sales_man_val: any
-  fcn_returns_cust_mobile_val: any
-
-  
-  prnt_inv_net_total_without_tax_sum: any;
-  prnt_inv_total_tax_amount_sum: any;
-  prnt_inv_net_total_with_tax_sum: any;
-  prnt_received_amount: any;
-  prnt_received_amount_words: any;
+    // dummyDate = '01-01-1753T00:00:00';
+    // zeroAmtVal;
+    // zeroMQtyVal;
 
 
-  newLineItem: any = {
-    STOCK_CODE: '',
-    STOCK_DESCRIPTION: 'DIAMOND PENDANT',
-    MAIN_STOCK_CODE: 'MP009544',
-    MAIN_STOCK_DESC: '',
-    KARAT_CODE: '',
-    DIVISIONMS: '',
-    DIVISION_CODE: 'M',
-    LOCATION_CODE: '',
-    TAG_LINES:
-      '18KRG- 2.58 GMS\r\nRD-44/0.25 CTS\r\nBT*-1/13.29 CTS\r\nORC/A/REP/1014',
-    DESIGN_CODE: 'LPERC000298-P',
-    COLOR_CODE: 'RG',
-    SIZE: '',
-    BARCODEITEM: 'False',
-    TAX_INCLUSIVE: 'False',
-    ASK_WASTAGE: 'False',
-    POSFIXED: 'False',
-    TPROMOTIONALITEM: 'False',
-    ITEM_ONHOLD: 'False',
-    STAMPCHARGES: '0.000',
-    PCS: '0',
-    GROSSWT: '0.000',
-    STONEWT: '0.000',
-    NET_WT: '0.000',
-    CHARGABLEWT: '0.000',
-    PURITY: '0.000000',
-    PUREWT: '0.000',
-    PUDIFF: '0.000',
-    STONEDIFF: '0.000',
-    STOCK_FCCOST: '1660.310',
-    STOCK_LCCOST: '1660.310',
-    PRICE1FC: 4620.0,
-    PRICE1LC: 4620.0,
-    PRICE2FC: 1660.31,
-    PRICE2LC: 1660.31,
-  };
-
-  constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,
-    private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2,private lineItemService: ItemDetailService
-  ) {
-    this.strBranchcode = localStorage.getItem('userbranch');
-    this.strUser = localStorage.getItem('username');
+    salespersonName: string = '';
+    branchOptions: string[] = [''];
 
 
-    let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
+    receiptModesTypes: any;
+    receiptModesList: any;
+    metalPurchaseDataPost: any = null;
+    retailSalesDataPost: any = null;
+    retailSReturnDataPost: any = null;
 
-    this.lineItemForm = this.formBuilder.group({
-      fcn_li_item_code: ['', Validators.required],
-      fcn_li_item_desc: ['', Validators.required],
-      fcn_li_division: ['', Validators.required],
-      fcn_li_location: [''],
-      fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
-      fcn_li_gross_wt: ['', [Validators.required, Validators.min(0.1)]],
-      fcn_li_stone_wt: [0, Validators.required],
-      fcn_li_net_wt: [0, Validators.required],
-      fcn_li_rate: [{ value: 0 }, [Validators.required, Validators.min(0.1)]],
-      fcn_li_total_amount: [0, [Validators.required, Validators.min(1)]],
-      fcn_li_discount_percentage: [0],
-      fcn_li_discount_amount: [0],
-      fcn_li_gross_amount: [0, [Validators.required, Validators.min(1)]],
-      fcn_li_tax_percentage: [0, Validators.required],
-      fcn_li_tax_amount: [0, Validators.required],
-      fcn_li_net_amount: [0, [Validators.required, Validators.min(1)]],
-      fcn_li_purity: [{ value: 0 }, Validators.required],
-      fcn_li_pure_wt: [{ value: 0 }, Validators.required],
-      fcn_ad_pcs: [0],
-      fcn_ad_cts: [''],
-      fcn_ad_gms: [0],
-      fcn_ad_rate_type: [''],
-      fcn_ad_rate: [0],
-      fcn_ad_amount: [0],
-      fcn_tab_details: [''],
-      fcn_ad_making_rate: [0],
-      fcn_ad_making_amount: [0],
-      fcn_ad_stone_rate: [0],
-      fcn_ad_stone_amount: [0],
-      fcn_ad_metal_rate: [0],
-      fcn_ad_metal_amount: [0],
-    });
 
-  }
 
-  ngOnInit(): void {
-    this.ordered_items = this.orderedItems;
-    if(this.isEditable1){
-        this.editTable(this.newLineItem1);
+    // public noImage = environment._noImage;
+    selectedOption = '3';
+    title = 'appBootstrap';
+
+
+    rs_WithReturnExchangeReceipt = {
+        _retailSales: {},
+        _retailReceipt: [],
+        _retailsReturn: {},
+        _metalPurchase: {},
+    };
+
+    vocTypesinExchange: any[] = [
+        // { value: 'POS', viewValue: 'POS' },
+        { value: 'POS', viewValue: 'POS' },
+        { value: 'PS1', viewValue: 'PS1' },
+    ];
+
+    custDesignation: any = [
+        { value: '1', label: 'Mr' },
+        { value: '2', label: 'Mrs' },
+        { value: '3', label: 'Ms' },
+    ];
+
+
+    itemcodeSelected(value: any) {
+        console.log(value);
+        this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
+        this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
     }
-  }
-
-  dismissModal() {
-    // Here you might emit an event or perform other actions to close the modal
-    console.log('Modal dismissed');
-  }
-
-  convertDateToYMD(str: any) {
-    var date = new Date(str),
-      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
-      day = ('0' + date.getDate()).slice(-2);
-    return [date.getFullYear(), mnth, day].join('-');
-  }
-  getStockDesc(event: any) {
-
-    console.log('====================================');
-    console.log('called', event.target.value);
-    console.log('====================================');
-
-    this.li_tax_amount_val = 0.0;
-    var gross_amount_val = 0.0;
-    this.li_net_amount_val = 0.0;
-    this.currentStockCode = event.target.value;
-
-    // form rest before stockcode change
-    this.lineItemForm.reset();
-    this.lineItemForm.reset();
-    this.lineItemForm.controls.fcn_li_item_code.setValue(this.currentStockCode);
-    console.log('called', event.target.value);
-
-    this.snackBar.open('Loading...');
-    if (event.target.value != '') {
-      console.log('====================================');
-      console.log('called', this.currentStockCode);
-      console.log('====================================');
-
-      let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
-        '&strBranchCode=' + this.strBranchcode +
-        '&strVocType=POS' + '&strUserName=' + this.strUser +
-        '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocTypeData)
-      this.suntechApi.getDynamicAPI(API)
-        .subscribe((resp: any) => {
-          this.snackBar.dismiss();
-          console.log('====================================');
-          console.log(this.comFunc.allCompanyParams);
-          console.log('====================================');
-          if (resp != null) {
-            const stockInfoResult = resp.resultStatus;
-            const stockInfos = resp.stockInfo;
-            const stockInfoPrice = resp.priceInfo;
-            let stockInfoTaxes = resp.taxInfo;
-            this.isFieldReset = true;
-            if (stockInfoTaxes.length == 0 || stockInfoTaxes === null) {
-              stockInfoTaxes = [{
-                HSN_COD: 0,
-                GST_CODE: 0,
-                IGST_PER: 0,
-                IGST_ACCODE: 0,
-              }];
-            }
-            // if (resp.status == 'Success') {
-            if (stockInfoResult.RESULT_TYPE == "" || stockInfoResult.RESULT_TYPE == "Success") {
-              this.newLineItem = stockInfos;
-              this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
-              this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
-              this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
-              // this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.IGST_ACCODE;
-              // this.newLineItem.POS_TAX_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
-              this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
-              this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
-
-              this.divisionMS = stockInfos.DIVISIONMS;
-
-              const isBalanceZero = parseFloat(this.newLineItem.BALANCE_QTY) === 0;
-              const allowNegative = this.comFunc.stringToBoolean(stockInfos.ALLOW_NEGATIVE);
-              this.validateGrossWt = !(isBalanceZero || allowNegative);
-
-              this.validateStoneWt = this.comFunc.stringToBoolean(stockInfos.STONE);
-              this.lineItemForm.controls['fcn_li_item_code'].setValue(
-                stockInfos.STOCK_CODE
-              );
-              this.lineItemForm.controls['fcn_li_item_desc'].setValue(
-                stockInfos.DESCRIPTION
-              );
-              this.lineItemForm.controls['fcn_li_location'].setValue(
-                stockInfos.LOCATION_CODE
-              );
-              this.lineItemForm.controls['fcn_li_division'].setValue(
-                stockInfos.DIVISION
-              );
-              // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(stockInfos.MKG_STOCKVALUE);
-              this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                stockInfos.BALANCE_PCS
-              );
-              this.lineItemPcs = stockInfos.BALANCE_PCS;
-              this.lineItemGrossWt = this.comFunc.transformDecimalVB(
-                this.comFunc.mQtyDecimals,
-                this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
-              );
-              this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                stockInfos.BALANCE_QTY
-              );
 
 
-              this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                stockInfoPrice.MIN_SAL_PRICE
-              );
+    divisionCodeSelected(e: any) {
+        console.log(e);
+        this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
 
-              this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
+    }
+    modalReference: any;
+    modalReferenceSalesReturn: any;
+    closeResult!: string;
+    orders: any[] = [];
+    receiptDetailsList: any = [];
 
-                this.comFunc.transformDecimalVB(
-                  this.comFunc.amtDecimals,
-                  stockInfos.STONE_WT || 0
-                )
-
-                // stockInfos.STONE_WT || 0
-              ); // need field
-              this.lineItemForm.controls['fcn_li_net_wt'].setValue(
-                stockInfos.NET_WT
-              ); // need field
-              // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(stockInfoPrice.STONE_WT); // need field
-              this.lineItemForm.controls.fcn_li_rate.enable();
-              // this.lineItemForm.controls.fcn_li_pcs.enable();
-              this.lineItemForm.controls['fcn_li_tax_percentage'].setValue(
-                this.comFunc.transformDecimalVB(
-                  this.comFunc.allbranchMaster?.BAMTDECIMALS, stockInfoTaxes[0].IGST_PER)
-              );
-              this.lineItemForm.controls['fcn_li_purity'].setValue(
-                stockInfos.PURITY
-              );
-
-              this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
-              this.blockNegativeStockValue = stockInfos.BALANCE_QTY;
-              this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
-              this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                stockInfoPrice.MIN_SAL_PRICE
-              );
-              this.validatePCS = stockInfos.VALIDATE_PCS;
-              this.managePcsGrossWt();
-
-              // this.lineItemForm.controls['fcn_li_rate'].setValue(stockInfos.RATE); // got value =0
-              this.lineItemForm.controls['fcn_li_rate'].setValue(
-                parseFloat(stockInfos.RATE).toFixed(2)
-              );
-
-              this.makingRate = parseFloat(stockInfos.RATE).toFixed(2);
-              this.lineItemForm.controls['fcn_ad_rate'].setValue(
-                parseFloat(stockInfos.RATE).toFixed(2)
-              );
+    receiptTotalNetAmt: any;
+    balanceAmount: any;
+    fcn_returns_cust_code_val: any;
+    fcn_exchange_division_val: any
+    fcn_exchange_item_desc_val: any
+    fcn_returns_voc_date_val: any
+    fcn_returns_sales_man_val: any
+    fcn_returns_cust_mobile_val: any
 
 
-
-              this.curr_line_item_images = stockInfos.PICTURE_NAME;
-
-              if (this.divisionMS == 'M') {
-                if (parseFloat(this.lineItemForm.value.fcn_li_gross_wt) !== 0) {
-                  this.renderer.selectRootElement('#fcn_li_total_amount').focus();
-                }
-                else {
-                  this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
-                }
+    prnt_inv_net_total_without_tax_sum: any;
+    prnt_inv_total_tax_amount_sum: any;
+    prnt_inv_net_total_with_tax_sum: any;
+    prnt_received_amount: any;
+    prnt_received_amount_words: any;
 
 
-                this.lineItemForm.controls['fcn_ad_making_rate'].setValue(
-                  parseFloat(stockInfoPrice.SELLING_PRICE).toFixed(2)
-                ); //calculation
+    newLineItem: any = {
+        STOCK_CODE: '',
+        STOCK_DESCRIPTION: 'DIAMOND PENDANT',
+        MAIN_STOCK_CODE: 'MP009544',
+        MAIN_STOCK_DESC: '',
+        KARAT_CODE: '',
+        DIVISIONMS: '',
+        DIVISION_CODE: 'M',
+        LOCATION_CODE: '',
+        TAG_LINES:
+            '18KRG- 2.58 GMS\r\nRD-44/0.25 CTS\r\nBT*-1/13.29 CTS\r\nORC/A/REP/1014',
+        DESIGN_CODE: 'LPERC000298-P',
+        COLOR_CODE: 'RG',
+        SIZE: '',
+        BARCODEITEM: 'False',
+        TAX_INCLUSIVE: 'False',
+        ASK_WASTAGE: 'False',
+        POSFIXED: 'False',
+        TPROMOTIONALITEM: 'False',
+        ITEM_ONHOLD: 'False',
+        STAMPCHARGES: '0.000',
+        PCS: '0',
+        GROSSWT: '0.000',
+        STONEWT: '0.000',
+        NET_WT: '0.000',
+        CHARGABLEWT: '0.000',
+        PURITY: '0.000000',
+        PUREWT: '0.000',
+        PUDIFF: '0.000',
+        STONEDIFF: '0.000',
+        STOCK_FCCOST: '1660.310',
+        STOCK_LCCOST: '1660.310',
+        PRICE1FC: 4620.0,
+        PRICE1LC: 4620.0,
+        PRICE2FC: 1660.31,
+        PRICE2LC: 1660.31,
+    };
 
-                this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
-                  stockInfoPrice.METAL_RATE
+    constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,
+        private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2, private lineItemService: ItemDetailService
+    ) {
+        this.strBranchcode = localStorage.getItem('userbranch');
+        this.strUser = localStorage.getItem('username');
 
-                ); //need field
-                this.lineItemForm.controls['fcn_ad_rate_type'].setValue(
-                  stockInfos.RATE_TYPE != 'NULL' ? stockInfos.RATE_TYPE : ''
-                );
 
-                this.lineItemForm.controls['fcn_tab_details'].setValue(
-                  stockInfos.TAGLINES
-                );
-                this.li_tag_val = stockInfos.TAGLINES;
-
-                this.lineItemForm.controls['fcn_li_rate'].setValue(
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.amtDecimals,
-                    stockInfoPrice.SELLING_PRICE
-                  )
-                );
-                // this.lineItemForm.controls['fcn_ad_amount'].setValue(stockInfoPrice.SELLING_PRICE);
-                this.makingRate = this.comFunc.transformDecimalVB(
-                  this.comFunc.amtDecimals,
-                  stockInfoPrice.SELLING_PRICE
-                )
-                // this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
-                //   this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
-                // );
-
-                 this.setMetalRate(stockInfos.KARAT_CODE);
-                this.manageCalculations();
-              } else {
-                this.lineItemForm.controls['fcn_li_rate'].setValue(
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                    stockInfoPrice.SELLING_PRICE
-                  )
-                );
-                this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                    stockInfoPrice.SELLING_PRICE
-                  )
-                );
-
-                this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
-                  this.zeroAmtVal
-                );
-                this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-                  this.zeroAmtVal
-                );
-
-                this.manageCalculations();
-              }
-
-              this.li_tax_amount_val =
-                this.lineItemForm.value.fcn_li_tax_amount;
-              this.li_net_amount_val =
-                this.lineItemForm.value.fcn_li_net_amount;
-            } else {
-              this.openDialog(
-                'Failed',
-                this.comFunc.getMsgByID('MSG1464'),
-                true
-              );
-            }
-          }
+        let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
+        this.zeroAmtVal = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            0
+        );
+        this.lineItemForm = this.formBuilder.group({
+            fcn_li_item_code: ['', Validators.required],
+            fcn_li_item_desc: ['', Validators.required],
+            fcn_li_division: ['', Validators.required],
+            fcn_li_location: [''],
+            fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
+            fcn_li_gross_wt: ['', [Validators.required, Validators.min(0.1)]],
+            fcn_li_stone_wt: [0, Validators.required],
+            fcn_li_net_wt: [0, Validators.required],
+            fcn_li_rate: [{ value: 0 }, [Validators.required, Validators.min(0.1)]],
+            fcn_li_total_amount: [0, [Validators.required, Validators.min(1)]],
+            fcn_li_discount_percentage: [0],
+            fcn_li_discount_amount: [0],
+            fcn_li_gross_amount: [0, [Validators.required, Validators.min(1)]],
+            fcn_li_tax_percentage: [0, Validators.required],
+            fcn_li_tax_amount: [0, Validators.required],
+            fcn_li_net_amount: [0, [Validators.required, Validators.min(1)]],
+            fcn_li_purity: [{ value: 0 }, Validators.required],
+            fcn_li_pure_wt: [{ value: 0 }, Validators.required],
+            fcn_ad_pcs: [0],
+            fcn_ad_cts: [''],
+            fcn_ad_gms: [0],
+            fcn_ad_rate_type: [''],
+            fcn_ad_rate: [0],
+            fcn_ad_amount: [0],
+            fcn_tab_details: [''],
+            fcn_ad_making_rate: [0],
+            fcn_ad_making_amount: [0],
+            fcn_ad_stone_rate: [0],
+            fcn_ad_stone_amount: [0],
+            fcn_ad_metal_rate: [0],
+            fcn_ad_metal_amount: [0],
         });
 
-
     }
 
-
-
-  }
-  manageCalculations(
-    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
-  ) {
-    console.log('====================================');
-    console.log('manageCalculations', argsData);
-    console.log('====================================');
-
-    /** set nett weight */
-    this.lineItemForm.controls['fcn_li_net_wt'].setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
-        this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_stone_wt
-        )
-      )
-    );
-
-    /**  set pure weight */
-    this.lineItemForm.controls.fcn_li_pure_wt.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
-        this.lineItemForm.value.fcn_li_purity
-      )
-    );
-
-    /** empty stone rate if stone wt is  0 */
-    const stonewtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt);
-    console.log('stonewtVal', stonewtVal);
-    (stonewtVal)
-    if (stonewtVal == 0) {
-      this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
+    ngOnInit(): void {
+        this.lineItemService.getData().subscribe(data => {
+            this.currentLineItems = data;
+        });
+        this.ordered_items = this.orderedItems;
+        if (this.editItemDetail == true) {
+            this.editTable(this.updatedLineItem);
+        }
     }
 
-    /** set stone amount */
-    this.lineItemForm.controls['fcn_ad_stone_amount'].setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) *
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
-      )
-    );
+    dismissModal() {
+        // Here you might emit an event or perform other actions to close the modal
+        console.log('Modal dismissed');
+    }
 
-    /** set metal amount */
-    this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate) *
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt) // pure weight changed at 18/3/2024
-        // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) // pure weight
-      )
-    );
+    convertDateToYMD(str: any) {
+        var date = new Date(str),
+            mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+            day = ('0' + date.getDate()).slice(-2);
+        return [date.getFullYear(), mnth, day].join('-');
+    }
+    getStockDesc(event: any) {
 
-    /**  set making amount (total amount) */
-    let mkgvalue;
-    if (argsData.totalAmt != null) {
-      mkgvalue = argsData.totalAmt;
-      localStorage.setItem(
-        'fcn_li_total_amount',
-        this.comFunc
-          .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(mkgvalue))
-          .toString()
-      );
-    } else {
-      // mkgvalue =
-      //   this.lineItemForm.value.fcn_li_rate *
-      //   this.lineItemForm.value.fcn_li_gross_wt;
+        console.log('====================================');
+        console.log('called', event.target.value);
+        console.log('====================================');
+
+        this.li_tax_amount_val = 0.0;
+        var gross_amount_val = 0.0;
+        this.li_net_amount_val = 0.0;
+        this.currentStockCode = event.target.value;
+
+        // form rest before stockcode change
+        this.lineItemForm.reset();
+        this.lineItemForm.reset();
+        this.lineItemForm.controls.fcn_li_item_code.setValue(this.currentStockCode);
+        console.log('called', event.target.value);
+
+        this.snackBar.open('Loading...');
+        if (event.target.value != '') {
+            console.log('====================================');
+            console.log('called', this.currentStockCode);
+            console.log('====================================');
+
+            let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
+                '&strBranchCode=' + this.strBranchcode +
+                '&strVocType=POS' + '&strUserName=' + this.strUser +
+                '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocTypeData)
+            this.suntechApi.getDynamicAPI(API)
+                .subscribe((resp: any) => {
+                    this.snackBar.dismiss();
+                    console.log('====================================');
+                    console.log(this.comFunc.allCompanyParams);
+                    console.log('====================================');
+                    if (resp != null) {
+                        const stockInfoResult = resp.resultStatus;
+                        const stockInfos = resp.stockInfo;
+                        const stockInfoPrice = resp.priceInfo;
+                        let stockInfoTaxes = resp.taxInfo;
+                        this.isFieldReset = true;
+                        if (stockInfoTaxes.length == 0 || stockInfoTaxes === null) {
+                            stockInfoTaxes = [{
+                                HSN_COD: 0,
+                                GST_CODE: 0,
+                                IGST_PER: 0,
+                                IGST_ACCODE: 0,
+                            }];
+                        }
+                        // if (resp.status == 'Success') {
+                        if (stockInfoResult.RESULT_TYPE == "" || stockInfoResult.RESULT_TYPE == "Success") {
+                            this.newLineItem = stockInfos;
+                            this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
+                            this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
+                            this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
+                            // this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.IGST_ACCODE;
+                            // this.newLineItem.POS_TAX_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
+                            this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
+                            this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
+
+                            this.divisionMS = stockInfos.DIVISIONMS;
+
+                            const isBalanceZero = parseFloat(this.newLineItem.BALANCE_QTY) === 0;
+                            const allowNegative = this.comFunc.stringToBoolean(stockInfos.ALLOW_NEGATIVE);
+                            this.validateGrossWt = !(isBalanceZero || allowNegative);
+
+                            this.validateStoneWt = this.comFunc.stringToBoolean(stockInfos.STONE);
+                            this.lineItemForm.controls['fcn_li_item_code'].setValue(
+                                stockInfos.STOCK_CODE
+                            );
+                            this.lineItemForm.controls['fcn_li_item_desc'].setValue(
+                                stockInfos.DESCRIPTION
+                            );
+                            this.lineItemForm.controls['fcn_li_location'].setValue(
+                                stockInfos.LOCATION_CODE
+                            );
+                            this.lineItemForm.controls['fcn_li_division'].setValue(
+                                stockInfos.DIVISION
+                            );
+                            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(stockInfos.MKG_STOCKVALUE);
+                            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                                stockInfos.BALANCE_PCS
+                            );
+                            this.lineItemPcs = stockInfos.BALANCE_PCS;
+                            this.lineItemGrossWt = this.comFunc.transformDecimalVB(
+                                this.comFunc.mQtyDecimals,
+                                this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
+                            );
+                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                stockInfos.BALANCE_QTY
+                            );
 
 
-      // new calculation added 30/12/2023
-      if (this.divisionMS == 'M') {
-        switch (this.newLineItem?.MAKING_ON) {
+                            this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                                this.comFunc.amtDecimals,
+                                stockInfoPrice.MIN_SAL_PRICE
+                            );
 
-          case 'PCS':
-            mkgvalue =
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) *
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-            break;
+                            this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
 
-          case 'GROSS':
-            console.log('GROSS',
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.amtDecimals,
+                                    stockInfos.STONE_WT || 0
+                                )
+
+                                // stockInfos.STONE_WT || 0
+                            ); // need field
+                            this.lineItemForm.controls['fcn_li_net_wt'].setValue(
+                                stockInfos.NET_WT
+                            ); // need field
+                            // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(stockInfoPrice.STONE_WT); // need field
+                            this.lineItemForm.controls.fcn_li_rate.enable();
+                            // this.lineItemForm.controls.fcn_li_pcs.enable();
+                            this.lineItemForm.controls['fcn_li_tax_percentage'].setValue(
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.allbranchMaster?.BAMTDECIMALS, stockInfoTaxes[0].IGST_PER)
+                            );
+                            this.lineItemForm.controls['fcn_li_purity'].setValue(
+                                stockInfos.PURITY
+                            );
+
+                            this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
+                            this.blockNegativeStockValue = stockInfos.BALANCE_QTY;
+                            this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
+                            this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                                this.comFunc.amtDecimals,
+                                stockInfoPrice.MIN_SAL_PRICE
+                            );
+                            this.validatePCS = stockInfos.VALIDATE_PCS;
+                            this.managePcsGrossWt();
+
+                            // this.lineItemForm.controls['fcn_li_rate'].setValue(stockInfos.RATE); // got value =0
+                            this.lineItemForm.controls['fcn_li_rate'].setValue(
+                                parseFloat(stockInfos.RATE).toFixed(2)
+                            );
+
+                            this.makingRate = parseFloat(stockInfos.RATE).toFixed(2);
+                            this.lineItemForm.controls['fcn_ad_rate'].setValue(
+                                parseFloat(stockInfos.RATE).toFixed(2)
+                            );
+
+
+
+                            this.curr_line_item_images = stockInfos.PICTURE_NAME;
+
+                            if (this.divisionMS == 'M') {
+                                if (parseFloat(this.lineItemForm.value.fcn_li_gross_wt) !== 0) {
+                                    this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+                                }
+                                else {
+                                    this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
+                                }
+
+
+                                this.lineItemForm.controls['fcn_ad_making_rate'].setValue(
+                                    parseFloat(stockInfoPrice.SELLING_PRICE).toFixed(2)
+                                ); //calculation
+
+                                this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
+                                    stockInfoPrice.METAL_RATE
+
+                                ); //need field
+                                this.lineItemForm.controls['fcn_ad_rate_type'].setValue(
+                                    stockInfos.RATE_TYPE != 'NULL' ? stockInfos.RATE_TYPE : ''
+                                );
+
+                                this.lineItemForm.controls['fcn_tab_details'].setValue(
+                                    stockInfos.TAGLINES
+                                );
+                                this.li_tag_val = stockInfos.TAGLINES;
+
+                                this.lineItemForm.controls['fcn_li_rate'].setValue(
+                                    this.comFunc.transformDecimalVB(
+                                        this.comFunc.amtDecimals,
+                                        stockInfoPrice.SELLING_PRICE
+                                    )
+                                );
+                                // this.lineItemForm.controls['fcn_ad_amount'].setValue(stockInfoPrice.SELLING_PRICE);
+                                this.makingRate = this.comFunc.transformDecimalVB(
+                                    this.comFunc.amtDecimals,
+                                    stockInfoPrice.SELLING_PRICE
+                                )
+                                this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
+                                    this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
+                                );
+
+                                this.setMetalRate(stockInfos.KARAT_CODE);
+                                this.manageCalculations();
+                            } else {
+                                this.lineItemForm.controls['fcn_li_rate'].setValue(
+                                    this.comFunc.transformDecimalVB(
+                                        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                        stockInfoPrice.SELLING_PRICE
+                                    )
+                                );
+                                this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+                                    this.comFunc.transformDecimalVB(
+                                        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                        stockInfoPrice.SELLING_PRICE
+                                    )
+                                );
+
+                                this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+                                    this.zeroAmtVal
+                                );
+                                this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                                    this.zeroAmtVal
+                                );
+
+                                this.manageCalculations();
+                            }
+
+                            this.li_tax_amount_val =
+                                this.lineItemForm.value.fcn_li_tax_amount;
+                            this.li_net_amount_val =
+                                this.lineItemForm.value.fcn_li_net_amount;
+                        } else {
+                            this.openDialog(
+                                'Failed',
+                                this.comFunc.getMsgByID('MSG1464'),
+                                true
+                            );
+                        }
+                    }
+                });
+
+
+        }
+
+
+
+    }
+    manageCalculations(
+        argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
+    ) {
+        console.log('====================================');
+        console.log('manageCalculations', argsData);
+        console.log('====================================');
+
+        /** set nett weight */
+        this.lineItemForm.controls['fcn_li_net_wt'].setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
+                this.comFunc.emptyToZero(
+                    this.lineItemForm.value.fcn_li_stone_wt
+                )
+            )
+        );
+
+        /**  set pure weight */
+        this.lineItemForm.controls.fcn_li_pure_wt.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+                this.lineItemForm.value.fcn_li_purity
+            )
+        );
+
+        /** empty stone rate if stone wt is  0 */
+        const stonewtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt);
+        console.log('stonewtVal', stonewtVal);
+        (stonewtVal)
+        if (stonewtVal == 0) {
+            this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
+        }
+
+        /** set stone amount */
+        this.lineItemForm.controls['fcn_ad_stone_amount'].setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) *
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
+            )
+        );
+
+        /** set metal amount */
+        this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate) *
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt) // pure weight changed at 18/3/2024
+                // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) // pure weight
+            )
+        );
+
+        /**  set making amount (total amount) */
+        let mkgvalue;
+        if (argsData.totalAmt != null) {
+            mkgvalue = argsData.totalAmt;
+            localStorage.setItem(
+                'fcn_li_total_amount',
+                this.comFunc
+                    .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(mkgvalue))
+                    .toString()
+            );
+        } else {
+            // mkgvalue =
+            //   this.lineItemForm.value.fcn_li_rate *
+            //   this.lineItemForm.value.fcn_li_gross_wt;
+
+
+            // new calculation added 30/12/2023
+            if (this.divisionMS == 'M') {
+                switch (this.newLineItem?.MAKING_ON) {
+
+                    case 'PCS':
+                        mkgvalue =
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) *
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+                        break;
+
+                    case 'GROSS':
+                        console.log('GROSS',
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+                        );
+
+                        mkgvalue =
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+
+                        break;
+
+                    case 'NET':
+                        mkgvalue =
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+                        break;
+
+                }
+            } else {
+                mkgvalue =
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) *
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+            }
+        }
+        // const mkgvalue = (
+        //   this.lineItemForm.value.fcn_li_rate *
+        //   this.lineItemForm.value.fcn_li_gross_wt
+        // ).toFixed(2);
+
+        this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+            // Math.round(parseFloat(mkgvalue)).toFixed(2)
+
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(mkgvalue)
+            )
+        );
+
+        // set localstorage for get value
+        localStorage.setItem(
+            'fcn_li_total_amount',
+            // Math.round(parseFloat(mkgvalue)).toFixed(2)
+            this.comFunc
+                .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, mkgvalue)
+                .toString()
+        );
+
+        localStorage.setItem('fcn_li_rate', this.lineItemForm.value.fcn_li_rate);
+
+        /** set all total amount */
+        let stoneAmt = this.comFunc.emptyToZero(
+            this.lineItemForm.value.fcn_ad_stone_amount
+        );
+        let mkgAmt = this.comFunc.emptyToZero(
+            this.lineItemForm.value.fcn_li_total_amount
+            // this.lineItemForm.value.fcn_ad_making_amount
+        );
+        let mtlAmt = this.comFunc.emptyToZero(
+            this.lineItemForm.value.fcn_ad_metal_amount
+        );
+
+
+        console.log('====================================');
+        console.log(stoneAmt, mkgAmt, mtlAmt);
+        console.log('====================================');
+
+
+
+        /**  set Gross amt */
+        if (argsData.nettAmt == null) {
+            if (this.divisionMS == 'M') {
+                // console.log('====================================');
+                // console.log(
+                //   typeof this.lineItemForm.value.fcn_ad_amount,
+                //   this.lineItemForm.value.fcn_ad_amount,
+                //   typeof this.lineItemForm.value.fcn_li_discount_amount,
+                //   this.lineItemForm.value.fcn_li_discount_amount
+                // );
+                // console.log('====================================');
+                // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+                //   // Math.round(
+                //   //   this.lineItemForm.value.fcn_ad_amount -
+                //   //   this.lineItemForm.value.fcn_li_discount_amount
+                //   // ).toFixed(2)
+                //   this.comFunc.transformDecimalVB(
+                //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                //     this.lineItemForm.value.fcn_ad_amount -
+                //     this.lineItemForm.value.fcn_li_discount_amount
+                //   )
+                // );
+                this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+                    this.comFunc.transformDecimalVB(
+                        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                        this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
+                    )
+                );
+            } else {
+
+                /* divisionMS == s, set total amount to gross amt */
+                this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+                    // Math.round(
+                    //   this.lineItemForm.value.fcn_li_total_amount -
+                    //   this.lineItemForm.value.fcn_li_discount_amount
+                    // ).toFixed(2)
+                    this.comFunc.transformDecimalVB(
+                        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+                        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+                    )
+                    // this.comFunc.transformDecimalVB(
+                    //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    //   this.lineItemForm.value.fcn_li_total_amount -
+                    //   this.lineItemForm.value.fcn_li_discount_amount
+                    // )
+                );
+            }
+        }
+
+        if (argsData.nettAmt == null) {
+            /** set tax amount */
+            let taxAmount;
+            taxAmount = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.getPercentage(
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage),
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+                )
+            );
+            this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+                // Math.round(parseFloat(value)).toFixed(2)
+                this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+            );
+            this.li_tax_amount_val = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                taxAmount
             );
 
-            mkgvalue =
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+            /** set nett amount */
+            const netAmtValue =
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+
+            // this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+            //   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+            // );
+            this.li_net_amount_val = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                netAmtValue
+            );
+            this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+                this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+            );
+
+            localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
 
-            break;
-
-          case 'NET':
-            mkgvalue =
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-            break;
-
-        }
-      } else {
-        mkgvalue =
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) *
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
-      }
-    }
-    // const mkgvalue = (
-    //   this.lineItemForm.value.fcn_li_rate *
-    //   this.lineItemForm.value.fcn_li_gross_wt
-    // ).toFixed(2);
-
-    this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-      // Math.round(parseFloat(mkgvalue)).toFixed(2)
-
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(mkgvalue)
-      )
-    );
-
-    // set localstorage for get value
-    localStorage.setItem(
-      'fcn_li_total_amount',
-      // Math.round(parseFloat(mkgvalue)).toFixed(2)
-      this.comFunc
-        .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, mkgvalue)
-        .toString()
-    );
-
-    localStorage.setItem('fcn_li_rate', this.lineItemForm.value.fcn_li_rate);
-
-    /** set all total amount */
-    let stoneAmt = this.comFunc.emptyToZero(
-      this.lineItemForm.value.fcn_ad_stone_amount
-    );
-    let mkgAmt = this.comFunc.emptyToZero(
-      this.lineItemForm.value.fcn_li_total_amount
-      // this.lineItemForm.value.fcn_ad_making_amount
-    );
-    let mtlAmt = this.comFunc.emptyToZero(
-      this.lineItemForm.value.fcn_ad_metal_amount
-    );
-
-
-    console.log('====================================');
-    console.log(stoneAmt, mkgAmt, mtlAmt);
-    console.log('====================================');
-
-
-
-    /**  set Gross amt */
-    if (argsData.nettAmt == null) {
-      if (this.divisionMS == 'M') {
-        // console.log('====================================');
-        // console.log(
-        //   typeof this.lineItemForm.value.fcn_ad_amount,
-        //   this.lineItemForm.value.fcn_ad_amount,
-        //   typeof this.lineItemForm.value.fcn_li_discount_amount,
-        //   this.lineItemForm.value.fcn_li_discount_amount
-        // );
-        // console.log('====================================');
-        // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-        //   // Math.round(
-        //   //   this.lineItemForm.value.fcn_ad_amount -
-        //   //   this.lineItemForm.value.fcn_li_discount_amount
-        //   // ).toFixed(2)
-        //   this.comFunc.transformDecimalVB(
-        //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        //     this.lineItemForm.value.fcn_ad_amount -
-        //     this.lineItemForm.value.fcn_li_discount_amount
-        //   )
-        // );
-        this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-          this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
-          )
-        );
-      } else {
-
-        /* divisionMS == s, set total amount to gross amt */
-        this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-          // Math.round(
-          //   this.lineItemForm.value.fcn_li_total_amount -
-          //   this.lineItemForm.value.fcn_li_discount_amount
-          // ).toFixed(2)
-          this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-          )
-          // this.comFunc.transformDecimalVB(
-          //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          //   this.lineItemForm.value.fcn_li_total_amount -
-          //   this.lineItemForm.value.fcn_li_discount_amount
-          // )
-        );
-      }
-    }
-
-    if (argsData.nettAmt == null) {
-      /** set tax amount */
-      let taxAmount;
-      taxAmount = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.getPercentage(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage),
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
-        )
-      );
-      this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-        // Math.round(parseFloat(value)).toFixed(2)
-        this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
-      );
-      this.li_tax_amount_val = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        taxAmount
-      );
-
-      /** set nett amount */
-      const netAmtValue =
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
-
-      // this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-      //   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
-      // );
-      this.li_net_amount_val = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        netAmtValue
-      );
-      this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-        this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
-      );
-
-      localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
-
-    } else {
-
-      // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
-    }
-
-    // this.li_tax_amount_val = Math.round(parseFloat(value)).toFixed(2);
-
-    // this.li_net_amount_val =  Math.round(netAmtValue).toFixed(2);
-
-    this.lineItemForm.controls['fcn_li_rate'].setValue(
-      this.comFunc.commaSeperation(this.comFunc
-        .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
-    );
-    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-      this.comFunc.commaSeperation(
-        this.comFunc.decimalQuantityFormat(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
-          'METAL')
-      )
-    );
-    this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
-      this.comFunc.commaSeperation(
-        this.comFunc.decimalQuantityFormat(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt),
-          'STONE')
-      )
-    );
-    this.lineItemForm.controls['fcn_li_net_wt'].setValue(
-      this.comFunc.commaSeperation(
-        this.comFunc.decimalQuantityFormat(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt),
-          'METAL')
-      )
-    );
-    this.lineItemForm.controls['fcn_li_pure_wt'].setValue(
-      this.comFunc.commaSeperation(
-        this.comFunc.decimalQuantityFormat(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
-          'METAL')
-      )
-    );
-    this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_total_amount)
-    );
-    this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_ad_metal_amount)
-    );
-    this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_ad_stone_rate)
-    );
-    this.lineItemForm.controls['fcn_ad_stone_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_ad_stone_amount)
-    );
-    this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_gross_amount)
-    );
-    this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_percentage || this.zeroAmtVal)
-    );
-    this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount || this.zeroAmtVal)
-    );
-    this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
-    );
-    // alert(this.lineItemForm.value.fcn_li_net_amount))
-    this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_net_amount)
-    );
-    // this.lineItemForm.controls['fcn_li_rate'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
-    // );
-    // this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_total_amount)))
-    // );
-    // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_gross_amount)))
-    // );
-    // this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_discount_percentage)))
-    // );
-    // this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_discount_amount)))
-    // );
-    // this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_tax_amount)))
-    // );
-    // // alert(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount))
-    // this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-    //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
-    //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_net_amount)))
-    // );
-  }
-  getPercentage(percent: any, total: any) {
-    return (parseFloat(percent.toString()) / 100) * parseFloat(total.toString());
-    // return ((percent / 100) * total).toFixed(2);
-  }
-
-
-  storeDefaultValues(totGross: any, totTax: any, totNet: any, totMakeAmnt: any) {
-    this.defaultGrossTotal = totGross;
-    this.defaultTaxTotal = totTax;
-    this.defaultNetTotal = totNet;
-    this.defaultMakingCharge = totMakeAmnt;
-  }
-
-  openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
-    this.dialogBox = this.dialog.open(DialogboxComponent, {
-      width: '40%',
-      disableClose: true,
-      data: { title, msg, okBtn, swapColor },
-    });
-  }
-
-  setMetalRate(karatCode: any) {
-    const value = this.karatRateDetails.filter(
-      (data: any) => data.KARAT_CODE == karatCode
-    )[0].KARAT_RATE;
-    this.lineItemForm.controls.fcn_ad_metal_rate.setValue(this.comFunc.decimalQuantityFormat(value, 'METAL_RATE'));
-  }
-
-  managePcsGrossWt() {
-    if (this.validatePCS == true) {
-        this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
-        this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-
-        this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
-            Validators.required,
-            Validators.min(1),
-        ]);
-        if (this.divisionMS == 'M') {
-            if (this.newLineItem.PCS_TO_GMS?.toString() == '0')
-              this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
-            else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-          }
-    } else {
-        this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
-        this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
-
-        this.removeValidationsForForms(this.lineItemForm, ['fcn_li_pcs']);
-
-        if (this.newLineItem.BLOCK_GRWT == true)
-            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-        else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
-
-    }
-    //   if (stockInfos.BLOCK_GRWT == true)
-    //   this.lineItemForm.controls.fcn_li_gross_wt.disable();
-    // else this.lineItemForm.controls.fcn_li_gross_wt.enable();
-}
-
-removeValidationsForForms(form: FormGroup, controlsArr: string[]) {
-  controlsArr.forEach(controlName => {
-      const control = form.get(controlName);
-      if (control) {
-          control.clearValidators();
-          control.updateValueAndValidity();
-      }
-  });
-}
-
-
-changePCS(event: any) {
-  const value = event.target.value;
-  if (value != '' && this.validatePCS == true) {
-      this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-      // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-
-      if (this.blockNegativeStock == 'B') {
-          if (this.lineItemPcs < value) {
-              this.openDialog(
-                  'Warning',
-                  'Current Stock Qty Exceeding Available Stock Qty.',
-                  true
-              );
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                  if (data == 'OK') {
-                      this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                          this.lineItemPcs
-                      );
-                      this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                          this.lineItemPcs
-                      );
-
-                      this.manageCalculations();
-                  }
-                  // this.setTotalAmount();
-                  // this.changeGrossWt({target:{value }});
-
-                  // this.setGrossAmt();
-                  // this.setRate();
-              });
-          } else {
-              this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-              this.manageCalculations();
-          }
-      } else if (this.blockNegativeStock == 'W') {
-          if (this.lineItemPcs < value) {
-              this.openDialog(
-                  'Warning',
-                  'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                  false
-              );
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                  if (data == 'No') {
-                      this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                          this.lineItemPcs
-                      );
-                      this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                          this.lineItemPcs
-                      );
-
-                      this.manageCalculations();
-
-                      // this.setTotalAmount();
-
-                      // this.changeGrossWt({target:{value:this.lineItemPcs }});
-
-                      // this.setGrossAmt();
-                      // this.setRate();
-                  } else {
-                      // this.changeGrossWt({ target: { value: this.lineItemPcs } });
-
-                      // this.setGrossAmt();
-                      // this.setRate();
-                      // this.setTotalAmount();
-                      this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-                      this.manageCalculations();
-                  }
-              });
-          } else {
-              this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-              this.manageCalculations();
-          }
-      } else {
-          // blockNegativeStock = 'A'
-          // this.setGrossAmt();
-          // this.setRate();
-          // this.changeGrossWt({target:{value:0 }});
-          // this.setTotalAmount();
-          this.manageCalculations();
-      }
-  } else {
-      if (this.validatePCS == true)
-          this.lineItemForm.controls['fcn_li_gross_wt'].setValue(0);
-      this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
-
-      // this.setGrossAmt();
-      // this.setRate();
-      // this.setTotalAmount();
-      this.manageCalculations();
-  }
-}
-
-
-changeGrossWt(event: any) {
-  if (parseFloat(this.lineItemGrossWt) < this.lineItemForm.controls.fcn_li_gross_wt.value && this.lineItemGrossWt != 0) {
-
-      this.openDialog(
-          'Warning',
-          'Gross Weight Exceeding Available Gross Weight',
-          true
-      );
-      this.dialogBox.afterClosed().subscribe((data: any) => {
-          if (data == 'OK') {
-              this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                  this.lineItemGrossWt
-              );
-              this.manageCalculations();
-          }
-      });
-
-  }
-  else {
-      this.lineItemForm.controls.fcn_li_gross_wt.setValue(
-          this.comFunc.transformDecimalVB(
-              this.comFunc.mQtyDecimals,
-              this.comFunc.emptyToZero(event.target.value)
-          )
-      );
-      console.log('====================================');
-      console.log(
-          this.comFunc.transformDecimalVB(
-              this.comFunc.mQtyDecimals,
-              this.comFunc.emptyToZero(event.target.value)
-          )
-      );
-      console.log('====================================');
-      const value = event.target.value;
-      if (value != '' && this.validatePCS == false) {
-          if (this.blockNegativeStock == 'B') {
-              if (this.lineItemGrossWt < value) {
-                  this.openDialog(
-                      'Warning',
-                      'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                      true
-                  );
-                  this.dialogBox.afterClosed().subscribe((data: any) => {
-                      if (data == 'OK') {
-                          this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                              this.lineItemGrossWt
-                          );
-                          // this.setNettWeight();
-                          this.manageCalculations();
-                      }
-                  });
-              } else {
-                  // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-                  this.manageCalculations();
-              }
-          } else if (this.blockNegativeStock == 'W') {
-              if (this.lineItemGrossWt < value) {
-                  this.openDialog(
-                      'Warning',
-                      'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                      false
-                  );
-                  this.dialogBox.afterClosed().subscribe((data: any) => {
-                      if (data == 'No') {
-                          this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                              this.lineItemGrossWt
-                          );
-                          // this.setNettWeight();
-                          this.manageCalculations();
-                      } else {
-                          // this.setNettWeight();
-                          this.manageCalculations();
-                      }
-                  });
-              } else {
-                  this.manageCalculations();
-              }
-          } else {
-              // blockNegativeStock = 'A'
-              // this.setNettWeight();
-              this.manageCalculations();
-          }
-      } else {
-          // this.setNettWeight();
-          this.manageCalculations();
-      }
-  }
-
-}
-
-getExchangeNwtWt(event: any) {
-  const value = event.target.value;
-  if (value != '' && value != 0) {
-    
-
-       // this.changeExchangeNettWt({ target: { value: _exchangeGrossWt } });
-      //  this.setOzWt();
-      //  this.setExchangeMakingAmt();
-      //  this.setExMetalAmt();
-      //  this.setExNetAmt();
-      // focus
-      //  this.setFocusBasedExchangeStone();
-  } else {
-      // focus
-      // this.setFocusBasedExchangeStone();
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1303'), true);
-  }
-}
-
-changeNettWt(event: any) {
-  if (event.target.value != '') {
-      const value = this.comFunc.transformDecimalVB(
-          this.comFunc.mQtyDecimals,
-          this.lineItemForm.value.fcn_li_gross_wt -
-          this.lineItemForm.value.fcn_li_net_wt
-      );
-      this.lineItemForm.controls.fcn_li_stone_wt.setValue(value);
-      // this.setStoneAmt();
-      this.manageCalculations();
-  } else {
-      // this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
-      this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
-      // this.setStoneAmt();
-      this.manageCalculations();
-  }
-}
-
-changeStoneRate(event: any) {
-  if (event.target.value != '') {
-      // this.setStoneAmt();
-      this.manageCalculations();
-  } else {
-      this.lineItemForm.controls.fcn_ad_stone_rate.setValue(0);
-      // this.setStoneAmt();
-      this.manageCalculations();
-  }
-}
-
-changeStoneAmt(event: any) {
-  if (event.target.value != '') {
-    if (
-      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) == 0
-
-    ) {
-      this.lineItemForm.controls.fcn_ad_stone_amount.setValue(this.zeroAmtVal);
-    } else {
-      const value = (
-        parseFloat(this.lineItemForm.value.fcn_ad_stone_amount) /
-        parseFloat(this.lineItemForm.value.fcn_li_stone_wt)
-      );
-      this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
-        this.comFunc.decimalQuantityFormat(value, 'AMOUNT')
-      );
-    }
-    // this.setStoneAmt();
-  } else {
-    // this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
-    this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
-    // this.setStoneAmt();
-  }
-}
-
-changeRate(event: any) {
-
-    const karatComp22 = this.comFunc.allbranchMaster?.KARATCOMPANY22;
-    const minBranchProfitPercentMetal = this.comFunc.allbranchMaster?.MINBRANCHPROFITPERCENTMETAL;
-
-    const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
-    const value = event.target.value;
-    if (event.target.value != '') {
-
-      if (this.divisionMS == 'M') {
-
-        let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
-        let dblStockFcCost: any;
-        let karatCode = this.newLineItem.KARAT_CODE;
-
-        // this code commented at 21/3/2024 by jebaraj instruction
-        // if (this.comFunc.compCurrency == this.vocDataForm.value.txtCurrency.toString().trim()) {
-        //   // if (this.comFunc.compCurrency == 'AED') {
-        //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
-        //     if (karatCode.toString() == "24") {
-        //       dblStockFcCost = dblStockCost + 1;
-        //     }
-        //     else {
-        //       dblStockFcCost = dblStockCost + 5;
-        //     }
-        //   }
-        //   else
-        //     if ((dblStockCost <= .5) && (this.comFunc.compAcCode == "JHROR1")) {
-        //       dblStockCost = dblStockCost + .5;
-        //     }
-        //     else {
-        //       console.log('minbranch ', dblStockCost * minBranchProfitPercentMetal / 100.00, 'dblStockCost', dblStockCost);
-        //       dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
-        //     }
-        // }
-        // else {
-        //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
-        //     if (karatCode == "24") {
-        //       dblStockFcCost =
-        //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 1), this.vocDataForm.value.txtCurRate);
-        //     }
-        //     else {
-
-        //       dblStockFcCost =
-        //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 5), this.vocDataForm.value.txtCurRate);
-        //     }
-        //   }
-        //   else {
-        //     dblStockFcCost =
-        //       this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00)), this.vocDataForm.value.txtCurRate);
-        //   }
-        // }
-        // this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
-        // this.manageCalculations();
-
-        // if (!this.newLineItem.LESSTHANCOST) {
-
-        //   // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
-        //   {
-        //     if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
-        //       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-        //       this.dialogBox.afterClosed().subscribe((data: any) => {
-        //         if (data == 'OK') {
-        //           this.lineItemForm.controls.fcn_li_rate.setValue(
-        //             // ''
-        //             preVal
-        //           );
-        //           this.manageCalculations();
-        //           this.renderer.selectRootElement('#fcn_li_rate').focus();
-        //         }
-        //       });
-        //       return;
-        //     }
-        //   }
-        // }
-
-        if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
-
-          this.rateFunc(value);
-        }
-        else {
-          // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
-          // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-            if (data == 'OK') {
-              this.lineItemForm.controls.fcn_li_rate.setValue(
-                // ''
-                preVal
-                // this.comFunc.transformDecimalVB(
-                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                //   this.zeroAmtVal
-                // )
-              );
-              this.renderer.selectRootElement('#fcn_li_rate').focus();
-            }
-          });
-        }
-      }
-      let checkStockCostVal =
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
-
-      if (this.divisionMS == 'S') {
-        if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-          this.rateFunc(value);
-        }
-        else {
-          // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-            if (data == 'OK') {
-              this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                this.comFunc.transformDecimalVB(
-                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                  preVal
-                )
-              );
-            }
-          });
-        }
-      }
-
-
-
-    } else {
-      this.renderer.selectRootElement('#fcn_li_rate').focus();
-      this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
-      this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
-      // this.setGrossAmt();
-      this.manageCalculations();
-    }
-  }
-
-rateFunc(value: any) {
-
-  if (this.blockMinimumPrice == 'B') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-          this.openDialog(
-              'Warning',
-              `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-              }`,
-              // 'The rate is below to the minimum price, Do you want to Continue?','
-              true
-          );
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'OK') {
-                  // this.lineItemForm.controls.fcn_li_rate.setValue(
-                  //   this.blockMinimumPriceValue
-                  // );
-                  this.lineItemForm.controls.fcn_li_rate.setValue(
-                      this.makingRate
-                      // this.zeroAmtVal
-                  );
-                  this.manageCalculations();
-              }
-          });
-      } else {
-          this.manageCalculations();
-      }
-  }
-  else if (this.blockMinimumPrice == 'W') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-          this.openDialog(
-              'Warning',
-              // 'The rate is below to the minimum price, Do you want to Continue?',
-              `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-              }`,
-              false
-          );
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'No') {
-                  this.lineItemForm.controls.fcn_li_rate.setValue(
-                      this.zeroAmtVal
-                  );
-                  this.manageCalculations();
-
-              } else {
-                  this.manageCalculations();
-              }
-          });
-      }
-      else {
-          this.manageCalculations();
-      }
-  } else {
-      // blockMinimumPrice = 'A'
-      this.manageCalculations();
-  }
-}
-
-
-changeTotalAmt(event: any, nettAmt = null) {
-    const totalAmtVal: any = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
-    const val = this.comFunc.transformDecimalVB(
-      this.comFunc.allbranchMaster?.BAMTDECIMALS,
-      this.comFunc.emptyToZero(event.target.value));
-    if (event.target.value != '') {
-      const value = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        (totalAmtVal / this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt))
-      );
-      // this.lineItemForm.controls.fcn_li_rate.setValue(value);
-      // this.manageCalculations();
-      // alert(value);
-      const lsTotalAmt: any = localStorage.getItem('fcn_li_total_amount');
-      this.validateMinSalePriceByTotalAmt(
-        value,
-        val,
-        parseFloat(lsTotalAmt),
-        nettAmt
-      );
-      // if (this.lineItemForm.value.fcn_li_stone_wt != '' || this.lineItemForm.value.fcn_li_stone_wt != 0 && this.divisionMS == 'M') {
-      //   this.renderer.selectRootElement('#fcn_ad_stone_amount').focus();
-      // }
-    } else {
-      this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
-      this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
-      // this.setGrossAmt();
-      this.manageCalculations();
-    }
-  }
-validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt = null) {
-  const preRateVal = localStorage.getItem('fcn_li_rates');
-  const preTotalVal = localStorage.getItem('fcn_li_total_amnt');
-  // alert(this.lineItemForm.value.fcn_li_net_amount)
-  if (value != '') {
-
-      // alert('validateMinSalePriceByTotalAmt parseFloat(value)'+parseFloat(value)+'STOCK_COST' +this.newLineItem.STOCK_COST );
-      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
-
-          if (this.blockMinimumPrice == 'B') {
-              if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-                  this.openDialog(
-                      'Warning',
-                      // 'The rate is below to the minimum price, Do you want to Continue?',
-                      // this.comFunc.getMsgByID('MSG1731'),
-                      `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-                      } `,
-
-                      true
-                  );
-                  this.dialogBox.afterClosed().subscribe((data: any) => {
-                      if (data == 'OK') {
-                          // this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-                          //   0
-                          // );
-                          this.lineItemForm.controls.fcn_li_total_amount.setValue(lsTotalAmt);
-                          this.manageCalculations();
-                      }
-                  });
-              } else {
-                  this.lineItemForm.controls.fcn_li_rate.setValue(value);
-                  this.manageCalculations({ totalAmt: totalAmt, nettAmt });
-              }
-          }
-          else if (this.blockMinimumPrice == 'W') {
-              if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-                  this.openDialog(
-                      'Warning',
-                      // 'The rate is below to the minimum price, Do you want to Continue?',
-                      `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-                      }`,
-                      false
-                  );
-                  this.dialogBox.afterClosed().subscribe((data: any) => {
-                      if (data == 'No') {
-                          // document.execCommand('undo', true, null);
-                          this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                              lsTotalAmt
-                          );
-                          const lsNettAmt = localStorage.getItem('fcn_li_net_amount')
-                          // alert('lsNettAmt'+lsNettAmt);
-                          this.manageCalculations();
-                          // this.manageCalculations({ nettAmt: lsNettAmt });
-                      } else {
-                          this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
-                          this.lineItemForm.controls.fcn_li_rate.setValue(value);
-                          this.manageCalculations({ totalAmt: totalAmt, nettAmt });
-                      }
-                  });
-              } else {
-                  this.lineItemForm.controls.fcn_li_rate.setValue(value);
-                  // this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
-                  this.manageCalculations({ totalAmt: totalAmt, nettAmt });
-              }
-          } else {
-              // blockMinimumPrice = 'A'
-              this.lineItemForm.controls.fcn_li_rate.setValue(value);
-              this.manageCalculations({ totalAmt: totalAmt, nettAmt });
-          }
-
-      } else {
-          // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
-          // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'OK') {
-                  if(this.divisionMS=='M'){
-                    if(this.divisionMS=='M'){
-                  this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                      preTotalVal
-                  );
-                   this.lineItemForm.controls.fcn_li_rate.setValue(
-                    preRateVal
-                  );}
-                //   this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                //       this.defaultNetTotal
-                //   );
-
-                //   this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                //       this.defaultMakingCharge
-                //   );
-
-                //   this.lineItemForm.controls.fcn_li_tax_amount.setValue(
-                //       this.defaultTaxTotal
-                //   );
-
-                //   this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-                //       this.defaultGrossTotal
-                //   );
-
-                  this.renderer.selectRootElement('#fcn_li_rate').focus();
-              }
-              else if(this.divisionMS=='S'){
-                  this.lineItemForm.controls.fcn_li_rate.setValue(
-                      preRateVal
-                    );
-                 
-                    this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                      preTotalVal
-                    );
-              }
-          }
-            
-          });
-      }
-  } else {
-      this.lineItemForm.controls.fcn_li_rate.setValue(0);
-      this.lineItemForm.controls.fcn_li_total_amount.setValue(0);
-      this.manageCalculations();
-  }
-}
-
-
-changeDisAmount(event: any, nettAmt = null) {
-  if (event.target.value != '') {
-      const value =
-          // (
-          //   (this.lineItemForm.value.fcn_li_discount_amount /
-          //     this.lineItemForm.value.fcn_li_total_amount) *
-          //   100
-          // ).toFixed(2);
-          this.comFunc.transformDecimalVB(
-              this.comFunc.amtDecimals,
-              (this.lineItemForm.value.fcn_li_discount_amount /
-                  this.lineItemForm.value.fcn_li_total_amount) *
-              100
-          );
-
-      this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
-      console.log('dis amount', value);
-      // alert('dis per' + value.toString());
-      // alert('nettAmt '+nettAmt);
-      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
-
-      // this.validateMinSalePrice();
-      // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
-      // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2),  parseFloat(lsTotalAmt).toFixed(2));
-  } else {
-      this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
-      this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
-      this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
-
-      // this.setGrossAmt();
-      this.manageCalculations();
-  }
-}
-
-changeDisPer(event: any, discountAmt = null, nettAmt = null) {
-  // alert(event.target.value);
-  // alert('disAmt '+discountAmt );
-
-  if (event.target.value != '') {
-      let disAmt;
-      if (discountAmt != null && nettAmt == null) {
-          disAmt = discountAmt;
-          this.disFunc(disAmt);
-      }
-
-      if (discountAmt == null && nettAmt == null) {
-          const value = this.getPercentage(
-              this.lineItemForm.value.fcn_li_discount_percentage,
-              this.lineItemForm.value.fcn_li_total_amount
-          );
-          disAmt = this.comFunc.transformDecimalVB(
-              this.comFunc.amtDecimals,
-              value
-          );
-          this.disFunc(disAmt);
-
-      } else {
-          disAmt = this.lineItemForm.value.fcn_li_discount_amount;
-          // alert('********disAmt******' + disAmt);
-          // alert('********grossAmt******' + this.lineItemForm.value.fcn_li_gross_amount);
-          // alert('********nettAmt****** ' + nettAmt + 'type ' + typeof nettAmt);
-          this.manageCalculations({ disAmt: disAmt, nettAmt });
-      }
-
-      // this.setGrossAmt();
-      // alert('pre nettAmt ' + this.lineItemForm.value.fcn_li_net_amount)
-      // alert('nettAmt ' + parseFloat(disAmt) + parseFloat(this.lineItemForm.value.fcn_li_gross_amount))
-
-
-      // need to enable
-      // this.validateMinSalePrice();
-
-  } else {
-      this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
-      // this.setGrossAmt();
-      this.manageCalculations();
-  }
-}
-
-
-disFunc(disAmt: any) {
-  // this.manageCalculations({ disAmt: disAmt, nettAmt });
-  this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-      // Math.round(parseFloat(value)).toFixed(2)
-      disAmt
-  );
-
-
-  this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-      this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          parseFloat(this.lineItemForm.value.fcn_li_total_amount) -
-          disAmt
-      )
-  );
-
-  let taxAmount;
-  taxAmount = this.comFunc.transformDecimalVB(
-      this.comFunc.amtDecimals,
-      this.getPercentage(
-          parseFloat(this.lineItemForm.value.fcn_li_tax_percentage),
-          parseFloat(this.lineItemForm.value.fcn_li_gross_amount)
-      )
-  );
-  this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-      this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, taxAmount)
-  );
-
-
-  /** set nett amount */
-  const netAmtValue =
-      parseFloat(this.lineItemForm.value.fcn_li_gross_amount) +
-      parseFloat(this.lineItemForm.value.fcn_li_tax_amount);
-  this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-      this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, netAmtValue)
-  );
-  localStorage.setItem('fcn_li_net_amount', netAmtValue.toString())
-
-  this.validateMinSalePrice()
-}
-
-validateMinSalePrice() {
-  const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
-  const grossWt = this.lineItemForm.value.fcn_li_gross_wt;
-  const value = (grossAmt / grossWt).toString();
-  // const value = (grossAmt / grossWt).toFixed(2);
-  // alert(this.blockMinimumPriceValue + '_' + value);
-  console.log('==============validateMinSalePrice======================');
-  console.log(value);
-  console.log('====================================');
-
-  // if (value != '') {
-
-  let checkStockCostVal =
-      parseFloat(this.lineItemForm.value.fcn_li_net_amount) /
-      parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
-
-  // alert('checkStockCostVal ' + checkStockCostVal + 'STOCK_COST ' + this.newLineItem.STOCK_COST);
-  if (this.divisionMS == 'S') {
-      if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-          this.manageCalculations();
-          // if (this.blockMinimumPrice == 'B') {
-          //   if (parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-          //     this.openDialog(
-          //       'Warning',
-          //       `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-          //       }`,
-          //       // 'The rate is below to the minimum price, Do you want to Continue?','
-          //       true
-          //     );
-          //     this.dialogBox.afterClosed().subscribe((data: any) => {
-          //       if (data == 'OK') {
-          //         this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-          //           0
-          //         );
-          //         // this.changeDisPer({ target: { value: 0 } });
-          //         this.manageCalculations();
-          //       }
-          //     });
-          //   } else {
-          //     this.manageCalculations();
-          //   }
-          // }
-          // else if (this.blockMinimumPrice == 'W') {
-          //   if (parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-          //     this.openDialog(
-          //       'Warning',
-          //       // 'The rate is below to the minimum price, Do you want to Continue?',
-          //       `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-          //       }`,
-          //       false
-          //     );
-          //     this.dialogBox.afterClosed().subscribe((data: any) => {
-          //       if (data == 'No') {
-          //         this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-          //           0
-          //         );
-          //         // this.changeDisPer({ target: { value: 0 } });
-          //         this.manageCalculations();
-
-          //       } else {
-          //         this.manageCalculations();
-          //       }
-          //     });
-          //   }
-          //   else {
-          //     this.manageCalculations();
-          //   }
-          // } else {
-          //   // blockMinimumPrice = 'A'
-          //   this.manageCalculations();
-          // }
-      }
-      else {
-          // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'OK') {
-                  this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
-                      this.zeroAmtVal
-                      // this.comFunc.transformDecimalVB(
-                      //   this.comFunc.amtDecimals,
-
-                      // )
-                  );
-                  this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-                      this.zeroAmtVal
-                  );
-                  this.manageCalculations();
-              }
-          });
-      }
-  }
-  // }
-}
-
-
-changeStoneWt(event: any) {
-  const value = event.target.value;
-  console.log('====================================');
-  console.log(event.target);
-  console.log('====================================');
-  // alert(value + '_' + this.lineItemForm.value.fcn_li_gross_wt);
-  if (value != '') {
-      if (
-          parseFloat(value) > parseFloat(this.lineItemForm.value.fcn_li_gross_wt)
-      ) {
-          this.openDialog(
-              'Warning',
-              'Stone weight cannot be exceeded Gross weight',
-              true
-          );
-          // this.stoneWtPreVal = 0;
-
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'OK') {
-                  this.lineItemForm.controls['fcn_li_stone_wt'].setValue(this.zeroMQtyVal);
-                  // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(this.stoneWtPreVal);
-                  //  this.lineItemForm.controls['fcn_li_stone_wt'].valueChanges
-                  //   .pipe(startWith(1), pairwise()).subscribe(
-                  //     ([prevValue, selectedValue]) => {
-                  //       console.log('prev val => ' + prevValue); // previous value
-                  //       console.log('curr val => ' + selectedValue); // new value
-                  //       this.stoneWtPreVal = prevValue;
-                  //       // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(prevValue)
-                  //     }
-                  //   );
-                  // this.lineItemForm.controls['fcn_li_stone_wt'].valueChanges
-                  //   .pipe(startWith(2), pairwise()).subscribe(
-                  //     ([prevValue, selectedValue]) => {
-                  //       console.log('prev val => ' + prevValue); // previous value
-                  //       console.log('curr val => ' + selectedValue); // new value
-                  //       this.stoneWtPreVal = prevValue;
-                  //       this.lineItemForm.controls['fcn_li_stone_wt'].setValue(prevValue)
-                  //     }
-                  //   );
-                  // this.setNettWeight();
-                  this.manageCalculations();
-              }
-          });
-      } else {
-          // this.setStoneAmt();
-          // this.setNettWeight();
-          this.manageCalculations();
-      }
-  } else {
-      this.lineItemForm.controls.fcn_li_stone_wt.setValue(this.zeroMQtyVal);
-      // this.setStoneAmt();
-      // this.setNettWeight();
-      this.manageCalculations();
-  }
-}
-setValToLocalStorage(event: any, name: any) {
-  let checkStockCostVal =
-      parseFloat(this.lineItemForm.value.fcn_li_net_amount) /
-      parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
-
-  if (name == 'fcn_li_net_amount') {
-      if (this.divisionMS == 'M') {
-
-          if (
-              parseFloat(this.lineItemForm.value.fcn_li_net_amount) >
-              parseFloat(this.lineItemForm.value.fcn_ad_metal_amount)
-          ) {
-              localStorage.setItem(name, event.target.value.toString());
-
-          }
-      }
-      if (this.divisionMS == 'S') {
-
-          if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-              localStorage.setItem(name, event.target.value.toString());
-
-          }
-      }
-
-  } else {
-      localStorage.setItem(name, event.target.value.toString());
-  }
-
-}
-
-
-changeNettAmt(event: any) {
-  // console.log('==============changeNettAmt======================');
-  // console.log(localStorage.getItem('fcn_li_net_amount'));
-  // console.log('====================================');
-  const preVal = localStorage.getItem('fcn_li_net_amount');
-  if (event.target.value != '') {
-      let checkStockCostVal =
-          parseFloat(this.lineItemForm.value.fcn_li_net_amount) /
-          parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
-      // alert('checkStockCostVal '+ checkStockCostVal +' STOCK_COST' + parseFloat(this.newLineItem.STOCK_COST));
-
-      if (this.divisionMS == 'M') {
-
-          if (
-              // this.lineItemModalForSalesReturn ||
-
-              parseFloat(this.lineItemForm.value.fcn_li_net_amount) >
-              parseFloat(this.lineItemForm.value.fcn_ad_metal_amount)
-          ) {
-              this.netAmtFunc(event);
-          } else {
-              this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                  if (data == 'OK') {
-                      this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                          this.comFunc.transformDecimalVB(
-                              this.comFunc.amtDecimals,
-                              preVal
-                          )
-                      );
-                  }
-              });
-          }
-      }
-
-      if (this.divisionMS == 'S') {
-
-          if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-              this.netAmtFunc(event);
-          } else {
-              // Rate Cannot be Less Than Cost
-              this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                  if (data == 'OK') {
-                      this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                          this.comFunc.transformDecimalVB(
-                              this.comFunc.amtDecimals,
-                              preVal
-                          )
-                      );
-                  }
-              });
-          }
-      }
-
-      // this.lineItemForm.controls.fcn_li_rate.setValue(value);
-      // this.manageCalculations();
-      // alert(value);
-      // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
-      // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2), parseFloat(lsTotalAmt).toFixed(2));
-  } else {
-      this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-          this.zeroAmtVal
-      );
-      this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
-      // this.setGrossAmt();
-      this.manageCalculations();
-  }
-}
-
-netAmtFunc(event: any) {
-  this.lineItemForm.controls.fcn_li_net_amount.setValue(
-      this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          event.target.value
-      )
-  );
-
-  const taxAmt = this.comFunc.transformDecimalVB(
-      this.comFunc.amtDecimals,
-      (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) *
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage)) /
-      (100 + this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage))
-  );
-  const grossAmt =
-      this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          parseFloat(this.lineItemForm.value.fcn_li_net_amount) -
-          parseFloat(taxAmt));
-
-  let changingRate;
-  let totalAmt;
-  if (this.divisionMS == 'M') {
-      totalAmt = this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          parseFloat(grossAmt) -
-          (parseFloat(this.lineItemForm.value.fcn_ad_stone_amount || 0) +
-              parseFloat(this.lineItemForm.value.fcn_ad_metal_amount || 0))
-      );
-  } else {
-      totalAmt = this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.lineItemForm.value.fcn_li_total_amount
-      );
-
-  }
-
-  // Math.round(
-  //   grossAmt -
-  //   (parseFloat(
-  //     this.lineItemForm.value.fcn_ad_stone_amount || 0
-  //   ) +
-  //     parseFloat(
-  //       this.lineItemForm.value.fcn_ad_metal_amount || 0
-  //     ))
-  // ).toFixed(2);
-  // alert('totalAmt ' + totalAmt);
-  console.log(grossAmt, totalAmt, taxAmt);
-  const discountAmt = this.comFunc.transformDecimalVB(
-      this.comFunc.amtDecimals,
-      parseFloat(totalAmt) - parseFloat(grossAmt)
-  );
-
-  // alert(discountAmt);
-
-  // this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
-  // this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
-
-  this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
-  this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
-  this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
-
-  console.log('dis amount', discountAmt);
-  // alert(`taxamt ${taxAmt} grossamt ${grossAmt} totaamt ${totalAmt} disAmt ${discountAmt}`);
-
-  if (this.divisionMS == 'M') {
-      this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
-      this.changeTotalAmt(
-          { target: { value: totalAmt } },
-          this.lineItemForm.value.fcn_li_net_amount
-      );
-  } else {
-      this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-          discountAmt
-      );
-      this.changeDisAmount(
-          { target: { value: discountAmt } },
-          this.lineItemForm.value.fcn_li_net_amount
-      );
-
-
-      changingRate = this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.lineItemForm.value.fcn_li_gross_amount / this.lineItemForm.value.fcn_li_pcs
-      );
-      this.lineItemForm.controls.fcn_li_rate.setValue(
-          changingRate
-      );
-      this.lineItemForm.controls.fcn_li_rate.setValue(
-          changingRate
-      );
-
-      this.lineItemForm.controls['fcn_li_total_amount'].setValue(
-          this.comFunc.transformDecimalVB(
-              this.comFunc.amtDecimals,
-              this.comFunc.emptyToZero(this.lineItemForm.controls.fcn_li_gross_amount.value) - (this.comFunc.emptyToZero(this.lineItemForm.controls.fcn_li_tax_amount.value) + this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount))
-          )
-      );
-
-
-  }
-
-}
-
-
-addItemtoList(btn: any) {
-    Object.values(this.lineItemForm.controls).forEach(control => {
-      control.markAsTouched();
-    });
-    if (!this.lineItemForm.invalid) {
-      if (
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) >=
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
-      ) {
-        this.updateBtn = false;
-        
-        if (this.newLineItem.STOCK_CODE == '') {
-          // alert('Invalid Stock Code');
-          // this.snackBar.open('Invalid Stock Code', 'OK');
-          this.openDialog('Warning', 'Invalid Stock Code', true);
         } else {
-          let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
-          // alert(JSON.stringify(itemsLengths));
 
-          // alert(itemsLengths);
-          if (
-            this.orderedItemEditId == '' ||
-            this.orderedItemEditId == undefined ||
-            this.orderedItemEditId == null
-          ) {
-            if (itemsLengths == undefined) itemsLengths = 1;
-            else itemsLengths = itemsLengths.ID + 1;
-            this.order_items_slno_length = itemsLengths;
-          } else {
-            itemsLengths = this.orderedItemEditId;
-            this.order_items_slno_length = itemsLengths;
-          }
-
-          var temp_resp = this.newLineItem;
-
-          console.log(this.newLineItem);
-
-          var values: any = {
-            ID: this.order_items_slno_length,
-            sn_no: this.order_items_slno_length,
-            stock_code: this.newLineItem.STOCK_CODE,
-            mkg_amount: this.lineItemForm.value.fcn_ad_making_amount || 0,
-            // total_amount: temp_resp.PRICE1LC,
-            pcs: this.lineItemForm.value.fcn_li_pcs,
-            weight: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
-            description: this.lineItemForm.value.fcn_li_item_desc,
-            tax_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount),
-            net_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount),
-            pure_wt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
-            making_amt: this.lineItemForm.value.total_amount || 0,
-            // making_amt: this.lineItemForm.value.fcn_ad_making_amount || 0,
-            metal_rate: this.lineItemForm.value.fcn_ad_metal_rate || 0,
-            metal_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
-            stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
-            dis_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) || 0,
-            gross_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
-            rate: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0,
-            taxPer: this.lineItemForm.value.fcn_li_tax_percentage || 0,
-          };
-
-          values.total_amount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
-          // values.total_amount = this.lineItemForm.value.fcn_li_total_amount;
-          this.newLineItem.HSN_CODE = this.newLineItem.HSN_CODE;
-          this.newLineItem.GST_CODE = this.newLineItem.GST_CODE;
-          this.newLineItem.pcs = this.lineItemForm.value.fcn_li_pcs;
-          this.newLineItem.pure_wt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt);
-          this.newLineItem.STONE_WT = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt);
-          this.newLineItem.total_amount =
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
-          this.newLineItem.divisionMS = this.divisionMS;
-
-          if (
-            this.orderedItemEditId == '' ||
-            this.orderedItemEditId == undefined ||
-            this.orderedItemEditId == null
-          ) {
-            this.ordered_items.push(values);
-            // this.orderedItemEditId = '';
-          } else {
-            const preitemIndex = this.ordered_items.findIndex((data) => {
-              // console.table(data);
-              console.table(data.SRNO == this.orderedItemEditId);
-              return data.sn_no == this.orderedItemEditId;
-            });
-            if (preitemIndex != -1) {
-              values.sn_no = this.orderedItemEditId;
-
-              this.ordered_items[preitemIndex] = values;
-            }
-          }
-          console.log(this.ordered_items);
-          this.sumTotalValues();
-          this.setPosItemData(this.order_items_slno_length, this.newLineItem);
-          this.newLineItem.STOCK_CODE = '';
-
-          this.li_division_val = '';
-          this.li_item_code_val = '';
-          this.li_item_desc_val = '';
-          this.li_location_val = '';
-          this.li_gross_wt_val = '';
-          this.li_stone_wt_val = '';
-          this.li_net_wt_val = '';
-          this.li_making_rate_val = '';
-          this.li_making_amount_val = '';
-          this.li_stone_rate_val = '';
-          this.li_stone_amount_val = '';
-          this.li_metal_rate_val = '';
-          this.li_metal_amount_val = '';
-          this.li_rate_val = '';
-          this.li_total_val = '';
-          this.li_discount_percentage_val = '';
-          this.li_discount_amount_val = '';
-          this.li_gross_amount_val = '';
-          this.li_tax_percentage_val = '';
-          this.li_tax_amount_val = '';
-          this.li_net_amount_val = '';
-          this.li_tag_val = '';
-
-          this.lineItemForm.reset();
-          this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
-          this.setRetailSalesDataPost();
-
-          if (btn == 'finish_btn') {
-            this.modal.dismiss('Cross click');
-          }
-
+            // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
         }
 
-      } else {
-        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
-        // this.dialogBox.afterClosed().subscribe((data) => {
-        //   if (data == 'OK') {
-        //     this.lineItemForm.controls.fcn_li_net_amount.setValue(
-        //       this.comFunc.transformDecimalVB(
-        //         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        //         localStorage.getItem('fcn_li_net_amount')
-        //       ))
-        //   }
-        // });
-      }
-    } else {
-      console.log('====================================');
-      console.log(this.lineItemForm.controls.fcn_li_gross_wt.errors);
-      console.log('====================================');
-      this.snackBar.open('Please Fill Required Fields', '', {
-        duration: 2000 // time in milliseconds
-      });
+        // this.li_tax_amount_val = Math.round(parseFloat(value)).toFixed(2);
+
+        // this.li_net_amount_val =  Math.round(netAmtValue).toFixed(2);
+
+        this.lineItemForm.controls['fcn_li_rate'].setValue(
+            this.comFunc.commaSeperation(this.comFunc
+                .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
+        );
+        this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
+                    'METAL')
+            )
+        );
+        this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt),
+                    'STONE')
+            )
+        );
+        this.lineItemForm.controls['fcn_li_net_wt'].setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt),
+                    'METAL')
+            )
+        );
+        this.lineItemForm.controls['fcn_li_pure_wt'].setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
+                    'METAL')
+            )
+        );
+        this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_total_amount)
+        );
+        this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_ad_metal_amount)
+        );
+        this.lineItemForm.controls['fcn_ad_stone_rate'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_ad_stone_rate)
+        );
+        this.lineItemForm.controls['fcn_ad_stone_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_ad_stone_amount)
+        );
+        this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_gross_amount)
+        );
+        this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_percentage || this.zeroAmtVal)
+        );
+        this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount || this.zeroAmtVal)
+        );
+        this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
+        );
+        // alert(this.lineItemForm.value.fcn_li_net_amount))
+        this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+            this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_net_amount)
+        );
+        // this.lineItemForm.controls['fcn_li_rate'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
+        // );
+        // this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_total_amount)))
+        // );
+        // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_gross_amount)))
+        // );
+        // this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_discount_percentage)))
+        // );
+        // this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_discount_amount)))
+        // );
+        // this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_tax_amount)))
+        // );
+        // // alert(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount))
+        // this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+        //   this.comFunc.commaSeperation(this.comFunc.emptyToZero(this.comFunc
+        //     .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.lineItemForm.value.fcn_li_net_amount)))
+        // );
     }
-  }
-
-
-  editTable = async (event: any) => {
-
-    event.cancel = true;
-    //   event.settings.CommandButtonInitialize = (sender, e) =>
-    //  {
-    //      if ((e.ButtonType == event.settings.ColumnCommandButtonType.Update) || (e.ButtonType == event.settings.ColumnCommandButtonType.Cancel))
-    //      {
-    //          e.Visible = false;
-    //      }
-    //  };
-    this.lineItemService.getData().subscribe(data => {
-        this.currentLineItems = data;
-      });
-    const value: any = this.currentLineItems.filter(
-      (data: any) =>  data.SRNO == event.sn_no
-    )[0];
-    console.log(
-      '===============editTable==currentLineItems==================='
-    );
-    console.log(value);
-    console.log('====================================');
-
-    console.log(this.li_item_code_val);
-
-    // this.open(this.mymodal);
-
-    this.updateBtn = true;
-
-    this.newLineItem = value;
-
-
-    // if (this.editOnly == true || this.viewOnly == true) {
-    this.snackBar.open('Loading...');
-
-    // this.disableSaveBtn = true;
-
-    // let API = 'RetailSalesStockValidation?strStockCode=' + value.stock_code
-    //   +
-    //   '&strBranchCode=' + this.strBranchcode +
-    //   '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
-    //   '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
-    // await
-    //   this.suntechApi.getDynamicAPI(API)
-    //     .subscribe(async (resp: any) => {
-    //       this.snackBar.dismiss();
-    //       console.log('===========edit====getPOSStockCodeValidation=====================');
-    //       console.log(resp);
-    //       console.log('====================================');
-    //       if (resp != null) {
-    //         if (resp.resultStatus.RESULT_TYPE == 'Success') {
-    //           let stockInfos = resp.stockInfo;
-    //           console.log(stockInfos);
-
-    //           this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
-    //           this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
-    //           this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
-    //           this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
-    //           this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
-    //         //   this.disableSaveBtn = false;
-    //           this.validatePCS = stockInfos.VALIDATE_PCS;
-    //           this.managePcsGrossWt();
-
-    //           this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
-    //           this.newLineItem.DIVISION = stockInfos.DIVISION;
-    //           this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
-    //           this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
-
-
-    //           if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
-
-    //             if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
-    //               this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-    //             // else
-    //             //   /* need to check this for diamond item */
-    //             //   this.setMakingValidation();
-    //           }
-
-    //         }
-    //       }
-
-    //     })
-    // }
-
-
-    this.newLineItem.STOCK_CODE = value.STOCK_CODE;
-    this.newLineItem.DIVISION = value.DIVISION_CODE;
-    this.newLineItem.HSN_CODE = value.HSNCODE;
-    this.newLineItem.GST_CODE = value.VATCODE;
-    this.newLineItem.MAIN_STOCK_CODE = value.MAINSTOCKCODE;// changed at 16/3/2024
-    // this.newLineItem.MAIN_STOCK_CODE = value.MainStockCode;
-    console.log('edit af data', value)
-    this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
-    // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
-    // this.divisionMS = value.divisionMS;
-
-    
-
-    
-    this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
-    this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
-    this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
-    this.lineItemForm.controls.fcn_li_location.setValue(value.LOCTYPE_CODE);
-    this.lineItemForm.controls.fcn_li_pcs.setValue(value.PCS);
-    this.lineItemForm.controls.fcn_li_gross_wt.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        value.GROSSWT));
-    this.lineItemForm.controls.fcn_li_stone_wt.setValue(
-
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BSQTYDECIMALS,
-        value.STONEWT));
-    this.lineItemForm.controls.fcn_li_net_wt.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
-        value.NETWT));
-    this.lineItemForm.controls.fcn_li_rate.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(value.MKG_RATEFC)));
-    this.lineItemForm.controls.fcn_li_total_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.MKGVALUEFC));
-    this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNT)
-    );
-    this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNTVALUEFC)
-    );
-    this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.NETVALUEFC)
-    );
-    // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
-    this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_PER
-      )
-    );
-    this.lineItemForm.controls.fcn_li_tax_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC));
-    // this.lineItemForm.controls.fcn_li_net_amount.setValue(value.NETVALUEFC);
-    this.lineItemForm.controls.fcn_li_net_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC));
-
-    this.lineItemForm.controls.fcn_li_purity.setValue(
-      this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
-    );
-    this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
-    // this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
-
-    this.lineItemForm.controls.fcn_ad_amount.setValue(
-      // value.TOTALWITHVATFC
-
-      value.MKGMTLNETRATE // changed at 18/3/2024
-    );
-    this.lineItemForm.controls.fcn_ad_rate_type.setValue(value.RATE_TYPE);
-    this.lineItemForm.controls.fcn_ad_rate.setValue(value.MKGMTLNETRATE); // changed at 18/3/2024
-    this.lineItemForm.controls.fcn_tab_details.setValue(value.SJEW_TAGLINES);
-    // this.lineItemForm.controls.fcn_ad_making_rate.setValue(value.PUREWT);
-    // this.lineItemForm.controls.fcn_ad_making_amount.setValue(value.PUREWT);
-    this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.STONE_RATEFC));
-    this.lineItemForm.controls.fcn_ad_stone_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.STONEVALUEFC));
-    this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
-
-      this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE')
-
-    );
-    this.lineItemForm.controls.fcn_ad_metal_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.METALVALUEFC));
-
-    if (this.editOnly || this.viewOnly) {
-      const divisionMS = this.comFunc.getDivisionMS(value.DIVISION_CODE);
-      // this.currentLineItems.divisionMS = divisionMS;
-      this.divisionMS = divisionMS;
-    } else {
-      this.divisionMS = value.DIVISIONMS;
-    }
-    if (!this.viewOnly) {
-      // this.currentLineItems.splice((value.SRNO - 1), 1);
-      // this.ordered_items.splice((value.SRNO - 1), 1);
+    getPercentage(percent: any, total: any) {
+        return (parseFloat(percent.toString()) / 100) * parseFloat(total.toString());
+        // return ((percent / 100) * total).toFixed(2);
     }
 
-    localStorage.setItem('fcn_li_rate', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate).toString());
-    localStorage.setItem('fcn_li_total_amount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount).toString());
-    localStorage.setItem('fcn_li_net_amount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount).toString());
-
-
-    // this.manageCalculations();
-    // this.sumTotalValues();
-    // this.li_division_val = '';
-    // this.li_item_desc_val = '';
-    // this.li_location_val = '';
-    // this.li_gross_wt_val = '';
-    // this.li_stone_wt_val = '';
-    // this.li_net_wt_val = '';
-    // this.li_making_rate_val = '';
-    // this.li_making_amount_val = '';
-    // this.li_stone_rate_val = '';
-    // this.li_stone_amount_val = '';
-    // this.li_metal_rate_val = '';
-    // this.li_metal_amount_val = '';
-    // this.li_rate_val = '';
-    // this.li_total_val = '';
-    // this.li_discount_percentage_val = '';
-    // this.li_discount_amount_val = '';
-    // this.li_gross_amount_val = '';
-    // this.li_tax_percentage_val = '';
-    // this.li_tax_amount_val = '';
-    // this.li_net_amount_val = '';
-    // this.li_tag_val = '';
-
-    /* this.updateBtn = true;
-
-    if(this.showDivisionModal){
-    this.getSno = event.data['sNo'];
-    this.dataForm.controls['mkg_amt'].setValue(event.data['MkgAmount']);
-    this.dataForm.controls['net_amt'].setValue(event.data['TotalAmount']);
-    this.dataForm.controls['pcs'].setValue(event.data['Qty']);
-    this.dataForm.controls['net_wt'].setValue(event.data['Weight']);
-    }else{
-      this.getSno = event.data['sNo'];
-      this.divisionForm.controls['mkg_amt'].setValue(event.data['MkgAmount']);
-      this.divisionForm.controls['net_amt'].setValue(event.data['TotalAmount']);
-      this.divisionForm.controls['pcs'].setValue(event.data['Qty']);
-      this.divisionForm.controls['net_wt'].setValue(event.data['Weight']);
-    } */
-    // console.log(event.target.value)
-    // this.li_item_code_val = this.lineItemForm.value.fcn_li_item_code;
-    // // this.li_item_code_val = this.lineItemForm.value.fcn_li_item_code
-    // this.lineItemForm.controls['fcn_li_item_code'].setValue(
-    //   this.li_item_code_val
-    // );
-
-    // let events = {
-    //   target: { value: this.lineItemForm.value.fcn_li_item_code },
-    // };
-    // console.log(events);
-
-    // this.getStockDesc(events);
-  }
-sumTotalValues() {
-  /* line items start */
-  let total_pcs = 0;
-  let total_weight = 0;
-  let total_pure_weight = 0;
-  let total_making_amt = 0;
-  let total_metal_amt = 0;
-  let total_stone_amt = 0;
-  let total_dis_amt = 0;
-  let total_gross_amt = 0;
-  let total_sum = 0;
-  let tax_sum = 0;
-  let net_sum = 0;
-  /* line items end */
-
-  let total_sales_return_sum = 0;
-  let total_exchange = 0;
-  let total_received_amount = 0;
-
-  this.ordered_items.forEach(function (item) {
-      console.log('item---------------------', item);
-
-      total_sum = total_sum + parseFloat(item.total_amount);
-      tax_sum = tax_sum + parseFloat(item.tax_amount);
-      net_sum = net_sum + parseFloat(item.net_amount);
-      total_pcs = total_pcs + item.pcs;
-      total_weight = total_weight + parseFloat(item.weight);
-      total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
-      total_making_amt = total_making_amt + parseFloat(item.making_amt);
-      total_metal_amt = total_metal_amt + parseFloat(item.metal_amt);
-      total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
-      total_dis_amt = total_dis_amt + parseFloat(item.dis_amt);
-      total_gross_amt = total_gross_amt + parseFloat(item.gross_amt);
-  });
-
-  this.prnt_inv_total_pcs = total_pcs;
-  this.prnt_inv_total_weight = total_weight;
-  this.prnt_inv_total_pure_weight = total_pure_weight;
-  this.prnt_inv_total_making_amt = total_making_amt;
-  this.prnt_inv_total_metal_amt = total_metal_amt;
-  this.prnt_inv_total_stone_amt = total_stone_amt;
-  this.prnt_inv_total_dis_amt = total_dis_amt;
-  this.prnt_inv_total_gross_amt = total_gross_amt;
-
-  this.prnt_inv_net_total_without_tax = total_sum;
-  this.order_items_total_amount = total_sum;
-  this.prnt_inv_total_tax_amount = tax_sum;
-  this.order_items_total_tax = tax_sum;
-
-  this.order_items_total_gross_amount = net_sum;
-  this.order_items_total_discount_amount = 0.0;
-  // sales return items
-  //  this.sales_returns_items.forEach(function (item: any) {
-   //     total_sales_return_sum =
-  //          total_sales_return_sum + parseFloat(item.total_amount);
- //   });
- 
-
-  //  this.exchange_items.forEach(function (item) {
-  //      total_exchange = total_exchange + parseFloat(item.total_amount);
- //   });
-
-  // Metal purchase (Exchange)
-  this.sumExchangeItem();
-  this.sumRetailSalesReturn();
-  this.order_total_exchange = total_exchange;
-
-  console.log('============== amount ======================');
-  console.log(
-      this.order_items_total_gross_amount,
-      total_sales_return_sum,
-      total_exchange
-  );
-  console.log('====================================');
-  this.order_items_total_net_amount = this.comFunc.transformDecimalVB(
-      this.comFunc.amtDecimals,
-      this.order_items_total_gross_amount -
-      // total_sales_return_sum -
-      this.invReturnSalesTotalNetTotal -
-      total_exchange
-  );
-  this.order_items_total_net_amount_org = this.order_items_total_net_amount;
-  this.sumReceiptItem();
-
-}
-
- // Receipt
- sumReceiptItem() {
-  var totalNetAmount = 0.0;
-
-  this.receiptDetailsList.forEach((item: any) => {
-      totalNetAmount =
-          this.comFunc.emptyToZero(totalNetAmount) + this.comFunc.emptyToZero(item['AMOUNT_FC']);
-  });
-
-  this.receiptTotalNetAmt =
-      this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, totalNetAmount);
-  this.balanceAmount =
-      this.comFunc.emptyToZero(this.order_items_total_net_amount) - this.comFunc.emptyToZero(this.receiptTotalNetAmt);
-
-  this.prnt_received_amount = this.receiptTotalNetAmt;
-  this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
-
-  // recpCtrl.receiptTotalNetAmt = receiptTotalNetAmt;
-  // recpCtrl.balanceAmount = balanceAmount;
-}
-
-
-numToWord(number: any) {
-  //Validates the number input and makes it a string
-  if (typeof number === 'string') {
-      number = parseInt(number, 10);
-  }
-  if (typeof number === 'number' && !isNaN(number) && isFinite(number)) {
-      number = number.toString(10);
-  } else {
-      return 'This is not a valid number';
-  }
-
-  //Creates an array with the number's digits and
-  //adds the necessary amount of 0 to make it fully
-  //divisible by 3
-  var digits = number.split('');
-  var digitsNeeded = 3 - (digits.length % 3);
-  if (digitsNeeded !== 3) {
-      //prevents this : (123) ---> (000123)
-      while (digitsNeeded > 0) {
-          digits.unshift('0');
-          digitsNeeded--;
-      }
-  }
-
-  //Groups the digits in groups of three
-  var digitsGroup = [];
-  var numberOfGroups = digits.length / 3;
-  for (var i = 0; i < numberOfGroups; i++) {
-      digitsGroup[i] = digits.splice(0, 3);
-  }
-  console.log(digitsGroup); //debug
-
-  //Change the group's numerical values to text
-  var digitsGroupLen = digitsGroup.length;
-  var numTxt = [
-      [
-          null,
-          'one',
-          'two',
-          'three',
-          'four',
-          'five',
-          'six',
-          'seven',
-          'eight',
-          'nine',
-      ], //hundreds
-      [
-          null,
-          'ten',
-          'twenty',
-          'thirty',
-          'forty',
-          'fifty',
-          'sixty',
-          'seventy',
-          'eighty',
-          'ninety',
-      ], //tens
-      [
-          null,
-          'one',
-          'two',
-          'three',
-          'four',
-          'five',
-          'six',
-          'seven',
-          'eight',
-          'nine',
-      ], //ones
-  ];
-  var tenthsDifferent = [
-      'ten',
-      'eleven',
-      'twelve',
-      'thirteen',
-      'fourteen',
-      'fifteen',
-      'sixteen',
-      'seventeen',
-      'eighteen',
-      'nineteen',
-  ];
-
-  // j maps the groups in the digitsGroup
-  // k maps the element's position in the group to the numTxt equivalent
-  // k values: 0 = hundreds, 1 = tens, 2 = ones
-  for (var j = 0; j < digitsGroupLen; j++) {
-      for (var k = 0; k < 3; k++) {
-          var currentValue = digitsGroup[j][k];
-          digitsGroup[j][k] = numTxt[k][currentValue];
-          if (k === 0 && currentValue !== '0') {
-              // !==0 avoids creating a string "null hundred"
-              digitsGroup[j][k] += ' hundred ';
-          } else if (k === 1 && currentValue === '1') {
-              //Changes the value in the tens place and erases the value in the ones place
-              digitsGroup[j][k] = tenthsDifferent[digitsGroup[j][2]];
-              digitsGroup[j][2] = 0; //Sets to null. Because it sets the next k to be evaluated, setting this to null doesn't work.
-          }
-      }
-  }
-
-  console.log(digitsGroup); //debug
-
-  //Adds '-' for grammar, cleans all null values, joins the group's elements into a string
-  for (var l = 0; l < digitsGroupLen; l++) {
-      if (digitsGroup[l][1] && digitsGroup[l][2]) {
-          digitsGroup[l][1] += '-';
-      }
-      digitsGroup[l].filter(function (e: any) {
-          return e !== null;
-      });
-      digitsGroup[l] = digitsGroup[l].join('');
-  }
-
-  console.log(digitsGroup); //debug
-
-  //Adds thousand, millions, billion and etc to the respective string.
-  var posfix = [
-      null,
-      'thousand',
-      'million',
-      'billion',
-      'trillion',
-      'quadrillion',
-      'quintillion',
-      'sextillion',
-  ];
-  if (digitsGroupLen > 1) {
-      var posfixRange = posfix.splice(0, digitsGroupLen).reverse();
-      for (var m = 0; m < digitsGroupLen - 1; m++) {
-          //'-1' prevents adding a null posfix to the last group
-          if (digitsGroup[m]) {
-              // avoids 10000000 being read (one billion million)
-              digitsGroup[m] += ' ' + posfixRange[m];
-          }
-      }
-  }
-
-  console.log(digitsGroup); //debug
-
-  //Joins all the string into one and returns it
-  return digitsGroup.join(' ');
-}
-
-
-setPosItemData(sno: any, data: any) {
-
-  let temp_pos_item_data: any = {
-
-
-      DIVISIONMS: data.divisionMS,
-      SRNO: sno,
-      DIVISION_CODE: data.DIVISION,
-      STOCK_CODE: data.STOCK_CODE, // m
-      GROSS_AMT: this.lineItemForm.value.fcn_li_gross_amount || 0,
-      PCS: data.pcs, //m
-      GROSSWT: this.lineItemForm.value.fcn_li_gross_wt,
-      STONEWT: data.STONE_WT, // m
-      NETWT: this.lineItemForm.value.fcn_li_net_wt, // m
-      PURITY: data.PURITY, // m
-      PUREWT: data.pure_wt, // m
-      CHARGABLEWT: this.lineItemForm.value.fcn_li_net_wt, // defaultNetTotal weight
-      MKG_RATEFC: this.lineItemForm.value.fcn_li_rate || 0, //need
-      MKG_RATECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-      ), // cctofc rate
-
-      MKGVALUEFC: this.lineItemForm.value.fcn_li_total_amount, // metal amount
-      MKGVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
-      ), // metal amount
-      RATE_TYPE: data.RATE_TYPE, //need_input
-      METAL_RATE: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_metal_rate
-      ),
-
-      METAL_RATE_GMSFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_metal_rate
-      ), //need_input
-      METAL_RATE_GMSCC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate)
-      ),
-
-
-      METALVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_metal_amount
-      ),
-
-      METALVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
-      ),
-      STONE_RATEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_stone_rate
-      ),
-      STONE_RATECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
-      ),
-      STONEVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_stone_amount
-      ),
-      STONEVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount)
-      ),
-      DISCOUNT: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_discount_percentage
-      ),
-      DISCOUNTVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_discount_amount
-      ),
-      DISCOUNTVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-      ),
-    
-      NETVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_net_amount
-      ),
-      NETVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
-      ),
-      PUDIFF: 0,
-      STONEDIFF: 0,
-      PONO: 0, //need_input
-      LOCTYPE_CODE: this.lineItemForm.value.fcn_li_location, // need
-      SUPPLIER: data.SUPPLIER || '',
-      STOCK_DOCDESC: this.lineItemForm.value.fcn_li_item_desc,
-      LOCKED: false,
-      MCLENGTH: 0, //need_input
-      MCUNIT: 0,
-      POSSALESSR: '0',
-      PHYSICALSTOCK: '0',
-      METALAMT: '0',
-      MAKINGAMT: '0',
-   
-      STDIFFAC: '0',
-      STAMTAC: '0',
-      STKTRANMKGCOST: '0',
-      MAINSTOCKCODE: data.MAIN_STOCK_CODE, //need field
-      MKGMTLNETRATE: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          parseFloat(this.lineItemForm.value.fcn_li_total_amount) +
-          parseFloat(this.lineItemForm.value.fcn_ad_metal_amount)
-      ),
-
-      MTL_SIZE: '0',
-      MTL_COLOR: '0',
-      MTL_DESIGN: '0',
-     // SALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
-      STKTRN_LANDINGCOST: 0, //need
-      STKTRN_WASTAGERATE: 0, //need
-
-      HSN_CODE: data.HSN_CODE,
-      VATCODE: data.GST_CODE,
-
-      VAT_PER: 0,
-
-      VAT_AMOUNTFC: 0,
- 
-      VAT_AMOUNTLC: 0,
-
-      TOTALWITHVATFC: 0,
-  
-      TOTALWITHVATLC: 0,
- 
-
-      RS_PICTUREPATH: '',
-      RSO_FIXED: false,
-      RSORDERGROSSWT: 0,
-      RUBY_WT: 0,
-      RUBY_RATE: 0,
-      RUBY_AMOUNTFC: 0,
-      RUBY_AMOUNTCC: 0,
-      EMERALD_WT: 0,
-      EMERALD_RATE: 0,
-      EMERALD_AMOUNTFC: 0,
-      EMERALD_AMOUNTCC: 0,
-      SAPPHIRE_WT: 0,
-      SAPPHIRE_RATE: 0,
-      SAPPHIRE_AMOUNTFC: 0,
-      SAPPHIRE_AMOUNTCC: 0,
-      ZIRCON_WT: 0,
-      ZIRCON_RATE: 0,
-      ZIRCON_AMOUNTFC: 0,
-      ZIRCON_AMOUNTCC: 0,
-      COLOR_STONE_WT: 0,
-      COLOR_STONE_RATE: 0,
-      COLOR_STONE_AMOUNTFC: 0,
-      COLOR_STONE_AMOUNTCC: 0,
-      SJEW_TAGLINES: this.lineItemForm.value.fcn_tab_details || '',
-      DSALEPERSON_CODE: '',
-      VAT_ACCODE: '0',
-
-      // Loyalty_Item: false,
-      WASTE_PER: 0,
-
-      DT_BRANCH_CODE: this.strBranchcode,
-      DT_VOCNO: '0', // to 0
-      DT_VOCTYPE: 'EST', // change
-      // "DT_VOCTYPE":  this.vocType, // change
-      DT_YEARMONTH: this.baseYear,
-      DT_BLOCKPSRIMPORT: false,
-      // GIFT_ITEM: false,
-
-      // STOCKCHECKOTHERBRANCH: false,
-      // DTREMARKS: '',
-      SERVICE_STOCK_CODE: '',
-      GSTMETALPER: 0.0,
-      GSTMAKINGPER: 0.0,
-      GSTOTHERPER: 0.0,
-      GSTMETALAMT_CC: 0.0,
-      GSTMAKINGAMT_CC: 0.0,
-      GSTOTHERAMT_CC: 0.0,
-      GSTMETALAMT_FC: 0.0,
-      GSTMAKINGAMT_FC: 0.0,
-      GSTOTHERAMT_FC: 0.0,
-      TOTALWITHGST_CC: 0.0,
-      TOTALWITHGST_FC: 0.0,
-
-      EXTRA_STOCK_CODE: '001293413',
-      OT_TRANSFER_TIME: '',
-
-      MARGIN_PER: '0.000',
-      MARGIN_AMTFC: '0.000',
-      MARGIN_AMTCC: '0.000',
-      CGST_PER: '0.00',
-      CGST_AMOUNTFC: '0.000',
-      CGST_AMOUNTCC: '0.000',
-      SGST_PER: '0.000',
-      SGST_AMOUNTFC: '0.000',
-      SGST_AMOUNTCC: '0.000',
-      IGST_PER: this.lineItemForm.value.fcn_li_tax_percentage || 0,
-      IGST_AMOUNTFC: this.lineItemForm.value.fcn_li_tax_amount || 0,
-      IGST_AMOUNTCC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.lineItemForm.value.fcn_li_tax_amount
-      ),
-      CGST_ACCODE: '0',
-      SGST_ACCODE: '0',
-      IGST_ACCODE: this.newLineItem.IGST_ACCODE,
-      TOTAL_AMOUNTFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_gross_amount
-      ),
-      
-
-      TOTAL_AMOUNTCC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
-      ),
-    
-      CGST_CTRLACCODE: '0',
-      SGST_CTRLACCODE: '0',
-      IGST_CTRLACCODE: '0',
-      GST_GROUP: '0',
-      GST_CODE: data['GST_CODE'],
-      SERVICE_ACCODE: '0',
-      WASTAGEPER: '0.00',
-      WASTAGEQTY: '0.000',
-      WASTAGEPUREWT: '0.000',
-      WASTAGEAMOUNTFC: '0.000',
-      WASTAGEAMOUNTCC: '0.000',
-    
-      "INCLUSIVE": false,
-      "OLDRATE": '0',
-      "OLDAMOUNT": '0',
-      "DISC_USER_NAME": '0',
-      "DISC_AMOUNT": '0.000',
-      "DISC_PERCENTAGE": '0.000',
-      "KUNDAN_UNIT": '0',
-      "KUNDAN_PCS": '0',
-      "KUNDAN_CARAT": '0.000',
-      "KUNDAN_WEIGHT": '0.000',
-      "KUNDAN_RATEFC": '0.000',
-      "KUNDAN_RATECC": '0.000',
-      "KUNDANVALUEFC": '0.000',
-      "KUNDANVALUECC": '0.000',
-      "CESS_PER": '0.000',
-      "CESS_AMOUNTFC": '0.000',
-      "CESS_AMOUNTCC": '0.000',
-      "ROS_FIXED": '0',
-      "BATCHID": '0',
-      "STAMP_RATE": '0.000000',
-      'STAMP_AMOUNT': '0.00',
-      "STAMP_AMOUNTCC": '0.00',
-      "SET_REF": '0',
-      "LOYALTY_POINTS": '0.00',
-      "SALES_TAGLINES":
-          this.lineItemForm.value.fcn_tab_details || '0',
-      "GPC_STONEDIFF_AC": '0',
-      "GPC_STONEVALUESALES_AC": '0',
-      "GPC_POSSALES_AC": '0',
-      "GPC_KUNDANVALUESALES_AC": '0',
-      "GPC_POSSALESSR_AC": '0',
-      "GPC_METALAMT_AC": '0',
-      "GPC_PHYSICALSTOCK_AC": '0',
-      "GPC_WASTAGE_AC": '0',
-      "GPC_STAMPCHARGE_AC": '0',
-      "COUNTRY_CODE": '',
-      "UNIT_CODE": '0',
-      "FLAGESTK": '0',
-      "GPC_MAKINGAMT_AC": '0',
-      "DTSALESPERSON_CODE": "0"
-  };
-  console.log(data);
-
-  let _taxamount = 0;
-  _taxamount = data.PRICE1LC * (this.branch_tax_percentage / 100);
-
-  let _net_amount_val = +_taxamount + +data.PRICE1LC;
-
-
-  console.log(temp_pos_item_data);
-  if (
-      this.orderedItemEditId == '' ||
-      this.orderedItemEditId == undefined ||
-      this.orderedItemEditId == null
-  ) {
-      this.currentLineItems.push(temp_pos_item_data);
-      this.lineItemService.setData(this.currentLineItems);
-  } else {
-      const preitemIndex = this.currentLineItems.findIndex((data: any) => {
-          console.table(data.SRNO == this.orderedItemEditId);
-          return data.SRNO == this.orderedItemEditId;
-      });
-      console.log('====================================');
-      console.log(preitemIndex);
-      console.log('====================================');
-      if (preitemIndex != -1) {
-          temp_pos_item_data.SRNO = this.orderedItemEditId;
-          this.currentLineItems[preitemIndex] = temp_pos_item_data;
-      }
-      console.log(
-          '===========updatedcurrentLineItems========================='
-      );
-      console.log(this.currentLineItems);
-      console.log(this.ordered_items);
-      console.log('====================================');
-      this.orderedItemEditId = '';
-  }
-  this.pos_main_data.RetailDetails = this.currentLineItems;
-  console.log(this.pos_main_data);
-}
-
-
-
-setRetailSalesDataPost() {
-  // alert(this.customerDetails?.CODE );
-  // alert(this.invReturnSalesTotalNetTotal)
-  // alert(this.order_total_exchange)
-
-
-  this.retailSalesDataPost =
-  {
-      MID: this.retailSalesMID,
-      BRANCH_CODE: this.strBranchcode,
-      VOCTYPE: 'EST',
-      // VOCTYPE: this.vocType,
-      VOCNO: this.retailSaleDataVocNo,
-     // VOCDATE: this.convertDateWithTimeZero(
-     //     new Date(this.vocDataForm.value.vocdate).toISOString()
-     // ),
-   //   YEARMONTH: this.baseYear,
-     // PARTYNAME: this.customerDataForm.value.fcn_customer_name,
-      // "PARTYNAME": "Urwashi Jani",
-      //TEL1: this.customerDetails?.TEL1 || '',
-     // TEL2: this.customerDetails?.TEL2 || '',
-      //SALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
-      RATE_TYPE: '', //need_input
-      METAL_RATE: 0, //need_input
-      SALES_ORDER: 0, //need_input
-      TOTAL_PCS: this.comFunc.emptyToZero(this.prnt_inv_total_pcs),
-      TOTAL_GRWT: this.comFunc.emptyToZero(this.prnt_inv_total_weight),
-      TOTAL_PUWT: this.comFunc.emptyToZero(this.prnt_inv_total_pure_weight),
-      TOTAL_MKGVALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.emptyToZero(this.order_items_total_amount)
-      ),
-      TOTAL_MKGVALUE_CC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.CCToFC(
-              this.comFunc.compCurrency,
-              this.comFunc.emptyToZero(this.order_items_total_amount)
-          )
-      ),
-      TOTAL_METALVALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.emptyToZero(this.prnt_inv_total_metal_amt)
-      ),
-      TOTAL_METALVALUE_CC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.CCToFC(
-              this.comFunc.compCurrency,
-              this.comFunc.emptyToZero(this.prnt_inv_total_metal_amt)
-          )
-      ),
-      TOTAL_STONEVALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.prnt_inv_total_stone_amt
-      ),
-      TOTAL_STONEVALUE_CC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.CCToFC(
-              this.comFunc.compCurrency,
-              this.comFunc.emptyToZero(this.prnt_inv_total_stone_amt)
-          )
-      ),
-      TOTAL_PUDIFF: 0, //need_input
-      TOTAL_STONEDIFF: 0, //need_input
-      TOTAL_DISCVALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.prnt_inv_total_dis_amt
-      ), //need_input
-      TOTAL_DISCVALUE_CC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.CCToFC(
-              this.comFunc.compCurrency,
-              this.comFunc.emptyToZero(this.prnt_inv_total_dis_amt)
-          )
-      ), //need_input
-
-      NETVALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      // NETVALUE_FC: this.comFunc.transformDecimalVB(
-      //   this.comFunc.amtDecimals,
-      //   this.prnt_inv_total_gross_amt
-      // ),
-      NETVALUE_CC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.CCToFC(
-              this.comFunc.compCurrency,
-              this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-              // this.comFunc.emptyToZero(this.prnt_inv_total_gross_amt)
-          )
-      ),
-      // SYSTEM_DATE: , // need_input // check in api -
-      SYSTEM_DATE: new Date().toISOString(), // need_input // check in api -
-      // SYSTEM_DATE: this.dummyDate , // need_input // check in api -
-      SRETURNMID: 0, //need
-      SRETURNVOCNO: 0, //need
-      SRETURNVOCTYPE: '',
-      SRETURN_VALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.invReturnSalesTotalNetTotal
-      ), //need
-      SRETURN_VALUE_CC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.invReturnSalesTotalNetTotal)
-      ), //need
-      PURCHASEMID: 0, //need
-      PURCHASEVOCNO: 0, //need
-      PURCHASEVOCTYPE: '',
-      PURCHASE_VALUE_FC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.order_total_exchange
-      ), //need
-      PURCHASE_VALUE_CC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.order_total_exchange)
-      ), //need
-      ADJUST_ADVANCE: 0, //need
-      DISCOUNT: this.order_items_total_discount_amount, // need_input
-      // SUBTOTAL: this.prnt_inv_net_total_without_tax,
-      SUBTOTAL: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      NETTOTAL: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      RECEIPT_TOTAL: 0, //need_input
-      REFUND: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      // REFUND: 0,
-      NAVSEQNO: 0, //need
-     // MOBILE: this.customerDataForm.value.fcn_customer_mobile,
-     // POBOX: this.customerDetails?.POBOX_NO || '',
-      //EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
-      REMARKS: '', //need_input
-     // POSCUSTCODE: this.customerDetails?.CODE || '',
-      ITEM_CURRENCY: this.comFunc.compCurrency,
-      ITEM_CURR_RATE: 1,
-      ADJUST_ADVANCECC: 0,
-      DISCOUNTCC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.order_items_total_discount_amount)
-      ), // need_input
-      SUBTOTALCC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          // this.comFunc.emptyToZero(this.prnt_inv_net_total_without_tax)
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      NETTOTALCC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      RECEIPT_TOTALCC: 0, //need_input
-      REFUNDCC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-      ),
-      // REFUNDCC: 0,
-      PENDING: 1,
-      POSDETAILS: '',
-      CREDITAC: '',
-      DELIVERYDATE: this.dummyDate, //need
-      ORDERMID: 0, //need
-      FLAG_UPDATED: 'N',
-      FLAG_INPROCESS: 'N',
-       // NATIONALITY: this.customerDetailForm.value.fcn_cust_detail_nationality
-         
-        //   || '',
-       // TYPE: this.customerDetails?.TYPE || '',
-      ORDEREXEDATE: this.dummyDate, //need
-      FLAG_EDIT_ALLOW: 'N',
-      D2DTRANSFER: 'F',
-      RSCUSTIDNO: '',
-        // POSKnownAbout: this.customerDetails?.POSKnownAbout || 0,
-
-      // etc fields
-      RS_FIXED: false, //need
-      SALESREFERENCE: '',
-      TRANS_CODES: '0',
-      CONSIGNMENTPARTY: '0',
-      TOTALVAT_AMOUNTFC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.order_items_total_tax
-      ),
-      TOTALVAT_AMOUNTLC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.order_items_total_tax
-      ),
-      RSSTATE: '',
-      SALESFIXINGMID: '0',
-      SALESFIXINGREF: '0',
-      REDEMPTIONTOTALVALUECC: 0,
-      GSTVATAMOUNTFC: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          this.order_items_total_tax
-      ),
-      GSTVATAMOUNTCC: this.comFunc.CCToFC(
-          this.comFunc.compCurrency,
-          this.order_items_total_tax
-      ),
-      CCPOSTINGDONE: '0',
-      BALANCE_FC: 0, //need
-      BALANCE_CC: 0, //need
-      LOCALREMARKSNEW: '0',
-      MACHINEID: "0",
-      AUTOPOSTING: false,
-      POSTDATE: this.dummyDate, //need
-      INVREF: '0',
-      SCHEMESALESFIXINGPUREWT: 0,
-      BLOCKPSRIMPORT: false,
-      INCLUDEVAT: false,
-      WAYBILLNO: '',
-      WAYBILLDATE: this.dummyDate, //need
-      HTUSERNAME: this.strUser || '',
-      REMARKSNEW: '',
-      REC_MODE: '',
-      GENSEQNO: 0, //need
-      CCSALESCOMMISIONAmountCC: 0,
-      CCSALESCOMMISIONAmountFC: 0,
-      GroupRef: '',
-      INTIALPROMOTION: false,
-      POSORDERADVVATAMTLC: 0,
-      POSORDERADVVATAMTFC: 0,
-      FROM_TOUCH: false,
-      Agent_Commission: false,
-      AgentCommission_Per: 0,
-      CALCULATE_LOYALTY: true,
-      TRAYN: false,
-      TRANO: "0",
-      POSReferenceRepairInvoice: '',
-      RSLOGINMID: '0',
-      TRAYNREFUND: false,
-      TRAYNREFUNDDATE: this.dummyDate, //need
-      SERVICE_INVOICE: false,
-      GJVREFERENCE: '',
-      GJVMID: 0, //need
-      holdbarcode: false,
-      PROMO_CODE: '',
-      VATAMOUNTFCROUND: 0,
-      VATAMOUNTFCROUNDCC: 0,
-      LIFETIMEWARRANTY: false,
-      SALESORDER_VALIDITYDATE: this.dummyDate, //need
-      EmiratesSkywardsMile: false,
-      ONLINERATE: false,
-      CERTIFICATEPRINTED: '0',
-      OT_TRANSFER_TIME: '',
-      PLANETRESPONEFLG: false,
-      PLANETQRURL: '',
-      VoucherRedeemed: '',
-      QRCODEIMAGE: '',
-      QRCODEVALUE: '',
-      BOARDINGPASS: '',
-      WITHOUTVAT: false,
-      FLIGHTNO: '',
-      BOARDINGFROM: '',
-      BOARDINGDATE: this.dummyDate, //need
-      // new values
-      CITY:
-       //   this.customerDetailForm.value.fcn_cust_detail_city ||
-          // this.customerDetails?.CITY ||
-          '',
-       //STATE: this.customerDetails?.STATE || '',
-      ADDRESS:
-       //   this.customerDetailForm.value.fcn_cust_detail_address ||
-          // this.customerDetails?.ADDRESS ||
-          '',
-      COUNTRY_CODE:
-         // this.customerDetailForm.value.fcn_cust_detail_country ||
-          // this.customerDetails?.COUNTRY_CODE ||
-          '',
-      //CUST_LANGUAGE: this.customerDetails?.CUST_LANGUAGE || '0',
-      PRINT_COUNT: 0,
-      GST_TOTALFC: 0,
-      GST_TOTALCC: 0,
-      GST_STATE_CODE: '0',
-    //  PANNO: this.customerDetails?.PANCARDNO || '0',
-      GST_NUMBER: '',
-      TRA_ID_TYPE: '0',
-    //  POSCUSTIDNO: this.customerDetails?.POSCUSTIDNO || '',
-      POS_CREDITLIMIT_AUTHORIZED_USER: '',
-      POS_CREDITLIMIT_AUTHORIZED_REMARK: '',
-      TOTALCESS_AMOUNTFC: 0,
-      TOTALCESS_AMOUNTCC: 0,
-      FORM_60: false,
-      COMP_WISE_INVOICE: false,
-      REFBY_CUSTCODE: '0',
-      PRINT_COUNT_ACCOPY: 0,
-      PRINT_COUNT_CNTLCOPY: 0,
-
-
-      "ESTIMATION_STATUS": "O", // 0 - O
-      "POS_REFERENCE": "",
-
-      // SOURCEOFWEALTHANDFUNDS: this.customerDetailForm.value.fcn_source_of_fund || '',
-
-      // estimationDetail: this.currentLineItems,
-  };
-
-  console.log('====================================');
-  console.log(this.retailSalesDataPost);
-  console.log('====================================');
-
-}
-
-sumExchangeItem() {
-  let total_pcs = 0;
-  let total_nett_weight = 0;
-  let total_pure_weight = 0;
-  let total_metal_amt = 0;
-  let total_stone_amt = 0;
-  let total_sum = 0;
-  let total_gross_wt = 0;
-  let total_purity = 0;
-  let total_purity_diff = 0;
-  let total_pure_wt = 0;
-  let total_mkg_value = 0;
-  let total_net_amount = 0;
-  let total_oz_weight = 0;
-
-  this.exchange_items.forEach(function (item) {
-      console.log('exchange item---------------------', item);
-      total_sum = total_sum + parseFloat(item.total_amount);
-      total_pcs = total_pcs + item.pcs;
-      total_nett_weight = total_nett_weight + parseFloat(item.weight); //nett weight
-      total_gross_wt = total_gross_wt + parseFloat(item.gross_wt);
-      total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
-      total_metal_amt = total_metal_amt + parseFloat(item.metalAmt);
-      total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
-      total_purity_diff = total_purity_diff + parseFloat(item.purity_diff);
-      total_mkg_value = total_mkg_value + parseFloat(item.mkg_amount);
-      total_net_amount = total_net_amount + parseFloat(item.net_amount);
-      total_oz_weight = total_oz_weight + parseFloat(item.ozWeight);
-      console.log('=================ozWeight===================');
-      console.log(typeof item.ozWeight, item.ozWeight);
-      console.log('====================================');
-  });
-
-  this.invMetalPurchaseTotalPcs = total_pcs;
-  this.invMetalPurchaseTotalNettWeight = total_nett_weight;
-  this.invMetalPurchaseTotalGrossWeight = total_gross_wt;
-  this.invMetalPurchaseTotalPureWeight = total_pure_weight;
-  this.invMetalPurchaseTotalPurityDiff = total_purity_diff;
-  this.invMetalPurchaseTotalMetalAmt = total_metal_amt;
-  this.invMetalPurchaseTotalStoneAmt = total_stone_amt;
-  this.invMetalPurchaseTotalMakingAmt = total_mkg_value;
-  this.invMetalPurchaseTotalNetAmt = total_net_amount;
-  this.invMetalPurchaseTotalOzWt = total_oz_weight;
-}
-
-updateRetailSalesReturnVal() {
-  if (!this.lineItemForm.invalid) {
-      this.setRetailSalesRowData(this.order_items_slno_length, this.newLineItem);
-      this.modalReferenceSalesReturn.close();
-  } else {
-      this.snackBar.open('Please Fill Required Fields', '', {
-          duration: 2000 // time in milliseconds
-      });
-  }
-}
-
-
-sumRetailSalesReturn() {
-  let total_pcs = 0;
-  let total_weight = 0;
-  let total_pure_weight = 0;
-  let total_making_amt = 0;
-  let total_metal_amt = 0;
-  let total_stone_amt = 0;
-  let total_dis_amt = 0;
-  let total_sum = 0;
-  let tax_sum = 0;
-  let net_sum = 0;
-  let total_pur_diff = 0;
-  let total_stone_diff = 0;
-  let total_dis_per = 0;
-  let total_tax_amt = 0;
-
-  this.sales_returns_items.forEach(function (item: any) {
-      console.log('return item---------------------', item);
-      total_sum = total_sum + parseFloat(item.total_amount);
-      tax_sum = tax_sum + parseFloat(item.tax_amount);
-      net_sum = net_sum + parseFloat(item.net_amount);
-      total_pcs = total_pcs + item.pcs;
-      total_weight = total_weight + parseFloat(item.weight);
-      total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
-      total_making_amt = total_making_amt + parseFloat(item.making_amt);
-      total_metal_amt = total_metal_amt + parseFloat(item.metal_amt);
-      total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
-      total_pur_diff = total_pur_diff + parseFloat(item.PUDIFF);
-      total_stone_diff = total_stone_diff + parseFloat(item.STONEDIFF);
-      total_dis_amt = total_dis_amt + parseFloat(item.DISCOUNTVALUEFC);
-      total_dis_per = total_dis_per + parseFloat(item.DISCOUNT);
-      total_tax_amt = total_tax_amt + parseFloat(item.VAT_AMOUNTFC);
-  });
-  // alert(total_pur_diff);
-
-  this.invReturnSalesTotalPcs = total_pcs;
-  this.invReturnSalesTotalWeight = total_weight;
-  this.invReturnSalesTotalPureWeight = total_pure_weight;
-  this.invReturnSalesTotalMakingAmt = total_making_amt;
-  this.invReturnSalesTotalMetalAmt = total_metal_amt;
-  this.invReturnSalesTotalStoneAmt = total_stone_amt;
-  this.invReturnSalesTotalNetAmt = net_sum;
-  this.invReturnSalesTotalPurityDiff = total_pur_diff;
-  this.invReturnSalesTotalStoneDiff = total_stone_diff;
-  this.invReturnSalesTotalDisAmt = total_dis_amt;
-  this.invReturnSalesTotalDisPer = total_dis_per;
-  this.invReturnSalesTotalTaxAmt = total_tax_amt;
-
-  // this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
-  //   this.comFunc.amtDecimals,
-  //   net_sum + total_tax_amt
-  // );
-
-  this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
-      this.comFunc.amtDecimals,
-      // total_sum
-      net_sum
-      // +       total_tax_amt
-  );
-  console.log('=================invReturnSalesTotalPcs===================');
-  console.log(
-      this.invReturnSalesTotalPcs,
-      this.invReturnSalesTotalWeight,
-      this.invReturnSalesTotalPureWeight,
-      this.invReturnSalesTotalMakingAmt,
-      this.invReturnSalesTotalMetalAmt,
-      this.invReturnSalesTotalStoneAmt,
-      this.invReturnSalesTotalNetAmt,
-      this.invReturnSalesTotalPurityDiff,
-      this.invReturnSalesTotalStoneDiff,
-      this.invReturnSalesTotalDisAmt,
-      this.invReturnSalesTotalDisPer,
-      this.invReturnSalesTotalNetTotal
-  );
-  console.log('====================================');
-}
-
-setRetailSalesRowData(sno: any, data: any) {
-  let temp_pos_item_data: any = {
-      DIVISIONMS: data.DIVISIONMS,
-      DIVISION_CODE: data.DIVISION_CODE,
-      STOCK_CODE: data.STOCK_CODE,
-      GROSS_AMT: this.lineItemForm.value.fcn_li_gross_amount || 0,
-      PCS: this.lineItemForm.value.fcn_li_pcs || 1,
-      GROSSWT: this.lineItemForm.value.fcn_li_gross_wt,
-      STONEWT: data.STONEWT,
-      NETWT: this.lineItemForm.value.fcn_li_net_wt,
-      PURITY: data.PURITY,
-      PUREWT: data.PUREWT,
-      CHARGABLEWT: data.NET_WT,
-      MKG_RATEFC: this.lineItemForm.value.fcn_li_rate || 0,
-      MKG_RATECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-      ),
-      MKGVALUEFC: this.lineItemForm.value.fcn_li_total_amount,
-      MKGVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
-      ),
-      METAL_RATE: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_metal_rate
-      ),
-      METAL_RATE_GMSFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_metal_rate
-      ),
-      METAL_RATE_GMSCC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate)
-      ),
-      METALVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_metal_amount
-      ),
-      METALVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
-      ),
-      STONE_RATEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_stone_rate
-      ),
-      STONE_RATECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
-      ),
-      STONEVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_ad_stone_amount
-      ),
-      STONEVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount)
-      ),
-      DISCOUNT: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_discount_percentage
-      ),
-      DISCOUNTVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_discount_amount
-      ),
-      DISCOUNTVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-      ),
-      NETVALUEFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_gross_amount
-      ),
-      NETVALUECC: this.comFunc.FCToCC(
-          this.comFunc.compCurrency,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
-      ),
-      LOCTYPE_CODE: this.lineItemForm.value.fcn_li_location, // need
-      SUPPLIER: data.SUPPLIER || '',
-      STOCK_DOCDESC: this.lineItemForm.value.fcn_li_item_desc,
-      LOCKED: false,
-      StkTranMkgCost: data.STKTRANMKGCOST,
-      MainStockCode: data.MAIN_STOCK_CODE, //need field
-      MkgMtlNetRate: this.comFunc.transformDecimalVB(
-          this.comFunc.amtDecimals,
-          parseFloat(this.lineItemForm.value.fcn_li_total_amount) +
-          parseFloat(this.lineItemForm.value.fcn_ad_metal_amount)
-      ),
-      //DTSALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
-      StkTrn_LandingCost: data.STOCK_COST, //need
-      HSNCODE: data.HSN_CODE,
-      VATCODE: data.GST_CODE,
-      VAT_PER: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_tax_percentage
-      ),
-      VAT_AMOUNTFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_tax_amount
-      ),
-      VAT_AMOUNTLC: this.comFunc.emptyToZero(
-          this.comFunc.FCToCC(
-              this.comFunc.compCurrency,
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount)
-          )
-      ),
-      TOTALWITHVATFC: this.comFunc.emptyToZero(
-          this.lineItemForm.value.fcn_li_net_amount
-      ),
-      TOTALWITHVATLC:
-          this.comFunc.emptyToZero(
-              this.comFunc.FCToCC(
-                  this.comFunc.compCurrency,
-                  this.comFunc.emptyToZero(
-                      this.lineItemForm.value.fcn_li_net_amount
-                  )
-              )
-          ) || 0,
-  };
-  const preitemIndex = this.salesReturnsItems_forVoc.findIndex((data: any) => data.SRNO.toString() == this.salesReturnRowDataSRNO.toString());
-  if (preitemIndex != -1) {
-      console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
-      console.log(this.salesReturnsItems_forVoc[preitemIndex], temp_pos_item_data);
-      console.log('====================================');
-      this.salesReturnsItems_forVoc[preitemIndex] = { ...this.salesReturnsItems_forVoc[preitemIndex], ...temp_pos_item_data };
-      console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
-      console.log(this.salesReturnsItems_forVoc[preitemIndex]);
-      console.log('====================================');
-  } else {
-      console.log('============failed=====this.salesReturnsItems_forVoc[preitemIndex]===================');
-      console.log(this.salesReturnsItems_forVoc[preitemIndex]);
-      console.log('====================================');
-  }
-}
+
+    storeDefaultValues(totGross: any, totTax: any, totNet: any, totMakeAmnt: any) {
+        this.defaultGrossTotal = totGross;
+        this.defaultTaxTotal = totTax;
+        this.defaultNetTotal = totNet;
+        this.defaultMakingCharge = totMakeAmnt;
+    }
+
+    openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
+        this.dialogBox = this.dialog.open(DialogboxComponent, {
+            width: '40%',
+            disableClose: true,
+            data: { title, msg, okBtn, swapColor },
+        });
+    }
+
+    setMetalRate(karatCode: any) {
+        const value = this.karatRateDetails.filter(
+            (data: any) => data.KARAT_CODE == karatCode
+        )[0].KARAT_RATE;
+        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(this.comFunc.decimalQuantityFormat(value, 'METAL_RATE'));
+    }
+
+    managePcsGrossWt() {
+        if (this.validatePCS == true) {
+            this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+
+            this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
+                Validators.required,
+                Validators.min(1),
+            ]);
+            if (this.divisionMS == 'M') {
+                if (this.newLineItem.PCS_TO_GMS?.toString() == '0')
+                    this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+                else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+            }
+        } else {
+            this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+
+            this.removeValidationsForForms(this.lineItemForm, ['fcn_li_pcs']);
+
+            if (this.newLineItem.BLOCK_GRWT == true)
+                this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+            else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+
+        }
+        //   if (stockInfos.BLOCK_GRWT == true)
+        //   this.lineItemForm.controls.fcn_li_gross_wt.disable();
+        // else this.lineItemForm.controls.fcn_li_gross_wt.enable();
+    }
+
+    removeValidationsForForms(form: FormGroup, controlsArr: string[]) {
+        controlsArr.forEach(controlName => {
+            const control = form.get(controlName);
+            if (control) {
+                control.clearValidators();
+                control.updateValueAndValidity();
+            }
+        });
+    }
+
+
+    changePCS(event: any) {
+        const value = event.target.value;
+        if (value != '' && this.validatePCS == true) {
+            this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+
+            if (this.blockNegativeStock == 'B') {
+                if (this.lineItemPcs < value) {
+                    this.openDialog(
+                        'Warning',
+                        'Current Stock Qty Exceeding Available Stock Qty.',
+                        true
+                    );
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                                this.lineItemPcs
+                            );
+                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                this.lineItemPcs
+                            );
+
+                            this.manageCalculations();
+                        }
+                        // this.setTotalAmount();
+                        // this.changeGrossWt({target:{value }});
+
+                        // this.setGrossAmt();
+                        // this.setRate();
+                    });
+                } else {
+                    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                    this.manageCalculations();
+                }
+            } else if (this.blockNegativeStock == 'W') {
+                if (this.lineItemPcs < value) {
+                    this.openDialog(
+                        'Warning',
+                        'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                        false
+                    );
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'No') {
+                            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                                this.lineItemPcs
+                            );
+                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                this.lineItemPcs
+                            );
+
+                            this.manageCalculations();
+
+                            // this.setTotalAmount();
+
+                            // this.changeGrossWt({target:{value:this.lineItemPcs }});
+
+                            // this.setGrossAmt();
+                            // this.setRate();
+                        } else {
+                            // this.changeGrossWt({ target: { value: this.lineItemPcs } });
+
+                            // this.setGrossAmt();
+                            // this.setRate();
+                            // this.setTotalAmount();
+                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                            this.manageCalculations();
+                        }
+                    });
+                } else {
+                    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                    this.manageCalculations();
+                }
+            } else {
+                // blockNegativeStock = 'A'
+                // this.setGrossAmt();
+                // this.setRate();
+                // this.changeGrossWt({target:{value:0 }});
+                // this.setTotalAmount();
+                this.manageCalculations();
+            }
+        } else {
+            if (this.validatePCS == true)
+                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(0);
+            this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
+
+            // this.setGrossAmt();
+            // this.setRate();
+            // this.setTotalAmount();
+            this.manageCalculations();
+        }
+    }
+
+
+    changeGrossWt(event: any) {
+        if (parseFloat(this.lineItemGrossWt) < this.lineItemForm.controls.fcn_li_gross_wt.value && this.lineItemGrossWt != 0) {
+
+            this.openDialog(
+                'Warning',
+                'Gross Weight Exceeding Available Gross Weight',
+                true
+            );
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'OK') {
+                    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                        this.lineItemGrossWt
+                    );
+                    this.manageCalculations();
+                }
+            });
+
+        }
+        else {
+            this.lineItemForm.controls.fcn_li_gross_wt.setValue(
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.mQtyDecimals,
+                    this.comFunc.emptyToZero(event.target.value)
+                )
+            );
+            console.log('====================================');
+            console.log(
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.mQtyDecimals,
+                    this.comFunc.emptyToZero(event.target.value)
+                )
+            );
+            console.log('====================================');
+            const value = event.target.value;
+            if (value != '' && this.validatePCS == false) {
+                if (this.blockNegativeStock == 'B') {
+                    if (this.lineItemGrossWt < value) {
+                        this.openDialog(
+                            'Warning',
+                            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                            true
+                        );
+                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                            if (data == 'OK') {
+                                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                    this.lineItemGrossWt
+                                );
+                                // this.setNettWeight();
+                                this.manageCalculations();
+                            }
+                        });
+                    } else {
+                        // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                        this.manageCalculations();
+                    }
+                } else if (this.blockNegativeStock == 'W') {
+                    if (this.lineItemGrossWt < value) {
+                        this.openDialog(
+                            'Warning',
+                            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                            false
+                        );
+                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                            if (data == 'No') {
+                                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                    this.lineItemGrossWt
+                                );
+                                // this.setNettWeight();
+                                this.manageCalculations();
+                            } else {
+                                // this.setNettWeight();
+                                this.manageCalculations();
+                            }
+                        });
+                    } else {
+                        this.manageCalculations();
+                    }
+                } else {
+                    // blockNegativeStock = 'A'
+                    // this.setNettWeight();
+                    this.manageCalculations();
+                }
+            } else {
+                // this.setNettWeight();
+                this.manageCalculations();
+            }
+        }
+
+    }
+
+    getExchangeNwtWt(event: any) {
+        const value = event.target.value;
+        if (value != '' && value != 0) {
+
+
+            // this.changeExchangeNettWt({ target: { value: _exchangeGrossWt } });
+            //  this.setOzWt();
+            //  this.setExchangeMakingAmt();
+            //  this.setExMetalAmt();
+            //  this.setExNetAmt();
+            // focus
+            //  this.setFocusBasedExchangeStone();
+        } else {
+            // focus
+            // this.setFocusBasedExchangeStone();
+            this.openDialog('Warning', this.comFunc.getMsgByID('MSG1303'), true);
+        }
+    }
+
+    changeNettWt(event: any) {
+        if (event.target.value != '') {
+            const value = this.comFunc.transformDecimalVB(
+                this.comFunc.mQtyDecimals,
+                this.lineItemForm.value.fcn_li_gross_wt -
+                this.lineItemForm.value.fcn_li_net_wt
+            );
+            this.lineItemForm.controls.fcn_li_stone_wt.setValue(value);
+            // this.setStoneAmt();
+            this.manageCalculations();
+        } else {
+            // this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
+            this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
+            // this.setStoneAmt();
+            this.manageCalculations();
+        }
+    }
+
+    changeStoneRate(event: any) {
+        if (event.target.value != '') {
+            // this.setStoneAmt();
+            this.manageCalculations();
+        } else {
+            this.lineItemForm.controls.fcn_ad_stone_rate.setValue(0);
+            // this.setStoneAmt();
+            this.manageCalculations();
+        }
+    }
+
+    changeStoneAmt(event: any) {
+        if (event.target.value != '') {
+            if (
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) == 0
+
+            ) {
+                this.lineItemForm.controls.fcn_ad_stone_amount.setValue(this.zeroAmtVal);
+            } else {
+                const value = (
+                    parseFloat(this.lineItemForm.value.fcn_ad_stone_amount) /
+                    parseFloat(this.lineItemForm.value.fcn_li_stone_wt)
+                );
+                this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
+                    this.comFunc.decimalQuantityFormat(value, 'AMOUNT')
+                );
+            }
+            // this.setStoneAmt();
+        } else {
+            // this.lineItemForm.controls.fcn_li_stone_wt.setValue(0);
+            this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
+            // this.setStoneAmt();
+        }
+    }
+
+    changeRate(event: any) {
+
+        const karatComp22 = this.comFunc.allbranchMaster?.KARATCOMPANY22;
+        const minBranchProfitPercentMetal = this.comFunc.allbranchMaster?.MINBRANCHPROFITPERCENTMETAL;
+
+        const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
+        const value = event.target.value;
+        if (event.target.value != '') {
+
+            if (this.divisionMS == 'M') {
+
+                let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
+                let dblStockFcCost: any;
+                let karatCode = this.newLineItem.KARAT_CODE;
+
+                // this code commented at 21/3/2024 by jebaraj instruction
+                // if (this.comFunc.compCurrency == this.vocDataForm.value.txtCurrency.toString().trim()) {
+                //   // if (this.comFunc.compCurrency == 'AED') {
+                //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
+                //     if (karatCode.toString() == "24") {
+                //       dblStockFcCost = dblStockCost + 1;
+                //     }
+                //     else {
+                //       dblStockFcCost = dblStockCost + 5;
+                //     }
+                //   }
+                //   else
+                //     if ((dblStockCost <= .5) && (this.comFunc.compAcCode == "JHROR1")) {
+                //       dblStockCost = dblStockCost + .5;
+                //     }
+                //     else {
+                //       console.log('minbranch ', dblStockCost * minBranchProfitPercentMetal / 100.00, 'dblStockCost', dblStockCost);
+                //       dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
+                //     }
+                // }
+                // else {
+                //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
+                //     if (karatCode == "24") {
+                //       dblStockFcCost =
+                //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 1), this.vocDataForm.value.txtCurRate);
+                //     }
+                //     else {
+
+                //       dblStockFcCost =
+                //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 5), this.vocDataForm.value.txtCurRate);
+                //     }
+                //   }
+                //   else {
+                //     dblStockFcCost =
+                //       this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00)), this.vocDataForm.value.txtCurRate);
+                //   }
+                // }
+                // this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
+                // this.manageCalculations();
+
+                // if (!this.newLineItem.LESSTHANCOST) {
+
+                //   // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
+                //   {
+                //     if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
+                //       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                //       this.dialogBox.afterClosed().subscribe((data: any) => {
+                //         if (data == 'OK') {
+                //           this.lineItemForm.controls.fcn_li_rate.setValue(
+                //             // ''
+                //             preVal
+                //           );
+                //           this.manageCalculations();
+                //           this.renderer.selectRootElement('#fcn_li_rate').focus();
+                //         }
+                //       });
+                //       return;
+                //     }
+                //   }
+                // }
+
+                if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+
+                    this.rateFunc(value);
+                }
+                else {
+                    // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
+                    // Rate Cannot be Less Than Cost
+                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_rate.setValue(
+                                // ''
+                                preVal
+                                // this.comFunc.transformDecimalVB(
+                                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                //   this.zeroAmtVal
+                                // )
+                            );
+                            this.renderer.selectRootElement('#fcn_li_rate').focus();
+                        }
+                    });
+                }
+            }
+            let checkStockCostVal =
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+
+            if (this.divisionMS == 'S') {
+                if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+                    this.rateFunc(value);
+                }
+                else {
+                    // Rate Cannot be Less Than Cost
+                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                    preVal
+                                )
+                            );
+                        }
+                    });
+                }
+            }
+
+
+
+        } else {
+            this.renderer.selectRootElement('#fcn_li_rate').focus();
+            this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
+            this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
+            // this.setGrossAmt();
+            this.manageCalculations();
+        }
+    }
+
+    rateFunc(value: any) {
+
+        if (this.blockMinimumPrice == 'B') {
+            if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                this.openDialog(
+                    'Warning',
+                    `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                    }`,
+                    // 'The rate is below to the minimum price, Do you want to Continue?','
+                    true
+                );
+                this.dialogBox.afterClosed().subscribe((data: any) => {
+                    if (data == 'OK') {
+                        // this.lineItemForm.controls.fcn_li_rate.setValue(
+                        //   this.blockMinimumPriceValue
+                        // );
+                        this.lineItemForm.controls.fcn_li_rate.setValue(
+                            this.makingRate
+                            // this.zeroAmtVal
+                        );
+                        this.manageCalculations();
+                    }
+                });
+            } else {
+                this.manageCalculations();
+            }
+        }
+        else if (this.blockMinimumPrice == 'W') {
+            if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                this.openDialog(
+                    'Warning',
+                    // 'The rate is below to the minimum price, Do you want to Continue?',
+                    `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                    }`,
+                    false
+                );
+                this.dialogBox.afterClosed().subscribe((data: any) => {
+                    if (data == 'No') {
+                        this.lineItemForm.controls.fcn_li_rate.setValue(
+                            this.zeroAmtVal
+                        );
+                        this.manageCalculations();
+
+                    } else {
+                        this.manageCalculations();
+                    }
+                });
+            }
+            else {
+                this.manageCalculations();
+            }
+        } else {
+            // blockMinimumPrice = 'A'
+            this.manageCalculations();
+        }
+    }
+
+
+    changeTotalAmt(event: any, nettAmt = null) {
+        const totalAmtVal: any = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+        const val = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            this.comFunc.emptyToZero(event.target.value));
+        if (event.target.value != '') {
+            const value = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                (totalAmtVal / this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt))
+            );
+            // this.lineItemForm.controls.fcn_li_rate.setValue(value);
+            // this.manageCalculations();
+            // alert(value);
+            const lsTotalAmt: any = localStorage.getItem('fcn_li_total_amount');
+            this.validateMinSalePriceByTotalAmt(
+                value,
+                val,
+                parseFloat(lsTotalAmt),
+                nettAmt
+            );
+            // if (this.lineItemForm.value.fcn_li_stone_wt != '' || this.lineItemForm.value.fcn_li_stone_wt != 0 && this.divisionMS == 'M') {
+            //   this.renderer.selectRootElement('#fcn_ad_stone_amount').focus();
+            // }
+        } else {
+            this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
+            this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
+            // this.setGrossAmt();
+            this.manageCalculations();
+        }
+    }
+    validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt = null) {
+        const preRateVal = localStorage.getItem('fcn_li_rates');
+        const preTotalVal = localStorage.getItem('fcn_li_total_amnt');
+
+        const nonMetalPreRateVal = localStorage.getItem('fcn_li_rate');
+        const nonMetalPreTotalVal = localStorage.getItem('fcn_li_total_amount');
+        // alert(this.lineItemForm.value.fcn_li_net_amount)
+        if (value != '') {
+
+            // alert('validateMinSalePriceByTotalAmt parseFloat(value)'+parseFloat(value)+'STOCK_COST' +this.newLineItem.STOCK_COST );
+            if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+
+                if (this.blockMinimumPrice == 'B') {
+                    if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                        this.openDialog(
+                            'Warning',
+                            // 'The rate is below to the minimum price, Do you want to Continue?',
+                            // this.comFunc.getMsgByID('MSG1731'),
+                            `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                            } `,
+
+                            true
+                        );
+                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                            if (data == 'OK') {
+                                // this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+                                //   0
+                                // );
+                                this.lineItemForm.controls.fcn_li_total_amount.setValue(lsTotalAmt);
+                                this.manageCalculations();
+                            }
+                        });
+                    } else {
+                        this.lineItemForm.controls.fcn_li_rate.setValue(value);
+                        this.manageCalculations({ totalAmt: totalAmt, nettAmt });
+                    }
+                }
+                else if (this.blockMinimumPrice == 'W') {
+                    if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                        this.openDialog(
+                            'Warning',
+                            // 'The rate is below to the minimum price, Do you want to Continue?',
+                            `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                            }`,
+                            false
+                        );
+                        this.dialogBox.afterClosed().subscribe((data: any) => {
+                            if (data == 'No') {
+                                // document.execCommand('undo', true, null);
+                                this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                                    lsTotalAmt
+                                );
+                                const lsNettAmt = localStorage.getItem('fcn_li_net_amount')
+                                // alert('lsNettAmt'+lsNettAmt);
+                                this.manageCalculations();
+                                // this.manageCalculations({ nettAmt: lsNettAmt });
+                            } else {
+                                this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
+                                this.lineItemForm.controls.fcn_li_rate.setValue(value);
+                                this.manageCalculations({ totalAmt: totalAmt, nettAmt });
+                            }
+                        });
+                    } else {
+                        this.lineItemForm.controls.fcn_li_rate.setValue(value);
+                        // this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
+                        this.manageCalculations({ totalAmt: totalAmt, nettAmt });
+                    }
+                } else {
+                    // blockMinimumPrice = 'A'
+                    this.lineItemForm.controls.fcn_li_rate.setValue(value);
+                    this.manageCalculations({ totalAmt: totalAmt, nettAmt });
+                }
+
+            } else {
+                // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
+                // Rate Cannot be Less Than Cost
+                this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                this.dialogBox.afterClosed().subscribe((data: any) => {
+                    if (data == 'OK') {
+                        if (this.divisionMS == 'M') {
+                            if (this.divisionMS == 'M') {
+                                this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                                    preTotalVal
+                                );
+                                this.lineItemForm.controls.fcn_li_rate.setValue(
+                                    preRateVal
+                                );
+                            }
+                            //   this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                            //       this.defaultNetTotal
+                            //   );
+
+                            //   this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                            //       this.defaultMakingCharge
+                            //   );
+
+                            //   this.lineItemForm.controls.fcn_li_tax_amount.setValue(
+                            //       this.defaultTaxTotal
+                            //   );
+
+                            //   this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+                            //       this.defaultGrossTotal
+                            //   );
+
+                            this.renderer.selectRootElement('#fcn_li_rate').focus();
+                        }
+                        else if (this.divisionMS == 'S') {
+
+                            this.lineItemForm.controls.fcn_li_rate.setValue(
+                                nonMetalPreRateVal
+                            );
+
+                            this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                                nonMetalPreTotalVal
+                            );
+                        }
+                    }
+
+                });
+            }
+        } else {
+            this.lineItemForm.controls.fcn_li_rate.setValue(0);
+            this.lineItemForm.controls.fcn_li_total_amount.setValue(0);
+            this.manageCalculations();
+        }
+    }
+
+
+    changeDisAmount(event: any, nettAmt = null) {
+        if (event.target.value != '') {
+            const value =
+                // (
+                //   (this.lineItemForm.value.fcn_li_discount_amount /
+                //     this.lineItemForm.value.fcn_li_total_amount) *
+                //   100
+                // ).toFixed(2);
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    (this.lineItemForm.value.fcn_li_discount_amount /
+                        this.lineItemForm.value.fcn_li_total_amount) *
+                    100
+                );
+
+            this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
+            console.log('dis amount', value);
+            // alert('dis per' + value.toString());
+            // alert('nettAmt '+nettAmt);
+            this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
+
+            // this.validateMinSalePrice();
+            // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
+            // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2),  parseFloat(lsTotalAmt).toFixed(2));
+        } else {
+            this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
+            this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
+            this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
+
+            // this.setGrossAmt();
+            this.manageCalculations();
+        }
+    }
+
+    changeDisPer(event: any, discountAmt = null, nettAmt = null) {
+        // alert(event.target.value);
+        // alert('disAmt '+discountAmt );
+
+        if (event.target.value != '') {
+            let disAmt;
+            if (discountAmt != null && nettAmt == null) {
+                disAmt = discountAmt;
+                this.disFunc(disAmt);
+            }
+
+            if (discountAmt == null && nettAmt == null) {
+                const value = this.getPercentage(
+                    this.lineItemForm.value.fcn_li_discount_percentage,
+                    this.lineItemForm.value.fcn_li_total_amount
+                );
+                disAmt = this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    value
+                );
+                this.disFunc(disAmt);
+
+            } else {
+                disAmt = this.lineItemForm.value.fcn_li_discount_amount;
+                // alert('********disAmt******' + disAmt);
+                // alert('********grossAmt******' + this.lineItemForm.value.fcn_li_gross_amount);
+                // alert('********nettAmt****** ' + nettAmt + 'type ' + typeof nettAmt);
+                this.manageCalculations({ disAmt: disAmt, nettAmt });
+            }
+
+            // this.setGrossAmt();
+            // alert('pre nettAmt ' + this.lineItemForm.value.fcn_li_net_amount)
+            // alert('nettAmt ' + parseFloat(disAmt) + parseFloat(this.lineItemForm.value.fcn_li_gross_amount))
+
+
+            // need to enable
+            // this.validateMinSalePrice();
+
+        } else {
+            this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
+            // this.setGrossAmt();
+            this.manageCalculations();
+        }
+    }
+
+
+
+    disFunc(disAmt: any) {
+        // this.manageCalculations({ disAmt: disAmt, nettAmt });
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+            // Math.round(parseFloat(value)).toFixed(2)
+            disAmt
+        );
+
+        this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+                disAmt
+            )
+        );
+
+        let taxAmount;
+        taxAmount = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            this.getPercentage(
+                parseFloat(this.lineItemForm.value.fcn_li_tax_percentage),
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+            )
+        );
+        this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+        );
+
+
+        /** set nett amount */
+        const netAmtValue =
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+        this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+        );
+        localStorage.setItem('fcn_li_net_amount', netAmtValue.toString())
+
+        this.validateMinSalePrice()
+    }
+
+    validateMinSalePrice() {
+        const grossAmt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
+        const grossWt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+        const preDisAmtVal = this.comFunc.decimalQuantityFormat(
+            this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
+            'AMOUNT')
+        const preDisPerVal =
+            this.comFunc.decimalQuantityFormat(
+                this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_percentage')),
+                'AMOUNT')
+
+
+        const value = (grossAmt / grossWt).toString();
+        // const value = (grossAmt / grossWt).toFixed(2);
+        // alert(this.blockMinimumPriceValue + '_' + value);
+        console.log('==============validateMinSalePrice======================');
+        console.log(value);
+        console.log('====================================');
+
+
+        // if (value != '') {
+
+        let checkStockCostVal =
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+
+        // alert('checkStockCostVal ' + checkStockCostVal + 'STOCK_COST ' + this.newLineItem.STOCK_COST);
+        if (this.divisionMS == 'S') {
+            if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+                this.manageCalculations();
+                // if (this.blockMinimumPrice == 'B') {
+                //   if (parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                //     this.openDialog(
+                //       'Warning',
+                //       `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                //       }`,
+                //       // 'The rate is below to the minimum price, Do you want to Continue?','
+                //       true
+                //     );
+                //     this.dialogBox.afterClosed().subscribe((data) => {
+                //       if (data == 'OK') {
+                //         this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+                //           0
+                //         );
+                //         // this.changeDisPer({ target: { value: 0 } });
+                //         this.manageCalculations();
+                //       }
+                //     });
+                //   } else {
+                //     this.manageCalculations();
+                //   }
+                // }
+                // else if (this.blockMinimumPrice == 'W') {
+                //   if (parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                //     this.openDialog(
+                //       'Warning',
+                //       // 'The rate is below to the minimum price, Do you want to Continue?',
+                //       `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                //       }`,
+                //       false
+                //     );
+                //     this.dialogBox.afterClosed().subscribe((data) => {
+                //       if (data == 'No') {
+                //         this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+                //           0
+                //         );
+                //         // this.changeDisPer({ target: { value: 0 } });
+                //         this.manageCalculations();
+
+                //       } else {
+                //         this.manageCalculations();
+                //       }
+                //     });
+                //   }
+                //   else {
+                //     this.manageCalculations();
+                //   }
+                // } else {
+                //   // blockMinimumPrice = 'A'
+                //   this.manageCalculations();
+                // }
+            }
+            else {
+                // Rate Cannot be Less Than Cost
+                this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                this.dialogBox.afterClosed().subscribe((data: any) => {
+                    if (data == 'OK') {
+                        alert('dis amt ' + preDisAmtVal + ' _ ' + preDisPerVal)
+                        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+                            preDisPerVal || this.zeroAmtVal
+                            // this.comFunc.transformDecimalVB(
+                            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+
+                            // )
+                        );
+                        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                            preDisAmtVal || this.zeroAmtVal
+                        );
+                        this.manageCalculations();
+                    }
+                });
+            }
+        }
+        // }
+    }
+
+
+    changeStoneWt(event: any) {
+        const value = event.target.value;
+        console.log('====================================');
+        console.log(event.target);
+        console.log('====================================');
+        // alert(value + '_' + this.lineItemForm.value.fcn_li_gross_wt);
+        if (value != '') {
+            if (
+                parseFloat(value) > parseFloat(this.lineItemForm.value.fcn_li_gross_wt)
+            ) {
+                this.openDialog(
+                    'Warning',
+                    'Stone weight cannot be exceeded Gross weight',
+                    true
+                );
+                // this.stoneWtPreVal = 0;
+
+                this.dialogBox.afterClosed().subscribe((data: any) => {
+                    if (data == 'OK') {
+                        this.lineItemForm.controls['fcn_li_stone_wt'].setValue(this.zeroMQtyVal);
+                        // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(this.stoneWtPreVal);
+                        //  this.lineItemForm.controls['fcn_li_stone_wt'].valueChanges
+                        //   .pipe(startWith(1), pairwise()).subscribe(
+                        //     ([prevValue, selectedValue]) => {
+                        //       console.log('prev val => ' + prevValue); // previous value
+                        //       console.log('curr val => ' + selectedValue); // new value
+                        //       this.stoneWtPreVal = prevValue;
+                        //       // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(prevValue)
+                        //     }
+                        //   );
+                        // this.lineItemForm.controls['fcn_li_stone_wt'].valueChanges
+                        //   .pipe(startWith(2), pairwise()).subscribe(
+                        //     ([prevValue, selectedValue]) => {
+                        //       console.log('prev val => ' + prevValue); // previous value
+                        //       console.log('curr val => ' + selectedValue); // new value
+                        //       this.stoneWtPreVal = prevValue;
+                        //       this.lineItemForm.controls['fcn_li_stone_wt'].setValue(prevValue)
+                        //     }
+                        //   );
+                        // this.setNettWeight();
+                        this.manageCalculations();
+                    }
+                });
+            } else {
+                // this.setStoneAmt();
+                // this.setNettWeight();
+                this.manageCalculations();
+            }
+        } else {
+            this.lineItemForm.controls.fcn_li_stone_wt.setValue(this.zeroMQtyVal);
+            // this.setStoneAmt();
+            // this.setNettWeight();
+            this.manageCalculations();
+        }
+    }
+    setValToLocalStorage(event: any, name: any) {
+        let checkStockCostVal =
+            parseFloat(this.lineItemForm.value.fcn_li_net_amount) /
+            parseFloat(this.lineItemForm.value.fcn_li_gross_wt);
+
+        if (name == 'fcn_li_net_amount') {
+            if (this.divisionMS == 'M') {
+
+                if (
+                    parseFloat(this.lineItemForm.value.fcn_li_net_amount) >
+                    parseFloat(this.lineItemForm.value.fcn_ad_metal_amount)
+                ) {
+                    localStorage.setItem(name, event.target.value.toString());
+
+                }
+            }
+            if (this.divisionMS == 'S') {
+
+                if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+                    localStorage.setItem(name, event.target.value.toString());
+
+                }
+            }
+
+        } else {
+            localStorage.setItem(name, event.target.value.toString());
+        }
+
+    }
+
+    changeGrossAmt(event: any) {
+        const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_gross_amount'));
+        if (event.target.value != '') {
+            let totalAmt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+            let grossAmt = this.comFunc.emptyToZero(event.target.value);
+            if (this.divisionMS == 'S') {
+
+                const taxAmt = this.getPercentage(
+                    this.lineItemForm.value.fcn_li_tax_percentage,
+                    this.lineItemForm.value.fcn_li_gross_amount
+                );
+
+                const value =
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+
+
+                const nettAmt = this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    value
+                );
+
+                // alert(`grossAmt ${grossAmt} value ${value} nettAmt ${nettAmt} `);
+
+                let checkStockCostVal =
+                    this.comFunc.emptyToZero(nettAmt) /
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+
+                if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+
+                    localStorage.setItem('fcn_li_gross_amount', this.comFunc.transformDecimalVB(
+                        this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(event.target.value)).toString());
+
+                    this.changeGrossFunc(totalAmt, grossAmt);
+
+
+                } else {
+                    // Rate Cannot be Less Than Cost
+                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                    preVal
+                                )
+                            );
+                            // this.changeGrossFunc(totalAmt, preVal);
+                            this.manageCalculations();
+                        }
+                    });
+                }
+
+            } else {
+
+                let stoneAmt = this.comFunc.emptyToZero(
+                    this.lineItemForm.value.fcn_ad_stone_amount
+                );
+                // let mkgAmt = this.comFunc.emptyToZero(
+                //   this.lineItemForm.value.fcn_li_total_amount
+                // );
+                let mtlAmt = this.comFunc.emptyToZero(
+                    this.lineItemForm.value.fcn_ad_metal_amount
+                );
+                let mkgAmt = grossAmt - (stoneAmt + mtlAmt)
+                this.changeTotalAmt({ target: { value: mkgAmt } });
+                // console.log(stoneAmt, mkgAmt, mtlAmt);
+                // this.lineItemForm.controls.fcn_ad_amount.setValue(
+                //   (parseFloat(stoneAmt) + parseFloat(mkgAmt) + parseFloat(mtlAmt)).toFixed(
+                //     2
+                //   )
+                // );
+
+                this.setTaxAmt();
+                this.setNettAmt();
+            }
+        } else {
+        }
+    }
+    setTaxAmt() {
+        const value = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS, this.getPercentage(
+                this.lineItemForm.value.fcn_li_tax_percentage,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+            ));
+        this.lineItemForm.controls['fcn_li_tax_amount'].setValue(value);
+        this.li_tax_amount_val = value;
+        this.setNettAmt();
+    }
+    setNettAmt() {
+
+        const value =
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+        console.log('value', value);
+        const nettAmt = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            value
+        );
+        this.lineItemForm.controls['fcn_li_net_amount'].setValue(nettAmt);
+        // this.order_items_total_gross_amount = value;
+        this.li_net_amount_val = nettAmt;
+
+
+    }
+    changeGrossFunc(totalAmt: any, grossAmt: any) {
+
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                parseFloat(totalAmt) - parseFloat(grossAmt)
+            )
+        );
+        const disPer = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            (this.lineItemForm.value.fcn_li_discount_amount /
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)) *
+            100
+        );
+        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(disPer);
+
+        this.setTaxAmt();
+
+        this.setNettAmt();
+
+    }
+    async changeNettAmt(event: any) {
+
+        // console.log('==============changeNettAmt======================');
+        // console.log(localStorage.getItem('fcn_li_net_amount'));
+        // console.log('====================================');
+        const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_net_amount'));
+        const netAmtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
+        if (event.target.value != '') {
+            let checkStockCostVal =
+                netAmtVal /
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+            // alert('checkStockCostVal '+ checkStockCostVal +' STOCK_COST' + parseFloat(this.newLineItem.STOCK_COST));
+
+            if (this.divisionMS == 'M') {
+
+                if (
+                    // this.lineItemModalForSalesReturn ||
+
+                    netAmtVal >
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
+                ) {
+                    this.netAmtFunc(event);
+                } else {
+                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                                this.comFunc.commaSeperation(
+                                    this.comFunc.transformDecimalVB(
+                                        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                        preVal
+                                    )
+                                )
+                            );
+                        }
+                    });
+                }
+            }
+
+            if (this.divisionMS == 'S') {
+
+                if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+                    this.netAmtFunc(event);
+                } else {
+                    // Rate Cannot be Less Than Cost
+                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                    preVal
+                                )
+                            );
+                        }
+                    });
+                }
+            }
+
+            // this.lineItemForm.controls.fcn_li_rate.setValue(value);
+            // this.manageCalculations();
+            // alert(value);
+            // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
+            // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2), parseFloat(lsTotalAmt).toFixed(2));
+        } else {
+            this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+                this.zeroAmtVal
+            );
+            this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
+            // this.setGrossAmt();
+            this.manageCalculations();
+        }
+    }
+
+    netAmtFunc(event: any) {
+        this.lineItemForm.controls.fcn_li_net_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(event.target.value)
+            )
+        );
+
+        const taxAmt = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) *
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage)) /
+            (100 + this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage))
+        );
+        const grossAmt =
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) -
+                this.comFunc.emptyToZero(taxAmt));
+
+
+        let totalAmt;
+        if (this.divisionMS == 'M') {
+            totalAmt = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                parseFloat(grossAmt) -
+                (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount || 0) +
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
+            );
+        } else {
+            totalAmt = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+            );
+        }
+        // Math.round(
+        //   grossAmt -
+        //   (parseFloat(
+        //     this.lineItemForm.value.fcn_ad_stone_amount || 0
+        //   ) +
+        //     parseFloat(
+        //       this.lineItemForm.value.fcn_ad_metal_amount || 0
+        //     ))
+        // ).toFixed(2);
+        // alert('totalAmt ' + totalAmt);
+        console.log(grossAmt, totalAmt, taxAmt);
+        let discountAmt = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            parseFloat(totalAmt) - parseFloat(grossAmt)
+        );
+
+        // alert(discountAmt);
+
+        // this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
+        // this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
+
+        this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
+        this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
+
+        console.log('dis amount', discountAmt);
+        // alert(`taxamt ${taxAmt} grossamt ${grossAmt} totaamt ${totalAmt} disAmt ${discountAmt}`);
+
+        if (this.divisionMS == 'M') {
+            this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
+            this.changeTotalAmt(
+                { target: { value: totalAmt } },
+                this.lineItemForm.value.fcn_li_net_amount
+            );
+        } else {
+            if (parseFloat(discountAmt.toString()) < 0)
+                discountAmt = this.zeroAmtVal;
+            this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                discountAmt
+            );
+            this.changeDisAmount(
+                { target: { value: discountAmt } },
+                this.lineItemForm.value.fcn_li_net_amount
+            );
+
+            // this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+            //   discountAmt
+            // );
+            // this.changeDisAmount(
+            //   { target: { value: discountAmt } },
+            //   this.lineItemForm.value.fcn_li_net_amount
+            // );
+        }
+
+    }
+
+
+    addItemtoList(btn: any) {
+        Object.values(this.lineItemForm.controls).forEach(control => {
+            control.markAsTouched();
+        });
+        if (!this.lineItemForm.invalid) {
+            if (
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) >=
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
+            ) {
+                this.updateBtn = false;
+
+                if (this.newLineItem.STOCK_CODE == '') {
+                    // alert('Invalid Stock Code');
+                    // this.snackBar.open('Invalid Stock Code', 'OK');
+                    this.openDialog('Warning', 'Invalid Stock Code', true);
+                } else {
+                    let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
+                    // alert(JSON.stringify(itemsLengths));
+
+                    // alert(itemsLengths);
+                    if (
+                        this.orderedItemEditId == '' ||
+                        this.orderedItemEditId == undefined ||
+                        this.orderedItemEditId == null
+                    ) {
+                        if (itemsLengths == undefined) itemsLengths = 1;
+                        else itemsLengths = itemsLengths.ID + 1;
+                        this.order_items_slno_length = itemsLengths;
+                    } else {
+                        itemsLengths = this.orderedItemEditId;
+                        this.order_items_slno_length = itemsLengths;
+                    }
+
+                    var temp_resp = this.newLineItem;
+
+                    console.log(this.newLineItem);
+
+                    var values: any = {
+                        ID: this.order_items_slno_length,
+                        sn_no: this.order_items_slno_length,
+                        stock_code: this.newLineItem.STOCK_CODE,
+                        mkg_amount: this.lineItemForm.value.fcn_ad_making_amount || 0,
+                        // total_amount: temp_resp.PRICE1LC,
+                        pcs: this.lineItemForm.value.fcn_li_pcs,
+                        weight: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
+                        description: this.lineItemForm.value.fcn_li_item_desc,
+                        tax_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount),
+                        net_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount),
+                        pure_wt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
+                        making_amt: this.lineItemForm.value.total_amount || 0,
+                        // making_amt: this.lineItemForm.value.fcn_ad_making_amount || 0,
+                        metal_rate: this.lineItemForm.value.fcn_ad_metal_rate || 0,
+                        metal_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
+                        stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
+                        dis_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) || 0,
+                        gross_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
+                        rate: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0,
+                        taxPer: this.lineItemForm.value.fcn_li_tax_percentage || 0,
+                    };
+
+                    values.total_amount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+                    // values.total_amount = this.lineItemForm.value.fcn_li_total_amount;
+                    this.newLineItem.HSN_CODE = this.newLineItem.HSN_CODE;
+                    this.newLineItem.GST_CODE = this.newLineItem.GST_CODE;
+                    this.newLineItem.pcs = this.lineItemForm.value.fcn_li_pcs;
+                    this.newLineItem.pure_wt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt);
+                    this.newLineItem.STONE_WT = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt);
+                    this.newLineItem.total_amount =
+                        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+                    this.newLineItem.divisionMS = this.divisionMS;
+
+                    if (
+                        this.orderedItemEditId == '' ||
+                        this.orderedItemEditId == undefined ||
+                        this.orderedItemEditId == null
+                    ) {
+                        this.ordered_items.push(values);
+                        // this.orderedItemEditId = '';
+                    } else {
+                        const preitemIndex = this.ordered_items.findIndex((data) => {
+                            // console.table(data);
+                            console.table(data.SRNO == this.orderedItemEditId);
+                            return data.sn_no == this.orderedItemEditId;
+                        });
+                        if (preitemIndex != -1) {
+                            values.sn_no = this.orderedItemEditId;
+
+                            this.ordered_items[preitemIndex] = values;
+                        }
+                    }
+                    console.log(this.ordered_items);
+                    this.sumTotalValues();
+                    this.setPosItemData(this.order_items_slno_length, this.newLineItem);
+                    this.newLineItem.STOCK_CODE = '';
+
+                    this.li_division_val = '';
+                    this.li_item_code_val = '';
+                    this.li_item_desc_val = '';
+                    this.li_location_val = '';
+                    this.li_gross_wt_val = '';
+                    this.li_stone_wt_val = '';
+                    this.li_net_wt_val = '';
+                    this.li_making_rate_val = '';
+                    this.li_making_amount_val = '';
+                    this.li_stone_rate_val = '';
+                    this.li_stone_amount_val = '';
+                    this.li_metal_rate_val = '';
+                    this.li_metal_amount_val = '';
+                    this.li_rate_val = '';
+                    this.li_total_val = '';
+                    this.li_discount_percentage_val = '';
+                    this.li_discount_amount_val = '';
+                    this.li_gross_amount_val = '';
+                    this.li_tax_percentage_val = '';
+                    this.li_tax_amount_val = '';
+                    this.li_net_amount_val = '';
+                    this.li_tag_val = '';
+
+                    this.lineItemForm.reset();
+                    this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
+                    this.setRetailSalesDataPost();
+
+                    if (btn == 'finish_btn') {
+                        this.modal.dismiss('Cross click');
+                    }
+
+                }
+
+            } else {
+                this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
+                // this.dialogBox.afterClosed().subscribe((data) => {
+                //   if (data == 'OK') {
+                //     this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                //       this.comFunc.transformDecimalVB(
+                //         this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                //         localStorage.getItem('fcn_li_net_amount')
+                //       ))
+                //   }
+                // });
+            }
+        } else {
+            console.log('====================================');
+            console.log(this.lineItemForm.controls.fcn_li_gross_wt.errors);
+            console.log('====================================');
+            this.snackBar.open('Please Fill Required Fields', '', {
+                duration: 2000 // time in milliseconds
+            });
+        }
+    }
+
+
+    editTable = async (event: any) => {
+
+        event.cancel = true;
+        //   event.settings.CommandButtonInitialize = (sender, e) =>
+        //  {
+        //      if ((e.ButtonType == event.settings.ColumnCommandButtonType.Update) || (e.ButtonType == event.settings.ColumnCommandButtonType.Cancel))
+        //      {
+        //          e.Visible = false;
+        //      }
+        //  };
+        this.orderedItemEditId = event.sn_no;
+        this.lineItemService.getData().subscribe(data => {
+            this.currentLineItems = data;
+        });
+        const value: any = this.currentLineItems.filter(
+            (data: any) => data.SRNO == event.sn_no
+        )[0];
+        console.log(
+            '===============editTable==currentLineItems==================='
+        );
+        console.log(value);
+        console.log('====================================');
+
+        console.log(this.li_item_code_val);
+
+        // this.open(this.mymodal);
+
+        this.updateBtn = true;
+
+        this.newLineItem = value;
+
+
+        // if (this.editOnly == true || this.viewOnly == true) {
+        this.snackBar.open('Loading...');
+
+        // this.disableSaveBtn = true;
+
+        // let API = 'RetailSalesStockValidation?strStockCode=' + value.stock_code
+        //   +
+        //   '&strBranchCode=' + this.strBranchcode +
+        //   '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
+        //   '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+        // await
+        //   this.suntechApi.getDynamicAPI(API)
+        //     .subscribe(async (resp: any) => {
+        //       this.snackBar.dismiss();
+        //       console.log('===========edit====getPOSStockCodeValidation=====================');
+        //       console.log(resp);
+        //       console.log('====================================');
+        //       if (resp != null) {
+        //         if (resp.resultStatus.RESULT_TYPE == 'Success') {
+        //           let stockInfos = resp.stockInfo;
+        //           console.log(stockInfos);
+
+        //           this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
+        //           this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
+        //           this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
+        //           this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
+        //           this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
+        //         //   this.disableSaveBtn = false;
+        //           this.validatePCS = stockInfos.VALIDATE_PCS;
+        //           this.managePcsGrossWt();
+
+        //           this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
+        //           this.newLineItem.DIVISION = stockInfos.DIVISION;
+        //           this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
+        //           this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
+
+
+        //           if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
+
+        //             if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
+        //               this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+        //             // else
+        //             //   /* need to check this for diamond item */
+        //             //   this.setMakingValidation();
+        //           }
+
+        //         }
+        //       }
+
+        //     })
+        // }
+
+
+        this.newLineItem.STOCK_CODE = value.STOCK_CODE;
+        this.newLineItem.DIVISION = value.DIVISION_CODE;
+        this.newLineItem.HSN_CODE = value.HSNCODE;
+        this.newLineItem.GST_CODE = value.VATCODE;
+        this.newLineItem.MAIN_STOCK_CODE = value.MAINSTOCKCODE;// changed at 16/3/2024
+        // this.newLineItem.MAIN_STOCK_CODE = value.MainStockCode;
+        console.log('edit af data', value)
+        this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
+        // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
+        // this.divisionMS = value.divisionMS;
+
+
+
+
+        this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
+        this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
+        this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
+        this.lineItemForm.controls.fcn_li_location.setValue(value.LOCTYPE_CODE);
+        this.lineItemForm.controls.fcn_li_pcs.setValue(value.PCS);
+        this.lineItemForm.controls.fcn_li_gross_wt.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+                value.GROSSWT));
+        this.lineItemForm.controls.fcn_li_stone_wt.setValue(
+
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BSQTYDECIMALS,
+                value.STONEWT));
+        this.lineItemForm.controls.fcn_li_net_wt.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+                value.NETWT));
+        this.lineItemForm.controls.fcn_li_rate.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(value.MKG_RATEFC)));
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, parseFloat(value.MKGVALUEFC)));
+        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNT)
+        );
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNTVALUEFC)
+        );
+        this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.NETVALUEFC)
+        );
+        // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
+        this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_PER
+            )
+        );
+        this.lineItemForm.controls.fcn_li_tax_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC));
+        // this.lineItemForm.controls.fcn_li_net_amount.setValue(value.NETVALUEFC);
+        this.lineItemForm.controls.fcn_li_net_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC));
+
+        this.lineItemForm.controls.fcn_li_purity.setValue(
+            this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
+        );
+        this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
+        // this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
+
+        this.lineItemForm.controls.fcn_ad_amount.setValue(
+            // value.TOTALWITHVATFC
+
+            value.MKGMTLNETRATE // changed at 18/3/2024
+        );
+        this.lineItemForm.controls.fcn_ad_rate_type.setValue(value.RATE_TYPE);
+        this.lineItemForm.controls.fcn_ad_rate.setValue(value.MKGMTLNETRATE); // changed at 18/3/2024
+        this.lineItemForm.controls.fcn_tab_details.setValue(value.SJEW_TAGLINES);
+        // this.lineItemForm.controls.fcn_ad_making_rate.setValue(value.PUREWT);
+        // this.lineItemForm.controls.fcn_ad_making_amount.setValue(value.PUREWT);
+        this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.STONE_RATEFC));
+        this.lineItemForm.controls.fcn_ad_stone_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.STONEVALUEFC));
+        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
+
+            this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE')
+
+        );
+        this.lineItemForm.controls.fcn_ad_metal_amount.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, value.METALVALUEFC));
+
+        if (this.editOnly || this.viewOnly) {
+            const divisionMS = this.comFunc.getDivisionMS(value.DIVISION_CODE);
+            // this.currentLineItems.divisionMS = divisionMS;
+            this.divisionMS = divisionMS;
+        } else {
+            this.divisionMS = value.DIVISIONMS;
+        }
+        if (!this.viewOnly) {
+            // this.currentLineItems.splice((value.SRNO - 1), 1);
+            // this.ordered_items.splice((value.SRNO - 1), 1);
+        }
+
+        localStorage.setItem('fcn_li_rate', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate).toString());
+        localStorage.setItem('fcn_li_total_amount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount).toString());
+        localStorage.setItem('fcn_li_net_amount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount).toString());
+
+
+
+    }
+    sumTotalValues() {
+        /* line items start */
+        let total_pcs = 0;
+        let total_weight = 0;
+        let total_pure_weight = 0;
+        let total_making_amt = 0;
+        let total_metal_amt = 0;
+        let total_stone_amt = 0;
+        let total_dis_amt = 0;
+        let total_gross_amt = 0;
+        let total_sum = 0;
+        let tax_sum = 0;
+        let net_sum = 0;
+        /* line items end */
+
+        let total_sales_return_sum = 0;
+        let total_exchange = 0;
+        let total_received_amount = 0;
+
+        this.ordered_items.forEach(function (item) {
+            console.log('item---------------------', item);
+
+            total_sum = total_sum + parseFloat(item.total_amount);
+            tax_sum = tax_sum + parseFloat(item.tax_amount);
+            net_sum = net_sum + parseFloat(item.net_amount);
+            total_pcs = total_pcs + item.pcs;
+            total_weight = total_weight + parseFloat(item.weight);
+            total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
+            total_making_amt = total_making_amt + parseFloat(item.making_amt);
+            total_metal_amt = total_metal_amt + parseFloat(item.metal_amt);
+            total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
+            total_dis_amt = total_dis_amt + parseFloat(item.dis_amt);
+            total_gross_amt = total_gross_amt + parseFloat(item.gross_amt);
+        });
+
+        this.prnt_inv_total_pcs = total_pcs;
+        this.prnt_inv_total_weight = total_weight;
+        this.prnt_inv_total_pure_weight = total_pure_weight;
+        this.prnt_inv_total_making_amt = total_making_amt;
+        this.prnt_inv_total_metal_amt = total_metal_amt;
+        this.prnt_inv_total_stone_amt = total_stone_amt;
+        this.prnt_inv_total_dis_amt = total_dis_amt;
+        this.prnt_inv_total_gross_amt = total_gross_amt;
+
+        this.prnt_inv_net_total_without_tax = total_sum;
+        this.order_items_total_amount = total_sum;
+        this.prnt_inv_total_tax_amount = tax_sum;
+        this.order_items_total_tax = tax_sum;
+
+        this.order_items_total_gross_amount = net_sum;
+        this.order_items_total_discount_amount = 0.0;
+
+
+
+
+
+        // sales return items
+        //  this.sales_returns_items.forEach(function (item: any) {
+        //     total_sales_return_sum =
+        //          total_sales_return_sum + parseFloat(item.total_amount);
+        //   });
+
+
+        //  this.exchange_items.forEach(function (item) {
+        //      total_exchange = total_exchange + parseFloat(item.total_amount);
+        //   });
+
+        // Metal purchase (Exchange)
+        this.sumExchangeItem();
+        this.sumRetailSalesReturn();
+        this.order_total_exchange = total_exchange;
+
+        console.log('============== amount ======================');
+        console.log(
+            this.order_items_total_gross_amount,
+            total_sales_return_sum,
+            total_exchange
+        );
+        console.log('====================================');
+        this.order_items_total_net_amount = this.comFunc.transformDecimalVB(
+            this.comFunc.amtDecimals,
+            this.order_items_total_gross_amount -
+            // total_sales_return_sum -
+            this.invReturnSalesTotalNetTotal -
+            total_exchange
+        );
+
+        this.grossAmountEvent.emit(this.order_items_total_gross_amount);
+
+        this.totalTaxEvent.emit(this.order_items_total_tax);
+
+        this.itemTotalEvent.emit(this.prnt_inv_total_gross_amt);
+
+        this.netTotalEvent.emit(this.order_items_total_net_amount);
+
+
+        this.order_items_total_net_amount_org = this.order_items_total_net_amount;
+        this.sumReceiptItem();
+
+    }
+
+    // Receipt
+    sumReceiptItem() {
+        var totalNetAmount = 0.0;
+
+        this.receiptDetailsList.forEach((item: any) => {
+            totalNetAmount =
+                this.comFunc.emptyToZero(totalNetAmount) + this.comFunc.emptyToZero(item['AMOUNT_FC']);
+        });
+
+        this.receiptTotalNetAmt =
+            this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, totalNetAmount);
+        this.balanceAmount =
+            this.comFunc.emptyToZero(this.order_items_total_net_amount) - this.comFunc.emptyToZero(this.receiptTotalNetAmt);
+
+        this.prnt_received_amount = this.receiptTotalNetAmt;
+        this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
+
+        // recpCtrl.receiptTotalNetAmt = receiptTotalNetAmt;
+        // recpCtrl.balanceAmount = balanceAmount;
+    }
+
+
+    numToWord(number: any) {
+        //Validates the number input and makes it a string
+        if (typeof number === 'string') {
+            number = parseInt(number, 10);
+        }
+        if (typeof number === 'number' && !isNaN(number) && isFinite(number)) {
+            number = number.toString(10);
+        } else {
+            return 'This is not a valid number';
+        }
+
+        //Creates an array with the number's digits and
+        //adds the necessary amount of 0 to make it fully
+        //divisible by 3
+        var digits = number.split('');
+        var digitsNeeded = 3 - (digits.length % 3);
+        if (digitsNeeded !== 3) {
+            //prevents this : (123) ---> (000123)
+            while (digitsNeeded > 0) {
+                digits.unshift('0');
+                digitsNeeded--;
+            }
+        }
+
+        //Groups the digits in groups of three
+        var digitsGroup = [];
+        var numberOfGroups = digits.length / 3;
+        for (var i = 0; i < numberOfGroups; i++) {
+            digitsGroup[i] = digits.splice(0, 3);
+        }
+        console.log(digitsGroup); //debug
+
+        //Change the group's numerical values to text
+        var digitsGroupLen = digitsGroup.length;
+        var numTxt = [
+            [
+                null,
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine',
+            ], //hundreds
+            [
+                null,
+                'ten',
+                'twenty',
+                'thirty',
+                'forty',
+                'fifty',
+                'sixty',
+                'seventy',
+                'eighty',
+                'ninety',
+            ], //tens
+            [
+                null,
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine',
+            ], //ones
+        ];
+        var tenthsDifferent = [
+            'ten',
+            'eleven',
+            'twelve',
+            'thirteen',
+            'fourteen',
+            'fifteen',
+            'sixteen',
+            'seventeen',
+            'eighteen',
+            'nineteen',
+        ];
+
+        // j maps the groups in the digitsGroup
+        // k maps the element's position in the group to the numTxt equivalent
+        // k values: 0 = hundreds, 1 = tens, 2 = ones
+        for (var j = 0; j < digitsGroupLen; j++) {
+            for (var k = 0; k < 3; k++) {
+                var currentValue = digitsGroup[j][k];
+                digitsGroup[j][k] = numTxt[k][currentValue];
+                if (k === 0 && currentValue !== '0') {
+                    // !==0 avoids creating a string "null hundred"
+                    digitsGroup[j][k] += ' hundred ';
+                } else if (k === 1 && currentValue === '1') {
+                    //Changes the value in the tens place and erases the value in the ones place
+                    digitsGroup[j][k] = tenthsDifferent[digitsGroup[j][2]];
+                    digitsGroup[j][2] = 0; //Sets to null. Because it sets the next k to be evaluated, setting this to null doesn't work.
+                }
+            }
+        }
+
+        console.log(digitsGroup); //debug
+
+        //Adds '-' for grammar, cleans all null values, joins the group's elements into a string
+        for (var l = 0; l < digitsGroupLen; l++) {
+            if (digitsGroup[l][1] && digitsGroup[l][2]) {
+                digitsGroup[l][1] += '-';
+            }
+            digitsGroup[l].filter(function (e: any) {
+                return e !== null;
+            });
+            digitsGroup[l] = digitsGroup[l].join('');
+        }
+
+        console.log(digitsGroup); //debug
+
+        //Adds thousand, millions, billion and etc to the respective string.
+        var posfix = [
+            null,
+            'thousand',
+            'million',
+            'billion',
+            'trillion',
+            'quadrillion',
+            'quintillion',
+            'sextillion',
+        ];
+        if (digitsGroupLen > 1) {
+            var posfixRange = posfix.splice(0, digitsGroupLen).reverse();
+            for (var m = 0; m < digitsGroupLen - 1; m++) {
+                //'-1' prevents adding a null posfix to the last group
+                if (digitsGroup[m]) {
+                    // avoids 10000000 being read (one billion million)
+                    digitsGroup[m] += ' ' + posfixRange[m];
+                }
+            }
+        }
+
+        console.log(digitsGroup); //debug
+
+        //Joins all the string into one and returns it
+        return digitsGroup.join(' ');
+    }
+
+
+    setPosItemData(sno: any, data: any) {
+
+        let temp_pos_item_data: any = {
+            // new values
+            // "UNIQUEID": 0,
+
+            DIVISIONMS: data.divisionMS,
+            SRNO: sno,
+            DIVISION_CODE: data.DIVISION,
+            STOCK_CODE: data.STOCK_CODE, // m
+            GROSS_AMT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
+            PCS: data.pcs, //m
+            GROSSWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
+            STONEWT: data.STONE_WT, // m
+            NETWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt), // m
+            PURITY: data.PURITY, // m
+            PUREWT: data.pure_wt, // m
+            CHARGABLEWT: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt), // net weight
+            // CHARGABLEWT: data.NET_WT, // net weight
+            MKG_RATEFC: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0, //need
+            MKG_RATECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate), this.vocDataForm.value.txtCurRate
+            ), // cctofc rate
+
+            MKGVALUEFC: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount), // metal amount
+            MKGVALUECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount), this.vocDataForm.value.txtCurRate
+            ), // metal amount
+            RATE_TYPE: data.RATE_TYPE, //need_input
+            METAL_RATE: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_metal_rate
+            ),
+
+            METAL_RATE_GMSFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_metal_rate
+            ), //need_input
+            METAL_RATE_GMSCC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate), this.vocDataForm.value.txtCurRate
+            ),
+
+            // "METAL_RATE_GMSFC": 18.1, // jeba
+            // "METAL_RATE_GMSCC": 19.1, // jeba
+            METALVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_metal_amount
+            ),
+
+            METALVALUECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount), this.vocDataForm.value.txtCurRate
+            ),
+            STONE_RATEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_stone_rate
+            ),
+            STONE_RATECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate), this.vocDataForm.value.txtCurRate
+            ),
+            STONEVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_stone_amount
+            ),
+            STONEVALUECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount), this.vocDataForm.value.txtCurRate
+            ),
+            DISCOUNT: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_discount_percentage
+            ),
+            DISCOUNTVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_discount_amount
+            ),
+            DISCOUNTVALUECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount), this.vocDataForm.value.txtCurRate
+            ),
+            NETVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_gross_amount
+            ),
+            NETVALUECC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount), this.vocDataForm.value.txtCurRate
+            ),
+            // NETVALUEFC: this.comFunc.emptyToZero(
+            //   this.lineItemForm.value.fcn_li_net_amount
+            // ),
+            // NETVALUECC: this.comFunc.FCToCC(
+            //   this.comFunc.compCurrency,
+            //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
+            // ),
+            PUDIFF: 0,
+            STONEDIFF: 0,
+            PONO: 0, //need_input
+            LOCTYPE_CODE: this.lineItemForm.value.fcn_li_location, // need
+            SUPPLIER: data.SUPPLIER || '',
+            STOCK_DOCDESC: this.lineItemForm.value.fcn_li_item_desc,
+            LOCKED: false,
+            MCLENGTH: 0, //need_input
+            MCUNIT: 0,
+            POSSALESSR: '',
+            PHYSICALSTOCK: '',
+            METALAMT: '0',
+            MAKINGAMT: '0',
+            // METALAMT: `${this.comFunc.emptyToZero(
+            //   this.lineItemForm.value.fcn_ad_metal_amount
+            // )}`,
+            // MAKINGAMT: `${this.comFunc.emptyToZero(
+            //   this.lineItemForm.value.fcn_li_total_amount
+            // )}`,
+            STDIFFAC: '',
+            STAMTAC: '',
+            // STKTRANMKGCOST: '0',
+            STKTRANMKGCOST: data.STOCK_COST,
+            MAINSTOCKCODE: data.MAIN_STOCK_CODE, //need field
+            MKGMTLNETRATE: this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) +
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
+            ),
+
+            MTL_SIZE: '',
+            MTL_COLOR: '',
+            MTL_DESIGN: '',
+            SALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
+            STKTRN_LANDINGCOST: data.STOCK_COST, //need
+            STKTRN_WASTAGERATE: 0, //need
+
+            HSN_CODE: data.HSN_CODE,
+            VATCODE: data.GST_CODE,
+
+            VAT_PER: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_tax_percentage
+            ),
+
+            // TOTALWITHVATFC: this.comFunc.emptyToZero(
+            //   this.lineItemForm.value.fcn_li_net_amount
+            // ),
+            // TOTALWITHVATLC: this.comFunc.CCToFC(
+            //   this.comFunc.compCurrency,
+            //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
+            // ),
+            VAT_AMOUNTFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_tax_amount
+            ),
+            VAT_AMOUNTLC: this.comFunc.emptyToZero(
+                this.comFunc.FCToCC(
+                    this.vocDataForm.value.txtCurrency,
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount), this.vocDataForm.value.txtCurRate
+                )
+            ),
+            TOTALWITHVATFC: this.comFunc.emptyToZero(
+                // this.order_items_total_gross_amount,
+                this.lineItemForm.value.fcn_li_net_amount
+                // this.lineItemForm.value.fcn_ad_amount
+                // + this.lineItemForm.value.fcn_li_tax_amount
+            ),
+            TOTALWITHVATLC:
+                this.comFunc.emptyToZero(
+                    this.comFunc.FCToCC(
+                        this.vocDataForm.value.txtCurrency,
+                        this.comFunc.emptyToZero(
+                            this.lineItemForm.value.fcn_li_net_amount
+                            // this.lineItemForm.value.fcn_li_net_amount
+                            // this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+                            // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_amount)
+                            // + this.comFunc.emptyToZero( this.lineItemForm.value.fcn_li_tax_amount)
+                        ), this.vocDataForm.value.txtCurRate
+                    )
+                ) || 0,
+
+            RS_PICTUREPATH: '',
+            RSO_FIXED: false,
+            RSORDERGROSSWT: 0,
+            RUBY_WT: 0,
+            RUBY_RATE: 0,
+            RUBY_AMOUNTFC: 0,
+            RUBY_AMOUNTCC: 0,
+            EMERALD_WT: 0,
+            EMERALD_RATE: 0,
+            EMERALD_AMOUNTFC: 0,
+            EMERALD_AMOUNTCC: 0,
+            SAPPHIRE_WT: 0,
+            SAPPHIRE_RATE: 0,
+            SAPPHIRE_AMOUNTFC: 0,
+            SAPPHIRE_AMOUNTCC: 0,
+            ZIRCON_WT: 0,
+            ZIRCON_RATE: 0,
+            ZIRCON_AMOUNTFC: 0,
+            ZIRCON_AMOUNTCC: 0,
+            COLOR_STONE_WT: 0,
+            COLOR_STONE_RATE: 0,
+            COLOR_STONE_AMOUNTFC: 0,
+            COLOR_STONE_AMOUNTCC: 0,
+            SJEW_TAGLINES: this.lineItemForm.value.fcn_tab_details || '',
+            DSALEPERSON_CODE: '',
+            VAT_ACCODE: '',
+
+            // Loyalty_Item: false,
+            WASTE_PER: 0,
+
+            DT_BRANCH_CODE: this.strBranchcode,
+            DT_VOCNO: '0', // to 0
+            DT_VOCTYPE: this.vocType, // change
+            // "DT_VOCTYPE":  this.vocType, // change
+            DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+            DT_BLOCKPSRIMPORT: false,
+            // GIFT_ITEM: false,
+
+            // STOCKCHECKOTHERBRANCH: false,
+            // DTREMARKS: '',
+            SERVICE_STOCK_CODE: '',
+            GSTMETALPER: 0.0,
+            GSTMAKINGPER: 0.0,
+            GSTOTHERPER: 0.0,
+            GSTMETALAMT_CC: 0.0,
+            GSTMAKINGAMT_CC: 0.0,
+            GSTOTHERAMT_CC: 0.0,
+            GSTMETALAMT_FC: 0.0,
+            GSTMAKINGAMT_FC: 0.0,
+            GSTOTHERAMT_FC: 0.0,
+            TOTALWITHGST_CC: 0.0,
+            TOTALWITHGST_FC: 0.0,
+
+            EXTRA_STOCK_CODE: '001293413', //need
+            // flagEStk: '0',
+            OT_TRANSFER_TIME: '',
+            // IssueGiftVoucher: false,
+
+            MARGIN_PER: '0.000',
+            MARGIN_AMTFC: '0.000',
+            MARGIN_AMTCC: '0.000',
+            CGST_PER: '0.00',
+            CGST_AMOUNTFC: '0.000',
+            CGST_AMOUNTCC: '0.000',
+            SGST_PER: '0.000',
+            SGST_AMOUNTFC: '0.000',
+            SGST_AMOUNTCC: '0.000',
+            IGST_PER: this.lineItemForm.value.fcn_li_tax_percentage || 0,
+            IGST_AMOUNTFC: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount) || 0,
+            IGST_AMOUNTCC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount), this.vocDataForm.value.txtCurRate
+            ),
+            CGST_ACCODE: '',
+            SGST_ACCODE: '',
+            IGST_ACCODE: '',
+            TOTAL_AMOUNTFC: this.comFunc.emptyToZero(
+                this.order_items_total_gross_amount
+            ),
+            TOTAL_AMOUNTCC: this.comFunc.FCToCC(
+                this.vocDataForm.value.txtCurrency,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount), this.vocDataForm.value.txtCurRate
+            ),
+            CGST_CTRLACCODE: '',
+            SGST_CTRLACCODE: '',
+            IGST_CTRLACCODE: '',
+            GST_GROUP: '',
+            GST_CODE: data['GST_CODE'],
+            SERVICE_ACCODE: '',
+            WASTAGEPER: '0.00',
+            WASTAGEQTY: '0.000',
+            WASTAGEPUREWT: '0.000',
+            WASTAGEAMOUNTFC: '0.000',
+            WASTAGEAMOUNTCC: '0.000',
+            // INCLUSIVE: false,
+            // OLDRATE: '',
+            // OLDAMOUNT: '',
+            // DISC_USER_NAME: '',
+            // DISC_AMOUNT: '0.000',
+            // DISC_PERCENTAGE: '0.000',
+            // KUNDAN_UNIT: '0',
+            // KUNDAN_PCS: '0',
+            // KUNDAN_CARAT: '0.000',
+            // KUNDAN_WEIGHT: '0.000',
+            // KUNDAN_RATEFC: '0.000',
+            // KUNDAN_RATECC: '0.000',
+            // KUNDANVALUEFC: '0.000',
+            // KUNDANVALUECC: '0.000',
+            // CESS_PER: '0.000',
+            // CESS_AMOUNTFC: '0.000',
+            // CESS_AMOUNTCC: '0.000',
+            // ROS_FIXED: '0',
+            // BATCHID: '0',
+            // STAMP_RATE: '0.000000',
+            // STAMP_AMOUNT: '0.00',
+            // STAMP_AMOUNTCC: '0.00',
+            // SET_REF: '',
+            // LOYALTY_POINTS: '0.00',
+            // SALES_TAGLINES: '',
+            // GPC_STONEDIFF_AC: '',
+            // GPC_STONEVALUESALES_AC: '',
+            // GPC_POSSALES_AC: '',
+            // GPC_KUNDANVALUESALES_AC: '',
+            // GPC_POSSALESSR_AC: '',
+            // GPC_METALAMT_AC: '',
+            // GPC_PHYSICALSTOCK_AC: '',
+            // GPC_WASTAGE_AC: '',
+            // GPC_STAMPCHARGE_AC: '',
+            // COUNTRY_CODE: '',
+            // UNIT_CODE: '',
+            // FLAGESTK: '0',
+            "INCLUSIVE": false,
+            "OLDRATE": '0',
+            "OLDAMOUNT": '0',
+            "DISC_USER_NAME": '0',
+            "DISC_AMOUNT": '0.000',
+            "DISC_PERCENTAGE": '0.000',
+            "KUNDAN_UNIT": '0',
+            "KUNDAN_PCS": '0',
+            "KUNDAN_CARAT": '0.000',
+            "KUNDAN_WEIGHT": '0.000',
+            "KUNDAN_RATEFC": '0.000',
+            "KUNDAN_RATECC": '0.000',
+            "KUNDANVALUEFC": '0.000',
+            "KUNDANVALUECC": '0.000',
+            "CESS_PER": '0.000',
+            "CESS_AMOUNTFC": '0.000',
+            "CESS_AMOUNTCC": '0.000',
+            "ROS_FIXED": '0',
+            "BATCHID": '0',
+            "STAMP_RATE": '0.000000',
+            'STAMP_AMOUNT': '0.00',
+            "STAMP_AMOUNTCC": '0.00',
+            "SET_REF": '0',
+            "LOYALTY_POINTS": '0.00',
+            "SALES_TAGLINES":
+                this.lineItemForm.value.fcn_tab_details || '',
+            "GPC_STONEDIFF_AC": '0',
+            "GPC_STONEVALUESALES_AC": '0',
+            "GPC_POSSALES_AC": '0',
+            "GPC_KUNDANVALUESALES_AC": '0',
+            "GPC_POSSALESSR_AC": '0',
+            "GPC_METALAMT_AC": '0',
+            "GPC_PHYSICALSTOCK_AC": '0',
+            "GPC_WASTAGE_AC": '0',
+            "GPC_STAMPCHARGE_AC": '0',
+            "COUNTRY_CODE": '',
+            "UNIT_CODE": '0',
+            "FLAGESTK": '0',
+            "GPC_MAKINGAMT_AC": '0',
+            "DTSALESPERSON_CODE": "0",
+
+            // new fields added - 28-12-2023
+            "COMPONENT_PRICE_TYPE": "",
+            "DTREMARKS": "",
+            "DUFIX_METALGROSSWT": 0,
+            "DUFIX_DIAPCS": 0,
+            "DUFIX_DIACARAT": 0,
+            "DUFIX_STONEPCS": 0,
+            "DUFIX_STONECARAT": 0,
+            "DUFIX_METAL_WT": 0,
+            "DUFIX_FINEGOLD": 0,
+            "DUFIX_MASTERFINEGOLD": 0,
+            "DUFIX_DIACTRATEFC": 0,
+            "DUFIX_DIACTRATECC": 0,
+            "DUFIX_DIAVALUEFC": 0,
+            "DUFIX_DIAVALUECC": 0,
+            "DUFIX_CLRSTNRATEFC": 0,
+            "DUFIX_CLRSTNRATECC": 0,
+            "DUFIX_CLRSTNVALUEFC": 0,
+            "DUFIX_CLRSTNVALUECC": 0,
+            "DUFIX_METALVALUEFC": 0,
+            "DUFIX_METALVALUECC": 0,
+            "DUFIX_LABOURFC": 0,
+            "DUFIX_LABOURCC": 0,
+            "DUFIX_HMCHARGEFC": 0,
+            "DUFIX_HMCHARGECC": 0,
+            "DUFIX_CERTCHARGEFC": 0,
+            "DUFIX_CERTCHARGECC": 0,
+            "DUFIX_DWASTAGE": 0,
+            "DUFIX_PURITY": 0,
+            "DUFIX_PUDIFF": 0,
+            "DUFIX_DKARAT_CODE": "",
+            "DUFIX_METLA_WT": 0,
+            "DUFIX_DWASTAGEPER": 0,
+            "DUFIX_DWASTAGEAMOUNTFC": 0,
+            "DUFIX_DWASTAGEAMOUNTCC": 0,
+            "DUFIX_PEARL_PCS": 0,
+            "DUFIX_PEARL_WT": 0,
+            "DUFIX_PEARL_AMTFC": 0,
+            "DUFIX_PEARL_AMTCC": 0,
+            "DUFIX_DLABUNIT": 0,
+            "DUFIX_DLABRATEFC": 0,
+            "DUFIX_DLABRATECC": 0,
+            "DUFIX_DCHARGABLEWEIGHT": 0,
+            "GIFT_ITEM": false,
+            "HSNCODE": "",
+            "LESSTHANCOST_USER": "",
+            "NEWUNIQUEID": 0,
+            "STOCKCHECKOTHERBRANCH": false,
+
+            // new fields added - 03-02-2024 for posplanet save calculation
+            "GSTVATONMAKING": data.GSTVATONMAKING,
+            "EXCLUDEGSTVAT": data.EXCLUDEGSTVAT,
+
+        };
+        console.log(data);
+
+        let _taxamount = 0;
+        _taxamount = data.PRICE1LC * (this.branch_tax_percentage / 100);
+
+        let _net_amount_val = +_taxamount + +data.PRICE1LC;
+
+
+        console.log(temp_pos_item_data);
+        if (
+            this.orderedItemEditId == '' ||
+            this.orderedItemEditId == undefined ||
+            this.orderedItemEditId == null
+        ) {
+            this.currentLineItems.push(temp_pos_item_data);
+            this.lineItemService.setData(this.currentLineItems);
+        } else {
+            const preitemIndex = this.currentLineItems.findIndex((data: any) => {
+                console.table(data.SRNO == this.orderedItemEditId);
+                return data.SRNO == this.orderedItemEditId;
+            });
+            console.log('====================================');
+            console.log(preitemIndex);
+            console.log('====================================');
+            if (preitemIndex != -1) {
+                temp_pos_item_data.SRNO = this.orderedItemEditId;
+                this.currentLineItems[preitemIndex] = temp_pos_item_data;
+            }
+            console.log(
+                '===========updatedcurrentLineItems========================='
+            );
+            console.log(this.currentLineItems);
+            console.log(this.ordered_items);
+            console.log('====================================');
+            this.orderedItemEditId = '';
+        }
+        this.pos_main_data.RetailDetails = this.currentLineItems;
+        console.log(this.pos_main_data);
+    }
+
+
+
+    setRetailSalesDataPost() {
+        // alert(this.customerDetails?.CODE );
+        // alert(this.invReturnSalesTotalNetTotal)
+        // alert(this.order_total_exchange)
+
+
+        this.retailSalesDataPost =
+        {
+            MID: this.retailSalesMID,
+            BRANCH_CODE: this.strBranchcode,
+            VOCTYPE: 'EST',
+            // VOCTYPE: this.vocType,
+            VOCNO: this.retailSaleDataVocNo,
+            // VOCDATE: this.convertDateWithTimeZero(
+            //     new Date(this.vocDataForm.value.vocdate).toISOString()
+            // ),
+            //   YEARMONTH: this.baseYear,
+            // PARTYNAME: this.customerDataForm.value.fcn_customer_name,
+            // "PARTYNAME": "Urwashi Jani",
+            //TEL1: this.customerDetails?.TEL1 || '',
+            // TEL2: this.customerDetails?.TEL2 || '',
+            //SALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
+            RATE_TYPE: '', //need_input
+            METAL_RATE: 0, //need_input
+            SALES_ORDER: 0, //need_input
+            TOTAL_PCS: this.comFunc.emptyToZero(this.prnt_inv_total_pcs),
+            TOTAL_GRWT: this.comFunc.emptyToZero(this.prnt_inv_total_weight),
+            TOTAL_PUWT: this.comFunc.emptyToZero(this.prnt_inv_total_pure_weight),
+            TOTAL_MKGVALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.emptyToZero(this.order_items_total_amount)
+            ),
+            TOTAL_MKGVALUE_CC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.order_items_total_amount)
+                )
+            ),
+            TOTAL_METALVALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.emptyToZero(this.prnt_inv_total_metal_amt)
+            ),
+            TOTAL_METALVALUE_CC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.prnt_inv_total_metal_amt)
+                )
+            ),
+            TOTAL_STONEVALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.prnt_inv_total_stone_amt
+            ),
+            TOTAL_STONEVALUE_CC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.prnt_inv_total_stone_amt)
+                )
+            ),
+            TOTAL_PUDIFF: 0, //need_input
+            TOTAL_STONEDIFF: 0, //need_input
+            TOTAL_DISCVALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.prnt_inv_total_dis_amt
+            ), //need_input
+            TOTAL_DISCVALUE_CC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.prnt_inv_total_dis_amt)
+                )
+            ), //need_input
+
+            NETVALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            // NETVALUE_FC: this.comFunc.transformDecimalVB(
+            //   this.comFunc.amtDecimals,
+            //   this.prnt_inv_total_gross_amt
+            // ),
+            NETVALUE_CC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+                    // this.comFunc.emptyToZero(this.prnt_inv_total_gross_amt)
+                )
+            ),
+            // SYSTEM_DATE: , // need_input // check in api -
+            SYSTEM_DATE: new Date().toISOString(), // need_input // check in api -
+            // SYSTEM_DATE: this.dummyDate , // need_input // check in api -
+            SRETURNMID: 0, //need
+            SRETURNVOCNO: 0, //need
+            SRETURNVOCTYPE: '',
+            SRETURN_VALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.invReturnSalesTotalNetTotal
+            ), //need
+            SRETURN_VALUE_CC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.invReturnSalesTotalNetTotal)
+            ), //need
+            PURCHASEMID: 0, //need
+            PURCHASEVOCNO: 0, //need
+            PURCHASEVOCTYPE: '',
+            PURCHASE_VALUE_FC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.order_total_exchange
+            ), //need
+            PURCHASE_VALUE_CC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.order_total_exchange)
+            ), //need
+            ADJUST_ADVANCE: 0, //need
+            DISCOUNT: this.order_items_total_discount_amount, // need_input
+            // SUBTOTAL: this.prnt_inv_net_total_without_tax,
+            SUBTOTAL: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            NETTOTAL: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            RECEIPT_TOTAL: 0, //need_input
+            REFUND: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            // REFUND: 0,
+            NAVSEQNO: 0, //need
+            // MOBILE: this.customerDataForm.value.fcn_customer_mobile,
+            // POBOX: this.customerDetails?.POBOX_NO || '',
+            //EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
+            REMARKS: '', //need_input
+            // POSCUSTCODE: this.customerDetails?.CODE || '',
+            ITEM_CURRENCY: this.comFunc.compCurrency,
+            ITEM_CURR_RATE: 1,
+            ADJUST_ADVANCECC: 0,
+            DISCOUNTCC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.order_items_total_discount_amount)
+            ), // need_input
+            SUBTOTALCC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                // this.comFunc.emptyToZero(this.prnt_inv_net_total_without_tax)
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            NETTOTALCC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            RECEIPT_TOTALCC: 0, //need_input
+            REFUNDCC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.order_items_total_gross_amount)
+            ),
+            // REFUNDCC: 0,
+            PENDING: 1,
+            POSDETAILS: '',
+            CREDITAC: '',
+            DELIVERYDATE: this.dummyDate, //need
+            ORDERMID: 0, //need
+            FLAG_UPDATED: 'N',
+            FLAG_INPROCESS: 'N',
+            // NATIONALITY: this.customerDetailForm.value.fcn_cust_detail_nationality
+
+            //   || '',
+            // TYPE: this.customerDetails?.TYPE || '',
+            ORDEREXEDATE: this.dummyDate, //need
+            FLAG_EDIT_ALLOW: 'N',
+            D2DTRANSFER: 'F',
+            RSCUSTIDNO: '',
+            // POSKnownAbout: this.customerDetails?.POSKnownAbout || 0,
+
+            // etc fields
+            RS_FIXED: false, //need
+            SALESREFERENCE: '',
+            TRANS_CODES: '0',
+            CONSIGNMENTPARTY: '0',
+            TOTALVAT_AMOUNTFC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.order_items_total_tax
+            ),
+            TOTALVAT_AMOUNTLC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.order_items_total_tax
+            ),
+            RSSTATE: '',
+            SALESFIXINGMID: '0',
+            SALESFIXINGREF: '0',
+            REDEMPTIONTOTALVALUECC: 0,
+            GSTVATAMOUNTFC: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                this.order_items_total_tax
+            ),
+            GSTVATAMOUNTCC: this.comFunc.CCToFC(
+                this.comFunc.compCurrency,
+                this.order_items_total_tax
+            ),
+            CCPOSTINGDONE: '0',
+            BALANCE_FC: 0, //need
+            BALANCE_CC: 0, //need
+            LOCALREMARKSNEW: '0',
+            MACHINEID: "0",
+            AUTOPOSTING: false,
+            POSTDATE: this.dummyDate, //need
+            INVREF: '0',
+            SCHEMESALESFIXINGPUREWT: 0,
+            BLOCKPSRIMPORT: false,
+            INCLUDEVAT: false,
+            WAYBILLNO: '',
+            WAYBILLDATE: this.dummyDate, //need
+            HTUSERNAME: this.strUser || '',
+            REMARKSNEW: '',
+            REC_MODE: '',
+            GENSEQNO: 0, //need
+            CCSALESCOMMISIONAmountCC: 0,
+            CCSALESCOMMISIONAmountFC: 0,
+            GroupRef: '',
+            INTIALPROMOTION: false,
+            POSORDERADVVATAMTLC: 0,
+            POSORDERADVVATAMTFC: 0,
+            FROM_TOUCH: false,
+            Agent_Commission: false,
+            AgentCommission_Per: 0,
+            CALCULATE_LOYALTY: true,
+            TRAYN: false,
+            TRANO: "0",
+            POSReferenceRepairInvoice: '',
+            RSLOGINMID: '0',
+            TRAYNREFUND: false,
+            TRAYNREFUNDDATE: this.dummyDate, //need
+            SERVICE_INVOICE: false,
+            GJVREFERENCE: '',
+            GJVMID: 0, //need
+            holdbarcode: false,
+            PROMO_CODE: '',
+            VATAMOUNTFCROUND: 0,
+            VATAMOUNTFCROUNDCC: 0,
+            LIFETIMEWARRANTY: false,
+            SALESORDER_VALIDITYDATE: this.dummyDate, //need
+            EmiratesSkywardsMile: false,
+            ONLINERATE: false,
+            CERTIFICATEPRINTED: '0',
+            OT_TRANSFER_TIME: '',
+            PLANETRESPONEFLG: false,
+            PLANETQRURL: '',
+            VoucherRedeemed: '',
+            QRCODEIMAGE: '',
+            QRCODEVALUE: '',
+            BOARDINGPASS: '',
+            WITHOUTVAT: false,
+            FLIGHTNO: '',
+            BOARDINGFROM: '',
+            BOARDINGDATE: this.dummyDate, //need
+            // new values
+            CITY:
+                //   this.customerDetailForm.value.fcn_cust_detail_city ||
+                // this.customerDetails?.CITY ||
+                '',
+            //STATE: this.customerDetails?.STATE || '',
+            ADDRESS:
+                //   this.customerDetailForm.value.fcn_cust_detail_address ||
+                // this.customerDetails?.ADDRESS ||
+                '',
+            COUNTRY_CODE:
+                // this.customerDetailForm.value.fcn_cust_detail_country ||
+                // this.customerDetails?.COUNTRY_CODE ||
+                '',
+            //CUST_LANGUAGE: this.customerDetails?.CUST_LANGUAGE || '0',
+            PRINT_COUNT: 0,
+            GST_TOTALFC: 0,
+            GST_TOTALCC: 0,
+            GST_STATE_CODE: '0',
+            //  PANNO: this.customerDetails?.PANCARDNO || '0',
+            GST_NUMBER: '',
+            TRA_ID_TYPE: '0',
+            //  POSCUSTIDNO: this.customerDetails?.POSCUSTIDNO || '',
+            POS_CREDITLIMIT_AUTHORIZED_USER: '',
+            POS_CREDITLIMIT_AUTHORIZED_REMARK: '',
+            TOTALCESS_AMOUNTFC: 0,
+            TOTALCESS_AMOUNTCC: 0,
+            FORM_60: false,
+            COMP_WISE_INVOICE: false,
+            REFBY_CUSTCODE: '0',
+            PRINT_COUNT_ACCOPY: 0,
+            PRINT_COUNT_CNTLCOPY: 0,
+
+
+            "ESTIMATION_STATUS": "O", // 0 - O
+            "POS_REFERENCE": "",
+
+            // SOURCEOFWEALTHANDFUNDS: this.customerDetailForm.value.fcn_source_of_fund || '',
+
+            // estimationDetail: this.currentLineItems,
+        };
+
+        console.log('====================================');
+        console.log(this.retailSalesDataPost);
+        console.log('====================================');
+
+    }
+
+    sumExchangeItem() {
+        let total_pcs = 0;
+        let total_nett_weight = 0;
+        let total_pure_weight = 0;
+        let total_metal_amt = 0;
+        let total_stone_amt = 0;
+        let total_sum = 0;
+        let total_gross_wt = 0;
+        let total_purity = 0;
+        let total_purity_diff = 0;
+        let total_pure_wt = 0;
+        let total_mkg_value = 0;
+        let total_net_amount = 0;
+        let total_oz_weight = 0;
+
+        this.exchange_items.forEach(function (item) {
+            console.log('exchange item---------------------', item);
+            total_sum = total_sum + parseFloat(item.total_amount);
+            total_pcs = total_pcs + item.pcs;
+            total_nett_weight = total_nett_weight + parseFloat(item.weight); //nett weight
+            total_gross_wt = total_gross_wt + parseFloat(item.gross_wt);
+            total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
+            total_metal_amt = total_metal_amt + parseFloat(item.metalAmt);
+            total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
+            total_purity_diff = total_purity_diff + parseFloat(item.purity_diff);
+            total_mkg_value = total_mkg_value + parseFloat(item.mkg_amount);
+            total_net_amount = total_net_amount + parseFloat(item.net_amount);
+            total_oz_weight = total_oz_weight + parseFloat(item.ozWeight);
+            console.log('=================ozWeight===================');
+            console.log(typeof item.ozWeight, item.ozWeight);
+            console.log('====================================');
+        });
+
+        this.invMetalPurchaseTotalPcs = total_pcs;
+        this.invMetalPurchaseTotalNettWeight = total_nett_weight;
+        this.invMetalPurchaseTotalGrossWeight = total_gross_wt;
+        this.invMetalPurchaseTotalPureWeight = total_pure_weight;
+        this.invMetalPurchaseTotalPurityDiff = total_purity_diff;
+        this.invMetalPurchaseTotalMetalAmt = total_metal_amt;
+        this.invMetalPurchaseTotalStoneAmt = total_stone_amt;
+        this.invMetalPurchaseTotalMakingAmt = total_mkg_value;
+        this.invMetalPurchaseTotalNetAmt = total_net_amount;
+        this.invMetalPurchaseTotalOzWt = total_oz_weight;
+    }
+
+    updateRetailSalesReturnVal() {
+        if (!this.lineItemForm.invalid) {
+            this.setRetailSalesRowData(this.order_items_slno_length, this.newLineItem);
+            this.modalReferenceSalesReturn.close();
+        } else {
+            this.snackBar.open('Please Fill Required Fields', '', {
+                duration: 2000 // time in milliseconds
+            });
+        }
+    }
+
+
+    sumRetailSalesReturn() {
+        let total_pcs = 0;
+        let total_weight = 0;
+        let total_pure_weight = 0;
+        let total_making_amt = 0;
+        let total_metal_amt = 0;
+        let total_stone_amt = 0;
+        let total_dis_amt = 0;
+        let total_sum = 0;
+        let tax_sum = 0;
+        let net_sum = 0;
+        let total_pur_diff = 0;
+        let total_stone_diff = 0;
+        let total_dis_per = 0;
+        let total_tax_amt = 0;
+
+        this.sales_returns_items.forEach(function (item: any) {
+            console.log('return item---------------------', item);
+            total_sum = total_sum + parseFloat(item.total_amount);
+            tax_sum = tax_sum + parseFloat(item.tax_amount);
+            net_sum = net_sum + parseFloat(item.net_amount);
+            total_pcs = total_pcs + item.pcs;
+            total_weight = total_weight + parseFloat(item.weight);
+            total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
+            total_making_amt = total_making_amt + parseFloat(item.making_amt);
+            total_metal_amt = total_metal_amt + parseFloat(item.metal_amt);
+            total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
+            total_pur_diff = total_pur_diff + parseFloat(item.PUDIFF);
+            total_stone_diff = total_stone_diff + parseFloat(item.STONEDIFF);
+            total_dis_amt = total_dis_amt + parseFloat(item.DISCOUNTVALUEFC);
+            total_dis_per = total_dis_per + parseFloat(item.DISCOUNT);
+            total_tax_amt = total_tax_amt + parseFloat(item.VAT_AMOUNTFC);
+        });
+        // alert(total_pur_diff);
+
+        this.invReturnSalesTotalPcs = total_pcs;
+        this.invReturnSalesTotalWeight = total_weight;
+        this.invReturnSalesTotalPureWeight = total_pure_weight;
+        this.invReturnSalesTotalMakingAmt = total_making_amt;
+        this.invReturnSalesTotalMetalAmt = total_metal_amt;
+        this.invReturnSalesTotalStoneAmt = total_stone_amt;
+        this.invReturnSalesTotalNetAmt = net_sum;
+        this.invReturnSalesTotalPurityDiff = total_pur_diff;
+        this.invReturnSalesTotalStoneDiff = total_stone_diff;
+        this.invReturnSalesTotalDisAmt = total_dis_amt;
+        this.invReturnSalesTotalDisPer = total_dis_per;
+        this.invReturnSalesTotalTaxAmt = total_tax_amt;
+
+        // this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
+        //   this.comFunc.amtDecimals,
+        //   net_sum + total_tax_amt
+        // );
+
+        this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
+            this.comFunc.amtDecimals,
+            // total_sum
+            net_sum
+            // +       total_tax_amt
+        );
+        console.log('=================invReturnSalesTotalPcs===================');
+        console.log(
+            this.invReturnSalesTotalPcs,
+            this.invReturnSalesTotalWeight,
+            this.invReturnSalesTotalPureWeight,
+            this.invReturnSalesTotalMakingAmt,
+            this.invReturnSalesTotalMetalAmt,
+            this.invReturnSalesTotalStoneAmt,
+            this.invReturnSalesTotalNetAmt,
+            this.invReturnSalesTotalPurityDiff,
+            this.invReturnSalesTotalStoneDiff,
+            this.invReturnSalesTotalDisAmt,
+            this.invReturnSalesTotalDisPer,
+            this.invReturnSalesTotalNetTotal
+        );
+        console.log('====================================');
+    }
+
+    setRetailSalesRowData(sno: any, data: any) {
+        let temp_pos_item_data: any = {
+            DIVISIONMS: data.DIVISIONMS,
+            DIVISION_CODE: data.DIVISION_CODE,
+            STOCK_CODE: data.STOCK_CODE,
+            GROSS_AMT: this.lineItemForm.value.fcn_li_gross_amount || 0,
+            PCS: this.lineItemForm.value.fcn_li_pcs || 1,
+            GROSSWT: this.lineItemForm.value.fcn_li_gross_wt,
+            STONEWT: data.STONEWT,
+            NETWT: this.lineItemForm.value.fcn_li_net_wt,
+            PURITY: data.PURITY,
+            PUREWT: data.PUREWT,
+            CHARGABLEWT: data.NET_WT,
+            MKG_RATEFC: this.lineItemForm.value.fcn_li_rate || 0,
+            MKG_RATECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+            ),
+            MKGVALUEFC: this.lineItemForm.value.fcn_li_total_amount,
+            MKGVALUECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+            ),
+            METAL_RATE: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_metal_rate
+            ),
+            METAL_RATE_GMSFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_metal_rate
+            ),
+            METAL_RATE_GMSCC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate)
+            ),
+            METALVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_metal_amount
+            ),
+            METALVALUECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
+            ),
+            STONE_RATEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_stone_rate
+            ),
+            STONE_RATECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_rate)
+            ),
+            STONEVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_ad_stone_amount
+            ),
+            STONEVALUECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount)
+            ),
+            DISCOUNT: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_discount_percentage
+            ),
+            DISCOUNTVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_discount_amount
+            ),
+            DISCOUNTVALUECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+            ),
+            NETVALUEFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_gross_amount
+            ),
+            NETVALUECC: this.comFunc.FCToCC(
+                this.comFunc.compCurrency,
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+            ),
+            LOCTYPE_CODE: this.lineItemForm.value.fcn_li_location, // need
+            SUPPLIER: data.SUPPLIER || '',
+            STOCK_DOCDESC: this.lineItemForm.value.fcn_li_item_desc,
+            LOCKED: false,
+            StkTranMkgCost: data.STKTRANMKGCOST,
+            MainStockCode: data.MAIN_STOCK_CODE, //need field
+            MkgMtlNetRate: this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals,
+                parseFloat(this.lineItemForm.value.fcn_li_total_amount) +
+                parseFloat(this.lineItemForm.value.fcn_ad_metal_amount)
+            ),
+            //DTSALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
+            StkTrn_LandingCost: data.STOCK_COST, //need
+            HSNCODE: data.HSN_CODE,
+            VATCODE: data.GST_CODE,
+            VAT_PER: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_tax_percentage
+            ),
+            VAT_AMOUNTFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_tax_amount
+            ),
+            VAT_AMOUNTLC: this.comFunc.emptyToZero(
+                this.comFunc.FCToCC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount)
+                )
+            ),
+            TOTALWITHVATFC: this.comFunc.emptyToZero(
+                this.lineItemForm.value.fcn_li_net_amount
+            ),
+            TOTALWITHVATLC:
+                this.comFunc.emptyToZero(
+                    this.comFunc.FCToCC(
+                        this.comFunc.compCurrency,
+                        this.comFunc.emptyToZero(
+                            this.lineItemForm.value.fcn_li_net_amount
+                        )
+                    )
+                ) || 0,
+        };
+        const preitemIndex = this.salesReturnsItems_forVoc.findIndex((data: any) => data.SRNO.toString() == this.salesReturnRowDataSRNO.toString());
+        if (preitemIndex != -1) {
+            console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
+            console.log(this.salesReturnsItems_forVoc[preitemIndex], temp_pos_item_data);
+            console.log('====================================');
+            this.salesReturnsItems_forVoc[preitemIndex] = { ...this.salesReturnsItems_forVoc[preitemIndex], ...temp_pos_item_data };
+            console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
+            console.log(this.salesReturnsItems_forVoc[preitemIndex]);
+            console.log('====================================');
+        } else {
+            console.log('============failed=====this.salesReturnsItems_forVoc[preitemIndex]===================');
+            console.log(this.salesReturnsItems_forVoc[preitemIndex]);
+            console.log('====================================');
+        }
+    }
 
 }
