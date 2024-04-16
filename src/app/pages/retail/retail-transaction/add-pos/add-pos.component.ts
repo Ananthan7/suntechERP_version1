@@ -8248,7 +8248,7 @@ export class AddPosComponent implements OnInit {
   changePCS(event: any) {
     const value = event.target.value;
     if (value != '' && this.validatePCS == true) {
-      this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+      // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
 
       if (this.blockNegativeStock == 'B') {

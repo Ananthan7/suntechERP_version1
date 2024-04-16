@@ -28,6 +28,8 @@ export class DiamondBranchTransferInAutoRepairDetailsComponent  implements OnIni
   @Input() content!: any;
   tableData:any[]=[];
   private subscriptions: Subscription[] = [];
+  userName = localStorage.getItem('username');
+  userbranch = localStorage.getItem('userbranch');
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -42,16 +44,30 @@ export class DiamondBranchTransferInAutoRepairDetailsComponent  implements OnIni
   }
 
   locationCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 155,
-    SEARCH_FIELD: 'Location',
-    SEARCH_HEADING: 'location Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "Location<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    
+        PAGENO: 1,
+        RECORDS: 10,
+        LOOKUPID: 155,
+        ORDER_TYPE: 0,
+        SEARCH_FIELD: "LOCATION",
+        SEARCH_HEADING: "Loc Code",
+        SEARCH_VALUE: "",
+        WHERECONDITION: "@Strbranch='"+ this.userbranch+"',@strUsercode='"+this.userName+"',@stravoidforsales= 0",
+        VIEW_INPUT: true,
+        VIEW_TABLE: true,
+
+    // PAGENO: 1,
+    // RECORDS: 10,
+    // LOOKUPID: 155,
+    // SEARCH_FIELD: 'Location',
+    // SEARCH_HEADING: 'location Code',
+    // SEARCH_VALUE: '',
+    // WHERECONDITION: "Location<> ''",
+    // VIEW_INPUT: true,
+    // VIEW_TABLE: true,
   }
+
+  
 
  
 

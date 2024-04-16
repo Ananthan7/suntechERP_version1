@@ -137,8 +137,8 @@ export class ComponentSizeMasterComponent implements OnInit {
       "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
       "RADIUS": this.componentsizemasterForm.value.radius || 0,
       "LENGTH": this.componentsizemasterForm.value.length || 0,
-      "WIDTH": this.componentsizemasterForm.value.width || 0,
-      "HEIGHT": this.componentsizemasterForm.value.height || 0
+      "WIDTH": this.commonService.emptyToZero(this.componentsizemasterForm.value.width),
+      "HEIGHT": this.commonService.emptyToZero(this.componentsizemasterForm.value.height)
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
