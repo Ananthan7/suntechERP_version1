@@ -4,12 +4,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { RetailGridComponent } from './retail-grid/retail-grid.component';
+import { ReceiptDetailComponent } from './receipt-detail/receipt-detail.component';
 
 
 
 @NgModule({
   declarations: [
-    RetailGridComponent
+    RetailGridComponent,
+    ReceiptDetailComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { RetailGridComponent } from './retail-grid/retail-grid.component';
     SharedModule
   ],
   exports: [
-    RetailGridComponent
+    RetailGridComponent,
+    ReceiptDetailComponent
   ]
 })
 export class CommonRetailModule { }
