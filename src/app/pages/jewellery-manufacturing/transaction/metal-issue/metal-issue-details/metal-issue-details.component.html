@@ -206,7 +206,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="treeNumber"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode" maxlength="8"
                                                 class="text-right" NumberOnly />
                                         </mat-form-field>
                                     </div>
@@ -215,11 +215,11 @@
                                         Purity :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput
+                                            <input type="text" matInput
                                                 formControlName="jobPurity"
                                                 style="text-align: right;"
-                                                [readonly]="viewMode"
-                                                AmountDecimalInput />
+                                                [readonly]="viewMode" [max]="6"
+                                                MetalDecimalInput />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -254,7 +254,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="pcs"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode" maxlength="8"
                                                 style="text-align: right;"
                                                 NumberOnly />
                                         </mat-form-field>
@@ -280,7 +280,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="grossWeight"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode" [max]="6"
                                                 style="text-align: right;"
                                                 MetalDecimalInput />
                                         </mat-form-field>
@@ -292,7 +292,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="netWeight"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode" [max]="13"
                                                 style="text-align: right;"
                                                 MetalDecimalInput />
                                         </mat-form-field>
@@ -318,7 +318,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="pureWeight"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode" [max]="13"
                                                 style="text-align: right;"
                                                 MetalDecimalInput />
                                         </mat-form-field>

@@ -95,10 +95,10 @@
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" matInput 
-                                    class="text-right"
+                                <input type="text" matInput 
+                                    class="text-right" maxlength="10"
                                     [readonly]="viewMode" NumberOnly
-                                    formControlName="LossAllowed" maxlength="12"
+                                    formControlName="LossAllowed"
                                     />
                             </mat-form-field>
                         </div>
@@ -119,7 +119,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text"  matInput
-                                    maxlength="12"   
+                                maxlength="11"
                                     class="text-right"
                                     [readonly]="viewMode" NumberOnly
                                     formControlName="TrayWeight" />
