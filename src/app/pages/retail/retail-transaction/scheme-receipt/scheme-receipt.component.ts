@@ -282,7 +282,9 @@ export class SchemeReceiptComponent implements OnInit {
   }
   onRowClickHandler(event: any) {
     this.dataIndex = event.dataIndex
-    this.openNewReceiptDetails(this.dataToEditrow[0] || this.orderedItems[0])
+    console.log(this.orderedItems);
+    
+    this.openNewReceiptDetails(this.orderedItems[0])
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -767,6 +769,7 @@ export class SchemeReceiptComponent implements OnInit {
     let detailsArray: any = [];
     let datas: any = {};
     let branchData = this.commonService.allbranchMaster
+    console.log(this.orderedItems, 'this.orderedItems');
 
     this.orderedItems.forEach((item: any) => {
       datas = {
