@@ -170,6 +170,8 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.GST_GROUP.setValue(this.content.GST_GROUP)
     this.receiptEntryForm.controls.CGST_ACCODE.setValue(this.content.CGST_ACCODE)
     this.receiptEntryForm.controls.SGST_ACCODE.setValue(this.content.SGST_ACCODE)
+    this.receiptEntryForm.controls.SGST_ACCODE.setValue(this.content.SGST_ACCODE)
+    this.receiptEntryForm.controls.HSN_AC.setValue(this.content.HSN_AC);
     this.setFormControlAmount('InstallmentAmount', this.content.InstallmentAmount)
     this.setFormControlAmount('Header_Amount', this.content.Header_Amount)
     this.setFormControlAmount('Amount_LC', this.content.Amount_LC)
