@@ -17,11 +17,23 @@ import { DiamondBranchTransferInAutoRepairDetailsComponent } from './diamond-bra
 })
 export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
   @Input() content!: any;
-  tableData: any[] = []; 
-  diamondBranchTransferinAutoRepairDetails : any[] = [];
-  columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
-  columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
-  columnheadItemDetails2:any[] = ['Repair Narration']
+  tableData: any[] = [];
+  diamondBranchTransferinAutoRepairDetails: any[] = [];
+  // columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
+
+  columnheadItemDetails: any[] = [
+    { title: 'Sr.No', field: 'SRNO' },
+    { title: 'Div', field: 'DIVISION_CODE' },
+    { title: 'Description', field: 'STOCK_DOCDESC' },
+    { title: 'Remarks', field: 'SUPPLIERDESC' },
+    { title: 'Pcs', field: 'PCS' },
+    { title: 'Gr.Wt', field: 'GROSSWT' },
+    { title: 'Repair Type', field: 'REPAIRITEM' },
+    { title: 'Type', field: 'RATE_TYPE' },
+  ];
+
+  columnheadItemDetails1: any[] = ['Comp Code', 'Description', 'Pcs', 'Size Set', 'Size Code', 'Type', 'Category', 'Shape', 'Height', 'Width', 'Length', 'Radius', 'Remarks'];
+  columnheadItemDetails2: any[] = ['Repair Narration']
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
@@ -75,42 +87,42 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
   }
 
 
- 
+
   diamondBranchTransferinAutoRepairForm: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocNo:[''],
-    branch:[''],
-    enteredBy:[''],
-    Currency:[''],
-    CurrencyDesc:[''],
-    vocDate:[''],
-    status:[''],
-    CreditDays:[''],
-    creditDate:[''],
-    location:[''],
-    narration:[''],
-    stateCode:[''],
-    taxCode:[''],
-    type:[''],
-    RefNo:[''],
-    FullChecked:[''],
-    FullChecked1:[''],
-    Total:[''],
-    Total1:[''],
-    TotalFC:[''],
-    TotalCC:[''],
-    TotalGST:[''],
-    zerothAmtFC:[''],
-    Gross:[''],
-    Gross1:[''],
+    voctype: [''],
+    vocNo: [''],
+    branch: [''],
+    enteredBy: [''],
+    Currency: [''],
+    CurrencyDesc: [''],
+    vocDate: [''],
+    status: [''],
+    CreditDays: [''],
+    creditDate: [''],
+    location: [''],
+    narration: [''],
+    stateCode: [''],
+    taxCode: [''],
+    type: [''],
+    RefNo: [''],
+    FullChecked: [''],
+    FullChecked1: [''],
+    Total: [''],
+    Total1: [''],
+    TotalFC: [''],
+    TotalCC: [''],
+    TotalGST: [''],
+    zerothAmtFC: [''],
+    Gross: [''],
+    Gross1: [''],
 
   });
 
   ngOnInit(): void {
-   
+
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.diamondBranchTransferinAutoRepairForm.controls.voctype.setValue(this.comService.getqueryParamVocType());    
+    this.diamondBranchTransferinAutoRepairForm.controls.voctype.setValue(this.comService.getqueryParamVocType());
     this.diamondBranchTransferinAutoRepairForm.controls.currency.setValue(this.comService.compCurrency);
     this.diamondBranchTransferinAutoRepairForm.controls.currencyAmt.setValue(this.comService.getCurrRate(this.comService.compCurrency));
   }
@@ -140,7 +152,7 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
     this.activeModal.close(data);
   }
 
- 
+
 
 
 
@@ -154,12 +166,19 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
     modalRef.result.then((postData) => {
       // console.log(postData);      
       if (postData) {
-        console.log('Data from modal:', postData);    
+        console.log('Data from modal:', postData);
+
         this.diamondBranchTransferinAutoRepairDetails.push(postData);
-       }} );
-    
+
+        this.diamondBranchTransferinAutoRepairDetails.forEach((item, i) => {
+          item.SRNO = i + 1;
+        });
+
+      }
+    });
+
   }
-  
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
@@ -171,7 +190,7 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
       return
     }
     let API = 'MetalTransferAuto/InsertMetalTransferAuto'
-    let postData = 
+    let postData =
     {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -255,7 +274,7 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -275,17 +294,17 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-  
+
   }
 
-  update(){
+  update() {
     if (this.diamondBranchTransferinAutoRepairForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'MetalTransferAuto/UpdateMetalTransferAuto/'+ this.diamondBranchTransferinAutoRepairForm.value.branchCode + this.diamondBranchTransferinAutoRepairForm.value.voctype + this.diamondBranchTransferinAutoRepairForm.value.vocno + this.diamondBranchTransferinAutoRepairForm.value.yearMonth
-    let postData = 
+
+    let API = 'MetalTransferAuto/UpdateMetalTransferAuto/' + this.diamondBranchTransferinAutoRepairForm.value.branchCode + this.diamondBranchTransferinAutoRepairForm.value.voctype + this.diamondBranchTransferinAutoRepairForm.value.vocno + this.diamondBranchTransferinAutoRepairForm.value.yearMonth
+    let postData =
     {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -366,10 +385,10 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
       "OUSTATUS": true,
       "Details": this.diamondBranchTransferinAutoRepairDetails
     }
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -390,7 +409,7 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -456,6 +475,6 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
       }
     });
   }
-  
+
 
 }

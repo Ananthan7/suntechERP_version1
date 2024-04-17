@@ -70,8 +70,8 @@
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="partyCode" [readonly]="viewMode"  />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="customerCodeData" *ngIf="!viewMode"
-                                    (newRowClick)="customerSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="partyCodeData" *ngIf="!viewMode"
+                                    (newRowClick)="partySelected($event)"></master-search>
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="partyDesc" [readonly]="viewMode" />
                                 </mat-form-field>
@@ -132,7 +132,7 @@
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="customerCode" [readonly]="viewMode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="customerCodeData" *ngIf="!viewMode"
+                                <master-search [MasterSearchData]="customerData" *ngIf="!viewMode"
                                     (newRowClick)="customerSelected($event)"></master-search>
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="customerCodeDesc"

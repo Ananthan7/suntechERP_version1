@@ -335,24 +335,42 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
 
   salesManSelected(e:any){
     console.log(e);
-    this.repairReceiveForm.controls.worker.setValue(e.WORKER_CODE);
+    this.repairReceiveForm.controls.salesMan.setValue(e.WORKER_CODE);
   }
 
-  customerCodeData: MasterSearchModel = {
+  partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code ',
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Party Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+  customerData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'POS Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
+  partySelected(e:any){
+    console.log(e);
+    this.repairReceiveForm.controls.partyCode.setValue(e.ACCODE);
+    this.repairReceiveForm.controls.partyName.setValue(e['ACCOUNT HEAD']);
+  }
   customerSelected(e:any){
     console.log(e);
-    this.repairReceiveForm.controls.worker.setValue(e.WORKER_CODE);
+    this.repairReceiveForm.controls.customerCode.setValue(e.CODE);
+    this.repairReceiveForm.controls.customerCodeDesc.setValue(e.NAME);
   }
 
   deleteTableData(){

@@ -188,9 +188,9 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput [max]="13"
+                    <input type="text" matInput maxlength="24"
                       class="text-right" formControlName="STONE_PCS"
-                      StoneDecimalInput />
+                      NumberOnly />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Time Taken
@@ -217,7 +217,7 @@
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput
                       class="text-right" formControlName="STONE_WT" [max]="13"
-                      StoneDecimalInput />
+                      SixDecimalInput/>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Price 1
@@ -340,7 +340,7 @@
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput [max]="13"
                       class="text-right" formControlName="PURE_WT"
-                      MetalDecimalInput />
+                      SixDecimalInput />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Start Date
@@ -518,8 +518,8 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="netWt"
-                      CommaSeparatedNumber class="text-right" />
+                    <input type="text" matInput formControlName="netWt" [max]="13"
+                    SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Chargable Wt
