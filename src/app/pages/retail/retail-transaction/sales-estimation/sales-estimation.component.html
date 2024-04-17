@@ -324,7 +324,7 @@
               </div>
               <!-- <div style="font-size: 22px; font-weight: 500">AED {{this.lineItemForm.value.fcn_li_total_amount}}</div> -->
               <div style="font-size: 22px; font-weight: 500">
-                AED {{ order_items_total_net_amount | number : "1.2" }}
+                AED {{ netTotal | number : "1.2" }}
               </div>
             </div>
           </div>
@@ -489,9 +489,12 @@
                             </dxi-column>
                             <dxi-column dataField="description" [width]="150" [allowEditing]="false" alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="weight" caption="Weight" [width]="100" [allowEditing]="false">
+
+                            <dxi-column dataField="pcs" caption="Pcs" alignment="right" [width]="100"
+                              [allowEditing]="false"></dxi-column>
+                            <dxi-column dataField="weight" caption="Weight" alignment="right"
+                              [format]="weightDecimalFormat" [width]="100" [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="pcs" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
                             <dxi-column dataField="total_amount" caption="Mkg amount" alignment="right"
                               format="currency" [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false"
                               precision="2"></dxi-column>
@@ -525,7 +528,7 @@
 
                         <div>
 
-                          <button type="submit" (click)="open(mymodal)" [disabled]="
+                          <button type="submit" (click)="open(mymodal,false,null,false,false)" [disabled]="
                             this.viewOnly || this.amlNameValidationData
                           " class="btn btn-secondary" style="
                             margin: 10px;
@@ -790,7 +793,7 @@
                   <!-- <td class="td-w-40">Total Amount</td> -->
                   <td>
                     <input type="text" class="form-control textboxcorner" id
-                      value="{{ prnt_inv_total_gross_amt | decimalFormat:'AMOUNT' }}" aria-describedby
+                      value="{{ itemTotal | decimalFormat:'AMOUNT' }}" aria-describedby
                       placeholder="0.00" readonly />
                   </td>
                 </tr>
@@ -798,7 +801,7 @@
                   <td class="td-w-40">Tax Amount</td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id
-                      [value]="order_items_total_tax | decimalFormat:'AMOUNT'" aria-describedby readonly />
+                      [value]="totalTax | decimalFormat:'AMOUNT'" aria-describedby readonly />
                   </td>
                 </tr>
                 <tr>
@@ -806,7 +809,7 @@
                   <td class="td-w-40">Gross Total</td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
-                        order_items_total_gross_amount | decimalFormat:'AMOUNT'
+                      grossTotal | decimalFormat:'AMOUNT'
                       }}" aria-describedby placeholder="0.00" readonly />
                   </td>
                 </tr>
@@ -1404,8 +1407,12 @@
 
 <!-- Line Item Modal -->
 <ng-template #mymodal let-modal modal-lg>
-  <app-item-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [vocTypeData]="vocTypeData"
-    [orderedItems]="ordered_items" (newItemEvent)="updateOrderedItems($event)"></app-item-detail></ng-template>
+  <app-item-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [updatedLineItem]="newLineItem"
+    [vocTypeData]="vocTypeData" [vocDataForm]="vocDataForm" [orderedItems]="ordered_items" [vocType]="vocType"
+    [karatRateDetails]="karatRateDetails" [editItemDetail]="isEditable" (grossAmountEvent)="updateGrossAmount($event)"
+    (totalTaxEvent)="updateTotalTax($event)" (itemTotalEvent)="updateItemTotal($event)"
+    (netTotalEvent)="updateNetTotal($event)" (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
+</ng-template>
 
 <!-- Sales Return Modal -->
 <ng-template #adjust_sale_return_modal let-modal modal-lg>

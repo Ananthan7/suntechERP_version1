@@ -23,8 +23,8 @@
                             Type</label>
                         <div class="col-md-2">
                             <mat-form-field style="width: 70%">
-                                <input type="text" matInput
-                                    formControlName="selectVocType" />
+                                <input type="text" matInput UpperCaseDirective
+                                    formControlName="VocType" />
                             </mat-form-field>
                             <master-search
                                 [MasterSearchData]="vocTypeMasterData"
@@ -36,16 +36,19 @@
                             Type</label>
                         <div class="col-md-2">
                             <mat-form-field style="width: 100%">
-                                <input type="text" matInput
+                                <input type="text" matInput readonly
                                     formControlName="mainVocType" />
                             </mat-form-field>
                         </div>
                         <div class="col-md-2">
                             <mat-form-field style="width: 70%">
-                                <input type="text" matInput
-                                    formControlName="mainVocTypeCode" />
+                                <input type="text" matInput readonly
+                                    formControlName="branchCode" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <!-- <master-search
+                                [MasterSearchData]="branchMasterData"
+                                (newRowClick)="vocTypeSelected($event)">
+                            </master-search> -->
                         </div>
                         <div class="col-md-2">
                             <mat-checkbox class="example-margin"
