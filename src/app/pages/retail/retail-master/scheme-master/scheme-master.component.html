@@ -27,8 +27,8 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text"
                                 [readonly]="viewMode"
-                                UppercaseDirective
-                                (focusout)="getSchemeMasterList()" maxlength="6"
+                                UpperCaseDirective
+                                (focusout)="checkIfSchemeCodeExists()" maxlength="6"
                                 matInput formControlName="code" />
                             <mat-error
                                 *ngIf="schemeMasterForm.controls.code.touched 
@@ -41,7 +41,7 @@
                         <label class="col-form-label m-2">Prefix*</label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                UppercaseDirective
+                                UpperCaseDirective
                                 formControlName="prefix"
                                 (keypress)="removePrefixCode()"
                                 (change)="prefixCodeValidate($event)" />

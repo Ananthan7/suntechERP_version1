@@ -172,6 +172,17 @@ export class SchemeMasterComponent implements OnInit {
     this.subscriptions.push(receipts2);
   }
 
+  checkIfSchemeCodeExists() {
+    let API = 'SchemeMaster/CheckIfSchemeCodeExists/' + this.schemeMasterForm.value.code
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((resp: any) => {
+        if (resp.checkifExists) {
+          this.comService.toastErrorByMsgId(resp.message || 'Scheme Already Exists')
+          this.schemeMasterForm.controls.code.setValue('')
+        }
+      });
+    this.subscriptions.push(Sub);
+  }
   getSchemeMasterList() {
     let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -181,7 +192,7 @@ export class SchemeMasterComponent implements OnInit {
           this.schemeMasterForm.controls.startDate.setValue(data.START_DATE)
         } else {
           if (resp.status == 'Success') {
-            this.comService.showSnackBarMsg('Scheme Already Exists')
+            this.comService.toastErrorByMsgId('Scheme Already Exists')
             this.schemeMasterForm.controls.code.setValue('')
             return
           }

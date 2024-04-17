@@ -142,7 +142,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput
-                                UppercaseDirective
+                                UpperCaseDirective
                                 maxlength="20"
                                 (keypress)="validateInput($event)"
                                 formControlName="PanNo" [readonly]="viewMode" />
@@ -155,7 +155,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" [readonly]="viewMode" matInput
-                                formControlName="Code" UppercaseDirective
+                                formControlName="Code" UpperCaseDirective
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
                         <master-search *ngIf="!viewMode"
@@ -197,7 +197,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="SchemeId" UppercaseDirective
+                                formControlName="SchemeId" UpperCaseDirective
                                 (focusout)="fetchSchemeWithCustCode()" />
                         </mat-form-field>
                         <master-search *ngIf="!viewMode"
