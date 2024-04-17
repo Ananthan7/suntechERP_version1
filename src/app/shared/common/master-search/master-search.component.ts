@@ -77,7 +77,7 @@ export class MasterSearchComponent implements OnInit {
     const container = event.target;
     const scrollPosition = container.scrollTop + container.clientHeight;
     // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;
-    if (scrollPosition >= container.scrollHeight - 1) {
+    if (this.totalItems != this.dataSource.length && scrollPosition >= container.scrollHeight - 1) {
       this.loadMoreData(this.currentPage);
     }
   }
@@ -103,10 +103,16 @@ export class MasterSearchComponent implements OnInit {
       this.isLoading = false;
       if (result.dynamicData && result.dynamicData[0].length>0) {
         this.dataSource = result.dynamicData[0]
-        let dataCount = result.dynamicData[1]
-        this.totalItems = dataCount.COUNT
-
         this.dataSourceHead = Object.keys(this.dataSource[0]);
+        if(result.dynamicData[1]){
+          let dataCount = result.dynamicData[1]
+          this.totalItems = dataCount.COUNT
+        }else{
+          this.totalItems = this.dataSource.length
+          console.log(this.totalItems,'this.totalItems');
+          
+        }
+        
         this.currentPage++;
       }
       // else {
