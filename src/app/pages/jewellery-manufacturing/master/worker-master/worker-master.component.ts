@@ -22,7 +22,7 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   buttonField: boolean = true;
   viewMode: boolean = false;
-  viewModeBtn: boolean = true;
+  viewModeBtn:boolean = true;
   isViewMode: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
@@ -53,27 +53,14 @@ export class WorkerMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 155,
-    LOAD_ONCLICK: true,
-    ORDER_TYPE: 0,
-    WHERECONDITION: "@Strbranch=DIAMFG,@strUsercode= ADMIN,@stravoidforsales= 0",
-    SEARCH_FIELD: "Location",
-    SEARCH_VALUE: "",
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Worker A/c Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  // {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 152,
-  //   SEARCH_FIELD: 'ACCODE',
-  //   SEARCH_HEADING: 'Worker A/c Code',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "ACCODE <> ''",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  // }
-
   supervisorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -289,8 +276,8 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   updateWorkerMaster() {
-    this.viewModeBtn = false;
-
+    this.viewModeBtn=false;
+     
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -544,12 +531,12 @@ export class WorkerMasterComponent implements OnInit {
           }).then(() => {
             // Clear the input value
             this.workerMasterForm.controls.WorkerCode.setValue('');
-
+           
             this.codeEnable = true;
             setTimeout(() => {
               this.renderer.selectRootElement('#code').focus();
-            }, 500);
-
+            },500);
+            
           });
         }
       }, err => {
