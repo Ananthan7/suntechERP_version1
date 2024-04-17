@@ -801,8 +801,9 @@ export class ProcessMasterComponent implements OnInit {
     this.searchModeLoss = !this.searchModeLoss;
  this.processMasterForm.controls.loss_min.setValue(0);
  this.processMasterForm.controls.loss_max.setValue(0);
+ this.processMasterForm.controls.accountStart.setValue(0);
 //  this.processMasterForm.controls.min_end.setValue(0);
-//       this.processMasterForm.controls.accountStart.setValue(0);
+
 //       this.processMasterForm.controls.loss_standard.setValue(0);
     // Update the validation status after setting or clearing validators
     //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
