@@ -78,6 +78,8 @@ import { AuditTrailComponent } from './common/audit-trail/audit-trail.component'
 import { DecimalFormatPipe } from './pipes/decimal-format.pipe';
 import { AttachmentUploadComponent } from './common/attachment-upload/attachment-upload.component';
 import { AuthCheckerComponent } from './common/auth-checker/auth-checker.component';
+import { NumericFilterDirective } from './directives/single-digit-numeric';
+
 @NgModule({
   declarations: [
     //pipes declarations
@@ -105,6 +107,7 @@ import { AuthCheckerComponent } from './common/auth-checker/auth-checker.compone
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    NumericFilterDirective,
     FormatSixDecimalDirective,
     UppercaseDirective,
     DurationPickerComponent,
@@ -187,6 +190,7 @@ import { AuthCheckerComponent } from './common/auth-checker/auth-checker.compone
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    NumericFilterDirective,
     FormatSixDecimalDirective,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,

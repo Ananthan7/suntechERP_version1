@@ -47,6 +47,7 @@ export class ItemDetailTable implements OnInit {
     li_rate_val: any;
     updateBtn!: boolean;
     ordered_items: any[] = [];
+    modalReferenceUserAuth!: NgbModalRef;
     @Input() orderedItems!: any[];
 
 
@@ -113,6 +114,7 @@ export class ItemDetailTable implements OnInit {
     blockNegativeStockValue: any;
     blockMinimumPrice: any;
     blockMinimumPriceValue: any;
+    userwiseDiscount: boolean = false;
 
 
     invReturnSalesTotalPcs: any = 0;
@@ -353,7 +355,7 @@ export class ItemDetailTable implements OnInit {
             fcn_li_item_desc: ['', Validators.required],
             fcn_li_division: ['', Validators.required],
             fcn_li_location: [''],
-            fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
+            fcn_li_pcs: [0, Validators.required],
             fcn_li_gross_wt: ['', [Validators.required, Validators.min(0.1)]],
             fcn_li_stone_wt: [0, Validators.required],
             fcn_li_net_wt: [0, Validators.required],
@@ -392,6 +394,7 @@ export class ItemDetailTable implements OnInit {
         if (this.editItemDetail == true) {
             this.editTable(this.updatedLineItem);
         }
+        this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false : true;
     }
 
     dismissModal() {
@@ -619,6 +622,24 @@ export class ItemDetailTable implements OnInit {
                                 this.lineItemForm.value.fcn_li_tax_amount;
                             this.li_net_amount_val =
                                 this.lineItemForm.value.fcn_li_net_amount;
+
+
+                                if (this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString()) == false) {
+
+                                    this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
+                                    this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
+                                    this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
+                                  } else {
+                  
+                                    this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
+                                    this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
+                                    this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
+                                      Validators.required,
+                                    ]);
+                                    this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [
+                                      Validators.required,
+                                    ]);
+                                  }
                         } else {
                             this.openDialog(
                                 'Failed',
@@ -635,6 +656,15 @@ export class ItemDetailTable implements OnInit {
 
 
     }
+
+    
+  addValidationsForForms(form: FormGroup, ctrlName: any, validations: any) {
+    const control = form.get(ctrlName);
+    if (control) {
+      control.setValidators(validations);
+      control.updateValueAndValidity();
+    }
+  }
     manageCalculations(
         argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
     ) {
@@ -1285,6 +1315,7 @@ export class ItemDetailTable implements OnInit {
                 this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
                     this.comFunc.decimalQuantityFormat(value, 'AMOUNT')
                 );
+                this.manageCalculations();
             }
             // this.setStoneAmt();
         } else {
@@ -1298,194 +1329,206 @@ export class ItemDetailTable implements OnInit {
 
         const karatComp22 = this.comFunc.allbranchMaster?.KARATCOMPANY22;
         const minBranchProfitPercentMetal = this.comFunc.allbranchMaster?.MINBRANCHPROFITPERCENTMETAL;
-
+    
         const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
         const value = event.target.value;
         if (event.target.value != '') {
-
-            if (this.divisionMS == 'M') {
-
-                let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
-                let dblStockFcCost: any;
-                let karatCode = this.newLineItem.KARAT_CODE;
-
-                // this code commented at 21/3/2024 by jebaraj instruction
-                // if (this.comFunc.compCurrency == this.vocDataForm.value.txtCurrency.toString().trim()) {
-                //   // if (this.comFunc.compCurrency == 'AED') {
-                //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
-                //     if (karatCode.toString() == "24") {
-                //       dblStockFcCost = dblStockCost + 1;
-                //     }
-                //     else {
-                //       dblStockFcCost = dblStockCost + 5;
-                //     }
-                //   }
-                //   else
-                //     if ((dblStockCost <= .5) && (this.comFunc.compAcCode == "JHROR1")) {
-                //       dblStockCost = dblStockCost + .5;
-                //     }
-                //     else {
-                //       console.log('minbranch ', dblStockCost * minBranchProfitPercentMetal / 100.00, 'dblStockCost', dblStockCost);
-                //       dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
-                //     }
-                // }
-                // else {
-                //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
-                //     if (karatCode == "24") {
-                //       dblStockFcCost =
-                //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 1), this.vocDataForm.value.txtCurRate);
-                //     }
-                //     else {
-
-                //       dblStockFcCost =
-                //         this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + 5), this.vocDataForm.value.txtCurRate);
-                //     }
-                //   }
-                //   else {
-                //     dblStockFcCost =
-                //       this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00)), this.vocDataForm.value.txtCurRate);
-                //   }
-                // }
-                // this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
-                // this.manageCalculations();
-
-                // if (!this.newLineItem.LESSTHANCOST) {
-
-                //   // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
-                //   {
-                //     if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
-                //       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-                //       this.dialogBox.afterClosed().subscribe((data: any) => {
-                //         if (data == 'OK') {
-                //           this.lineItemForm.controls.fcn_li_rate.setValue(
-                //             // ''
-                //             preVal
-                //           );
-                //           this.manageCalculations();
-                //           this.renderer.selectRootElement('#fcn_li_rate').focus();
-                //         }
-                //       });
-                //       return;
-                //     }
-                //   }
-                // }
-
-                if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
-
-                    this.rateFunc(value);
-                }
-                else {
-                    // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
-                    // Rate Cannot be Less Than Cost
-                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-                    this.dialogBox.afterClosed().subscribe((data: any) => {
-                        if (data == 'OK') {
-                            this.lineItemForm.controls.fcn_li_rate.setValue(
-                                // ''
-                                preVal
-                                // this.comFunc.transformDecimalVB(
-                                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                                //   this.zeroAmtVal
-                                // )
-                            );
-                            this.renderer.selectRootElement('#fcn_li_rate').focus();
-                        }
-                    });
-                }
-            }
-            let checkStockCostVal =
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
-
-            if (this.divisionMS == 'S') {
-                if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-                    this.rateFunc(value);
-                }
-                else {
-                    // Rate Cannot be Less Than Cost
-                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-                    this.dialogBox.afterClosed().subscribe((data: any) => {
-                        if (data == 'OK') {
-                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                                this.comFunc.transformDecimalVB(
-                                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                                    preVal
-                                )
-                            );
-                        }
-                    });
-                }
-            }
-
-
-
-        } else {
-            this.renderer.selectRootElement('#fcn_li_rate').focus();
-            this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
-            this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
-            // this.setGrossAmt();
-            this.manageCalculations();
-        }
-    }
-
-    rateFunc(value: any) {
-
-        if (this.blockMinimumPrice == 'B') {
-            if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-                this.openDialog(
-                    'Warning',
-                    `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-                    }`,
-                    // 'The rate is below to the minimum price, Do you want to Continue?','
-                    true
-                );
-                this.dialogBox.afterClosed().subscribe((data: any) => {
-                    if (data == 'OK') {
-                        // this.lineItemForm.controls.fcn_li_rate.setValue(
-                        //   this.blockMinimumPriceValue
-                        // );
-                        this.lineItemForm.controls.fcn_li_rate.setValue(
-                            this.makingRate
-                            // this.zeroAmtVal
-                        );
-                        this.manageCalculations();
-                    }
-                });
-            } else {
-                this.manageCalculations();
-            }
-        }
-        else if (this.blockMinimumPrice == 'W') {
-            if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-                this.openDialog(
-                    'Warning',
-                    // 'The rate is below to the minimum price, Do you want to Continue?',
-                    `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-                    }`,
-                    false
-                );
-                this.dialogBox.afterClosed().subscribe((data: any) => {
-                    if (data == 'No') {
-                        this.lineItemForm.controls.fcn_li_rate.setValue(
-                            this.zeroAmtVal
-                        );
-                        this.manageCalculations();
-
-                    } else {
-                        this.manageCalculations();
-                    }
-                });
+    
+          if (this.divisionMS == 'M') {
+    
+            let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
+            let dblStockFcCost: any;
+            let karatCode = this.newLineItem.KARAT_CODE;
+    
+    
+            if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+    
+              this.rateFunc(value);
             }
             else {
-                this.manageCalculations();
+              // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
+              // Rate Cannot be Less Than Cost
+              this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+              this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'OK') {
+                  this.lineItemForm.controls.fcn_li_rate.setValue(
+                    // ''
+                    preVal
+                    // this.comFunc.transformDecimalVB(
+                    //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    //   this.zeroAmtVal
+                    // )
+                  );
+                  this.renderer.selectRootElement('#fcn_li_rate').focus();
+                }
+              });
             }
+          }
+          let checkStockCostVal =
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+    
+          if (this.divisionMS == 'S') {
+            if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+              this.rateFunc(value);
+            }
+            else {
+              // Rate Cannot be Less Than Cost
+              this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+              this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'OK') {
+                  this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                    this.comFunc.transformDecimalVB(
+                      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                      preVal
+                    )
+                  );
+                }
+              });
+            }
+          }
+    
+    
+    
         } else {
-            // blockMinimumPrice = 'A'
-            this.manageCalculations();
+          this.renderer.selectRootElement('#fcn_li_rate').focus();
+          this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
+          this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
+          // this.setGrossAmt();
+          this.manageCalculations();
         }
-    }
+      }
+
+      async rateFunc(value: any) {
+        let isAuth: any = false;
+        const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
+    
+        // if(this.userwiseDiscount)
+        // alert('rateFunc ');
+        // isAuth = await this.openAuthModal();
+        // alert(`validated ${isAuth}`);
+    
+        if (this.blockMinimumPrice == 'B') {
+          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+            if (this.userwiseDiscount) {
+            
+              this.rateFuncDetail('B', value);
+           
+            } else {
+              this.rateFuncDetail('B', value);
+            }
+          } else {
+            this.manageCalculations();
+          }
+        }
+        else if (this.blockMinimumPrice == 'W') {
+          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+            if (this.userwiseDiscount) {
+            //   isAuth = await this.openAuthModal();
+            //   if (isAuth) {
+            //     this.rateFuncDetail('W', value);
+            //   } else {
+                
+                this.lineItemForm.controls.fcn_li_rate.setValue(
+                  preVal
+                );
+                this.manageCalculations();
+            //   }
+            } else {
+              this.rateFuncDetail('W', value);
+            }
+          }
+          else {
+            this.manageCalculations();
+          }
+        } else {
+        //   isAuth = await this.openAuthModal();
+        //   if (isAuth) {
+        //     this.manageCalculations();
+        //   } else {
+            this.lineItemForm.controls.fcn_li_rate.setValue(
+              preVal
+            );
+            this.manageCalculations();
+        //   }
+    
+        }
+      }
+    
+    //   openAuthModal() {
+    //     this.authForm.reset();
+    //     return new Promise((resolve) => {
+    
+    //       this.modalReferenceUserAuth = this.modalService.open(
+    //         this.userAuthModal,
+    //         {
+    //           size: "lg",
+    //           backdrop: false,
+    //           keyboard: false,
+    //           windowClass: "modal-full-width",
+    //         }
+    //       );
+    
+    //       this.modalReferenceUserAuth.result.then((result) => {
+    //         if (result) {
+    //           console.log("Result :", result);
+    //           resolve(true);
+    //         } else {
+    //           resolve(false);
+    //         }
+    //       },
+    //         (reason) => {
+    //           console.log(`Dismissed ${reason}`);
+    //           resolve(false);
+    
+    //         }
+    //       );
+    //     });
+    
+    
+    //   }
 
 
+      rateFuncDetail(bOrW: String, value: any) {
+        const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
+    
+        console.log('rateFuncDetail value', value, 'fcn_li_rate', preVal);
+    
+        // alert('called rateFuncDetail')
+    
+    
+        this.openDialog(
+          'Warning',
+          `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
+          }`,
+          // 'The rate is below to the minimum price, Do you want to Continue?','
+          bOrW == 'B' ? true : false
+        );
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            // this.lineItemForm.controls.fcn_li_rate.setValue(
+            //   this.blockMinimumPriceValue
+            // );
+            this.lineItemForm.controls.fcn_li_rate.setValue(
+              // this.zeroAmtVal
+              preVal
+            );
+            this.manageCalculations();
+          }
+          else if (data == 'No') {
+            this.lineItemForm.controls.fcn_li_rate.setValue(
+              // this.zeroAmtVal
+              preVal
+    
+            );
+            this.manageCalculations();
+    
+          } else {
+            this.manageCalculations();
+          }
+        });
+      }
+    
     changeTotalAmt(event: any, nettAmt = null) {
         const totalAmtVal: any = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
         const val = this.comFunc.transformDecimalVB(
@@ -1517,8 +1560,12 @@ export class ItemDetailTable implements OnInit {
         }
     }
     validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt = null) {
-        const preRateVal = localStorage.getItem('fcn_li_rates');
-        const preTotalVal = localStorage.getItem('fcn_li_total_amnt');
+        // const preRateVal = localStorage.getItem('fcn_li_rates');
+        // const preTotalVal = localStorage.getItem('fcn_li_total_amnt');
+
+        const preRateVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
+        const preTotalVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_total_amount'));
+        const preNetAmtVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_net_amount'));
 
         const nonMetalPreRateVal = localStorage.getItem('fcn_li_rate');
         const nonMetalPreTotalVal = localStorage.getItem('fcn_li_total_amount');
@@ -1596,31 +1643,33 @@ export class ItemDetailTable implements OnInit {
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
                         if (this.divisionMS == 'M') {
-                            if (this.divisionMS == 'M') {
-                                this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                                    preTotalVal
-                                );
-                                this.lineItemForm.controls.fcn_li_rate.setValue(
-                                    preRateVal
-                                );
-                            }
-                            //   this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                            //       this.defaultNetTotal
-                            //   );
-
-                            //   this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                            //       this.defaultMakingCharge
-                            //   );
-
-                            //   this.lineItemForm.controls.fcn_li_tax_amount.setValue(
-                            //       this.defaultTaxTotal
-                            //   );
-
-                            //   this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-                            //       this.defaultGrossTotal
-                            //   );
-
-                            this.renderer.selectRootElement('#fcn_li_rate').focus();
+                            // alert('preRateVal '+ preRateVal);
+                            // this.lineItemForm.controls.fcn_li_rate.setValue(
+                            // ''
+                            // this.comFunc.transformDecimalVB(
+                            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                            //   this.zeroAmtVal
+                            // )
+                            // );
+                            // this.renderer.selectRootElement('#fcn_li_rate').focus();
+                            this.lineItemForm.controls.fcn_li_rate.setValue(
+                                preRateVal
+                            );
+                            // alert('preTotalVal '+ preTotalVal)
+                            this.lineItemForm.controls.fcn_li_total_amount.setValue(
+                                this.comFunc.emptyToZero(preTotalVal)
+                            );
+                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                    preNetAmtVal
+                                )
+                            );
+                            // alert('preTotalVal '+preTotalVal)
+                            // alert('preNetAmtVal '+preNetAmtVal)
+                            this.manageCalculations({ totalAmt: preTotalVal });
+                            // this.manageCalculations();
+                            this.renderer.selectRootElement('#fcn_li_net_amount').focus();
                         }
                         else if (this.divisionMS == 'S') {
 
@@ -1644,84 +1693,89 @@ export class ItemDetailTable implements OnInit {
     }
 
 
-    changeDisAmount(event: any, nettAmt = null) {
+    changeDisAmount(event: any, nettAmt: any = null) {
+        const preDisAmtVal =
+          this.comFunc.decimalQuantityFormat(
+            this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
+            'AMOUNT')
+    
         if (event.target.value != '') {
-            const value =
-                // (
-                //   (this.lineItemForm.value.fcn_li_discount_amount /
-                //     this.lineItemForm.value.fcn_li_total_amount) *
-                //   100
-                // ).toFixed(2);
-                this.comFunc.transformDecimalVB(
-                    this.comFunc.amtDecimals,
-                    (this.lineItemForm.value.fcn_li_discount_amount /
-                        this.lineItemForm.value.fcn_li_total_amount) *
-                    100
-                );
-
-            this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
-            console.log('dis amount', value);
-            // alert('dis per' + value.toString());
-            // alert('nettAmt '+nettAmt);
-            this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
-
-            // this.validateMinSalePrice();
-            // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
-            // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2),  parseFloat(lsTotalAmt).toFixed(2));
+          const value =
+            // (
+            //   (this.lineItemForm.value.fcn_li_discount_amount /
+            //     this.lineItemForm.value.fcn_li_total_amount) *
+            //   100
+            // ).toFixed(2);
+            this.comFunc.transformDecimalVB(
+              this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              (this.lineItemForm.value.fcn_li_discount_amount /
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)) *
+              100
+            );
+    
+          this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
+          console.log('dis amount', value);
+          // alert('dis per' + value.toString());
+          // alert('nettAmt '+nettAmt);
+          this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
+    
+          // this.validateMinSalePrice();
+          // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
+          // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2),  parseFloat(lsTotalAmt).toFixed(2));
         } else {
-            this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
-            this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
-            this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
-
-            // this.setGrossAmt();
-            this.manageCalculations();
+          this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
+          this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
+          this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
+    
+          // this.setGrossAmt();
+          this.manageCalculations();
         }
-    }
+      }
 
     changeDisPer(event: any, discountAmt = null, nettAmt = null) {
         // alert(event.target.value);
         // alert('disAmt '+discountAmt );
-
+    
         if (event.target.value != '') {
-            let disAmt;
-            if (discountAmt != null && nettAmt == null) {
-                disAmt = discountAmt;
-                this.disFunc(disAmt);
-            }
-
-            if (discountAmt == null && nettAmt == null) {
-                const value = this.getPercentage(
-                    this.lineItemForm.value.fcn_li_discount_percentage,
-                    this.lineItemForm.value.fcn_li_total_amount
-                );
-                disAmt = this.comFunc.transformDecimalVB(
-                    this.comFunc.amtDecimals,
-                    value
-                );
-                this.disFunc(disAmt);
-
-            } else {
-                disAmt = this.lineItemForm.value.fcn_li_discount_amount;
-                // alert('********disAmt******' + disAmt);
-                // alert('********grossAmt******' + this.lineItemForm.value.fcn_li_gross_amount);
-                // alert('********nettAmt****** ' + nettAmt + 'type ' + typeof nettAmt);
-                this.manageCalculations({ disAmt: disAmt, nettAmt });
-            }
-
-            // this.setGrossAmt();
-            // alert('pre nettAmt ' + this.lineItemForm.value.fcn_li_net_amount)
-            // alert('nettAmt ' + parseFloat(disAmt) + parseFloat(this.lineItemForm.value.fcn_li_gross_amount))
-
-
-            // need to enable
-            // this.validateMinSalePrice();
-
+          let disAmt;
+          if (discountAmt != null && nettAmt == null) {
+            disAmt = discountAmt;
+            this.disFunc(disAmt);
+          }
+    
+          if (discountAmt == null && nettAmt == null) {
+            const value = this.getPercentage(
+              this.lineItemForm.value.fcn_li_discount_percentage,
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+            );
+            disAmt = this.comFunc.transformDecimalVB(
+              this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              value
+            );
+            this.disFunc(disAmt);
+    
+          } else {
+            disAmt = this.lineItemForm.value.fcn_li_discount_amount;
+            // alert('********disAmt******' + disAmt);
+            // alert('********grossAmt******' + this.lineItemForm.value.fcn_li_gross_amount);
+            // alert('********nettAmt****** ' + nettAmt + 'type ' + typeof nettAmt);
+            this.manageCalculations({ disAmt: disAmt, nettAmt });
+          }
+    
+          // this.setGrossAmt();
+          // alert('pre nettAmt ' + this.lineItemForm.value.fcn_li_net_amount)
+          // alert('nettAmt ' + parseFloat(disAmt) + parseFloat(this.lineItemForm.value.fcn_li_gross_amount))
+    
+    
+          // need to enable
+          // this.validateMinSalePrice();
+    
         } else {
-            this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
-            // this.setGrossAmt();
-            this.manageCalculations();
+          this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
+          // this.setGrossAmt();
+          this.manageCalculations();
         }
-    }
+      }
 
 
 

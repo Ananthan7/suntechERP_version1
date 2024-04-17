@@ -55,9 +55,13 @@
                 <div class="col-md-3">
                   <mat-form-field aria-readonly="true">
                     <mat-label>PCs</mat-label>
+                    <!-- <input class="st_txt_right" [min]="0" [maxLength]="14"
+                    (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
+                    formControlName="fcn_li_pcs" (change)="changeRate($event)" readonly="{{ viewOnly }}"
+                    RemoveLeadingZeros /> -->
                     <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                      formControlName="fcn_li_pcs" (change)="changePCS($event)" readonly />
+                      formControlName="fcn_li_pcs" (change)="changePCS($event)" readonly NumericFilter />
 
                     <mat-error *ngIf="
                         lineItemForm.controls.fcn_li_pcs.hasError(
@@ -185,6 +189,12 @@
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_rate"
                       formControlName="fcn_li_rate" (change)="changeRate($event)" readonly="{{ viewOnly }}"
                       (focus)="setValToLocalStorage($event, 'fcn_li_rate')" AmountDecimalInput />
+
+                    <!-- 
+                    <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                      (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_rate"
+                      formControlName="fcn_li_rate" (change)="changeRate($event)" readonly="{{ viewOnly }}"
+                      (focus)="setValToLocalStorage($event, 'fcn_li_rate')" AmountDecimalInput /> -->
                     <mat-error *ngIf="
                         lineItemForm.controls.fcn_li_rate.hasError(
                           'required'
@@ -240,19 +250,34 @@
                 <div class="col-md-6">
                   <mat-form-field>
                     <mat-label>Discount %</mat-label>
-                    <input class="st_txt_right" type="number" [min]="0" [max]="100"
+                    <input class="st_txt_right" [min]="0" [max]="100"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                       formControlName="fcn_li_discount_percentage" (change)="changeDisPer($event)"
-                      id="fcn_li_discount_percentage" [readonly]="viewOnly" AmountDecimalInput />
+                      id="fcn_li_discount_percentage" (focus)="
+                      setValToLocalStorage(
+                        $event,
+                        'fcn_li_discount_percentage'
+                      )
+                    " [readonly]="viewOnly" AmountDecimalInput />
+                    <!-- <input class="st_txt_right" type="number" [min]="0" [max]="100"
+                      (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                      formControlName="fcn_li_discount_percentage" (change)="changeDisPer($event)"
+                      id="fcn_li_discount_percentage" [readonly]="viewOnly" AmountDecimalInput /> -->
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
                   <mat-form-field>
                     <mat-label>Discount Amount</mat-label>
-                    <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                    <input class="st_txt_right" [min]="0" [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                       formControlName="fcn_li_discount_amount" id="fcn_li_discount_amount"
-                      (change)="changeDisAmount($event)" [readonly]="viewOnly" AmountDecimalInput />
+                      (change)="changeDisAmount($event)" [readonly]="viewOnly" (focus)="
+                      setValToLocalStorage($event, 'fcn_li_discount_amount')
+                    " AmountDecimalInput />
+                    <!-- <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                      (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                      formControlName="fcn_li_discount_amount" id="fcn_li_discount_amount"
+                      (change)="changeDisAmount($event)" [readonly]="viewOnly" AmountDecimalInput /> -->
                   </mat-form-field>
                 </div>
               </div>

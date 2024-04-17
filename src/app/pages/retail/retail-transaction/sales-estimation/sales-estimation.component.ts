@@ -6763,7 +6763,7 @@ export class SalesEstimationComponent implements OnInit {
         let _status = [];
         console.log(
             'order_items_total_net_amount',
-            this.order_items_total_net_amount
+            this.netTotal
         );
         console.log(
             'invReturnSalesTotalNetTotal',
@@ -6771,7 +6771,7 @@ export class SalesEstimationComponent implements OnInit {
         );
         console.log(this.receiptTotalNetAmt);
 
-        if (this.order_items_total_net_amount.toString() != '0.00') {
+        if (this.netTotal.toString() != '0.00') {
             // if (parseFloat(this.order_items_total_net_amount) > 0) {
             //   if (parseFloat(this.order_items_total_net_amount) != parseFloat(this.receiptTotalNetAmt)) {
             //   _status[0] = false;
