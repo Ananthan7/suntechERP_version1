@@ -279,8 +279,8 @@
                               class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" class="text-right" matInput
-                                  NumberOnly maxlength="20" />
+                                <input type="text" class="text-right" matInput [max]="13"
+                                MetalDecimalInput  />
                               </mat-form-field>
                             </div>
                           </div>
@@ -706,7 +706,7 @@
                   :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="width"
+                    <input type="text" matInput formControlName="width" [max]="13"
                       class="text-right" AmountDecimalInput />
                   </mat-form-field>
                 </div>
