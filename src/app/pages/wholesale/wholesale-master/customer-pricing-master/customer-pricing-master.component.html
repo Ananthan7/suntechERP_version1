@@ -151,7 +151,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Minimum Making:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput class="text-right" CommaSeparatedNumber/>
+                          <input type="text" matInput class="text-right" MetalDecimalInput [max]="6"/>
                         </mat-form-field>
 
                       </div>
@@ -253,7 +253,7 @@
                   <mat-checkbox class="col-sm-6 example-margin">Plate Charges Rate</mat-checkbox>
                   <div class="col-md-5">
                     <mat-form-field style="width: 80%;">
-                      <input type="text" matInput class="text-right" CommaSeparatedNumber/>
+                      <input type="text" matInput class="text-right" MetalDecimalInput [max]="6"/>
                     </mat-form-field>
                   </div>
                 </div>

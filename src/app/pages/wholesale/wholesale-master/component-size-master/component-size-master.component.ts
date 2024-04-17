@@ -30,7 +30,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    
+
   ) { }
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
@@ -46,8 +46,8 @@ export class ComponentSizeMasterComponent implements OnInit {
     this.componentsizemasterForm = this.formBuilder.group({
       code: ['', [Validators.required]],
       desc: ['', [Validators.required]],
-      height: ['',[Validators.required]],
-      width: ['',[Validators.required]],
+      height: ['', [Validators.required]],
+      width: ['', [Validators.required]],
       length: [''],
       radius: ['']
     });
@@ -63,7 +63,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.setFormValues()
       this.viewMode = true;
-     
+
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
       this.setFormValues()
@@ -75,41 +75,45 @@ export class ComponentSizeMasterComponent implements OnInit {
     if (!this.content) return
     this.componentsizemasterForm.controls.code.setValue(this.content.COMPSIZE_CODE)
     this.componentsizemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
-    this.componentsizemasterForm.controls.height.setValue(this.content.HEIGHT)
-    this.componentsizemasterForm.controls.width.setValue(this.content.WIDTH)
-    this.componentsizemasterForm.controls.length.setValue(this.content.LENGTH)
-    this.componentsizemasterForm.controls.radius.setValue(this.content.RADIUS)
+    this.componentsizemasterForm.controls.height.setValue(this.setDecimalPoint(this.content.HEIGHT))
+    this.componentsizemasterForm.controls.width.setValue(this.setDecimalPoint(this.content.WIDTH))
+    this.componentsizemasterForm.controls.length.setValue(this.setDecimalPoint(this.content.LENGTH))
+    this.componentsizemasterForm.controls.radius.setValue(this.setDecimalPoint(this.content.RADIUS))
   }
-
+  setDecimalPoint(data: any) {
+    let number = this.commonService.decimalQuantityFormat(data, 'THREE')
+    return this.commonService.commaSeperation(number)
+  }
 
   calculateRadius() {
-    const height = this.componentsizemasterForm.get('height')?.value;
-    const width = this.componentsizemasterForm.get('width')?.value;
-  
+    let form = this.componentsizemasterForm.value
+    const height = this.commonService.emptyToZero(form.height)
+    const width = this.commonService.emptyToZero(form.width)
+
     if (height !== null && width !== null) {
       // Calculate the radius based on the provided formula
-      const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)),3/3);
-      return radiusValue.toFixed(2); 
+      const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)), 3 / 3);
+      return radiusValue.toFixed(2);
     } else {
-      return '0'; 
+      return '0';
     }
   }
-  
+
   getValues() {
     const height = this.componentsizemasterForm.value.height || 0;
-      const width = this.componentsizemasterForm.value.width || 0;
-      const length = this.componentsizemasterForm.value.length || 0;
-      const radius = this.calculateRadius();
-    
-      const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${radius}#`;
-    
-      // Update the form control with the calculated result and description
-      this.componentsizemasterForm.patchValue({
-        radius: radius,
-        desc: formattedDesc
-      }, { emitEvent: false });
+    const width = this.componentsizemasterForm.value.width || 0;
+    const length = this.componentsizemasterForm.value.length || 0;
+    let radius = this.calculateRadius();
+    radius = this.setDecimalPoint(radius)
+    const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${radius}#`;
+
+    // Update the form control with the calculated result and description
+    this.componentsizemasterForm.patchValue({
+      radius: radius,
+      desc: formattedDesc
+    }, { emitEvent: false });
   }
-  
+
 
 
   close(data?: any) {
@@ -121,7 +125,7 @@ export class ComponentSizeMasterComponent implements OnInit {
 
     if (this.content?.FLAG == 'VIEW') return
     if (this.content?.FLAG == 'EDIT') {
-      
+
       this.update()
       return
     }
@@ -131,15 +135,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     }
 
     let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
-    let postData = {
-      "MID": 0,
-      "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
-      "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
-      "RADIUS": this.componentsizemasterForm.value.radius || 0,
-      "LENGTH": this.componentsizemasterForm.value.length || 0,
-      "WIDTH": this.commonService.emptyToZero(this.componentsizemasterForm.value.width),
-      "HEIGHT": this.commonService.emptyToZero(this.componentsizemasterForm.value.height)
-    }
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -165,24 +161,28 @@ export class ComponentSizeMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub);
   }
+  setPostData() {
+    let form = this.componentsizemasterForm.value
+    return {
+      "MID": this.content ? this.content.MID : 0,
+      "COMPSIZE_CODE": this.commonService.nullToString(form.code),
+      "DESCRIPTION": this.commonService.nullToString(form.desc),
+      "RADIUS": this.commonService.nullToString(form.radius),
+      "LENGTH": this.commonService.nullToString(form.length),
+      "WIDTH": this.commonService.nullToString(form.width),
+      "HEIGHT": this.commonService.nullToString(form.height),
+    }
 
+  }
   update() {
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
+
     let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
-    let postData =
-    {
-      "MID": 0,
-      "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
-      "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
-      "RADIUS": this.componentsizemasterForm.value.radius || "",
-      "LENGTH": this.componentsizemasterForm.value.length || "",
-      "WIDTH": this.componentsizemasterForm.value.width || "",
-      "HEIGHT": this.componentsizemasterForm.value.height || ""
-    }
+    let postData = this.setPostData()
 
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)

@@ -170,7 +170,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="LOSS_WT"
+                    <input type="text" matInput formControlName="LOSS_WT" [max]="13"
                       SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
@@ -180,7 +180,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="TEXT" matInput MetalDecimalInput
+                    <input type="text" matInput MetalDecimalInput [max]="13"
                       class="text-right" formControlName="GROSS_WT" />
                   </mat-form-field>
                 </div>
@@ -188,7 +188,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput
+                    <input type="text" matInput [max]="13"
                       class="text-right" formControlName="STONE_PCS"
                       StoneDecimalInput />
                   </mat-form-field>
@@ -206,7 +206,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput
+                    <input type="text" matInput [max]="13"
                       class="text-right" formControlName="METAL_WT"
                       MetalDecimalInput />
                   </mat-form-field>
@@ -215,8 +215,8 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput
-                      class="text-right" formControlName="STONE_WT"
+                    <input type="text" matInput
+                      class="text-right" formControlName="STONE_WT" [max]="13"
                       StoneDecimalInput />
                   </mat-form-field>
                 </div>
@@ -224,7 +224,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput
+                    <input type="number" matInput  
                       class="text-right" formControlName="price1" NumberOnly />
                   </mat-form-field>
                 </div>
@@ -312,7 +312,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="PURITY"
+                    <input type="number" matInput formControlName="PURITY" [max]="13"
                       class="text-right" SixDecimalInput />
                   </mat-form-field>
                 </div>
@@ -320,7 +320,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput SixDecimalInput
+                    <input type="text" matInput SixDecimalInput [max]="13"
                       class="text-right" formControlName="Job_Purity" />
                   </mat-form-field>
                 </div>
@@ -338,7 +338,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput
+                    <input type="text" matInput [max]="13"
                       class="text-right" formControlName="PURE_WT"
                       MetalDecimalInput />
                   </mat-form-field>
@@ -362,7 +362,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput
+                    <input type="text" matInput [max]="13"
                       class="text-right" formControlName="PurityDiff"
                       SixDecimalInput />
                   </mat-form-field>
@@ -484,7 +484,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="metalpcs"
+                    <input type="text" matInput formControlName="metalpcs" maxlength="10"
                       NumberOnly class="text-right" />
                   </mat-form-field>
                 </div>
@@ -492,7 +492,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="grossWt"
+                    <input type="text" matInput formControlName="grossWt" [max]="13"
                       MetalDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
@@ -501,7 +501,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="stoneWt"
-                      CommaSeparatedNumber class="text-right" />
+                    StoneDecimalInput class="text-right" [max]="13"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -510,7 +510,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="PURITY"
+                    <input type="text" matInput formControlName="PURITY" [max]="13"
                       SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
@@ -536,7 +536,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="purityPer"
+                    <input type="text" matInput formControlName="purityPer" [max]="13"
                       SixDecimalInput class="text-right" NumberOnly />
                   </mat-form-field>
                 </div>
@@ -544,7 +544,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="PUREWT"
+                    <input type="text" matInput formControlName="PUREWT" [max]="13"
                       CommaSeparatedNumber class="text-right" />
                   </mat-form-field>
                 </div>
@@ -552,7 +552,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="purityDiff"
+                    <input type="text" matInput formControlName="purityDiff" [max]="13"
                       SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
@@ -578,7 +578,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="mkgRate"
+                    <input type="text" matInput formControlName="mkgRate" [max]="13"
                       class="text-right" SixDecimalInput />
                   </mat-form-field>
                 </div>
@@ -657,7 +657,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="jobPurity"
+                    <input type="text" matInput formControlName="jobPurity" [max]="13"
                       SixDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
