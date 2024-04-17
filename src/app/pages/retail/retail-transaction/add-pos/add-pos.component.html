@@ -1801,14 +1801,7 @@
 </div>
 
 <ng-template #sales_payment_modal let-modal modal-lg>
-  <app-receipt-detail
-  [modal]="modal" [dataModel]="RECEIPT_MODEL" [cashreceiptForm]="cashreceiptForm"
-  [vocDataForm]="vocDataForm" [advanceReceiptForm]="advanceReceiptForm" 
-  [creditCardReceiptForm]="creditCardReceiptForm" [customerReceiptForm]="customerReceiptForm"
-  [giftReceiptForm]="giftReceiptForm" [othersReceiptForm]="othersReceiptForm"
-  (newReceiptItem)="saveReceipt($event)"></app-receipt-detail>
-
-  <!-- <div class="modal-header" style="padding: 10px 20px">
+  <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-pos-metal">Payments</h4>
     <button
       type="button"
@@ -2563,7 +2556,7 @@
         &nbsp;
       </div>
     </div>
-  </div> -->
+  </div>
 </ng-template>
 
 <ng-template #oldgoldmodal let-modal modal-lg>
