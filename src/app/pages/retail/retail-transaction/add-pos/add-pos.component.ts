@@ -71,7 +71,7 @@ export class AddPosComponent implements OnInit {
 
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
-
+  RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
 
@@ -11556,7 +11556,12 @@ export class AddPosComponent implements OnInit {
     }
     this.open(this.sales_payment_modal, false, data);
   }
-
+  // ==================updatePaymentItems
+  updatePaymentItems(event:any){
+    console.log(event,'event');
+    
+  }
+  //=====================
   setTabByIndex(index: any, data?: any) {
 
     // this.order_items_total_net_amount = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.order_items_total_net_amount);

@@ -1431,5 +1431,5 @@
 <ng-template #oldgoldmodal let-modal modal-lg>
   <app-exchange-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [customerDataForm]="customerDataForm"
     [vocDataForm]="vocDataForm" [customerDetailForm]="customerDetailForm" [ordered_items]="ordered_items"
-    (newExchangeItem)="updateExchangeItems($event)"></app-exchange-detail>
+    (newExchangeItem)="saveReceipt($event)"></app-exchange-detail>
 </ng-template>
