@@ -355,7 +355,7 @@ export class ItemDetailTable implements OnInit {
             fcn_li_item_desc: ['', Validators.required],
             fcn_li_division: ['', Validators.required],
             fcn_li_location: [''],
-            fcn_li_pcs: [0, Validators.required],
+            fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
             fcn_li_gross_wt: ['', [Validators.required, Validators.min(0.1)]],
             fcn_li_stone_wt: [0, Validators.required],
             fcn_li_net_wt: [0, Validators.required],
