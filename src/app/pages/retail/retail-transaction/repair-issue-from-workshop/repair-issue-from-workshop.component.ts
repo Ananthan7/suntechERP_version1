@@ -335,7 +335,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
 
   salesManSelected(e:any){
     console.log(e);
-    this.repairReceiveForm.controls.worker.setValue(e.WORKER_CODE);
+    this.repairReceiveForm.controls.salesMan.setValue(e.WORKER_CODE);
   }
 
   customerCodeData: MasterSearchModel = {

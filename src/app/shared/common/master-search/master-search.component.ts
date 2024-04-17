@@ -104,7 +104,7 @@ export class MasterSearchComponent implements OnInit {
       if (result.dynamicData && result.dynamicData[0].length>0) {
         this.dataSource = result.dynamicData[0]
         let dataCount = result.dynamicData[1]
-        this.totalItems = dataCount.COUNT
+        // this.totalItems = dataCount.COUNT
 
         this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
