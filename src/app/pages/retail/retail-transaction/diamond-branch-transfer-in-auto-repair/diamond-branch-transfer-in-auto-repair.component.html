@@ -270,12 +270,12 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                                        <dx-data-grid id="gridContainer" [dataSource]="diamondBranchTransferinAutoRepairDetails" [showBorders]="true"
                                             [showColumnLines]="true" [showRowLines]="true" class="mt-3">
                                             <dxo-editing mode="cell" [allowUpdating]="!viewMode">
                                             </dxo-editing>
                                             <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                                dataField="{{ data.field }}" caption="{{ data.title }}" [allowEditing]="true"
                                                 alignment="center" backgroundcolor="#000">
                                             </dxi-column>
 
