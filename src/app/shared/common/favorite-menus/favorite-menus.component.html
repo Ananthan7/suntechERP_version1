@@ -1,0 +1,10 @@
+<h5>Favorites</h5>
+<ul>
+    <li *ngFor="let submenu of favMenuList" (click)="pageRoutes( '/'+ submenu.ANG_WEB_COMPONENT_NAME + '/'+     submenu.ANG_WEB_PATH_NAME, 
+    { modulename: submenu.MENU_MODULE, subMenuName: submenu.MENU_CAPTION_ENG, 
+        ctrl: submenu.ANG_WEB_CONTROLLER_NAME,component: submenu.ANG_WEB_FORM_NAME,
+        tableName: submenu.HEADER_TABLE, VocType: submenu.VOCTYPE, 
+        mainVocType: submenu.MAIN_VOCTYPE },submenu)">
+        <h6 class="favItems">{{submenu.MENU_CAPTION_ENG}}</h6>
+    </li>
+</ul>

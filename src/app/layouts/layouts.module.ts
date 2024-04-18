@@ -18,6 +18,7 @@ import { RightsidebarComponent } from './rightsidebar/rightsidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.c
     SimplebarAngularModule,
     TranslateModule,
     RouterModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    SharedModule
   ],
   providers: [LanguageService]
 })

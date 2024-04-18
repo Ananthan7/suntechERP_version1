@@ -89,38 +89,38 @@ export const MENU: MenuItem[] = [
     //     ]
     // },
     
-    {
-        id: 2,
-        label: 'Management',
-        icon: 'edit',
-        link: '/Management',
-    },
-    {
-        id: 3,
-        label: 'Operational',
-        icon: 'settings',
-        link: '/operationals',
-    },
-    {
-        id: 4,
-        label: 'Sales',
-        icon: 'trending-up',
-        subItems: [
-            {
-                id: 2,
-                label: 'Modules',
-                link: '/Sales',
-                parentId: 4
-            },
+    // {
+    //     id: 2,
+    //     label: 'Management',
+    //     icon: 'edit',
+    //     link: '/Management',
+    // },
+    // {
+    //     id: 3,
+    //     label: 'Operational',
+    //     icon: 'settings',
+    //     link: '/operationals',
+    // },
+    // {
+    //     id: 4,
+    //     label: 'Sales',
+    //     icon: 'trending-up',
+    //     subItems: [
+    //         {
+    //             id: 2,
+    //             label: 'Modules',
+    //             link: '/Sales',
+    //             parentId: 4
+    //         },
           
-        ]
-    },
-    {
-        id: 5,
-        label: 'Support',
-        icon: 'user',
+    //     ]
+    // },
+    // {
+    //     id: 5,
+    //     label: 'Support',
+    //     icon: 'user',
         
-    },
+    // },
   
   
 ];

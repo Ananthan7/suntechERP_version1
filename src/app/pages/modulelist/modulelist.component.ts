@@ -44,11 +44,16 @@ export class ModulelistComponent implements OnInit {
       this.isLoading = false;
       if (response.status == 'Success') {
         this.menuList = response.response;
-        this.menuList.push({
-          MID: 15,
-          MODULE_NAME: 'Addons',
-          imageUrl: '../../assets/images/lp-icons/1.png'
-        });
+        // this.menuList.push({
+        //   MID: 1,
+        //   MODULE_NAME: 'Retail',
+        //   imageUrl: '../../assets/images/lp-icons/Retail.png'
+        // });
+        // this.menuList.push({
+        //   MID: 15,
+        //   MODULE_NAME: 'Addons',
+        //   imageUrl: '../../assets/images/lp-icons/1.png'
+        // });
 
         this.menuList.sort((a, b) => {
           const nameA = a.MODULE_NAME;
@@ -74,7 +79,7 @@ export class ModulelistComponent implements OnInit {
         this.menuList.forEach(data => {
           if (data.MODULE_NAME == 'Boiling') {
             data.imageUrl = '../../assets/images/lp-icons/2.png'
-          } else if (data.MID == 14) {
+          } else if (data.MODULE_NAME == 14) {
             data.imageUrl = '../../assets/images/lp-icons/3.png'
           } else if (data.MID == 10) {
             data.imageUrl = '../../assets/images/lp-icons/4.png'
@@ -92,13 +97,13 @@ export class ModulelistComponent implements OnInit {
             data.imageUrl = '../../assets/images/lp-icons/10.png'
           } else if (data.MID == 4) {
             data.imageUrl = '../../assets/images/lp-icons/12.png'
-          } else if (data.MID == 1) {
-            data.imageUrl = '../../assets/images/lp-icons/11.png'
+          } else if (data.MODULE_NAME == 'Retail') {
+            data.imageUrl = '../../assets/images/lp-icons/Retail.png'
           } else if (data.MODULE_NAME == 'Wholesale') {
             data.imageUrl = '../../assets/images/lp-icons/11.png'
           }
-
         });
+        this.menuList = this.menuList.filter((item:any)=> item.MODULE_NAME == 'Retail')
         localStorage.setItem('MENU_LIST', JSON.stringify(this.menuList));
         this.ChangeDetector.detectChanges()
       } else {
@@ -106,7 +111,7 @@ export class ModulelistComponent implements OnInit {
       }
     }, err => {
       this.isLoading = false;
-      alert(err)
+      alert('server error');
     })
   }
 
