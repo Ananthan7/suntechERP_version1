@@ -10,6 +10,8 @@ export class ItemDetailService {
   lineItemPcs!: any;
   lineItemGrossWt!: any;
   private storedItems = new BehaviorSubject<any[]>([]);
+  divisionCode!:string;
+  isStoneIncluded:boolean = false;
 
   setData(data: any[]) {
     this.storedItems.next(data);
