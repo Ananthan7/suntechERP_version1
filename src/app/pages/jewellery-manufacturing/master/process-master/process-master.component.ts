@@ -24,6 +24,7 @@ export class ProcessMasterComponent implements OnInit {
   searchModeRecov: boolean = true;
   searchModeAllow: boolean = true;
   codeEnable: boolean = true;
+  isDisabled: boolean = false;
 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -60,6 +61,11 @@ export class ProcessMasterComponent implements OnInit {
   indeterminate = false;
   labelPosition: 'before' | 'after' = 'after';
   disabled = false;
+  showMaxContentAlert(): void {
+    if (this.processMasterForm.value.processCode == '') {
+      this.commonService.toastErrorByMsgId('processcode cannot be empty')
+    }
+  }
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
@@ -81,11 +87,13 @@ export class ProcessMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.codeMode = true;
+      this.isDisabled = !this.isDisabled;
       console.log('fire')
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.codeMode = true;
+      this.isDisabled = true;
       this.setFormValues();
 
     }
@@ -156,8 +164,8 @@ export class ProcessMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
-
   }
+ 
 
   checkCode(): boolean {
     if (this.processMasterForm.value.processCode == '') {
@@ -588,12 +596,15 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ApprovalCodeSelected(e: any) {
+    if (this.checkCode()) return
     this.processMasterForm.controls.approvalCode.setValue(e.APPR_CODE);
   }
   ApprovalProcessSelected(e: any) {
+    if (this.checkCode()) return
     this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
   ACCODESelected(e: any) {
+    if (this.checkCode()) return
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
       this.commonService.toastErrorByMsgId('cannot select the same account code');
       return;
@@ -602,6 +613,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   StockProcesSelected(e: any) {
+    if (this.checkCode()) return
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
   }
   /** checking for same account code selection */
@@ -881,7 +893,11 @@ export class ProcessMasterComponent implements OnInit {
     // Update the input value
     (event.target as HTMLInputElement).value = formattedValue;
   }
-
+  showAlertIfCodeIsEmpty(): void {
+    if (this.processMasterForm.value.processCode == '') {
+      this.commonService.toastErrorByMsgId('processcode cannot be empty')
+    }
+  }
 
 
 }

@@ -152,7 +152,10 @@ export class StoneReturnComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  userDataSelected(value: any) {
+    console.log(value);
+    this.stonereturnFrom.controls.enterdBy.setValue(value.UsersName);
+  }
   WorkerCodeSelected(e: any) {
     console.log(e);
     this.stonereturnFrom.controls.worker.setValue(e.WORKER_CODE);
