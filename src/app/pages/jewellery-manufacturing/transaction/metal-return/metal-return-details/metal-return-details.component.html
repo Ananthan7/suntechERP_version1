@@ -189,7 +189,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Net Weight :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="netWeight" style="text-align: right;"
+                                    <input type="text" matInput formControlName="netWeight" style="text-align: right;" [max]="13"
                                         [readonly]="viewMode" MetalDecimalInput/>
                                 </mat-form-field>
                             </div>
@@ -209,7 +209,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="pureWeight"
+                                    <input type="text" matInput formControlName="pureWeight" [max]="13"
                                         style="text-align: right;" [readonly]="viewMode" MetalDecimalInput/>
                                 </mat-form-field>
                             </div>

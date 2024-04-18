@@ -71,7 +71,7 @@ export class AddPosComponent implements OnInit {
 
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
-
+  RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
 
@@ -3558,82 +3558,8 @@ export class AddPosComponent implements OnInit {
                   encodeURIComponent(this.customerDetails?.NATIONAL_IDENTIFICATION_NO) ||
                   '%27%27',
               };
-              // this.snackBar.open('Loading...');
-
-              // this.suntechApi.getAMLValidation(payload).subscribe(async (data) => {
               this.isCustProcessing = false;
-
-              //   this.snackBar.open('Loading...');
-
-              //   // data = JSON.parse(data);
-              //   // console.log(data, typeof data);
-              //   this.suntechApi
-              //     .updateAMLDigiScreenValidation(
-              //       this.customerDetails.CODE,
-              //       true
-              //     )
-              //     .subscribe((resp) => {
-              //       this.snackBar.dismiss();
-              //       if (resp.status == "Success") {
-              //         // this.customerDetails = resp.response;
-              //         this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
-              //       } else {
-              //         this.snackBar.open('Digiscreen Failed');
-              //       }
-
-              //       console.log('====================================');
-              //       console.log('resp', resp);
-              //       console.log('====================================');
-              //     });
-
-              //   if (data.response.isMatched != null) {
-              //     this.snackBar.dismiss();
-
-              //     if (data.response.isMatched.toUpperCase() == 'YES') {
-              //       // if (data.response == 'yes') {
-              //       this.openDialog('Warning', 'We cannot proceed', true);
-              //       this.dialogBox.afterClosed().subscribe((data) => {
-              //         if (data == 'OK') {
               this.modalReference.close();
-              //         }
-              //       });
-              //       // need to use put api
-              //       this.amlNameValidationData = true;
-
-              //       this.suntechApi
-              //         .updateAMLNameValidation(this.customerDetails.CODE, true)
-              //         .subscribe((resp) => {
-              //           // this.customerDetails = resp.response;
-              //           this.customerDetails.AMLNAMEVALIDATION =
-              //             resp.response != null ? resp.response?.AMLNAMEVALIDATION : true;
-
-              //           console.log('====================================');
-              //           console.log('resp', resp);
-              //           console.log('====================================');
-              //         });
-              //       // }
-              //     } else {
-
-              //       this.openDialog('Success', JSON.stringify(data.response), true);
-              //       this.dialogBox.afterClosed().subscribe((data) => {
-              //         if (data == 'OK') {
-              //           this.modalReference.close();
-              //         }
-              //       });
-              //       //proceed
-              //       this.amlNameValidationData = false;
-              //     }
-              //   } else {
-              //     this.openDialog('Warning', JSON.stringify(data.response), true);
-              //     this.dialogBox.afterClosed().subscribe((data) => {
-              //       if (data == 'OK') {
-              //         this.modalReference.close();
-              //       }
-              //     });
-              //     this.amlNameValidationData = true;
-
-              //   }
-              // });
             } else {
               this.isCustProcessing = false;
 
@@ -11556,7 +11482,12 @@ export class AddPosComponent implements OnInit {
     }
     this.open(this.sales_payment_modal, false, data);
   }
-
+  // ==================updatePaymentItems
+  updatePaymentItems(event:any){
+    console.log(event,'event');
+    
+  }
+  //=====================
   setTabByIndex(index: any, data?: any) {
 
     // this.order_items_total_net_amount = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.order_items_total_net_amount);

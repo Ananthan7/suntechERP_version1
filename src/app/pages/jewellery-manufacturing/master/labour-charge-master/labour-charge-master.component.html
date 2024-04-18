@@ -196,7 +196,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" [readonly]="viewMode" 
-                    matInput AmountDecimalInput [max]="13"
+                    matInput SixDecimalInput [max]="13"
                     (keypress)="salesChangesDia('selling_rate')"
                     class="text-right"
                     formControlName="selling_rate" />
@@ -253,7 +253,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode  || codeEnable2" matInput
+                    [readonly]="viewMode" matInput
                     class="text-right" formControlName="ctWtTo"
                     (change)="onCtweighttto($event,'Ctwtto')" />
                 </mat-form-field>
@@ -406,7 +406,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode"
-                    AmountDecimalInput [max]="13"
+                  SixDecimalInput [max]="13"
                     formControlName="metalselling_rate"
                     (keypress)="salesChangesMetal('metalselling_rate')"
                     class="text-right" />
