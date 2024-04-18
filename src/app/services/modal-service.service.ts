@@ -5,7 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ItemDetailService {
-
+  validatePCS!: boolean;
+  blockNegativeStock!: any;
+  lineItemPcs!: any;
+  lineItemGrossWt!: any;
   private storedItems = new BehaviorSubject<any[]>([]);
 
   setData(data: any[]) {

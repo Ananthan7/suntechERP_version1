@@ -61,7 +61,7 @@
                     RemoveLeadingZeros /> -->
                     <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                      formControlName="fcn_li_pcs" (change)="changePCS($event)" readonly NumericFilter />
+                      formControlName="fcn_li_pcs" (change)="changePCS($event)" [readonly]="viewOnly" NumericFilter />
 
                     <mat-error *ngIf="
                         lineItemForm.controls.fcn_li_pcs.hasError(
@@ -185,7 +185,7 @@
                     <mat-label>{{
                       divisionMS == "M" ? "Making Rate" : "Rate"
                       }}</mat-label>
-                    <input class="st_txt_right" [min]="0" [maxLength]="14"
+                    <input class="st_txt_right"  [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_rate"
                       formControlName="fcn_li_rate" (change)="changeRate($event)" readonly="{{ viewOnly }}"
                       (focus)="setValToLocalStorage($event, 'fcn_li_rate')" AmountDecimalInput />

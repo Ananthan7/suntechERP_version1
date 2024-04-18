@@ -1,12 +1,37 @@
-// body {
-//     background: #cccccc !important;
-// }
+button.touch-big-button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
 
-.btn-primary {
-  background-color: #0d4f9e !important;
-  border-color: #0d4f9e !important;
-  border-radius: 5px !important;
-  padding: 6px 15px 6px 15px !important;
+.touch-big-button-inner {
+  display: flex;
+  align-items: center;
+}
+
+.touch-big-button-inner span {
+  margin-left: 5px;
+}
+
+.tabletd_gray {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.tabletd_gray tr td,
+.tabletd_gray tr th {
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+body {
+  background: #cccccc !important;
+}
+
+.card {
+  background-color: #ffffff;
 }
 
 .pcoded-main-container {
@@ -29,7 +54,7 @@ label {
 
 .card-header {
   padding: 10px;
-  background-color: #d2d2d2;
+  background-color: #f0f0f0;
 }
 
 .card-body {
@@ -52,10 +77,6 @@ label {
   cursor: pointer;
 }
 
-.touch-big-button-black {
-  background-color: #666666 !important;
-}
-
 .badge {
   font-size: 113%;
   padding: 1em 0.6em;
@@ -64,37 +85,27 @@ label {
   height: 50px;
 }
 
+// touch-big-button styles
+.touch-big-button-black {
+  background-color: #666666 !important;
+}
+
 .touch-big-button {
-  width: 100%;
-  height: 50px;
+  min-width: 130px;
   background-color: #0861a9;
   text-align: center;
   color: #ffffff;
   cursor: pointer;
-}
-.touch-big-button-inner {
+  padding: 0px 4px 4px 4px;
   text-align: center !important;
-  padding-left: 0px !important;
-  padding-top: 4px !important;
-  font-size: 15px !important;
 }
 
 .touch-big-button i {
   padding-right: 7px;
   padding-top: 13px;
+  font-size: 15px;
 }
 
-.touch-big-button i {
-  font-size: 20px;
-  padding-top: 10px;
-}
-
-.touch-big-button div {
-  text-align: center;
-  padding-left: 0px;
-  padding-top: 0px;
-  font-size: 12px;
-}
 
 button[aria-label="Close"]:focus {
   outline: none;
@@ -129,6 +140,10 @@ button[aria-label="Close"]:focus {
   display: inline !important;
 }
 
+.mat-form-field-pending-so {
+  display: inline-block !important;
+}
+
 .rhs-table-1 .td-w-40 {
   width: 40% !important;
   border-right: none !important;
@@ -158,15 +173,55 @@ button[aria-label="Close"]:focus {
   vertical-align: middle !important;
 }
 
-::ng-deep {
-    .cdk-overlay-container {
-        position: fixed;
-        z-index: 1070 !important;
-    }
+::ng-deep .mat-tab-body-content {
+  overflow: hidden !important;
 }
-.form-control {
-  border-radius: 0 !important;
-  border: none !important;
-  border-bottom: 1px solid #969696 !important;
-  background: transparent;
+
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+}
+
+
+.mat-flat-button.mat-primary {
+  background-color: #428cc9 !important;
+  color: #fff;
+}
+
+.mat-flat-button.mat-primary:disabled {
+  color: #fff;
+  background-color: #7e8790 !important;
+  border-color: #7e8790 !important;
+  cursor: not-allowed !important;
+}
+
+fieldset {
+  padding: 10px;
+  border: solid 1px #949494;
+  position: relative;
+  margin-top: 25px;
+
+  legend {
+    color: #333334;
+    position: absolute;
+    top: -13px;
+    background: #fff;
+    width: 80px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+
+}
+
+.hidden {
+  display: none;
+}
+
+.karat_code {
+  width: 100%;
+  border-color: transparent;
 }
