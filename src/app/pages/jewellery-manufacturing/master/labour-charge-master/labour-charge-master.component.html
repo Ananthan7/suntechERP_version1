@@ -173,7 +173,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" [readonly]="viewMode" matInput
-                    AmountDecimalInput [max]="13"
+                  MetalDecimalInput [max]="13"
                     class="text-right"
                     formControlName="cost_rate" />
                 </mat-form-field>
@@ -228,7 +228,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode" matInput
-                    class="text-right"
+                    class="text-right" NumberOnly maxlength="20"
                     formControlName="ctWtFrom" (keyup)="CtWtcodeEnabled()" />
                 </mat-form-field>
               </div>
@@ -254,7 +254,7 @@
                 <mat-form-field>
                   <input type="text" matInput
                     [readonly]="viewMode" matInput
-                    class="text-right" formControlName="ctWtTo"
+                    class="text-right" formControlName="ctWtTo" NumberOnly maxlength="20"
                     (change)="onCtweighttto($event,'Ctwtto')" />
                 </mat-form-field>
               </div>
@@ -384,7 +384,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode"
-                    AmountDecimalInput [max]="13"
+                  MetalDecimalInput [max]="13"
                     formControlName="metalcost_rate"
                     class="text-right" />
                 </mat-form-field>
