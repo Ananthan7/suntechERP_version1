@@ -544,12 +544,14 @@
                   </div>
                 </div>
               </mat-tab>
+              <!-- Sales Return tab starts -->
               <mat-tab label="Sales Return">
                 <div class="table-responsive">
                   <div class="content">
                     <div class="left">
                       <div class="wrapper">
                         <div class="container">
+                        <!-- Sales Return grid starts -->
                           <dx-data-grid id="sales_return_grid" [dataSource]="sales_returns_items" keyExpr="ID"
                             (onRowRemoved)="removeSalesReturnGrid($event)"
                             (onEditingStart)="editTableSalesReturn($event)" [showBorders]="true">
@@ -602,17 +604,11 @@
                           <div>
 
                             <button type="submit" (click)="open(adjust_sale_return_modal)" class="btn btn-secondary"
-                              [disabled]="
-                            this.ordered_items.length > 0 && !this.viewOnly
-                              ? false
-                              : true
-                          " style="
-                              margin: 10px;
-
+                              [disabled]="this.ordered_items.length > 0 && !this.viewOnly ? false : true" 
+                              style="margin: 10px;
                               width: 20px !important;
                               padding: 3px 10px;
-                              padding-right: 21px;
-                            ">
+                              padding-right: 21px;">
                               <i class="fa fa-plus"></i>
                             </button>
                           </div>
@@ -1417,7 +1413,8 @@
 <!-- Sales Return Modal -->
 <ng-template #adjust_sale_return_modal let-modal modal-lg>
   <app-sales-return [modalTitle]="'Dynamic Modal Title'" [modal]="modal"
-    (salesReturnsItemsChange)="sales_returns_items = $event"
+    [editItemDetail]="isEditable" [viewOnlyDetail]="viewOnly" [updatedGridItem]="salesReturnDataToEdit"
+    (salesReturnsItemsChange)="addSalesReturnItem($event)"
     [filteredSalesReturnBranchOptions]="filteredSalesReturnBranchOptions"></app-sales-return>
 </ng-template>
 

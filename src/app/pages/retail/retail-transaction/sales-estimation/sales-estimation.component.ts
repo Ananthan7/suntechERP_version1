@@ -2048,14 +2048,22 @@ export class SalesEstimationComponent implements OnInit {
     customizeDate(data: any) {
         // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
     }
-
+    addSalesReturnItem(data: any) {
+        if (!this.editOnly) {
+            data.forEach((element: any, index: any) => {
+                this.sales_returns_items.push(element)
+            });
+        }
+        this.resetSalesReturnGrid()
+    }
+    resetSalesReturnGrid() {
+        this.sales_returns_items.forEach((element: any, index: any) => {
+            element.sn_no = index + 1
+        });
+    }
     open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, tableEdit = false) {
         this.lineItemModalForSalesReturn = false;
         this.updateBtn = false;
-        console.log('====================================');
-        console.log('content', content);
-
-        console.log('====================================');
         tableEdit ? this.isEditable = true : this.isEditable = false;
 
         this.salesReturnForm.reset();
@@ -2322,18 +2330,14 @@ export class SalesEstimationComponent implements OnInit {
         // this.newLineItem = value;
 
     }
+    salesReturnDataToEdit: any;
     editTableSalesReturn(event: any) {
+        this.salesReturnDataToEdit = event.data;
         this.salesReturnEditId = event.data.ID;
         event.cancel = true;
         const value: any = this.currentsalesReturnItems.filter(
             (data: any) => data.SRNO == event.data.sn_no
         )[0];
-        console.log(
-            '===============editTable==currentsalesReturnItems==================='
-        );
-        console.log(this.currentsalesReturnItems);
-        console.log(value);
-        console.log('====================================');
         event.component.refresh();
 
         this.open(this.adjust_sale_return_modal);
@@ -2361,44 +2365,6 @@ export class SalesEstimationComponent implements OnInit {
         // this.salesReturnForm.controls.fcn_returns_voc_no.setValue(value.DT_VOCNO);
         this.searchVocNoSalRet();
 
-        // const data = [
-        //   {
-        //     DIVISION_CODE: value.DIVISION_CODE,
-        //     STOCK_CODE: value.STOCK_CODE,
-        //     STOCK_DOCDESC: value.STOCK_DOCDESC,
-        //     GROSSWT: value.GROSSWT,
-        //     NETVALUEFC: value.NETVALUEFC,
-        //     // additional values
-        //     PCS: value.PCS,
-        //     NETWT: value.NETWT,
-        //     PURITY: value.PURITY,
-        //     PUREWT: value.PUREWT,
-        //     CHARGABLEWT: value.CHARGABLEWT,
-        //     MKG_RATEFC: value.MKG_RATEFC,
-        //     MKG_RATECC: value.MKG_RATECC,
-        //     MKGVALUEFC: value.MKGVALUEFC,
-        //     MKGVALUECC: value.MKGVALUECC,
-        //     RATE_TYPE: value.RATE_TYPE || '',
-        //     METAL_RATE: value.METAL_RATE,
-        //     METAL_RATE_GMSFC: value.METAL_RATE_GMSFC,
-        //     METAL_RATE_GMSCC: value.METAL_RATE_GMSCC,
-        //     METALVALUEFC: value.METALVALUEFC,
-        //     METALVALUECC: value.METALVALUECC,
-        //     STONE_RATEFC: value.STONE_RATEFC,
-        //     STONE_RATECC: value.STONE_RATECC,
-        //     STONEVALUEFC: value.STONEVALUEFC,
-        //     STONEVALUECC: value.STONEVALUECC,
-        //     NETVALUECC: value.NETVALUECC,
-        //     TOTALWITHVATFC: value?.TOTALWITHVATFC || 0,
-        //     TOTALWITHVATLC: value?.TOTALWITHVATFC || 0,
-        //   },
-        // ];
-        // this.salesReturnsItems_forVoc = data;
-        // this.sales_returns_total_amt = value.TOTALWITHVATFC;
-        // this.salesReturnEditCode = value.STOCK_CODE;
-        // this.salesReturnEditAmt = value.TOTALWITHVATFC;
-
-        // this.searchVocNoSalRet();
     }
 
     editTableExchangeItem(event: any) {
