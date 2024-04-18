@@ -28,7 +28,7 @@
                                             (focusout)="checkCodeExists($event)"
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode"
-                                            maxlength="6" [readonly]="codeMode"
+                                            maxlength="6" [readonly]="codeMode "
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 

@@ -140,35 +140,35 @@
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group2" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group2')" [(ngModel)]="selectedValue" name="selectedValue">
+                  <mat-select formControlName="group2" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group2')" [(ngModel)]="selectedValue1" name="selectedValue">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group3"[disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group3')" [(ngModel)]="selectedValue" name="selectedValue">
+                  <mat-select formControlName="group3"[disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group3')" [(ngModel)]="selectedValue2" name="selectedValue">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group4" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group4')" [(ngModel)]="selectedValue" name="selectedValue">
+                  <mat-select formControlName="group4" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group4')" [(ngModel)]="selectedValue3" name="selectedValue">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group5" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group5')" [(ngModel)]="selectedValue" name="selectedValue">
+                  <mat-select formControlName="group5" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group5')" [(ngModel)]="selectedValue4" name="selectedValue">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-select formControlName="group6" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group6')" [(ngModel)]="selectedValue" name="selectedValue">
+                  <mat-select formControlName="group6" [disabled]="disableSelect || codeEnable " (selectionChange)="onSelectionChange($event.value, 'group6')" [(ngModel)]="selectedValue5" name="selectedValue">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
                   </mat-select>
                 </mat-form-field>
