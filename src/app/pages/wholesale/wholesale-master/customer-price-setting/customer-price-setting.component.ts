@@ -34,6 +34,11 @@ export class CustomerPriceSettingComponent implements OnInit {
   enableUpdate: boolean = true;
   approveDisable: boolean = true;
   selectedValue: string = 'None';
+  selectedValue1: string = 'None';
+  selectedValue2: string = 'None';
+  selectedValue3: string = 'None';
+  selectedValue4: string = 'None';
+  selectedValue5: string = 'None';
 
   groups = [
     { type: 'None', value: 'None' },
@@ -351,10 +356,10 @@ export class CustomerPriceSettingComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   update(){
-    if (this.customerpricesettingForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.customerpricesettingForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
   
     let API = 'CustomerVendorPricingMaster/UpdateCustomerVendorPricingMaster/'+this.content.CUSTOMER_CODE
     let postData = 

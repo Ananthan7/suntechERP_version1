@@ -8,7 +8,7 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)=" deleteProcessMaster()"></modal-header>
+        ></modal-header>
     <!-- content section -->
     <div class="card pt-1">
         <form [formGroup]="processMasterForm">
@@ -28,7 +28,7 @@
                                             (focusout)="checkCodeExists($event)"
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode"
-                                            maxlength="6" [readonly]="codeMode"
+                                            maxlength="6" [readonly]="codeMode "
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 
@@ -46,7 +46,8 @@
                                             placeholder="DESCRIPTION"
                                             formControlName="processDesc"
                                             maxlength="40"
-                                            [readonly]="codeMode" />
+                                            (focus)="showAlertIfCodeIsEmpty()"
+                                            [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -62,7 +63,8 @@
                                             <mat-option
                                                 *ngFor="let option of processTypeList"
                                                 [value]="option.SRNO"
-                                                [disabled]="viewMode">
+                                                (focus)="showAlertIfCodeIsEmpty()"
+                                                [disabled]="viewMode || codeEnable" >
                                                 {{ option.ENGLISH }}
                                             </mat-option>
                                         </mat-select>
@@ -73,11 +75,13 @@
                                     Time * :</label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="yourContent"
-                                        [viewMode]="viewMode"
+                                    [viewMode]="viewMode  || codeEnable"
+                                    (click)="showMaxContentAlert()"
                                         (updateDuration)="updateStandardTime($event)"
                                         [durationToSplit]="standTime"
                                         formControlName="stand_time"
-                                        [disabled]="viewMode"></app-duration-picker>
+                                        (focus)="showAlertIfCodeIsEmpty()"
+                                        [disabled]="viewMode || codeEnable"></app-duration-picker>
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -89,7 +93,8 @@
                                         <input type="text" matInput
                                             maxlength="6"
                                             formControlName="WIPaccount"
-                                            [readonly]="viewMode || codeEnable" />
+                                            (focus)="showAlertIfCodeIsEmpty()"
+                                            [readonly]="viewMode || codeEnable"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMasterData"
@@ -103,10 +108,12 @@
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="maxContent"
                                         [durationToSplit]="maxTime"
-                                        [viewMode]="viewMode"
+                                        [viewMode]="viewMode  || codeEnable"
+                                        (click)="showMaxContentAlert()"
                                         (updateDuration)="updateMaximumTime($event)"
                                         formControlName="max_time"
-                                        [disabled]="viewMode"></app-duration-picker>
+                                        (focus)="showAlertIfCodeIsEmpty()"
+                                        [disabled]="viewMode || codeEnable" ></app-duration-picker>
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -121,7 +128,8 @@
                                             style="text-align: right;"
                                             maxlength="5"
                                             formControlName="Position"
-                                            [readonly]="viewMode || codeEnable" />
+                                            (focus)="showAlertIfCodeIsEmpty()"
+                                            [readonly]="viewMode || codeEnable"  />
                                     </mat-form-field>
                                 </div>
                                 <label for="input"
@@ -135,7 +143,8 @@
                                             NumberOnly
                                             formControlName="trayWeight"
                                             maxlength="12"
-                                            [readonly]="viewMode || codeEnable" />
+                                            (focus)="showAlertIfCodeIsEmpty()"
+                                            [readonly]="viewMode || codeEnable"  />
                                         <!-- <input type="number" matInput style="text-align: right;"
                                             formControlName="trayWeight"  [readonly]="viewMode" /> -->
                                     </mat-form-field>
@@ -150,7 +159,8 @@
                                         <input type="text" matInput
                                             maxlength="6"
                                             formControlName="approvalCode"
-                                            [readonly]="viewMode || codeEnable" />
+                                            (focus)="showAlertIfCodeIsEmpty()"
+                                            [readonly]="viewMode || codeEnable"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="approvalCodeData"
@@ -166,6 +176,7 @@
                                         <input type="text" matInput
                                             maxlength="6"
                                             formControlName="approvalProcess"
+                                            (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                     <master-search
@@ -183,7 +194,8 @@
                                     <mat-form-field style="width: 80%">
                                         <input type="text" matInput
                                             formControlName="recStockCode"
-                                            [readonly]="islossReadOnly" />
+                                            (focus)="showAlertIfCodeIsEmpty()"
+                                            [readonly]="viewMode || codeEnable"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="StockProcessData"
@@ -209,6 +221,7 @@
                                             style="text-align: right;"
                                             formControlName="labour_charge"
                                             maxlength="15"
+                                            (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
@@ -221,7 +234,8 @@
                                 <mat-checkbox formControlName="loss"
                                     class="example-margin"
                                     (change)="onlossChange($event)"
-                                    [disabled]="viewMode">
+                                    (focus)="showAlertIfCodeIsEmpty()"
+                                    [disabled]="viewMode || codeEnable">
                                     Loss *</mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
                                     (change)="onlossChange($event)">
@@ -233,7 +247,9 @@
                                 <mat-checkbox formControlName="recovery"
                                     class="example-margin"
                                     (change)="onRecovery($event)"
-                                    [disabled]="viewMode">
+                                    [disabled]="viewMode || codeEnable"
+                                    (focus)="showAlertIfCodeIsEmpty()"
+                                     >
                                     Recovery * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="recovery">
                                 <label class="form-check-label">

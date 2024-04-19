@@ -339,7 +339,7 @@ export class ItemDetailTable implements OnInit {
     };
 
     constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,
-        private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2,public lineItemService: ItemDetailService
+        private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2, public lineItemService: ItemDetailService
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
         this.strUser = localStorage.getItem('username');
@@ -492,19 +492,22 @@ export class ItemDetailTable implements OnInit {
                                 stockInfos.BALANCE_PCS
                             );
                             this.lineItemPcs = stockInfos.BALANCE_PCS;
-                            this.lineItemService.lineItemPcs=stockInfos.BALANCE_PCS;
+                            this.lineItemService.lineItemPcs = stockInfos.BALANCE_PCS;
                             this.lineItemGrossWt = this.comFunc.transformDecimalVB(
                                 this.comFunc.mQtyDecimals,
                                 this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
                             );
-                            this.lineItemService.lineItemGrossWt=this.comFunc.transformDecimalVB(
+                            this.lineItemService.lineItemGrossWt = this.comFunc.transformDecimalVB(
                                 this.comFunc.mQtyDecimals,
                                 this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
                             );
                             this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
                                 stockInfos.BALANCE_QTY
                             );
-
+                            this.lineItemService.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                                this.comFunc.amtDecimals,
+                                stockInfoPrice.MIN_SAL_PRICE
+                            );
 
                             this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
                                 this.comFunc.amtDecimals,
@@ -535,12 +538,17 @@ export class ItemDetailTable implements OnInit {
                             );
 
                             this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
-                            this.lineItemService.divisionCode=stockInfos.DIVISION;
-                            
+                            this.lineItemService.divisionCode = stockInfos.DIVISION;
+
                             this.blockNegativeStockValue = stockInfos.BALANCE_QTY;
                             this.lineItemService.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
+                            this.lineItemService.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
                             this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
                             this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                                this.comFunc.amtDecimals,
+                                stockInfoPrice.MIN_SAL_PRICE
+                            );
+                            this.lineItemService.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
                                 this.comFunc.amtDecimals,
                                 stockInfoPrice.MIN_SAL_PRICE
                             );
@@ -558,13 +566,13 @@ export class ItemDetailTable implements OnInit {
                                 parseFloat(stockInfos.RATE).toFixed(2)
                             );
 
-
+                            this.renderer.selectRootElement('#fcn_li_total_amount').focus();
 
                             this.curr_line_item_images = stockInfos.PICTURE_NAME;
 
                             if (this.divisionMS == 'M') {
                                 if (parseFloat(this.lineItemForm.value.fcn_li_gross_wt) !== 0) {
-                                    this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+                                    // this.renderer.selectRootElement('#fcn_li_total_amount').focus();
                                 }
                                 else {
                                     this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
@@ -635,22 +643,22 @@ export class ItemDetailTable implements OnInit {
                                 this.lineItemForm.value.fcn_li_net_amount;
 
 
-                                if (this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString()) == false) {
+                            if (this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString()) == false) {
 
-                                    this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
-                                    this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
-                                    this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
-                                  } else {
-                  
-                                    this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
-                                    this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
-                                    this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
-                                      Validators.required,
-                                    ]);
-                                    this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [
-                                      Validators.required,
-                                    ]);
-                                  }
+                                this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
+                                this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
+                                this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
+                            } else {
+
+                                this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
+                                this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
+                                this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
+                                    Validators.required,
+                                ]);
+                                this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [
+                                    Validators.required,
+                                ]);
+                            }
                         } else {
                             this.openDialog(
                                 'Failed',
@@ -668,14 +676,14 @@ export class ItemDetailTable implements OnInit {
 
     }
 
-    
-  addValidationsForForms(form: FormGroup, ctrlName: any, validations: any) {
-    const control = form.get(ctrlName);
-    if (control) {
-      control.setValidators(validations);
-      control.updateValueAndValidity();
+
+    addValidationsForForms(form: FormGroup, ctrlName: any, validations: any) {
+        const control = form.get(ctrlName);
+        if (control) {
+            control.setValidators(validations);
+            control.updateValueAndValidity();
+        }
     }
-  }
     manageCalculations(
         argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
     ) {
@@ -828,7 +836,7 @@ export class ItemDetailTable implements OnInit {
         /**  set Gross amt */
         if (argsData.nettAmt == null) {
             if (this.divisionMS == 'M') {
-     
+
                 this.lineItemForm.controls.fcn_li_gross_amount.setValue(
                     this.comFunc.transformDecimalVB(
                         this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -959,11 +967,10 @@ export class ItemDetailTable implements OnInit {
         this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
             this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
         );
-        // alert(this.lineItemForm.value.fcn_li_net_amount))
         this.lineItemForm.controls['fcn_li_net_amount'].setValue(
             this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_net_amount)
         );
-  
+
     }
     getPercentage(percent: any, total: any) {
         return (parseFloat(percent.toString()) / 100) * parseFloat(total.toString());
@@ -1037,84 +1044,85 @@ export class ItemDetailTable implements OnInit {
     changePCS(event: any) {
         const value = event.target.value;
         if (value != '' && this.lineItemService.validatePCS == true) {
-          // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-          // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-    
-          if (this.lineItemService.blockNegativeStock == 'B') {
-            if (this.lineItemService.lineItemPcs < value) {
-              this.openDialog(
-                'Warning',
-                'Current Stock Qty Exceeding Available Stock Qty.',
-                true
-              );
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                if (data == 'OK') {
-                  this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                    this.lineItemService.lineItemPcs
-                  );
-                  this.checkDivisionForPcs()
-              
-    
-                  this.manageCalculations();
-                }
-              
-              });
-            } else {
-            //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-              this.manageCalculations();
-            }
-            this.checkDivisionForPcs()
-          } else if (this.lineItemService.blockNegativeStock == 'W') {
-            if (this.lineItemService.lineItemPcs < value) {
-              this.openDialog(
-                'Warning',
-                'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                false
-              );
-              this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                this.lineItemService.lineItemPcs
-              );
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                if (data == 'No') {
-                    this.checkDivisionForPcs()
-    
-                  this.manageCalculations();
-    
-                } else {
-               
-                  this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                    this.lineItemService.lineItemPcs
-                  );
-                //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-                  this.manageCalculations();
-                }
-              });
-            } else {
-            //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-           
-              this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                this.lineItemService.lineItemPcs
-              );
-              this.manageCalculations();
-            }
-            this.checkDivisionForPcs()
-          } else {
-        
-            this.manageCalculations();
-          }
-        } else {
-          if (this.validatePCS == true)
-            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(this.zeroMQtyVal);
-          this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
-    
-          // this.setGrossAmt();
-          // this.setRate();
-          // this.setTotalAmount();
-          this.manageCalculations();
-        }
-      }
+            // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
 
-      checkDivisionForPcs(){
+            if (this.lineItemService.blockNegativeStock == 'B') {
+                if (this.lineItemService.lineItemPcs < value) {
+                    this.openDialog(
+                        'Warning',
+                        'Current Stock Qty Exceeding Available Stock Qty.',
+                        true
+                    );
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                                this.lineItemService.lineItemPcs
+                            );
+                            this.checkDivisionForPcs()
+
+
+                            this.manageCalculations();
+                        }
+
+                    });
+                } else {
+                    //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                    this.manageCalculations();
+                }
+                this.checkDivisionForPcs()
+            } else if (this.lineItemService.blockNegativeStock == 'W') {
+                if (this.lineItemService.lineItemPcs < value) {
+                    this.openDialog(
+                        'Warning5',
+                        'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                        false
+                    );
+                    this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                        this.lineItemService.lineItemPcs
+                    );
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'No') {
+                            this.checkDivisionForPcs()
+
+                            this.manageCalculations();
+
+                        } else {
+                            this.checkDivisionForPcs()
+                            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+                            this.manageCalculations();
+                            //   this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                            //     value
+                            //   );
+                            //   this.manageCalculations();
+                        }
+                    });
+                } else {
+                    //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+
+                    this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                        this.lineItemService.lineItemPcs
+                    );
+                    this.manageCalculations();
+                }
+                this.checkDivisionForPcs()
+            } else {
+
+                this.manageCalculations();
+            }
+        } else {
+            if (this.validatePCS == true)
+                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(this.zeroMQtyVal);
+            this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
+
+            // this.setGrossAmt();
+            // this.setRate();
+            // this.setTotalAmount();
+            this.manageCalculations();
+        }
+    }
+
+    checkDivisionForPcs() {
         const validDivisionCodes = ['M', 'D', 'W'];
         const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.lineItemService.divisionCode.toUpperCase())
 
@@ -1128,99 +1136,75 @@ export class ItemDetailTable implements OnInit {
                 this.lineItemService.lineItemPcs
             );
         }
-        
 
-      }
+
+    }
+
+
+
+
 
     changeGrossWt(event: any) {
-        if (parseFloat(this.lineItemService.lineItemGrossWt) < this.lineItemForm.controls.fcn_li_gross_wt.value && this.lineItemService.lineItemGrossWt != 0) {
+        const value = event.target.value;
+        if (value != '') {
 
-            this.openDialog(
-                'Warning',
-                'Gross Weight Exceeding Available Gross Weight',
-                true
-            );
-            this.dialogBox.afterClosed().subscribe((data: any) => {
-                if (data == 'OK') {
-                    this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                        this.lineItemService.lineItemGrossWt
+
+            if (this.lineItemService.blockNegativeStock == 'B') {
+                if (this.lineItemService.lineItemGrossWt < value) {
+                    this.openDialog(
+                        'Warning',
+                        'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                        true
                     );
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                this.lineItemService.lineItemGrossWt
+                            );
+                            // this.setNettWeight();
+                            this.manageCalculations();
+                        }
+                    });
+                } else {
+                    //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
                     this.manageCalculations();
                 }
-            });
 
-        }
-        else {
-            this.lineItemForm.controls.fcn_li_gross_wt.setValue(
-                this.comFunc.transformDecimalVB(
-                    this.comFunc.mQtyDecimals,
-                    this.comFunc.emptyToZero(event.target.value)
-                )
-            );
-            console.log('====================================');
-            console.log(
-                this.comFunc.transformDecimalVB(
-                    this.comFunc.mQtyDecimals,
-                    this.comFunc.emptyToZero(event.target.value)
-                )
-            );
-            console.log('====================================');
-            const value = event.target.value;
-            if (value != '' && this.validatePCS == false) {
-                if (this.blockNegativeStock == 'B') {
-                    if (this.lineItemService.lineItemGrossWt < value) {
-                        this.openDialog(
-                            'Warning',
-                            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                            true
-                        );
-                        this.dialogBox.afterClosed().subscribe((data: any) => {
-                            if (data == 'OK') {
-                                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                                    this.lineItemService.lineItemGrossWt
-                                );
-                                // this.setNettWeight();
-                                this.manageCalculations();
-                            }
-                        });
-                    } else {
-                        // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
-                        this.manageCalculations();
-                    }
-                } else if (this.blockNegativeStock == 'W') {
-                    if (this.lineItemService.lineItemGrossWt < value) {
-                        this.openDialog(
-                            'Warning',
-                            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-                            false
-                        );
-                        this.dialogBox.afterClosed().subscribe((data: any) => {
-                            if (data == 'No') {
-                                this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                                    this.lineItemService.lineItemGrossWt
-                                );
-                                // this.setNettWeight();
-                                this.manageCalculations();
-                            } else {
-                                // this.setNettWeight();
-                                this.manageCalculations();
-                            }
-                        });
-                    } else {
-                        this.manageCalculations();
-                    }
+            } else if (this.lineItemService.blockNegativeStock == 'W') {
+                if (this.lineItemService.lineItemGrossWt < value) {
+                    this.openDialog(
+                        'Warning9',
+                        'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                        false
+                    );
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'No') {
+                            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+                                this.lineItemService.lineItemGrossWt
+                            );
+                            // this.setNettWeight();
+                            this.manageCalculations();
+
+                        } else {
+                            // this.setNettWeight();
+                            this.manageCalculations();
+                        }
+                    });
                 } else {
-                    // blockNegativeStock = 'A'
-                    // this.setNettWeight();
                     this.manageCalculations();
                 }
             } else {
+                // blockNegativeStock = 'A'
                 // this.setNettWeight();
                 this.manageCalculations();
             }
+        } else {
+            // this.setNettWeight();
+            this.manageCalculations();
         }
-
     }
+
+
 
     getExchangeNwtWt(event: any) {
         const value = event.target.value;
@@ -1237,7 +1221,7 @@ export class ItemDetailTable implements OnInit {
         } else {
             // focus
             // this.setFocusBasedExchangeStone();
-            this.openDialog('Warning', this.comFunc.getMsgByID('MSG1303'), true);
+            this.openDialog('Warning3', this.comFunc.getMsgByID('MSG1303'), true);
         }
     }
 
@@ -1299,136 +1283,132 @@ export class ItemDetailTable implements OnInit {
 
         const karatComp22 = this.comFunc.allbranchMaster?.KARATCOMPANY22;
         const minBranchProfitPercentMetal = this.comFunc.allbranchMaster?.MINBRANCHPROFITPERCENTMETAL;
-    
+
         const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
         const value = event.target.value;
         if (event.target.value != '') {
-    
-          if (this.divisionMS == 'M') {
-    
-            let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
-            let dblStockFcCost: any;
-            let karatCode = this.newLineItem.KARAT_CODE;
-    
-    
-            if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
-    
-              this.rateFunc(value);
-            }
-            else {
-              // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
-              // Rate Cannot be Less Than Cost
-              this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                if (data == 'OK') {
-                  this.lineItemForm.controls.fcn_li_rate.setValue(
-                    // ''
-                    preVal
-                    // this.comFunc.transformDecimalVB(
-                    //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                    //   this.zeroAmtVal
-                    // )
-                  );
-                  this.renderer.selectRootElement('#fcn_li_rate').focus();
-                }
-              });
-            }
-          }
-          let checkStockCostVal =
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
-    
-          if (this.divisionMS == 'S') {
-            if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-              this.rateFunc(value);
-            }
-            else {
-              // Rate Cannot be Less Than Cost
-              this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
-              this.dialogBox.afterClosed().subscribe((data: any) => {
-                if (data == 'OK') {
-                  this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                    this.comFunc.transformDecimalVB(
-                      this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                      preVal
-                    )
-                  );
-                }
-              });
-            }
-          }
-    
-    
-    
-        } else {
-          this.renderer.selectRootElement('#fcn_li_rate').focus();
-          this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
-          this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
-          // this.setGrossAmt();
-          this.manageCalculations();
-        }
-      }
 
-      async rateFunc(value: any) {
+            if (this.divisionMS == 'M') {
+
+                let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
+                let dblStockFcCost: any;
+                let karatCode = this.newLineItem.KARAT_CODE;
+
+
+                if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+
+                    this.rateFunc(value);
+                }
+                else {
+                    // Rate Cannot be Less Than Cost
+                    this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_rate.setValue(
+                                // ''
+                                preVal
+                                // this.comFunc.transformDecimalVB(
+                                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                //   this.zeroAmtVal
+                                // )
+                            );
+                            this.renderer.selectRootElement('#fcn_li_rate').focus();
+                        }
+                    });
+                }
+            }
+            let checkStockCostVal =
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
+
+            if (this.divisionMS == 'S') {
+                if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+                    console.log(this.lineItemModalForSalesReturn);
+                    console.log(this.newLineItem.STOCK_COST)
+                    this.rateFunc(value);
+                }
+                else {
+                    // Rate Cannot be Less Than Cost
+                    this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                            this.lineItemForm.controls.fcn_li_net_amount.setValue(
+                                this.comFunc.transformDecimalVB(
+                                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                                    preVal
+                                )
+                            );
+                        }
+                    });
+                }
+            }
+
+
+
+        } else {
+            this.renderer.selectRootElement('#fcn_li_rate').focus();
+            this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
+            this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
+            // this.setGrossAmt();
+            this.manageCalculations();
+        }
+    }
+
+    async rateFunc(value: any) {
         let isAuth: any = false;
         const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
-    
-        // if(this.userwiseDiscount)
-        // alert('rateFunc ');
-        // isAuth = await this.openAuthModal();
-        // alert(`validated ${isAuth}`);
-    
-        if (this.blockMinimumPrice == 'B') {
-          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-            if (this.userwiseDiscount) {
-            
-              this.rateFuncDetail('B', value);
-           
+
+        if (this.lineItemService.blockMinimumPrice == 'B') {
+            if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
+                if (this.userwiseDiscount) {
+
+                    this.rateFuncDetail('B', value);
+
+                } else {
+                    this.rateFuncDetail('B', value);
+                }
             } else {
-              this.rateFuncDetail('B', value);
+                this.manageCalculations();
             }
-          } else {
-            this.manageCalculations();
-          }
         }
-        else if (this.blockMinimumPrice == 'W') {
-          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-            if (this.userwiseDiscount) {
+        else if (this.lineItemService.blockMinimumPrice == 'W') {
+            if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
+                if (this.userwiseDiscount) {
+                    //   isAuth = await this.openAuthModal();
+                    //   if (isAuth) {
+                    //     this.rateFuncDetail('W', value);
+                    //   } else {
+
+                    this.lineItemForm.controls.fcn_li_rate.setValue(
+                        preVal
+                    );
+                    this.manageCalculations();
+                    //   }
+                } else {
+                    this.rateFuncDetail('W', value);
+                }
+            }
+            else {
+                this.manageCalculations();
+            }
+        } else {
             //   isAuth = await this.openAuthModal();
             //   if (isAuth) {
-            //     this.rateFuncDetail('W', value);
+            //     this.manageCalculations();
             //   } else {
-                
-                this.lineItemForm.controls.fcn_li_rate.setValue(
-                  preVal
-                );
-                this.manageCalculations();
-            //   }
-            } else {
-              this.rateFuncDetail('W', value);
-            }
-          }
-          else {
-            this.manageCalculations();
-          }
-        } else {
-        //   isAuth = await this.openAuthModal();
-        //   if (isAuth) {
-        //     this.manageCalculations();
-        //   } else {
             this.lineItemForm.controls.fcn_li_rate.setValue(
-              preVal
+                preVal
             );
             this.manageCalculations();
-        //   }
-    
+            //   }
+
         }
-      }
-    
+    }
+
     //   openAuthModal() {
     //     this.authForm.reset();
     //     return new Promise((resolve) => {
-    
+
     //       this.modalReferenceUserAuth = this.modalService.open(
     //         this.userAuthModal,
     //         {
@@ -1438,7 +1418,7 @@ export class ItemDetailTable implements OnInit {
     //           windowClass: "modal-full-width",
     //         }
     //       );
-    
+
     //       this.modalReferenceUserAuth.result.then((result) => {
     //         if (result) {
     //           console.log("Result :", result);
@@ -1450,55 +1430,56 @@ export class ItemDetailTable implements OnInit {
     //         (reason) => {
     //           console.log(`Dismissed ${reason}`);
     //           resolve(false);
-    
+
     //         }
     //       );
     //     });
-    
-    
+
+
     //   }
 
 
-      rateFuncDetail(bOrW: String, value: any) {
+    rateFuncDetail(bOrW: String, value: any) {
         const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
-    
+
+        const makingAmount = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_total_amount'));
+
         console.log('rateFuncDetail value', value, 'fcn_li_rate', preVal);
-    
-        // alert('called rateFuncDetail')
-    
-    
+
+
+
         this.openDialog(
-          'Warning',
-          `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
-          }`,
-          // 'The rate is below to the minimum price, Do you want to Continue?','
-          bOrW == 'B' ? true : false
+            'Warning5',
+            `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.lineItemService.blockMinimumPriceValue
+            }`,
+            // 'The rate is below to the minimum price, Do you want to Continue?','
+            bOrW == 'B' ? true : false
         );
         this.dialogBox.afterClosed().subscribe((data: any) => {
-          if (data == 'OK') {
-            // this.lineItemForm.controls.fcn_li_rate.setValue(
-            //   this.blockMinimumPriceValue
-            // );
-            this.lineItemForm.controls.fcn_li_rate.setValue(
-              // this.zeroAmtVal
-              preVal
-            );
-            this.manageCalculations();
-          }
-          else if (data == 'No') {
-            this.lineItemForm.controls.fcn_li_rate.setValue(
-              // this.zeroAmtVal
-              preVal
-    
-            );
-            this.manageCalculations();
-    
-          } else {
-            this.manageCalculations();
-          }
+            if (data == 'OK') {
+                // this.lineItemForm.controls.fcn_li_rate.setValue(
+                //   this.blockMinimumPriceValue
+                // );
+                this.lineItemForm.controls.fcn_li_rate.setValue(
+                    // this.zeroAmtVal
+                    preVal
+                );
+                this.manageCalculations({ totalAmt: makingAmount });
+            }
+            else if (data == 'No') {
+                this.lineItemForm.controls.fcn_li_rate.setValue(
+                    // this.zeroAmtVal
+                    preVal
+
+                );
+                this.manageCalculations();
+
+            } else {
+                this.manageCalculations();
+            }
         });
-      }
-    
+    }
+
     changeTotalAmt(event: any, nettAmt = null) {
         const totalAmtVal: any = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
         const val = this.comFunc.transformDecimalVB(
@@ -1511,7 +1492,7 @@ export class ItemDetailTable implements OnInit {
             );
             // this.lineItemForm.controls.fcn_li_rate.setValue(value);
             // this.manageCalculations();
-            // alert(value);
+
             const lsTotalAmt: any = localStorage.getItem('fcn_li_total_amount');
             this.validateMinSalePriceByTotalAmt(
                 value,
@@ -1539,19 +1520,17 @@ export class ItemDetailTable implements OnInit {
 
         const nonMetalPreRateVal = localStorage.getItem('fcn_li_rate');
         const nonMetalPreTotalVal = localStorage.getItem('fcn_li_total_amount');
-        // alert(this.lineItemForm.value.fcn_li_net_amount)
         if (value != '') {
 
-            // alert('validateMinSalePriceByTotalAmt parseFloat(value)'+parseFloat(value)+'STOCK_COST' +this.newLineItem.STOCK_COST );
             if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
 
-                if (this.blockMinimumPrice == 'B') {
-                    if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                if (this.lineItemService.blockMinimumPrice == 'B') {
+                    if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
                         this.openDialog(
-                            'Warning',
+                            'Warning6',
                             // 'The rate is below to the minimum price, Do you want to Continue?',
                             // this.comFunc.getMsgByID('MSG1731'),
-                            `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                            `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.lineItemService.blockMinimumPriceValue
                             } `,
 
                             true
@@ -1562,7 +1541,7 @@ export class ItemDetailTable implements OnInit {
                                 //   0
                                 // );
                                 this.lineItemForm.controls.fcn_li_total_amount.setValue(lsTotalAmt);
-                                this.manageCalculations();
+                                this.manageCalculations({ totalAmt: nonMetalPreTotalVal });
                             }
                         });
                     } else {
@@ -1570,12 +1549,12 @@ export class ItemDetailTable implements OnInit {
                         this.manageCalculations({ totalAmt: totalAmt, nettAmt });
                     }
                 }
-                else if (this.blockMinimumPrice == 'W') {
-                    if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+                else if (this.lineItemService.blockMinimumPrice == 'W') {
+                    if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
                         this.openDialog(
-                            'Warning',
+                            'Warning7',
                             // 'The rate is below to the minimum price, Do you want to Continue?',
-                            `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+                            `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.lineItemService.blockMinimumPriceValue
                             }`,
                             false
                         );
@@ -1586,7 +1565,6 @@ export class ItemDetailTable implements OnInit {
                                     lsTotalAmt
                                 );
                                 const lsNettAmt = localStorage.getItem('fcn_li_net_amount')
-                                // alert('lsNettAmt'+lsNettAmt);
                                 this.manageCalculations();
                                 // this.manageCalculations({ nettAmt: lsNettAmt });
                             } else {
@@ -1607,13 +1585,11 @@ export class ItemDetailTable implements OnInit {
                 }
 
             } else {
-                // alert('STOCK_COST' + this.newLineItem.STOCK_COST + 'rate' + value);
                 // Rate Cannot be Less Than Cost
-                this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                this.openDialog('Warning8', this.comFunc.getMsgByID('MSG1721'), true);
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
                         if (this.divisionMS == 'M') {
-                            // alert('preRateVal '+ preRateVal);
                             // this.lineItemForm.controls.fcn_li_rate.setValue(
                             // ''
                             // this.comFunc.transformDecimalVB(
@@ -1625,7 +1601,6 @@ export class ItemDetailTable implements OnInit {
                             this.lineItemForm.controls.fcn_li_rate.setValue(
                                 preRateVal
                             );
-                            // alert('preTotalVal '+ preTotalVal)
                             this.lineItemForm.controls.fcn_li_total_amount.setValue(
                                 this.comFunc.emptyToZero(preTotalVal)
                             );
@@ -1635,8 +1610,7 @@ export class ItemDetailTable implements OnInit {
                                     preNetAmtVal
                                 )
                             );
-                            // alert('preTotalVal '+preTotalVal)
-                            // alert('preNetAmtVal '+preNetAmtVal)
+
                             this.manageCalculations({ totalAmt: preTotalVal });
                             // this.manageCalculations();
                             this.renderer.selectRootElement('#fcn_li_net_amount').focus();
@@ -1665,87 +1639,79 @@ export class ItemDetailTable implements OnInit {
 
     changeDisAmount(event: any, nettAmt: any = null) {
         const preDisAmtVal =
-          this.comFunc.decimalQuantityFormat(
-            this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
-            'AMOUNT')
-    
+            this.comFunc.decimalQuantityFormat(
+                this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
+                'AMOUNT')
+
         if (event.target.value != '') {
-          const value =
-            // (
-            //   (this.lineItemForm.value.fcn_li_discount_amount /
-            //     this.lineItemForm.value.fcn_li_total_amount) *
-            //   100
-            // ).toFixed(2);
-            this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              (this.lineItemForm.value.fcn_li_discount_amount /
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)) *
-              100
-            );
-    
-          this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
-          console.log('dis amount', value);
-          // alert('dis per' + value.toString());
-          // alert('nettAmt '+nettAmt);
-          this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
-    
-          // this.validateMinSalePrice();
-          // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
-          // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2),  parseFloat(lsTotalAmt).toFixed(2));
+            const value =
+                // (
+                //   (this.lineItemForm.value.fcn_li_discount_amount /
+                //     this.lineItemForm.value.fcn_li_total_amount) *
+                //   100
+                // ).toFixed(2);
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    (this.lineItemForm.value.fcn_li_discount_amount /
+                        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)) *
+                    100
+                );
+
+            this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
+            console.log('dis amount', value);
+
+            this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
+
+            // this.validateMinSalePrice();
+            // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
         } else {
-          this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
-          this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
-          this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
-    
-          // this.setGrossAmt();
-          this.manageCalculations();
+            this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
+            this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
+            this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
+
+            // this.setGrossAmt();
+            this.manageCalculations();
         }
-      }
+    }
 
     changeDisPer(event: any, discountAmt = null, nettAmt = null) {
-        // alert(event.target.value);
-        // alert('disAmt '+discountAmt );
-    
+
+
         if (event.target.value != '') {
-          let disAmt;
-          if (discountAmt != null && nettAmt == null) {
-            disAmt = discountAmt;
-            this.disFunc(disAmt);
-          }
-    
-          if (discountAmt == null && nettAmt == null) {
-            const value = this.getPercentage(
-              this.lineItemForm.value.fcn_li_discount_percentage,
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
-            );
-            disAmt = this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              value
-            );
-            this.disFunc(disAmt);
-    
-          } else {
-            disAmt = this.lineItemForm.value.fcn_li_discount_amount;
-            // alert('********disAmt******' + disAmt);
-            // alert('********grossAmt******' + this.lineItemForm.value.fcn_li_gross_amount);
-            // alert('********nettAmt****** ' + nettAmt + 'type ' + typeof nettAmt);
-            this.manageCalculations({ disAmt: disAmt, nettAmt });
-          }
-    
-          // this.setGrossAmt();
-          // alert('pre nettAmt ' + this.lineItemForm.value.fcn_li_net_amount)
-          // alert('nettAmt ' + parseFloat(disAmt) + parseFloat(this.lineItemForm.value.fcn_li_gross_amount))
-    
-    
-          // need to enable
-          // this.validateMinSalePrice();
-    
+            let disAmt;
+            if (discountAmt != null && nettAmt == null) {
+                disAmt = discountAmt;
+                this.disFunc(disAmt);
+            }
+
+            if (discountAmt == null && nettAmt == null) {
+                const value = this.getPercentage(
+                    this.lineItemForm.value.fcn_li_discount_percentage,
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+                );
+                disAmt = this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    value
+                );
+                this.disFunc(disAmt);
+
+            } else {
+                disAmt = this.lineItemForm.value.fcn_li_discount_amount;
+
+                this.manageCalculations({ disAmt: disAmt, nettAmt });
+            }
+
+            // this.setGrossAmt();
+
+            // need to enable
+            // this.validateMinSalePrice();
+
         } else {
-          this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
-          // this.setGrossAmt();
-          this.manageCalculations();
+            this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
+            // this.setGrossAmt();
+            this.manageCalculations();
         }
-      }
+    }
 
 
 
@@ -1792,7 +1758,7 @@ export class ItemDetailTable implements OnInit {
     validateMinSalePrice() {
         const grossAmt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
         const grossWt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
-        const preDisAmtVal = this.comFunc.decimalQuantityFormat(
+        let preDisAmtVal = this.comFunc.decimalQuantityFormat(
             this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
             'AMOUNT')
         const preDisPerVal =
@@ -1803,7 +1769,6 @@ export class ItemDetailTable implements OnInit {
 
         const value = (grossAmt / grossWt).toString();
         // const value = (grossAmt / grossWt).toFixed(2);
-        // alert(this.blockMinimumPriceValue + '_' + value);
         console.log('==============validateMinSalePrice======================');
         console.log(value);
         console.log('====================================');
@@ -1815,7 +1780,6 @@ export class ItemDetailTable implements OnInit {
             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
-        // alert('checkStockCostVal ' + checkStockCostVal + 'STOCK_COST ' + this.newLineItem.STOCK_COST);
         if (this.divisionMS == 'S') {
             if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
                 this.manageCalculations();
@@ -1873,10 +1837,9 @@ export class ItemDetailTable implements OnInit {
             }
             else {
                 // Rate Cannot be Less Than Cost
-                this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                this.openDialog('Warning9', this.comFunc.getMsgByID('MSG1721'), true);
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
-                        alert('dis amt ' + preDisAmtVal + ' _ ' + preDisPerVal)
                         this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
                             preDisPerVal || this.zeroAmtVal
                             // this.comFunc.transformDecimalVB(
@@ -1884,6 +1847,8 @@ export class ItemDetailTable implements OnInit {
 
                             // )
                         );
+                        if (parseFloat(preDisPerVal) == 0)
+                            preDisAmtVal = 0;
                         this.lineItemForm.controls.fcn_li_discount_amount.setValue(
                             preDisAmtVal || this.zeroAmtVal
                         );
@@ -1901,7 +1866,6 @@ export class ItemDetailTable implements OnInit {
         console.log('====================================');
         console.log(event.target);
         console.log('====================================');
-        // alert(value + '_' + this.lineItemForm.value.fcn_li_gross_wt);
         if (value != '') {
             if (
                 parseFloat(value) > parseFloat(this.lineItemForm.value.fcn_li_gross_wt)
@@ -2003,7 +1967,6 @@ export class ItemDetailTable implements OnInit {
                     value
                 );
 
-                // alert(`grossAmt ${grossAmt} value ${value} nettAmt ${nettAmt} `);
 
                 let checkStockCostVal =
                     this.comFunc.emptyToZero(nettAmt) /
@@ -2019,7 +1982,7 @@ export class ItemDetailTable implements OnInit {
 
                 } else {
                     // Rate Cannot be Less Than Cost
-                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.openDialog('Warning11', this.comFunc.getMsgByID('MSG1721'), true);
                     this.dialogBox.afterClosed().subscribe((data: any) => {
                         if (data == 'OK') {
                             this.lineItemForm.controls.fcn_li_gross_amount.setValue(
@@ -2118,7 +2081,6 @@ export class ItemDetailTable implements OnInit {
             let checkStockCostVal =
                 netAmtVal /
                 this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
-            // alert('checkStockCostVal '+ checkStockCostVal +' STOCK_COST' + parseFloat(this.newLineItem.STOCK_COST));
 
             if (this.divisionMS == 'M') {
 
@@ -2130,7 +2092,7 @@ export class ItemDetailTable implements OnInit {
                 ) {
                     this.netAmtFunc(event);
                 } else {
-                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
+                    this.openDialog('Warning12', this.comFunc.getMsgByID('MSG1914'), true);
                     this.dialogBox.afterClosed().subscribe((data: any) => {
                         if (data == 'OK') {
                             this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -2152,7 +2114,7 @@ export class ItemDetailTable implements OnInit {
                     this.netAmtFunc(event);
                 } else {
                     // Rate Cannot be Less Than Cost
-                    this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+                    this.openDialog('Warning13', this.comFunc.getMsgByID('MSG1721'), true);
                     this.dialogBox.afterClosed().subscribe((data: any) => {
                         if (data == 'OK') {
                             this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -2168,9 +2130,7 @@ export class ItemDetailTable implements OnInit {
 
             // this.lineItemForm.controls.fcn_li_rate.setValue(value);
             // this.manageCalculations();
-            // alert(value);
             // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
-            // this.validateMinSalePriceByTotalAmt(value, parseFloat(event.target.value).toFixed(2), parseFloat(lsTotalAmt).toFixed(2));
         } else {
             this.lineItemForm.controls['fcn_li_total_amount'].setValue(
                 this.zeroAmtVal
@@ -2225,14 +2185,12 @@ export class ItemDetailTable implements OnInit {
         //       this.lineItemForm.value.fcn_ad_metal_amount || 0
         //     ))
         // ).toFixed(2);
-        // alert('totalAmt ' + totalAmt);
         console.log(grossAmt, totalAmt, taxAmt);
         let discountAmt = this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS,
             parseFloat(totalAmt) - parseFloat(grossAmt)
         );
 
-        // alert(discountAmt);
 
         // this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
         // this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
@@ -2242,7 +2200,6 @@ export class ItemDetailTable implements OnInit {
         this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
 
         console.log('dis amount', discountAmt);
-        // alert(`taxamt ${taxAmt} grossamt ${grossAmt} totaamt ${totalAmt} disAmt ${discountAmt}`);
 
         if (this.divisionMS == 'M') {
             this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
@@ -2285,14 +2242,11 @@ export class ItemDetailTable implements OnInit {
                 this.updateBtn = false;
 
                 if (this.newLineItem.STOCK_CODE == '') {
-                    // alert('Invalid Stock Code');
                     // this.snackBar.open('Invalid Stock Code', 'OK');
                     this.openDialog('Warning', 'Invalid Stock Code', true);
                 } else {
                     let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
-                    // alert(JSON.stringify(itemsLengths));
 
-                    // alert(itemsLengths);
                     if (
                         this.orderedItemEditId == '' ||
                         this.orderedItemEditId == undefined ||
@@ -2444,50 +2398,50 @@ export class ItemDetailTable implements OnInit {
         this.snackBar.open('Loading...');
 
         let API = 'RetailSalesStockValidation?strStockCode=' + value.STOCK_CODE
-          +
-          '&strBranchCode=' + this.strBranchcode +
-          '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
-          '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+            +
+            '&strBranchCode=' + this.strBranchcode +
+            '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
+            '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
         await
-          this.suntechApi.getDynamicAPI(API)
-            .subscribe(async (resp: any) => {
-              this.snackBar.dismiss();
-              console.log('===========edit====getPOSStockCodeValidation=====================');
-              console.log(resp);
-              console.log('====================================');
-              if (resp != null) {
-                if (resp.resultStatus.RESULT_TYPE == 'Success') {
-                  let stockInfos = resp.stockInfo;
-                  console.log(stockInfos);
+            this.suntechApi.getDynamicAPI(API)
+                .subscribe(async (resp: any) => {
+                    this.snackBar.dismiss();
+                    console.log('===========edit====getPOSStockCodeValidation=====================');
+                    console.log(resp);
+                    console.log('====================================');
+                    if (resp != null) {
+                        if (resp.resultStatus.RESULT_TYPE == 'Success') {
+                            let stockInfos = resp.stockInfo;
+                            console.log(stockInfos);
 
-                  this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
-                  this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
-                  this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
-                  this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
-                  this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
-                //   this.disableSaveBtn = false;
-                  this.validatePCS = stockInfos.VALIDATE_PCS;
-                  this.managePcsGrossWt();
+                            this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
+                            this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
+                            this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
+                            this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
+                            this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
+                            //   this.disableSaveBtn = false;
+                            this.validatePCS = stockInfos.VALIDATE_PCS;
+                            this.managePcsGrossWt();
 
-                  this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
-                  this.newLineItem.DIVISION = stockInfos.DIVISION;
-                  this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
-                  this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
+                            this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
+                            this.newLineItem.DIVISION = stockInfos.DIVISION;
+                            this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
+                            this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
 
-                  this.lineItemService.isStoneIncluded = this.comFunc.stringToBoolean(stockInfos.STONE);
-                  console.log(this.lineItemService.isStoneIncluded)
-                  if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
+                            this.lineItemService.isStoneIncluded = this.comFunc.stringToBoolean(stockInfos.STONE);
+                            console.log(this.lineItemService.isStoneIncluded)
+                            if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
 
-                    if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
-                      this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-                    
-                  }
+                                if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
+                                    this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
 
-                }
-              }
+                            }
 
-            })
-        
+                        }
+                    }
+
+                })
+
 
 
         this.newLineItem.STOCK_CODE = value.STOCK_CODE;
@@ -2557,8 +2511,12 @@ export class ItemDetailTable implements OnInit {
         this.lineItemForm.controls.fcn_li_purity.setValue(
             this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
         );
-        this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
-        // this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
+
+        this.lineItemForm.controls.fcn_li_pure_wt.setValue(
+            this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS, value.PUREWT)
+        );
+
 
         this.lineItemForm.controls.fcn_ad_amount.setValue(
             // value.TOTALWITHVATFC
@@ -3710,7 +3668,6 @@ export class ItemDetailTable implements OnInit {
             total_dis_per = total_dis_per + parseFloat(item.DISCOUNT);
             total_tax_amt = total_tax_amt + parseFloat(item.VAT_AMOUNTFC);
         });
-        // alert(total_pur_diff);
 
         this.invReturnSalesTotalPcs = total_pcs;
         this.invReturnSalesTotalWeight = total_weight;

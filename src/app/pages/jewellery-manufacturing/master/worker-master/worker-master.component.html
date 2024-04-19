@@ -142,8 +142,8 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput MetalDecimalInput
-                                    maxlength="12" class="text-right"
-                                    [readonly]="viewMode|| codeEnable" 
+                                     class="text-right"
+                                    [readonly]="viewMode" [max]="13"
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -152,8 +152,8 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" class="text-right"
-                                    maxlength="12" matInput MetalDecimalInput
-                                    [readonly]="viewMode|| codeEnable" 
+                                     matInput MetalDecimalInput
+                                    [readonly]="viewMode" [max]="13"
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -163,9 +163,9 @@
                             Target Weight(GMS) :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput maxlength="12"
-                                [readonly]="viewMode|| codeEnable"   class="text-right"
-                                    MetalDecimalInput
+                                <input type="text" matInput 
+                                [readonly]="viewMode"   class="text-right"
+                                    MetalDecimalInput [max]="13"
                                     formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>

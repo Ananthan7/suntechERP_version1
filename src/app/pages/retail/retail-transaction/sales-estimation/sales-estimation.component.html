@@ -275,6 +275,21 @@
     <div class="col-xl-12">
       <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
         <div class="row" style="background-color: #efefef; margin-bottom: 10px">
+          <div class="col-md-1 d-flex justify-content-center align-items-center">
+            <div>
+              <button
+                type="button"
+                color="primary"
+                mat-flat-button
+                (click)="open(mymodal,false,null,false,false)"
+                [disabled]="viewOnly"
+              >
+                New
+              </button>
+            </div>
+          </div>
+
+
           <div class="col-md-2 m-t-10">
             <mat-form-field>
               <mat-label>Voucher</mat-label>
@@ -324,7 +339,7 @@
               </div>
               <!-- <div style="font-size: 22px; font-weight: 500">AED {{this.lineItemForm.value.fcn_li_total_amount}}</div> -->
               <div style="font-size: 22px; font-weight: 500">
-                AED {{ netTotal | number : "1.2" }}
+                {{comFunc.compCurrency}} {{ netTotal | number : "1.2" }}
               </div>
             </div>
           </div>
@@ -496,10 +511,10 @@
                               [format]="weightDecimalFormat" [width]="100" [allowEditing]="false">
                             </dxi-column>
                             <dxi-column dataField="total_amount" caption="Mkg amount" alignment="right"
-                              format="currency" [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false"
+                            [allowEditing]="false"
                               precision="2"></dxi-column>
                             <dxi-column dataField="net_amount" caption="Total amount" alignment="right"
-                              format="currency" [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false"
+                            [format]="amountDecimalFormat" [allowEditing]="false"
                               precision="2">
                             </dxi-column>
 
@@ -510,15 +525,15 @@
                               <dxi-total-item column="stock_code" summaryType="min" [customizeText]="customizeDate">
                               </dxi-total-item>
                               <dxi-total-item column="weight" summaryType="sum" caption="Weight"
-                                [valueFormat]="weightDecimalFormat" displayFormat="Wt: {0}">
+                                [valueFormat]="weightDecimalFormat" displayFormat="{0}">
 
                               </dxi-total-item>
                               <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
-                              <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
+                              <dxi-total-item column="total_amount" summaryType="sum" displayFormat="{0}"
                                 type="fixedPoint" precision="2" [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
-                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="AED {0}"
+                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}"
                                 precision="2" [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
 
@@ -571,10 +586,10 @@
                             </dxi-column>
                             <!-- <dxi-column dataField="mkg_amount" alignment="right" format="currency" -->
                             <dxi-column dataField="VAT_AMOUNTFC" alignment="right" format="currency"
-                              caption="Vat Amount" [format]="{ style: 'currency', currency: 'AED' }"
+                              caption="Vat Amount" [format]="amountDecimalFormat"
                               [allowEditing]="false"></dxi-column>
                             <dxi-column dataField="net_amount" alignment="right" format="currency"
-                              caption="Total Amount" [format]="{ style: 'currency', currency: 'AED' }"
+                              caption="Total Amount" [format]="amountDecimalFormat"
                               [allowEditing]="false">
                             </dxi-column>
 
@@ -589,13 +604,13 @@
                               <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
                               <!-- <dxi-total-item column="mkg_amount" summaryType="sum" displayFormat="AED {0}" -->
-                              <dxi-total-item column="VAT_AMOUNTFC" summaryType="sum" displayFormat="AED {0}"
-                                [valueFormat]="{ currency: 'AED' }">
+                              <dxi-total-item column="VAT_AMOUNTFC" summaryType="sum" displayFormat="{0}"
+                              [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
                               <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}" -->
                               <!-- type: 'fixedPoint', precision: 2, -->
-                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="AED {0}"
-                                type="fixedPoint" precision="2" [valueFormat]="{ currency: 'AED' }">
+                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}"
+                                type="fixedPoint" precision="2"  [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
                               <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxo-summary>
@@ -603,7 +618,7 @@
 
                           <div>
 
-                            <button type="submit" (click)="open(adjust_sale_return_modal)" class="btn btn-secondary"
+                            <button type="submit" (click)="openSalesReturnForm(adjust_sale_return_modal)" class="btn btn-secondary"
                               [disabled]="this.ordered_items.length > 0 && !this.viewOnly ? false : true" 
                               style="margin: 10px;
                               width: 20px !important;
@@ -641,8 +656,8 @@
                             <dxi-column dataField="weight" caption="Weight" [width]="100" [allowEditing]="false">
                             </dxi-column>
                             <dxi-column dataField="pcs" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="net_amount" alignment="right" format="currency"
-                              [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false">
+                            <dxi-column dataField="net_amount" alignment="right"
+                            [format]="amountDecimalFormat" [allowEditing]="false">
                             </dxi-column>
 
                             <dxo-summary>
@@ -655,8 +670,8 @@
                               </dxi-total-item>
                               <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
-                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="AED {0}"
-                                [valueFormat]="{ currency: 'AED' }">
+                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}"
+                              [valueFormat]="gridAmountDecimalFormat">
                                 <!-- [valueFormat]="{ currency: 'EUR' }" -->
                               </dxi-total-item>
                             </dxo-summary>

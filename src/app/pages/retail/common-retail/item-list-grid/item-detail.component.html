@@ -59,8 +59,7 @@
                     (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                     formControlName="fcn_li_pcs" (change)="changeRate($event)" readonly="{{ viewOnly }}"
                     RemoveLeadingZeros /> -->
-                    <input class="st_txt_right" type="text"  [maxLength]="14"
-                       matInput id="fcn_li_pcs"
+                    <input class="st_txt_right" type="text" [maxLength]="14" matInput id="fcn_li_pcs"
                       formControlName="fcn_li_pcs" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
 
                     <mat-error *ngIf="
@@ -174,7 +173,8 @@
                     <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_ad_stone_amount" matInput
                       formControlName="fcn_ad_stone_amount" value="{{ li_stone_amount_val }}"
-                      (change)="changeStoneAmt($event)" [readonly]="!lineItemService.isStoneIncluded" AmountDecimalInput />
+                      (change)="changeStoneAmt($event)" [readonly]="!lineItemService.isStoneIncluded"
+                      AmountDecimalInput />
                   </mat-form-field>
                 </div>
 
@@ -186,10 +186,9 @@
                     <mat-label>{{
                       divisionMS == "M" ? "Making Rate" : "Rate"
                       }}</mat-label>
-                    <input class="st_txt_right" [max]="14" type="text"
-                      matInput id="fcn_li_rate" formControlName="fcn_li_rate" (change)="changeRate($event)"
-                      readonly="{{ viewOnly }}" (focus)="setValToLocalStorage($event, 'fcn_li_rate')"
-                      AmountDecimalInput />
+                    <input class="st_txt_right" [max]="14" type="text" matInput id="fcn_li_rate"
+                      formControlName="fcn_li_rate" (change)="changeRate($event)" readonly="{{ viewOnly }}"
+                      (focus)="setValToLocalStorage($event, 'fcn_li_rate')" AmountDecimalInput />
 
                     <!-- 
                     <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
@@ -218,8 +217,7 @@
                       {{
                       divisionMS == "M" ? "Making Amount" : "Amount"
                       }}</mat-label>
-                    <input class="st_txt_right" type="text"  [max]="14"
-                       id="fcn_li_total_amount" matInput
+                    <input class="st_txt_right" type="text" [max]="14" id="fcn_li_total_amount" matInput
                       formControlName="fcn_li_total_amount" (change)="changeTotalAmt($event)" id="fcn_li_total_amount"
                       readonly="{{ viewOnly }}" AmountDecimalInput />
 
@@ -255,11 +253,11 @@
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                       formControlName="fcn_li_discount_percentage" (change)="changeDisPer($event)"
                       id="fcn_li_discount_percentage" (focus)="
-                      setValToLocalStorage(
-                        $event,
-                        'fcn_li_discount_percentage'
-                      )
-                    " [readonly]="viewOnly" AmountDecimalInput />
+                          setValToLocalStorage(
+                            $event,
+                            'fcn_li_discount_percentage'
+                          )
+                        " [readonly]="viewOnly" AmountDecimalInput />
                     <!-- <input class="st_txt_right" type="number" [min]="0" [max]="100"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                       formControlName="fcn_li_discount_percentage" (change)="changeDisPer($event)"
@@ -349,9 +347,11 @@
                 <div class="col-md-3" *ngIf="taxType == 1">
                   <mat-form-field>
                     <mat-label>Tax Amount</mat-label>
-                    <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+
+
+                    <input class="st_txt_right" [min]="0" [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_tax_amount"
-                      id="fcn_li_tax_amount" readonly />
+                      id="fcn_li_tax_amount" AmountDecimalInput readonly />
                   </mat-form-field>
                 </div>
                 <div class="col-md-3" *ngIf="taxType == 2">
