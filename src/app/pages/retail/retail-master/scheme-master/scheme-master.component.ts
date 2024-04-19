@@ -173,6 +173,7 @@ export class SchemeMasterComponent implements OnInit {
   }
 
   checkIfSchemeCodeExists() {
+    if (this.content?.FLAG == 'VIEW' || this.content?.FLAG == 'EDIT') return
     let API = 'SchemeMaster/CheckIfSchemeCodeExists/' + this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
@@ -336,7 +337,7 @@ export class SchemeMasterComponent implements OnInit {
     return {
       "MID": this.content?.MID || 0,
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
-      "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
+      "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code.toUpperCase()),
       "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
       "SCHEME_UNIT": 1,
       "SCHEME_BONUS": this.comService.emptyToZero(this.schemeMasterForm.value.bonusInstallment),

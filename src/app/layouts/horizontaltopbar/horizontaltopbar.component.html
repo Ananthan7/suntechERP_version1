@@ -195,9 +195,9 @@
     <!-- navbar section starts -->
     <div class="topnav">
         <div class="container-fluid">
-            <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+            <nav class="navbar navbar-light navbar-expand-lg topnav-menu ">
 
-                <div class="collapse navbar-collapse" id="topnav-menu-content">
+                <div class="collapse navbar-collapse d-flex justify-content-between" id="topnav-menu-content">
                     <ul class="navbar-nav">
                         <ng-container *ngFor="let item of menuItems">
                             <li class="nav-item dropdown">
@@ -294,6 +294,9 @@
                             </li>
                         </ng-container>
                     </ul>
+                    <div style="color: white !important;">
+                        {{this.userBranch}} - {{BRANCH_DESCRIPTION}}
+                    </div>
                 </div>
             </nav>
         </div>

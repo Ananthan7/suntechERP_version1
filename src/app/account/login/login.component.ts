@@ -53,6 +53,8 @@ export class LoginComponent implements OnInit {
     this.changeRtlLayout(isLayoutRTL);
     let map = new Map();
     this.dataForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
       branch: new FormControl('', Validators.required),
       year: new FormControl('', Validators.required),
     });
@@ -130,6 +132,25 @@ export class LoginComponent implements OnInit {
       });
       //to unsubscribe
       this.subscriptions.push(sub)
+    } else {
+      this.dataForm.controls.password.setValue('')
+      this.dataForm.controls.branch.setValue('')
+      this.dataForm.controls.year.setValue('')
+      this.comService.formControlSetReadOnly('password', true);
+      this.comService.formControlSetReadOnly('branch', true);
+      this.comService.formControlSetReadOnly('year', true);
+    }
+  }
+  checkPasswordChange(event:any){
+    console.log(event.target.value,'event.target.value');
+    
+    if(event.target.value == ''){
+      this.dataForm.controls.username.setValue('')
+      this.dataForm.controls.branch.setValue('')
+      this.dataForm.controls.year.setValue('')
+      this.comService.formControlSetReadOnly('password', true);
+      this.comService.formControlSetReadOnly('branch', true);
+      this.comService.formControlSetReadOnly('year', true);
     }
   }
   // use: to check username and password from API
@@ -145,7 +166,7 @@ export class LoginComponent implements OnInit {
         let API = 'ValidatePassword?strusername=' + this.user_name + '&strPassword=' + password
         let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
           if (resp.status == 'Success') {
-      this.snackBar.open('loading...');
+            this.snackBar.open('loading...');
             let API2 = 'UseBranchNetMaster/' + this.user_name + ''
             let sub2: Subscription = this.dataService.getDynamicAPI(API2).subscribe((resp) => {
               if (resp.status == 'Success') {
@@ -155,7 +176,7 @@ export class LoginComponent implements OnInit {
 
                 this.all_branch = resp.response;
                 var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
-
+                this.dataForm.controls.branch.setValue(data[0]);
                 this.options = data;
                 this.filteredOptions =
                   this.dataForm.controls.branch.valueChanges.pipe(
@@ -186,6 +207,12 @@ export class LoginComponent implements OnInit {
         });
         //to unsubscribe
         this.subscriptions.push(sub)
+      }else{
+        this.dataForm.controls.username.setValue('')
+        this.dataForm.controls.branch.setValue('')
+        this.dataForm.controls.year.setValue('')
+        this.comService.formControlSetReadOnly('branch', true);
+        this.comService.formControlSetReadOnly('year', true);
       }
     } else {
       this.snackBar.open('Enter Valid UserName', '', {
@@ -204,9 +231,17 @@ export class LoginComponent implements OnInit {
     e.target.value = e.target.value.toString().toUpperCase();
     this.dataForm.controls.branch.setValue(e.target.value);
   }
+  isNumeric(event: any) {
+    return this.comService.isNumeric(event)
+  }
   /**USE: branch change function to call financial year API */
   changeBranch(e: any) {
-    if (e.target.value == '') return;
+    if (e.target.value == '') {
+      this.dataForm.controls.year.setValue('')
+      this.comService.formControlSetReadOnly('year', true);
+      this.filteredOptions_year = undefined
+      return;
+    }
     let optionsSelected = this.options.filter((item: any) => item == (e.target.value).toUpperCase())
     if (optionsSelected.length == 0) {
       this.dataForm.controls.branch.setValue('')
@@ -214,7 +249,7 @@ export class LoginComponent implements OnInit {
     }
     let selectedBranch = this.dataForm.value.branch;
     if (selectedBranch != '') {
-      this.snackBar.open('loading...');
+      this.snackBar.open('Validating...');
       let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
       let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp) => {
 
@@ -224,7 +259,7 @@ export class LoginComponent implements OnInit {
 
           this.all_year = resp.response;
           this.options_year = this.all_year.map((item: any) => item.fyearcode);
-
+          this.dataForm.controls.year.setValue(this.options_year[0]);
           this.filteredOptions_year =
             this.dataForm.controls.year.valueChanges.pipe(
               startWith(''),
@@ -242,19 +277,19 @@ export class LoginComponent implements OnInit {
 
   }
   yearSelected: any = ''
-  getYearMonthAPI(){
+  getYearMonthAPI() {
     let API = 'BaseFinanceYear/GetBaseFinancialYear'
     let yr = this.comService.currentDate
     let param = {
       VOCDATE: this.comService.formatYYMMDD(yr)
     }
-    let sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
-    .subscribe((resp: any) => {
-      if (resp.status == "Success") {
-        this.yearSelected = resp.BaseFinancialyear
-        localStorage.setItem('YEAR', this.yearSelected);
-      }
-    });
+    let sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((resp: any) => {
+        if (resp.status == "Success") {
+          this.yearSelected = resp.BaseFinancialyear
+          localStorage.setItem('YEAR', this.yearSelected);
+        }
+      });
     this.subscriptions.push(sub)
   }
   /**USE: sign in with API branchmaster */
@@ -262,7 +297,7 @@ export class LoginComponent implements OnInit {
     let branch = this.dataForm.value.branch;
     let year = this.dataForm.value.year;
 
-    if (branch != '' && this.validateState == 2 && year != '') {
+    if (this.dataForm.valid && this.validateState == 2) {
       let API = 'BranchMaster/' + branch
       let sub: Subscription = this.dataService.getDynamicAPI(API)
         .subscribe((resp: any) => {

@@ -25,6 +25,7 @@
                         <mat-form-field class="example-full-width">
                             <mat-label>Username</mat-label>
                             <input matInput placeholder="Username" value
+                                autocomplete="off" formControlName="username"
                                 (keyup)="changeTextUpperCase($event)"
                                 (focusout)="checkUserName($event)">
                         </mat-form-field>
@@ -32,12 +33,13 @@
                         <mat-form-field class="example-full-width">
                             <mat-label>Password</mat-label>
                             <input id="password"  type="password" matInput
-                                placeholder="Password"
-                                value (focusout)="checkUserNamePassword($event)">
+                                placeholder="Password" autocomplete="off"
+                                formControlName="password"
+                                (focusout)="checkUserNamePassword($event)">
                         </mat-form-field>
                         <mat-form-field class="example-full-width">
                             <mat-label>Branch</mat-label>
-                            <input id="branch" type="text" autocomplete="new-password"
+                            <input id="branch" type="text" autocomplete="off"
                                 matInput
                                 formControlName="branch"
                                 [matAutocomplete]="branch"
@@ -54,7 +56,9 @@
                         </mat-form-field>
                         <mat-form-field class="example-full-width">
                             <mat-label>Year</mat-label>
-                            <input id="year"  matInput type="text" formControlName="year"
+                            <input id="year"  matInput type="text"
+                                autocomplete="off" formControlName="year"
+                                (keypress)="isNumeric($event)"
                                 [matAutocomplete]="year" (focusout)="validateYear($event)">
                             <mat-autocomplete #year="matAutocomplete"
                                 autoActiveFirstOption>
