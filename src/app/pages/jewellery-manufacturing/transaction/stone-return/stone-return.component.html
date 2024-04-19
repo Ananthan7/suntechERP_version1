@@ -43,17 +43,18 @@
             </div>
             <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Entered By :</label>
-              <div class="col-sm-3">
-                <mat-form-field style="width: 100%;">
+              <div class="col-md-8">
+                <mat-form-field style="width: 75%;">
                   <input type="text" matInput formControlName="enterdBy" [readonly]="viewMode"/>
                 </mat-form-field>
-
+                <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
+                </master-search>
               </div>
-              <div class="col-sm-4">
+              <!-- <div class="col-sm-4">
                 <mat-form-field style="width: 140%;">
                   <input type="text" matInput formControlName="enteredByName" [readonly]="viewMode"/>
                 </mat-form-field>
-              </div>
+              </div> -->
 
             </div>
             <!-- <div class="row mb-2">

@@ -519,7 +519,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="netWt" [max]="13"
-                    SixDecimalInput class="text-right" />
+                    MetalDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Chargable Wt
@@ -545,7 +545,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="PUREWT" [max]="13"
-                      CommaSeparatedNumber class="text-right" />
+                    MetalDecimalInput class="text-right" />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Purity Diff
@@ -702,12 +702,12 @@
                 <div class="row mb-1">
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput class="text-right" />
+                      <input type="text" matInput class="text-right" MetalDecimalInput [max]="13"/>
                     </mat-form-field>
                   </div>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput class="text-right" />
+                      <input type="text" matInput class="text-right" MetalDecimalInput [max]="13"/>
                     </mat-form-field>
                   </div>
                 </div>

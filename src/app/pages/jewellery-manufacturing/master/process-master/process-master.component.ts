@@ -24,7 +24,6 @@ export class ProcessMasterComponent implements OnInit {
   searchModeRecov: boolean = true;
   searchModeAllow: boolean = true;
   codeEnable: boolean = true;
-
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
@@ -60,6 +59,11 @@ export class ProcessMasterComponent implements OnInit {
   indeterminate = false;
   labelPosition: 'before' | 'after' = 'after';
   disabled = false;
+  showMaxContentAlert(): void {
+    if (this.processMasterForm.value.processCode == '') {
+      this.commonService.toastErrorByMsgId('processcode cannot be empty')
+    }
+  }
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
@@ -89,6 +93,7 @@ export class ProcessMasterComponent implements OnInit {
       this.setFormValues();
 
     }
+    
   }
 
 
@@ -155,8 +160,8 @@ export class ProcessMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
-
   }
+ 
 
   checkCode(): boolean {
     if (this.processMasterForm.value.processCode == '') {
@@ -462,15 +467,15 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.loss == 1) {
       this.validateLossRange();
     }
-    // if (this.lossData == false) {
-    //   this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
-    // }
+    if (this.lossData == false) {
+      this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
+    }
     // else {
 
     //   if (this.formattedTime > this.formattedMaxTime) {
     //     this.toastr.error('Maximum time should not be less than Standard time');
     //   }
-    //   else {
+      else {
         if (this.content && this.content.FLAG == 'EDIT') {
           this.updateProcessMaster()
           return
@@ -577,9 +582,9 @@ export class ProcessMasterComponent implements OnInit {
         this.subscriptions.push(Sub);
 
         console.log(this.processMasterForm.value.stand_time);
+        }
       }
     
-  
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -587,12 +592,15 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ApprovalCodeSelected(e: any) {
+    if (this.checkCode()) return
     this.processMasterForm.controls.approvalCode.setValue(e.APPR_CODE);
   }
   ApprovalProcessSelected(e: any) {
+    if (this.checkCode()) return
     this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
   ACCODESelected(e: any) {
+    if (this.checkCode()) return
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
       this.commonService.toastErrorByMsgId('cannot select the same account code');
       return;
@@ -601,6 +609,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   StockProcesSelected(e: any) {
+    if (this.checkCode()) return
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
   }
   /** checking for same account code selection */
@@ -880,7 +889,11 @@ export class ProcessMasterComponent implements OnInit {
     // Update the input value
     (event.target as HTMLInputElement).value = formattedValue;
   }
-
+  showAlertIfCodeIsEmpty(): void {
+    if (this.processMasterForm.value.processCode == '') {
+      this.commonService.toastErrorByMsgId('processcode cannot be empty')
+    }
+  }
 
 
 }
