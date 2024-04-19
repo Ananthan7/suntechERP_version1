@@ -330,58 +330,52 @@ export class SalesReturnModal implements OnInit {
     private renderer: Renderer2,
     private inDb: IndexedDbService,
   ) {
-    this.setInitialValues()
   }
 
   ngOnInit(): void {
     this.ordered_items = this.orderedItems;
+    this.setInitialValues()
   }
   setInitialValues() {
+    console.log(this.updatedGridItem, 'updatedGridItem');
     this.strBranchcode = localStorage.getItem('userbranch');
     this.strUser = localStorage.getItem('username');
     this.baseYear = localStorage.getItem('year');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
-    if(!this.editItemDetail){
-      this.salesReturnForm.controls.fcn_returns_branch.setValue(this.comFunc.branchCode)
-      this.getSalesReturnVocTypes();
-      this.getYearList();
+    this.getYearList();
+    if (this.comFunc.nullToString(this.updatedGridItem[0]?.FLAG) == 'EDIT') {
+      this.sales_returns_items.push(this.updatedGridItem[0])
+      this.editTableSalesReturn()
       return
     }
-    console.log(this.updatedGridItem,'updatedGridItem');
-    
+    this.salesReturnForm.controls.fcn_returns_branch.setValue(this.comFunc.branchCode)
+    this.getSalesReturnVocTypes();
   }
-  editTableSalesReturn(event: any) {
-    this.salesReturnEditId = event.data.ID;
-    event.cancel = true;
+  editTableSalesReturn(event?: any) {
+    let data = this.updatedGridItem[0]
+    this.salesReturnEditId = data.ID;
+    // event.cancel = true;
     const value: any = this.currentsalesReturnItems.filter(
-      (data: any) => data.SRNO == event.data.sn_no
+      (data: any) => data.SRNO == data.sn_no
     )[0];
-    console.log(
-      '===============editTable==currentsalesReturnItems==================='
-    );
-    console.log(this.currentsalesReturnItems);
-    console.log(value);
-    console.log('====================================');
-    event.component.refresh();
 
-    const data = this.retailSReturnDataPost.SALESREFERENCE.split('-');
-    console.log(data,'data');
-    
+    // event.component.refresh();
+
+    // const data = this.retailSReturnDataPost.SALESREFERENCE.split('-');
+
     this.salesReturnForm.controls.fcn_returns_fin_year.setValue(
-      data[3]
-      // value.DT_YEARMONTH
+      // data[3]
+      data.slsReturn.POS_YEARMONTH
     );
     this.salesReturnForm.controls.fcn_returns_branch.setValue(
-      // value.DT_BRANCH_CODE
-      data[0]
+      data.slsReturn.POS_BRANCH_CODE
+      // data[0]
     );
     this.salesReturnForm.controls.fcn_returns_voc_type.setValue(
-      // value.DT_VOCTYPE
-      data[1]
+      data.slsReturn.POS_VOCTYPE
+      // data[1]
     );
-    this.salesReturnForm.controls.fcn_returns_voc_no.setValue(data[2]);
-    // this.salesReturnForm.controls.fcn_returns_voc_no.setValue(value.PONO);
-    // this.salesReturnForm.controls.fcn_returns_voc_no.setValue(value.DT_VOCNO);
+    this.salesReturnForm.controls.fcn_returns_voc_no.setValue(data.slsReturn.POS_VOCNO);
     this.searchVocNoSalRet();
   }
 
@@ -463,7 +457,7 @@ export class SalesReturnModal implements OnInit {
             } else {
               _response = resp.response[0];
               this.salesReturnsItems_forVoc = resp.response;
-              let _vocdate = _response.POS_BRANCH_CODE.split(' ');
+              let _vocdate = _response.VOCDATE.split(' ');
               for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
                 for (let j = 0; j < this.sales_returns_items.length; j++) {
                   if (this.salesReturnsItems_forVoc[i].SRNO.toString() == this.sales_returns_items[j].sn_no.toString()) {
@@ -487,8 +481,6 @@ export class SalesReturnModal implements OnInit {
               this.salesReturnForm.controls['fcn_returns_voc_date'].setValue(
                 _vocdate[0]
               );
-              console.table(this.sales_returns_items);
-              console.table(this.sales_returns_pre_items);
               this.sales_returns_total_amt = this.sales_returns_items.reduce(
                 (preVal: any, curVal: any) =>
                   parseFloat(preVal) + parseFloat(curVal.net_amount),
@@ -612,12 +604,17 @@ export class SalesReturnModal implements OnInit {
   }
   /**USE: Add row item to parent grid on save click */
   addItemtoSalesReturn() {
-    if(this.sales_returns_items.length == 0){
+    if (this.sales_returns_items.length == 0) {
       this.comFunc.showSnackBarMsg('PLEASE SELECT ITEM')
       return
     }
     const values = this.sales_returns_pre_items;
-    this.sales_returns_items = values;
+    console.log(values,'values');
+    // if(this.updatedGridItem.length>0){
+    //   this.sales_returns_items = values.filter((item:any)=> item.stock_code != this.updatedGridItem[0].stock_code);
+    // }else{
+      this.sales_returns_items = values
+    // }
 
     for (let i = 0; i < this.sales_returns_items.length; i++) {
       this.setSalesReturnItems(

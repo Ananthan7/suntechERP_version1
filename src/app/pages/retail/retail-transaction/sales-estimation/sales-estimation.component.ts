@@ -2048,13 +2048,20 @@ export class SalesEstimationComponent implements OnInit {
     customizeDate(data: any) {
         // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
     }
-    addSalesReturnItem(data: any) {
-        if (!this.editOnly) {
-            data.forEach((element: any, index: any) => {
-                this.sales_returns_items.push(element)
-            });
+    openSalesReturnForm(data:any){
+        if(this.salesReturnDataToEdit.length>0){
+            this.comFunc.showSnackBarMsg('Please remove selected voucher to add new voucher')
+            return
         }
+        this.open(data)
+    }
+    addSalesReturnItem(data: any) {
+        this.sales_returns_items = []
+        data.forEach((element: any, index: any) => {
+            this.sales_returns_items.push(element)
+        });
         this.resetSalesReturnGrid()
+        this.sumTotalValues()
     }
     resetSalesReturnGrid() {
         this.sales_returns_items.forEach((element: any, index: any) => {
@@ -2330,9 +2337,10 @@ export class SalesEstimationComponent implements OnInit {
         // this.newLineItem = value;
 
     }
-    salesReturnDataToEdit: any;
+    salesReturnDataToEdit: any[] = [];
     editTableSalesReturn(event: any) {
-        this.salesReturnDataToEdit = event.data;
+        this.salesReturnDataToEdit = [event.data];
+        this.salesReturnDataToEdit[0].FLAG = 'EDIT'
         this.salesReturnEditId = event.data.ID;
         event.cancel = true;
         const value: any = this.currentsalesReturnItems.filter(

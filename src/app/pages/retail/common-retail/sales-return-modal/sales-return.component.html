@@ -68,7 +68,7 @@
               <mat-label>Voc No</mat-label>
               <input type="text" matInput formControlName="fcn_returns_voc_no"
                 (change)="getRetailSReturn_EvnFn($event)"
-                [readonly]="viewOnly || this.sales_returns_items.length > 0" />
+                [readonly]="viewOnly || this.updatedGridItem.length > 0" />
             </mat-form-field>
           </div>
           <div class="col-md-1 text-right" style="margin-top: 7px">
