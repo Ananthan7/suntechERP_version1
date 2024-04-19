@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 export class ItemDetailService {
   validatePCS!: boolean;
   blockNegativeStock!: any;
+  blockMinimumPrice!: any;
+  blockMinimumPriceValue!: any;
   lineItemPcs!: any;
   lineItemGrossWt!: any;
   private storedItems = new BehaviorSubject<any[]>([]);
