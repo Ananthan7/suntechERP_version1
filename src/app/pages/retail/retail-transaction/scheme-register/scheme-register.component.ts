@@ -93,7 +93,7 @@ export class SchemeRegisterComponent implements OnInit {
     SEARCH_FIELD: 'SCHEME_CODE',
     SEARCH_HEADING: 'Scheme Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STATUS = 1 AND BRANCH_CODE="+this.commonService.branchCode,
+    WHERECONDITION: `STATUS = 1 AND BRANCH_CODE='${this.commonService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
