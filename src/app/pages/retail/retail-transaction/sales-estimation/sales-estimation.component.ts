@@ -2037,12 +2037,12 @@ export class SalesEstimationComponent implements OnInit {
 
     customizeWeight = (data: any) => {
         console.log(data);
-        return 'Wt: ' + this.comFunc.decimalQuantityFormat(data['value'], 'AMOUNT');
+        return this.comFunc.decimalQuantityFormat(data['value'], 'AMOUNT');
     }
 
     customizeQty(data: any) {
         console.log(data);
-        return 'Qty: ' + data['value'];
+        return data['value'];
         // return 'Total Qty: ' + data['value'];
     }
     customizeDate(data: any) {
@@ -2289,13 +2289,7 @@ export class SalesEstimationComponent implements OnInit {
         this.newLineItem = event.data;
         event.cancel = true;
         this.isEditable = true;
-        //   event.settings.CommandButtonInitialize = (sender, e) =>
-        //  {
-        //      if ((e.ButtonType == event.settings.ColumnCommandButtonType.Update) || (e.ButtonType == event.settings.ColumnCommandButtonType.Cancel))
-        //      {
-        //          e.Visible = false;
-        //      }
-        //  };
+
         const value: any = this.currentLineItems.filter(
             (data: any) => data.SRNO == event.data.sn_no
         )[0];
@@ -2306,23 +2300,9 @@ export class SalesEstimationComponent implements OnInit {
         console.log('====================================');
         event.component.refresh();
 
-        // console.log(this.ordered_items);
-        // console.log(this.newLineItem);
-        // let alldata = [];
-        // alldata.push(this.newLineItem)
-        // console.log(alldata);
-
-        // let result = alldata.filter((data)=>{ data.ID == event.data.ID})
-        // console.log(result);
         console.log(this.li_item_code_val);
 
-        // document.getElementsByClassName('dx-link-save')['style'].display = 'none';
-        // var res = $('.dx-link dx-link-save').attr('display', 'none');
-        // console.log(res);
 
-        // $('.dx-link-save').hide();
-
-        // console.log(event.target.value)
         this.open(this.mymodal, false, null, false, true);
 
         // this.updateBtn = true;
@@ -6766,7 +6746,7 @@ export class SalesEstimationComponent implements OnInit {
             // this.rs_WithReturnExchangeReceipt._metalPurchase = this.metalPurchaseMain;
             // console.log(this.rs_WithReturnExchangeReceipt);
             // alert('Bill Saved');
-            this.postRetailSalesMaster();
+            this.postRetailSalesMaster(type);
             // this.snackBar.open('Bill Saved', 'OK');
         } else {
             // alert(_validate[1]);
@@ -6789,7 +6769,7 @@ export class SalesEstimationComponent implements OnInit {
         console.log('====================================');
     }
 
-    postRetailSalesMaster() {
+    postRetailSalesMaster(type: any) {
 
         if (this.amlNameValidation)
             if (!this.customerDetails.AMLNAMEVALIDATION && this.customerDetails.DIGISCREENED) {
@@ -7146,6 +7126,7 @@ export class SalesEstimationComponent implements OnInit {
                         if (res != null) {
                             if (res.status == 'SUCCESS') {
                                 this.snackBar.open('POS Saved', 'OK');
+                                this.saveAndContinue(type);
                                 setTimeout(() => {
                                     // location.reload();
                                     this.router.navigateByUrl('/estimation');
@@ -7192,6 +7173,26 @@ export class SalesEstimationComponent implements OnInit {
             } else {
                 this.openDialog('Warning', 'Please fill customer details', true);
             }
+        }
+    }
+
+
+    saveAndContinue(type: any) {
+        if (type == 'continue') {
+            this.resetSalesReturnGrid()
+            this.salesReturnForm.reset();
+            this.lineItemForm.reset();
+            this.exchangeForm.reset();
+            this.customerDetailForm.reset();
+            this.customerDetailForm.reset();
+            this.customerDataForm.reset();
+            this.lineItemForm.reset();
+            this.ordered_items = [];
+            this.sales_returns_items = [];
+            this.exchange_items = [];
+            this.open(this.mymodal, false, null, false, false)
+        } else {
+            this.close('reloadMainGrid');
         }
     }
 
@@ -10403,7 +10404,23 @@ export class SalesEstimationComponent implements OnInit {
 
     sendToEmail() { }
 
-    cancelBill() { }
+    cancelBill() {
+        this.open(this.mymodal, false, null, false, false)
+        this.resetSalesReturnGrid()
+        this.salesReturnForm.reset();
+        this.lineItemForm.reset();
+        this.exchangeForm.reset();
+        this.customerDetailForm.reset();
+        this.customerDetailForm.reset();
+        this.customerDataForm.reset();
+        this.lineItemForm.reset();
+        this.ordered_items = [];
+        this.sales_returns_items = [];
+        this.exchange_items = [];
+
+
+
+    }
 
     getSalesReturnVocTypes() {
         //     http://94.200.156.234:85/api/UspGetSubVouchers
