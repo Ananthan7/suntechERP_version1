@@ -24,8 +24,6 @@ export class ProcessMasterComponent implements OnInit {
   searchModeRecov: boolean = true;
   searchModeAllow: boolean = true;
   codeEnable: boolean = true;
-  isDisabled: boolean = false;
-
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
@@ -87,13 +85,11 @@ export class ProcessMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.codeMode = true;
-      this.isDisabled = !this.isDisabled;
       console.log('fire')
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.codeMode = true;
-      this.isDisabled = true;
       this.setFormValues();
 
     }
