@@ -42,6 +42,10 @@ export class SalesReturnModal implements OnInit {
   @Input() modal!: NgbModalRef;
   @Output() newItemEvent = new EventEmitter<any>();
   @Output() salesReturnsItemsChange = new EventEmitter<any[]>();
+  @Input() orderedItems!: any[];
+  @Input() editItemDetail: any;
+  @Input() viewOnlyDetail: any;
+  @Input() updatedGridItem: any;
 
   salesReturnsItems_forVoc: any = [];
   exchange_items: any[] = [];
@@ -51,7 +55,6 @@ export class SalesReturnModal implements OnInit {
   sales_returns_items_slno_length: any = 0;
   sales_returns_total_amt: any = 0.0;
   sales_returns_items_total_amount: any;
-  salesReturnForm!: FormGroup;
   branch_tax_percentage: any;
   baseYear: any = '';
   li_stone_wt_val: any;
@@ -65,7 +68,7 @@ export class SalesReturnModal implements OnInit {
   li_rate_val: any;
   updateBtn!: boolean;
   ordered_items: any[] = [];
-  @Input() orderedItems!: any[];
+
   customerDetails: any = {};
 
   inv_bill_date: any;
@@ -307,101 +310,119 @@ export class SalesReturnModal implements OnInit {
   options_year: string[] = [''];
   filteredadvanceYear!: Observable<string[]>;
 
-
-
-  constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,
-    private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2,    private inDb: IndexedDbService,
-  ) {
-    this.strBranchcode = localStorage.getItem('userbranch');
-    this.strUser = localStorage.getItem('username');
-    this.baseYear = localStorage.getItem('year');
-
-    let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
-    this.salesReturnForm = this.formBuilder.group({
-      fcn_returns_fin_year: ['', Validators.required],
-      fcn_returns_branch: ['', Validators.required],
-      fcn_returns_voc_type: ['', Validators.required],
-      fcn_returns_voc_no: ['', Validators.required],
-      fcn_returns_voc_date: ['',],
-      fcn_returns_sales_man: ['',],
-      fcn_returns_cust_code: ['',],
-      fcn_returns_cust_mobile: ['',],
-
-    });
-
-    this.inDb.getAllData('compparams').subscribe((data: any) => {
-      if (data.length > 0) {
-          this.comFunc.allCompanyParams = data;
-          this.comFunc.setCompParaValues();
-         // this.getArgs();
-      } else {
-         // this.getArgs();
-      }
+  salesReturnForm: FormGroup = this.formBuilder.group({
+    fcn_returns_fin_year: ['', Validators.required],
+    fcn_returns_branch: ['', Validators.required],
+    fcn_returns_voc_type: ['', Validators.required],
+    fcn_returns_voc_no: ['', Validators.required],
+    fcn_returns_voc_date: ['',],
+    fcn_returns_sales_man: ['',],
+    fcn_returns_cust_code: ['',],
+    fcn_returns_cust_mobile: ['',],
   });
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    public comFunc: CommonServiceService,
+    private suntechApi: SuntechAPIService,
+    public dialog: MatDialog,
+    private renderer: Renderer2,
+    private inDb: IndexedDbService,
+  ) {
+    this.setInitialValues()
   }
-
-
-
-
 
   ngOnInit(): void {
     this.ordered_items = this.orderedItems;
-    this.getSalesReturnVocTypes();
-    this.getYearList();
   }
+  setInitialValues() {
+    this.strBranchcode = localStorage.getItem('userbranch');
+    this.strUser = localStorage.getItem('username');
+    this.baseYear = localStorage.getItem('year');
+    let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
+    if(!this.editItemDetail){
+      this.salesReturnForm.controls.fcn_returns_branch.setValue(this.comFunc.branchCode)
+      this.getSalesReturnVocTypes();
+      this.getYearList();
+      return
+    }
+    console.log(this.updatedGridItem,'updatedGridItem');
+    
+  }
+  editTableSalesReturn(event: any) {
+    this.salesReturnEditId = event.data.ID;
+    event.cancel = true;
+    const value: any = this.currentsalesReturnItems.filter(
+      (data: any) => data.SRNO == event.data.sn_no
+    )[0];
+    console.log(
+      '===============editTable==currentsalesReturnItems==================='
+    );
+    console.log(this.currentsalesReturnItems);
+    console.log(value);
+    console.log('====================================');
+    event.component.refresh();
+
+    const data = this.retailSReturnDataPost.SALESREFERENCE.split('-');
+    console.log(data,'data');
+    
+    this.salesReturnForm.controls.fcn_returns_fin_year.setValue(
+      data[3]
+      // value.DT_YEARMONTH
+    );
+    this.salesReturnForm.controls.fcn_returns_branch.setValue(
+      // value.DT_BRANCH_CODE
+      data[0]
+    );
+    this.salesReturnForm.controls.fcn_returns_voc_type.setValue(
+      // value.DT_VOCTYPE
+      data[1]
+    );
+    this.salesReturnForm.controls.fcn_returns_voc_no.setValue(data[2]);
+    // this.salesReturnForm.controls.fcn_returns_voc_no.setValue(value.PONO);
+    // this.salesReturnForm.controls.fcn_returns_voc_no.setValue(value.DT_VOCNO);
+    this.searchVocNoSalRet();
+  }
+
   private _filteryear(value: string): string[] {
     const filterValue = value.toString().toLowerCase();
     return this.options_year.filter((option) =>
       option.toString().toLowerCase().includes(filterValue)
     );
   }
-
-
-
-
-  
   getYearList() {
     let API = `FinancialYear?branchcode=${this.strBranchcode}&strusername=${this.strUser}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         var data = resp.response.map((t: any) => t.fyearcode);
         this.options_year = data;
-        this.filteredOptions_year =
-          this.salesReturnForm.controls.fcn_returns_fin_year.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._filteryear(value))
-          );
-console.log(this.filteredOptions_year)
+        this.filteredOptions_year = this.salesReturnForm.controls.fcn_returns_fin_year.valueChanges.pipe(
+          startWith(''),
+          map((value) => this._filteryear(value))
+        );
+        let currentYear = this.comFunc.currentDate.getFullYear()
+        console.log(currentYear, 'currentYear');
 
+        this.salesReturnForm.controls.fcn_returns_fin_year.setValue(currentYear)
       });
   }
 
   changeBranch(e: any) {
-
-
   }
 
-
-
   getSalesReturnVocTypes() {
-    //     http://94.200.156.234:85/api/UspGetSubVouchers
-    // {
-
-    // }
     const API = `UspGetSubVouchers`;
     const postData = {
       "strBranchCode": this.strBranchcode,
       "strMainVocType": "POS"
-      //    this.mainVocType
     };
-
+    // let voc = this.comFunc.getqueryParamVocType()
     this.suntechApi.postDynamicAPI(API, postData)
       .subscribe((res: any) => {
         if (res.status == "Success") {
           this.vocTypesinSalesReturn = res.dynamicData[0];
-          console.log('this.vocTypesinSalesReturn', this.vocTypesinSalesReturn);
-
+          this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocTypesinSalesReturn[0].VOCTYPE)
         }
       });
   }
@@ -416,12 +437,6 @@ console.log(this.filteredOptions_year)
       this.sales_returns_total_amt = 0;
       this.salesReturnEditCode = '';
       this.salesReturnEditAmt = '';
-
-      //  this.fcn_returns_voc_no_val = event.target.value;
-      console.log(this.salesReturnForm.value.fcn_returns_fin_year);
-      console.log(this.salesReturnForm.value.fcn_returns_branch);
-      console.log(this.salesReturnForm.value.fcn_returns_voc_type);
-      console.log(this.salesReturnForm.value.fcn_returns_voc_no);
       let _response;
 
       let fin_year = this.salesReturnForm.value.fcn_returns_fin_year;
@@ -497,7 +512,7 @@ console.log(this.filteredOptions_year)
 
   changeRetailSalesReturnVal(value: any) {
 
-}
+  }
 
   searchVocNoSalRet() {
     this.getRetailSReturn_EvnFn({
@@ -505,32 +520,21 @@ console.log(this.filteredOptions_year)
         value: this.salesReturnForm.value.fcn_returns_voc_no,
       },
     });
-    
-  }
 
+  }
+  /**USE: pass data to parent table when checked */
   checkSelectedVal(stockCode: any, amtval: any, srNo: any) {
     let item = this.sales_returns_items.find(
       (data: any) => data.sn_no.toString() == srNo.toString()
       // data.stock_code == stockCode && data.total_amount == amtval
     );
-
-    this.salesReturnsItemsChange.emit(this.sales_returns_items);
-
     return item;
-}
+  }
 
 
   addSalesReturnOnSelect(event: any, slsReturn: any, index: any) {
-    // console.table(event: any);
-    // console.table(slsReturn);
     let checked = event.target.checked;
-    // let itemsLength = this.sales_returns_pre_items.length + 1;
-    // let itemsLengths =
-    //   this.sales_returns_pre_items[this.sales_returns_pre_items.length - 1];
-    // // alert(JSON.stringify(itemsLengths));
-    // if (itemsLengths == undefined) itemsLengths = 1;
-    // else itemsLengths = itemsLengths.ID + 1;
-    // alert(itemsLengths);
+
     let itemsLengths = slsReturn.SRNO;
 
     if (checked) {
@@ -563,13 +567,12 @@ console.log(this.filteredOptions_year)
           parseFloat(slsReturn.NETVALUEFC)
 
         ));
-      console.log('====================================');
-      
+
       values.stock_code = slsReturn.STOCK_CODE;
       values.mkg_amount = slsReturn.MKG_RATEFC;
       //values.total_amount = slsReturn.TOTAL_AMOUNTFC;
       values.total_amount = slsReturn.TOTAL_AMOUNTFC;
-      
+
       values.pcs = slsReturn.PCS;
       values.weight = slsReturn.GROSSWT;
       values.description = slsReturn.STOCK_DOCDESC;
@@ -583,23 +586,10 @@ console.log(this.filteredOptions_year)
       values.DISCOUNT = slsReturn.DISCOUNT;
       values.VAT_AMOUNTFC = slsReturn.VAT_AMOUNTFC;
       values.UNIQUEID = slsReturn.UNIQUEID;
-      console.log("---sundhar---");
-      console.log(values);
+
       this.sales_returns_pre_items.push(values);
-      console.log(this.sales_returns_pre_items);
-      console.log("---sundhar c---");
-      // enable
-      // this.setSalesReturnItems(
-      //   itemsLength,
-      //   slsReturn
-      // );
-
-      // }
-      // }
     } else {
-      // this.sales_returns_pre_items.filter((data: any) => {
 
-      // });
       for (var i = 0; i < this.sales_returns_pre_items.length; i++) {
         var obj = this.sales_returns_pre_items[i];
         // if (obj.ID == itemsLength) {
@@ -620,91 +610,31 @@ console.log(this.filteredOptions_year)
       }
     }
   }
-
-
+  /**USE: Add row item to parent grid on save click */
   addItemtoSalesReturn() {
-    // alert('test');
-    console.table(this.sales_returns_pre_items);
+    if(this.sales_returns_items.length == 0){
+      this.comFunc.showSnackBarMsg('PLEASE SELECT ITEM')
+      return
+    }
     const values = this.sales_returns_pre_items;
     this.sales_returns_items = values;
-    console.log('******************');
-    console.log(this.sales_returns_items);
-    console.log(this.sales_returns_items[0]);
-    // this.sales_returns_items.forEach((data, index) => {
-    //   console.log('===============this.sales_returns_items.forEach=====================');
-    //   console.log(data);
-    //   data.ID = index + 1;
-    //   data.sn_no = index + 1;
 
-    //   console.log('====================================');
-    //   // this.sales_returns_items[index].ID = index + 1;
-    //   this.setSalesReturnItems(
-    //     index + 1,
-    //     data.slsReturn,
-    //   )
-    // });
-    // this.currentsalesReturnItems.forEach((data, index) => {
-    //   data.ID = index + 1;
-    //   data.SRNO = index + 1;
-    // });
     for (let i = 0; i < this.sales_returns_items.length; i++) {
-      // this.sales_returns_items[i].ID = i + 1;
-      // this.sales_returns_items[i].rid = this.comFunc.generateNumber();
-
-      console.log('******************');
-      console.log(this.sales_returns_items[i]);
-      console.log(this.sales_returns_items[i].slsReturn);
-      console.log('******************');
       this.setSalesReturnItems(
         this.sales_returns_items[i].ID,
         this.sales_returns_items[i].slsReturn
       );
     }
-
-    console.log('=============sales_returns_items=======================');
-    console.log(this.sales_returns_items);
-    console.log(this.currentsalesReturnItems);
-    console.log('====================================');
-    // this.sumTotalValues();
-
-    // console.log(this.sales_returns_items);
-    // console.log(this.sales_returns_items_slno_length);
-
-    // var items_length = this.sales_returns_items.length;
-    // if (items_length == 0) this.sales_returns_items_slno_length = 1;
-    // else
-    //   this.sales_returns_items_slno_length =
-    //     this.sales_returns_items_slno_length + 1;
-
-    // var values = {
-    //   ID: this.sales_returns_items_slno_length,
-    //   sn_no: this.sales_returns_items_slno_length,
-    //   stock_code: '',
-    //   mkg_amount: '',
-    //   total_amount: '',
-    //   pcs: '',
-    //   weight: '',
-    //   description: '',
-    //   tax_amount: '',
-    //   net_amount: '',
-    // };
     this.sumTotalValues();
+    console.log(this.sales_returns_items, 'data to parent');
+
+    this.salesReturnsItemsChange.emit(this.sales_returns_items);
     this.modal.dismiss('Cross click');
-    // this.modalReference.dismiss();
   }
 
   setSalesReturnItems(slno: any, items: any) {
-    // alert('data');
-
-    // alert('items.STOCK_CODE '+items.STOCK_CODE)
-    // alert('items.STOCK_DOCDESC '+items.STOCK_DOCDESC)
     let temp_sales_return_items: any = {
-      // "STOCK_DOCDESC":"",
-      // "LOCTYPE_CODE": "",
-      // "RATE_TYPE": "",
       rid: this.comFunc.generateNumber(),
-
-
       UNIQUEID: items.UNIQUEID,
       SRNO: slno,
       DIVISION_CODE: items.DIVISION_CODE,
@@ -1014,7 +944,7 @@ console.log(this.filteredOptions_year)
     let total_exchange = 0;
     let total_received_amount = 0;
 
-   
+
 
     this.prnt_inv_total_pcs = total_pcs;
     this.prnt_inv_total_weight = total_weight;
@@ -1041,8 +971,8 @@ console.log(this.filteredOptions_year)
     // this.order_total_sales_returns = this.invReturnSalesTotalNetTotal;
 
     //this.exchange_items.forEach(function (item) {
-     
-      //total_exchange = total_exchange + parseFloat(item.total_amount);
+
+    //total_exchange = total_exchange + parseFloat(item.total_amount);
     //});
 
     // Metal purchase (Exchange)

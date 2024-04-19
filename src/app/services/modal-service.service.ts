@@ -5,8 +5,13 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ItemDetailService {
-
+  validatePCS!: boolean;
+  blockNegativeStock!: any;
+  lineItemPcs!: any;
+  lineItemGrossWt!: any;
   private storedItems = new BehaviorSubject<any[]>([]);
+  divisionCode!:string;
+  isStoneIncluded:boolean = false;
 
   setData(data: any[]) {
     this.storedItems.next(data);

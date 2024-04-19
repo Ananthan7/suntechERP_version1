@@ -1,200 +1,537 @@
+<div style="display: none" id="print_invoice">
+  <table style="border: hidden; width: 100%">
+    <tr>
+      <td style="border: hidden; vertical-align: top">
+        <div style="font-weight: bold; text-align: center; font-size: 24px">
+          <h4 style="margin: 5px 0px">Estimation</h4>
+        </div>
+      </td>
+    </tr>
+  </table>
 
+  <table style="width: 100%">
+    <tr>
+      <td style="border-bottom-style: hidden">
+        <label style="font-weight: bold">Customer Name </label>
+        <label style="float: right">{{
+          this.customerDataForm.value.fcn_customer_name
+          }}</label>
+        <!-- <label style="float: right">{{ inv_customer_name }}</label> -->
+      </td>
+      <td style="border-bottom-style: hidden">
+        <label style="font-weight: bold">INVOICE NO </label>
+        <label style="font-weight: bold; float: right">
+          {{ this.vocDataForm.value.fcn_voc_no }}
+          <!-- {{ inv_number }} -->
+        </label>
+      </td>
+    </tr>
+    <tr style="border-bottom: hidden">
+      <td>
+        <label style="font-weight: bold">ID No/Passport </label>
+        <label style="float: right">{{
+          this.customerDataForm.value.fcn_customer_id_number
+          }}</label>
+      </td>
+      <td>
+        <label style="font-weight: bold">Bill Date </label>
+        <label style="float: right">
+          <!-- {{ inv_bill_date }} -->
+          {{ this.convertDate(this.vocDataForm.value.vocdate) }}
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label style="font-weight: bold">Mobile Number</label>
+        <label style="float: right">
+          <!-- {{ inv_cust_mobile_no }} -->
+          {{ this.customerDataForm.value.fcn_customer_mobile }}
+        </label>
+      </td>
+      <td>
+        <label style="font-weight: bold">Salesman</label>
+        <label style="float: right">
+          <!-- {{ inv_sales_man }} -->
+          {{ this.vocDataForm.value.sales_person }}
+        </label>
+      </td>
+    </tr>
+  </table>
 
-<div class="p-3">
-  <!-- header section starts -->
-  <div
-    class="pos-sales-modalheader border-bottom d-flex justify-content-between p-1">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Retail Sales</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-      <i class="feather icon-x close-icon"></i>
-    </button>
-  </div>
+  <br />
   <div class="row">
-    <div class="col-md-12">
-      <button type="button" mat-flat-button color="primary"
-        (click)="addNew()">New</button>
+    <table class="table" style="margin-left: 0px; width: 100%">
+      <thead style="background: #eaecea; -webkit-print-color-adjust: exact">
+        <tr style="text-align-last: center">
+          <th style="vertical-align: middle; text-align: center">No</th>
+          <th style="vertical-align: middle; text-align: center">
+            Description
+          </th>
+          <th style="vertical-align: middle; text-align: center">Pcs</th>
+          <th style="vertical-align: middle; text-align: center">Qty/Gms</th>
+          <th style="vertical-align: middle; text-align: center">
+            Rate (Mkg/Pcs)
+          </th>
+          <th style="vertical-align: middle; text-align: center">
+            Net Amount (Excl.VAT)
+          </th>
+          <th style="vertical-align: middle; text-align: center">Discount</th>
+          <th style="vertical-align: middle; text-align: center">VAT %</th>
+          <th style="vertical-align: middle; text-align: center">Tax Amount</th>
+          <th style="vertical-align: middle; text-align: center">
+            Net Amount (Incl.VAT)
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cli of ordered_items; let id = index">
+          <td style="border-bottom-style: hidden; text-align: center">
+            {{ cli.sn_no }}
+          </td>
+          <td style="border-bottom-style: hidden">
+            {{ cli.description }} - {{ cli.stock_code }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.pcs }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.weight }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.rate | number : "1.2" }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.gross_amt | number : "1.2" }}
+            <!-- {{ cli.mkg_amount| number:'1.2' }} -->
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.dis_amt | number : "1.2" }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.taxPer | number : "1.2" }}
+            <!-- {{ branch_tax_percentage }} -->
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.tax_amount | number : "1.2" }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.net_amount | number : "1.2" }}
+          </td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td style="border-right-style: hidden" colspan="2">
+            <div>
+              <p style="float: left">({{ prnt_inv_total_pcs }} items)</p>
+              <p style="float: right">Total</p>
+            </div>
+          </td>
+
+          <td style="font-weight: 600; text-align-last: right">
+            {{ prnt_inv_total_pcs }}
+          </td>
+          <td style="font-weight: 600; text-align-last: right">
+            <!-- {{ prnt_inv_total_weight }} -->
+            &nbsp;
+          </td>
+          <td style="font-weight: 600; text-align-last: right">
+            &nbsp;
+            <!-- {{order_items_total_amount | number:'1.2' }} -->
+          </td>
+          <td style="font-weight: 600; text-align-last: right">
+            {{ prnt_inv_total_gross_amt | number : "1.2" }}
+            <!-- {{ prnt_inv_net_total_without_tax }} -->
+          </td>
+          <td style="font-weight: 600; text-align-last: right">&nbsp;</td>
+          <td style="font-weight: 600; text-align-last: right">
+            {{ prnt_inv_total_tax_amount | number : "1.2" }}
+          </td>
+          <td style="font-weight: 600; text-align-last: right">
+            <!-- {{ prnt_inv_net_total_with_tax }} -->
+            {{ order_items_total_gross_amount | number : "1.2" }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8" style="font-weight: 600; text-align-last: right">
+            Total Before VAT
+          </td>
+          <td style="text-align-last: right">
+            {{ prnt_inv_total_gross_amt | number : "1.2" }}
+            <!-- {{ prnt_inv_net_total_without_tax }} -->
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8" style="font-weight: 600; text-align-last: right">
+            Total Discount
+          </td>
+          <td style="text-align-last: right">
+            {{ order_items_total_discount_amount | number : "1.2" }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8" style="font-weight: 600; text-align-last: right">
+            Total VAT 5%
+          </td>
+          <td style="text-align-last: right">
+            {{ prnt_inv_total_tax_amount | number : "1.2" }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8" style="font-weight: 600; text-align-last: right">
+            Net Amount
+          </td>
+          <td style="text-align-last: right">
+            {{ order_items_total_gross_amount | number : "1.2" }}
+            <!-- {{ prnt_inv_net_total_with_tax }} -->
+          </td>
+        </tr>
+
+        <tr [style]="
+            invReturnSalesTotalNetTotal != 0 ? 'border-bottom: hidden' : ''
+          " *ngIf="invReturnSalesTotalNetTotal != 0">
+          <td colspan="9" style="font-weight: 600;">
+            Sales Return : {{ invReturnSalesTotalNetTotal | number : "1.2" }}
+          </td>
+        </tr>
+        <tr *ngIf="order_total_exchange != 0">
+          <td colspan="9" style="font-weight: 600">
+            Exchange : {{ order_total_exchange | number : "1.2" }}
+          </td>
+        </tr>
+        <tr hidden>
+          <td colspan="9" style="font-weight: 600">
+            Recieved : {{ prnt_received_amount | number : "1.2" }}
+          </td>
+        </tr>
+        <tr hidden>
+          <td colspan="9" style="text-transform: capitalize">
+            {{
+            prnt_received_amount_words != ""
+            ? prnt_received_amount_words +
+            "UNITED ARAB EMIRATES DIRHAM Only"
+            : ""
+            }}
+          </td>
+        </tr>
+
+        <tr style="border-top: 1px solid #000">
+          <td colspan="3">Confirmed on behalf of</td>
+          <td colspan="6" style="font-weight: 600; text-align-last: right">
+            <!-- Meena Jewellery -->
+            {{ this.comFunc.allbranchMaster.BRANCH_NAME }}
+            <!-- Suntech Business Solutions -->
+          </td>
+        </tr>
+
+        <tr style="border-bottom: hidden; height: 120px">
+          <td colspan="3"></td>
+          <td colspan="3"></td>
+          <td colspan="3"></td>
+        </tr>
+        <tr>
+          <td colspan="3"
+            style="font-weight: 600; font-size: 14px; text-align: center">
+            CUSTOMER'S SIGNATURE
+          </td>
+          <td colspan="3"
+            style="font-weight: 600; font-size: 14px; text-align: center">
+            INVOICE CHECKED BY
+          </td>
+          <td colspan="3"
+            style="font-weight: 600; font-size: 14px; text-align: center">
+            AUTHORISED SIGNATURE
+          </td>
+        </tr>
+        <tr>
+          <td colspan="9"
+            style="font-weight: 300; text-align-last: center; font-size: 14px">
+            THANK YOU FOR SHOPPING WITH US
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Sales Estimation</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xl-12">
+      <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
+        <div class="row" style="background-color: #efefef; margin-bottom: 10px">
+          <div class="col-md-2 m-t-10">
+            <mat-form-field>
+              <mat-label>Voucher</mat-label>
+              <input type="text" matInput formControlName="vocType"
+                id="voc_type" [readonly]="true" />
+            </mat-form-field>
+
+          </div>
+
+          <div class="col-md-2 m-t-10">
+
+            <mat-form-field>
+              <mat-label>{{ date_lbl }}</mat-label>
+              <!-- [matDatepicker]="vocDate" -->
+              <input matInput type="text" name="vocdate"
+                [matDatepicker]="vocDate" formControlName="vocdate"
+                value="{{ currentDate }}" placeholder="DD/MM/YYYY"
+                [max]="currentDate" [readonly]="viewOnly" />
+              <mat-datepicker-toggle matSuffix
+                [for]="vocDate"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+            </mat-form-field>
+
+          </div>
+          <div class="col-md-2">
+            <mat-form-field>
+              <mat-label>{{ vocno_lbl }}</mat-label>
+              <input type="text" style="text-align: right;" matInput
+                formControlName="fcn_voc_no" [readonly]="true" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-1 m-t-10">
+            <mat-form-field>
+              <mat-label>{{ sales_person_lbl }}</mat-label>
+              <input type="text" matInput formControlName="sales_person"
+                id="sales_person"
+                [matAutocomplete]="salesperson" [readonly]="viewOnly" />
+              <!-- <input type="text" matInput formControlName="sales_person"  [matAutocomplete]="auto" [matAutocomplete]="salesperson" (keyup.enter)="chooseFirstOption($event)"> -->
+              <mat-autocomplete #salesperson="matAutocomplete"
+                autoActiveFirstOption
+                (optionSelected)="changeSalesPerson($event.option.value)">
+                <mat-option
+                  *ngFor="let option of salesPersonFilteredOptions | async"
+                  [value]="option.SALESPERSON_CODE">
+                  {{ option.SALESPERSON_CODE + " - " + option.DESCRIPTION }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3" style="background-color: #d6d8da">
+            <div class="form-group">
+              <div class="font-weight-bold"
+                style="font-size: 20px; font-weight: 400; color: #0d4f9e">
+                Net Total
+              </div>
+              <!-- <div style="font-size: 22px; font-weight: 500">AED {{this.lineItemForm.value.fcn_li_total_amount}}</div> -->
+              <div style="font-size: 22px; font-weight: 500">
+                AED {{ netTotal | number : "1.2" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-  <!-- content section starts -->
-  <div style="padding-top: 0px !important;">
-    <div class="metal-sales-card">
-      <!-- voucher data form starts -->
-      <div class="row">
-        <div class="col-md-12 p-3">
-          <form [formGroup]="vocDataForm">
-            <div class="row p-2"
-              style="background-color: #ebeaea; margin-bottom: 10px">
-              <div class="col-md-3 col-sm-12 m-t-10">
-                <div class="datepick pt-1">
-                  <input class="form-control flatpickr-input"
-                    type="text" placeholder="Date*"
-                    style="background: transparent;font-weight: 600;"
-                    mwlFlatpickr dateFormat="d-m-Y" [maxDate]="currentDate"
-                    formControlName="vocdate" [readonly]="viewOnly">
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-12 m-t-10">
-                <mat-form-field>
-                  <mat-label>Voc No</mat-label>
-                  <input type="text" matInput
-                    formControlName="fcn_voc_no"
-                    [readonly]="true" />
+
+  <div class="row">
+
+    <div class="col-xl-9">
+      <div style="background-color: #ffffff">
+        <div>
+          <form [formGroup]="customerDataForm"
+            style="width:100%; max-width: none">
+            <div class="row">
+              <div class="col-md-2">
+                <mat-form-field style="width: 130px;">
+                  <mat-label>Mobile Number</mat-label>
+                  <input type="text" style="text-align: right;"
+                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
+                    matInput (focusout)="!viewOnly && onCustomerNameFocus()"
+                    formControlName="fcn_customer_mobile"
+                    [readonly]="viewOnly" />
+
+                  <mat-error *ngIf="
+                    customerDataForm.controls.fcn_customer_mobile.hasError(
+                      'required'
+                    )
+                  ">
+                    Mobile Number is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-md-3 col-sm-12 m-t-10">
-                <mat-form-field>
-                  <mat-label>Sales Person</mat-label>
-                  <input type="text" matInput formControlName="sales_person"
-                    id="sales_person" [matAutocomplete]="salesperson"
-                    [readonly]="viewOnly" />
-                  <mat-autocomplete #salesperson="matAutocomplete"
-                    style="position: absolute; z-index: 1000;"
-                    autoActiveFirstOption
-                    (optionSelected)="changeSalesPerson($event.option.value)">
+              <div class="col-md-2">
+                <mat-form-field style="width: 130px;">
+                  <mat-label>Name</mat-label>
+                  <input type="text" matInput
+                    formControlName="fcn_customer_name"
+                    (change)="nameChange($event)"
+                    [readonly]="true" />
+                  <!-- <input type="text" matInput [pattern]="noWhiteSpacePattern" formControlName="fcn_customer_name" (change)="nameChange($event)"  [readonly]="viewOnly" /> -->
+                  <mat-error *ngIf="
+                    customerDataForm.controls.fcn_customer_name.hasError(
+                      'required'
+                    )
+                  ">
+                    Name is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
+                    customerDataForm.controls.fcn_customer_name.hasError(
+                      'pattern'
+                    )
+                  ">
+                    Whitespace Not Allowed
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <!-- <div class="col-md-2" *ngIf="this.customerDetails?.CODE != undefined || null || ''"> -->
+                <mat-form-field style="width: 130px;">
+                  <mat-label>Code</mat-label>
+                  <input type="text" matInput
+                    formControlName="fcn_customer_code"
+                    (change)="nameChange($event)"
+                    [readonly]="true" />
+
+                  <mat-error *ngIf="
+                    customerDataForm.controls.fcn_customer_code.hasError(
+                      'required'
+                    )
+                  ">
+                    Code is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field style="width: 130px;">
+                  <mat-label>ID Type </mat-label>
+                  <input type="text" matInput
+                    formControlName="fcn_customer_id_type"
+                    [matAutocomplete]="idtype"
+                    [readonly]="true" />
+                  <mat-autocomplete #idtype="matAutocomplete"
+                    (optionSelected)="changeIdtype($event.option.value)"
+                    autoActiveFirstOption>
                     <mat-option
-                      *ngFor="let option of salesPersonFilteredOptions | async"
-                      [value]="option.SALESPERSON_CODE">
-                      {{ option.SALESPERSON_CODE +' - '+ option.DESCRIPTION}}
+                      *ngFor="let option of idTypeFilteredOptions | async"
+                      [value]="option">
+                      {{ option }}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-error *ngIf="
+                    customerDataForm.controls.fcn_customer_id_type.hasError(
+                      'required'
+                    )
+                  ">
+                    ID Type is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field style="width: 130px;">
+                  <mat-label>ID#</mat-label>
+                  <input type="text" matInput
+                    formControlName="fcn_customer_id_number"
+                    [readonly]="true" />
+                  <mat-error *ngIf="
+                    customerDataForm.controls.fcn_customer_id_number.hasError(
+                      'required'
+                    )
+                  ">
+                    ID# is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
 
-              <div class="col-md-3 col-sm-12" style="background-color: #d6d8da">
-                <div class="form-group">
-                  <div class="font-weight-bold"
-                    style="font-size: 20px; font-weight: 400; color: #0d4f9e">
-                    Net Total
-                  </div>
-                  <div style="font-size: 22px; font-weight: 500">
-                    AED {{ order_items_total_net_amount | number : "1.2" }}
-                  </div>
-                </div>
+              <div class="col-md-2 justify-content-center">
+                <button type="button" style="font-size: 12px; padding: 0px 9px"
+                  (click)="open(more_customer_detail_modal)" mat-flat-button
+                  color="primary" [disabled]="viewOnly">
+                  {{
+                  this.customerDetails.MOBILE == null || undefined
+                  ? "Add Customer"
+                  : "Edit Customer"
+                  }}
+                </button>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-2">
+                <mat-form-field>
+                  <mat-label>Expiry Date</mat-label>
+                  <input matInput [matDatepicker]="expDate"
+                    name="fcn_customer_exp_date"
+                    formControlName="fcn_customer_exp_date"
+                    placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+                  <mat-datepicker-toggle matSuffix
+                    [for]="expDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate"
+                    #expDate></mat-datepicker>
+
+                  <mat-error *ngIf="
+                      customerDataForm.controls.fcn_customer_exp_date.hasError(
+                        'required'
+                      )
+                    ">
+                    Expiry date is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
           </form>
-        </div>
-      </div>
-      <div class="row">
-        <!-- voucher type form ends -->
-        <div class="col-md-9 col-sm-12">
-          <!-- customer details form starts -->
-          <div class="row">
-            <form [formGroup]="customerDataForm"
-              style="width: 100%; max-width: none">
-              <div class="row">
-                <div class="col-md-3 col-sm-12">
-                  <mat-form-field>
-                    <mat-label>Mobile Number</mat-label>
-                    <input type="text"
-                      onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                      matInput (focusout)="!viewOnly && onCustomerNameFocus()"
-                      formControlName="fcn_customer_mobile"
-                      [readonly]="viewOnly" />
-                    <mat-error
-                      *ngIf="customerDataForm.controls.fcn_customer_mobile.hasError('required')">
-                      Mobile Number is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                  <mat-progress-bar mode="indeterminate"
-                    *ngIf="customerDetails.loader"></mat-progress-bar>
-                </div>
-                <div class="col-md-3 col-sm-12">
-                  <mat-form-field>
-                    <mat-label>Name</mat-label>
-                    <input type="text" matInput
-                      formControlName="fcn_customer_name"
-                      (change)="nameChange($event)"
-                      [readonly]="viewOnly" />
-                    <mat-error
-                      *ngIf="customerDataForm.controls.fcn_customer_name.hasError('required')">
-                      Name is <strong>required</strong>
-                    </mat-error>
-                    <mat-error
-                      *ngIf="customerDataForm.controls.fcn_customer_name.hasError('pattern')">
-                      Whitespace Not Allowed
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-2 col-sm-12">
-                  <mat-form-field>
-                    <mat-label>ID Type </mat-label>
-                    <input type="text" matInput
-                      formControlName="fcn_customer_id_type"
-                      [matAutocomplete]="idtype"
-                      [readonly]="viewOnly" />
-                    <mat-autocomplete #idtype="matAutocomplete"
-                      (optionSelected)="changeIdtype($event.option.value)"
-                      autoActiveFirstOption>
-                      <mat-option
-                        *ngFor="let option of idTypeFilteredOptions "
-                        [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-2 col-sm-12">
-                  <mat-form-field>
-                    <mat-label>ID#</mat-label>
-                    <input type="text" matInput
-                      formControlName="fcn_customer_id_number"
-                      [readonly]="viewOnly" />
-                  </mat-form-field>
-                </div>
-                <div class="col-md-1 col-sm-12 justify-content-center">
-                  <button type="button"
-                    (click)="open('more_customer_detail_modal')"
-                    mat-flat-button color="primary"
-                    [disabled]="viewOnly"
-                    style="font-size: 11px; padding: 0px 9px;">
-                    {{ this.customerDetails.MOBILE == null || undefined ?
-                    'Add Customer': 'Edit Customer' }}
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-          <!-- customer form ends -->
-          <hr style="width: 100%" />
-          <!-- product detail form starts -->
-          <div class="m-t-10" style="padding: 0px">
-            <mat-tab-group style="background-color: #f7f6f6;">
-              <!-- Line Item TAB -->
+
+          <div class="col-md-12 m-t-10" style="padding: 0px">
+            <mat-tab-group>
               <mat-tab label="Line Item">
                 <div class="table-responsive">
                   <div class="content">
                     <div class="left">
-                      <div class="wrapper">
+                      <div class="wrapper" style="margin-top: 20px;">
                         <div class="container" style="padding: 0px">
                           <dx-data-grid id="gridContainer"
                             [dataSource]="ordered_items" keyExpr="ID"
                             [showBorders]="true"
                             (onRowRemoved)="removeLineItemsGrid($event)"
-                            (onEditingStart)="editTable($event)"
-                            [columnAutoWidth]="true">
+                            (onEditingStart)="editTable($event)">
                             <dxo-editing [allowUpdating]="true"
                               [allowDeleting]="!viewOnly">
-                              <dxo-texts [editRow]="viewOnly? 'View' : 'Edit' "
-                                deleteRow="Remove"> </dxo-texts>
+                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'"
+                                deleteRow="Remove">
+                              </dxo-texts>
                             </dxo-editing>
                             <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="sn_no" width="50"
-                              caption="SLNo" [allowEditing]="false"
+                            <dxi-column dataField="sn_no" [width]="50"
+                              caption="{{ slno_lbl }}" [allowEditing]="false"
                               alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="stock_code" width="100"
+                            <dxi-column dataField="stock_code" [width]="100"
                               [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="description" width="150"
+                            <dxi-column dataField="description" [width]="150"
                               [allowEditing]="false" alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="weight" caption="Weight"
-                              width="100" [allowEditing]="false">
-                            </dxi-column>
+
                             <dxi-column dataField="pcs" caption="Pcs"
-                              width="100"
+                              alignment="right" [width]="100"
                               [allowEditing]="false"></dxi-column>
+                            <dxi-column dataField="weight" caption="Weight"
+                              alignment="right"
+                              [format]="weightDecimalFormat" [width]="100"
+                              [allowEditing]="false">
+                            </dxi-column>
                             <dxi-column dataField="total_amount"
                               caption="Mkg amount" alignment="right"
                               format="currency"
@@ -205,11 +542,13 @@
                               caption="Total amount" alignment="right"
                               format="currency"
                               [format]="{ style: 'currency', currency: 'AED' }"
-                              [allowEditing]="false" precision="2">
+                              [allowEditing]="false"
+                              precision="2">
                             </dxi-column>
 
                             <dxo-summary>
-                              <dxi-total-item column="sn_no" summaryType="count">
+                              <dxi-total-item column="sn_no"
+                                summaryType="count">
                               </dxi-total-item>
                               <dxi-total-item column="stock_code"
                                 summaryType="min"
@@ -217,7 +556,9 @@
                               </dxi-total-item>
                               <dxi-total-item column="weight" summaryType="sum"
                                 caption="Weight"
-                                [customizeText]="customizeWeight">
+                                [valueFormat]="weightDecimalFormat"
+                                displayFormat="Wt: {0}">
+
                               </dxi-total-item>
                               <dxi-total-item column="pcs" summaryType="sum"
                                 [customizeText]="customizeQty">
@@ -225,21 +566,30 @@
                               <dxi-total-item column="total_amount"
                                 summaryType="sum" displayFormat="AED {0}"
                                 type="fixedPoint" precision="2"
-                                [valueFormat]="{ currency: 'AED' }">
+                                [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
                               <dxi-total-item column="net_amount"
-                                summaryType="sum"
-                                displayFormat="AED {0}" precision="2"
-                                [valueFormat]="{ currency: 'AED' }">
+                                summaryType="sum" displayFormat="AED {0}"
+                                precision="2"
+                                [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
+
                             </dxo-summary>
                           </dx-data-grid>
                         </div>
 
                         <div>
-                          <button mat-mini-fab color="primary" class="m-2"
-                            type="submit"
-                            (click)="open('mymodal')">
+
+                          <button type="submit"
+                            (click)="open(mymodal,false,null,false,false)"
+                            [disabled]="
+                            this.viewOnly || this.amlNameValidationData
+                          " class="btn btn-secondary" style="
+                            margin: 10px;
+                            width: 20px !important;
+                            padding: 3px 10px;
+                            padding-right: 21px;
+                          ">
                             <i class="fa fa-plus"></i>
                           </button>
                         </div>
@@ -248,7 +598,6 @@
                   </div>
                 </div>
               </mat-tab>
-              <!-- Sales Return -->
               <mat-tab label="Sales Return">
                 <div class="table-responsive">
                   <div class="content">
@@ -259,40 +608,44 @@
                             [dataSource]="sales_returns_items" keyExpr="ID"
                             (onRowRemoved)="removeSalesReturnGrid($event)"
                             (onEditingStart)="editTableSalesReturn($event)"
-                            [showBorders]="true" [columnAutoWidth]="true">
+                            [showBorders]="true">
                             <dxo-editing [allowUpdating]="true"
                               [allowDeleting]="!viewOnly">
-                              <dxo-texts [editRow]="viewOnly? 'View' : 'Edit' "
-                                deleteRow="Remove"> </dxo-texts>
+                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'"
+                                deleteRow="Remove">
+                              </dxo-texts>
                             </dxo-editing>
                             <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="sn_no" width="50"
+                            <dxi-column dataField="sn_no" [width]="50"
                               caption="SLNo" [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="stock_code" width="100"
+                            <dxi-column dataField="stock_code" [width]="100"
                               [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="description" width="200"
+                            <dxi-column dataField="description" [width]="200"
                               [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="weight" caption="Weight"
-                              width="100" [allowEditing]="false">
-                            </dxi-column>
+
                             <dxi-column dataField="pcs" caption="Pcs"
-                              width="100"
-                              [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="mkg_amount" alignment="right"
-                              format="currency"
+                              [width]="100" [allowEditing]="false"></dxi-column>
+                            <dxi-column dataField="weight" caption="Weight"
+                              [width]="100" [allowEditing]="false">
+                            </dxi-column>
+                            <!-- <dxi-column dataField="mkg_amount" alignment="right" format="currency" -->
+                            <dxi-column dataField="VAT_AMOUNTFC"
+                              alignment="right" format="currency"
+                              caption="Vat Amount"
                               [format]="{ style: 'currency', currency: 'AED' }"
                               [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="total_amount"
-                              alignment="right"
+                            <dxi-column dataField="net_amount" alignment="right"
                               format="currency"
+                              caption="Total Amount"
                               [format]="{ style: 'currency', currency: 'AED' }"
                               [allowEditing]="false">
                             </dxi-column>
 
                             <dxo-summary>
-                              <dxi-total-item column="sn_no" summaryType="count">
+                              <dxi-total-item column="sn_no"
+                                summaryType="count">
                               </dxi-total-item>
                               <dxi-total-item column="stock_code"
                                 summaryType="min"
@@ -305,22 +658,38 @@
                               <dxi-total-item column="pcs" summaryType="sum"
                                 [customizeText]="customizeQty">
                               </dxi-total-item>
-                              <dxi-total-item column="mkg_amount"
-                                summaryType="sum"
-                                displayFormat="AED {0}"
-                                [valueFormat]="{ currency: 'AED' }">
-                              </dxi-total-item>
-                              <dxi-total-item column="total_amount"
+                              <!-- <dxi-total-item column="mkg_amount" summaryType="sum" displayFormat="AED {0}" -->
+                              <dxi-total-item column="VAT_AMOUNTFC"
                                 summaryType="sum" displayFormat="AED {0}"
                                 [valueFormat]="{ currency: 'AED' }">
                               </dxi-total-item>
+                              <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}" -->
+                              <!-- type: 'fixedPoint', precision: 2, -->
+                              <dxi-total-item column="net_amount"
+                                summaryType="sum" displayFormat="AED {0}"
+                                type="fixedPoint" precision="2"
+                                [valueFormat]="{ currency: 'AED' }">
+                              </dxi-total-item>
+                              <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxo-summary>
                           </dx-data-grid>
 
                           <div>
-                            <button mat-mini-fab color="primary" class="m-2"
-                              type="submit"
-                              (click)="open('adjust_sale_return_modal')">
+
+                            <button type="submit"
+                              (click)="open(adjust_sale_return_modal)"
+                              class="btn btn-secondary"
+                              [disabled]="
+                            this.ordered_items.length > 0 && !this.viewOnly
+                              ? false
+                              : true
+                          " style="
+                              margin: 10px;
+
+                              width: 20px !important;
+                              padding: 3px 10px;
+                              padding-right: 21px;
+                            ">
                               <i class="fa fa-plus"></i>
                             </button>
                           </div>
@@ -330,7 +699,6 @@
                   </div>
                 </div>
               </mat-tab>
-              <!-- Exchange -->
               <mat-tab label="Exchange">
                 <div class="table-responsive">
                   <div class="content">
@@ -340,31 +708,29 @@
                           <dx-data-grid id="exchange_item_grid"
                             [dataSource]="exchange_items" keyExpr="ID"
                             (onRowRemoved)="removeExchangeItemGrid($event)"
-                            [showBorders]="true" [columnAutoWidth]="true"
+                            [showBorders]="true"
                             (onEditingStart)="editTableExchangeItem($event)">
-                            <!-- <dxo-editing [allowUpdating]="false" [allowDeleting]="true">
-                            <dxo-texts deleteRow="Remove"> </dxo-texts>
-                          </dxo-editing> -->
+
                             <dxo-editing [allowUpdating]="true"
                               [allowDeleting]="!viewOnly">
-                              <dxo-texts [editRow]="viewOnly? 'View' : 'Edit' "
-                                deleteRow="Remove"> </dxo-texts>
+                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'"
+                                deleteRow="Remove">
+                              </dxo-texts>
                             </dxo-editing>
                             <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="sn_no" width="50"
+                            <dxi-column dataField="sn_no" [width]="50"
                               caption="SLNo" [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="stock_code" width="100"
+                            <dxi-column dataField="stock_code" [width]="100"
                               [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="description" width="200"
+                            <dxi-column dataField="description" [width]="200"
                               [allowEditing]="false"></dxi-column>
                             <dxi-column dataField="weight" caption="Weight"
-                              width="100" [allowEditing]="false">
+                              [width]="100" [allowEditing]="false">
                             </dxi-column>
                             <dxi-column dataField="pcs" caption="Pcs"
-                              width="100"
-                              [allowEditing]="false"></dxi-column>
+                              [width]="100" [allowEditing]="false"></dxi-column>
                             <dxi-column dataField="net_amount" alignment="right"
                               format="currency"
                               [format]="{ style: 'currency', currency: 'AED' }"
@@ -372,7 +738,8 @@
                             </dxi-column>
 
                             <dxo-summary>
-                              <dxi-total-item column="sn_no" summaryType="count">
+                              <dxi-total-item column="sn_no"
+                                summaryType="count">
                               </dxi-total-item>
                               <dxi-total-item column="stock_code"
                                 summaryType="min"
@@ -386,17 +753,25 @@
                                 [customizeText]="customizeQty">
                               </dxi-total-item>
                               <dxi-total-item column="net_amount"
-                                summaryType="sum"
-                                displayFormat="AED {0}"
+                                summaryType="sum" displayFormat="AED {0}"
                                 [valueFormat]="{ currency: 'AED' }">
+                                <!-- [valueFormat]="{ currency: 'EUR' }" -->
                               </dxi-total-item>
                             </dxo-summary>
                           </dx-data-grid>
 
                           <div>
-                            <button mat-mini-fab color="primary" class="m-2"
-                              type="submit"
-                              (click)="open('exchange_modal')">
+                            <button type="submit" [disabled]="
+                              this.ordered_items.length > 0 && !this.viewOnly
+                                ? false
+                                : true
+                            " (click)="open(oldgoldmodal)"
+                              class="btn btn-secondary" style="
+                              margin: 10px;
+                              width: 20px !important;
+                              padding: 3px 10px;
+                              padding-right: 21px;
+                            ">
                               <i class="fa fa-plus"></i>
                             </button>
                           </div>
@@ -407,23 +782,25 @@
                 </div>
               </mat-tab>
             </mat-tab-group>
+
             <hr style="width: 100%" />
           </div>
-          <!-- product detail form ends -->
-          <!-- reciept section starts -->
+
           <div class="row" style="margin-top: 0px">
-            <div class="col-md-6">
+
+            <div class="col-md-6" hidden="true">
               <div class="card m-t-10">
                 <div class="card-header">
-                  <b (click)="open(sales_payment_modal)"
-                    style="color: #0861a9; cursor: pointer; text-decoration: underline;">
-                    Receipt Details
-                  </b>
-                  <span style="float:right;">
-                    <button type="submit" (click)="open('sales_payment_modal')"
-                      style
-                      class="btn btnsml btn-secondary w-30">Add</button>
-                  </span>
+                  <b (click)="open(sales_payment_modal)" style="
+                    color: #0861a9;
+                    cursor: pointer;
+                    text-decoration: underline;
+                  ">Receipt Details</b>
+                  <span style="float: right"><button type="submit"
+                      (click)="open(sales_payment_modal)" style
+                      class="btn btnsml btn-secondary w-30">
+                      Add
+                    </button></span>
                 </div>
                 <div class="card-body receipt-details">
                   <table class="tabletd_gray">
@@ -433,8 +810,10 @@
                       <th>Amount LC</th>
                       <th>&nbsp;</th>
                     </tr>
-                    <tr
-                      *ngFor="let rec_details of receiptDetailsList; let id= index">
+                    <tr *ngFor="
+                      let rec_details of receiptDetailsList;
+                      let id = index
+                    ">
                       <td>{{ rec_details.RECEIPT_MODE }}</td>
                       <td>{{ rec_details.CURRENCY_CODE }}</td>
                       <td style="text-align: right; padding-right: 3px">
@@ -460,206 +839,786 @@
                       </td>
                     </tr>
                   </table>
+
                   <div class="row">
                     <div class="col-md-12 text-right m-t-10">
+                      <!--<button type="submit" class="btn btnsml btn-secondary w-30 m-l-10">Delete</button>-->
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- reciept section ends -->
         </div>
-        <!-- selling price total amount Right side section starts -->
-        <div class="col-md-3 col-sm-12">
-          <div class="card p-2" style="background-color: #ececec !important">
-            <div style="height: 100px; overflow-y: scroll">
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <div class="card" style="background-color: #ececec !important">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xl-12 col-md-6"
+              style="height: 140px; overflow-y: scroll">
               <table class="tabletd_gray">
                 <tr>
-                  <th style="width: 50%">Karat</th>
-                  <!-- <th style="width: 50%">Karat </th> -->
-                  <th>Selling Price</th>
-                  <!-- <th>Buying Price</th> -->
+                  <th style="width: 30%">Karat</th>
+
+                  <th style="width: 35%">Sale</th>
+                  <th style="width: 35%">Purchase Rate</th>
                 </tr>
-                <tr *ngFor="let krd of karatRateDetails; let id= index">
+                <tr *ngFor="let krd of karatRateDetails; let id = index">
                   <td>{{ krd.KARAT_CODE }}</td>
                   <td style="text-align: right; padding-right: 3px">
                     <input type="number" (change)="changeKaratRate($event, id)"
-                      style="text-align: right;"
-                      onwheel="this.blur()" [value]="krd.KARAT_RATE"
+                      style="text-align: right"
+                      onwheel="this.blur()"
+                      [value]="krd.KARAT_RATE| decimalFormat:'AMOUNT'"
                       class="karat_code"
-                      [readOnly]="viewOnly ? true: false   ">
+                      [readOnly]="
+                      viewOnly ||
+                      this.comFunc?.posKARATRATECHANGE.toString() == '0'
+                        ? true
+                        : false
+                    " />
                     <!-- {{ krd.KARAT_RATE }} -->
                   </td>
-                  <!-- <td style="text-align:right;padding-right:3px;"> {{krd.POPKARAT_RATE}} </td> -->
+                  <td style="text-align: right; padding-right: 3px">
+                    {{ krd.POPKARAT_RATE| decimalFormat:'AMOUNT' }}
+                  </td>
                 </tr>
               </table>
             </div>
-            <table class="m-t-10 rhs-table-1">
-              <tr>
-                <td class="td-w-40">Amount</td>
-                <!-- <td class="td-w-40">Total Amount</td> -->
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ prnt_inv_total_gross_amt | number : '1.2'}}"
-                    aria-describedby placeholder="0.00"
-                    readonly />
-                </td>
-              </tr>
-              <tr>
-                <td class="td-w-40">Tax Amount</td>
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ this.order_items_total_tax | number : '1.2'}}"
-                    aria-describedby placeholder="0.00"
-                    readonly />
-                </td>
-              </tr>
-              <tr>
-                <td class="td-w-40">Amount with tax</td>
-                <!-- <td class="td-w-40">Gross Total</td> -->
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ order_items_total_gross_amount | number : '1.2'}}"
-                    aria-describedby placeholder="0.00"
-                    readonly />
-                </td>
-              </tr>
-              <tr>
-                <td class="td-w-40" style="background: #adacab">
-                  Sales Return
-                </td>
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ invReturnSalesTotalNetTotal | number : '1.2'}}"
-                    aria-describedby placeholder="0.00"
-                    readonly />
-                </td>
-              </tr>
-              <tr>
-                <td class="td-w-40" style="background: #adacab">Exchange</td>
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ order_total_exchange | number : '1.2'}}"
-                    aria-describedby placeholder="0.00"
-                    readonly />
-                </td>
-              </tr>
-              <tr>
-                <td class="td-w-40"
-                  style="background-color: #1a61a9; color: #fff">
-                  <b>Discount</b>
-                </td>
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ order_items_total_discount_amount | number : '1.2'}}"
-                    aria-describedby placeholder="0"
-                    readonly />
-                </td>
-                <!-- <td>
-                <input type="text" class="form-control textboxcorner" id=""
-                  value="{{ order_items_total_discount_amount }}" aria-describedby="" placeholder="0" />
-              </td> -->
-              </tr>
-              <tr>
-                <td class="td-w-40"
-                  style="background-color: #1a61a9; color: #fff">
-                  <b>Net Amount</b>
-                </td>
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    value="{{ order_items_total_net_amount | number : '1.2' }}"
-                    aria-describedby placeholder="0.00"
-                    readonly />
-                </td>
-              </tr>
 
-              <tr>
-                <td class="td-w-40"
-                  style="background-color: #1a61a9; color: #fff">
-                  <b>Received</b>
-                </td>
-                <td>
-                  <input type="text" class="form-control textboxcorner" id
-                    [(ngModel)]="receiptTotalNetAmt"
-                    value="{{ receiptTotalNetAmt }}" aria-describedby
-                    placeholder="0.00" readonly />
-                  <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
-                  value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
-                </td>
-              </tr>
-            </table>
-            <!-- save bill / cancel buttons section-->
-            <div>
-              <div class="row m-t-10 m-b-10">
-                <div class="col-md-6 col-xl-6" style="padding-right: 5px"
-                  (click)="backToList()" *ngIf="viewOnly">
-                  <div class="touch-big-button touch-big-button-black">
-                    <div class="touch-big-button-inner">
-                      <i class="fa fa-arrow-circle-left"></i> <span> Back</span>
-                    </div>
-                  </div>
-                </div>
+            <div class="col-xl-12 col-md-6">
+              <table class="m-t-10 rhs-table-1">
+                <tr>
+                  <!-- <td class="td-w-40">Amount</td> -->
+                  <td class="td-w-40">Item Total</td>
+                  <!-- <td class="td-w-40">Total Amount</td> -->
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      value="{{ itemTotal | decimalFormat:'AMOUNT' }}"
+                      aria-describedby
+                      placeholder="0.00" readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="td-w-40">Tax Amount</td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      [value]="totalTax | decimalFormat:'AMOUNT'"
+                      aria-describedby readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <!-- <td class="td-w-40">Amount with tax</td> -->
+                  <td class="td-w-40">Gross Total</td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      value="{{
+                      grossTotal | decimalFormat:'AMOUNT'
+                      }}" aria-describedby placeholder="0.00" readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="td-w-40" style="background: #adacab">
+                    Sales Return
+                  </td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      value="{{ invReturnSalesTotalNetTotal| decimalFormat:'AMOUNT' }}"
+                      aria-describedby
+                      placeholder="0.00" readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="td-w-40" style="background: #adacab">Exchange</td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      value="{{ order_total_exchange | decimalFormat:'AMOUNT' }}"
+                      aria-describedby placeholder="0.00"
+                      readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="td-w-40"
+                    style="background-color: #1a61a9; color: #fff">
+                    <b>Discount</b>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      value="{{
+                        order_items_total_discount_amount | decimalFormat:'AMOUNT'
+                      }}" (change)="changeFinalDiscount($event)"
+                      aria-describedby placeholder="0"
+                      [readonly]="viewOnly" />
+                  </td>
 
-                <div class="col-md-6 col-xl-6"
-                  matTooltip="You have already saved"
-                  [matTooltipDisabled]="isSaved"
-                  style="padding-right: 5px;"
-                  (click)="viewOnly || isSaved ? '' :saveOrder()"
-                  *ngIf="!viewOnly">
-                  <div class="touch-big-button touch-big-button-black">
-                    <div class="touch-big-button-inner p-2">
-                      <i class="fa fa-save"></i> <span> Save Bill</span>
-                    </div>
-                  </div>
-                </div>
+                </tr>
+                <tr>
+                  <td class="td-w-40"
+                    style="background-color: #1a61a9; color: #fff">
+                    <b>Net Amount</b>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      value="{{ netTotal | decimalFormat:'AMOUNT' }}"
+                      aria-describedby
+                      placeholder="0.00" readonly />
+                  </td>
+                </tr>
 
-                <div class="col-md-6 col-xl-6" style="padding-left: 5px">
-                  <app-print-invoice></app-print-invoice>
+                <tr>
+                  <td class="td-w-40"
+                    style="background-color: #1a61a9; color: #fff">
+                    <b>Receipt Total</b>
+                    <!-- <b>Received</b> -->
+                  </td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner" id
+                      [(ngModel)]="receiptTotalNetAmt"
+                      value="{{ receiptTotalNetAmt| decimalFormat:'AMOUNT' }}"
+                      aria-describedby placeholder="0.00"
+                      readonly />
+
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="td-w-40"
+                    style="background-color: #1a61a9; color: #fff">
+                    <b>VAT Round Off</b>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control textboxcorner"
+                      id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
+                      aria-describedby placeholder="0.00" readonly />
+
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
+
+          <div class="row m-t-10 m-b-10">
+            <div class="col-md-6 col-xl-6" style="padding-right: 5px"
+              (click)="backToList()" *ngIf="viewOnly">
+              <div class="touch-big-button touch-big-button-black">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-arrow-circle-left"></i> <span> Back</span>
                 </div>
               </div>
+            </div>
 
-              <div class="row mt-2" *ngIf="!viewOnly">
-                <div class="col-md-6 col-xl-6" style="padding-right: 5px">
-                  <div class="touch-big-button touch-big-button-black">
-                    <div class="touch-big-button-inner p-2"><i
-                        class="fa fa-search"></i>
-                      <span> Search</span></div>
-                  </div>
+            <div class="col-md-6 col-xl-6"
+              (click)="viewOnly || isSaved ? '' : saveOrder()"
+              *ngIf="!viewOnly">
+              <div class="touch-big-button touch-big-button-black">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-save"></i> <span> Save Bill</span>
                 </div>
+              </div>
+            </div>
 
-                <div class="col-md-6 col-xl-6" style="padding-left: 5px"
-                  routerLink="/pos">
-                  <div class="touch-big-button">
-                    <div class="touch-big-button-inner p-1">
-                      <i class="fa fa-window-close pe-2"></i> <span> Cancel Bill</span>
-                    </div>
-                  </div>
+            <div class="col-md-6 col-xl-6"
+              (click)="this.viewOnly || this.editOnly ? printInvoice() : ''">
+              <!-- *ngIf="!viewOnly" -->
+              <div class="touch-big-button">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-print"></i> <span> Print Bill</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-6 mt-2"
+              (click)="this.viewOnly || this.editOnly ? sendToEmail() : ''">
+              <div class="touch-big-button">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-print"></i> <span> Send Email</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-6 mt-2"
+              (click)="viewOnly || isSaved ? '' : saveOrder('continue')"
+              *ngIf="!viewOnly">
+              <div class="touch-big-button touch-big-button-black">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-save"></i> <span> Save & Continue</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2" *ngIf="!viewOnly">
+            <div class="col-md-6 col-xl-6">
+              <div class="touch-big-button touch-big-button-black">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-search"></i> <span> Search</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-6" (click)="cancelBill()">
+              <div class="touch-big-button">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-window-close"></i> <span> Cancel Bill</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- selling price total amount Right side section ends -->
       </div>
-
     </div>
   </div>
 </div>
-<!-- modal selections -->
-<ng-template #more_customer_detail_modal let-modal modal-lg>
-  <!-- <app-add-customer (closebtnClick)="closeModal()"></app-add-customer> -->
-  <app-pos-customer-master (closebtnClick)="closeModal()"></app-pos-customer-master>
-</ng-template>
-<ng-template #mymodal let-modal modal-lg>
-  <app-add-items (closebtnClick)="closeModal()"></app-add-items>
-</ng-template>
-<ng-template #adjust_sale_return_modal let-modal modal-lg>
-  <app-add-sales-return (closebtnClick)="closeModal()"></app-add-sales-return>
-</ng-template>
-<ng-template #exchange_modal let-modal modal-lg>
-  <app-add-exchange (closebtnClick)="closeModal()"></app-add-exchange>
-</ng-template>
+
 <ng-template #sales_payment_modal let-modal modal-lg>
-  <app-add-payment (closebtnClick)="closeModal()"></app-add-payment>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Payments</h4>
+    <button type="button" class="close" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex"
+      (selectedTabChange)="setTabByIndex($event.index)">
+      <mat-tab label="CASH RECEIPT"
+        [disabled]="!this.receiptModesList?.BTN_CASH || viewOnly">
+        <form [formGroup]="cashreceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsCash"
+                    [matAutocomplete]="receiptmode"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #receiptmode="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option
+                      *ngFor="let option of receiptModeOptions_Cash | async"
+                      [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      cashreceiptForm.controls.paymentsCash.hasError('required')
+                    ">
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount LC</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="cashAmtLC" id="cashAmtLC"
+                    placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount FC</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="cashAmtFC" id="cashAmtFC"
+                    (focusout)="
+                      changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
+                    " placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      cashreceiptForm.controls.cashAmtFC.hasError('required')
+                    ">
+                    Amount FC is <strong>required</strong>
+                  </mat-error>
+                  <mat-error
+                    *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('min')">
+                    Amount FC is should Not Be Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </mat-tab>
+
+      <mat-tab label="CREDIT CARD"
+        [disabled]="!this.receiptModesList?.BTN_CREDITCARD || viewOnly">
+        <form [formGroup]="creditCardReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput
+                    formControlName="paymentsCreditCard"
+                    [matAutocomplete]="receiptmodecc"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #receiptmodecc="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option
+                      *ngFor="let option of receiptModeOptions_CC | async"
+                      [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      creditCardReceiptForm.controls.paymentsCreditCard.hasError(
+                        'required'
+                      )
+                    ">
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>CC No.</mat-label>
+                  <input type="number" matInput formControlName="cardCCNo"
+                    id="cardCCNo" maxlength="19"
+                    [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      creditCardReceiptForm.controls.cardCCNo.hasError(
+                        'required'
+                      )
+                    ">
+                    CC No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount </mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="cardAmtFC" id="cardAmtFC"
+                    placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      creditCardReceiptForm.controls.cardAmtFC.hasError(
+                        'required'
+                      )
+                    ">
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
+                      creditCardReceiptForm.controls.cardAmtFC.hasError('min')
+                    ">
+                    Amount is should Not Be Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+
+      <mat-tab label="ADVANCE"
+        [disabled]="!this.receiptModesList?.BTN_ADVANCE || viewOnly">
+        <form [formGroup]="advanceReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsAdvance"
+                    id="paymentsAdvance"
+                    [matAutocomplete]="paymentsAdvance" [readonly]="viewOnly" />
+                  <mat-autocomplete #paymentsAdvance="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option
+                      *ngFor="let option of receiptModeAdvanceOthers | async"
+                      [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      advanceReceiptForm.controls.paymentsAdvance.hasError(
+                        'required'
+                      )
+                    ">
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Branch</mat-label>
+                  <input type="text" matInput formControlName="advanceBranch"
+                    [matAutocomplete]="advanceBranch"
+                    id="advanceBranch" (focusout)="changeBranch($event)"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #advanceBranch="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option *ngFor="
+                        let option of filteredAdvanceBranchOptions | async
+                      " [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      advanceReceiptForm.controls.advanceBranch.hasError(
+                        'required'
+                      )
+                    ">
+                    Branch is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Year</mat-label>
+                  <input matInput type="text" id="advanceYear"
+                    formControlName="advanceYear" id="advanceYear"
+                    [matAutocomplete]="advanceYear" [readonly]="viewOnly" />
+                  <mat-autocomplete #advanceYear="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option
+                      *ngFor="let option of filteredadvanceYear | async"
+                      [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      advanceReceiptForm.controls.advanceYear.hasError(
+                        'required'
+                      )
+                    ">
+                    Year is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Rec No.</mat-label>
+                  <input type="text" matInput formControlName="advanceRecNo"
+                    value id="advanceRecNo"
+                    (change)="changeAdvanceVocNo($event)"
+                    [readonly]="viewOnly" />
+
+                  <mat-error *ngIf="
+                      advanceReceiptForm.controls.advanceRecNo.hasError(
+                        'required'
+                      )
+                    ">
+                    Rec No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="advanceAmount" id="advanceAmount"
+                    [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      advanceReceiptForm.controls.advanceAmount.hasError(
+                        'required'
+                      )
+                    ">
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
+                      advanceReceiptForm.controls.advanceAmount.hasError('min')
+                    ">
+                    Amount is should Not Be Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Vat Amount Paid LC</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="advanceVatAmountLC"
+                    id="advanceVatAmountLC" placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Vat Amount Paid FC</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="advanceVatAmountFC"
+                    id="advanceVatAmountFC" placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+
+      <mat-tab label="OTHERS"
+        [disabled]="!this.receiptModesList?.BTN_OTHERS || viewOnly">
+        <form [formGroup]="othersReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsOthers"
+                    id="paymentsOthers"
+                    [matAutocomplete]="receiptmodeOthers"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #receiptmodeOthers="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option
+                      *ngFor="let option of receiptModeOptionsOthers | async"
+                      [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      othersReceiptForm.controls.paymentsOthers.hasError(
+                        'required'
+                      )
+                    ">
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="othersAmtFC" id="othersAmtFC"
+                    placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      othersReceiptForm.controls.othersAmtFC.hasError(
+                        'required'
+                      )
+                    ">
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
+                      othersReceiptForm.controls.othersAmtFC.hasError('min')
+                    ">
+                    Amount is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="GIFT. VOC"
+        [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly">
+        <form [formGroup]="giftReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput
+                    formControlName="paymentsCreditGIftVoc"
+                    id="paymentsCreditGIftVoc"
+                    [matAutocomplete]="paymentsCreditGIftVoc"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #paymentsCreditGIftVoc="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option
+                      *ngFor="let option of receiptModeGiftOptions | async"
+                      [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      giftReceiptForm.controls.paymentsCreditGIftVoc.hasError(
+                        'required'
+                      )
+                    ">
+                    Receipt Mode <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Branch</mat-label>
+                  <input type="text" matInput formControlName="giftBranch"
+                    [matAutocomplete]="giftBranch"
+                    id="giftBranch" (focusout)="changeBranch($event)"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #giftBranch="matAutocomplete"
+                    autoActiveFirstOption>
+                    <mat-option *ngFor="
+                        let option of filteredGiftModeBranchOptions | async
+                      " [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      giftReceiptForm.controls.giftBranch.hasError('required')
+                    ">
+                    Branch is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Voc No.</mat-label>
+                  <input type="text" matInput formControlName="giftVocNo" value
+                    id="giftVocNo"
+                    [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      giftReceiptForm.controls.giftVocNo.hasError('required')
+                    ">
+                    Voc No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="giftAmtFC" id="giftAmtFC"
+                    placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                      giftReceiptForm.controls.giftAmtFC.hasError('required')
+                    ">
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error
+                    *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('min')">
+                    Amount is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="CUSTOMERS"
+        [disabled]="!this.receiptModesList?.BTN_CUSTOMER || viewOnly">
+        <form [formGroup]="customerReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Select Accode</mat-label>
+                  <input type="text" matInput formControlName="customAcCodeList"
+                    [matAutocomplete]="customAcCodeList"
+                    id="customAcCodeList" [readonly]="viewOnly" />
+                  <mat-autocomplete #customAcCodeList="matAutocomplete"
+                    autoActiveFirstOption
+                    (optionSelected)="changeCustAcCode($event.option.value)">
+                    <mat-option
+                      *ngFor="let option of customAcCodeListOptions | async"
+                      [value]="option.CODE">
+                      {{ option.CODE + " - " + option.DESCRIPTION }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      customerReceiptForm.controls.customAcCodeList.hasError(
+                        'required'
+                      )
+                    ">
+                    Accode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount LC</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="customerAmtLC" id="customerAmtLC"
+                    placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount FC</mat-label>
+                  <input type="number" class="st_txt_right" matInput
+                    formControlName="customerAmtFC" id="customerAmtFC"
+                    (focusout)="
+                      changeReceiptAmtFC(
+                        $event,
+                        'customerReceiptForm',
+                        'customerAmtLC'
+                      )
+                    " placeholder="0.00" [readonly]="viewOnly" />
+
+                  <mat-error *ngIf="
+                      customerReceiptForm.controls.customerAmtFC.hasError(
+                        'required'
+                      )
+                    ">
+                    Amount FC is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
+                      customerReceiptForm.controls.customerAmtFC.hasError('min')
+                    ">
+                    Amount FC is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div style="padding-bottom: 20px">
+      <div style="text-align: right; padding: 10px">
+        <button *ngIf="!viewOnly" class="btn btn-secondary btn-m-r-10"
+          [disabled]="viewOnly"
+          (click)="saveReceipt('Continue')">
+          Continue
+        </button>
+        <button *ngIf="!viewOnly" class="btn btn-primary btn-m-r-10"
+          [disabled]="viewOnly" (click)="saveReceipt()">
+          SAVE
+        </button>
+        <button class="btn btn-danger" #closeModalButton
+          (click)="modal.dismiss('Cross click')">
+          CLOSE
+        </button>
+        &nbsp;
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Line Item Modal -->
+<ng-template #mymodal let-modal modal-lg>
+  <app-item-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal"
+    [updatedLineItem]="newLineItem"
+    [vocTypeData]="vocTypeData" [vocDataForm]="vocDataForm"
+    [orderedItems]="ordered_items" [vocType]="vocType"
+    [karatRateDetails]="karatRateDetails" [editItemDetail]="isEditable"
+    (grossAmountEvent)="updateGrossAmount($event)"
+    (totalTaxEvent)="updateTotalTax($event)"
+    (itemTotalEvent)="updateItemTotal($event)"
+    (netTotalEvent)="updateNetTotal($event)"
+    (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
+</ng-template>
+
+<!-- Sales Return Modal -->
+<ng-template #adjust_sale_return_modal let-modal modal-lg>
+  <app-sales-return [modalTitle]="'Dynamic Modal Title'" [modal]="modal"
+    (salesReturnsItemsChange)="sales_returns_items = $event"
+    [filteredSalesReturnBranchOptions]="filteredSalesReturnBranchOptions"></app-sales-return>
+</ng-template>
+
+<!-- Customer Detail Modal -->
+<ng-template #more_customer_detail_modal let-modal modal-lg>
+  <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal"
+    [customerDataForm]="customerDataForm"
+    [vocDataForm]="vocDataForm"></app-customer-details>
+</ng-template>
+
+<!-- Exchange Modal -->
+<ng-template #oldgoldmodal let-modal modal-lg>
+  <app-exchange-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal"
+    [customerDataForm]="customerDataForm"
+    [vocDataForm]="vocDataForm" [customerDetailForm]="customerDetailForm"
+    [ordered_items]="ordered_items"
+    (newExchangeItem)="updateExchangeItems($event)"></app-exchange-detail>
 </ng-template>
