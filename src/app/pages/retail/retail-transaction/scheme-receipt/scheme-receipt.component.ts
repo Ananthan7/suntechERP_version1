@@ -741,6 +741,10 @@ export class SchemeReceiptComponent implements OnInit {
       dataToChild.SchemeID = this.receiptDetailsForm.value.SchemeID
       dataToChild.BALANCE_CC = this.content?.BALANCE_CC
       dataToChild.MID = this.content?.MID
+      dataToChild.PartyCode = this.receiptDetailsForm.value.PartyCode
+      dataToChild.ChequeNumber = this.orderedItems[0].ChequeNumber
+      dataToChild.DrawnBank = this.orderedItems[0].DrawnBank
+      dataToChild.DepBank = this.orderedItems[0].DepBank
       dataToChild.GRID_DATA = this.unsavedGridData || []
       this.dataToEditrow = dataToChild;
     } else {
@@ -1250,7 +1254,7 @@ export class SchemeReceiptComponent implements OnInit {
       console.log(this.orderedItems, 'this.orderedItems');
 
       this.orderedItems.forEach((item: any) => {
-        item.SchemeBalance = this.commonService.emptyToZero(item.SchemeBalance)
+        SchemeBalance = this.commonService.emptyToZero(item.SchemeBalance)
         item.Amount_FC = this.commonService.emptyToZero(item.Amount_FC)
         item.Amount_LC = this.commonService.emptyToZero(item.Amount_LC)
         item.AMOUNT_VAT = ((parseInt(item.Amount_LC) / (100 + parseInt(item.VAT_AMT))) * 100).toFixed(2)

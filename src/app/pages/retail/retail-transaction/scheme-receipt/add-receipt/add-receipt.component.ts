@@ -172,6 +172,10 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.SGST_ACCODE.setValue(this.content.SGST_ACCODE)
     this.receiptEntryForm.controls.SGST_ACCODE.setValue(this.content.SGST_ACCODE)
     this.receiptEntryForm.controls.HSN_AC.setValue(this.content.HSN_AC);
+    this.receiptEntryForm.controls.ChequeNumber.setValue(this.content.ChequeNumber);
+    this.receiptEntryForm.controls.DepBank.setValue(this.content.DepBank);
+    this.receiptEntryForm.controls.DrawnBank.setValue(this.content.DrawnBank);
+    this.receiptEntryForm.controls.ChequeDate.setValue(this.content.ChequeDate);
     this.setFormControlAmount('InstallmentAmount', this.content.InstallmentAmount)
     this.setFormControlAmount('Header_Amount', this.content.Header_Amount)
     this.setFormControlAmount('Amount_LC', this.content.Amount_LC)
@@ -520,7 +524,8 @@ export class AddReceiptComponent implements OnInit {
       Accode: accountCode,
       strdate: this.commonService.formatDate(new Date()),
       branch_code: this.commonService.branchCode,
-      mainvoctype: this.commonService.getqueryParamMainVocType()
+      mainvoctype: this.commonService.getqueryParamMainVocType(),
+      voctype: this.commonService.getqueryParamVocType()
     }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(`TaxDetails`, param)
       .subscribe((result) => {
