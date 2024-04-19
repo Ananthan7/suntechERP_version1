@@ -34,6 +34,7 @@ export class SchemeMasterComponent implements OnInit {
   yearMonth?: String;
   viewMode: boolean = false;
   codeEditMode: boolean = false;
+  codeViewMode: boolean = false;
   usedSchemeEditMode: boolean = false;
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -88,16 +89,18 @@ export class SchemeMasterComponent implements OnInit {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
         this.codeEditMode = true
+        this.codeViewMode = true
         this.usedSchemeEditMode = true;
       }
       if (this.content.FLAG == 'EDIT') {
         this.codeEditMode = true
-        this.viewMode = false;
+        this.codeViewMode = true;
         this.schemeRegistrationWithParameter()
         this.getAllSelectOptions()
       }
       if (this.content.FLAG == 'DELETE') {
         this.codeEditMode = false
+        this.codeViewMode = true;
         this.viewMode = true;
         this.usedSchemeEditMode = true;
         this.schemeRegistrationWithParameter()
@@ -105,6 +108,7 @@ export class SchemeMasterComponent implements OnInit {
       this.setInitialValues()
     } else {
       this.codeEditMode = true
+      this.codeViewMode = false;
       this.getAllSelectOptions()
       this.setFormValues()
     }
@@ -173,7 +177,7 @@ export class SchemeMasterComponent implements OnInit {
   }
 
   checkIfSchemeCodeExists() {
-    if (this.content?.FLAG == 'VIEW' || this.content?.FLAG == 'EDIT') return
+    if (this.content) return
     let API = 'SchemeMaster/CheckIfSchemeCodeExists/' + this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {

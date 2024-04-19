@@ -20,13 +20,13 @@
     <form [formGroup]="schemeMasterForm" class="p-1">
         <div class="row">
             <div class="col-md-8">
-                <div class="row align-items-center">
+                <div class="row align-items-errorcenter">
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Code*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text"
-                                [readonly]="viewMode"
+                                [readonly]="codeViewMode"
                                 UpperCaseDirective
                                 (focusout)="checkIfSchemeCodeExists()" maxlength="6"
                                 matInput formControlName="code" />
@@ -145,7 +145,6 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text" class="text-right"
                                 [readonly]="viewMode" maxlength="5"
-                                (keypress)="isNumeric($event)"
                                 AmountDecimalInput
                                 (focusout)="checkReceiptModeExist('bonusInstallment','receiptModeTwo')"
                                 matInput
@@ -168,7 +167,6 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" maxlength="15"
-                                (keypress)="isNumeric($event)"
                                 class="text-right"
                                 [readonly]="viewMode"
                                 AmountDecimalInput
