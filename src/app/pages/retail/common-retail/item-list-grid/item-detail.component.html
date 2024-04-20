@@ -164,7 +164,7 @@
                     <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                       (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_stone_rate"
                       id="fcn_ad_stone_rate" (change)="changeStoneRate($event)" value="{{ li_stone_rate_val }}"
-                      [readonly]="viewOnly" AmountDecimalInput />
+                      [readonly]="!lineItemService.isStoneIncluded" AmountDecimalInput />
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">

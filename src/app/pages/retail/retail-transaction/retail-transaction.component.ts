@@ -246,12 +246,14 @@ export class RetailTransactionComponent implements OnInit {
       //   }
       // });
 
-      const shouldCloseModal = confirm('Are you sure you want to close the modal?');
-      if (shouldCloseModal) {
-        this.modalRef.close();
-      } else {
-        this.modalRef.shown;
-      }
+      
+      // this.modalRef.shown;
+      // const shouldCloseModal = confirm('Are you sure you want to close the modal?');
+      // if (shouldCloseModal) {
+      //   this.modalRef.close();
+      // } else {
+      //   this.modalRef.shown;
+      // }
     }
   }
 

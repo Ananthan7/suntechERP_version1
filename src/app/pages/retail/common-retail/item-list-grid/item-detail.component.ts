@@ -28,6 +28,8 @@ export class ItemDetailTable implements OnInit {
     @Output() totalTaxEvent = new EventEmitter<any>();
     @Output() itemTotalEvent = new EventEmitter<any>();
     @Output() netTotalEvent = new EventEmitter<any>();
+    @Output() netAmountEvent = new EventEmitter<any>();
+    
 
     @Input() karatRateDetails!: any[];
     salesReturnsItems_forVoc: any = [];
@@ -2659,6 +2661,7 @@ export class ItemDetailTable implements OnInit {
 
 
         this.order_items_total_net_amount_org = this.order_items_total_net_amount;
+        this.netAmountEvent.emit(this.order_items_total_net_amount_org)
         this.sumReceiptItem();
 
     }
