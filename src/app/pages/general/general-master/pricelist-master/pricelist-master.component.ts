@@ -72,11 +72,11 @@ export class PricelistMasterComponent implements OnInit {
       description: ['', [Validators.required]],
       priceMethod: [0, [Validators.required]],
       priceSign: ['+'],
-      priceValue: [''],
+      priceValue: ['', [Validators.required]],
       finalPriceSign: ['+'],
-      finalPriceValue: [''],
+      finalPriceValue: ['', [Validators.required]],
       addlValueSign: ['+'],
-      addlValue: [''],
+      addlValue: ['', [Validators.required]],
       priceRoundoff: [false],
       dontCalculate: [false],
       roundoff_digit: ['',[Validators.required]],
@@ -146,9 +146,9 @@ export class PricelistMasterComponent implements OnInit {
 
   private initializeForm() {
     try {
-      this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-      this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-      this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      // this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      // this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      // this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     //  this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     } catch (error) {
       console.error('Error in initializeForm:', error);

@@ -24,7 +24,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6"
-                    [readonly]="viewMode" formControlName="divisions" />
+                    [readonly]="viewMode || inputDisable" formControlName="divisions" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="diaDivisionCodeData"
                   (newRowClick)="divisionCodeSelected($event)"
@@ -99,7 +99,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     formControlName="currency" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="currencyCodeData"
@@ -112,7 +112,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="shape" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="shapeCodeData"
@@ -124,7 +124,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="process" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"
@@ -137,7 +137,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="size_from" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sizeFromCodeData"
@@ -148,7 +148,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="labour_ac" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="labouracCodeData"
@@ -161,7 +161,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="size_to" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sizeToCodeData"
@@ -184,7 +184,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="sieve" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sieveCodeData"
@@ -197,7 +197,6 @@
                 <mat-form-field>
                   <input type="text" [readonly]="viewMode" 
                     matInput SixDecimalInput [max]="13"
-                    (keypress)="salesChangesDia('selling_rate')"
                     class="text-right"
                     formControlName="selling_rate" />
                 </mat-form-field>
@@ -208,7 +207,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     formControlName="sieve_desc" />
                 </mat-form-field>
               </div>
@@ -218,7 +217,7 @@
                 <mat-form-field>
                   <input type="text" matInput [readonly]="viewMode"
                     AmountDecimalInput [max]="6"
-                    class="text-right" formControlName="selling" />
+                    class="text-right" formControlName="selling"   (keypress)="salesChangesDia('selling')"/>
                 </mat-form-field>
               </div>
             </div>
@@ -253,7 +252,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode" matInput
+                    [readonly]="viewMode || codeEnable2" matInput
                     class="text-right" formControlName="ctWtTo" NumberOnly maxlength="20"
                     (change)="onCtweighttto($event,'Ctwtto')" />
                 </mat-form-field>
@@ -279,7 +278,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="metalDivision">
                 </mat-form-field>
                 <master-search [MasterSearchData]="metalDivisionCodeData"
@@ -290,12 +289,12 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode  || stockcodeDisable || inputDisable"
                     formControlName="stock_code" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="stockCodeData"
                   (newRowClick)="stockCodeSelected($event)"
-                  *ngIf=" viewDisable == false"></master-search>
+                  *ngIf=" viewDisable || viewDisable1 == false"></master-search>
               </div>
             </div>
             <div class="row mb-2">
@@ -326,7 +325,7 @@
                   <mat-label>Select</mat-label>
                   <mat-select formControlName="metallabourType">
                     <mat-option *ngFor="let option of labourTypeList"
-                      [disabled]="viewMode" [value]="option.value">
+                      [disabled]="viewMode  || stockcodeDisable || viewDisable1" [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -336,7 +335,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="metalcurrency" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="currencyCodeData"
@@ -349,7 +348,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="karat" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="karatCodeData"
@@ -360,7 +359,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode"
+                  <input matInput type="text" [readonly]="viewMode || inputDisable"
                     formControlName="labourAc" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="labouracCodeData"
@@ -372,12 +371,12 @@
               <label for="input" class="col-sm-2 col-form-label">Color :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode  || stockcodeDisable || inputDisable"
                     maxlength="6" formControlName="color" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData"
                   (newRowClick)="colorDataSelected($event)"
-                  *ngIf=" viewDisable == false"></master-search>
+                  *ngIf=" viewDisable || viewDisable1 == false"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Cost Rate *
                 :</label>
@@ -394,7 +393,7 @@
               <label for="input" class="col-sm-2 col-form-label">Type :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="typecode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="typeCodeData"
@@ -405,10 +404,9 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" [readonly]="viewMode"
+                  <input matInput type="text" [readonly]="viewMode|| viewsellingrateMetal"
                   SixDecimalInput [max]="13"
                     formControlName="metalselling_rate"
-                    (keypress)="salesChangesMetal('metalselling_rate')"
                     class="text-right" />
                 </mat-form-field>
               </div>
@@ -418,7 +416,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="category" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="categoryCodeData"
@@ -429,8 +427,9 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || viewsellingMetal"
                     AmountDecimalInput [max]="6" formControlName="metalSelling"
+                    (keypress)="salesChange('metalSelling')"
                     class="text-right" />
                 </mat-form-field>
               </div>
@@ -440,7 +439,7 @@
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="subCategory" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="subcategoryCodeData"
@@ -461,7 +460,7 @@
               <label for="input" class="col-sm-2 col-form-label">Brand :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput [readonly]="viewMode"
+                  <input type="text" matInput [readonly]="viewMode || inputDisable"
                     maxlength="6" formControlName="brand" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="brandCodeData"
@@ -477,7 +476,7 @@
                   <mat-label>Select</mat-label>
                   <mat-select formControlName="metalunitList">
                     <mat-option *ngFor="let option of unitList"
-                      [disabled]="viewMode" [value]="option.value"
+                      [disabled]="viewMode || stockcodeDisable" [value]="option.value"
                       (onSelectionChange)="unitSelected()">
                       {{ option.name }}
                     </mat-option>

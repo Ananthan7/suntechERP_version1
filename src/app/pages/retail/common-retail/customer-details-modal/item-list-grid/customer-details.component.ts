@@ -6,6 +6,7 @@ import {
     Input,
     EventEmitter,
     Output,
+    HostListener,
 } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map, startWith } from 'rxjs/operators';
@@ -32,11 +33,13 @@ import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.co
 export class customerDetailsModal implements OnInit {
     @Input() modalTitle: string = 'Default Title';
 
-    @Input() customerDataForm!: FormGroup; 
-    @Input() vocDataForm!: FormGroup; 
+    @Input() customerDataForm!: FormGroup;
+    @Input() vocDataForm!: FormGroup;
 
     @Input() modal!: NgbModalRef;
     @Output() newItemEvent = new EventEmitter<any>();
+    @Output() customerModalDismissed = new EventEmitter<boolean>();
+
     salesReturnsItems_forVoc: any = [];
     exchange_items: any[] = [];
     sales_returns_items: any = [];
@@ -56,7 +59,7 @@ export class customerDetailsModal implements OnInit {
     ordered_items: any[] = [];
     @Input() orderedItems!: any[];
 
-    amlNameValidation:any;
+    amlNameValidation: any;
     strBranchcode: any = '';
     strUser: any = '';
     customerDetails: any = {};
@@ -76,7 +79,7 @@ export class customerDetailsModal implements OnInit {
     invMetalPurchaseTotalOzWt: any;
 
 
-    
+
     inv_customer_name: any;
     inv_cust_mobile_no: any;
     inv_sales_man: any;
@@ -166,7 +169,7 @@ export class customerDetailsModal implements OnInit {
     lineItemGrossWt: any;
     public newDictionary: any;
     public taxType = 1;
-  
+
     mobileCountryMasterOptions!: Observable<any[]>;
 
 
@@ -212,7 +215,7 @@ export class customerDetailsModal implements OnInit {
     dummyDate = '1900-01-01T00:00:00';
     dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
 
-   
+
 
 
     salespersonName: string = '';
@@ -258,7 +261,7 @@ export class customerDetailsModal implements OnInit {
     stateMaster: any = [];
     stateMasterOptions!: Observable<any[]>;
     idTypeOptions: string[] = [''];
-    
+
     idTypeFilteredOptions!: Observable<string[]>;
     cityMaster: any = [];
     cityMasterOptions!: Observable<any[]>;
@@ -266,7 +269,7 @@ export class customerDetailsModal implements OnInit {
     custTypeMasterOptions!: Observable<any[]>;
     sourceOfFundList: any[] = [];
     sourceOfFundListOptions!: Observable<any[]>;
-   
+
     modalReference: any;
     modalReferenceSalesReturn: any;
     closeResult!: string;
@@ -274,17 +277,17 @@ export class customerDetailsModal implements OnInit {
     receiptDetailsList: any = [];
 
     receiptTotalNetAmt: any;
- 
+
 
 
     constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,
-        private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2,private datePipe: DatePipe
+        private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2, private datePipe: DatePipe
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
         this.strUser = localStorage.getItem('username');
         this.baseYear = localStorage.getItem('year');
         this.amlNameValidation = this.comFunc.allbranchMaster.AMLNAMEVALIDATION;
-       
+
         this.customerDetailForm = this.formBuilder.group({
             fcn_customer_detail_name: ['', Validators.required],
             fcn_customer_detail_fname: ['', Validators.required],
@@ -317,18 +320,25 @@ export class customerDetailsModal implements OnInit {
 
     }
 
+    @HostListener('document:keydown.escape', ['$event'])
+    onKeydownHandler(event: KeyboardEvent) {
+        this.modal.dismiss('Escape key click');
+        this.customerModalDismissed.emit(true); 
+
+    }
+
     ngOnInit(): void {
         this.mobileCountryMasterOptions =
-        this.customerDetailForm.controls.fcn_mob_code.valueChanges.pipe(
-            startWith(''),
-            map((value) =>
-                this._filterMasters(this.mobileCountryMaster, value, 'MOBILECOUNTRYCODE', 'DESCRIPTION')
-            )
-        );
+            this.customerDetailForm.controls.fcn_mob_code.valueChanges.pipe(
+                startWith(''),
+                map((value) =>
+                    this._filterMasters(this.mobileCountryMaster, value, 'MOBILECOUNTRYCODE', 'DESCRIPTION')
+                )
+            );
 
         this.customerDataForm.valueChanges.subscribe(values => {
             // Do something with the new form values
-          });
+        });
         this.getMasters();
         this.getIdMaster();
         this.getMaritalStatus();
@@ -522,9 +532,9 @@ export class customerDetailsModal implements OnInit {
 
         this.inv_customer_name = this.customerDataForm.value.fcn_customer_name;
         this.inv_cust_mobile_no = this.customerDataForm.value.fcn_customer_mobile;
-         this.inv_sales_man = this.vocDataForm.value.sales_person;
-          this.inv_bill_date = this.convertDate(this.vocDataForm.value.vocdate);
-          this.inv_number = this.vocDataForm.value.fcn_voc_no;
+        this.inv_sales_man = this.vocDataForm.value.sales_person;
+        this.inv_bill_date = this.convertDate(this.vocDataForm.value.vocdate);
+        this.inv_number = this.vocDataForm.value.fcn_voc_no;
     }
 
     dummyDateCheck(date: any) {
@@ -540,7 +550,7 @@ export class customerDetailsModal implements OnInit {
             day = ('0' + date.getDate()).slice(-2);
         return [day, mnth, date.getFullYear()].join('-');
     }
-    
+
     openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
         this.dialogBox = this.dialog.open(DialogboxComponent, {
             width: '40%',
@@ -562,7 +572,7 @@ export class customerDetailsModal implements OnInit {
     }
 
     async getMasters() {
-       
+
         this.countryMaster = this.comFunc.countryMaster;
         this.countryMasterOptions =
             this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.pipe(
@@ -579,7 +589,7 @@ export class customerDetailsModal implements OnInit {
                     this._filterMasters(this.mobileCountryMaster, value, 'MOBILECOUNTRYCODE', 'DESCRIPTION')
                 )
             );
-       
+
         this.nationalityMaster = this.comFunc.nationalityMaster;
         this.nationalityMasterOptions =
             this.customerDetailForm.controls.fcn_cust_detail_nationality.valueChanges.pipe(
@@ -590,7 +600,7 @@ export class customerDetailsModal implements OnInit {
             );
 
 
-        const sourceOfWealth = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('COUNTRY MASTER')}`;
+        const sourceOfWealth = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('SOURCE OF WEALTH AND FUNDS MASTER')}`;
         this.suntechApi.getDynamicAPI(sourceOfWealth).subscribe((resp) => {
             if (resp.status == 'Success') {
                 this.sourceOfFundList = resp.response;
@@ -616,7 +626,7 @@ export class customerDetailsModal implements OnInit {
         this.getStateMasterByID(value);
     }
 
-    
+
     getStateMasterByID(countryCode: any) {
         let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('STATE MASTER')}/${encodeURIComponent(countryCode)}`
         this.suntechApi.getDynamicAPI(API).
@@ -654,7 +664,7 @@ export class customerDetailsModal implements OnInit {
                 startWith(''),
                 map((value) => this._filterIdType(value))
             );
-    
+
     }
 
     private _filterIdType(value: string): string[] {
@@ -992,9 +1002,9 @@ export class customerDetailsModal implements OnInit {
                     YEARMONTH: this.baseYear || '',
                     VOCNO: this.vocDataForm.value.fcn_voc_no || '',
                     VOCDATE: this.convertDateWithTimeZero(
-                       new Date(this.vocDataForm.value.vocdate).toISOString()
-                   ),
-                 
+                        new Date(this.vocDataForm.value.vocdate).toISOString()
+                    ),
+
                     'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
                     'COUNTRY_DESC': this.customerDetails?.COUNTRY_DESC || '',
                     'STATE_DESC': this.customerDetails?.STATE_DESC || '',
@@ -1286,7 +1296,7 @@ export class customerDetailsModal implements OnInit {
                                         if (resp.status == "Success") {
                                             // this.customerDetails = resp.response;
                                             this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
-                                            this.openDialog('Success', JSON.stringify(data.response), true);
+                                            this.openDialog('Success', 'Customer added', true);
                                             this.dialogBox.afterClosed().subscribe((data: any) => {
                                                 if (data == 'OK') {
                                                     this.modal.dismiss('Cross click');
@@ -1382,48 +1392,48 @@ export class customerDetailsModal implements OnInit {
         //this.customerDataForm.controls['fcn_customer_id_number'].setValue(val);
     }
 
-        /** start customer detail form */
-        nameChange(event: any) {
-            const value = event.target.value.toString().trim();
-            // event.target.value = value;
-            if (value != '') {
-                this.amlNameValidationData = false;
-    
-                const res = value.split(/\s+/);
-                event.target.value = res.join(' ');
-    
-                this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
-                    res[0]
-                );
-                if (res.length == 1) {
-                    this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
-                    this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
-                        ''
-                    );
-                }
-                if (res.length == 2) {
-                    this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
-                    this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
-                        res[1]
-                    );
-                }
-                if (res.length > 2) {
-                    this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
-                        res[1]
-                    );
-                    res.splice(0, 2);
-                    this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
-                        res.join(' ')
-                    );
-                }
-    
-                this.renderer.selectRootElement('#fcn_cust_detail_phone').focus();
-            } else {
-                this.customerDetailForm.controls.fcn_customer_detail_fname.setValue('');
+    /** start customer detail form */
+    nameChange(event: any) {
+        const value = event.target.value.toString().trim();
+        // event.target.value = value;
+        if (value != '') {
+            this.amlNameValidationData = false;
+
+            const res = value.split(/\s+/);
+            event.target.value = res.join(' ');
+
+            this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
+                res[0]
+            );
+            if (res.length == 1) {
                 this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
-                this.customerDetailForm.controls.fcn_customer_detail_lname.setValue('');
-                this.amlNameValidationData = true;
+                this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+                    ''
+                );
             }
+            if (res.length == 2) {
+                this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
+                this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+                    res[1]
+                );
+            }
+            if (res.length > 2) {
+                this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
+                    res[1]
+                );
+                res.splice(0, 2);
+                this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+                    res.join(' ')
+                );
+            }
+
+            this.renderer.selectRootElement('#fcn_cust_detail_phone').focus();
+        } else {
+            this.customerDetailForm.controls.fcn_customer_detail_fname.setValue('');
+            this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
+            this.customerDetailForm.controls.fcn_customer_detail_lname.setValue('');
+            this.amlNameValidationData = true;
         }
+    }
 
 }

@@ -271,7 +271,7 @@
 </div>
 
 <div class="modal-body">
-  <div class="row">
+  <div class="row p-2" style="margin: 6px 6px 0px 6px">
     <div class="col-xl-12">
       <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
         <div class="row" style="background-color: #efefef; margin-bottom: 10px">
@@ -290,7 +290,7 @@
           </div>
 
 
-          <div class="col-md-2 m-t-10">
+          <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>Voucher</mat-label>
               <input type="text" matInput formControlName="vocType" id="voc_type" [readonly]="true" />
@@ -298,7 +298,7 @@
 
           </div>
 
-          <div class="col-md-2 m-t-10">
+          <div class="col-md-2 m-t-10 pt-2">
 
             <mat-form-field>
               <mat-label>{{ date_lbl }}</mat-label>
@@ -310,13 +310,13 @@
             </mat-form-field>
 
           </div>
-          <div class="col-md-2">
+          <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ vocno_lbl }}</mat-label>
               <input type="text" style="text-align: right;" matInput formControlName="fcn_voc_no" [readonly]="true" />
             </mat-form-field>
           </div>
-          <div class="col-md-1 m-t-10">
+          <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ sales_person_lbl }}</mat-label>
               <input type="text" matInput formControlName="sales_person" id="sales_person"
@@ -476,6 +476,19 @@
                     ">
                     Expiry date is <strong>required</strong>
                   </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3 mt-3" *ngIf="posPlanetIssuing">
+                <mat-checkbox color="primary" formControlName="tourVatRefuncYN"
+                  >Tourist VAT Refund</mat-checkbox
+                >
+              </div>
+  
+              <div class="col-md-2" *ngIf="posPlanetIssuing">
+                <mat-form-field>
+                  <mat-label>Tourist VAT Refund</mat-label>
+                  <input type="text" matInput formControlName="tourVatRefundNo" />
                 </mat-form-field>
               </div>
             </div>
@@ -848,8 +861,8 @@
                   </td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
-                        order_items_total_discount_amount | decimalFormat:'AMOUNT'
-                      }}" (change)="changeFinalDiscount($event)" aria-describedby placeholder="0"
+                        order_items_total_discount_amount 
+                      }}" (change)="changeFinalDiscount($event)" aria-describedby placeholder="0.00"
                       [readonly]="viewOnly" />
                   </td>
 
@@ -912,7 +925,7 @@
               </div>
             </div>
 
-            <div class="col-md-6 col-xl-6" (click)="this.viewOnly || this.editOnly ? printInvoice() : ''">
+            <div class="col-md-6 col-xl-6" (click)="this.viewOnly || this.editOnly||isPrintingEnabled ? printInvoice() : ''">
               <!-- *ngIf="!viewOnly" -->
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
@@ -1422,7 +1435,7 @@
     [vocTypeData]="vocTypeData" [vocDataForm]="vocDataForm" [orderedItems]="ordered_items" [vocType]="vocType"
     [karatRateDetails]="karatRateDetails" [editItemDetail]="isEditable" (grossAmountEvent)="updateGrossAmount($event)"
     (totalTaxEvent)="updateTotalTax($event)" (itemTotalEvent)="updateItemTotal($event)"
-    (netTotalEvent)="updateNetTotal($event)" (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
+    (netTotalEvent)="updateNetTotal($event)"  (netAmountEvent)="updateNetGrossTotal($event)" (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
 </ng-template>
 
 <!-- Sales Return Modal -->
@@ -1436,7 +1449,7 @@
 <!-- Customer Detail Modal -->
 <ng-template #more_customer_detail_modal let-modal modal-lg>
   <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [customerDataForm]="customerDataForm"
-    [vocDataForm]="vocDataForm"></app-customer-details>
+    [vocDataForm]="vocDataForm" (customerModalDismissed)="onModalDismissed($event)"></app-customer-details>
 </ng-template>
 
 <!-- Exchange Modal -->

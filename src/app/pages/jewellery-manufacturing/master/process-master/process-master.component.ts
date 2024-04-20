@@ -467,6 +467,16 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.loss == 1) {
       this.validateLossRange();
     }
+
+
+    if(this.formattedTime > this.formattedMaxTime)
+      {
+        this.toastr.error('Standard Time  should not be Greater than Maximum Time');
+      }
+      else
+      {
+
+      
     if (this.lossData == false) {
       this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
     }
@@ -584,6 +594,7 @@ export class ProcessMasterComponent implements OnInit {
         console.log(this.processMasterForm.value.stand_time);
         }
       }
+    }
     
 
   close(data?: any) {
