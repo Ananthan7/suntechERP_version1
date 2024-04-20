@@ -235,7 +235,7 @@
                                     class="example-margin"
                                     (change)="onlossChange($event)"
                                     (focus)="showAlertIfCodeIsEmpty()"
-                                    [disabled]="viewMode || codeEnable">
+                                    [disabled]="viewMode">
                                     Loss *</mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
                                     (change)="onlossChange($event)">
@@ -247,7 +247,7 @@
                                 <mat-checkbox formControlName="recovery"
                                     class="example-margin"
                                     (change)="onRecovery($event)"
-                                    [disabled]="viewMode || codeEnable"
+                                    [disabled]="viewMode"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                      >
                                     Recovery * </mat-checkbox>
@@ -353,7 +353,7 @@
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountStartData"
-                                        *ngIf="searchModeLoss == false"
+                                        *ngIf="!viewMode"
                                         (newRowClick)="accountStartSelected($event)">
                                     </master-search>
                                 </div>
@@ -365,7 +365,7 @@
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMiddleData"
-                                        *ngIf="searchModeRecov == false"
+                                        *ngIf="!viewMode"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
                                 </div>
@@ -377,7 +377,7 @@
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountEndData"
-                                        *ngIf="searchModeAllow == false"
+                                        *ngIf="!viewMode"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>
                                 </div>

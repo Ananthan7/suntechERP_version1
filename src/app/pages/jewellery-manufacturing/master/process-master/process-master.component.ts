@@ -178,23 +178,24 @@ export class ProcessMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.checkifExists) {
-          Swal.fire({
-            title: '',
-            text: result.message || 'Process Code Already Exists!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-            }
-          });
-          this.processMasterForm.controls.processCode.setValue('')
-        }
-      }, err => {
-        this.processMasterForm.controls.processCode.setValue('')
-      })
+    .subscribe((result) => {
+      if (result.checkifExists) {
+        this.toastr.error(result.message || 'Process Code Already Exists!', '', {
+          closeButton: true,
+          timeOut: 5000, // Optional: Set the duration for the toastr message
+          progressBar: true // Optional: Show a progress bar
+        });
+        this.processMasterForm.controls.processCode.setValue('');
+      }
+    }, err => {
+      this.toastr.error('An error occurred. Please try again later.', 'Error', {
+        closeButton: true,
+        timeOut: 5000,
+        progressBar: true
+      });
+      this.processMasterForm.controls.processCode.setValue('');
+    });0.
+
     this.subscriptions.push(Sub)
   }
 
@@ -379,10 +380,10 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.MergePices.setValue(this.onchangeCheckBoxNum(this.content.MERGE_BLOCK))
 
 
-    this.processMasterForm.controls.loss.setValue(this.onchangeCheckBox(this.content.ALLOW_LOSS));
-    this.processMasterForm.controls.loss_on_gross.setValue(this.onchangeCheckBox(this.content.LOSS_ON_GROSS));
+    this.processMasterForm.controls.loss.setValue(this.viewchangeYorN(this.content.ALLOW_LOSS));
+    this.processMasterForm.controls.loss_on_gross.setValue(this.viewchangeYorN(this.content.LOSS_ON_GROSS));
     this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.onchangeCheckBox(this.content.TIMEON_PROCESS));
-    this.processMasterForm.controls.RecoveryProcess.setValue(this.onchangeCheckBox(this.content.RECOVERY_PROCESS));
+    this.processMasterForm.controls.RecoveryProcess.setValue(this.viewchangeYorN(this.content.RECOVERY_PROCESS));
     this.processMasterForm.controls.Metal.setValue(this.viewchangeYorN(this.content.ALLOW_METAL));
     this.processMasterForm.controls.Stone.setValue(this.viewchangeYorN(this.content.ALLOW_STONE));
     this.processMasterForm.controls.Consumable.setValue(this.viewchangeYorN(this.content.ALLOW_CONSUMABLE));
@@ -491,11 +492,24 @@ export class ProcessMasterComponent implements OnInit {
           return
         }
 
-        if (this.processMasterForm.invalid) {
-          this.toastr.error('select all required fields')
-          return
+        const formValue = this.processMasterForm.value;
+    
+        if (!formValue.processCode) {
+          this.toastr.error('processCode cannot be empty');
+          return;
         }
-
+        if (!formValue.processDesc) {
+          this.toastr.error('Deescription cannot be empty');
+          return;
+        }
+        if (!formValue.processType) {
+          this.toastr.error('processType cannot be empty');
+          return;
+        }
+        if (!formValue.WIPaccount) {
+          this.toastr.error('WIPaccount cannot be empty');
+          return;
+        }
         let API = 'ProcessMasterDj/InsertProcessMasterDJ'
         let postData = {
           "MID": 0,
@@ -701,7 +715,7 @@ export class ProcessMasterComponent implements OnInit {
       "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(this.processMasterForm.value.DeductPureWeight),
       "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
-      "ALLOW_GAIN": this.processMasterForm.value.AllowGain,
+      "ALLOW_GAIN":this.processMasterForm.value.AllowGain,
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,

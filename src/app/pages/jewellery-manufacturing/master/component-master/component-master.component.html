@@ -18,7 +18,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="code" id="code"
-                                    [readonly]="viewMode || editMode" #code oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
+                                    [readonly]="editableMode || viewMode" [disabled]="viewMode" #code oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
@@ -26,7 +26,7 @@
                                     <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="codeCodeData"
-                                *ngIf="viewMode == false"  (newRowClick)="codeCodeSelected($event)">
+                                  (newRowClick)="codeCodeSelected($event)" *ngIf=" viewDisable == false">
                                 </master-search>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="category" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="categoryCodeData"
+                                <master-search [MasterSearchData]="categoryCodeData" *ngIf="!viewMode"
                                     (newRowClick)="categoryCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="shape"  [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="shapeCodeData"
+                                <master-search [MasterSearchData]="shapeCodeData" *ngIf="!viewMode"
                                     (newRowClick)="shapeCodeSelected($event)">
                                 </master-search>
                             </div>
@@ -89,7 +89,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="settingType" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="settingTypeCodeData"
+                                <master-search [MasterSearchData]="settingTypeCodeData" *ngIf="!viewMode"
                                     (newRowClick)="settingTypeCodeSelected($event)">
                                 </master-search>
                             </div>
@@ -155,7 +155,7 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput formControlName="processSeq" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="processSeqCodeData"
+                                <master-search [MasterSearchData]="processSeqCodeData" *ngIf="!viewMode"
                                     (newRowClick)="processSeqCodeSelected($event)">
                                 </master-search>
                             </div>
@@ -168,7 +168,7 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput formControlName="costCenter" [readonly]="viewMode || codeEnable"  />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="costCenterCodeData"
+                                <master-search [MasterSearchData]="costCenterCodeData" *ngIf="!viewMode"
                                     (newRowClick)="costCenterCodeSelected($event)">
                                 </master-search>
                             </div>

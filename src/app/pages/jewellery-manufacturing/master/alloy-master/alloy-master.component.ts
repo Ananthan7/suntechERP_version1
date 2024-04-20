@@ -110,7 +110,6 @@ export class AlloyMasterComponent implements OnInit {
     console.log(this.content.FLAG);
     
     if (this.content.FLAG == 'EDIT') {
-      this.viewMode = true;
       this.isDisabled = !this.isDisabled;
       this.setInitialValues()
     } else if (this.content.FLAG == 'VIEW') {

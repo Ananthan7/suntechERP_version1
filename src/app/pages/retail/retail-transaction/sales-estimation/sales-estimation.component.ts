@@ -4858,23 +4858,9 @@ export class SalesEstimationComponent implements OnInit {
 
 
     onModalDismissed(dismissed: any) {
-        this.openDialog(
-            'Warning',
-            'Are you sure want to close ?',
-            false
-          );
-    
-          this.dialogBox.afterClosed().subscribe((data: any) => {
-            if (data == 'No') {
-    
-    
-            } else {
-                this.open(this.mymodal, false, null, false, false)
-            }
-          });
-        // if (dismissed) {
-        //     this.open(this.mymodal, false, null, false, false)
-        // }
+        if (dismissed) {
+            this.open(this.mymodal, false, null, false, false)
+        }
     }
 
 

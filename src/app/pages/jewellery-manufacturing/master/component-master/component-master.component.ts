@@ -29,6 +29,8 @@ export class ComponentMasterComponent implements OnInit {
   codeEnable: boolean = true;
   viewMode: boolean = false;
   editMode: boolean = false;
+  editableMode: boolean = false;
+  viewDisable: boolean = false;
 
   images: any[] = [];
   constructor(
@@ -48,10 +50,14 @@ export class ComponentMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
 
       this.setFormValues();
+      this.viewMode = true;
+      this.viewDisable = true;
     } else (this.content.FLAG == 'EDIT')
     {
    
       this.setFormValues();
+      this.editableMode = true;
+      this.editMode = true;
     }
 
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
