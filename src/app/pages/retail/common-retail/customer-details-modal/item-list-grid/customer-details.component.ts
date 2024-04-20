@@ -21,6 +21,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { DatePipe } from '@angular/common';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
+import { ItemDetailService } from 'src/app/services/modal-service.service';
 
 
 
@@ -38,7 +39,7 @@ export class customerDetailsModal implements OnInit {
 
     @Input() modal!: NgbModalRef;
     @Output() newItemEvent = new EventEmitter<any>();
-    @Output() customerModalDismissed = new EventEmitter<boolean>();
+   
 
     salesReturnsItems_forVoc: any = [];
     exchange_items: any[] = [];
@@ -280,7 +281,7 @@ export class customerDetailsModal implements OnInit {
 
 
 
-    constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,
+    constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar, public comFunc: CommonServiceService,public lineItemService: ItemDetailService,
         private suntechApi: SuntechAPIService, public dialog: MatDialog, private renderer: Renderer2, private datePipe: DatePipe
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
@@ -320,12 +321,7 @@ export class customerDetailsModal implements OnInit {
 
     }
 
-    @HostListener('document:keydown.escape', ['$event'])
-    onKeydownHandler(event: KeyboardEvent) {
-        this.modal.dismiss('Escape key click');
-        this.customerModalDismissed.emit(true); 
-
-    }
+   
 
     ngOnInit(): void {
         this.mobileCountryMasterOptions =
@@ -624,6 +620,17 @@ export class customerDetailsModal implements OnInit {
 
     changeCountry(value: any) {
         this.getStateMasterByID(value);
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    onKeydownHandler(event: KeyboardEvent) {
+      this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
+      if (this.lineItemService.isWarningModalOpen) {
+        event.preventDefault();
+        event.stopPropagation(); 
+      } else {
+        
+      }
     }
 
 

@@ -9,6 +9,7 @@ import {
   Input,
   EventEmitter,
   Output,
+  HostListener,
 } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map, pairwise, startWith } from 'rxjs/operators';
@@ -28,6 +29,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { ItemDetailService } from 'src/app/services/modal-service.service';
 
 
 
@@ -329,6 +331,7 @@ export class SalesReturnModal implements OnInit {
     public dialog: MatDialog,
     private renderer: Renderer2,
     private inDb: IndexedDbService,
+    public lineItemService: ItemDetailService,
   ) {
   }
 
@@ -1529,6 +1532,17 @@ export class SalesReturnModal implements OnInit {
 
       retailSReturnDetails: this.currentsalesReturnItems,
     };
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
+    if (this.lineItemService.isWarningModalOpen) {
+      event.preventDefault();
+      event.stopPropagation(); 
+    } else {
+      
+    }
   }
 }
 

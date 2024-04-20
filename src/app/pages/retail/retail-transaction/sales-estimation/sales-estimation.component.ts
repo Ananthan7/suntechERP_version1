@@ -4857,11 +4857,6 @@ export class SalesEstimationComponent implements OnInit {
     }
 
 
-    onModalDismissed(dismissed: any) {
-        if (dismissed) {
-            this.open(this.mymodal, false, null, false, false)
-        }
-    }
 
 
     setExchangeMetalGstItems(slno: any, items: any) {

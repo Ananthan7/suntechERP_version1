@@ -32,6 +32,8 @@ export class ItemDetailTable implements OnInit {
     
 
     @Input() karatRateDetails!: any[];
+
+    isWarningModalOpen:boolean=false;
     salesReturnsItems_forVoc: any = [];
     exchange_items: any[] = [];
     sales_returns_items: any = [];
@@ -1141,10 +1143,6 @@ export class ItemDetailTable implements OnInit {
 
 
     }
-
-
-
-
 
     changeGrossWt(event: any) {
         const value = event.target.value;
@@ -3839,6 +3837,17 @@ export class ItemDetailTable implements OnInit {
             console.log(this.salesReturnsItems_forVoc[preitemIndex]);
             console.log('====================================');
         }
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    onKeydownHandler(event: KeyboardEvent) {
+      this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
+      if (this.lineItemService.isWarningModalOpen) {
+        event.preventDefault();
+        event.stopPropagation(); 
+      } else {
+        
+      }
     }
 
 }
