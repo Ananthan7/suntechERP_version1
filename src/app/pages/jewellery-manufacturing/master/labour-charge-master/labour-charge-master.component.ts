@@ -49,11 +49,15 @@ export class LabourChargeMasterComponent implements OnInit {
   displayMetalWtFrom: any;
   displayMetalWtTo: any;
   viewDisable: boolean = false;
+  viewDisable1: boolean = false;
+  inputDisable: boolean = false;
 
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
+
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
+
   viewModeSetting :boolean = false;
   ViewModemethod :boolean = false;
   codeEnable1: boolean = true;
@@ -111,7 +115,7 @@ export class LabourChargeMasterComponent implements OnInit {
     wtFrom: [''],
     wtTo: [''],
     onGrossWt: [false, [Validators.required]],
-    forDesignOnly: [false, [Validators.required]]
+    forDesignOnly: [false, [Validators.required]],
   }); 
 
 
@@ -133,6 +137,7 @@ export class LabourChargeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.grossWt = true;
     this.codeEnable1 = true;
+    this.inputDisable = true;
 
   //  this.renderer.selectRootElement('#code')?.focus();
 
@@ -166,41 +171,41 @@ export class LabourChargeMasterComponent implements OnInit {
     private renderer: Renderer2,
   ) { }
 
-  salesChangesDia(data: any) {
-    console.log(data);
+  // salesChangesDia(data: any) {
+  //   console.log(data);
 
-    if (data == 'selling') {
-      this.viewsellingrate = true;
-      this.viewselling = false;
-      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
-    } else if (data == 'selling_rate') {
-      this.viewselling = true;
-      this.viewsellingrate = false;
-      this.diamondlabourMasterForm.controls.selling.setValue('');
-    } else {
-      this.viewselling = false;
-      this.viewsellingrate = false;
-    }
+  //   if (data == 'selling') {
+  //     this.viewsellingrate = true;
+  //     this.viewselling = false;
+  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+  //   } else if (data == 'selling_rate') {
+  //     this.viewselling = true;
+  //     this.viewsellingrate = false;
+  //     this.diamondlabourMasterForm.controls.selling.setValue('');
+  //   } else {
+  //     this.viewselling = false;
+  //     this.viewsellingrate = false;
+  //   }
 
-  }
+  // }
 
 
-  salesChangesMetal(data: any) {
-    console.log(data);
-    if (data == 'metalSelling') {
-      this.viewsellingrateMetal = true;
-      this.viewsellingMetal = false;
-      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
-    } else if (data == 'metalselling_rate') {
-      this.viewsellingMetal = true;
-      this.viewsellingrateMetal = false;
-      this.metallabourMasterForm.controls.metalSelling.setValue('');
-    } else {
-      this.viewsellingMetal = false;
-      this.viewsellingrateMetal = false;
-    }
+  // salesChangesMetal(data: any) {
+  //   console.log(data);
+  //   if (data == 'metalSelling') {
+  //     this.viewsellingrateMetal = true;
+  //     this.viewsellingMetal = false;
+  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+  //   } else if (data == 'metalselling_rate') {
+  //     this.viewsellingMetal = true;
+  //     this.viewsellingrateMetal = false;
+  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
+  //   } else {
+  //     this.viewsellingMetal = false;
+  //     this.viewsellingrateMetal = false;
+  //   }
 
-  }
+  // }
 
 
   diaDivisionCodeData: MasterSearchModel = {
@@ -815,7 +820,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
-      "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly,
+      "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly || false,
       "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
     }
@@ -892,7 +897,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
-      "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly,
+      "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly || false,
       "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
     }
@@ -996,17 +1001,19 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log(event);
     if (event.checked === true) {
       this.stockcodeDisable = true;
-      this.metallabourMasterForm.controls['stock_code'].disable();
-      this.metallabourMasterForm.controls['color'].disable();
-      this.metallabourMasterForm.controls['metallabourType'].disable();
-      this.metallabourMasterForm.controls['metalunitList'].disable();
+      this.viewDisable1 = true;
+      // this.metallabourMasterForm.controls['stock_code'].disable();
+      // this.metallabourMasterForm.controls['color'].disable();
+      // this.metallabourMasterForm.controls['metallabourType'].disable();
+      // this.metallabourMasterForm.controls['metalunitList'].disable();
     }
     else {
       this.stockcodeDisable = false;
-      this.metallabourMasterForm.controls['stock_code'].enable();
-      this.metallabourMasterForm.controls['color'].enable();
-      this.metallabourMasterForm.controls['metallabourType'].enable();
-      this.metallabourMasterForm.controls['metalunitList'].enable();
+      this.viewDisable1 = false;
+      // this.metallabourMasterForm.controls['stock_code'].enable();
+      // this.metallabourMasterForm.controls['color'].enable();
+      // this.metallabourMasterForm.controls['metallabourType'].enable();
+      // this.metallabourMasterForm.controls['metalunitList'].enable();
 
     }
   }
@@ -1051,44 +1058,93 @@ export class LabourChargeMasterComponent implements OnInit {
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  onweightto(event: any, data: String) {
-    let wtf = this.metallabourMasterForm.value.wtFrom;
-    let wtt = this.metallabourMasterForm.value.wtTo;
-    if (data != 'wtfrom') {
+  
+  // onweightto(event: any, data: String) {
+  //   let wtf = this.metallabourMasterForm.value.wtFrom;
+  //   let wtt = this.metallabourMasterForm.value.wtTo;
+  //   if (data != 'wtFrom') {
+  //     if (wtf > wtt) {
+  //       Swal.fire({
+  //         title: event.message || 'Weight From should be lesser than Weight To',
+  //         text: '',
+  //         icon: 'error',
+  //         confirmButtonColor: '#336699',
+  //         confirmButtonText: 'Ok'
+  //       })
+  //       this.metallabourMasterForm.controls.wtTo.setValue('');
+  //     }
+    
+  //   }
+  // }
+
+  onweightto(event: any, data: string) {
+    // Retrieve the values of Wt From and Wt To from the form
+    const wtf: number = parseFloat(this.metallabourMasterForm.value.wtFrom);
+    const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
+  
+    // Check if the data parameter is not 'wtfrom'
+    if (data !== 'wtfrom') {
+      // Check if Wt From is greater than Wt To
       if (wtf > wtt) {
+        // Display an error message
         Swal.fire({
           title: event.message || 'Weight From should be lesser than Weight To',
           text: '',
           icon: 'error',
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
-        })
+        });
+  
+        // Clear the value of Wt To input field
         this.metallabourMasterForm.controls.wtTo.setValue('');
       }
-    
     }
-
-
   }
+  
 
-  onCtweighttto(event: any, data: String) {
-    let Ctwtf = this.diamondlabourMasterForm.value.ctWtFrom;
-    let Ctwtt = this.diamondlabourMasterForm.value.ctWtTo;
-    if (data != 'Ctwtfrom') {
+  //  onCtweighttto(event: any, data: String) {
+  //   let Ctwtf = this.diamondlabourMasterForm.value.ctWtFrom;
+  //   let Ctwtt = this.diamondlabourMasterForm.value.ctWtTo;
+  //   if (data != 'Ctwtfrom') {
+  //     if (Ctwtf > Ctwtt) {
+  //       Swal.fire({
+  //         title: event.message || 'Weight From should be lesser than Weight To',
+  //         text: '',
+  //         icon: 'error',
+  //         confirmButtonColor: '#336699',
+  //         confirmButtonText: 'Ok'
+  //       })
+  //       this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
+  //     }
+  //   }
+
+
+  // }
+
+  onCtweighttto(event: any, data: string) {
+    // Retrieve the values of Ct Wt From and Ct Wt To from the form
+    const Ctwtf: number = parseFloat(this.diamondlabourMasterForm.value.ctWtFrom);
+    const Ctwtt: number = parseFloat(this.diamondlabourMasterForm.value.ctWtTo);
+  
+    // Check if the data parameter is not 'Ctwtfrom'
+    if (data !== 'Ctwtfrom') {
+      // Check if Ct Wt From is greater than Ct Wt To
       if (Ctwtf > Ctwtt) {
+        // Display an error message
         Swal.fire({
           title: event.message || 'Weight From should be lesser than Weight To',
           text: '',
           icon: 'error',
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
-        })
+        });
+  
+        // Clear the value of Ct Wt To input field
         this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
       }
     }
-
-
   }
+  
 
   unitSelected() {
     console.log(' Hi' + this.unitList);
@@ -1125,6 +1181,43 @@ export class LabourChargeMasterComponent implements OnInit {
     }
 
   }
+
+  salesChange(data: any) {
+    console.log(data);
+
+    if (data == 'metalSelling') {
+      this.viewsellingrateMetal = true;
+      this.viewsellingMetal = false;
+      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+    } else if (data == 'metalselling_rate') {
+      this.viewsellingMetal = true;
+      this.viewsellingrateMetal = false;
+      this.metallabourMasterForm.controls.metalSelling.setValue('');
+    } else {
+      this.viewsellingMetal = false;
+      this.viewsellingrateMetal = false;
+    }
+
+  }
+
+  salesChangesDia(data: any) {
+    console.log(data);
+
+    if (data == 'selling') {
+      this.viewsellingrate = true;
+      this.viewselling = false;
+      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+    } else if (data == 'selling_rate') {
+      this.viewselling = true;
+      this.viewsellingrate = false;
+      this.diamondlabourMasterForm.controls.selling.setValue('');
+    } else {
+      this.viewselling = false;
+      this.viewsellingrate = false;
+    }
+    
+  }
+
 
   // onCtweighttto(event: any) {
   //   if (this.diamondlabourMasterForm.value.ctWtFrom < this.diamondlabourMasterForm.value.ctWtTo) {

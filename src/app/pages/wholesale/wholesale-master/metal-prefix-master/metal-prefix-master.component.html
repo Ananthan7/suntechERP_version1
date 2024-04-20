@@ -20,12 +20,12 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Prefix Code :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="prefixcode" />
+                          <input type="text" matInput formControlName="prefixcode"  oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="prefixcodedes" />
+                          <input type="text" matInput formControlName="prefixcodedes" oninput="this.value = this.value.toUpperCase()"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -57,7 +57,7 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Tag Wt :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="tagWt" />
+                          <input type="number" matInput formControlName="tagWt" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">

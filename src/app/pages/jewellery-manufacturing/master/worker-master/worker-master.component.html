@@ -23,7 +23,7 @@
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
                                     [readonly]="viewMode || editMode" #code
-                                    UpperCaseDirective
+                                    oninput="this.value = this.value.toUpperCase()"
                                     (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()"/>
                                 <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
@@ -36,7 +36,7 @@
                                 <input type="text" matInput
                                     placeholder="DESCRIPTION" UpperCaseDirective
                                     formControlName="WorkerDESCRIPTION"
-                                    #WorkerDESCRIPTION  [readonly]="viewMode || codeEnable" 
+                                    #WorkerDESCRIPTION  [readonly]="viewMode || codeEnable"  oninput="this.value = this.value.toUpperCase()"
                                     (input)="WorkerDESCRIPTION.value = WorkerDESCRIPTION.value.toUpperCase()" />
                             </mat-form-field>
                         </div>
