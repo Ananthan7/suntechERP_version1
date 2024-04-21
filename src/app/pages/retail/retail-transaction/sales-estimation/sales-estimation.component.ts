@@ -2062,10 +2062,12 @@ export class SalesEstimationComponent implements OnInit {
         // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
     }
     openSalesReturnForm(data: any) {
-        if (this.salesReturnDataToEdit.length > 0) {
+        console.log(this.salesReturnDataToEdit,'salesReturnDataToEdit');
+        if (this.sales_returns_items.length > 0) {
             this.comFunc.showSnackBarMsg('Please remove selected voucher to add new voucher')
             return
         }
+        data.FLAG = 'NEW'
         this.open(data)
     }
     addSalesReturnItem(data: any) {
@@ -2350,7 +2352,7 @@ export class SalesEstimationComponent implements OnInit {
         // this.updateBtn = true;
 
         // alert(value.DT_VOCNO);
-        this.open(this.adjust_sale_return_modal, true);
+        // this.open(this.adjust_sale_return_modal, true);
 
         const data = this.retailSReturnDataPost.SALESREFERENCE.split('-');
         this.salesReturnForm.controls.fcn_returns_fin_year.setValue(
@@ -2480,7 +2482,9 @@ export class SalesEstimationComponent implements OnInit {
                 }
             });
     }
-
+    customerSaved(event:any){
+        this.customerDetails = event
+    }
     customerSave() {
 
         console.log('============this.customerDetailForm.value.fcn_cust_detail_dob========================');
@@ -3358,9 +3362,6 @@ export class SalesEstimationComponent implements OnInit {
                         this.customerDataForm.controls.fcn_customer_exp_date.setValue(
                             new Date(result.POSCUSTIDEXP_DATE)
                         );
-                        console.log(result.POSCUSTIDEXP_DATE,'result.POSCUSTIDEXP_DATE');
-                        
-                        console.log(this.customerDetailForm.value.fcn_customer_exp_date);
                         
                         this.customerDetails = result;
 

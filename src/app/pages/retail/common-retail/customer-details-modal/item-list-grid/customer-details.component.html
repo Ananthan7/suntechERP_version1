@@ -326,6 +326,39 @@
 
             </mat-form-field>
           </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 130px;">
+              <mat-label>Wedding Date</mat-label>
+              <input matInput [matDatepicker]="Wedding_Date" name="Wedding_Date"
+                formControlName="fcn_cust_Wedding_Date" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+              <mat-datepicker-toggle matSuffix [for]="Wedding_Date"></mat-datepicker-toggle>
+              <mat-datepicker #Wedding_Date></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 130px;">
+              <mat-label>Language</mat-label>
+              <input type="text" matInput formControlName="fcn_cust_Language" [readonly]="viewOnly" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 130px;">
+              <mat-label>Pos Box</mat-label>
+              <input type="text" matInput formControlName="fcn_cust_PosBox" [readonly]="viewOnly" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 130px;">
+              <mat-label>Customer Type</mat-label>
+              <input type="text" matInput formControlName="fcn_cust_type" [readonly]="viewOnly" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 130px;">
+              <mat-label>Card Number</mat-label>
+              <input type="text" matInput formControlName="fcn_cust_CardNumber" [readonly]="viewOnly" />
+            </mat-form-field>
+          </div>
         </div>
       </form>
     </div>

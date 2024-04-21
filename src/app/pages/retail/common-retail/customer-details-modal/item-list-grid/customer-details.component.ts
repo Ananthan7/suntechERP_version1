@@ -39,7 +39,7 @@ export class customerDetailsModal implements OnInit {
     @Input() customerDetails: any = {};
 
     @Input() modal!: NgbModalRef;
-    @Output() newItemEvent = new EventEmitter<any>();
+    @Output() customerUpdated = new EventEmitter<any>();
    
 
     salesReturnsItems_forVoc: any = [];
@@ -316,7 +316,10 @@ export class customerDetailsModal implements OnInit {
             fcn_mob_code: ['', Validators.required],
 
             fcn_source_of_fund: [''],
-
+            fcn_cust_Wedding_Date: [''],
+            fcn_cust_Language: [''],
+            fcn_cust_PosBox: [''],
+            fcn_cust_CardNumber: [''],
         });
 
 
@@ -487,6 +490,19 @@ export class customerDetailsModal implements OnInit {
                         this.customerDetailForm.controls.fcn_source_of_fund.setValue(
                             result.SOURCE
                         );
+                        this.customerDetailForm.controls.fcn_cust_PosBox.setValue(
+                            result.POBOX_NO
+                        );
+                        this.customerDetailForm.controls.fcn_cust_Wedding_Date.setValue(
+                            result.WED_DATE
+                        );
+                        this.customerDetailForm.controls.fcn_cust_Language.setValue(
+                            result.CUST_LANGUAGE
+                        );
+                        this.customerDetailForm.controls.fcn_cust_CardNumber.setValue(
+                            result.PANCARDNO
+                        );
+
                         this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
                             this.dummyDateCheck(result.DATE_OF_BIRTH)
                         );
@@ -758,6 +774,8 @@ export class customerDetailsModal implements OnInit {
                 this.customerDataForm.value.fcn_source_of_fund;
             this.customerDetails.COMPANY =
                 this.customerDetailForm.value.fcn_cust_detail_company;
+            this.customerDetails.CUST_LANGUAGE =
+                this.customerDetailForm.value.fcn_cust_Language;
 
 
             // this.modalService.
@@ -781,7 +799,7 @@ export class customerDetailsModal implements OnInit {
                         this.customerDetailForm.value.fcn_cust_detail_address ||
                         // this.customerDetails?.ADDRESS ||
                         '',
-                    POBOX_NO: this.customerDetails?.POBOX_NO || '',
+                    POBOX_NO: this.customerDetailForm.value.fcn_cust_PosBox || '',
                     STATE: this.customerDetailForm.value.fcn_cust_detail_state
                         // || this.customerDetails?.STATE
                         || '',
@@ -806,7 +824,7 @@ export class customerDetailsModal implements OnInit {
                         this.customerDetailForm.value.fcn_cust_detail_marital_status ||
                         // this.customerDetails?.MARITAL_ST ||
                         'Unknown',
-                    WED_DATE: this.customerDetails?.WED_DATE || this.dummyDate,
+                    WED_DATE: this.customerDetailForm.value.fcn_cust_Wedding_Date || this.dummyDate,
                     SPOUSE_NAME: this.customerDetails?.SPOUSE_NAME || '',
                     REMARKS: this.customerDetails?.REMARKS || '',
                     DATE_OF_BIRTH:
@@ -1008,7 +1026,7 @@ export class customerDetailsModal implements OnInit {
                     CREDIT_LIMIT: this.customerDetails?.CREDIT_LIMIT || 0,
                     CREDIT_LIMIT_STATUS:
                         this.customerDetails?.CREDIT_LIMIT_STATUS || false,
-                    PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
+                    PANCARDNO: this.customerDetailForm.value.fcn_cust_CardNumber || '111111' || '',
                     VOCTYPE: this.vocType || '',
                     YEARMONTH: this.baseYear || '',
                     VOCNO: this.vocDataForm.value.fcn_voc_no || '',
@@ -1159,6 +1177,18 @@ export class customerDetailsModal implements OnInit {
                         this.customerDetailForm.controls.fcn_cust_desg.setValue(
                             this.customerDetails.POSCUSTPREFIX
                         );
+                        this.customerDetailForm.controls.fcn_cust_PosBox.setValue(
+                            this.customerDetails.POBOX_NO
+                        );
+                        this.customerDetailForm.controls.fcn_cust_Wedding_Date.setValue(
+                            this.customerDetails.WED_DATE
+                        );
+                        this.customerDetailForm.controls.fcn_cust_Language.setValue(
+                            this.customerDetails.CUST_LANGUAGE
+                        );
+                        this.customerDetailForm.controls.fcn_cust_CardNumber.setValue(
+                            this.customerDetails.PANCARDNO
+                        );
 
 
 
@@ -1185,7 +1215,7 @@ export class customerDetailsModal implements OnInit {
                             duration: 1000 // time in milliseconds
 
                         });
-
+                        this.customerUpdated.emit(this.customerDetails)
                         // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
                         if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
                             this.isCustProcessing = true;

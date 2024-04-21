@@ -1450,6 +1450,7 @@
 <ng-template #more_customer_detail_modal let-modal modal-lg>
   <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal" 
     [customerDataForm]="customerDataForm"
+    (customerUpdated)="customerSaved($event)"
     [customerDetails]="customerDetails"
     [vocDataForm]="vocDataForm"></app-customer-details>
 </ng-template>
