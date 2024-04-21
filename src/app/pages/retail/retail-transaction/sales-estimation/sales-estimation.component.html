@@ -464,7 +464,7 @@
               <div class="col-md-2">
                 <mat-form-field>
                   <mat-label>Expiry Date</mat-label>
-                  <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
+                  <input matInput [matDatepicker]="expDate"
                     formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
                   <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
@@ -1448,7 +1448,10 @@
 
 <!-- Customer Detail Modal -->
 <ng-template #more_customer_detail_modal let-modal modal-lg>
-  <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [customerDataForm]="customerDataForm"
+  <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal" 
+    [customerDataForm]="customerDataForm"
+    (customerUpdated)="customerSaved($event)"
+    [customerDetails]="customerDetails"
     [vocDataForm]="vocDataForm"></app-customer-details>
 </ng-template>
 

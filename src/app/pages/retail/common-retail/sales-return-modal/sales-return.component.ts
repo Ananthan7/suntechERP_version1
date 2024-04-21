@@ -346,13 +346,14 @@ export class SalesReturnModal implements OnInit {
     this.baseYear = localStorage.getItem('year');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.getYearList();
+    this.getSalesReturnVocTypes();
     if (this.comFunc.nullToString(this.updatedGridItem[0]?.FLAG) == 'EDIT') {
       this.sales_returns_items.push(this.updatedGridItem[0])
       this.editTableSalesReturn()
       return
     }
+    this.updatedGridItem = {}
     this.salesReturnForm.controls.fcn_returns_branch.setValue(this.comFunc.branchCode)
-    this.getSalesReturnVocTypes();
   }
   editTableSalesReturn(event?: any) {
     let data = this.updatedGridItem[0]
@@ -399,8 +400,6 @@ export class SalesReturnModal implements OnInit {
           map((value) => this._filteryear(value))
         );
         let currentYear = this.comFunc.currentDate.getFullYear()
-        console.log(currentYear, 'currentYear');
-
         this.salesReturnForm.controls.fcn_returns_fin_year.setValue(currentYear)
       });
   }
@@ -419,7 +418,13 @@ export class SalesReturnModal implements OnInit {
       .subscribe((res: any) => {
         if (res.status == "Success") {
           this.vocTypesinSalesReturn = res.dynamicData[0];
-          this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocTypesinSalesReturn[0].VOCTYPE)
+          if (this.comFunc.nullToString(this.updatedGridItem[0]?.FLAG) == 'EDIT') {
+            this.salesReturnForm.controls.fcn_returns_voc_type.setValue(
+              this.updatedGridItem[0]?.slsReturn.POS_VOCTYPE
+            );
+          }else{
+            this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocTypesinSalesReturn[0].VOCTYPE)
+          }
         }
       });
   }
@@ -461,6 +466,9 @@ export class SalesReturnModal implements OnInit {
               _response = resp.response[0];
               this.salesReturnsItems_forVoc = resp.response;
               let _vocdate = _response.VOCDATE.split(' ');
+              console.log(this.salesReturnsItems_forVoc,'this.salesReturnsItems_forVoc');
+              console.log(this.sales_returns_items,'sales_returns_items');
+              
               for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
                 for (let j = 0; j < this.sales_returns_items.length; j++) {
                   if (this.salesReturnsItems_forVoc[i].SRNO.toString() == this.sales_returns_items[j].sn_no.toString()) {
@@ -470,8 +478,14 @@ export class SalesReturnModal implements OnInit {
                       this.sales_returns_items[j]['net_amount']
                     // this.sales_returns_items[j]['total_amount']
                   }
+                  this.salesReturnsItems_forVoc[i].ISSELECTED = false
+                  if (this.sales_returns_items[j].ISSELECTED) {
+                    this.salesReturnsItems_forVoc[i].ISSELECTED = this.sales_returns_items[j].ISSELECTED
+                  }
                 }
               }
+              console.log(this.salesReturnsItems_forVoc,'this.salesReturnsItems_forVoc');
+
               this.salesReturnForm.controls['fcn_returns_sales_man'].setValue(
                 _response.SALESPERSON_CODE
               );
@@ -581,8 +595,11 @@ export class SalesReturnModal implements OnInit {
       values.DISCOUNT = slsReturn.DISCOUNT;
       values.VAT_AMOUNTFC = slsReturn.VAT_AMOUNTFC;
       values.UNIQUEID = slsReturn.UNIQUEID;
-
-      this.sales_returns_pre_items.push(values);
+      let checkstokcode:any[] = this.sales_returns_pre_items.filter((item:any)=> item.stock_code == slsReturn.STOCK_CODE)
+      console.log(values,'values');
+      if(checkstokcode.length==0){
+        this.sales_returns_pre_items.push(values);
+      }
     } else {
 
       for (var i = 0; i < this.sales_returns_pre_items.length; i++) {
@@ -612,7 +629,6 @@ export class SalesReturnModal implements OnInit {
       return
     }
     const values = this.sales_returns_pre_items;
-    console.log(values,'values');
     // if(this.updatedGridItem.length>0){
     //   this.sales_returns_items = values.filter((item:any)=> item.stock_code != this.updatedGridItem[0].stock_code);
     // }else{
