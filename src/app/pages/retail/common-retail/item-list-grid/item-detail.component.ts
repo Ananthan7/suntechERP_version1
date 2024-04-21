@@ -32,6 +32,8 @@ export class ItemDetailTable implements OnInit {
     
 
     @Input() karatRateDetails!: any[];
+
+    isWarningModalOpen:boolean=false;
     salesReturnsItems_forVoc: any = [];
     exchange_items: any[] = [];
     sales_returns_items: any = [];
@@ -225,10 +227,6 @@ export class ItemDetailTable implements OnInit {
     dummyDate = '1900-01-01T00:00:00';
     dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
 
-    // dummyDate = '01-01-1753T00:00:00';
-    // zeroAmtVal;
-    // zeroMQtyVal;
-
 
     salespersonName: string = '';
     branchOptions: string[] = [''];
@@ -268,14 +266,12 @@ export class ItemDetailTable implements OnInit {
 
 
     itemcodeSelected(value: any) {
-        console.log(value);
         this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
         this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
     }
 
 
     divisionCodeSelected(e: any) {
-        console.log(e);
         this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
 
     }
@@ -401,7 +397,6 @@ export class ItemDetailTable implements OnInit {
 
     dismissModal() {
         // Here you might emit an event or perform other actions to close the modal
-        console.log('Modal dismissed');
     }
 
     convertDateToYMD(str: any) {
@@ -412,9 +407,6 @@ export class ItemDetailTable implements OnInit {
     }
     getStockDesc(event: any) {
 
-        console.log('====================================');
-        console.log('called', event.target.value);
-        console.log('====================================');
 
         this.li_tax_amount_val = 0.0;
         var gross_amount_val = 0.0;
@@ -425,13 +417,10 @@ export class ItemDetailTable implements OnInit {
         this.lineItemForm.reset();
         this.lineItemForm.reset();
         this.lineItemForm.controls.fcn_li_item_code.setValue(this.currentStockCode);
-        console.log('called', event.target.value);
 
         this.snackBar.open('Loading...');
         if (event.target.value != '') {
-            console.log('====================================');
-            console.log('called', this.currentStockCode);
-            console.log('====================================');
+            
 
             let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
                 '&strBranchCode=' + this.strBranchcode +
@@ -440,9 +429,7 @@ export class ItemDetailTable implements OnInit {
             this.suntechApi.getDynamicAPI(API)
                 .subscribe((resp: any) => {
                     this.snackBar.dismiss();
-                    console.log('====================================');
-                    console.log(this.comFunc.allCompanyParams);
-                    console.log('====================================');
+                 
                     if (resp != null) {
                         const stockInfoResult = resp.resultStatus;
                         const stockInfos = resp.stockInfo;
@@ -476,7 +463,6 @@ export class ItemDetailTable implements OnInit {
 
                             this.validateStoneWt = this.comFunc.stringToBoolean(stockInfos.STONE);
                             this.lineItemService.isStoneIncluded = this.comFunc.stringToBoolean(stockInfos.STONE);
-                            console.log(this.lineItemService.isStoneIncluded)
                             this.lineItemForm.controls['fcn_li_item_code'].setValue(
                                 stockInfos.STOCK_CODE
                             );
@@ -489,7 +475,6 @@ export class ItemDetailTable implements OnInit {
                             this.lineItemForm.controls['fcn_li_division'].setValue(
                                 stockInfos.DIVISION
                             );
-                            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(stockInfos.MKG_STOCKVALUE);
                             this.lineItemForm.controls['fcn_li_pcs'].setValue(
                                 stockInfos.BALANCE_PCS
                             );
@@ -689,9 +674,7 @@ export class ItemDetailTable implements OnInit {
     manageCalculations(
         argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
     ) {
-        console.log('====================================');
-        console.log('manageCalculations', argsData);
-        console.log('====================================');
+       
 
         /** set nett weight */
         this.lineItemForm.controls['fcn_li_net_wt'].setValue(
@@ -715,7 +698,6 @@ export class ItemDetailTable implements OnInit {
 
         /** empty stone rate if stone wt is  0 */
         const stonewtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt);
-        console.log('stonewtVal', stonewtVal);
         (stonewtVal)
         if (stonewtVal == 0) {
             this.lineItemForm.controls.fcn_ad_stone_rate.setValue(this.zeroAmtVal);
@@ -751,10 +733,7 @@ export class ItemDetailTable implements OnInit {
                     .toString()
             );
         } else {
-            // mkgvalue =
-            //   this.lineItemForm.value.fcn_li_rate *
-            //   this.lineItemForm.value.fcn_li_gross_wt;
-
+           
 
             // new calculation added 30/12/2023
             if (this.divisionMS == 'M') {
@@ -767,10 +746,7 @@ export class ItemDetailTable implements OnInit {
                         break;
 
                     case 'GROSS':
-                        console.log('GROSS',
-                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
-                            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-                        );
+                     
 
                         mkgvalue =
                             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
@@ -791,10 +767,7 @@ export class ItemDetailTable implements OnInit {
                     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
             }
         }
-        // const mkgvalue = (
-        //   this.lineItemForm.value.fcn_li_rate *
-        //   this.lineItemForm.value.fcn_li_gross_wt
-        // ).toFixed(2);
+       
 
         this.lineItemForm.controls['fcn_li_total_amount'].setValue(
             // Math.round(parseFloat(mkgvalue)).toFixed(2)
@@ -829,11 +802,6 @@ export class ItemDetailTable implements OnInit {
         );
 
 
-        console.log('====================================');
-        console.log(stoneAmt, mkgAmt, mtlAmt);
-        console.log('====================================');
-
-
 
         /**  set Gross amt */
         if (argsData.nettAmt == null) {
@@ -849,20 +817,13 @@ export class ItemDetailTable implements OnInit {
 
                 /* divisionMS == s, set total amount to gross amt */
                 this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-                    // Math.round(
-                    //   this.lineItemForm.value.fcn_li_total_amount -
-                    //   this.lineItemForm.value.fcn_li_discount_amount
-                    // ).toFixed(2)
+                   
                     this.comFunc.transformDecimalVB(
                         this.comFunc.allbranchMaster?.BAMTDECIMALS,
                         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
                         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
                     )
-                    // this.comFunc.transformDecimalVB(
-                    //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                    //   this.lineItemForm.value.fcn_li_total_amount -
-                    //   this.lineItemForm.value.fcn_li_discount_amount
-                    // )
+                   
                 );
             }
         }
@@ -891,9 +852,6 @@ export class ItemDetailTable implements OnInit {
                 this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
                 this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
 
-            // this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-            //   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
-            // );
             this.li_net_amount_val = this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS,
                 netAmtValue
@@ -906,12 +864,8 @@ export class ItemDetailTable implements OnInit {
 
         } else {
 
-            // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
         }
 
-        // this.li_tax_amount_val = Math.round(parseFloat(value)).toFixed(2);
-
-        // this.li_net_amount_val =  Math.round(netAmtValue).toFixed(2);
 
         this.lineItemForm.controls['fcn_li_rate'].setValue(
             this.comFunc.commaSeperation(this.comFunc
@@ -976,7 +930,6 @@ export class ItemDetailTable implements OnInit {
     }
     getPercentage(percent: any, total: any) {
         return (parseFloat(percent.toString()) / 100) * parseFloat(total.toString());
-        // return ((percent / 100) * total).toFixed(2);
     }
 
 
@@ -1027,9 +980,7 @@ export class ItemDetailTable implements OnInit {
             else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
         }
-        //   if (stockInfos.BLOCK_GRWT == true)
-        //   this.lineItemForm.controls.fcn_li_gross_wt.disable();
-        // else this.lineItemForm.controls.fcn_li_gross_wt.enable();
+       
     }
 
     removeValidationsForForms(form: FormGroup, controlsArr: string[]) {
@@ -1046,8 +997,7 @@ export class ItemDetailTable implements OnInit {
     changePCS(event: any) {
         const value = event.target.value;
         if (value != '' && this.lineItemService.validatePCS == true) {
-            // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
-            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
+           
 
             if (this.lineItemService.blockNegativeStock == 'B') {
                 if (this.lineItemService.lineItemPcs < value) {
@@ -1069,7 +1019,6 @@ export class ItemDetailTable implements OnInit {
 
                     });
                 } else {
-                    //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
                     this.manageCalculations();
                 }
                 this.checkDivisionForPcs()
@@ -1091,16 +1040,11 @@ export class ItemDetailTable implements OnInit {
 
                         } else {
                             this.checkDivisionForPcs()
-                            // this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
                             this.manageCalculations();
-                            //   this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                            //     value
-                            //   );
-                            //   this.manageCalculations();
+                          
                         }
                     });
                 } else {
-                    //   this.lineItemForm.controls['fcn_li_gross_wt'].setValue(value);
 
                     this.lineItemForm.controls['fcn_li_pcs'].setValue(
                         this.lineItemService.lineItemPcs
@@ -1117,9 +1061,7 @@ export class ItemDetailTable implements OnInit {
                 this.lineItemForm.controls['fcn_li_gross_wt'].setValue(this.zeroMQtyVal);
             this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
 
-            // this.setGrossAmt();
-            // this.setRate();
-            // this.setTotalAmount();
+            
             this.manageCalculations();
         }
     }
@@ -1141,10 +1083,6 @@ export class ItemDetailTable implements OnInit {
 
 
     }
-
-
-
-
 
     changeGrossWt(event: any) {
         const value = event.target.value;
@@ -1213,13 +1151,7 @@ export class ItemDetailTable implements OnInit {
         if (value != '' && value != 0) {
 
 
-            // this.changeExchangeNettWt({ target: { value: _exchangeGrossWt } });
-            //  this.setOzWt();
-            //  this.setExchangeMakingAmt();
-            //  this.setExMetalAmt();
-            //  this.setExNetAmt();
-            // focus
-            //  this.setFocusBasedExchangeStone();
+          
         } else {
             // focus
             // this.setFocusBasedExchangeStone();
@@ -1309,10 +1241,7 @@ export class ItemDetailTable implements OnInit {
                             this.lineItemForm.controls.fcn_li_rate.setValue(
                                 // ''
                                 preVal
-                                // this.comFunc.transformDecimalVB(
-                                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                                //   this.zeroAmtVal
-                                // )
+                                
                             );
                             this.renderer.selectRootElement('#fcn_li_rate').focus();
                         }
@@ -1325,8 +1254,7 @@ export class ItemDetailTable implements OnInit {
 
             if (this.divisionMS == 'S') {
                 if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
-                    console.log(this.lineItemModalForSalesReturn);
-                    console.log(this.newLineItem.STOCK_COST)
+                   
                     this.rateFunc(value);
                 }
                 else {
@@ -1376,11 +1304,7 @@ export class ItemDetailTable implements OnInit {
         else if (this.lineItemService.blockMinimumPrice == 'W') {
             if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
                 if (this.userwiseDiscount) {
-                    //   isAuth = await this.openAuthModal();
-                    //   if (isAuth) {
-                    //     this.rateFuncDetail('W', value);
-                    //   } else {
-
+                   
                     this.lineItemForm.controls.fcn_li_rate.setValue(
                         preVal
                     );
@@ -1394,10 +1318,7 @@ export class ItemDetailTable implements OnInit {
                 this.manageCalculations();
             }
         } else {
-            //   isAuth = await this.openAuthModal();
-            //   if (isAuth) {
-            //     this.manageCalculations();
-            //   } else {
+           
             this.lineItemForm.controls.fcn_li_rate.setValue(
                 preVal
             );
@@ -1407,38 +1328,6 @@ export class ItemDetailTable implements OnInit {
         }
     }
 
-    //   openAuthModal() {
-    //     this.authForm.reset();
-    //     return new Promise((resolve) => {
-
-    //       this.modalReferenceUserAuth = this.modalService.open(
-    //         this.userAuthModal,
-    //         {
-    //           size: "lg",
-    //           backdrop: false,
-    //           keyboard: false,
-    //           windowClass: "modal-full-width",
-    //         }
-    //       );
-
-    //       this.modalReferenceUserAuth.result.then((result) => {
-    //         if (result) {
-    //           console.log("Result :", result);
-    //           resolve(true);
-    //         } else {
-    //           resolve(false);
-    //         }
-    //       },
-    //         (reason) => {
-    //           console.log(`Dismissed ${reason}`);
-    //           resolve(false);
-
-    //         }
-    //       );
-    //     });
-
-
-    //   }
 
 
     rateFuncDetail(bOrW: String, value: any) {
@@ -1446,31 +1335,23 @@ export class ItemDetailTable implements OnInit {
 
         const makingAmount = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_total_amount'));
 
-        console.log('rateFuncDetail value', value, 'fcn_li_rate', preVal);
-
-
 
         this.openDialog(
             'Warning5',
             `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.lineItemService.blockMinimumPriceValue
             }`,
-            // 'The rate is below to the minimum price, Do you want to Continue?','
             bOrW == 'B' ? true : false
         );
         this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
-                // this.lineItemForm.controls.fcn_li_rate.setValue(
-                //   this.blockMinimumPriceValue
-                // );
+              
                 this.lineItemForm.controls.fcn_li_rate.setValue(
-                    // this.zeroAmtVal
                     preVal
                 );
                 this.manageCalculations({ totalAmt: makingAmount });
             }
             else if (data == 'No') {
                 this.lineItemForm.controls.fcn_li_rate.setValue(
-                    // this.zeroAmtVal
                     preVal
 
                 );
@@ -1492,9 +1373,7 @@ export class ItemDetailTable implements OnInit {
                 this.comFunc.allbranchMaster?.BAMTDECIMALS,
                 (totalAmtVal / this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt))
             );
-            // this.lineItemForm.controls.fcn_li_rate.setValue(value);
-            // this.manageCalculations();
-
+           
             const lsTotalAmt: any = localStorage.getItem('fcn_li_total_amount');
             this.validateMinSalePriceByTotalAmt(
                 value,
@@ -1502,19 +1381,15 @@ export class ItemDetailTable implements OnInit {
                 parseFloat(lsTotalAmt),
                 nettAmt
             );
-            // if (this.lineItemForm.value.fcn_li_stone_wt != '' || this.lineItemForm.value.fcn_li_stone_wt != 0 && this.divisionMS == 'M') {
-            //   this.renderer.selectRootElement('#fcn_ad_stone_amount').focus();
-            // }
+          
         } else {
             this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
             this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
-            // this.setGrossAmt();
             this.manageCalculations();
         }
     }
     validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt = null) {
-        // const preRateVal = localStorage.getItem('fcn_li_rates');
-        // const preTotalVal = localStorage.getItem('fcn_li_total_amnt');
+       
 
         const preRateVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
         const preTotalVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_total_amount'));
@@ -1530,8 +1405,7 @@ export class ItemDetailTable implements OnInit {
                     if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
                         this.openDialog(
                             'Warning6',
-                            // 'The rate is below to the minimum price, Do you want to Continue?',
-                            // this.comFunc.getMsgByID('MSG1731'),
+                          
                             `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.lineItemService.blockMinimumPriceValue
                             } `,
 
@@ -1539,9 +1413,7 @@ export class ItemDetailTable implements OnInit {
                         );
                         this.dialogBox.afterClosed().subscribe((data: any) => {
                             if (data == 'OK') {
-                                // this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-                                //   0
-                                // );
+                               
                                 this.lineItemForm.controls.fcn_li_total_amount.setValue(lsTotalAmt);
                                 this.manageCalculations({ totalAmt: nonMetalPreTotalVal });
                             }
@@ -1555,20 +1427,17 @@ export class ItemDetailTable implements OnInit {
                     if (this.lineItemModalForSalesReturn || parseFloat(this.lineItemService.blockMinimumPriceValue) >= parseFloat(value)) {
                         this.openDialog(
                             'Warning7',
-                            // 'The rate is below to the minimum price, Do you want to Continue?',
                             `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.lineItemService.blockMinimumPriceValue
                             }`,
                             false
                         );
                         this.dialogBox.afterClosed().subscribe((data: any) => {
                             if (data == 'No') {
-                                // document.execCommand('undo', true, null);
                                 this.lineItemForm.controls.fcn_li_total_amount.setValue(
                                     lsTotalAmt
                                 );
                                 const lsNettAmt = localStorage.getItem('fcn_li_net_amount')
                                 this.manageCalculations();
-                                // this.manageCalculations({ nettAmt: lsNettAmt });
                             } else {
                                 this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
                                 this.lineItemForm.controls.fcn_li_rate.setValue(value);
@@ -1577,11 +1446,9 @@ export class ItemDetailTable implements OnInit {
                         });
                     } else {
                         this.lineItemForm.controls.fcn_li_rate.setValue(value);
-                        // this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
                         this.manageCalculations({ totalAmt: totalAmt, nettAmt });
                     }
                 } else {
-                    // blockMinimumPrice = 'A'
                     this.lineItemForm.controls.fcn_li_rate.setValue(value);
                     this.manageCalculations({ totalAmt: totalAmt, nettAmt });
                 }
@@ -1592,14 +1459,7 @@ export class ItemDetailTable implements OnInit {
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
                         if (this.divisionMS == 'M') {
-                            // this.lineItemForm.controls.fcn_li_rate.setValue(
-                            // ''
-                            // this.comFunc.transformDecimalVB(
-                            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                            //   this.zeroAmtVal
-                            // )
-                            // );
-                            // this.renderer.selectRootElement('#fcn_li_rate').focus();
+                           
                             this.lineItemForm.controls.fcn_li_rate.setValue(
                                 preRateVal
                             );
@@ -1647,11 +1507,7 @@ export class ItemDetailTable implements OnInit {
 
         if (event.target.value != '') {
             const value =
-                // (
-                //   (this.lineItemForm.value.fcn_li_discount_amount /
-                //     this.lineItemForm.value.fcn_li_total_amount) *
-                //   100
-                // ).toFixed(2);
+          
                 this.comFunc.transformDecimalVB(
                     this.comFunc.allbranchMaster?.BAMTDECIMALS,
                     (this.lineItemForm.value.fcn_li_discount_amount /
@@ -1660,18 +1516,14 @@ export class ItemDetailTable implements OnInit {
                 );
 
             this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
-            console.log('dis amount', value);
 
             this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
-
-            // this.validateMinSalePrice();
-            // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
+           
         } else {
             this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
             this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
             this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(0.0);
 
-            // this.setGrossAmt();
             this.manageCalculations();
         }
     }
@@ -1703,14 +1555,10 @@ export class ItemDetailTable implements OnInit {
                 this.manageCalculations({ disAmt: disAmt, nettAmt });
             }
 
-            // this.setGrossAmt();
-
-            // need to enable
-            // this.validateMinSalePrice();
+     
 
         } else {
             this.lineItemForm.controls.fcn_li_discount_amount.setValue(0.0);
-            // this.setGrossAmt();
             this.manageCalculations();
         }
     }
@@ -1718,9 +1566,7 @@ export class ItemDetailTable implements OnInit {
 
 
     disFunc(disAmt: any) {
-        // this.manageCalculations({ disAmt: disAmt, nettAmt });
         this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-            // Math.round(parseFloat(value)).toFixed(2)
             disAmt
         );
 
@@ -1770,13 +1616,9 @@ export class ItemDetailTable implements OnInit {
 
 
         const value = (grossAmt / grossWt).toString();
-        // const value = (grossAmt / grossWt).toFixed(2);
-        console.log('==============validateMinSalePrice======================');
-        console.log(value);
-        console.log('====================================');
 
 
-        // if (value != '') {
+
 
         let checkStockCostVal =
             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
@@ -1785,57 +1627,7 @@ export class ItemDetailTable implements OnInit {
         if (this.divisionMS == 'S') {
             if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
                 this.manageCalculations();
-                // if (this.blockMinimumPrice == 'B') {
-                //   if (parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-                //     this.openDialog(
-                //       'Warning',
-                //       `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-                //       }`,
-                //       // 'The rate is below to the minimum price, Do you want to Continue?','
-                //       true
-                //     );
-                //     this.dialogBox.afterClosed().subscribe((data) => {
-                //       if (data == 'OK') {
-                //         this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-                //           0
-                //         );
-                //         // this.changeDisPer({ target: { value: 0 } });
-                //         this.manageCalculations();
-                //       }
-                //     });
-                //   } else {
-                //     this.manageCalculations();
-                //   }
-                // }
-                // else if (this.blockMinimumPrice == 'W') {
-                //   if (parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-                //     this.openDialog(
-                //       'Warning',
-                //       // 'The rate is below to the minimum price, Do you want to Continue?',
-                //       `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-                //       }`,
-                //       false
-                //     );
-                //     this.dialogBox.afterClosed().subscribe((data) => {
-                //       if (data == 'No') {
-                //         this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-                //           0
-                //         );
-                //         // this.changeDisPer({ target: { value: 0 } });
-                //         this.manageCalculations();
-
-                //       } else {
-                //         this.manageCalculations();
-                //       }
-                //     });
-                //   }
-                //   else {
-                //     this.manageCalculations();
-                //   }
-                // } else {
-                //   // blockMinimumPrice = 'A'
-                //   this.manageCalculations();
-                // }
+                
             }
             else {
                 // Rate Cannot be Less Than Cost
@@ -1844,10 +1636,7 @@ export class ItemDetailTable implements OnInit {
                     if (data == 'OK') {
                         this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
                             preDisPerVal || this.zeroAmtVal
-                            // this.comFunc.transformDecimalVB(
-                            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-
-                            // )
+                           
                         );
                         if (parseFloat(preDisPerVal) == 0)
                             preDisAmtVal = 0;
@@ -1865,9 +1654,7 @@ export class ItemDetailTable implements OnInit {
 
     changeStoneWt(event: any) {
         const value = event.target.value;
-        console.log('====================================');
-        console.log(event.target);
-        console.log('====================================');
+      
         if (value != '') {
             if (
                 parseFloat(value) > parseFloat(this.lineItemForm.value.fcn_li_gross_wt)
@@ -1877,43 +1664,21 @@ export class ItemDetailTable implements OnInit {
                     'Stone weight cannot be exceeded Gross weight',
                     true
                 );
-                // this.stoneWtPreVal = 0;
 
                 this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
                         this.lineItemForm.controls['fcn_li_stone_wt'].setValue(this.zeroMQtyVal);
-                        // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(this.stoneWtPreVal);
-                        //  this.lineItemForm.controls['fcn_li_stone_wt'].valueChanges
-                        //   .pipe(startWith(1), pairwise()).subscribe(
-                        //     ([prevValue, selectedValue]) => {
-                        //       console.log('prev val => ' + prevValue); // previous value
-                        //       console.log('curr val => ' + selectedValue); // new value
-                        //       this.stoneWtPreVal = prevValue;
-                        //       // this.lineItemForm.controls['fcn_li_stone_wt'].setValue(prevValue)
-                        //     }
-                        //   );
-                        // this.lineItemForm.controls['fcn_li_stone_wt'].valueChanges
-                        //   .pipe(startWith(2), pairwise()).subscribe(
-                        //     ([prevValue, selectedValue]) => {
-                        //       console.log('prev val => ' + prevValue); // previous value
-                        //       console.log('curr val => ' + selectedValue); // new value
-                        //       this.stoneWtPreVal = prevValue;
-                        //       this.lineItemForm.controls['fcn_li_stone_wt'].setValue(prevValue)
-                        //     }
-                        //   );
-                        // this.setNettWeight();
+                       
                         this.manageCalculations();
                     }
                 });
             } else {
-                // this.setStoneAmt();
-                // this.setNettWeight();
+                
                 this.manageCalculations();
             }
         } else {
             this.lineItemForm.controls.fcn_li_stone_wt.setValue(this.zeroMQtyVal);
-            // this.setStoneAmt();
-            // this.setNettWeight();
+           
             this.manageCalculations();
         }
     }
@@ -2004,20 +1769,13 @@ export class ItemDetailTable implements OnInit {
                 let stoneAmt = this.comFunc.emptyToZero(
                     this.lineItemForm.value.fcn_ad_stone_amount
                 );
-                // let mkgAmt = this.comFunc.emptyToZero(
-                //   this.lineItemForm.value.fcn_li_total_amount
-                // );
+                
                 let mtlAmt = this.comFunc.emptyToZero(
                     this.lineItemForm.value.fcn_ad_metal_amount
                 );
                 let mkgAmt = grossAmt - (stoneAmt + mtlAmt)
                 this.changeTotalAmt({ target: { value: mkgAmt } });
-                // console.log(stoneAmt, mkgAmt, mtlAmt);
-                // this.lineItemForm.controls.fcn_ad_amount.setValue(
-                //   (parseFloat(stoneAmt) + parseFloat(mkgAmt) + parseFloat(mtlAmt)).toFixed(
-                //     2
-                //   )
-                // );
+               
 
                 this.setTaxAmt();
                 this.setNettAmt();
@@ -2040,13 +1798,11 @@ export class ItemDetailTable implements OnInit {
         const value =
             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
             this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
-        console.log('value', value);
         const nettAmt = this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS,
             value
         );
         this.lineItemForm.controls['fcn_li_net_amount'].setValue(nettAmt);
-        // this.order_items_total_gross_amount = value;
         this.li_net_amount_val = nettAmt;
 
 
@@ -2074,9 +1830,7 @@ export class ItemDetailTable implements OnInit {
     }
     async changeNettAmt(event: any) {
 
-        // console.log('==============changeNettAmt======================');
-        // console.log(localStorage.getItem('fcn_li_net_amount'));
-        // console.log('====================================');
+        
         const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_net_amount'));
         const netAmtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
         if (event.target.value != '') {
@@ -2087,7 +1841,6 @@ export class ItemDetailTable implements OnInit {
             if (this.divisionMS == 'M') {
 
                 if (
-                    // this.lineItemModalForSalesReturn ||
 
                     netAmtVal >
                     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
@@ -2130,9 +1883,6 @@ export class ItemDetailTable implements OnInit {
                 }
             }
 
-            // this.lineItemForm.controls.fcn_li_rate.setValue(value);
-            // this.manageCalculations();
-            // const lsTotalAmt = localStorage.getItem('fcn_li_total_amount');
         } else {
             this.lineItemForm.controls['fcn_li_total_amount'].setValue(
                 this.zeroAmtVal
@@ -2178,30 +1928,18 @@ export class ItemDetailTable implements OnInit {
                 this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
             );
         }
-        // Math.round(
-        //   grossAmt -
-        //   (parseFloat(
-        //     this.lineItemForm.value.fcn_ad_stone_amount || 0
-        //   ) +
-        //     parseFloat(
-        //       this.lineItemForm.value.fcn_ad_metal_amount || 0
-        //     ))
-        // ).toFixed(2);
-        console.log(grossAmt, totalAmt, taxAmt);
+       
         let discountAmt = this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS,
             parseFloat(totalAmt) - parseFloat(grossAmt)
         );
 
-
-        // this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
-        // this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
+        
 
         this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
         this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
         this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
 
-        console.log('dis amount', discountAmt);
 
         if (this.divisionMS == 'M') {
             this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
@@ -2220,13 +1958,7 @@ export class ItemDetailTable implements OnInit {
                 this.lineItemForm.value.fcn_li_net_amount
             );
 
-            // this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-            //   discountAmt
-            // );
-            // this.changeDisAmount(
-            //   { target: { value: discountAmt } },
-            //   this.lineItemForm.value.fcn_li_net_amount
-            // );
+           
         }
 
     }
@@ -2244,7 +1976,6 @@ export class ItemDetailTable implements OnInit {
                 this.updateBtn = false;
 
                 if (this.newLineItem.STOCK_CODE == '') {
-                    // this.snackBar.open('Invalid Stock Code', 'OK');
                     this.openDialog('Warning', 'Invalid Stock Code', true);
                 } else {
                     let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
@@ -2264,7 +1995,6 @@ export class ItemDetailTable implements OnInit {
 
                     var temp_resp = this.newLineItem;
 
-                    console.log(this.newLineItem);
 
                     var values: any = {
                         ID: this.order_items_slno_length,
@@ -2309,7 +2039,7 @@ export class ItemDetailTable implements OnInit {
                         // this.orderedItemEditId = '';
                     } else {
                         const preitemIndex = this.ordered_items.findIndex((data) => {
-                            // console.table(data);
+                            
                             console.table(data.SRNO == this.orderedItemEditId);
                             return data.sn_no == this.orderedItemEditId;
                         });
@@ -2319,7 +2049,6 @@ export class ItemDetailTable implements OnInit {
                             this.ordered_items[preitemIndex] = values;
                         }
                     }
-                    console.log(this.ordered_items);
                     this.sumTotalValues();
                     this.setPosItemData(this.order_items_slno_length, this.newLineItem);
                     this.newLineItem.STOCK_CODE = '';
@@ -2359,20 +2088,10 @@ export class ItemDetailTable implements OnInit {
 
             } else {
                 this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
-                // this.dialogBox.afterClosed().subscribe((data) => {
-                //   if (data == 'OK') {
-                //     this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                //       this.comFunc.transformDecimalVB(
-                //         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                //         localStorage.getItem('fcn_li_net_amount')
-                //       ))
-                //   }
-                // });
+               
             }
         } else {
-            console.log('====================================');
-            console.log(this.lineItemForm.controls.fcn_li_gross_wt.errors);
-            console.log('====================================');
+        
             this.snackBar.open('Please Fill Required Fields', '', {
                 duration: 2000 // time in milliseconds
             });
@@ -2408,13 +2127,10 @@ export class ItemDetailTable implements OnInit {
             this.suntechApi.getDynamicAPI(API)
                 .subscribe(async (resp: any) => {
                     this.snackBar.dismiss();
-                    console.log('===========edit====getPOSStockCodeValidation=====================');
-                    console.log(resp);
-                    console.log('====================================');
+                  
                     if (resp != null) {
                         if (resp.resultStatus.RESULT_TYPE == 'Success') {
                             let stockInfos = resp.stockInfo;
-                            console.log(stockInfos);
 
                             this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
                             this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
@@ -2431,7 +2147,6 @@ export class ItemDetailTable implements OnInit {
                             this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
 
                             this.lineItemService.isStoneIncluded = this.comFunc.stringToBoolean(stockInfos.STONE);
-                            console.log(this.lineItemService.isStoneIncluded)
                             if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
 
                                 if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
@@ -2452,7 +2167,6 @@ export class ItemDetailTable implements OnInit {
         this.newLineItem.GST_CODE = value.VATCODE;
         this.newLineItem.MAIN_STOCK_CODE = value.MAINSTOCKCODE;// changed at 16/3/2024
         // this.newLineItem.MAIN_STOCK_CODE = value.MainStockCode;
-        console.log('edit af data', value)
         this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
         // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
         // this.divisionMS = value.divisionMS;
@@ -2496,7 +2210,6 @@ export class ItemDetailTable implements OnInit {
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS, value.NETVALUEFC)
         );
-        // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
         this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_PER
@@ -2505,7 +2218,6 @@ export class ItemDetailTable implements OnInit {
         this.lineItemForm.controls.fcn_li_tax_amount.setValue(
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC));
-        // this.lineItemForm.controls.fcn_li_net_amount.setValue(value.NETVALUEFC);
         this.lineItemForm.controls.fcn_li_net_amount.setValue(
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC));
@@ -2521,15 +2233,13 @@ export class ItemDetailTable implements OnInit {
 
 
         this.lineItemForm.controls.fcn_ad_amount.setValue(
-            // value.TOTALWITHVATFC
 
             value.MKGMTLNETRATE // changed at 18/3/2024
         );
         this.lineItemForm.controls.fcn_ad_rate_type.setValue(value.RATE_TYPE);
         this.lineItemForm.controls.fcn_ad_rate.setValue(value.MKGMTLNETRATE); // changed at 18/3/2024
         this.lineItemForm.controls.fcn_tab_details.setValue(value.SJEW_TAGLINES);
-        // this.lineItemForm.controls.fcn_ad_making_rate.setValue(value.PUREWT);
-        // this.lineItemForm.controls.fcn_ad_making_amount.setValue(value.PUREWT);
+        
         this.lineItemForm.controls.fcn_ad_stone_rate.setValue(
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS, value.STONE_RATEFC));
@@ -2547,14 +2257,12 @@ export class ItemDetailTable implements OnInit {
 
         if (this.editOnly || this.viewOnly) {
             const divisionMS = this.comFunc.getDivisionMS(value.DIVISION_CODE);
-            // this.currentLineItems.divisionMS = divisionMS;
             this.divisionMS = divisionMS;
         } else {
             this.divisionMS = value.DIVISIONMS;
         }
         if (!this.viewOnly) {
-            // this.currentLineItems.splice((value.SRNO - 1), 1);
-            // this.ordered_items.splice((value.SRNO - 1), 1);
+          
         }
 
         localStorage.setItem('fcn_li_rate', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate).toString());
@@ -2584,7 +2292,7 @@ export class ItemDetailTable implements OnInit {
         let total_received_amount = 0;
 
         this.ordered_items.forEach(function (item) {
-            console.log('item---------------------', item);
+          
 
             total_sum = total_sum + parseFloat(item.total_amount);
             tax_sum = tax_sum + parseFloat(item.tax_amount);
@@ -2618,31 +2326,12 @@ export class ItemDetailTable implements OnInit {
 
 
 
-
-
-        // sales return items
-        //  this.sales_returns_items.forEach(function (item: any) {
-        //     total_sales_return_sum =
-        //          total_sales_return_sum + parseFloat(item.total_amount);
-        //   });
-
-
-        //  this.exchange_items.forEach(function (item) {
-        //      total_exchange = total_exchange + parseFloat(item.total_amount);
-        //   });
-
         // Metal purchase (Exchange)
         this.sumExchangeItem();
         this.sumRetailSalesReturn();
         this.order_total_exchange = total_exchange;
 
-        console.log('============== amount ======================');
-        console.log(
-            this.order_items_total_gross_amount,
-            total_sales_return_sum,
-            total_exchange
-        );
-        console.log('====================================');
+    
         this.order_items_total_net_amount = this.comFunc.transformDecimalVB(
             this.comFunc.amtDecimals,
             this.order_items_total_gross_amount -
@@ -2683,8 +2372,7 @@ export class ItemDetailTable implements OnInit {
         this.prnt_received_amount = this.receiptTotalNetAmt;
         this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
 
-        // recpCtrl.receiptTotalNetAmt = receiptTotalNetAmt;
-        // recpCtrl.balanceAmount = balanceAmount;
+      
     }
 
 
@@ -2718,7 +2406,6 @@ export class ItemDetailTable implements OnInit {
         for (var i = 0; i < numberOfGroups; i++) {
             digitsGroup[i] = digits.splice(0, 3);
         }
-        console.log(digitsGroup); //debug
 
         //Change the group's numerical values to text
         var digitsGroupLen = digitsGroup.length;
@@ -2791,7 +2478,6 @@ export class ItemDetailTable implements OnInit {
             }
         }
 
-        console.log(digitsGroup); //debug
 
         //Adds '-' for grammar, cleans all null values, joins the group's elements into a string
         for (var l = 0; l < digitsGroupLen; l++) {
@@ -2804,7 +2490,6 @@ export class ItemDetailTable implements OnInit {
             digitsGroup[l] = digitsGroup[l].join('');
         }
 
-        console.log(digitsGroup); //debug
 
         //Adds thousand, millions, billion and etc to the respective string.
         var posfix = [
@@ -2828,7 +2513,6 @@ export class ItemDetailTable implements OnInit {
             }
         }
 
-        console.log(digitsGroup); //debug
 
         //Joins all the string into one and returns it
         return digitsGroup.join(' ');
@@ -2970,13 +2654,6 @@ export class ItemDetailTable implements OnInit {
                 this.lineItemForm.value.fcn_li_tax_percentage
             ),
 
-            // TOTALWITHVATFC: this.comFunc.emptyToZero(
-            //   this.lineItemForm.value.fcn_li_net_amount
-            // ),
-            // TOTALWITHVATLC: this.comFunc.CCToFC(
-            //   this.comFunc.compCurrency,
-            //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
-            // ),
             VAT_AMOUNTFC: this.comFunc.emptyToZero(
                 this.lineItemForm.value.fcn_li_tax_amount
             ),
@@ -2989,8 +2666,7 @@ export class ItemDetailTable implements OnInit {
             TOTALWITHVATFC: this.comFunc.emptyToZero(
                 // this.order_items_total_gross_amount,
                 this.lineItemForm.value.fcn_li_net_amount
-                // this.lineItemForm.value.fcn_ad_amount
-                // + this.lineItemForm.value.fcn_li_tax_amount
+                
             ),
             TOTALWITHVATLC:
                 this.comFunc.emptyToZero(
@@ -2998,10 +2674,7 @@ export class ItemDetailTable implements OnInit {
                         this.vocDataForm.value.txtCurrency,
                         this.comFunc.emptyToZero(
                             this.lineItemForm.value.fcn_li_net_amount
-                            // this.lineItemForm.value.fcn_li_net_amount
-                            // this.comFunc.emptyToZero(this.order_items_total_gross_amount)
-                            // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_amount)
-                            // + this.comFunc.emptyToZero( this.lineItemForm.value.fcn_li_tax_amount)
+                           
                         ), this.vocDataForm.value.txtCurRate
                     )
                 ) || 0,
@@ -3232,7 +2905,6 @@ export class ItemDetailTable implements OnInit {
             "EXCLUDEGSTVAT": data.EXCLUDEGSTVAT,
 
         };
-        console.log(data);
 
         let _taxamount = 0;
         _taxamount = data.PRICE1LC * (this.branch_tax_percentage / 100);
@@ -3240,7 +2912,6 @@ export class ItemDetailTable implements OnInit {
         let _net_amount_val = +_taxamount + +data.PRICE1LC;
 
 
-        console.log(temp_pos_item_data);
         if (
             this.orderedItemEditId == '' ||
             this.orderedItemEditId == undefined ||
@@ -3250,35 +2921,23 @@ export class ItemDetailTable implements OnInit {
             this.lineItemService.setData(this.currentLineItems);
         } else {
             const preitemIndex = this.currentLineItems.findIndex((data: any) => {
-                console.table(data.SRNO == this.orderedItemEditId);
                 return data.SRNO == this.orderedItemEditId;
             });
-            console.log('====================================');
-            console.log(preitemIndex);
-            console.log('====================================');
+           
             if (preitemIndex != -1) {
                 temp_pos_item_data.SRNO = this.orderedItemEditId;
                 this.currentLineItems[preitemIndex] = temp_pos_item_data;
             }
-            console.log(
-                '===========updatedcurrentLineItems========================='
-            );
-            console.log(this.currentLineItems);
-            console.log(this.ordered_items);
-            console.log('====================================');
+           
+           
             this.orderedItemEditId = '';
         }
         this.pos_main_data.RetailDetails = this.currentLineItems;
-        console.log(this.pos_main_data);
     }
 
 
 
     setRetailSalesDataPost() {
-        // alert(this.customerDetails?.CODE );
-        // alert(this.invReturnSalesTotalNetTotal)
-        // alert(this.order_total_exchange)
-
 
         this.retailSalesDataPost =
         {
@@ -3287,15 +2946,7 @@ export class ItemDetailTable implements OnInit {
             VOCTYPE: 'EST',
             // VOCTYPE: this.vocType,
             VOCNO: this.retailSaleDataVocNo,
-            // VOCDATE: this.convertDateWithTimeZero(
-            //     new Date(this.vocDataForm.value.vocdate).toISOString()
-            // ),
-            //   YEARMONTH: this.baseYear,
-            // PARTYNAME: this.customerDataForm.value.fcn_customer_name,
-            // "PARTYNAME": "Urwashi Jani",
-            //TEL1: this.customerDetails?.TEL1 || '',
-            // TEL2: this.customerDetails?.TEL2 || '',
-            //SALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
+            
             RATE_TYPE: '', //need_input
             METAL_RATE: 0, //need_input
             SALES_ORDER: 0, //need_input
@@ -3408,11 +3059,8 @@ export class ItemDetailTable implements OnInit {
             ),
             // REFUND: 0,
             NAVSEQNO: 0, //need
-            // MOBILE: this.customerDataForm.value.fcn_customer_mobile,
-            // POBOX: this.customerDetails?.POBOX_NO || '',
-            //EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
+          
             REMARKS: '', //need_input
-            // POSCUSTCODE: this.customerDetails?.CODE || '',
             ITEM_CURRENCY: this.comFunc.compCurrency,
             ITEM_CURR_RATE: 1,
             ADJUST_ADVANCECC: 0,
@@ -3422,7 +3070,6 @@ export class ItemDetailTable implements OnInit {
             ), // need_input
             SUBTOTALCC: this.comFunc.CCToFC(
                 this.comFunc.compCurrency,
-                // this.comFunc.emptyToZero(this.prnt_inv_net_total_without_tax)
                 this.comFunc.emptyToZero(this.order_items_total_gross_amount)
             ),
             NETTOTALCC: this.comFunc.CCToFC(
@@ -3442,15 +3089,11 @@ export class ItemDetailTable implements OnInit {
             ORDERMID: 0, //need
             FLAG_UPDATED: 'N',
             FLAG_INPROCESS: 'N',
-            // NATIONALITY: this.customerDetailForm.value.fcn_cust_detail_nationality
-
-            //   || '',
-            // TYPE: this.customerDetails?.TYPE || '',
+           
             ORDEREXEDATE: this.dummyDate, //need
             FLAG_EDIT_ALLOW: 'N',
             D2DTRANSFER: 'F',
             RSCUSTIDNO: '',
-            // POSKnownAbout: this.customerDetails?.POSKnownAbout || 0,
 
             // etc fields
             RS_FIXED: false, //need
@@ -3570,14 +3213,9 @@ export class ItemDetailTable implements OnInit {
             "ESTIMATION_STATUS": "O", // 0 - O
             "POS_REFERENCE": "",
 
-            // SOURCEOFWEALTHANDFUNDS: this.customerDetailForm.value.fcn_source_of_fund || '',
-
-            // estimationDetail: this.currentLineItems,
+           
         };
 
-        console.log('====================================');
-        console.log(this.retailSalesDataPost);
-        console.log('====================================');
 
     }
 
@@ -3597,7 +3235,6 @@ export class ItemDetailTable implements OnInit {
         let total_oz_weight = 0;
 
         this.exchange_items.forEach(function (item) {
-            console.log('exchange item---------------------', item);
             total_sum = total_sum + parseFloat(item.total_amount);
             total_pcs = total_pcs + item.pcs;
             total_nett_weight = total_nett_weight + parseFloat(item.weight); //nett weight
@@ -3609,9 +3246,7 @@ export class ItemDetailTable implements OnInit {
             total_mkg_value = total_mkg_value + parseFloat(item.mkg_amount);
             total_net_amount = total_net_amount + parseFloat(item.net_amount);
             total_oz_weight = total_oz_weight + parseFloat(item.ozWeight);
-            console.log('=================ozWeight===================');
-            console.log(typeof item.ozWeight, item.ozWeight);
-            console.log('====================================');
+          
         });
 
         this.invMetalPurchaseTotalPcs = total_pcs;
@@ -3655,7 +3290,6 @@ export class ItemDetailTable implements OnInit {
         let total_tax_amt = 0;
 
         this.sales_returns_items.forEach(function (item: any) {
-            console.log('return item---------------------', item);
             total_sum = total_sum + parseFloat(item.total_amount);
             tax_sum = tax_sum + parseFloat(item.tax_amount);
             net_sum = net_sum + parseFloat(item.net_amount);
@@ -3685,33 +3319,14 @@ export class ItemDetailTable implements OnInit {
         this.invReturnSalesTotalDisPer = total_dis_per;
         this.invReturnSalesTotalTaxAmt = total_tax_amt;
 
-        // this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
-        //   this.comFunc.amtDecimals,
-        //   net_sum + total_tax_amt
-        // );
-
+      
         this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
             this.comFunc.amtDecimals,
             // total_sum
             net_sum
             // +       total_tax_amt
         );
-        console.log('=================invReturnSalesTotalPcs===================');
-        console.log(
-            this.invReturnSalesTotalPcs,
-            this.invReturnSalesTotalWeight,
-            this.invReturnSalesTotalPureWeight,
-            this.invReturnSalesTotalMakingAmt,
-            this.invReturnSalesTotalMetalAmt,
-            this.invReturnSalesTotalStoneAmt,
-            this.invReturnSalesTotalNetAmt,
-            this.invReturnSalesTotalPurityDiff,
-            this.invReturnSalesTotalStoneDiff,
-            this.invReturnSalesTotalDisAmt,
-            this.invReturnSalesTotalDisPer,
-            this.invReturnSalesTotalNetTotal
-        );
-        console.log('====================================');
+       
     }
 
     setRetailSalesRowData(sno: any, data: any) {
@@ -3827,18 +3442,23 @@ export class ItemDetailTable implements OnInit {
         };
         const preitemIndex = this.salesReturnsItems_forVoc.findIndex((data: any) => data.SRNO.toString() == this.salesReturnRowDataSRNO.toString());
         if (preitemIndex != -1) {
-            console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
-            console.log(this.salesReturnsItems_forVoc[preitemIndex], temp_pos_item_data);
-            console.log('====================================');
+          
             this.salesReturnsItems_forVoc[preitemIndex] = { ...this.salesReturnsItems_forVoc[preitemIndex], ...temp_pos_item_data };
-            console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
-            console.log(this.salesReturnsItems_forVoc[preitemIndex]);
-            console.log('====================================');
+           
         } else {
-            console.log('============failed=====this.salesReturnsItems_forVoc[preitemIndex]===================');
-            console.log(this.salesReturnsItems_forVoc[preitemIndex]);
-            console.log('====================================');
+            
         }
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    onKeydownHandler(event: KeyboardEvent) {
+      this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
+      if (this.lineItemService.isWarningModalOpen) {
+        event.preventDefault();
+        event.stopPropagation(); 
+      } else {
+        
+      }
     }
 
 }
