@@ -772,7 +772,7 @@ export class SalesEstimationComponent implements OnInit {
             fcn_mob_code: ['', Validators.required],
 
             fcn_source_of_fund: [''],
-
+            fcn_customer_exp_date: ['',],
         });
 
 
@@ -3320,12 +3320,6 @@ export class SalesEstimationComponent implements OnInit {
                         this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
                             result.MARITAL_ST
                         );
-                        console.log('=============datePipe=======================');
-                        console.log(this.dummyDateCheck(result.DATE_OF_BIRTH));
-
-
-                        console.log(this.datePipe.transform(this.dummyDateCheck(result.DATE_OF_BIRTH), 'dd/M/yyyy'));
-                        console.log('====================================');
 
                         this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
                             this.dummyDateCheck(result.DATE_OF_BIRTH)
@@ -3358,7 +3352,16 @@ export class SalesEstimationComponent implements OnInit {
                         this.customerDetailForm.controls.fcn_source_of_fund.setValue(
                             result.SOURCE
                         );
-
+                        this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+                            new Date(result.POSCUSTIDEXP_DATE)
+                        );
+                        this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+                            new Date(result.POSCUSTIDEXP_DATE)
+                        );
+                        console.log(result.POSCUSTIDEXP_DATE,'result.POSCUSTIDEXP_DATE');
+                        
+                        console.log(this.customerDetailForm.value.fcn_customer_exp_date);
+                        
                         this.customerDetails = result;
 
                         if (this.amlNameValidation)
@@ -7132,8 +7135,8 @@ export class SalesEstimationComponent implements OnInit {
                                     this.snackBar.open('POS Updated Successfully', 'OK');
                                     if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && this.customerDataForm.value.tourVatRefundNo == '') {
                                         this.posPlanetFileInsert();
-                                        this.createPlanetPOSVoidFile(); 
-                                      }
+                                        this.createPlanetPOSVoidFile();
+                                    }
                                     this.router.navigateByUrl('/estimation');
 
                                 } else {
@@ -7163,8 +7166,8 @@ export class SalesEstimationComponent implements OnInit {
                                 if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && traNo == '') {
 
                                     this.posPlanetFileInsert();
-                  
-                                  }
+
+                                }
                                 setTimeout(() => {
                                     // location.reload();
                                     this.router.navigateByUrl('/estimation');
@@ -7218,125 +7221,125 @@ export class SalesEstimationComponent implements OnInit {
         let netAmt: number = 0;
         let totalBeforeVat: number = 0;
         let totalVat: number = 0;
-    
+
         const res = this.nationalityMaster.filter((data: any) => data.CODE == this.customerDetailForm.value.fcn_cust_detail_nationality)
         const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
         const items = this.currentLineItems.filter((data: any) => data.DIVISION != 'X' && data.EXCLUDEGSTVAT == false && data.GSTVATONMAKING == false).map((data: any, i: any) => {
-    
-          totalBeforeVat += parseFloat(data.GROSS_AMT);
-          netAmt += parseFloat(data.TOTALWITHVATFC);
-          totalVat += parseFloat(data.VAT_AMOUNTFC);
-    
-          return {
-            "Description": data.STOCK_DOCDESC,
-            "Quantity": data.PCS || '', //doubt -c 
-            "GrossAmount": data.TOTALWITHVATFC,// total amount with vat
-            // "GrossAmount": data.GROSS_AMT, //doubt
-            "Code": data.STOCK_CODE, //doubt
-            "UnitPrice": data.TOTALWITHVATFC, //doubt - c -total amount with vat
-            "NetAmount": data.TOTALWITHVATFC, //  total amount with vat
-            "VatRate": data.VAT_PER, //doubt -c
-            "VatCode": data.VATCODE,
-            "VatAmount": data.VAT_AMOUNTFC,
-            "MerchandiseGroup": this.comFunc.allbranchMaster.PLANETMERCHANTGROUP, //doubt - branchmaster merchandise
-            "TaxRefundEligible": true, //doubt -c
-            "SerialNumber": (i + 1).toString() //doubt - srno  - c
-    
-          }
-    
+
+            totalBeforeVat += parseFloat(data.GROSS_AMT);
+            netAmt += parseFloat(data.TOTALWITHVATFC);
+            totalVat += parseFloat(data.VAT_AMOUNTFC);
+
+            return {
+                "Description": data.STOCK_DOCDESC,
+                "Quantity": data.PCS || '', //doubt -c 
+                "GrossAmount": data.TOTALWITHVATFC,// total amount with vat
+                // "GrossAmount": data.GROSS_AMT, //doubt
+                "Code": data.STOCK_CODE, //doubt
+                "UnitPrice": data.TOTALWITHVATFC, //doubt - c -total amount with vat
+                "NetAmount": data.TOTALWITHVATFC, //  total amount with vat
+                "VatRate": data.VAT_PER, //doubt -c
+                "VatCode": data.VATCODE,
+                "VatAmount": data.VAT_AMOUNTFC,
+                "MerchandiseGroup": this.comFunc.allbranchMaster.PLANETMERCHANTGROUP, //doubt - branchmaster merchandise
+                "TaxRefundEligible": true, //doubt -c
+                "SerialNumber": (i + 1).toString() //doubt - srno  - c
+
+            }
+
         });
         console.log('items', items);
         console.log('summary ', netAmt, totalBeforeVat, totalVat);
-    
-    
-    
+
+
+
         // skip Divison - X
         let postData = {
-          // "Version": environment.app_version,
-          "Version": '2.0',
-          "ReceiptNumber": this.vocDataForm.value.fcn_voc_no.toString(),
-          "Date": this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()) || '',
-          "Terminal": this.comFunc.allbranchMaster.PLANETTERMINALID, // branchmaster terminal ID
-          "Type": "RECEIPT", // c 
-          "Order": {
-            // "Total": this.order_items_total_gross_amount, // doubt total + vat // net amont - lineitem
-            // "TotalBeforeVAT": this.comFunc.transformDecimalVB(
-            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            //   this.prnt_inv_total_gross_amt //  total without vat
-            // ),
-            // "VatIncl": this.comFunc.transformDecimalVB(
-            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            //   this.order_items_total_tax
-            // ), //doubt - total vat amount - c
-            "Total": this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              netAmt
-            ),
-            "TotalBeforeVAT": this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              totalBeforeVat
-            ),
-            "VatIncl": this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              totalVat
-            ),
-            "Items": items,
-    
-          },
-          "Shopper": {
-            "FirstName": this.customerDetailForm.value.fcn_customer_detail_fname || '',
-            "LastName": this.customerDetailForm.value.fcn_customer_detail_lname || '',
-            "Gender": this.customerDetailForm.value.fcn_cust_detail_gender || '',
-            "Nationality": natinality || '',
-            "CountryOfResidence": this.customerDetailForm.value.fcn_cust_detail_nationality || '', // doubt - c
-            "PhoneNumber": (this.customerDetailForm.value.fcn_mob_code || '') + this.customerDetailForm.value.fcn_cust_detail_phone || '', // with mobile code infornt
-            "Email": this.customerDetailForm.value.fcn_cust_detail_email || '',
-            "Birth": {
-              "Date": this.customerDetailForm.value.fcn_cust_detail_dob || ''
+            // "Version": environment.app_version,
+            "Version": '2.0',
+            "ReceiptNumber": this.vocDataForm.value.fcn_voc_no.toString(),
+            "Date": this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()) || '',
+            "Terminal": this.comFunc.allbranchMaster.PLANETTERMINALID, // branchmaster terminal ID
+            "Type": "RECEIPT", // c 
+            "Order": {
+                // "Total": this.order_items_total_gross_amount, // doubt total + vat // net amont - lineitem
+                // "TotalBeforeVAT": this.comFunc.transformDecimalVB(
+                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                //   this.prnt_inv_total_gross_amt //  total without vat
+                // ),
+                // "VatIncl": this.comFunc.transformDecimalVB(
+                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                //   this.order_items_total_tax
+                // ), //doubt - total vat amount - c
+                "Total": this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    netAmt
+                ),
+                "TotalBeforeVAT": this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    totalBeforeVat
+                ),
+                "VatIncl": this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    totalVat
+                ),
+                "Items": items,
+
             },
-            "ShopperIdentityDocument": {
-              "Number": this.customerDataForm.value.fcn_customer_id_number,
-              "ExpirationDate": this.convertDateToYMD(this.customerDataForm.value.fcn_customer_exp_date),
-              "IssuedBy": "",
-              // passport , idcard
-              "Type": this.customerDataForm.value.fcn_customer_id_type == 'ID_CARD' ? 'ID_CARD' : 'PASSPORT'
+            "Shopper": {
+                "FirstName": this.customerDetailForm.value.fcn_customer_detail_fname || '',
+                "LastName": this.customerDetailForm.value.fcn_customer_detail_lname || '',
+                "Gender": this.customerDetailForm.value.fcn_cust_detail_gender || '',
+                "Nationality": natinality || '',
+                "CountryOfResidence": this.customerDetailForm.value.fcn_cust_detail_nationality || '', // doubt - c
+                "PhoneNumber": (this.customerDetailForm.value.fcn_mob_code || '') + this.customerDetailForm.value.fcn_cust_detail_phone || '', // with mobile code infornt
+                "Email": this.customerDetailForm.value.fcn_cust_detail_email || '',
+                "Birth": {
+                    "Date": this.customerDetailForm.value.fcn_cust_detail_dob || ''
+                },
+                "ShopperIdentityDocument": {
+                    "Number": this.customerDataForm.value.fcn_customer_id_number,
+                    "ExpirationDate": this.convertDateToYMD(this.customerDataForm.value.fcn_customer_exp_date),
+                    "IssuedBy": "",
+                    // passport , idcard
+                    "Type": this.customerDataForm.value.fcn_customer_id_type == 'ID_CARD' ? 'ID_CARD' : 'PASSPORT'
+                }
+
             }
-    
-          }
         };
-    
-    
+
+
         const API = `POSPlanetFile/CreatePOSPlanetFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
         this.suntechApi.postDynamicAPI(API, postData)
-          .subscribe((resp) => {
-            if (resp.status == "Success") {
-              // In retail sales
-              // update trno value to field
-              // planeturl - 
-              // /PLANETRESPONEFLG = true  
-              this.getPlanetPOSUpdateTag();
-    
-            }
-          });
-      }
+            .subscribe((resp) => {
+                if (resp.status == "Success") {
+                    // In retail sales
+                    // update trno value to field
+                    // planeturl - 
+                    // /PLANETRESPONEFLG = true  
+                    this.getPlanetPOSUpdateTag();
 
-      getPlanetPOSUpdateTag() {
+                }
+            });
+    }
+
+    getPlanetPOSUpdateTag() {
         const API = `POSPlanetFile/GetPlanetPOSUpdateTag/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
         this.suntechApi.getDynamicAPI(API)
-          .subscribe((res: any) => {
-            if (res.status == "Success") {
-            }
-          });
-      }
+            .subscribe((res: any) => {
+                if (res.status == "Success") {
+                }
+            });
+    }
 
-      createPlanetPOSVoidFile() {
+    createPlanetPOSVoidFile() {
         const API = `POSPlanetFile/CreatePlanetPOSVoidFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
         this.suntechApi.postDynamicAPI(API, {})
-          .subscribe((res: any) => {
-            if (res.status == "Success") {
-            }
-          });
-      }
+            .subscribe((res: any) => {
+                if (res.status == "Success") {
+                }
+            });
+    }
     saveAndContinue(type: any) {
         this.isPrintingEnabled = false;
         if (type == 'continue') {
@@ -7352,9 +7355,9 @@ export class SalesEstimationComponent implements OnInit {
             this.sales_returns_items = [];
             this.exchange_items = [];
             this.open(this.mymodal, false, null, false, false)
-        } 
-        else{
-            this.isPrintingEnabled=true;
+        }
+        else {
+            this.isPrintingEnabled = true;
         }
     }
 

@@ -36,6 +36,7 @@ export class customerDetailsModal implements OnInit {
 
     @Input() customerDataForm!: FormGroup;
     @Input() vocDataForm!: FormGroup;
+    @Input() customerDetails: any = {};
 
     @Input() modal!: NgbModalRef;
     @Output() newItemEvent = new EventEmitter<any>();
@@ -63,7 +64,7 @@ export class customerDetailsModal implements OnInit {
     amlNameValidation: any;
     strBranchcode: any = '';
     strUser: any = '';
-    customerDetails: any = {};
+    
     inv_bill_date: any;
     inv_number: any;
     inv_cust_id_no: any;
@@ -331,10 +332,15 @@ export class customerDetailsModal implements OnInit {
                     this._filterMasters(this.mobileCountryMaster, value, 'MOBILECOUNTRYCODE', 'DESCRIPTION')
                 )
             );
-
-        this.customerDataForm.valueChanges.subscribe(values => {
-            // Do something with the new form values
-        });
+        // CHANGE BY ANANTHA 21-04-2024 starts
+        // this.customerDataForm.valueChanges.subscribe(values => {
+        //     // Do something with the new form values
+        // });
+        if(this.customerDetails){
+            console.log(this.customerDetails,'this.customerDetails');
+            this.onCustomerNameFocus(this.customerDetails.MOBILE)
+        }
+        // CHANGE BY ANANTHA 21-04-2024 ends
         this.getMasters();
         this.getIdMaster();
         this.getMaritalStatus();
@@ -439,7 +445,7 @@ export class customerDetailsModal implements OnInit {
                             result.LASTNAME
                         );
                         this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
-                            result.TEL2
+                            result.MOBILE1
                         );
                         this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
                             result.GENDER
@@ -450,18 +456,11 @@ export class customerDetailsModal implements OnInit {
                         this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
                             result.MARITAL_ST
                         );
-                        console.log('=============datePipe=======================');
-                        console.log(this.dummyDateCheck(result.DATE_OF_BIRTH));
-
-
-                        console.log(this.datePipe.transform(this.dummyDateCheck(result.DATE_OF_BIRTH), 'dd/M/yyyy'));
-                        console.log('====================================');
-
-                        this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
-                            this.dummyDateCheck(result.DATE_OF_BIRTH)
-                            // this.datePipe.transform(this.dummyDateCheck(result.DATE_OF_BIRTH), 'dd/M/yyyy')
-
+                        this.customerDetailForm.controls.fcn_cust_detail_state.setValue(
+                            result.STATE
                         );
+
+                      
                         this.customerDetailForm.controls.fcn_cust_detail_occupation.setValue(
                             result.OCCUPATION
                         );
@@ -488,10 +487,12 @@ export class customerDetailsModal implements OnInit {
                         this.customerDetailForm.controls.fcn_source_of_fund.setValue(
                             result.SOURCE
                         );
-
+                        this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
+                            this.dummyDateCheck(result.DATE_OF_BIRTH)
+                        );
                         this.customerDetails = result;
 
-                        if (this.amlNameValidation)
+                        if (this.amlNameValidation){
                             if (!result.AMLNAMEVALIDATION && result.DIGISCREENED) {
                                 this.amlNameValidationData = false;
                             } else {
@@ -499,6 +500,7 @@ export class customerDetailsModal implements OnInit {
                                 // this.amlNameValidationData = true;
                                 // this.openDialog('Warning', 'Pending for approval', true);
                             }
+                        }
                     } else {
                         if (value == null) {
                             this.openDialog('Warning', 'Need To Create Customer', true);
@@ -754,6 +756,8 @@ export class customerDetailsModal implements OnInit {
                 this.customerDataForm.value.fcn_customer_code;
             this.customerDetails.SOURCE =
                 this.customerDataForm.value.fcn_source_of_fund;
+            this.customerDetails.COMPANY =
+                this.customerDetailForm.value.fcn_cust_detail_company;
 
 
             // this.modalService.
@@ -772,7 +776,7 @@ export class customerDetailsModal implements OnInit {
                     CODE: this.customerDataForm.value.fcn_customer_code || '0',
                     // CODE: this.customerDetails?.CODE || '0',
                     NAME: this.customerDataForm.value.fcn_customer_name || '',
-                    COMPANY: this.customerDataForm.value.COMPANY || this.customerDetails?.COMPANY || '',
+                    COMPANY: this.customerDetails?.COMPANY || '',
                     ADDRESS:
                         this.customerDetailForm.value.fcn_cust_detail_address ||
                         // this.customerDetails?.ADDRESS ||
@@ -1130,7 +1134,7 @@ export class customerDetailsModal implements OnInit {
                             this.customerDetails.LASTNAME
                         );
                         this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
-                            this.customerDetails.TEL2
+                            this.customerDetails.MOBILE1
                         );
                         this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
                             this.customerDetails.GENDER

@@ -318,7 +318,7 @@
               <input type="text" matInput formControlName="fcn_source_of_fund" id="fcn_source_of_fund"
                 [matAutocomplete]="fcn_source_of_fund" [readonly]="viewOnly" />
               <mat-autocomplete #fcn_source_of_fund="matAutocomplete" autoActiveFirstOption>
-                <mat-option *ngFor="let option of sourceOfFundListOptions | async" [value]="option.DESCRIPTION">
+                <mat-option *ngFor="let option of sourceOfFundListOptions | async" [value]="option.CODE">
                   {{ option.DESCRIPTION }}
                   <!-- {{ option.CODE +' - '+ option.DESCRIPTION}} -->
                 </mat-option>
