@@ -25,10 +25,9 @@
                                         style="width: 85%; margin-left: 7px;">
                                         <input type="text" matInput #code
                                             placeholder="CODE" #codeInput1
-                                            (focusout)="checkCodeExists($event)"
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode"
-                                            maxlength="6" [readonly]="codeMode "
+                                            maxlength="6" [readonly]="editableMode || viewMode"
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 
@@ -75,13 +74,13 @@
                                     Time * :</label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="yourContent"
-                                    [viewMode]="viewMode  || codeEnable"
+                                    [viewMode]="viewMode"
                                     (click)="showMaxContentAlert()"
                                         (updateDuration)="updateStandardTime($event)"
                                         [durationToSplit]="standTime"
                                         formControlName="stand_time"
                                         (focus)="showAlertIfCodeIsEmpty()"
-                                        [disabled]="viewMode || codeEnable"></app-duration-picker>
+                                        [disabled]="viewMode"></app-duration-picker>
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -94,7 +93,7 @@
                                             maxlength="6"
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable"  />
+                                            [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMasterData"
@@ -108,7 +107,7 @@
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="maxContent"
                                         [durationToSplit]="maxTime"
-                                        [viewMode]="viewMode  || codeEnable"
+                                        [viewMode]="viewMode"
                                         (click)="showMaxContentAlert()"
                                         (updateDuration)="updateMaximumTime($event)"
                                         formControlName="max_time"
