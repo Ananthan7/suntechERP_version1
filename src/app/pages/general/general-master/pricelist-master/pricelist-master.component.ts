@@ -207,7 +207,7 @@ export class PricelistMasterComponent implements OnInit {
       "ADDLVALUE": this.priceListMasterForm.value.addlValue,
       "ADDLVALUE_SIGN": this.priceListMasterForm.value.addlValueSign,
       "PRICE_ROUDOFF": this.priceListMasterForm.value.priceRoundoff,
-      "ROUNDOFF_DIGIT": this.priceListMasterForm.value.roundoff_digit || 0,
+      "ROUNDOFF_DIGIT": this.priceListMasterForm.value.roundoff_digit || '',
       "PRICE_FORMULA": "",
     };
   }

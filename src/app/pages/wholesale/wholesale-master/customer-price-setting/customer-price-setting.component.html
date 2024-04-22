@@ -118,12 +118,12 @@
                 <mat-checkbox class="example-margin" formControlName="stockCode"  [disabled]="codeEnable" [(ngModel)]="disableSelect" (click)="selectStock()">Stock Code * </mat-checkbox>
               </div>
               <div class="col-2">
-                <mat-checkbox class="example-margin"  formControlName="designCode" [disabled]="checkboxvalue"  >Design Code * </mat-checkbox>
+                <mat-checkbox class="example-margin"  formControlName="designCode" [disabled]="codeEnable"  >Design Code * </mat-checkbox>
               </div>
 
             </div>
             <div class="row pt-5">
-              <div class="col-2"><label>Group 1</label></div>
+              <div class="col-2"><label>Group 1 *</label></div>
               <div class="col-2"><label>Group 2 </label></div>
               <div class="col-2"><label>Group 3 </label></div>
               <div class="col-2"><label>Group 4 </label></div>

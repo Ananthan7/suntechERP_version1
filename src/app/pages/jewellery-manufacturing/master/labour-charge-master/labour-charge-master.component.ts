@@ -822,7 +822,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "COLOR": this.metallabourMasterForm.value.color,
       "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly || false,
       "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
-      "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
+      "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt || false,
     }
     console.log(this.metallabourMasterForm.value)
     console.log(postData)
@@ -893,13 +893,13 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": this.metallabourMasterForm.value.metalselling_rate || "",
+      "METALSTONE": this.metallabourMasterForm.value.metalselling || 0,
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
       "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly || false,
       "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
-      "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
+      "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt || false,
     }
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -1169,7 +1169,6 @@ export class LabourChargeMasterComponent implements OnInit {
     else {
       this.codeEnable1 = false;
     }
-
   }
 
   CtWtcodeEnabled() {
