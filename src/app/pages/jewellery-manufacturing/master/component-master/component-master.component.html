@@ -26,7 +26,7 @@
                                     <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="codeCodeData"
-                                  (newRowClick)="codeCodeSelected($event)" *ngIf=" viewDisable == false">
+                                  (newRowClick)="codeCodeSelected($event)" *ngIf="!editMode && !viewMode">
                                 </master-search>
                             </div>
                         </div>
@@ -216,7 +216,8 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        <menu-buttons [viewAddBtn]="true"  [viewDeleteBtn]="false" [viewImportBtn]="false"  [viewAddBtn]="!viewMode"
+                        [viewDeleteBtn]="!viewMode"
                             (addClick)="addTableData()"  (deleteClick)="deleteTableData()">
                         </menu-buttons>
                     </div>
