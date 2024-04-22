@@ -22,7 +22,10 @@ export class ItemDetailTable implements OnInit {
     @Input() vocType: any;
     @Input() itemDetailsEdit: any;
     @Input() vocDataForm!: FormGroup;
-    @Input() editItemDetail: any
+    @Input() editItemDetail: any;
+    @Input() viewOnly!: boolean;
+    @Input() editOnly!: boolean;
+
     @Output() newItemEvent = new EventEmitter<any>();
     @Output() grossAmountEvent = new EventEmitter<any>();
     @Output() totalTaxEvent = new EventEmitter<any>();
@@ -111,7 +114,6 @@ export class ItemDetailTable implements OnInit {
     standardPurity: any = 0;
     maritalStatusList: any = [];
     lineItemModalForSalesReturn: boolean = false;
-    viewOnly: boolean = false;
     zeroAmtVal!: any;
     zeroMQtyVal!: any;
     blockNegativeStock: any;
@@ -202,8 +204,6 @@ export class ItemDetailTable implements OnInit {
 
     selectedTabIndex = 0;
 
-
-    editOnly: boolean = false;
     public isCustProcessing = false;
 
     salesReturnRowData: any;
@@ -957,6 +957,7 @@ export class ItemDetailTable implements OnInit {
 
     managePcsGrossWt() {
         if (this.validatePCS == true) {
+            if(!this.viewOnly)
             this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
             this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
 

@@ -195,7 +195,7 @@
             Net Amount
           </td>
           <td style="text-align-last: right">
-            {{ order_items_total_gross_amount | number : "1.2" }}
+            {{ netTotal | number : "1.2" }}
             <!-- {{ prnt_inv_net_total_with_tax }} -->
           </td>
         </tr>
@@ -277,13 +277,8 @@
         <div class="row" style="background-color: #efefef; margin-bottom: 10px">
           <div class="col-md-1 d-flex justify-content-center align-items-center">
             <div>
-              <button
-                type="button"
-                color="primary"
-                mat-flat-button
-                (click)="open(mymodal,false,null,false,false)"
-                [disabled]="viewOnly"
-              >
+              <button type="button" color="primary" mat-flat-button (click)="open(mymodal,false,null,false,false)"
+                [disabled]="viewOnly">
                 New
               </button>
             </div>
@@ -464,8 +459,8 @@
               <div class="col-md-2">
                 <mat-form-field>
                   <mat-label>Expiry Date</mat-label>
-                  <input matInput [matDatepicker]="expDate"
-                    formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+                  <input matInput [matDatepicker]="expDate" formControlName="fcn_customer_exp_date"
+                    placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
                   <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
 
@@ -480,11 +475,9 @@
               </div>
 
               <div class="col-md-3 mt-3" *ngIf="posPlanetIssuing">
-                <mat-checkbox color="primary" formControlName="tourVatRefuncYN"
-                  >Tourist VAT Refund</mat-checkbox
-                >
+                <mat-checkbox color="primary" formControlName="tourVatRefuncYN">Tourist VAT Refund</mat-checkbox>
               </div>
-  
+
               <div class="col-md-2" *ngIf="posPlanetIssuing">
                 <mat-form-field>
                   <mat-label>Tourist VAT Refund</mat-label>
@@ -524,17 +517,14 @@
                               [format]="weightDecimalFormat" [width]="100" [allowEditing]="false">
                             </dxi-column>
                             <dxi-column dataField="total_amount" caption="Mkg amount" alignment="right"
-                            [allowEditing]="false"
-                              precision="2"></dxi-column>
+                              [allowEditing]="false" [format]="amountDecimalFormat" precision="2"></dxi-column>
                             <dxi-column dataField="net_amount" caption="Total amount" alignment="right"
-                            [format]="amountDecimalFormat" [allowEditing]="false"
-                              precision="2">
+                              [format]="amountDecimalFormat" [allowEditing]="false" precision="2">
                             </dxi-column>
 
 
                             <dxo-summary>
-                              <dxi-total-item column="sn_no" summaryType="count">
-                              </dxi-total-item>
+
                               <dxi-total-item column="stock_code" summaryType="min" [customizeText]="customizeDate">
                               </dxi-total-item>
                               <dxi-total-item column="weight" summaryType="sum" caption="Weight"
@@ -546,8 +536,8 @@
                               <dxi-total-item column="total_amount" summaryType="sum" displayFormat="{0}"
                                 type="fixedPoint" precision="2" [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
-                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}"
-                                precision="2" [valueFormat]="gridAmountDecimalFormat">
+                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}" precision="2"
+                                [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
 
                             </dxo-summary>
@@ -579,7 +569,7 @@
                     <div class="left">
                       <div class="wrapper">
                         <div class="container">
-                        <!-- Sales Return grid starts -->
+                          <!-- Sales Return grid starts -->
                           <dx-data-grid id="sales_return_grid" [dataSource]="sales_returns_items" keyExpr="ID"
                             (onRowRemoved)="removeSalesReturnGrid($event)"
                             (onEditingStart)="editTableSalesReturn($event)" [showBorders]="true">
@@ -599,11 +589,9 @@
                             </dxi-column>
                             <!-- <dxi-column dataField="mkg_amount" alignment="right" format="currency" -->
                             <dxi-column dataField="VAT_AMOUNTFC" alignment="right" format="currency"
-                              caption="Vat Amount" [format]="amountDecimalFormat"
-                              [allowEditing]="false"></dxi-column>
+                              caption="Vat Amount" [format]="amountDecimalFormat" [allowEditing]="false"></dxi-column>
                             <dxi-column dataField="net_amount" alignment="right" format="currency"
-                              caption="Total Amount" [format]="amountDecimalFormat"
-                              [allowEditing]="false">
+                              caption="Total Amount" [format]="amountDecimalFormat" [allowEditing]="false">
                             </dxi-column>
 
                             <dxo-summary>
@@ -618,12 +606,12 @@
                               </dxi-total-item>
                               <!-- <dxi-total-item column="mkg_amount" summaryType="sum" displayFormat="AED {0}" -->
                               <dxi-total-item column="VAT_AMOUNTFC" summaryType="sum" displayFormat="{0}"
-                              [valueFormat]="gridAmountDecimalFormat">
+                                [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
                               <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}" -->
                               <!-- type: 'fixedPoint', precision: 2, -->
                               <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}"
-                                type="fixedPoint" precision="2"  [valueFormat]="gridAmountDecimalFormat">
+                                type="fixedPoint" precision="2" [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
                               <!-- [valueFormat]="{ currency: 'EUR' }" -->
                             </dxo-summary>
@@ -631,9 +619,9 @@
 
                           <div>
 
-                            <button type="submit" (click)="openSalesReturnForm(adjust_sale_return_modal)" class="btn btn-secondary"
-                              [disabled]="this.ordered_items.length > 0 && !this.viewOnly ? false : true" 
-                              style="margin: 10px;
+                            <button type="submit" (click)="openSalesReturnForm(adjust_sale_return_modal)"
+                              class="btn btn-secondary"
+                              [disabled]="this.ordered_items.length > 0 && !this.viewOnly ? false : true" style="margin: 10px;
                               width: 20px !important;
                               padding: 3px 10px;
                               padding-right: 21px;">
@@ -669,8 +657,8 @@
                             <dxi-column dataField="weight" caption="Weight" [width]="100" [allowEditing]="false">
                             </dxi-column>
                             <dxi-column dataField="pcs" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="net_amount" alignment="right"
-                            [format]="amountDecimalFormat" [allowEditing]="false">
+                            <dxi-column dataField="net_amount" alignment="right" [format]="amountDecimalFormat"
+                              [allowEditing]="false">
                             </dxi-column>
 
                             <dxo-summary>
@@ -684,7 +672,7 @@
                               <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
                               <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}"
-                              [valueFormat]="gridAmountDecimalFormat">
+                                [valueFormat]="gridAmountDecimalFormat">
                                 <!-- [valueFormat]="{ currency: 'EUR' }" -->
                               </dxi-total-item>
                             </dxo-summary>
@@ -817,15 +805,14 @@
                   <!-- <td class="td-w-40">Total Amount</td> -->
                   <td>
                     <input type="text" class="form-control textboxcorner" id
-                      value="{{ itemTotal | decimalFormat:'AMOUNT' }}" aria-describedby
-                      placeholder="0.00" readonly />
+                      value="{{ itemTotal | decimalFormat:'AMOUNT' }}" aria-describedby placeholder="0.00" readonly />
                   </td>
                 </tr>
                 <tr>
                   <td class="td-w-40">Tax Amount</td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      [value]="totalTax | decimalFormat:'AMOUNT'" aria-describedby readonly />
+                    <input type="text" class="form-control textboxcorner" id [value]="totalTax | decimalFormat:'AMOUNT'"
+                      aria-describedby readonly />
                   </td>
                 </tr>
                 <tr>
@@ -855,15 +842,25 @@
                       readonly />
                   </td>
                 </tr>
+
                 <tr>
                   <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
-                    <b>Discount</b>
+                    <b>Roundoff Discount</b>
                   </td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id value="{{
-                        order_items_total_discount_amount 
-                      }}" (change)="changeFinalDiscount($event)" aria-describedby placeholder="0.00"
-                      [readonly]="viewOnly" />
+                    <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id="discountInput"
+                    [(ngModel)]="order_items_total_discount_amount"
+                    (focus)="clearField()"
+                    (blur)="order_items_total_discount_amount = formatValue(order_items_total_discount_amount)"
+                    (change)="changeFinalDiscount($event)"
+                    aria-describedby="helpId"
+                    [placeholder]="zeroAmtVal"
+                    [readonly]="viewOnly">
+                
+
                   </td>
 
                 </tr>
@@ -873,8 +870,7 @@
                   </td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id
-                      value="{{ netTotal | decimalFormat:'AMOUNT' }}" aria-describedby
-                      placeholder="0.00" readonly />
+                      value="{{ netTotal | decimalFormat:'AMOUNT' }}" aria-describedby placeholder="0.00" readonly />
                   </td>
                 </tr>
 
@@ -925,7 +921,8 @@
               </div>
             </div>
 
-            <div class="col-md-6 col-xl-6" (click)="this.viewOnly || this.editOnly||isPrintingEnabled ? printInvoice() : ''">
+            <div class="col-md-6 col-xl-6"
+              (click)="this.viewOnly || this.editOnly||isPrintingEnabled ? printInvoice() : ''">
               <!-- *ngIf="!viewOnly" -->
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
@@ -1434,24 +1431,23 @@
   <app-item-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [updatedLineItem]="newLineItem"
     [vocTypeData]="vocTypeData" [vocDataForm]="vocDataForm" [orderedItems]="ordered_items" [vocType]="vocType"
     [karatRateDetails]="karatRateDetails" [editItemDetail]="isEditable" (grossAmountEvent)="updateGrossAmount($event)"
-    (totalTaxEvent)="updateTotalTax($event)" (itemTotalEvent)="updateItemTotal($event)"
-    (netTotalEvent)="updateNetTotal($event)"  (netAmountEvent)="updateNetGrossTotal($event)" (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
+    (totalTaxEvent)="updateTotalTax($event)" (itemTotalEvent)="updateItemTotal($event)" [viewOnly]="viewOnly"
+    [editOnly]="editOnly" (netTotalEvent)="updateNetTotal($event)" (netAmountEvent)="updateNetGrossTotal($event)"
+    (newItemEvent)="updateOrderedItems($event)"></app-item-detail>
 </ng-template>
 
 <!-- Sales Return Modal -->
 <ng-template #adjust_sale_return_modal let-modal modal-lg>
-  <app-sales-return [modalTitle]="'Dynamic Modal Title'" [modal]="modal"
-    [editItemDetail]="isEditable" [viewOnlyDetail]="viewOnly" [updatedGridItem]="salesReturnDataToEdit"
+  <app-sales-return [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [editItemDetail]="isEditable"
+    [viewOnlyDetail]="viewOnly" [updatedGridItem]="salesReturnDataToEdit"
     (salesReturnsItemsChange)="addSalesReturnItem($event)"
     [filteredSalesReturnBranchOptions]="filteredSalesReturnBranchOptions"></app-sales-return>
 </ng-template>
 
 <!-- Customer Detail Modal -->
 <ng-template #more_customer_detail_modal let-modal modal-lg>
-  <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal" 
-    [customerDataForm]="customerDataForm"
-    (customerUpdated)="customerSaved($event)"
-    [customerDetails]="customerDetails"
+  <app-customer-details [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [customerDataForm]="customerDataForm"
+    (customerUpdated)="customerSaved($event)" [customerDetails]="customerDetails"
     [vocDataForm]="vocDataForm"></app-customer-details>
 </ng-template>
 
