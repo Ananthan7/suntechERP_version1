@@ -231,6 +231,7 @@ export class SchemeMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  // function to check zero and set values to empty
   checkReceiptModeExist(amt: string, mode: string) {
     if (this.comService.emptyToZero(this.schemeMasterForm.value[amt]) == 0) {
       this.schemeMasterForm.controls[mode].setValue('')
