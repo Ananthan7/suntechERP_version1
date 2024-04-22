@@ -33,6 +33,8 @@ export class SchemeReceiptComponent implements OnInit {
   disableAddBtn: boolean = true;
   disablePostBtn: boolean = true;
   disableAudit: boolean = true;
+  isloadingSave: boolean = false;
+
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
   detailArray: any[] = [];
@@ -960,8 +962,10 @@ export class SchemeReceiptComponent implements OnInit {
     //   return;
     // }
     this.commonService.showSnackBarMsg('MSG81447');
+    this.isloadingSave = true;
     this.dataService.postDynamicAPI("SchemeCurrencyReceipt/SchemeCurrencyReceipt/InsertWithAttachments", this.formdata)
       .subscribe((result: any) => {
+        this.isloadingSave = false;
         this.commonService.closeSnackBarMsg;
         if (result["status"] == "Success" || result.response) {
           this.isSaved = true;
@@ -982,13 +986,11 @@ export class SchemeReceiptComponent implements OnInit {
             }
           });
         } else {
-          this.toastr.error(
-            "Not saved try again", "", {
-            timeOut: 3000,
-          }
-          );
+          this.commonService.toastErrorByMsgId("Not saved try again");
         }
       }, (err) => {
+        this.isloadingSave = false;
+        this.commonService.toastErrorByMsgId("Not saved try again");
         this.commonService.closeSnackBarMsg;
       });
   }
@@ -1099,7 +1101,7 @@ export class SchemeReceiptComponent implements OnInit {
         this.formdata.append(`Model.model.receiptdata.Details[${index}].DT_YEARMONTH`, data.DT_YEARMONTH);
         this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_NO`, data.CARD_NO);
         this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_HOLDER`, data.CARD_HOLDER);
-        this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_EXPIRY`, data.CHEQUE_BANK);
+        this.formdata.append(`Model.model.receiptdata.Details[${index}].CARD_EXPIRY`, data.CARD_EXPIRY);
         this.formdata.append(`Model.model.receiptdata.Details[${index}].BASE_CONV_RATE`, data.BASE_CONV_RATE);
         this.formdata.append(`Model.model.receiptdata.Details[${index}].SUBLEDJER_CODE`, data.SUBLEDJER_CODE);
         this.formdata.append(`Model.model.receiptdata.Details[${index}].TOTAL_AMOUNTFC`, data.TOTAL_AMOUNTFC);

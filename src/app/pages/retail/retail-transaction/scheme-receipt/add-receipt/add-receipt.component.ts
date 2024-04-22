@@ -328,6 +328,16 @@ export class AddReceiptComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   onFileChange(input: any) {
+    const files = input.target.files;
+    if (files.length > 0) {
+      const file = files[0];
+      const fileType = file.type;
+      if (!this.isValidFileType(fileType)) {
+        this.commonService.toastErrorByMsgId('Invalid file type. Please upload a PDF, DOC, DOCX, TXT, JPG, JPEG, or PNG file.');
+        input.target.value = null;
+        return
+      }
+    }
     if (input.target.files.length > 0) {
       const file: File = input.target.files[0];
       for (let x = 0; x < input.target.files.length; x++) {
@@ -335,6 +345,15 @@ export class AddReceiptComponent implements OnInit {
         // this.formdata.append("Images[" + x + "].Image.File", file);
       }
     }
+  }
+  isValidFileType(fileType: string): boolean {
+    return (fileType === 'application/pdf' || 
+            fileType === 'application/msword' || 
+            fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+            fileType === 'text/plain' || 
+            fileType === 'image/jpeg' || 
+            fileType === 'image/jpg' || 
+            fileType === 'image/png');
   }
   //selected Branch from search
   selectedBranch(data: any) {

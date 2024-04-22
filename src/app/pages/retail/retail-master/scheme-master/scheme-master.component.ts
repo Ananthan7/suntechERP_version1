@@ -36,6 +36,7 @@ export class SchemeMasterComponent implements OnInit {
   codeEditMode: boolean = false;
   codeViewMode: boolean = false;
   usedSchemeEditMode: boolean = false;
+  isloadingSave: boolean = false;
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -307,8 +308,10 @@ export class SchemeMasterComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447');
     let API = 'SchemeMaster/InsertSchemeMaster'
     let postData = this.setPostData()
+    this.isloadingSave = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloadingSave = false;
         this.comService.closeSnackBarMsg();
         if (result.response) {
           if (result.status == "Success") {
@@ -332,7 +335,8 @@ export class SchemeMasterComponent implements OnInit {
           this.comService.toastErrorByMsgId(result.message)
         }
       }, err => {
-        this.comService.toastErrorByMsgId(err)
+        this.isloadingSave = false;
+        this.comService.toastErrorByMsgId('network issue found')
         this.comService.closeSnackBarMsg();
       })
     this.subscriptions.push(Sub);
@@ -443,9 +447,10 @@ export class SchemeMasterComponent implements OnInit {
     }
     let API = 'SchemeMaster/UpdateSchemeMaster/' + this.branchCode + "/" + this.schemeMasterForm.value.code
     let postData = this.setPostData()
-
+    this.isloadingSave = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloadingSave = false;
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -466,7 +471,10 @@ export class SchemeMasterComponent implements OnInit {
         } else {
           this.comService.toastErrorByMsgId(result.message)
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloadingSave = false;
+        this.comService.toastErrorByMsgId('network issue found')
+      })
     this.subscriptions.push(Sub)
   }
   deleteSchemeClick() {

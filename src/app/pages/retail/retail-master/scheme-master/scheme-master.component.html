@@ -11,6 +11,7 @@
     [disableDeleteBtn]="codeEditMode" 
     [isViewLog]="false" [isViewAttachment]="false"
     [isViewCopy]="false" [isViewPrint]="false"
+    [isloading]="isloadingSave"
     (cancelClick)="close()" (saveClick)="formSubmit()"
     (deleteClick)="deleteSchemeClick()"></modal-header>
 <!-- authentication component -->

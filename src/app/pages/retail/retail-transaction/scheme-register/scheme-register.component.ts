@@ -1023,8 +1023,10 @@ export class SchemeRegisterComponent implements OnInit {
   editSchemeDetail() {
     let API = 'SchemeRegistration/UpdateWithAttachments'
     this.setFormData();
+    this.isLoading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, this.formdata)
       .subscribe((result) => {
+        this.isLoading = false;
         if (result.status == "Success") {
           Swal.fire({
             title: this.commonService.getMsgByID('MSG2443') || 'Success',
@@ -1043,7 +1045,10 @@ export class SchemeRegisterComponent implements OnInit {
         } else {
           this.commonService.toastErrorByMsgId(result.message || 'No updated')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isLoading = false;
+        this.commonService.toastErrorByMsgId('No updated')
+      })
 
     this.subscriptions.push(Sub)
   }

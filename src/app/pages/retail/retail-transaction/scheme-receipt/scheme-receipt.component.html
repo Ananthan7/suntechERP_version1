@@ -10,6 +10,7 @@
     (auditTrailClick)="auditTrailClick()"
     (postClick)="AccountPosting()"
     (printClick)="printClicked()"
+    [isloading]="isloadingSave"
     [isViewLog]="false" [isViewAttachment]="false"
     [isViewCopy]="false" [isViewDelete]="false" [isViewPost]="true"
     [disableAuditTrail]="disableAudit"
