@@ -16,6 +16,8 @@ export class AmountDecimalDirective {
     var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode === 46;
     return isValid;  
   }
+  @Input() max: any;
+  @Input() min: any;
   @HostListener('input', ['$event']) onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
@@ -23,13 +25,31 @@ export class AmountDecimalDirective {
 
     // Split the value into integer and fractional parts
     const parts = value.split('.');
-    let integerPart = parts[0];
+    let integerPart = this.commonService.emptyToZero(parts[0]).toString();
     let fractionalPart = parts[1];
+    if (this.max && integerPart.length > this.max) {
+      integerPart = integerPart.slice(0, this.max);
+      input.value = `${integerPart}.${fractionalPart ? fractionalPart : ''}`;
+    }
     if (fractionalPart && fractionalPart.length > AMTDECIMAL) {
       fractionalPart = fractionalPart.slice(0, AMTDECIMAL);
       input.value = `${integerPart}.${fractionalPart}`;
     }
   }
+  // @HostListener('input', ['$event']) onInput(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   const value = input.value;
+  //   let AMTDECIMAL:any = this.commonService.allbranchMaster?.BAMTDECIMALS
+
+  //   // Split the value into integer and fractional parts
+  //   const parts = value.split('.');
+  //   let integerPart = parts[0];
+  //   let fractionalPart = parts[1];
+  //   if (fractionalPart && fractionalPart.length > AMTDECIMAL) {
+  //     fractionalPart = fractionalPart.slice(0, AMTDECIMAL);
+  //     input.value = `${integerPart}.${fractionalPart}`;
+  //   }
+  // }
 
   @HostListener('blur', ['$event']) onBlur(event: Event): void {
     const input = event.target as HTMLInputElement;

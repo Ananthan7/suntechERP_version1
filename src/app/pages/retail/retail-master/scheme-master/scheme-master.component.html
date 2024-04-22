@@ -116,7 +116,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" [readonly]="viewMode"
-                                class="text-right" maxlength="15"
+                                class="text-right" [max]="14"
                                 AmountDecimalInput
                                 (focusout)="checkReceiptModeExist('installmentAmount','receiptModeone')"
                                 matInput
@@ -145,7 +145,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" class="text-right"
-                                [readonly]="viewMode" maxlength="5"
+                                [readonly]="viewMode" [max]="5"
                                 AmountDecimalInput
                                 (focusout)="checkReceiptModeExist('bonusInstallment','receiptModeTwo')"
                                 matInput
@@ -167,7 +167,7 @@
                     </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" maxlength="15"
+                            <input type="text" [max]="9"
                                 class="text-right"
                                 [readonly]="viewMode"
                                 AmountDecimalInput
