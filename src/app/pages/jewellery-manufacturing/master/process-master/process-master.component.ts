@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild,  } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -60,6 +60,7 @@ export class ProcessMasterComponent implements OnInit {
   indeterminate = false;
   labelPosition: 'before' | 'after' = 'after';
   disabled = false;
+  value: any;
   showMaxContentAlert(): void {
     if (this.processMasterForm.value.processCode == '') {
       this.commonService.toastErrorByMsgId('processcode cannot be empty')
@@ -145,7 +146,7 @@ export class ProcessMasterComponent implements OnInit {
     AutoTransfer: [false],
     ApplySetting: [false],
     loss_standard: [''],
-    loss_min: ['', [Validators.min(0)]],
+    loss_min: ['', [Validators.required, this.minValueValidator]],
     loss_max: [''],
     standard_start: [''],
     standard_end: [''],
@@ -171,6 +172,13 @@ export class ProcessMasterComponent implements OnInit {
       return true
     }
     return false
+  } 
+  minValueValidator(control: FormControl) {
+    const value = control.value;
+    if (value < 5) {
+      return { minValue: true };
+    }
+    return null;
   }
 
 
@@ -330,7 +338,12 @@ export class ProcessMasterComponent implements OnInit {
     const minLoss = this.processMasterForm.value.loss_min;
     const maxLoss = this.processMasterForm.value.loss_max;
 
-    if (minLoss < stdLoss && stdLoss < maxLoss) {
+    if (minLoss < 0) {
+      this.lossData = false; // Set lossData to false if minLoss is less than 5
+      return; // Exit the function early
+    }
+
+    if (stdLoss && stdLoss < maxLoss) {
       this.lossData = true;
     } else {
       this.lossData = false;
