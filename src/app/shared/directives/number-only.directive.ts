@@ -16,7 +16,7 @@ export class NumericInputDirective {
   @HostListener('input', ['$event']) onInputChange(event: Event): void {
     const input = this.el.nativeElement as HTMLInputElement;
     const value = input.value;
-    const sanitizedValue = value.replace(/[^0-9]/g, '');
+    const sanitizedValue = value.replace(/[^0-9]/g, '').replace(/^0+/, '');
     let num = input.value;
     if (value !== sanitizedValue) {
       num = sanitizedValue; 
