@@ -1,5 +1,7 @@
 <!-- ngb drop down -->
-<span class="dropdown dropsMain" ngbDropdown #dropdown="ngbDropdown">
+<span class="dropdown dropsMain" ngbDropdown 
+    (openChange)="dorpdownToggle($event)"
+    #dropdown="ngbDropdown">
     <i class="fa fa-search search-btn" name="search"
         (click)="showOverlayPanel($event)" 
         aria-haspopup="true" aria-expanded="true"

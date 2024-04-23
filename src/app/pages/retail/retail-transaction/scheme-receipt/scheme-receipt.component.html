@@ -114,7 +114,8 @@
                                             <input type="text" matInput
                                                 formControlName="PartyCode"
                                                 maxlength="6"
-                                                readonly />
+                                                (focusout)="partyCodeChange($event)"
+                                                [readonly]="viewMode" />
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 60%;margin-left: 4px;">

@@ -26,8 +26,8 @@ export class MasterSearchComponent implements OnInit {
   isLoading: boolean = false;
   currentFilter: any;
 
-  alphabetSource: string[] =  ["A","B","C","D","E","F","G","H","I","J","K","L",
-  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+  alphabetSource: string[] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+    "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
   dataSource: any[] = [];
   dataSourceHead: any[] = [];
@@ -45,29 +45,29 @@ export class MasterSearchComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    if(!this.MasterSearchData.LOAD_ONCLICK){
+    if (!this.MasterSearchData.LOAD_ONCLICK) {
       this.loadData();
     }
   }
   getAPIValue() {
-    let API:string = this.MasterSearchData.API_VALUE || ''
+    let API: string = this.MasterSearchData.API_VALUE || ''
     this.commonService.toastSuccessByMsgId('MSG81447');
     this.subscriptions$ = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      console.log(result);
-      if (result.response) {
-        this.dataSourceHead = this.MasterSearchData.SEARCH_FIELD?.split(',').map(item => item.trim()) || []
-        this.dataSource = result.response
-      } else {
-        this.dataSourceHead = []
-        this.dataSource = []
-        this.closeOverlayPanel()
-        this.toastr.error('Data Not Available')
-      }
-    }, err => alert(err))
+      .subscribe((result) => {
+        console.log(result);
+        if (result.response) {
+          this.dataSourceHead = this.MasterSearchData.SEARCH_FIELD?.split(',').map(item => item.trim()) || []
+          this.dataSource = result.response
+        } else {
+          this.dataSourceHead = []
+          this.dataSource = []
+          this.closeOverlayPanel()
+          this.toastr.error('Data Not Available')
+        }
+      }, err => alert(err))
   }
 
-  alphabetClicked(item:any){
+  alphabetClicked(item: any) {
     this.MasterSearchData.SEARCH_VALUE = item;
     this.currentPage = 1
     this.loadData()
@@ -101,7 +101,7 @@ export class MasterSearchComponent implements OnInit {
     this.isLoading = true;
     this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
       this.isLoading = false;
-      if (result.dynamicData && result.dynamicData[0].length>0) {
+      if (result.dynamicData && result.dynamicData[0].length > 0) {
         this.dataSource = result.dynamicData[0]
         let dataCount = result.dynamicData[1]
         this.totalItems = dataCount.COUNT
@@ -115,7 +115,7 @@ export class MasterSearchComponent implements OnInit {
     })
 
   }
-  setPostdata(){
+  setPostdata() {
     return {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
@@ -127,8 +127,8 @@ export class MasterSearchComponent implements OnInit {
     }
   }
   /**use: load datas on scroll */
-  loadMoreData(currentPage?:number) {
-    if(this.totalItems >= this.dataSource.length+1 && this.currentPage != currentPage) return
+  loadMoreData(currentPage?: number) {
+    if (this.totalItems >= this.dataSource.length + 1 && this.currentPage != currentPage) return
     let param = this.setPostdata()
     let APIS = 'MasterLookUp'
     this.isLoading = true;
@@ -137,9 +137,9 @@ export class MasterSearchComponent implements OnInit {
       if (result.dynamicData[0]) {
         this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.dataSource = this.dataSource.concat(result.dynamicData[0]);
-        
+
         this.currentPage++;
-      } 
+      }
       // else {
       //   this.toastr.error('Data Not Available')
       // }
@@ -148,16 +148,16 @@ export class MasterSearchComponent implements OnInit {
   }
 
   showOverlayPanel(event?: Event) {
-    if(this.MasterSearchData.LOAD_ONCLICK){
+    if (this.MasterSearchData.LOAD_ONCLICK) {
       this.loadData();
     }
-    if(this.MasterSearchData.SEARCH_VALUE){
+    if (this.MasterSearchData.SEARCH_VALUE) {
       this.loadData();
     }
     // this.overlayPanels.show(event);
   }
-  onHidePanel(){
-    if(this.MasterSearchData.SEARCH_VALUE != ''){
+  onHidePanel() {
+    if (this.MasterSearchData.SEARCH_VALUE != '') {
       this.currentPage = 1
       this.MasterSearchData.LOAD_ONCLICK = true
     }
@@ -165,13 +165,23 @@ export class MasterSearchComponent implements OnInit {
     this.MasterSearchData.SEARCH_VALUE = ''
   }
   closeOverlayPanel() {
-    if(this.MasterSearchData.SEARCH_VALUE != ''){
+    if (this.MasterSearchData.SEARCH_VALUE != '') {
       this.currentPage = 1
       this.MasterSearchData.LOAD_ONCLICK = true
     }
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
-    this.overlayPanels.hide();
+    // this.overlayPanels.hide();
+    this.dropDown.close()
+  }
+  dorpdownToggle(event: any) {
+    if (!event)
+      if (this.MasterSearchData.SEARCH_VALUE != '') {
+        this.currentPage = 1
+        this.MasterSearchData.LOAD_ONCLICK = true
+      }
+    this.MasterSearchData.PAGENO = 1
+    this.MasterSearchData.SEARCH_VALUE = ''
   }
   //handle Row Click of table
   handleRowClick(event: any) {
@@ -190,9 +200,9 @@ export class MasterSearchComponent implements OnInit {
       this.isLoading = false;
       if (result.dynamicData[0]) {
         this.dataSource = result.dynamicData[0]
-        
+
         this.dataSourceHead = Object.keys(this.dataSource[0]);
-      } 
+      }
       // else {
       //   this.toastr.error('Data Not Available')
       // }

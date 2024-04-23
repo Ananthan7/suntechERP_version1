@@ -659,6 +659,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.MobileNo.setValue('')
     this.schemeRegistrationForm.controls.Name.setValue('')
     this.schemeRegistrationForm.controls.Email.setValue('')
+    this.schemeRegistrationForm.controls.PanNo.setValue('')
   }
   //search Value Change SCHEME_CUSTCODE
   searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
@@ -787,16 +788,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.newSchemeItems[index] = updatedObject;
     }
   }
-  onFileChange(input: any) {
-    if (input.target.files.length > 0) {
-      const file: File = input.target.files[0];
-      for (let x = 0; x < input.target.files.length; x++) {
-        this.Attachedfile.push(file);
-        this.schemeRegistrationForm.controls.Attachedfile.setValue(this.Attachedfile);
-        // this.formdata.append("Images[" + x + "].Image.File", file);
-      }
-    }
-  }
+
   setPostData() {
     let formValue = this.schemeRegistrationForm.value
     let params = {

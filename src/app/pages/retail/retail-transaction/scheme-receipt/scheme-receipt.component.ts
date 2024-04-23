@@ -170,7 +170,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
-      currency: 'AED'
+      currency: this.commonService.compCurrency
     };
     this.setInitialValues()
     if (!this.content) {
@@ -533,15 +533,14 @@ export class SchemeReceiptComponent implements OnInit {
     let API = `CreditCardMaster/GetCreditCardMaster`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
-        console.log(result);
-
         if (result.response) {
           let res = result.response.filter((item: any) => item.MODE == 3);
           if (res[0].ACCODE) {
             this.receiptDetailsForm.controls.PartyCode.setValue(res[0].ACCODE);
-            this.receiptDetailsForm.controls.PartyDescription.setValue(res[0].DESCRIPTION);
-            this.newReceiptData.PARTY_CODE = res[0].ACCODE;
-            this.rightSideHeader = res[0].DESCRIPTION;
+            this.partyCodeChange({target:{value: res[0].ACCODE}})
+            // this.receiptDetailsForm.controls.PartyDescription.setValue(res[0].DESCRIPTION);
+            // this.newReceiptData.PARTY_CODE = res[0].ACCODE;
+            // this.rightSideHeader = res[0].DESCRIPTION;
           } else {
             this.commonService.toastErrorByMsgId("PartyCode not found in credit master");
           }
@@ -653,9 +652,9 @@ export class SchemeReceiptComponent implements OnInit {
   }
 
   //party Code Change
-  partyCodeChange(event: any, searchFlag: string) {
+  partyCodeChange(event: any) {
     if (event.target.value == "") return;
-    let API = `Scheme/AccountMaster?${searchFlag}=${event.target.value}`;
+    let API = `AccountMaster/${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.response) {
@@ -667,7 +666,9 @@ export class SchemeReceiptComponent implements OnInit {
             this.newReceiptData.CURRENCY_CODE = data.CURRENCY_CODE;
             this.currencyCodeChange(data.CURRENCY_CODE);
           }
-          if (data.ACCOUNT_HEAD) {
+          if (data) {
+            this.receiptDetailsForm.controls.PartyDescription.setValue(data.ACCOUNT_HEAD);
+            this.newReceiptData.PARTY_CODE = data.ACCODE;
             this.rightSideHeader = data.ACCOUNT_HEAD;
           }
         } else {
