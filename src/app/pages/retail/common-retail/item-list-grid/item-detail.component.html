@@ -416,6 +416,16 @@
       <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
         Cancel</button>&nbsp;
 
+       
+    </div>
+    <div style="text-align: right; padding: 10px" *ngIf="viewOnly">
+      <button
+        mat-flat-btn
+        class="btn btn btn-danger"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Close</button
+      >&nbsp;
     </div>
 
 

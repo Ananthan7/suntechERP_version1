@@ -183,7 +183,7 @@ export class MeltingTypeComponent implements OnInit {
   
     if (defaultAlloyEmpty) {
       this.toastr.error('Default Alloy cannot be empty');
-      return; // Exit the method if any Default Alloy is empty
+      // return; // Exit the method if any Default Alloy is empty
     }
       if (this.content?.FLAG == 'VIEW') return
       if (this.content?.FLAG == 'EDIT') { 
@@ -210,6 +210,7 @@ export class MeltingTypeComponent implements OnInit {
 
         let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
           (result) => {
+            console.log('result',result)
             if (result.response) {
               if (result.status == 'Success') {
                 Swal.fire({
@@ -227,6 +228,7 @@ export class MeltingTypeComponent implements OnInit {
                 });
               }
             } else {
+            console.log(result,'result')
               this.toastr.error('The Code Already Exists');
             }
           },

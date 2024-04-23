@@ -28,10 +28,10 @@
                                             matInput
                                             (focusout)="prefixCodeValidate()"
                                             formControlName="code"
-                                            [readonly]="viewMode"
+                                            [readonly]="editableMode || viewMode" 
                                             oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
-                                    <master-search *ngIf="!viewMode"
+                                    <master-search *ngIf="!editMode && !viewMode"
                                         [MasterSearchData]="codeData"
                                         (newRowClick)="codeSelected($event)"></master-search>
                                 </div>
