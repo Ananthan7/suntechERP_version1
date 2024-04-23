@@ -69,6 +69,7 @@ export class SalesEstimationComponent implements OnInit {
     private onChangeCallback: (_: any) => void = noop;
 
     viewOnly: boolean = false;
+    isNoDiscountAllowed: boolean = false;
     isPrintingEnabled: boolean = false;
     editOnly: boolean = false;
     public isCustProcessing = false;
@@ -429,7 +430,7 @@ export class SalesEstimationComponent implements OnInit {
     order_items_total_net_amount_org: any;
     order_items_total_gross_amount: any;
     order_items_total_netvalue_sum: any;
-    order_items_total_discount_amount: any;
+    order_items_total_discount_amount: string='0.00';
     // order_total_sales_returns: any = 0.0;
     order_total_exchange: any;
     // order_received_amount: any;
@@ -1243,8 +1244,9 @@ export class SalesEstimationComponent implements OnInit {
                         // if (divisionMS == 'M') {
                         // values.gross_amt = data.NETVALUEFC;
                         // this.currentLineItems[index].GROSS_AMT = data.NETVALUEFC;
-                        values.gross_amt = data.TOTAL_AMOUNTFC;
-                        this.currentLineItems[index].GROSS_AMT = data.TOTAL_AMOUNTFC;
+                        
+                        values.gross_amt = data.NETVALUEFC;
+                        this.currentLineItems[index].GROSS_AMT = data.NETVALUEFC;
                         // } else {
                         //   // TOTAL_AMOUNTFC
                         //   values.gross_amt = data.MKGVALUEFC;
@@ -1578,7 +1580,8 @@ export class SalesEstimationComponent implements OnInit {
         this.getMaritalStatus();
         this.getAccountLookup();
         this.getCustomerTypeMaster();
-        this.getSalesReturnVocTypes()
+        this.getSalesReturnVocTypes();
+        this.checkDiscountEligible();
         // this.getComboFilters();
 
         this.posPlanetIssuing = this.comFunc.allbranchMaster.POSPLANETISSUING;
@@ -1604,6 +1607,14 @@ export class SalesEstimationComponent implements OnInit {
         this.lineItemService.getData().subscribe(data => {
             this.currentLineItems = data;
         });
+    }
+    checkDiscountEligible() {
+        const posRoundOffRange = Number(localStorage.getItem('POSROUNDOFFRANGE')) || 0;
+        if (posRoundOffRange == 0) {
+            this.isNoDiscountAllowed = true;
+        }
+        else
+            this.isNoDiscountAllowed = false;
     }
     getKaratDetails() {
         if (!this.editOnly && !this.viewOnly) {
@@ -3276,8 +3287,11 @@ export class SalesEstimationComponent implements OnInit {
                             result.IDCATEGORY
                             // result.CUST_TYPE
                         );
+                        // this.customerDataForm.controls['fcn_customer_id_number'].setValue(
+                        //     result.POSCUSTIDNO
+                        // );
                         this.customerDataForm.controls['fcn_customer_id_number'].setValue(
-                            result.POSCUSTIDNO
+                            result.PANCARDNO
                         );
                         this.inv_customer_name = result.NAME;
                         this.inv_cust_mobile_no = _cust_mobile_no;
@@ -5905,7 +5919,7 @@ export class SalesEstimationComponent implements OnInit {
             total_sum = total_sum + parseFloat(item.total_amount);
             tax_sum = tax_sum + parseFloat(item.tax_amount);
             net_sum = net_sum + parseFloat(item.net_amount);
-            total_pcs = total_pcs + item.pcs;
+            total_pcs = total_pcs +  parseFloat(item.pcs);
             total_weight = total_weight + parseFloat(item.weight);
             total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
             total_making_amt = total_making_amt + parseFloat(item.making_amt);
@@ -7180,9 +7194,11 @@ export class SalesEstimationComponent implements OnInit {
                                 this.snackBar.open('POS Saved', 'OK');
                                 this.saveAndContinue(type);
                                 const traNo = this.customerDataForm.value.tourVatRefundNo || '';
+                                this.sumTotalValues();
                                 if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && traNo == '') {
 
                                     this.posPlanetFileInsert();
+                                   
 
                                 }
                                 setTimeout(() => {
@@ -7393,41 +7409,50 @@ export class SalesEstimationComponent implements OnInit {
     backToList() {
         this.router.navigateByUrl('/pos');
     }
+
     printInvoice() {
         console.log('printing...');
-        let _validate: any = this.validateBeforePrint();
-        if (_validate[0]) {
-            const printContent: any = document.getElementById('print_invoice');
-            var WindowPrt: any = window.open(
-                '',
-                '_blank',
-                `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 1.5}`
-            );
-            /* WindowPrt.document.write(
-              '<html><title>SunTech</title><link rel="stylesheet" href="https://cdn.jsdelivr.defaultNetTotal/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"><style>.anim-rotate {animation: anim-rotate 1s linear infinite;}@keyframes anim-rotate {100% {transform: rotate(360deg);}}.anim-close-card {animation: anim-close-card 1.4s linear;}@keyframes anim-close-card {100% {opacity: 0.3;transform: scale3d(.3, .3, .3);}}.card {box-shadow: $card-shadow;margin-bottom: 30px;transition: all 0.3s ease-in-out;&:hover {box-shadow: 0 0 25px -5px #9e9c9e;}.card-header {border-bottom: $card-header-border;position: relative;+.card-body {padding-top: 0;}h5 {margin-bottom: 0;color: $theme-heading-color;font-size: 14px;font-weight: 700;display: inline-block;margin-right: 10px;line-height: 1.1;position: relative;}.card-header-right {right: 10px;top: 10px;display: inline-block;float: right;padding: 0;position: absolute;@media only screen and (max-width: 575px) {display: none;}.dropdown-menu {margin-top: 0;li {cursor: pointer;a {font-size: 14px;text-transform: capitalize;}}}.btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;color: #888;i {margin-right: 0;}&:after {display: none;}&:focus {box-shadow: none;outline: none;}}// custom toggler .btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;padding: 0;width: 20px;height: 20px;right: 8px;top: 8px;&.mobile-menu span {background-color: #888;height: 2px;border-radius: 5px;&:after, &:before {border-radius: 5px;height: 2px;background-color: #888;}}}.nav-pills {padding: 0;box-shadow: none;background: transparent;}}}.card-footer {padding: 0px !important;background-color: none !important ;border-top: 0px !important}}.card-block, .card-body {padding: 20px 25px;}&.card-load {position: relative;overflow: hidden;.card-loader {position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: flex;align-items: center;background-color: rgba(256, 256, 256,0.7);z-index: 999;i {margin: 0 auto;color: $primary-color;font-size: 24px;align-items: center;display: flex;}}}&.full-card {z-index: 99999;border-radius: 0;}}h4 {margin-bottom: 5px;}.btn-sm, .btn-group-sm>.btn {font-size: 12px;}.view-group {display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;padding-left: 0;margin-bottom: 0;}.thumbnail {height: 180px;margin-bottom: 30px;padding: 0px;-webkit-border-radius: 0px;-moz-border-radius: 0px;border-radius: 0px;}.item.list-group-item {float: none;width: 100%;background-color: #fff;margin-bottom: 30px;-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;padding: 0 1rem;border: 0;}.item.list-group-item .img-event {float: left;width: 30%;}.item.list-group-item .list-group-image {margin-right: 10px;}.item.list-group-item .thumbnail {margin-bottom: 0px;width: 100%;display: inline-block;}.item.list-group-item .caption {float: left;width: 70%;margin: 0;}.item.list-group-item:before, .item.list-group-item:after {display: table;content: " ";}.item.list-group-item:after {clear: both;}.card-title {margin-bottom: 5px;}h4 {font-size: 18px;}.card .card-block, .card .card-body {padding: 10px;}.caption p {margin-bottom: 5px;}.price {font-weight: 500;font-size: 1.25rem;color: #826d22;}.list-group-item .img-fluid {max-width: 75% !important;height: auto;}.list-group-item .img-event {text-align: center;}@media (min-width: 400px) {.list-group-item .table_comp_w {width: 50%;margin-top: -20%;margin-left: 35%;}}:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {padding: .5em 0 .5em 0 !important;}:host ::ng-deep .mat-form-field-wrapper {padding-bottom: 0.34375em;}.prod_weight td, .prod_weight th {padding: 5px 0px;font-size: 12px;}.prod_weight th {background-color: #ededf1;}.prod_weight td {color: #b3852d;}    table, th, td {border: 1px solid black; border-collapse: collapse;  }    th, td {    padding: 5px;    text-align: left;    }</style><body><div>'
-            );*/
-
-            // SunTech - POS
-            WindowPrt.document.write(
-                '<html><head><title>SunTech - POS ' +
-                new Date().toISOString() +
-                '</title></head><style> table, th, td { border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style><body><div>'
-            );
+        let _validate = this.validateBeforePrint();
+        if (_validate[0] === true) {
+            const printContent = document.getElementById('print_invoice');
+            if (!printContent) {
+                console.error('Print content element not found');
+                return;
+            }
+    
+            var WindowPrt = window.open('', '_blank', 'width=300,height=600');
+            if (WindowPrt === null) {
+                console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+                return;
+            }
+    
+            WindowPrt.document.write('<html><head><title>SunTech - POS ' + new Date().toISOString() + '</title></head>');
+            WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
+            WindowPrt.document.write('<body>');
             WindowPrt.document.write(printContent.innerHTML);
-            WindowPrt.document.write('</div></body></html>');
+            WindowPrt.document.write('</body></html>');
             WindowPrt.document.close();
             WindowPrt.focus();
+    
             setTimeout(() => {
-                WindowPrt.print();
+                if (WindowPrt) { 
+                    WindowPrt.print();
+                } else {
+                    console.error('Print window was closed before printing could occur.');
+                }
             }, 800);
+    
             console.log('printing... end ');
             console.log(printContent.innerHTML);
-            //WindowPrt.close();
         } else {
-            // alert(_validate[1]);
-            this.snackBar.open(_validate[1], 'OK');
+            if (typeof _validate[1] === 'string') {
+                this.snackBar.open(_validate[1], 'OK');
+            } else {
+                console.error('Error message is not a string:', _validate[1]);
+            }
         }
     }
+    
     openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
         this.dialogBox = this.dialog.open(DialogboxComponent, {
             width: '40%',
@@ -10566,36 +10591,28 @@ export class SalesEstimationComponent implements OnInit {
 
     changeFinalDiscount(event: any) {
         const value = event.target.value;
-
         const posRoundOffRange = Number(localStorage.getItem('POSROUNDOFFRANGE')) || 0;
 
-        if (Number(value) > posRoundOffRange) {
+        const numValue = Number(value);
+
+        if (numValue > posRoundOffRange || numValue < -posRoundOffRange) {
             this.openDialog('Warning', this.comFunc.getMsgByID('MSG7676'), true);
             this.dialogBox.afterClosed().subscribe((data: any) => {
                 if (data == 'OK') {
                     this.order_items_total_discount_amount = '0.00';
                 }
             });
-
-        }
-        else {
-
-
-            if (value != '') {
-
+        } else {
+            if (value !== '') {
                 let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.netGrossTotal) +
                     this.comFunc.emptyToZero(value));
 
-
-
                 this.netTotal = res;
                 this.order_items_total_discount_amount = value;
-                // this.receiptTotalNetAmt = res;
+
 
             } else {
-                this.netTotal = this.netGrossTotal
-                // this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
-
+                this.netTotal = this.netGrossTotal;
 
             }
         }
@@ -10653,10 +10670,10 @@ export class SalesEstimationComponent implements OnInit {
 
     formatValue(value: string): string {
         if (value && !isNaN(Number(value))) {
-          return parseFloat(value).toFixed(2);
+            return parseFloat(value).toFixed(2);
         }
-        return value; 
-      }
-      
+        return value;
+    }
+
 
 }
