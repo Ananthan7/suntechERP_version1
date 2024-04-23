@@ -79,6 +79,7 @@ import { DecimalFormatPipe } from './pipes/decimal-format.pipe';
 import { AttachmentUploadComponent } from './common/attachment-upload/attachment-upload.component';
 import { AuthCheckerComponent } from './common/auth-checker/auth-checker.component';
 import { NumericFilterDirective } from './directives/single-digit-numeric';
+import { GridSearchComponent } from './common/grid-search/grid-search.component';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { NumericFilterDirective } from './directives/single-digit-numeric';
     CommaSeparatedNumberDirective,
     AttachmentUploadComponent,
     AuthCheckerComponent,
+    GridSearchComponent,
   ],
   imports: [
     CommonModule,
@@ -178,6 +180,7 @@ import { NumericFilterDirective } from './directives/single-digit-numeric';
     AuditTrailComponent,
     AuthCheckerComponent,
     AttachmentUploadComponent,
+    GridSearchComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     DecimalFormatPipe,
