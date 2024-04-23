@@ -38,7 +38,7 @@ export class SchemeRegisterComponent implements OnInit {
   disableSaveBtn: boolean = false;
   selectedFieldValue: string = '';
   VIEWEDITFLAG: string = '';
-  
+
   schemeReceiptList: any[] = [];
   schemeReceiptListHead: any[] = [];
   newSchemeItems: any[] = [];
@@ -194,11 +194,11 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.setInitialValues()
   }
- 
+
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
   }
-  attachmentClicked(){
+  attachmentClicked() {
     this.attachmentUploadComponent?.showDialog()
   }
   SalesmanSelected(event: any) {
@@ -206,7 +206,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.SalesmanName.setValue(event.DESCRIPTION)
   }
   salesmanChange(event: any) {
-    if (event.target.value == ""){
+    if (event.target.value == "") {
       this.schemeRegistrationForm.controls.SalesmanName.setValue('');
       return
     };
@@ -232,14 +232,13 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Branch.setValue(event.BRANCH_CODE)
   }
   setInitialValues() {
-    if (!this.content) return;    
+    if (!this.content) return;
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
     this.schemeRegistrationForm.controls.Code.setValue(this.content.SCH_CUSTOMER_CODE)
     this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)
     this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
     this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
     this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
-    this.schemeRegistrationForm.controls.AlertBeforeDays.setValue(this.content.SCH_REMINDER_DAYS)
     this.openAttchments()
     this.getSchemeRegistrationDetail(this.content.SCH_CUSTOMER_ID)
   }
@@ -253,12 +252,12 @@ export class SchemeRegisterComponent implements OnInit {
           let data = result.response
           let detail = data.Details
           detail.forEach((item: any) => {
-            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC,'AMOUNT')
+            item.PAY_AMOUNT_CC = this.commonService.decimalQuantityFormat(item.PAY_AMOUNT_CC, 'AMOUNT')
             item.PAY_AMOUNT_CC = this.commonService.commaSeperation(item.PAY_AMOUNT_CC)
-            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC, 'AMOUNT')
             item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
           })
-          this.SchemeMasterDetails = detail.sort((a:any, b:any) => a.SRNO - b.SRNO);
+          this.SchemeMasterDetails = detail.sort((a: any, b: any) => a.SRNO - b.SRNO);
           if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'DELETE') {
             let schemeReceipts: any[] = this.SchemeMasterDetails.filter((item: any) => item.RCVD_VOCTYPE != '')
             if (schemeReceipts.length == 0) {
@@ -270,19 +269,19 @@ export class SchemeRegisterComponent implements OnInit {
                 this.viewMode = false;
                 this.viewDeleteBtn = false;
               }
-              if (this.content.FLAG == 'DELETE') this.deleteBtnClicked(); 
+              if (this.content.FLAG == 'DELETE') this.deleteBtnClicked();
             } else {
               this.viewDeleteBtn = false;
               this.viewMode = true;
-              if (this.content.FLAG == 'DELETE'){
+              if (this.content.FLAG == 'DELETE') {
                 this.commonService.toastErrorByMsgId('Scheme is in use!, cannot delete')
-              }else{
+              } else {
                 this.disableSaveBtn = true;
                 this.usedSchemeMode = false;
               }
             }
           }
-          if(this.content?.FLAG == 'VIEW'){
+          if (this.content?.FLAG == 'VIEW') {
             this.viewMode = true;
           }
           if (data.SCH_CANCEL) {
@@ -301,6 +300,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.SendAlert.setValue(data.SCH_SEND_ALERT)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCH_SCHEME_PERIOD)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCH_FREQUENCY)
+          this.schemeRegistrationForm.controls.AlertBeforeDays.setValue(data.SCH_REMINDER_DAYS)
 
           this.schemeRegistrationForm.controls.MobileNo.setValue(data.SCH_ALERT_MOBILE)
           this.schemeRegistrationForm.controls.Email.setValue(data.SCH_ALERT_EMAIL)
@@ -312,19 +312,19 @@ export class SchemeRegisterComponent implements OnInit {
           this.setFormControlAmount('CancellationCharge', data.SCH_CANCEL_AMT)
           this.setFormControlAmount('SumAssured', data.SCH_ASSURED_AMT_FC)
           this.setFormControlAmount('BonusInstallment', data.SCHEME_BONUS)
-          //amounts used for calculating number of units
-          this.initialLoadedAmounts = {
-            InstallmentAmount: data.SCH_INST_AMOUNT_CC,
-            CancellationCharge: data.SCH_CANCEL_AMT,
-            BonusInstallment: data.SCHEME_BONUS,
-          }
+
           this.schemeRegistrationForm.controls.Remarks.setValue(data.REMARKS)
           this.schemeRegistrationForm.controls.PanNo.setValue(data.PAN_NUMBER)
           this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.SCH_JOIN_DATE)
           this.schemeRegistrationForm.controls.VOCDATE.setValue(data.VOCDATE)
           this.schemeRegistrationForm.controls.MaturingDate.setValue(data.SCH_EXPIRE_DATE)
 
-
+          //amounts used for calculating number of units
+          this.initialLoadedAmounts = {
+            InstallmentAmount: data.SCH_INST_AMOUNT_CC,
+            CancellationCharge: data.SCH_CANCEL_AMT,
+            BonusInstallment: data.SCHEME_BONUS,
+          }
 
           let params = {
             "ID": 1,
@@ -377,14 +377,14 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  validateNoOfUnitLimit(event:any){
-    if(this.commonService.emptyToZero(event.target.value)>12){
+  validateNoOfUnitLimit(event: any) {
+    if (this.commonService.emptyToZero(event.target.value) > 12) {
       this.commonService.toastErrorByMsgId('No of Unit cannot be more than 12')
       this.schemeRegistrationForm.controls.Units.setValue(12)
     }
   }
-  sendAlertValidate(){
-    
+  sendAlertValidate() {
+
   }
   /**USE: change fn to calculate no of units and amount */
   numberOfUnitCalculate() {
@@ -447,7 +447,7 @@ export class SchemeRegisterComponent implements OnInit {
   validateInput(event: any): void {
     const allowedChars = /[a-zA-Z0-9]/;
     const inputChar = String.fromCharCode(event.charCode);
-    
+
     if (!allowedChars.test(inputChar)) {
       event.preventDefault();
     }
@@ -471,25 +471,25 @@ export class SchemeRegisterComponent implements OnInit {
 
     // Handle the cell click event based on the column and value
     // if (columnName === 'IS_ATTACHMENT_PRESENT') {
-      // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
-      let API = `SchemeRegistration/GetSchemeAttachments`
-      let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
-      let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
-        .subscribe((result: any) => {
-          if (result.fileCount > 0) {
-            this.savedAttachments = []
-            for (let j = 0; j < result.file.length; j++) {
-              this.savedAttachments.push({file: result.file[j]})
-              // window.open(
-              //   result.file[j],
-              //   '_blank' // <- This is what makes it open in a new window.
-              // );
-            }
-          } 
-          // else {
-          //   this.commonService.toastErrorByMsgId(result.message)
-          // }
-        })
+    // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
+    let API = `SchemeRegistration/GetSchemeAttachments`
+    let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result: any) => {
+        if (result.fileCount > 0) {
+          this.savedAttachments = []
+          for (let j = 0; j < result.file.length; j++) {
+            this.savedAttachments.push({ file: result.file[j] })
+            // window.open(
+            //   result.file[j],
+            //   '_blank' // <- This is what makes it open in a new window.
+            // );
+          }
+        }
+        // else {
+        //   this.commonService.toastErrorByMsgId(result.message)
+        // }
+      })
     // }
   }
   cancelSchemeClick() {
@@ -517,12 +517,12 @@ export class SchemeRegisterComponent implements OnInit {
   addScheme() {
     this.isViewSchemeMasterGrid = false
   }
-  uploadSubmited(file:any){
+  uploadSubmited(file: any) {
     this.Attachedfile = file
   }
   fetchSchemeWithCustCode() {
     if (this.viewMode == true || this.content?.FLAG == 'VIEW') return
-    if (this.schemeRegistrationForm.value.SchemeId == ''){
+    if (this.schemeRegistrationForm.value.SchemeId == '') {
       return
     }
     this.SchemeMasterDetails = []
@@ -585,21 +585,21 @@ export class SchemeRegisterComponent implements OnInit {
     this.SchemeMasterDetails[value.data.SRNO - 1].PAY_STATUS = data.PAY_STATUS ? true : false;
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
-  processValidations(){
+  processValidations() {
     let formValue = this.schemeRegistrationForm.value
-    if(formValue.Code == ''){
+    if (formValue.Code == '') {
       this.commonService.toastErrorByMsgId('Customer code required')
       return true
     }
-    if(formValue.Salesman == ''){
+    if (formValue.Salesman == '') {
       this.commonService.toastErrorByMsgId('Salesman required')
       return true
     }
-    if(formValue.SchemeId == ''){
+    if (formValue.SchemeId == '') {
       this.commonService.toastErrorByMsgId('Scheme Code required')
       return true
     }
-    if (formValue.SendAlert && this.commonService.emptyToZero(formValue.AlertBeforeDays) == 0 ) {
+    if (formValue.SendAlert && this.commonService.emptyToZero(formValue.AlertBeforeDays) == 0) {
       this.commonService.toastErrorByMsgId('Alert Before Days required for Send Alert')
       return true
     }
@@ -608,7 +608,7 @@ export class SchemeRegisterComponent implements OnInit {
   /**USE: funtion used to process grid  */
   processSchemeAPI() {
     let formValue = this.schemeRegistrationForm.value
-    if(this.processValidations()) return;
+    if (this.processValidations()) return;
     let joindate = this.commonService.formatYYMMDD(new Date(formValue.DateOfJoining))
     let params = {
       BRANCH_CODE: formValue.Branch || this.commonService.branchCode,
@@ -626,11 +626,11 @@ export class SchemeRegisterComponent implements OnInit {
           this.usedSchemeMode = true;
           this.SchemeMasterDetails = resp.response
           let amountcc = this.commonService.emptyToZero(formValue.InstallmentAmount)
-          amountcc = this.commonService.decimalQuantityFormat(amountcc,'AMOUNT')
+          amountcc = this.commonService.decimalQuantityFormat(amountcc, 'AMOUNT')
           this.SchemeMasterDetails.forEach((item: any) => {
             item.PAY_AMOUNT_FC = this.commonService.commaSeperation(amountcc)
             item.PAY_AMOUNT_CC = this.commonService.commaSeperation(amountcc)
-            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC,'AMOUNT')
+            item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTCC, 'AMOUNT')
             item.RCVD_AMOUNTCC = this.commonService.commaSeperation(item.RCVD_AMOUNTCC)
             item.RCVD_VOCNO = item.RCVD_VOCNO.toString()
             if (item.REMAINDER_SEND.toString() == '0') {
@@ -667,7 +667,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.schemeRegistrationForm.controls.Email.setValue('')
     }
   }
-  restCustomer(){
+  restCustomer() {
     this.schemeRegistrationForm.controls.Code.setValue('')
     this.schemeRegistrationForm.controls.MobileNo.setValue('')
     this.schemeRegistrationForm.controls.Name.setValue('')
@@ -676,7 +676,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   //search Value Change SCHEME_CUSTCODE
   searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
-    if(event.target.value == '') this.restCustomer();
+    if (event.target.value == '') this.restCustomer();
     if (event.target.value == '' || this.content?.FLAG == 'VIEW') return;
     let API = `PosCustomerMaster/GetCustomerByCode/${searchFlag}=${event.target.value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
@@ -975,7 +975,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Process Scheme Before saving')
       flag = true
     }
-    if (form.SendAlert && this.commonService.emptyToZero(form.AlertBeforeDays) == 0 ) {
+    if (form.SendAlert && this.commonService.emptyToZero(form.AlertBeforeDays) == 0) {
       this.commonService.toastErrorByMsgId('Alert Before Days required for Send Alert')
       flag = true
     }
@@ -1005,7 +1005,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.formdata = new FormData();
           Swal.fire({
             title: this.commonService.getMsgByID('MSG2443') || 'Success',
-            text:  "",
+            text: "",
             icon: 'success',
             showCancelButton: false,
             confirmButtonColor: '#3085d6',
@@ -1037,7 +1037,7 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.status == "Success") {
           Swal.fire({
             title: this.commonService.getMsgByID('MSG2443') || 'Success',
-            text:  "",
+            text: "",
             icon: 'success',
             showCancelButton: false,
             confirmButtonColor: '#3085d6',

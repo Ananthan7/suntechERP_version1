@@ -265,7 +265,10 @@ export class CommonServiceService {
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
-    return this.allCompanyParameters ? this.allCompanyParameters[0][parameter] : ''
+    let value = this.allCompanyParameters ? this.allCompanyParameters[0][parameter] : ''
+    if(value.toString().toUpperCase() == 'TRUE') value = true
+    if(value.toString().toUpperCase() == 'FALSE') value = false
+    return value
   }
 
   private initializeDecimalConstantsFlag() {
