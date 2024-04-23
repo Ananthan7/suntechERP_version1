@@ -271,7 +271,7 @@ export class AddSchemeComponent implements OnInit {
   }
   //search Value Change
   searchValueChange(event: any) {
-    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${event.SCHEME_CODE.toString()}`
+    let API = `SchemeMaster/GetSchemeMasterDetails/${event.SCHEME_CODE.toString()}`
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {

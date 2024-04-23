@@ -2,9 +2,9 @@
 <app-menubar [menuTitle]="menuTitle"
   (subMenuChange)="getMasterGridData($event)"></app-menubar>
 <!-- content section starts -->
-<div class="row d-flex justify-content-between"
+<div class="row"
   style="min-height: 100vh !important;">
-  <div class="col-md-2 col-sm-12">
+  <!-- <div class="col-md-2 col-sm-12">
     <app-cardbox [header]="'Cycle Time'" [content]="'32'"></app-cardbox>
     <app-cardbox [header]="'Yield %'" [content]="'22'"></app-cardbox>
     <app-cardbox [header]="'Through Out'" [content]="'44M'"></app-cardbox>
@@ -15,8 +15,8 @@
           width="100%" />
       </div>
     </div>
-  </div>
-  <div class="col-md-8 col-sm-12">
+  </div> -->
+  <div class="col-md-12 col-sm-12">
     <div class="card p-3">
       <div class="col-md-12">
         <div class="card_wrap">
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="card p-3">
+    <!-- <div class="card p-3">
       <div class="col-md-6">
         <div class="card_wrap">
           <h5>Avg Working Hours</h5>
@@ -44,9 +44,9 @@
             width="100%" height=" 165px" />
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
-  <div class="col-md-2 col-sm-12">
+  <!-- <div class="col-md-2 col-sm-12">
     <app-cardbox [header]="'Quantity Produced'" [content]="'44M'"></app-cardbox>
     <div class="card p-3">
       <div class="card_wrap">
@@ -56,7 +56,7 @@
       </div>
     </div>
     <app-cardbox [header]="'Quantity'" [content]="'4M'"></app-cardbox>
-  </div>
+  </div> -->
 </div>
 
 <ng-template #userAuthModal let-modal modal-md>

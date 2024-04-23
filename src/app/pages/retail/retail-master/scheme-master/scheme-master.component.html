@@ -41,9 +41,9 @@
                     <div class="col-md-4">
                         <label class="col-form-label m-2">Prefix*</label>
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput [readonly]="BRANCHASSCHEMEPREFIX"
                                 UpperCaseDirective
-                                formControlName="prefix"
+                                formControlName="prefixCode"
                                 (keypress)="removePrefixCode()"
                                 (change)="prefixCodeValidate($event)" />
                             <mat-error
@@ -53,7 +53,7 @@
                             </mat-error>
                         </mat-form-field>
                         <master-search [MasterSearchData]="prefixCodeData"
-                            *ngIf="!viewMode"
+                            *ngIf="!BRANCHASSCHEMEPREFIX"
                             (newRowClick)="prefixSelected($event)"></master-search>
                     </div>
                     <div class="col-md-4">

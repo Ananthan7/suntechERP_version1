@@ -9,11 +9,11 @@
                 <i class="fa fa-plus"></i> Add
             </button>
             <div class="icons_wrap">
-                <a class="pe-2">
+                <!-- <a class="pe-2">
                     <img src="../../../assets/images/menu/xls.png"
                         alt="excel" width="24px" height="23px" />
-                </a>
-                <div (click)="getMasterGridData({FLAG: 'REFRESH'})">
+                </a> -->
+                <div (click)="refreshClicked()">
                     <i-feather class="icon-sm" name="refresh-ccw"></i-feather>
                 </div>
             </div>
@@ -22,8 +22,8 @@
             <div class="search-box">
                 <div class="position-relative">
                     <input type="text" [(ngModel)]="SEARCH_VALUE"
-                        (keydown.enter)="getMasterGridData()"
-                        (focusout)="getMasterGridData()"
+                        (keydown.enter)="getMasterGridData(1)"
+                        (focusout)="getMasterGridData(1)"
                         class="form-control rounded bg-light border-0"
                         placeholder="Search...">
                     <i class="mdi mdi-magnify search-icon"></i>

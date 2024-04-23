@@ -37,6 +37,7 @@ export class SchemeMasterComponent implements OnInit {
   codeViewMode: boolean = false;
   usedSchemeEditMode: boolean = false;
   isloadingSave: boolean = false;
+  BRANCHASSCHEMEPREFIX: boolean = false;
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -89,11 +90,13 @@ export class SchemeMasterComponent implements OnInit {
     if (this.content) {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.BRANCHASSCHEMEPREFIX = true
         this.codeEditMode = true
         this.codeViewMode = true
         this.usedSchemeEditMode = true;
       }
       if (this.content.FLAG == 'EDIT') {
+        this.BRANCHASSCHEMEPREFIX = true
         this.codeEditMode = true
         this.codeViewMode = true;
         this.schemeRegistrationWithParameter()
@@ -103,6 +106,7 @@ export class SchemeMasterComponent implements OnInit {
         this.codeEditMode = false
         this.codeViewMode = true;
         this.viewMode = true;
+        this.BRANCHASSCHEMEPREFIX = true
         this.usedSchemeEditMode = true;
         this.schemeRegistrationWithParameter()
       }
@@ -112,6 +116,7 @@ export class SchemeMasterComponent implements OnInit {
       this.codeViewMode = false;
       this.getAllSelectOptions()
       this.setFormValues()
+  
     }
   }
   //number validation
@@ -190,7 +195,7 @@ export class SchemeMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
   getSchemeMasterList() {
-    let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code
+    let API = 'SchemeMaster/GetSchemeMasterDetails/'+ this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
         if (this.content && this.content?.FLAG) {
@@ -208,6 +213,11 @@ export class SchemeMasterComponent implements OnInit {
   }
   setFormValues() {
     this.schemeMasterForm.controls.startDate.setValue(this.currentDate)
+    //checking for branch wise prefix setting from company parameter starts
+    this.BRANCHASSCHEMEPREFIX = this.comService.getCompanyParamValue('BRANCHASSCHEMEPREFIX');
+    if(this.BRANCHASSCHEMEPREFIX){
+      this.schemeMasterForm.controls.prefixCode.setValue(this.comService.branchCode)
+    }
   }
 
   formatDate(event: any) {
@@ -224,7 +234,6 @@ export class SchemeMasterComponent implements OnInit {
 
 
   prefixSelected(e: any) {
-    this.schemeMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
     this.schemeMasterForm.controls.prefixCode.setValue(e.PREFIX_CODE);
   }
 
@@ -328,6 +337,7 @@ export class SchemeMasterComponent implements OnInit {
               }
             });
             this.viewMode = true
+            this.BRANCHASSCHEMEPREFIX = true
           } else {
             this.comService.toastErrorByMsgId(result.message)
           }
@@ -359,7 +369,7 @@ export class SchemeMasterComponent implements OnInit {
       "STATUS": this.schemeMasterForm.value.schemeStatus,
       "START_DATE": this.schemeMasterForm.value.startDate,
       "SCHEME_CURRENCY_CODE": '',
-      "PREFIX_CODE": this.comService.nullToString(this.schemeMasterForm.value.prefix),
+      "PREFIX_CODE": this.comService.nullToString(this.schemeMasterForm.value.prefixCode),
       "BONUS_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeTwo),
       "CANCEL_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeThree),
       "INST_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeone),
@@ -373,7 +383,6 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.description.setValue(this.content.SCHEME_NAME);
     this.schemeMasterForm.controls.remarks.setValue(this.content.SCHEME_REMARKS);
     this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
-    this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
     this.schemeMasterForm.controls.prefixCode.setValue(this.content.PREFIX_CODE);
     this.schemeMasterForm.controls.receiptModeTwo.setValue(this.content.BONUS_RECTYPE);
     this.schemeMasterForm.controls.receiptModeThree.setValue(this.content.CANCEL_RECTYPE);
@@ -426,16 +435,15 @@ export class SchemeMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
   prefixCodeValidate(event: any) {
+    if(this.content?.FLAG == 'VIEW' || this.BRANCHASSCHEMEPREFIX) return;
     let API = 'PrefixMaster/GetPrefixMasterDetail/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
         if (resp.status == 'Failed') {
           this.comService.toastErrorByMsgId('Prefix code not found')
-          this.schemeMasterForm.controls.prefix.setValue('')
           this.schemeMasterForm.controls.prefixCode.setValue('')
         } else {
           let data = resp.response
-          this.schemeMasterForm.controls.prefix.setValue(data.PREFIX_CODE)
           this.schemeMasterForm.controls.prefixCode.setValue(data.PREFIX_CODE)
         }
       });

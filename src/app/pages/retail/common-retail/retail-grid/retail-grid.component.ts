@@ -126,6 +126,14 @@ export class RetailGridComponent implements OnInit {
     this.isDisableEdit = false;
     this.isDisableView = false;
   }
+  refreshClicked(){
+    this.SEARCH_VALUE = ''
+    this.getMasterGridData(1)
+  }
+  validateBranchCode(){
+    if(this.vocType == 'MASSCH') return '';
+    return this.branchCode
+  }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     this.resetGridAction()
@@ -138,10 +146,6 @@ export class RetailGridComponent implements OnInit {
       this.mainVocType = data.MAIN_VOCTYPE || this.CommonService.getqueryParamMainVocType();
       this.tableName = data.HEADER_TABLE || this.CommonService.getqueryParamTable()
     } else {
-      if (this.SEARCH_VALUE != '') {
-        this.pageIndex = 1
-        this.pageSize = 10
-      }
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
@@ -164,7 +168,7 @@ export class RetailGridComponent implements OnInit {
       "CUSTOM_PARAM": {
         "FILTER": {
           "YEARMONTH": this.CommonService.nullToString(this.yearSelected),
-          "BRANCH_CODE": this.branchCode,
+          "BRANCH_CODE": this.validateBranchCode(),
           "VOCTYPE": this.CommonService.nullToString(this.vocType),
         },
         "TRANSACTION": {
@@ -182,10 +186,10 @@ export class RetailGridComponent implements OnInit {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
         if (resp.dynamicData && resp.dynamicData[0].length > 0) {
-          if (this.SEARCH_VALUE != '') {
-            this.orderedItems = []
-            this.SEARCH_VALUE = ''
-          }
+          // if (data == 1) {
+            // this.orderedItems = []
+            // this.SEARCH_VALUE = ''
+          // }
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
           // Replace empty object with an empty string
@@ -216,7 +220,7 @@ export class RetailGridComponent implements OnInit {
               this.orderedItemsHead = headers.sort((a:any, b:any) => a.DISPLAY_ORDER - b.DISPLAY_ORDER);
               return
             }
-            if (this.vocType == 'SCR' && this.mainVocType == 'PCR') {
+            if (this.tableName == 'CURRENCY_RECEIPT') {
               this.isDisableDelete = true;
               this.isDisableEdit = true;
               this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')

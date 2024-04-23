@@ -523,7 +523,7 @@ export class SchemeRegisterComponent implements OnInit {
     }
     this.SchemeMasterDetails = []
     this.commonService.toastInfoByMsgId('MSG81447');
-    let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
+    let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.SchemeId}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
         if (result.response) {
@@ -696,7 +696,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.MobileNo.setValue(data.MOBILE)
     this.schemeRegistrationForm.controls.Name.setValue(data.NAME)
     this.schemeRegistrationForm.controls.Email.setValue(data.EMAIL)
-    // this.schemeRegistrationForm.controls.GovIdType.setValue(data.Idcategory)
+    this.schemeRegistrationForm.controls.PanNo.setValue('')
     // this.schemeRegistrationForm.controls.GovIdNumber.setValue(data.POSCustIDNo)
     // if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode()
   }
