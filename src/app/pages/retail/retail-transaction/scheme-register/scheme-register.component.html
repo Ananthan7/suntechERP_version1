@@ -187,6 +187,7 @@
                             </label>
                             <span>
                                 <input type="checkbox" [disabled]="viewMode"
+                                    (change)="sendAlertValidate()"
                                     formControlName="SendAlert"> Send Alert
                             </span>
                         </div>

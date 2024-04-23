@@ -239,6 +239,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
     this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
     this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
+    this.schemeRegistrationForm.controls.AlertBeforeDays.setValue(this.content.SCH_REMINDER_DAYS)
     this.openAttchments()
     this.getSchemeRegistrationDetail(this.content.SCH_CUSTOMER_ID)
   }
@@ -381,6 +382,9 @@ export class SchemeRegisterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('No of Unit cannot be more than 12')
       this.schemeRegistrationForm.controls.Units.setValue(12)
     }
+  }
+  sendAlertValidate(){
+    
   }
   /**USE: change fn to calculate no of units and amount */
   numberOfUnitCalculate() {
@@ -581,21 +585,30 @@ export class SchemeRegisterComponent implements OnInit {
     this.SchemeMasterDetails[value.data.SRNO - 1].PAY_STATUS = data.PAY_STATUS ? true : false;
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
-  /**USE: funtion used to process grid  */
-  processSchemeAPI() {
+  processValidations(){
     let formValue = this.schemeRegistrationForm.value
     if(formValue.Code == ''){
       this.commonService.toastErrorByMsgId('Customer code required')
-      return
+      return true
     }
     if(formValue.Salesman == ''){
       this.commonService.toastErrorByMsgId('Salesman required')
-      return
+      return true
     }
     if(formValue.SchemeId == ''){
       this.commonService.toastErrorByMsgId('Scheme Code required')
-      return
+      return true
     }
+    if (formValue.SendAlert && this.commonService.emptyToZero(formValue.AlertBeforeDays) == 0 ) {
+      this.commonService.toastErrorByMsgId('Alert Before Days required for Send Alert')
+      return true
+    }
+    return false
+  }
+  /**USE: funtion used to process grid  */
+  processSchemeAPI() {
+    let formValue = this.schemeRegistrationForm.value
+    if(this.processValidations()) return;
     let joindate = this.commonService.formatYYMMDD(new Date(formValue.DateOfJoining))
     let params = {
       BRANCH_CODE: formValue.Branch || this.commonService.branchCode,
@@ -940,20 +953,21 @@ export class SchemeRegisterComponent implements OnInit {
   }
   submitValidation() {
     let flag = false
+    let form = this.schemeRegistrationForm.value
     // /Code Name Salesman
-    if (this.schemeRegistrationForm.value.Code == '') {
+    if (form.Code == '') {
       this.commonService.toastErrorByMsgId('Customer Code Required')
       flag = true
     }
-    if (this.schemeRegistrationForm.value.SchemeId == '') {
+    if (form.SchemeId == '') {
       this.commonService.toastErrorByMsgId('Scheme Code Required')
       flag = true
     }
-    if (this.schemeRegistrationForm.value.Branch == '') {
+    if (form.Branch == '') {
       this.commonService.toastErrorByMsgId('Branch Code Required')
       flag = true
     }
-    if (this.schemeRegistrationForm.value.Salesman == '') {
+    if (form.Salesman == '') {
       this.commonService.toastErrorByMsgId('Salesman Required')
       flag = true
     }
@@ -961,10 +975,10 @@ export class SchemeRegisterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Process Scheme Before saving')
       flag = true
     }
-    // if (this.schemeRegistrationForm.value.SendAlert && this.schemeRegistrationForm.value.Email == '' ) {
-    //   this.commonService.toastErrorByMsgId('Mail Id required for Send Alert')
-    //   flag = true
-    // }
+    if (form.SendAlert && this.commonService.emptyToZero(form.AlertBeforeDays) == 0 ) {
+      this.commonService.toastErrorByMsgId('Alert Before Days required for Send Alert')
+      flag = true
+    }
     return flag
   }
 
