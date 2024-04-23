@@ -152,8 +152,8 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   setInitialValues() {
-    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
-    this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    // this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'THREE'))
+    // this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -189,30 +189,30 @@ export class WorkerMasterComponent implements OnInit {
         })
       }
     })
-
+    let form = this.workerMasterForm.value
     let postData = {
       "MID": this.content?.MID ? this.content.MID : 0,
-      "WORKER_CODE": this.commonService.nullToString((this.workerMasterForm.value.WorkerCode).toUpperCase()),
-      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION,
+      "WORKER_CODE": this.commonService.nullToString((form.WorkerCode).toUpperCase()),
+      "DESCRIPTION": form.WorkerDESCRIPTION,
       "DEPARTMENT_CODE": "",
       "NETSAL": 0,
       "PERKS": 0,
       "GROSSAL": 0,
       "EXP": 0,
       "TOTALSAL": 0,
-      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": this.workerMasterForm.value.Password || "",
-      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
-      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": this.workerMasterForm.value.Active,
-      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": this.workerMasterForm.value.DailyTarget || "",
+      "ACCODE": form.WorkerAcCode || "",
+      "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed ),
+      "SECRET_CODE": form.Password || "",
+      "PROCESS_CODE": form.DefaultProcess || "",
+      "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
+      "SUPERVISOR": form.NameOfSupervisor || "",
+      "ACTIVE": form.Active,
+      "TARGET_WEIGHT": this.commonService.emptyToZero(form.TargetWeight),
+      "TARGET_BY": form.DailyTarget || "",
       "FINGER_ID": "",
-      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
-      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
+      "TARGET_PCS": this.commonService.emptyToZero(form.TargetPcs),
+      "TARGET_CARAT_WT": this.commonService.emptyToZero(form.TargetCaratWt),
+      "TARGET_METAL_WT": this.commonService.emptyToZero(form.TargetMetalWt),
       "WORKER_EXPIRY_DATE": "",
       "workerDetails": this.selectedProcessArr
     }
