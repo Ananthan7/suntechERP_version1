@@ -27,7 +27,7 @@
                 <mat-form-field>
                   <mat-label>Item Code </mat-label>
                   <input type="text" matInput formControlName="fcn_li_item_code" id="fcn_li_item_code" autofocus
-                    (change)="getStockDesc($event)" [readonly]="viewOnly" />
+                    (change)="getStockDesc($event)"  autocomplete="off" [readonly]="viewOnly" />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
@@ -59,7 +59,7 @@
                     (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                     formControlName="fcn_li_pcs" (change)="changeRate($event)" readonly="{{ viewOnly }}"
                     RemoveLeadingZeros /> -->
-                    <input class="st_txt_right" type="text" [maxLength]="14" matInput id="fcn_li_pcs"
+                    <input class="st_txt_right"  autocomplete="off" type="text" [maxLength]="14" matInput id="fcn_li_pcs"
                       formControlName="fcn_li_pcs" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
 
                     <mat-error *ngIf="
