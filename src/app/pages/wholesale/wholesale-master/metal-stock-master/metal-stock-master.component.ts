@@ -631,6 +631,7 @@ export class MetalStockMasterComponent implements OnInit {
   karatCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.karat.setValue(e['Karat Code']);
+    this.metalstockForm.controls.stdpurity.setValue(e.STD_PURITY);
   }
 
   subcategoryCodeSelected(e:any){

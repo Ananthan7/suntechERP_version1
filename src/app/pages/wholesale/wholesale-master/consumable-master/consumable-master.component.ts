@@ -170,11 +170,11 @@ export class ConsumableMasterComponent implements OnInit {
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 26,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country',
+    SEARCH_HEADING: 'Country Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -252,7 +252,8 @@ export class ConsumableMasterComponent implements OnInit {
     this.consumableForm.controls.category.setValue(e.CODE);
   }
 
-  countryCodeSelected(e: any) {
+
+  countryCodeSelected(e:any){
     console.log(e);
     this.consumableForm.controls.country.setValue(e.CODE);
   }
