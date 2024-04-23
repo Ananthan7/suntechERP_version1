@@ -424,7 +424,7 @@ export class ItemDetailTable implements OnInit {
 
             let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
                 '&strBranchCode=' + this.strBranchcode +
-                '&strVocType=POS' + '&strUserName=' + this.strUser +
+                '&strVocType='+this.vocType + '&strUserName=' + this.strUser +
                 '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocTypeData)
             this.suntechApi.getDynamicAPI(API)
                 .subscribe((resp: any) => {
@@ -1215,7 +1215,14 @@ export class ItemDetailTable implements OnInit {
     }
 
     changeRate(event: any) {
-
+        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+            this.zeroAmtVal
+          
+        );
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+            this.zeroAmtVal
+          
+        );
         const karatComp22 = this.comFunc.allbranchMaster?.KARATCOMPANY22;
         const minBranchProfitPercentMetal = this.comFunc.allbranchMaster?.MINBRANCHPROFITPERCENTMETAL;
 
@@ -1365,6 +1372,15 @@ export class ItemDetailTable implements OnInit {
     }
 
     changeTotalAmt(event: any, nettAmt = null) {
+        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+            this.zeroAmtVal
+          
+        );
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+            this.zeroAmtVal
+          
+        );
+      
         const totalAmtVal: any = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
         const val = this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -1382,6 +1398,7 @@ export class ItemDetailTable implements OnInit {
                 parseFloat(lsTotalAmt),
                 nettAmt
             );
+            // this.netAmtFunc(event);
           
         } else {
             this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
@@ -1895,6 +1912,11 @@ export class ItemDetailTable implements OnInit {
     }
 
     netAmtFunc(event: any) {
+
+        this.lineItemForm.value.fcn_li_discount_percentage
+
+
+
         this.lineItemForm.controls.fcn_li_net_amount.setValue(
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS,
