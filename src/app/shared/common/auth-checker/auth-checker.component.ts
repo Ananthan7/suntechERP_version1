@@ -103,12 +103,12 @@ export class AuthCheckerComponent implements OnInit {
     );
   }
 
-  submitAuth() {
-    if(!this.authForm.value.reason){
+  submitAuth(flag?:any) {
+    if(!this.authForm.value.reason && !flag){
       this.CommonService.toastErrorByMsgId('Reason required')
       return
     }
-    if (!this.authForm.invalid) {
+    if (!this.authForm.invalid || flag) {
       let API = 'ValidatePassword/ValidateEditDelete';
       const postData = {
         // "Username": this.authForm.value.username,
@@ -117,11 +117,14 @@ export class AuthCheckerComponent implements OnInit {
       };
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-          this.modalReferenceUserAuth.close(true);
-          this.authSubmit.emit('Success')
-          this.authForm.reset();
+          if(!flag){
+            this.modalReferenceUserAuth.close(true);
+            this.authSubmit.emit('Success')
+            this.authForm.reset();
+          }
         } else {
           this.CommonService.showSnackBarMsg(resp.message)
+          this.authForm.controls.password.setValue('')
         }
       });
       this.subscriptions.push(sub)

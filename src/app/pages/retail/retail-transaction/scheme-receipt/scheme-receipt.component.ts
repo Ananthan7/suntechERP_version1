@@ -89,7 +89,7 @@ export class SchemeReceiptComponent implements OnInit {
   partyCodeMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 81,
+    LOOKUPID: 95,
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Account Master",
     SEARCH_VALUE: "",
