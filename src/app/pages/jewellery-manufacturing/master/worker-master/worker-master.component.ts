@@ -514,7 +514,7 @@ export class WorkerMasterComponent implements OnInit {
       return; // Exit the function if in edit mode
     }
 
-    if (event.target.value === '' || this.viewMode) {
+    if (event.target.value === '' || this.viewMode ||  this.editMode ) {
       return; // Exit the function if the input is empty or in view mode
     }
 

@@ -27,6 +27,9 @@ export class AlloyMasterComponent implements OnInit {
   numericValue!: number;
   branchCode:any = localStorage.getItem('userbranch');
   currencyDt:any;
+  editableMode: boolean = false;
+  editMode: boolean = false;
+  
 
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -111,11 +114,14 @@ export class AlloyMasterComponent implements OnInit {
     
     if (this.content.FLAG == 'EDIT') {
       this.isDisabled = !this.isDisabled;
+      this.editMode = true;
+      this.editableMode = true;
       this.setInitialValues()
     } else if (this.content.FLAG == 'VIEW') {
       // this.alloyMastereForm.disable()
+      this.isDisabled = true;  
+      this.editMode = true;
       this.viewMode = true
-      this.isDisabled = true;
       this.setInitialValues()
     }
 

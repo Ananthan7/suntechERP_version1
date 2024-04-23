@@ -44,7 +44,7 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Worker A/c Code :</label>
+                                Worker A/C code :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
                                 [readonly]="viewMode || codeEnable"  maxlength="6"
@@ -96,8 +96,8 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput 
-                                    class="text-right" maxlength="10"
-                                    [readonly]="viewMode" NumberOnly
+                                    class="text-right" [max]="10"
+                                    [readonly]="viewMode" MetalDecimalInput
                                     formControlName="LossAllowed"
                                     />
                             </mat-form-field>
@@ -119,9 +119,8 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text"  matInput
-                                maxlength="12"
                                     class="text-right"
-                                    [readonly]="viewMode" NumberOnly
+                                    [readonly]="viewMode" MetalDecimalInput [max]="10"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
@@ -132,7 +131,7 @@
                                 <input type="text" class="text-right" matInput 
                                     maxlength="12"    [readonly]="viewMode|| codeEnable" 
                                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                                    NumberOnly formControlName="TargetPcs" />
+                                    MetalDecimalInput [max]="10" formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
                     </div>

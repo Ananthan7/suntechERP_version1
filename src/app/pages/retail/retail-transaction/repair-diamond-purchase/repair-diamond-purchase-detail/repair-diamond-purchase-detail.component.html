@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Repair metal purchase - Detail</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Repair diamond purchase - Detail</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -106,12 +106,12 @@
                                 Metal Rate : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="metal_rate"   />
+                                    <input type="text" matInput formControlName="metal_rate" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                                 Pieces : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="Pieces"   />
+                                    <input type="text" matInput formControlName="Pieces"  class="text-right" NumberOnly [maxLength]="14"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                                 Unit Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="unit_weight"   />
+                                    <input type="text" matInput formControlName="unit_weight" class="text-right" MetalDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -147,7 +147,7 @@
                                 Gross Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="gross_weight"   />
+                                    <input type="text" matInput formControlName="gross_weight" class="text-right" MetalDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                                 Stone Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="stone_weight"   />
+                                    <input type="text" matInput formControlName="stone_weight" class="text-right" StoneDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -165,7 +165,7 @@
                                 Purity : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="Purity"   />
+                                    <input type="text" matInput formControlName="Purity"  class="text-right" SixDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                                 Pure Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="pure_weight"   />
+                                    <input type="text" matInput formControlName="pure_weight"  class="text-right" MetalDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                                 Net Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="net_weight"   />
+                                    <input type="text" matInput formControlName="net_weight"  class="text-right" MetalDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
                                 Chargable Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="chargable_weight"   />
+                                    <input type="text" matInput formControlName="chargable_weight"  class="text-right" MetalDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -213,12 +213,12 @@
                                 Unit : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="unit"   />
+                                    <input type="text" matInput formControlName="unit"   class="text-right" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -227,12 +227,12 @@
                                 Rate : </label>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="rate_1"   />
+                                    <input type="text" matInput formControlName="rate_1" class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="amount_1"   />
+                                    <input type="text" matInput formControlName="amount_1" class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -258,7 +258,7 @@
                                 Rate : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="mrate_2"   />
+                                    <input type="text" matInput formControlName="mrate_2"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -267,7 +267,7 @@
                                 Amount : </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="mamount_2"   />
+                                    <input type="text" matInput formControlName="mamount_2" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -281,7 +281,7 @@
                                 Rate : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="srate_3"   />
+                                    <input type="text" matInput formControlName="srate_3" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -290,7 +290,7 @@
                                 Amount : </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="samount_3"   />
+                                    <input type="text" matInput formControlName="samount_3" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -304,7 +304,7 @@
                             </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="total_amount"   />
+                                    <input type="text" matInput formControlName="total_amount"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -375,17 +375,17 @@
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price_1"   />
+                                    <input type="text" matInput formControlName="price_1"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price_1fc"   />
+                                    <input type="text" matInput formControlName="price_1fc" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price_1lc"   />
+                                    <input type="text" matInput formControlName="price_1lc"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
 
@@ -397,17 +397,17 @@
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price_2"   />
+                                    <input type="text" matInput formControlName="price_2"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price_2fc"   />
+                                    <input type="text" matInput formControlName="price_2fc"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price_2lc"   />
+                                    <input type="text" matInput formControlName="price_2lc" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
 
@@ -433,7 +433,8 @@
                                         Pcs : </label>
                                     <div class="col-sm-9">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="Pcs"
+                                            <input type="number" matInput formControlName="Pcs"
+                                            class="text-right"
                                                   />
                                         </mat-form-field>
                                     </div>
@@ -443,7 +444,7 @@
                                         Cts : </label>
                                     <div class="col-sm-9">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="Cts"
+                                            <input type="text" matInput formControlName="Cts" class="text-right" AmountDecimalInput
                                                   />
                                         </mat-form-field>
                                     </div>
@@ -475,7 +476,7 @@
                                         Rate : </label>
                                     <div class="col-sm-9">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="rate_4"
+                                            <input type="text" matInput formControlName="rate_4" class="text-right" AmountDecimalInput
                                                   />
                                         </mat-form-field>
                                     </div>
@@ -485,7 +486,7 @@
                                         Total Amount : </label>
                                     <div class="col-sm-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="total_amount_2"
+                                            <input type="text" matInput formControlName="total_amount_2" class="text-right" AmountDecimalInput
                                                   />
                                         </mat-form-field>
                                     </div>
@@ -524,22 +525,22 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"  class="text-right" AmountDecimalInput />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"  class="text-right" SixDecimalInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -549,7 +550,7 @@
                                 Declaration No : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="declaration_no"   />
+                                    <input type="text" matInput formControlName="declaration_no" class="text-right" NumberOnly  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -577,7 +578,7 @@
                                 Purity Difference : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="purity_difference"   />
+                                    <input type="text" matInput formControlName="purity_difference" class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
@@ -592,7 +593,7 @@
                                 Stone Difference : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="stone_difference"   />
+                                    <input type="text" matInput formControlName="stone_difference"   class="text-right" StoneDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -609,7 +610,7 @@
                                 Amount : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"   class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -623,7 +624,7 @@
                                 Rate : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"   class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -636,7 +637,7 @@
                                 Lot No : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="Lot_No"   />
+                                    <input type="text" matInput formControlName="Lot_No"  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -647,7 +648,7 @@
                                 Bar No : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="bar_no"   />
+                                    <input type="text" matInput formControlName="bar_no"    />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -697,17 +698,17 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">CGST : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="CGST"   />
+                                    <input type="text" matInput formControlName="CGST"  class="text-right" AmountDecimalInput    />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="CGST_fc"   />
+                                    <input type="text" matInput formControlName="CGST_fc"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="CGST_cc"   />
+                                    <input type="text" matInput formControlName="CGST_cc"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -716,17 +717,17 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">SGST : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="SGST"   />
+                                    <input type="text" matInput formControlName="SGST"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="SGST_fc"   />
+                                    <input type="text" matInput formControlName="SGST_fc"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="SGST_cc"   />
+                                    <input type="text" matInput formControlName="SGST_cc"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -735,17 +736,17 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">IGST : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="IGST"   />
+                                    <input type="text" matInput formControlName="IGST" class="text-right" AmountDecimalInput    />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="IGST_fc"   />
+                                    <input type="text" matInput formControlName="IGST_fc"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="IGST_cc"   />
+                                    <input type="text" matInput formControlName="IGST_cc"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -755,7 +756,7 @@
 
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="round"   />
+                                    <input type="text" matInput formControlName="round"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -764,17 +765,17 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">Total >> </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="total"   />
+                                    <input type="text" matInput formControlName="total"  class="text-right" AmountDecimalInput   />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks"   class="text-right" AmountDecimalInput  />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks"   />
+                                    <input type="text" matInput formControlName="remarks" class="text-right" AmountDecimalInput    />
                                 </mat-form-field>
                             </div>
                         </div>

@@ -298,6 +298,7 @@ export class SalesEstimationComponent implements OnInit {
     prnt_inv_total_stone_amt: any;
     prnt_inv_total_dis_amt: any;
     prnt_inv_total_gross_amt: any;
+    order_items_total_discount_amount_sum: any;
     prnt_inv_net_total_without_tax: any;
     prnt_inv_total_tax_amount: any;
     prnt_inv_net_total_with_tax: any;
@@ -427,6 +428,7 @@ export class SalesEstimationComponent implements OnInit {
     order_items_total_net_amount: any;
     order_items_total_net_amount_org: any;
     order_items_total_gross_amount: any;
+    order_items_total_netvalue_sum: any;
     order_items_total_discount_amount: any;
     // order_total_sales_returns: any = 0.0;
     order_total_exchange: any;
@@ -1215,7 +1217,7 @@ export class SalesEstimationComponent implements OnInit {
                             tax_amount: data.IGST_AMOUNTFC,
                             // tax_amount: data.VAT_AMOUNTFC,
                             // net_amount: data.TOTALWITHVATFC,
-                            net_amount: data.NETVALUEFC,
+                            net_amount: data.TOTALWITHVATFC,
                             pure_wt: data.PUREWT,
                             making_amt: data.MKGVALUEFC || 0,
                             dis_amt: data.DISCOUNTVALUEFC || 0,
@@ -1225,6 +1227,7 @@ export class SalesEstimationComponent implements OnInit {
                             // taxPer: data.VAT_PER || 0,
                             metal_amt: this.lineItemForm.value.fcn_ad_metal_amount || 0,
                             stone_amt: this.lineItemForm.value.fcn_ad_stone_amount || 0,
+                            netValue_fc: data.NETVALUEFC
                         };
 
                         // this.newLineItem.pcs = data.PCS;
@@ -1254,6 +1257,7 @@ export class SalesEstimationComponent implements OnInit {
                         console.log(this.currentLineItems[index]);
                         console.log('====================================');
                     });
+                this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
 
                 this.retailSalesDataPost = retailSaleData;
                 this.retailSalesDataPost.estimationDetail = [];
@@ -2062,7 +2066,7 @@ export class SalesEstimationComponent implements OnInit {
         // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
     }
     openSalesReturnForm(data: any) {
-        console.log(this.salesReturnDataToEdit,'salesReturnDataToEdit');
+        console.log(this.salesReturnDataToEdit, 'salesReturnDataToEdit');
         if (this.sales_returns_items.length > 0) {
             this.comFunc.showSnackBarMsg('Please remove selected voucher to add new voucher')
             return
@@ -2482,7 +2486,7 @@ export class SalesEstimationComponent implements OnInit {
                 }
             });
     }
-    customerSaved(event:any){
+    customerSaved(event: any) {
         this.customerDetails = event
     }
     customerSave() {
@@ -3362,7 +3366,7 @@ export class SalesEstimationComponent implements OnInit {
                         this.customerDataForm.controls.fcn_customer_exp_date.setValue(
                             new Date(result.POSCUSTIDEXP_DATE)
                         );
-                        
+
                         this.customerDetails = result;
 
                         if (this.amlNameValidation)
@@ -5893,6 +5897,7 @@ export class SalesEstimationComponent implements OnInit {
         let total_sales_return_sum = 0;
         let total_exchange = 0;
         let total_received_amount = 0;
+        let netValue_fc_sum = 0;
 
         this.ordered_items.forEach(function (item) {
             console.log('item---------------------', item);
@@ -5908,6 +5913,7 @@ export class SalesEstimationComponent implements OnInit {
             total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
             total_dis_amt = total_dis_amt + parseFloat(item.dis_amt);
             total_gross_amt = total_gross_amt + parseFloat(item.gross_amt);
+            netValue_fc_sum = netValue_fc_sum + parseFloat(item.netValue_fc);
         });
 
         this.prnt_inv_total_pcs = total_pcs;
@@ -5917,15 +5923,15 @@ export class SalesEstimationComponent implements OnInit {
         this.prnt_inv_total_metal_amt = total_metal_amt;
         this.prnt_inv_total_stone_amt = total_stone_amt;
         this.prnt_inv_total_dis_amt = total_dis_amt;
-        this.prnt_inv_total_gross_amt = total_gross_amt;
-
+        this.prnt_inv_total_gross_amt = total_gross_amt - total_dis_amt;
+        this.order_items_total_discount_amount_sum = total_dis_amt;
         this.prnt_inv_net_total_without_tax = total_sum;
         this.order_items_total_amount = total_sum;
         this.prnt_inv_total_tax_amount = tax_sum;
         this.order_items_total_tax = tax_sum;
 
         this.order_items_total_gross_amount = net_sum;
-        this.order_items_total_discount_amount = '0.0';
+        this.order_items_total_netvalue_sum = netValue_fc_sum
         // sales return items
         this.sales_returns_items.forEach(function (item: any) {
             total_sales_return_sum =
@@ -5961,9 +5967,19 @@ export class SalesEstimationComponent implements OnInit {
 
         this.grossTotal = this.order_items_total_gross_amount;
         this.totalTax = this.order_items_total_tax;
-        this.itemTotal = this.prnt_inv_total_gross_amt;
-        this.netTotal = this.order_items_total_net_amount;
+        this.itemTotal = this.order_items_total_netvalue_sum;
+        // this.netTotal = this.order_items_total_gross_amount; 
+        this.netTotal = this.order_items_total_gross_amount + (this.order_items_total_discount_amount_sum);
 
+        // order_items_total_gross_amount
+        // : 
+        // 1748.68
+        // order_items_total_net_amount
+
+        // this.grossTotal = this.order_items_total_gross_amount;
+        // this.totalTax = this.order_items_total_tax;
+        // this.itemTotal = this.prnt_inv_total_gross_amt;
+        // this.netTotal = this.order_items_total_net_amount;
 
 
 
@@ -10550,23 +10566,42 @@ export class SalesEstimationComponent implements OnInit {
 
     changeFinalDiscount(event: any) {
         const value = event.target.value;
-        if (value != '') {
 
-            let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.netGrossTotal) +
-                this.comFunc.emptyToZero(value));
+        const posRoundOffRange = Number(localStorage.getItem('POSROUNDOFFRANGE')) || 0;
 
-
-
-            this.netTotal = res;
-            // this.receiptTotalNetAmt = res;
-
-        } else {
-            this.netTotal = this.netGrossTotal
-            // this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
-
+        if (Number(value) > posRoundOffRange) {
+            this.openDialog('Warning', this.comFunc.getMsgByID('MSG7676'), true);
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'OK') {
+                    this.order_items_total_discount_amount = '0.00';
+                }
+            });
 
         }
+        else {
+
+
+            if (value != '') {
+
+                let res: any = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.comFunc.emptyToZero(this.netGrossTotal) +
+                    this.comFunc.emptyToZero(value));
+
+
+
+                this.netTotal = res;
+                this.order_items_total_discount_amount = value;
+                // this.receiptTotalNetAmt = res;
+
+            } else {
+                this.netTotal = this.netGrossTotal
+                // this.receiptTotalNetAmt = this.order_items_total_net_amount_org;
+
+
+            }
+        }
     }
+
+
 
     sendToEmail() { }
 
@@ -10609,5 +10644,19 @@ export class SalesEstimationComponent implements OnInit {
                 }
             });
     }
+
+    clearField() {
+        if (this.order_items_total_discount_amount === '0.00') {
+            this.order_items_total_discount_amount = '';
+        }
+    }
+
+    formatValue(value: string): string {
+        if (value && !isNaN(Number(value))) {
+          return parseFloat(value).toFixed(2);
+        }
+        return value; 
+      }
+      
 
 }
