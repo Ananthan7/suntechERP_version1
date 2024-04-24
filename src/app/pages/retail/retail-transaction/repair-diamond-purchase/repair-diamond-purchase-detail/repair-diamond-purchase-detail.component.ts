@@ -18,6 +18,7 @@ import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/
 })
 export class RepairDiamondPurchaseDetailComponent implements OnInit {
   @Input() content!: any;
+  @Input() purchaseData!: any;
   @Input()
   selectedIndex!: number | null;
   tableData: any[] = [];  
@@ -147,8 +148,12 @@ export class RepairDiamondPurchaseDetailComponent implements OnInit {
   
   close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
+    if (this.purchaseData != null && this.purchaseData != undefined && data != null) {
+      data!.isUpdate = true;
+    }
+    this.activeModal.close(data); 
+   }
+    
 
  
   adddata() {
@@ -182,7 +187,7 @@ formSubmit() {
     return
   }
 
-  let API = 'DiamondPurchase/InsertDiamondPurchase'
+  // let API = 'DiamondPurchase/InsertDiamondPurchase'
   let postData = {
         "UNIQUEID": 0,
         "SRNO": 0,
@@ -324,29 +329,29 @@ formSubmit() {
       }
     
 
-  let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.repairdiapurchasedetailsForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
-        }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+  // let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+  //   .subscribe((result) => {
+  //     if (result.response) {
+  //       if (result.status == "Success") {
+  //         Swal.fire({
+  //           title: result.message || 'Success',
+  //           text: '',
+  //           icon: 'success',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then((result: any) => {
+  //           if (result.value) {
+  //             this.repairdiapurchasedetailsForm.reset()
+  //             this.tableData = []
+              this.close(postData)
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       this.toastr.error('Not saved')
+  //     }
+  //   }, err => alert(err))
+  // this.subscriptions.push(Sub)
 
 }
 

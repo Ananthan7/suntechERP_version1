@@ -1,7 +1,7 @@
 
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Purchase Return</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Repair Diamond Purchase</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -20,12 +20,12 @@
                             </label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="voc_type" />
+                                    <input type="text" matInput formControlName="voc_type" readonly/>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="voc_no" />
+                                    <input class="text-right" type="number" matInput formControlName="voc_no"  readonly/>
                                 </mat-form-field>
                             </div>
                         </div>
