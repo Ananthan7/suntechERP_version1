@@ -271,7 +271,7 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
       'THREE': 3,
-      'METAL_RATE': this.getCompanyParamValue('MRATEDECIMALS'),
+      'METAL_RATE': Number(this.allCompanyParameters.MRATEDECIMALS),
     };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
