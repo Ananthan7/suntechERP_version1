@@ -158,6 +158,10 @@
           </td>
           <td style="font-weight: 600; text-align-last: right">&nbsp;</td>
           <td style="font-weight: 600; text-align-last: right">
+            <!-- {{ prnt_inv_total_tax_amount | number : "1.2" }} -->
+          </td>
+          <td style="font-weight: 600; text-align-last: right">
+            <!-- {{ prnt_inv_net_total_with_tax }} -->
             {{ prnt_inv_total_tax_amount | number : "1.2" }}
           </td>
           <td style="font-weight: 600; text-align-last: right">
@@ -174,20 +178,28 @@
             <!-- {{ prnt_inv_net_total_without_tax }} -->
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td colspan="8" style="font-weight: 600; text-align-last: right">
-            Total Discount
+            Roundoff Discount
           </td>
           <td style="text-align-last: right">
             {{ order_items_total_discount_amount | number : "1.2" }}
           </td>
-        </tr>
+        </tr> -->
         <tr>
           <td colspan="8" style="font-weight: 600; text-align-last: right">
             Total VAT 5%
           </td>
           <td style="text-align-last: right">
             {{ prnt_inv_total_tax_amount | number : "1.2" }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8" style="font-weight: 600; text-align-last: right">
+            Roundoff Discount
+          </td>
+          <td style="text-align-last: right">
+            {{ order_items_total_discount_amount | number : "1.2" }} 
           </td>
         </tr>
         <tr>
@@ -858,7 +870,7 @@
                     (change)="changeFinalDiscount($event)"
                     aria-describedby="helpId"
                     [placeholder]="zeroAmtVal"
-                    [readonly]="viewOnly">
+                    [readonly]="viewOnly||isNoDiscountAllowed">
                 
 
                   </td>

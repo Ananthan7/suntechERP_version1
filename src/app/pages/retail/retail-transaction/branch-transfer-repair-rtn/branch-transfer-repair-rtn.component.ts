@@ -63,7 +63,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     SEARCH_FIELD: 'accode',
     SEARCH_HEADING: 'PARTY CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "accode<>'' AND  AC_OnHold = 0 AND BRANCH_CODE = "+ this.userbranch + "AND Account_Mode='P'",
+    WHERECONDITION: "accode<>'' AND  AC_OnHold = 0 AND BRANCH_CODE = '"+ this.userbranch + "' AND Account_Mode='P'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -113,6 +113,8 @@ export class BranchTransferRepairRtnComponent implements OnInit {
 
   partyCodeSelected(e:any){
     console.log(e);
+    this.branchTransferRepairRtnForm.controls.partyCode.setValue(e.ACCODE);
+    this.branchTransferRepairRtnForm.controls.partyName.setValue(e['ACCOUNT HEAD']);
   }
   
   branchCodeSelected(data: any) {
@@ -161,7 +163,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
       "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
       "REMARKS": this.branchTransferRepairRtnForm.value.transferRemarks,
-      "SYSTEM_DATE": "2024-03-06T13:12:01.635Z",
+      "SYSTEM_DATE": new Date().toISOString(),
       "NAVSEQNO": 0,
       "STATUS": "string",
       "METALVOCNO": 0,
@@ -194,8 +196,11 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        console.log(result)
+
         if (result.response) {
-          if (result.status == "Success") {
+          
+          if (result.status.toString().trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -203,6 +208,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
               confirmButtonColor: '#336699',
               confirmButtonText: 'Ok'
             }).then((result: any) => {
+              console.log(result)
               if (result.value) {
                 this.close('reloadMainGrid')
               }
