@@ -57,7 +57,7 @@
                                             style="width: 150px; margin-right: 10px;">
                                             <mat-select
                                                 (selectionChange)="onPriceTypeChange()"
-                                                formControlName="priceMethod">
+                                                formControlName="priceMethod" [disabled]="viewMode">
                                                 <mat-option
                                                     *ngFor="let priceType of priceTypeList"
                                                     [value]="priceType.value"
@@ -68,7 +68,7 @@
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 80px; margin-right: 10px;">
-                                            <mat-select [disabled]="isDisabled"
+                                            <mat-select [disabled]="viewMode"
                                                 formControlName="priceSign"
                                                 [required]="required">
                                                 <mat-option
@@ -97,7 +97,7 @@
                                         <mat-form-field
                                             style="width: 80px; margin-right: 10px;">
                                             <mat-select
-                                                formControlName="finalPriceSign">
+                                                formControlName="finalPriceSign" [disabled]="viewMode">
                                                 <mat-option
                                                     *ngFor="let option of operatorsList"
                                                     [value]="option.value"
@@ -127,7 +127,7 @@
                                             style="width: 150px; margin-right: 10px;">
                                             <mat-select
                                                 formControlName="addlValueSign"
-                                                [required]="required">
+                                                [required]="required" [disabled]="viewMode">
                                                 <mat-option
                                                     *ngFor="let option of operatorsList"
                                                     [value]="option.value"

@@ -25,11 +25,11 @@ export class AlloyMasterComponent implements OnInit {
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   numericValue!: number;
-  branchCode:any = localStorage.getItem('userbranch');
-  currencyDt:any;
+  branchCode: any = localStorage.getItem('userbranch');
+  currencyDt: any;
   editableMode: boolean = false;
   editMode: boolean = false;
-  
+
 
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -103,15 +103,15 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.setupFormSubscription();
+    this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
     console.log(this.userName);
-    
+
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
     console.log(this.content.FLAG);
-    
+
     if (this.content.FLAG == 'EDIT') {
       this.isDisabled = !this.isDisabled;
       this.editMode = true;
@@ -119,7 +119,7 @@ export class AlloyMasterComponent implements OnInit {
       this.setInitialValues()
     } else if (this.content.FLAG == 'VIEW') {
       // this.alloyMastereForm.disable()
-      this.isDisabled = true;  
+      this.isDisabled = true;
       this.editMode = true;
       this.viewMode = true
       this.setInitialValues()
@@ -129,36 +129,36 @@ export class AlloyMasterComponent implements OnInit {
 
   setupFormSubscription(): void {
     if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
-        this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
-            // Update value of price1Fc whenever price1Lc changes
-            this.alloyMastereForm.get('price1Fc')!.setValue(value);
-        });
+      this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
+        // Update value of price1Fc whenever price1Lc changes
+        this.alloyMastereForm.get('price1Fc')!.setValue(value);
+      });
     }
     if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
       this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
-          // Update value of price1Fc whenever price1Lc changes
-          this.alloyMastereForm.get('price2Fc')!.setValue(value);
+        // Update value of price1Fc whenever price1Lc changes
+        this.alloyMastereForm.get('price2Fc')!.setValue(value);
       });
-  } 
-  if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
-    this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
+    }
+    if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
+      this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
         this.alloyMastereForm.get('price3Fc')!.setValue(value);
-    });
-} 
-  if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
-    this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
+      });
+    }
+    if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
+      this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
         this.alloyMastereForm.get('price4Fc')!.setValue(value);
-    });
-  }
-  if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
-    this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
+      });
+    }
+    if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
+      this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
         this.alloyMastereForm.get('price5Fc')!.setValue(value);
-    });
+      });
+    }
   }
-}
 
   @ViewChild('codeInput')
   codeInput!: ElementRef;
@@ -166,7 +166,7 @@ export class AlloyMasterComponent implements OnInit {
   ngAfterViewInit(): void {
     this.codeInput.nativeElement.focus();
   }
-  
+
   setInitialValues() {
     console.log(this.content, 'content');
     // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
@@ -256,7 +256,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,    
+    VIEW_TABLE: true,
   }
 
   subcategoryCodeData: MasterSearchModel = {
@@ -268,10 +268,10 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,    
+    VIEW_TABLE: true,
   }
 
-  
+
   BrandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -298,7 +298,7 @@ export class AlloyMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
-  
+
   vendorCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -309,10 +309,10 @@ export class AlloyMasterComponent implements OnInit {
     WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    
+
   }
 
- 
+
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -389,7 +389,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls['currency'].setValue(e.CURRENCY_CODE);
     this.alloyMastereForm.controls['currencyRate'].setValue(e.CONV_RATE);
-     
+
   }
 
 
@@ -410,7 +410,7 @@ export class AlloyMasterComponent implements OnInit {
 
 
   vendorCodeSelected(e: any) {
-    console.log(e);    
+    console.log(e);
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.vendor.setValue(e['ACCOUNT HEAD']);
     this.alloyMastereForm.controls.vendorRef.setValue(e.ACCODE);
@@ -463,8 +463,8 @@ export class AlloyMasterComponent implements OnInit {
       return true
     }
     return false
-  // }
-}
+    // }
+  }
   priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
@@ -501,6 +501,49 @@ export class AlloyMasterComponent implements OnInit {
       this.alloyMastereForm.value.price5code === PRICE_CODE
     );
   }
+
+
+  priceCodeone(e:any){
+    if (this.checkStockCode()) return
+    if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+  }
+
+  priceTwoCode(e:any){
+    if (this.checkStockCode()) return
+    if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+  }
+
+  priceThreeCode(e:any){
+    if (this.checkStockCode()) return
+    if (this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+  }
+  
+  
+  priceFourCode(e:any){
+    if (this.checkStockCode()) return
+    if (this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+  }
+
+  priceFiveCode(e:any){
+    if (this.checkStockCode()) return
+    if (this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+  }
+
   priceOneCodeSelected(e: any) {
     if (this.checkStockCode()) return
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
@@ -508,8 +551,12 @@ export class AlloyMasterComponent implements OnInit {
       return;
     }
     this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
-
   }
+
+
+
+
+
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
@@ -984,7 +1031,7 @@ export class AlloyMasterComponent implements OnInit {
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData
     postData = this.setPostData()
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.status == "Success") {
@@ -1001,7 +1048,7 @@ export class AlloyMasterComponent implements OnInit {
               this.close('reloadMainGrid')
             }
           });
-        } else if(result.status == "Failed"){
+        } else if (result.status == "Failed") {
           Swal.fire({
             title: this.commonService.getMsgByID('MSG2239') || 'Code Already Exists',
             text: '',
@@ -1020,10 +1067,10 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  
+
 
   updateMeltingType() {
-    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/'+ this.content.STOCK_CODE;
+    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.content.STOCK_CODE;
     let postdata
     postdata = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)

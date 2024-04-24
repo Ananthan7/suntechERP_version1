@@ -88,9 +88,9 @@
 
                                         <div *dxTemplate="let data of 'usertemp'">
                                             <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a>
-                                            <master-search [MasterSearchData]="user"
+                                            <grid-search [MasterSearchData]="user"
                                                 (newRowClick)="userDataSelected($event,data,'usertemp')" *ngIf="userCodeEnable == false" >
-                                            </master-search>
+                                            </grid-search>
                                         </div>
 
                                         <div *dxTemplate="let data of 'typetemp'">
@@ -121,10 +121,10 @@
                                                 [checked]="data.value"  [disabled]="viewMode"/>
                                         </div>
                                         <div *dxTemplate="let data of 'mobilenumber'">
-                                            <input type="number" (change)="mobilenumber($event,data)"
+                                            <input type="number" (change)="mobilenumber($event,data)" 
                                                 style="text-align: right;"  [value]="data.value" style="width: 100%;"
-                                                [disabled]="data.value == '' || viewMode"  minlength="1" maxlength="20"
-                                                pattern="[0-9]+"  [readonly]="viewMode" />
+                                                [disabled]="data.value == '' || viewMode"
+                                                pattern="[0-9]+"  [readonly]="viewMode" (keypress)="isNumeric($event)"/>
 
                                         </div>
                                         <div *dxTemplate="let data of 'emailtemp'">
