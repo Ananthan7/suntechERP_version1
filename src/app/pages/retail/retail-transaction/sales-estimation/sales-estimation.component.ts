@@ -2390,20 +2390,22 @@ export class SalesEstimationComponent implements OnInit {
         this.searchVocNoSalRet();
 
     }
-
+    exchangeEditItem:any;
     editTableExchangeItem(event: any) {
         this.exchangeItemEditId = event.data.sn_no;
         event.cancel = true;
-        const value: any = this.currentExchangeMetalPurchase.filter(
-            (data: any) => data.SRNO == event.data.sn_no
-        )[0];
+        this.exchangeEditItem = event.data
+        // const value: any = this.currentExchangeMetalPurchase.filter(
+        //     (data: any) => data.SRNO == event.data.sn_no
+        // );
+        const value:any = event.data
         console.log(
             '===============editTable==currentExchangeMetalPurchase==================='
         );
         console.log(value);
+        console.log(this.exchange_items);
         console.log('====================================');
         event.component.refresh();
-
         this.open(this.oldgoldmodal);
 
         this.exchangeForm.controls.fcn_exchange_item_code.setValue(
@@ -7786,6 +7788,8 @@ export class SalesEstimationComponent implements OnInit {
     }
 
     updateExchangeItems(newExchangeItem: any[]) {
+        console.log(newExchangeItem,'newExchangeItem');
+        
         this.exchange_items = newExchangeItem;
     }
     validateMinSalePrice() {
