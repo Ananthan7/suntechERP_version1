@@ -48,6 +48,8 @@ export class SalesEstimationComponent implements OnInit {
     @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
     @ViewChild('more_customer_detail_modal') public more_customer_detail_modal!: NgbModal;
     isEditable: boolean = false;
+    
+  private cssFilePath = '../../../assets/estimation_pdf.scss';
     // public more_customer_detail_modal!: NgbModal;
 
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -7427,12 +7429,28 @@ export class SalesEstimationComponent implements OnInit {
             }
     
             WindowPrt.document.write('<html><head><title>SunTech - POS ' + new Date().toISOString() + '</title></head>');
-            WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
-            WindowPrt.document.write('<body>');
-            WindowPrt.document.write(printContent.innerHTML);
-            WindowPrt.document.write('</body></html>');
-            WindowPrt.document.close();
-            WindowPrt.focus();
+
+            const linkElement = WindowPrt.document.createElement('link');
+            linkElement.setAttribute('rel', 'stylesheet');
+            linkElement.setAttribute('type', 'text/css');
+             linkElement.setAttribute('href', this.cssFilePath);
+            WindowPrt.document.head.appendChild(linkElement);
+             // WindowPrt.document.body.prepend(qrCodeElement);
+      // WindowPrt.document.body.append(qrCodeElement);
+      WindowPrt.document.write(printContent.innerHTML);
+      // WindowPrt.document.write(qrCodeElement.outerHTML);
+      WindowPrt.document.write('</div></body></html>');
+
+
+      WindowPrt.document.close();
+      WindowPrt.focus();
+          
+            // WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
+            // WindowPrt.document.write('<body>');
+            // WindowPrt.document.write(printContent.innerHTML);
+            // WindowPrt.document.write('</body></html>');
+            // WindowPrt.document.close();
+            // WindowPrt.focus();
     
             setTimeout(() => {
                 if (WindowPrt) { 
