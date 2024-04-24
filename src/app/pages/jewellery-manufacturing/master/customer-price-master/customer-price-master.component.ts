@@ -17,7 +17,9 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./customer-price-master.component.scss']
 })
 export class CustomerPriceMasterComponent implements OnInit {
-
+  viewMode: boolean = false;
+  editableMode: boolean = false;
+  editMode: boolean = false;
   checkBoxesMode: string;
   divisionMS: any = 'ID';
   columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO',,'WEIGHT_FROM','WEIGHT_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER'];
@@ -155,9 +157,13 @@ export class CustomerPriceMasterComponent implements OnInit {
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
+      this.viewMode = true
+      this.editMode = true;
     }
     else (this.content.FLAG == 'EDIT')
     {
+      this.editableMode = true;
+      this.editMode = true;
       this.setFormValues();
     }
     this.branchCode = this.commonService.branchCode;
@@ -219,6 +225,41 @@ export class CustomerPriceMasterComponent implements OnInit {
 //     (event.target as HTMLInputElement).value = limitedValue;
 // }
 
+labourTypeList = [
+  {
+    name: 'MAKING',
+    value: 'MAKING'
+  },
+  {
+    name: 'POLISH',
+    value: 'POLISH'
+  },
+  {
+    name: 'FINISHING',
+    value: 'FINISHING'
+  },
+  {
+    name: 'CASTING',
+    value: 'CASTING'
+  },
+  {
+    name: 'GENERAL',
+    value: 'GENERAL'
+  },
+  {
+    name: 'RHODIUM',
+    value: 'RHODIUM'
+  },
+  {
+    name: 'STAMPING',
+    value: 'STAMPING'
+  },
+  {
+    name: 'WASTAGE',
+    value: 'WASTAGE'
+  },
+];
+
 formatNumber(): void {
   let numericValue = parseFloat(this.myNumber.replace(/,/g, '.'));
 
@@ -277,6 +318,12 @@ formatNumber(): void {
   }
 
   formSubmit(){
+
+    if (this.customerpricemasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
     if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
@@ -286,17 +333,18 @@ formatNumber(): void {
     //   this.toastr.error('select all required fields')
     //   return
     // }
-  
+
+
     let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
     let postData = {
       "MID": 0,
-      "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
-      "DESCRIPTION":  this.customerpricemasterForm.value.desc || "",
+      "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode,
+      "DESCRIPTION":  this.customerpricemasterForm.value.desc,
       "GOLD_LOSS_PER":  this.customerpricemasterForm.value.metal_loss || 0,
       "UPDATE_ON": "2023-11-28T05:47:14.177Z",
-      "PRICECODE": this.customerpricemasterForm.value.pricecode || "",
+      "PRICECODE": this.customerpricemasterForm.value.pricecode,
       "MARGIN_PER": this.customerpricemasterForm.value.margin || 0,
-      "LAB_TYPE": this.customerpricemasterForm.value.labourtype || "",
+      "LAB_TYPE": this.customerpricemasterForm.value.labourtype,
       "MARKUP_PER":  this.customerpricemasterForm.value.markup || 0,
       "CUSTOMER_NAME":  this.customerpricemasterForm.value.text,
       "PRINT_COUNT": 0,
