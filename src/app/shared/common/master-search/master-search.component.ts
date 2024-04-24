@@ -175,11 +175,13 @@ export class MasterSearchComponent implements OnInit {
     this.dropDown.close()
   }
   dorpdownToggle(event: any) {
-    if (!event)
+    if (!event){
       if (this.MasterSearchData.SEARCH_VALUE != '') {
-        this.currentPage = 1
+        // this.currentPage = 1
         this.MasterSearchData.LOAD_ONCLICK = true
       }
+    }
+    this.currentPage = 1
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
   }

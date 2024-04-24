@@ -962,6 +962,8 @@ export class SchemeReceiptComponent implements OnInit {
     //   this.submitEditedForm(this.formdata);
     //   return;
     // }
+    console.log(this.formdata,'this.formdata');
+    
     this.commonService.showSnackBarMsg('MSG81447');
     this.isloadingSave = true;
     this.dataService.postDynamicAPI("SchemeCurrencyReceipt/SchemeCurrencyReceipt/InsertWithAttachments", this.formdata)
@@ -997,6 +999,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
 
   setFormData() {
+    this.formdata = new FormData();
     this.setPostDateToSave();
     let formValue = this.receiptDetailsForm.value
     this.detailArray.forEach((item: any, i: any) => {

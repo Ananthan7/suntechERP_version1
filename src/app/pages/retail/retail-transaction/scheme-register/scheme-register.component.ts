@@ -1021,7 +1021,7 @@ export class SchemeRegisterComponent implements OnInit {
       }, err => {
         this.detailArray = []
         this.commonService.closeSnackBarMsg();
-        this.commonService.toastErrorByMsgId('MSG1531')
+        this.commonService.toastErrorByMsgId('Scheme Not Saved, try again')
         this.isLoading = false;
       })
     this.subscriptions.push(Sub)
