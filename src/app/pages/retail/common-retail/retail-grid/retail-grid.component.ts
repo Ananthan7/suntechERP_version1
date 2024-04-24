@@ -47,7 +47,6 @@ export class RetailGridComponent implements OnInit {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
     this.deleteRowDetails = this.deleteRowDetails.bind(this);
-    this.getMasterGridData()
   }
 
   ngOnInit(): void {
@@ -55,6 +54,7 @@ export class RetailGridComponent implements OnInit {
     this.mainVocType =  this.CommonService.getqueryParamMainVocType();
     this.tableName = this.CommonService.getqueryParamTable()
     this.getGridVisibleSettings();
+    this.getMasterGridData()
   }
 
   addButtonClick() {
@@ -199,6 +199,9 @@ export class RetailGridComponent implements OnInit {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
           } else {
             this.orderedItems = resp.dynamicData[0];
+            console.log(this.orderedItems.length);
+            console.log(this.orderedItems);
+            
             if (this.orderedItems.length == 10) {
               this.nextPage()
             }
@@ -285,7 +288,7 @@ export class RetailGridComponent implements OnInit {
             this.visibleFields.forEach((item: any, i) => {
               item.Id = i + 1;
             });
-            this.getMasterGridData()
+            // this.getMasterGridData()
 
           }
           else {
