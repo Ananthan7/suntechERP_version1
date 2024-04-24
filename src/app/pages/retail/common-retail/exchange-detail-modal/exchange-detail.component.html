@@ -95,9 +95,11 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Purity </mat-label>
-                <input type="number" [min]="this._exchangeItemchange?.PURITY_FROM || 0"
-                  [max]="this._exchangeItemchange?.PURITY_TO" [step]="0.01" [maxLength]="14"
-                  (change)="changeExPurity($event)" class="st_txt_right" matInput formControlName="fcn_exchange_purity"
+                <input type="text" [min]="this._exchangeItemchange?.PURITY_FROM || 0"
+                  [max]="this._exchangeItemchange?.PURITY_TO" [maxLength]="14"
+                  SixDecimalInput
+                  (change)="changeExPurity($event)" class="st_txt_right" 
+                  matInput formControlName="fcn_exchange_purity"
                   [readonly]="viewOnly" id="fcn_exchange_purity" />
 
               </mat-form-field>
