@@ -342,6 +342,17 @@ isNumeric(event: any) {
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
+      // Check if any input field is empty
+      const isEmpty = this.tableData.some((item: any) => {
+        return !item.MOBILE_NO.trim() || !item.EMAIL_ID.trim();
+      });
+  
+      if (isEmpty) {
+        this.toastr.error("Mobile number and Email ID must be filled for all selected items");
+        return;
+      }
+  
+      // Proceed with the update
       this.update();
       return;
     }
@@ -532,6 +543,7 @@ isNumeric(event: any) {
 
 
   update() {
+    
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('Please select all required fields');
       return;
