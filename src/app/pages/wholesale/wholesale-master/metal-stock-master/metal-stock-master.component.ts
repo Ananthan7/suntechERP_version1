@@ -1540,7 +1540,8 @@ export class MetalStockMasterComponent implements OnInit {
       this.metalstockForm.controls['PcGms'].enable();
     }
     else{
-      this.metalstockForm.controls['PcGms'].disable();
+      this.metalstockForm.controls['PcGms'].setValue(0); // or ''
+  this.metalstockForm.controls['PcGms'].disable();
     }
   }
 
