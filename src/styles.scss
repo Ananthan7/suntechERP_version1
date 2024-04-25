@@ -48,6 +48,7 @@ $ng-gradient-able-theme: mat.define-light-theme((color: (primary: $ng-gradient-a
 
 /* Importing Bootstrap SCSS file. */
 @import "~bootstrap/scss/bootstrap";
+@import "../src/assets/estimation_pdf.scss";
 
 /* Importing Stepper SCSS file */
 // @import '../node_modules/angular-archwizard/styles/archwizard.css';

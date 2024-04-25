@@ -18,7 +18,7 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Customer Code * :</label>
                   <div class="col-md-6">
                       <mat-form-field style="width: 80%;">
-                          <input type="text" matInput formControlName="customercode" id="customercode"/>
+                          <input type="text" matInput formControlName="customercode" id="customercode" [readonly]="editableMode || viewMode" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="customerCodeData"
                       (newRowClick)="customerCodeScpSelected($event)"></master-search>
@@ -29,23 +29,22 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Price Code * :</label>
                   <div class="col-md-7">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="pricecode" maxlength="15" oninput="this.value = this.value.toUpperCase()" />
+                      <input type="text" matInput formControlName="pricecode" maxlength="15" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-5 col-form-label">Labour Type * :</label>
                   <div class="col-md-7">
-                    <mat-form-field style="width: 100%;" >
-                      <select matNativeControl required formControlName="labourtype">
-                        <option value="setting">Setting</option>
-                        <option value="polish">Polish</option>
-                        <option value="finishing">Finishing</option>
-                        <option value="casting">Casting</option>
-                        <option value="general">General</option>
-                        <option value="rhoodium">Rhoodium</option>
-                      </select>
-                    </mat-form-field>
+                       <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="labourtype">
+                    <mat-option *ngFor="let option of labourTypeList"
+                      [disabled]="viewMode" [value]="option.value">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
                   </div>
                 </div>
               </div>
@@ -56,7 +55,7 @@
                     <div class="row align-items-center mb-1">
                       <div class="col-md-12">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="desc"/>
+                          <input type="text" matInput formControlName="desc" [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -71,7 +70,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Metal Loss%:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text"  matInput formControlName="metal_loss"  class="text-right" MetalDecimalInput />
+                          <input type="text"  matInput formControlName="metal_loss" [max]="3"  class="text-right" MetalDecimalInput [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -81,7 +80,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">MarkUp %:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="markup"  class="text-right" MetalDecimalInput/>
+                          <input type="text" matInput formControlName="markup" [max]="3" class="text-right" MetalDecimalInput [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -91,10 +90,11 @@
                       <div class="col-md-12">
                         <mat-form-field style="width: 72%;">
                           <input matInput [matDatepicker]="date"  formControlName="date"
-                          placeholder="DD/MM/YYYY"  DateValidation />
+                          placeholder="DD/MM/YYYY"  DateValidation [disabled]="viewMode"/>
                         <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                         <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
                         </mat-form-field>
+                             
                       </div>
                     </div>
                   </div>
@@ -105,7 +105,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Add On Rate:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="addonrate"  style="text-align: right;" />
+                          <input type="text" matInput formControlName="addonrate" [max]="5" SixDecimalInput style="text-align: right;" [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -115,7 +115,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Margin %:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="margin"  class="text-right" MetalDecimalInput />
+                          <input type="text" matInput formControlName="margin" [max]="3" class="text-right" MetalDecimalInput [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -161,27 +161,27 @@
                 <div class="row justify-content-between mb-2 border">
                   <div class="row pt-4">
                     <div class="col-md-5">
-                      <mat-radio-button value="1" checked>By Value</mat-radio-button>
+                      <mat-radio-button value="1" checked [disabled]="viewMode">By Value</mat-radio-button>
                     </div>
                     <div class="col-md-4">
-                      <mat-radio-button value="2" class="pl-3">By %</mat-radio-button>
+                      <mat-radio-button value="2" class="pl-3"  [disabled]="viewMode">By %</mat-radio-button>
                     </div>
                     <div class="col-md-2">
-                      <mat-radio-button value="1">Fixed</mat-radio-button>
+                      <mat-radio-button value="1"  [disabled]="viewMode">Fixed</mat-radio-button>
                     </div>
                   </div>
-                  <div class="row align-items-center mb-1 form-switch st-1">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" formControlName="text" (change)="change($event)">
-                    <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">{{text}}</label>
+                  <div class="row align-items-center mb-1 form-switch st-1" >
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" formControlName="text"  [disabled]="viewMode" (change)="change($event)" >
+                    <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked" >{{text}}</label>
                     <div class="col-md-9">
                       <mat-form-field style="width: 100%;">
-                        <input type="number" AmountDecimalInput maxlength="12" matInput [(ngModel)]="myNumber" (input)="formatNumber()" formControlName="changePrice" min="0"  style="text-align: right;"/>
+                        <input type="number" AmountDecimalInput maxlength="12" matInput [(ngModel)]="myNumber" (input)="formatNumber()" formControlName="changePrice" min="0"  style="text-align: right;" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                   </div>
           
                   <div class="col-md-8 offset-5 p-b1">
-                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn"  [disabled]="viewMode">
                       Change Value
                     </button>
                   </div>
@@ -194,9 +194,9 @@
           </div>
         </div>
         <div class="col-md-12 pt-3">
-          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1" >
             <mat-tab label="Stone Pricing">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatastone" [allowColumnResizing]="true" [showRowLines]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatastone" [allowColumnResizing]="true" [showRowLines]="true"  [disabled]="viewMode" >
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -208,7 +208,7 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatalabour" [height]="200" [allowColumnResizing]="true" [showRowLines]="true">
+              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO" [height]="250" [showBorders]="true" [dataSource]="tableDatalabour" [height]="200" [allowColumnResizing]="true" [showRowLines]="true"  [disabled]="viewMode" >
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -220,7 +220,7 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Design Wise Labour">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [height]="250" [showBorders]="true" [allowColumnResizing]="true"  [showRowLines]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [height]="250" [showBorders]="true" [allowColumnResizing]="true"  [showRowLines]="true"  [disabled]="viewMode" >
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing> -->
