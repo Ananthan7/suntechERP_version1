@@ -262,7 +262,12 @@ export class CommonServiceService {
   getCompanyParamValue(parameter: string) {
     return this.allCompanyParameters ? this.allCompanyParameters[0][parameter] : ''
   }
-
+  setCommaSerperatedNumber(value: any, decimal: any) {
+    return this.commaSeperation(
+      this.decimalQuantityFormat(
+        this.emptyToZero(value), decimal)
+    )
+  }
   private initializeDecimalConstantsFlag() {
     this.DECIMAL_CONSTANTS_FLAG = {
       'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
@@ -540,10 +545,10 @@ export class CommonServiceService {
   }
 
   emptyToZero(value: any) {
-    if(value){
+    if (value) {
       value = value.toString().replace(/,/g, '');
     }
-    value = typeof (value) == 'number' || !value  ? value : value.toString().trim();
+    value = typeof (value) == 'number' || !value ? value : value.toString().trim();
     // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
     if (value == '' || !value) {
       return 0;
@@ -557,7 +562,7 @@ export class CommonServiceService {
     return value
   }
 
-  timeToMinutes(timeString: string,days?: any) {
+  timeToMinutes(timeString: string, days?: any) {
     if (this.nullToString(timeString) == '') return ''
     // Split the time string into hours and minutes
     let timeComponents = timeString.split(':');
@@ -569,53 +574,53 @@ export class CommonServiceService {
     // Convert hours and minutes to total minutes
     let totalMinutes = hours * 60 + minutes;
 
-    if(Number(days)){
-      let totalDaysToMinutes = Number(days)*24
-      totalDaysToMinutes = totalDaysToMinutes*60
+    if (Number(days)) {
+      let totalDaysToMinutes = Number(days) * 24
+      totalDaysToMinutes = totalDaysToMinutes * 60
 
       totalMinutes = totalMinutes + totalDaysToMinutes
     }
     return totalMinutes;
   }
-  MinutesToHours(minutes:number){
-      // Get the input element value
-      var minutes = Number(minutes);
+  MinutesToHours(minutes: number) {
+    // Get the input element value
+    var minutes = Number(minutes);
 
-      // Calculate hours, minutes, and seconds
-      var hours = Math.floor(minutes / 60);
-      var remainingMinutes = minutes % 60;
-      var seconds = 0; // Assuming seconds are always zero for simplicity
+    // Calculate hours, minutes, and seconds
+    var hours = Math.floor(minutes / 60);
+    var remainingMinutes = minutes % 60;
+    var seconds = 0; // Assuming seconds are always zero for simplicity
 
-      // Format hours, minutes, and seconds
-      var formattedTime = (hours < 10 ? '0' : '') + hours + ':' +
-                          (remainingMinutes < 10 ? '0' : '') + remainingMinutes + ':' +
-                          (seconds < 10 ? '0' : '') + seconds;
+    // Format hours, minutes, and seconds
+    var formattedTime = (hours < 10 ? '0' : '') + hours + ':' +
+      (remainingMinutes < 10 ? '0' : '') + remainingMinutes + ':' +
+      (seconds < 10 ? '0' : '') + seconds;
 
-      // Display the result in the time input
-      return formattedTime;
+    // Display the result in the time input
+    return formattedTime;
   }
   timeToHHMMSS(timeString: string): string {
     if (this.nullToString(timeString) === '') {
       return '';
     }
-  
+
     // Split the time string into hours and minutes
     const timeComponents = timeString.split(':');
-  
+
     // Parse hours, minutes, and seconds from the split components
     const hours = parseInt(timeComponents[0], 10);
     const minutes = parseInt(timeComponents[1], 10);
     const seconds = parseInt(timeComponents[2], 10) || 0; // Assume 0 seconds if not provided
-  
+
     // Format hours, minutes, and seconds into "hh:mm:ss"
     const formattedTime = `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
     return formattedTime;
   }
-  
+
   padZero(value: number): string {
     return value < 10 ? `0${value}` : `${value}`;
   }
-  
+
 
 
 
@@ -894,7 +899,7 @@ export class CommonServiceService {
   addMonthsToDate(startDate: any, numberOfMonths: number) {
     const endDate = new Date(startDate);
     const newMonth = startDate.getMonth() + numberOfMonths;
-    
+
     // Adjust for cases where adding/subtracting months might affect the year
     endDate.setMonth(newMonth);
     // If the new month is greater than 11 (December), we need to adjust the year
@@ -919,8 +924,8 @@ export class CommonServiceService {
       let parts = data.split(".");
       data = parts[0]
       number = Number(data).toLocaleString('en-US', { style: 'decimal' })
-      number = number+'.'+parts[1]
-    }else{
+      number = number + '.' + parts[1]
+    } else {
       number = Number(data).toLocaleString('en-US', { style: 'decimal' })
     }
     return number
@@ -988,7 +993,7 @@ export class CommonServiceService {
   cDateFormat(value: any) {
     return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   }
-  validateEmail(email:any) {
+  validateEmail(email: any) {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);
   }
@@ -1001,7 +1006,7 @@ export class CommonServiceService {
     }
     return null;
   }
-  dataSplitPop(data:any){
+  dataSplitPop(data: any) {
     const result = data.split('');
     result.shift();
     result.pop();

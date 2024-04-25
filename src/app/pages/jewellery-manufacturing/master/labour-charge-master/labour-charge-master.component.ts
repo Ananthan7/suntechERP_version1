@@ -399,7 +399,7 @@ export class LabourChargeMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  // metallabourMasterForm
+
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -413,6 +413,9 @@ export class LabourChargeMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
+
+
+  
   DialabourTypeList = [
     {
       name: 'SETTING',

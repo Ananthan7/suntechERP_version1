@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="isDisabled" (cancelClick)="close()" (saveClick)="formSubmit()"
+<modal-header [isViewDelete]="!viewMode" (cancelClick)="close()" (saveClick)="formSubmit()"
     (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
@@ -21,10 +21,10 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%">
                                         <input type="text" id="code" matInput (focusout)="prefixCodeValidate()"
-                                            formControlName="code" [readonly]="editableMode || viewMode"
+                                            formControlName="code" [readonly]=" viewMode"
                                             oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
-                                    <master-search *ngIf="!editMode && !viewMode" [MasterSearchData]="codeData"
+                                    <master-search *ngIf="!viewMode" [MasterSearchData]="codeData"
                                         (newRowClick)="codeSelected($event)"></master-search>
                                 </div>
                             </div>
@@ -273,8 +273,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="number" matInput AmountDecimalInput formControlName="price1Fc"
-                                            class="text-right" [readonly]="true" />
+                                        <input type="text" matInput AmountDecimalInput formControlName="price1Fc" [max]="12"
+                                            class="text-right"   [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -305,8 +305,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price2Fc"
-                                            class="text-right" [readonly]="true" />
+                                        <input type="text" matInput AmountDecimalInput formControlName="price2Fc" [max]="12"
+                                            class="text-right" [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -337,8 +337,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="price3Fc" AmountDecimalInput
-                                            class="text-right" [readonly]="true" />
+                                        <input type="text" matInput formControlName="price3Fc" AmountDecimalInput [max]="12"
+                                            class="text-right" [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -369,8 +369,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="price4Fc" AmountDecimalInput
-                                            class="text-right" [readonly]="true" />
+                                        <input type="text" matInput formControlName="price4Fc" AmountDecimalInput [max]="12"
+                                            class="text-right" [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -401,8 +401,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="price5Fc" AmountDecimalInput
-                                            class="text-right" [readonly]="true" />
+                                        <input type="text" matInput formControlName="price5Fc" AmountDecimalInput [max]="12"
+                                            class="text-right" [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
