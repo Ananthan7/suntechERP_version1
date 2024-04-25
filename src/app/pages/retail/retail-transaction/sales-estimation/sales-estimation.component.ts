@@ -2379,7 +2379,6 @@ export class SalesEstimationComponent implements OnInit {
     }
 
     /**use: exchange table edit funtion */
-    exchangeEditItem: any;
     editTableExchangeItem(event: any) {
         this.exchangeItemEditId = event.data.sn_no;
         event.cancel = true;
@@ -2505,8 +2504,14 @@ export class SalesEstimationComponent implements OnInit {
         this.setExchangeCommaSep();
 
     }
+    setcommaSerperatedNumber(value:any,decimal:any){
+        return this.comFunc.commaSeperation(
+            this.comFunc.decimalQuantityFormat(
+                this.comFunc.emptyToZero(value), decimal)
+            )
+   
+    }
     setExchangeCommaSep() {
-
         this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
             this.comFunc.commaSeperation(
                 this.comFunc.decimalQuantityFormat(
@@ -5023,161 +5028,141 @@ export class SalesEstimationComponent implements OnInit {
         this.exchangeForm = newExchangeItem;
         console.log(this.exchangeForm.value, 'this.exchangeForm');
     }
+    /** addexchange item */
     addItemtoExchange(btn: any) {
+        let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
+        let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
+        let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
+        let _exchangePurity = this.exchangeForm.value.fcn_exchange_purity;
+        let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
+        let _exchangeMetalAmt = this.exchangeForm.value.fcn_exchange_metal_amount;
+        let _exchangeMkgAmt = this.exchangeForm.value.fcn_exchange_making_amt;
+        let _exchangeNetAmt = this.exchangeForm.value.fcn_exchange_net_amount;
 
-        Object.values(this.exchangeForm.controls).forEach(control => {
-            control.markAsTouched();
-        });
-        if (!this.exchangeForm.invalid) {
+        let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
+        let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
 
-            let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
-            let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
-            let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
-            let _exchangePurity = this.exchangeForm.value.fcn_exchange_purity;
-            let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
-            let _exchangeMetalAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount);
-            let _exchangeMkgAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_amt);
-            let _exchangeNetAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_amount);
+        console.log(_exchangeMetalAmt);
 
-            let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
-            let _exchangeWeight = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt);
 
-            console.log(_exchangeMetalAmt);
-
+        if (
+            this.exchangeForm.value.fcn_exchange_item_code != '' &&
+            _exchangeMetalAmt > 0 &&
+            _exchangeMetalAmt != '' &&
+            _exchangeNetAmt > 0 &&
+            _exchangeNetAmt != ''
+        ) {
+            // if (items_length == 0) this.exchange_items_slno_length = 1;
+            // else
+            //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
+            let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
+            console.log('itemsLengths ex', itemsLengths);
 
             if (
-                this.exchangeForm.value.fcn_exchange_item_code != '' &&
-                _exchangeMetalAmt > 0 &&
-                // _exchangeMetalAmt != '' &&
-                _exchangeNetAmt > 0
-                //  &&
-                // _exchangeNetAmt != ''
+                this.exchangeItemEditId == '' ||
+                this.exchangeItemEditId == undefined ||
+                this.exchangeItemEditId == null
             ) {
-                // if (items_length == 0) this.exchange_items_slno_length = 1;
-                // else
-                //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
-                let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
-                if (
-                    this.exchangeItemEditId == '' ||
-                    this.exchangeItemEditId == undefined ||
-                    this.exchangeItemEditId == null
-                ) {
-                    if (itemsLengths == undefined) itemsLengths = 1;
-                    else itemsLengths = itemsLengths.ID + 1;
-                    this.exchange_items_slno_length = itemsLengths;
-                } else {
-                    itemsLengths = this.exchangeItemEditId;
-                    this.exchange_items_slno_length = itemsLengths;
-                }
+                if (itemsLengths == undefined) itemsLengths = 1;
+                else itemsLengths = itemsLengths.ID + 1;
+                this.exchange_items_slno_length = itemsLengths;
 
-                var values = {
-                    ID: this.exchange_items_slno_length,
-                    sn_no: this.exchange_items_slno_length,
-                    stock_code: _exchangeItemCode,
-                    mkg_amount: _exchangeMkgAmt,
-                    total_amount: _exchangeMetalAmt,
-                    pcs: _exchangePcs,
-                    weight: _exchangeWeight, // nett weight
-                    description: _exchangeItemDesc,
-                    tax_amount: '0',
-                    net_amount: _exchangeNetAmt,
-                    metalRate: _exchangeMetalRate,
-                    metalAmt: _exchangeMetalAmt,
+                console.log('itemsLengths ex add', itemsLengths);
 
-                    // need to update
-                    gross_wt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt) || 0,
-                    pure_wt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight) || 0,
-                    stone_amt: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount) || 0,
-                    purity_diff: this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_purity_diff) || 0,
-                    // gross_amt: this.lineItemForm.value.fcn_li_gross_amount || 0,
-                    METAL_RATE_TYPE: this._exchangeItemchange.METAL_RATE_TYPE,
-                    METAL_RATE: this._exchangeItemchange.METAL_RATE,
-                    METAL_RATE_PERGMS_ITEMKARAT:
-                        this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT,
-                    ozWeight: this.setOzWt(),
-                };
-
-                // this.exchange_items.push(values);
-                if (
-                    this.exchangeItemEditId == '' ||
-                    this.exchangeItemEditId == undefined ||
-                    this.exchangeItemEditId == null
-                ) {
-                    this.exchange_items.push(values);
-                } else {
-                    // this.exchange_items[this.exchangeItemEditId - 1] = values;
-                    // this.exchangeItemEditId = '';
-                    // alert(this.exchangeItemEditId)
-                    const preitemIndex = this.exchange_items.findIndex((data) => {
-                        // console.table(data);
-                        console.table(data.sn_no == this.exchangeItemEditId);
-                        return data.sn_no == this.exchangeItemEditId;
-                    });
-                    // alert(preitemIndex)
-                    console.log('====================================');
-                    console.log(this.exchange_items);
-                    console.log('====================================');
-                    if (preitemIndex != -1) {
-                        values.sn_no = this.exchangeItemEditId;
-                        this.exchange_items[preitemIndex] = values;
-                        console.log(
-                            '==============this.exchange_items[preitemIndex]======================'
-                        );
-                        console.log(values);
-                        console.log('====================================');
-                    }
-                }
-
-                this.setExchangeMetalItems(this.exchange_items_slno_length, values);
-                this.setExchangeMetalGstItems(this.exchange_items_slno_length, values);
-                // alert('metal detail added');
-
-                this.exchangeForm.controls['fcn_exchange_division'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_item_desc'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_item_code'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_pcs'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_gross_wt'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_stone_wt'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_net_wt'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_chargeable_wt'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_pure_weight'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_purity_diff'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_stone_rate'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_stone_amount'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_making_rate'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_making_amt'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_net_amount'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_scrap_bag_no'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_scrap_bag_desc'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_location'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_jawahara'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_resale_recycle'].setValue('');
-                this.exchangeForm.controls['fcn_exchange_cash_exchange'].setValue('');
-                if (btn == 'saveBtn') this.modalReference.close();
-                this.sumTotalValues();
-
-                this.setMetalPurchaseDataPost();
             } else {
-                // alert('Invalid Metal Amount');
-                if (this.exchangeForm.value.fcn_exchange_item_code == '') {
-                    this.openDialog('Warning', 'Stock code should not be empty', true);
-                }
-                if (_exchangeMetalAmt == 0)
-                    this.openDialog('Warning', 'Invalid Metal Amount', true);
-                if (_exchangeNetAmt == 0)
-                    // if (_exchangeNetAmt == '' || 0)
-                    this.openDialog('Warning', 'Invalid Net Amount', true);
+                itemsLengths = this.exchangeItemEditId;
+                this.exchange_items_slno_length = itemsLengths;
             }
 
+            console.log('=====================this.exchange_items_slno_length===============');
+            console.log(this.exchange_items_slno_length);
+            console.log(this.exchange_items);
+            console.log('====================================');
+            var values = {
+                ID: this.exchange_items_slno_length,
+                sn_no: this.exchange_items_slno_length,
+                stock_code: _exchangeItemCode,
+                mkg_amount: _exchangeMkgAmt,
+                total_amount: _exchangeMetalAmt,
+                pcs: _exchangePcs,
+                weight: _exchangeWeight, // nett weight
+                description: _exchangeItemDesc,
+                tax_amount: '0',
+                net_amount: _exchangeNetAmt,
+                metalRate: _exchangeMetalRate,
+                metalAmt: _exchangeMetalAmt,
+
+                // need to update
+                gross_wt: this.exchangeForm.value.fcn_exchange_gross_wt || 0,
+                pure_wt: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
+                stone_amt: this.exchangeForm.value.fcn_exchange_stone_amount || 0,
+                purity_diff: this.exchangeForm.value.fcn_exchange_purity_diff || 0,
+                // gross_amt: this.lineItemForm.value.fcn_li_gross_amount || 0,
+                METAL_RATE_TYPE: this._exchangeItemchange?.METAL_RATE_TYPE,
+                METAL_RATE: this._exchangeItemchange?.METAL_RATE,
+                // METAL_RATE: this._exchangeItemchange?.METAL_RATE,
+                METAL_RATE_PERGMS_ITEMKARAT:
+                    this._exchangeItemchange?.METAL_RATE_PERGMS_ITEMKARAT,
+                ozWeight: this.setOzWt(),
+            };
+
+            // this.exchange_items.push(values);
+            if (
+                this.exchangeItemEditId == '' ||
+                this.exchangeItemEditId == undefined ||
+                this.exchangeItemEditId == null
+            ) {
+                this.exchange_items.push(values);
+            } else {
+                // this.exchange_items[this.exchangeItemEditId - 1] = values;
+                // this.exchangeItemEditId = '';
+                // alert(this.exchangeItemEditId)
+                const preitemIndex = this.exchange_items.findIndex((data: any) => {
+                    // console.table(data);
+                    console.table(data.sn_no == this.exchangeItemEditId);
+                    return data.sn_no == this.exchangeItemEditId;
+                });
+                // alert(preitemIndex)
+                console.log('====================================');
+                console.log(this.exchange_items);
+                console.log('====================================');
+                if (preitemIndex != -1) {
+                    values.sn_no = this.exchangeItemEditId;
+                    this.exchange_items[preitemIndex] = values;
+                    console.log(
+                        '==============this.exchange_items[preitemIndex]======================'
+                    );
+                    console.log(values);
+                    console.log('====================================');
+                }
+            }
+
+            this.setExchangeMetalItems(this.exchange_items_slno_length, values);
+            this.setExchangeMetalGstItems(this.exchange_items_slno_length, values);
+            // alert('metal detail added');
+
+            this.exchangeForm.controls['fcn_exchange_division'].setValue('');
+            this.exchangeForm.controls['fcn_exchange_item_desc'].setValue('');
+            this.exchangeForm.controls['fcn_exchange_item_code'].setValue('');
+            this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
+            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
+            this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
+            if (btn == 'saveBtn') this.modalReference.close();
+            this.sumTotalValues();
+
+            this.setMetalPurchaseDataPost();
         } else {
-            this.snackBar.open('Please Fill Required Fields', '', {
-                duration: 2000 // time in milliseconds
-            });
+            // alert('Invalid Metal Amount');
+            if (this.exchangeForm.value.fcn_exchange_item_code == '') {
+                this.openDialog('Warning', 'Stock code should not be empty', true);
+            }
+            if (_exchangeMetalAmt == '' || 0)
+                this.openDialog('Warning', 'Invalid Metal Amount', true);
+            if (_exchangeNetAmt == '' || 0)
+                this.openDialog('Warning', 'Invalid Net Amount', true);
         }
     }
+
 
     changeBranch(e: any) {
         console.log(this.dataForm.value.branch);
@@ -5265,10 +5250,10 @@ export class SalesEstimationComponent implements OnInit {
                             _exchangeItem[0].PCS
                         );
                         this.exchangeForm.controls['fcn_exchange_gross_wt'].setValue(
-                            _exchangeItem[0].GROSSWT
+                            this.setcommaSerperatedNumber(_exchangeItem[0].GROSSWT,'METAL')
                         );
                         this.exchangeForm.controls['fcn_exchange_purity'].setValue(
-                            parseFloat(_exchangeItem[0].PURITY)
+                            this.setcommaSerperatedNumber(_exchangeItem[0].PURITY,'PURITY')
                         );
                         this.standardPurity = this._exchangeItemchange.PURITY;
                         if (_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT > 0) {
@@ -5286,7 +5271,9 @@ export class SalesEstimationComponent implements OnInit {
                                 // _karatRateRec[0].KARAT_RATE
                             );
                         } else {
-                            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('0.000000');
+                            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+                                this.setcommaSerperatedNumber(0,'METAL_RATE')
+                            );
                         }
 
                         this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
@@ -8497,12 +8484,12 @@ export class SalesEstimationComponent implements OnInit {
             this.exchangeForm.value.fcn_exchange_net_wt * this.standardPurity
         );
         // console.log('')
-        const pureWeight = this.comFunc.transformDecimalVB(
+        let pureWeight:any = this.comFunc.transformDecimalVB(
             this.comFunc.mQtyDecimals,
             parseFloat(standardValue) -
             parseFloat(this.exchangeForm.value.fcn_exchange_pure_weight)
         );
-
+        pureWeight = this.comFunc.emptyToZero(pureWeight)>0? pureWeight : 0
         this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(pureWeight);
     }
     changeExNetAmt(event: any) {
@@ -9726,8 +9713,8 @@ export class SalesEstimationComponent implements OnInit {
             'POPCUSTCODE': this.customerDetails['CODE'] || '',
             MID: this.metalPurchaseDataMID,
             BRANCH_CODE: this.strBranchcode,
-            VOCTYPE: 'PEP',
-            // VOCTYPE: 'POP',
+            // VOCTYPE: 'PEP',
+            VOCTYPE: 'POP',
             // VOCTYPE: this.vocType,
             // VOCNO: this.vocDataForm.value.fcn_voc_no,
             VOCNO: this.metalPurchaseDataVocNo,
@@ -10049,8 +10036,8 @@ export class SalesEstimationComponent implements OnInit {
             this.retailSReturnDataPost = {
                 MID: this.retailSReturnDataMID,
                 BRANCH_CODE: this.strBranchcode,
-                VOCTYPE: 'SRE',
-                // VOCTYPE: 'PSR',
+                // VOCTYPE: 'SRE',
+                VOCTYPE: 'PSR',
                 // VOCTYPE: this.vocType,
                 // VOCNO: this.vocDataForm.value.fcn_voc_no,
                 VOCNO: this.retailSReturnVocNo,
