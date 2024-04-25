@@ -751,7 +751,10 @@ export class LabourChargeMasterComponent implements OnInit {
 
   formSubmit() {
 
-
+    if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid ) {
+      this.toastr.error('select all required fields')
+      return
+    }
 
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -816,7 +819,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": this.metallabourMasterForm.value.metalselling_rate || "",
+      "METALSTONE": this.metallabourMasterForm.value.metalselling_rate || "1",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,

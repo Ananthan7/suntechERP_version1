@@ -29,7 +29,7 @@
                             <mat-form-field style="width: 70%;">
                                 <input type="text" matInput formControlName="stockcode"   />
                             </mat-form-field>
-                            <master-search ></master-search>
+                            <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"></master-search>
                         </div>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 70%;">

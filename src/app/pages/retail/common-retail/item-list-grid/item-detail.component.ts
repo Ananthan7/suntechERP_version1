@@ -717,7 +717,7 @@ export class ItemDetailTable implements OnInit {
             this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS,
                 this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate) *
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt) // pure weight changed at 18/3/2024
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) // pure weight changed at 18/3/2024
                 // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) // pure weight
             )
         );

@@ -48,6 +48,8 @@ export class SalesEstimationComponent implements OnInit {
     @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
     @ViewChild('more_customer_detail_modal') public more_customer_detail_modal!: NgbModal;
     isEditable: boolean = false;
+    
+  private cssFilePath = '../../../assets/estimation_pdf.scss';
     // public more_customer_detail_modal!: NgbModal;
 
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -2388,20 +2390,22 @@ export class SalesEstimationComponent implements OnInit {
         this.searchVocNoSalRet();
 
     }
-
+    exchangeEditItem:any;
     editTableExchangeItem(event: any) {
         this.exchangeItemEditId = event.data.sn_no;
         event.cancel = true;
         const value: any = this.currentExchangeMetalPurchase.filter(
             (data: any) => data.SRNO == event.data.sn_no
-        )[0];
+        );
+        this.exchangeEditItem = value
+        // const value:any = event.data
         console.log(
             '===============editTable==currentExchangeMetalPurchase==================='
         );
         console.log(value);
+        console.log(this.exchange_items);
         console.log('====================================');
         event.component.refresh();
-
         this.open(this.oldgoldmodal);
 
         this.exchangeForm.controls.fcn_exchange_item_code.setValue(
@@ -4920,8 +4924,14 @@ export class SalesEstimationComponent implements OnInit {
             this.currentExchangeMetalPurchaseGst;
         console.log(this.metalPurchaseMain);
     }
-
-    addItemtoExchange(btn: any) {
+    updateExchangeItems(newExchangeItem: any) {
+        this.exchangeForm = newExchangeItem;
+        console.log(this.exchangeForm.value,'this.exchangeForm');
+    }
+    addItemtoExchange(newExchangeItem: any) {
+        debugger
+        console.log(newExchangeItem,'newExchangeItem');
+        // this.exchange_items = newExchangeItem;
         let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
         let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
         let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
@@ -4949,7 +4959,7 @@ export class SalesEstimationComponent implements OnInit {
             //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
             let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
             console.log('itemsLengths ex', itemsLengths);
-
+            
             if (
                 this.exchangeItemEditId == '' ||
                 this.exchangeItemEditId == undefined ||
@@ -5039,7 +5049,7 @@ export class SalesEstimationComponent implements OnInit {
             this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
-            if (btn == 'saveBtn') this.modalReference.close();
+            // if (btn == 'saveBtn') this.modalReference.close();
             this.sumTotalValues();
 
             this.setMetalPurchaseDataPost();
@@ -7427,12 +7437,28 @@ export class SalesEstimationComponent implements OnInit {
             }
     
             WindowPrt.document.write('<html><head><title>SunTech - POS ' + new Date().toISOString() + '</title></head>');
-            WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
-            WindowPrt.document.write('<body>');
-            WindowPrt.document.write(printContent.innerHTML);
-            WindowPrt.document.write('</body></html>');
-            WindowPrt.document.close();
-            WindowPrt.focus();
+
+            const linkElement = WindowPrt.document.createElement('link');
+            linkElement.setAttribute('rel', 'stylesheet');
+            linkElement.setAttribute('type', 'text/css');
+             linkElement.setAttribute('href', this.cssFilePath);
+            WindowPrt.document.head.appendChild(linkElement);
+             // WindowPrt.document.body.prepend(qrCodeElement);
+      // WindowPrt.document.body.append(qrCodeElement);
+      WindowPrt.document.write(printContent.innerHTML);
+      // WindowPrt.document.write(qrCodeElement.outerHTML);
+      WindowPrt.document.write('</div></body></html>');
+
+
+      WindowPrt.document.close();
+      WindowPrt.focus();
+          
+            // WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
+            // WindowPrt.document.write('<body>');
+            // WindowPrt.document.write(printContent.innerHTML);
+            // WindowPrt.document.write('</body></html>');
+            // WindowPrt.document.close();
+            // WindowPrt.focus();
     
             setTimeout(() => {
                 if (WindowPrt) { 
@@ -7767,9 +7793,7 @@ export class SalesEstimationComponent implements OnInit {
         this.ordered_items = newOrder;
     }
 
-    updateExchangeItems(newExchangeItem: any[]) {
-        this.exchange_items = newExchangeItem;
-    }
+    
     validateMinSalePrice() {
         const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
         const grossWt = this.lineItemForm.value.fcn_li_gross_wt;

@@ -40,14 +40,18 @@ import { ItemDetailService } from 'src/app/services/modal-service.service';
 })
 export class ExchangeDetailModal implements OnInit {
     @Input() modalTitle: string = 'Default Title';
-    @Input() ordered_items!: any; 
-    @Input() customerDataForm!: FormGroup; 
-   
-    @Input() vocDataForm!: FormGroup; 
-    @Input() customerDetailForm!: FormGroup; 
+    @Input() ordered_items!: any;
+    @Input() updateExchangeItems!: any;
+    @Input() customerDataForm!: FormGroup;
+
+    @Input() vocDataForm!: FormGroup;
+    @Input() customerDetailForm!: FormGroup;
+    @Input() exchangeForm!: FormGroup;
+
 
     @Input() modal!: NgbModalRef;
     @Output() newExchangeItem = new EventEmitter<any>();
+    @Output() exchangeFormItem = new EventEmitter<any>();
 
     viewOnly: boolean = false;
 
@@ -55,9 +59,8 @@ export class ExchangeDetailModal implements OnInit {
     dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
     salesReturnsItems_forVoc: any = [];
     currentExchangeMetalPurchase: any[] = [];
-    exchange_items: any[] = [];
+    @Input() exchange_items: any[] = [];
     sales_returns_items: any = [];
-    exchangeForm!: FormGroup;
     branch_tax_percentage: any;
     standardPurity: any = 0;
     baseYear: any = '';
@@ -72,23 +75,23 @@ export class ExchangeDetailModal implements OnInit {
     metalPurchaseDataMID: any = '0';
 
 
-      // sales return total var..
-      invReturnSalesTotalPcs: any = 0;
-      invReturnSalesTotalWeight: any = 0;
-      invReturnSalesTotalPureWeight: any = 0;
-      invReturnSalesTotalMakingAmt: any = 0;
-      invReturnSalesTotalMetalAmt: any = 0;
-      invReturnSalesTotalStoneAmt: any = 0;
-      invReturnSalesTotalNetAmt: any = 0;
-      invReturnSalesTotalDisAmt: any = 0;
-      invReturnSalesTotalPurityDiff: any = 0;
-      invReturnSalesTotalStoneDiff: any = 0;
-      invReturnSalesTotalDisPer: any = 0;
-      invReturnSalesTotalTaxAmt: any = 0;
-      invReturnSalesTotalNetTotal: any = 0;
+    // sales return total var..
+    invReturnSalesTotalPcs: any = 0;
+    invReturnSalesTotalWeight: any = 0;
+    invReturnSalesTotalPureWeight: any = 0;
+    invReturnSalesTotalMakingAmt: any = 0;
+    invReturnSalesTotalMetalAmt: any = 0;
+    invReturnSalesTotalStoneAmt: any = 0;
+    invReturnSalesTotalNetAmt: any = 0;
+    invReturnSalesTotalDisAmt: any = 0;
+    invReturnSalesTotalPurityDiff: any = 0;
+    invReturnSalesTotalStoneDiff: any = 0;
+    invReturnSalesTotalDisPer: any = 0;
+    invReturnSalesTotalTaxAmt: any = 0;
+    invReturnSalesTotalNetTotal: any = 0;
 
 
-  
+
     prnt_inv_total_items: any;
     prnt_inv_total_pcs: any;
     prnt_inv_total_weight: any;
@@ -102,7 +105,7 @@ export class ExchangeDetailModal implements OnInit {
     prnt_inv_total_tax_amount: any;
     prnt_inv_net_total_with_tax: any;
 
-    
+
     order_items_slno_length: any;
     order_items_total_amount: any;
     order_items_total_tax: any;
@@ -182,7 +185,7 @@ export class ExchangeDetailModal implements OnInit {
     retailSReturnVocNo: any = '0';
     metalPurchaseDataVocNo: any = '0';
     receiptEditId: any;
-    _exchangeItemchange: any;
+    @Input() _exchangeItemchange: any;
     exchangeFormMetalRateType = '';
 
     invMetalPurchaseTotalNettWeight: any;
@@ -203,11 +206,11 @@ export class ExchangeDetailModal implements OnInit {
     orders: any[] = [];
     receiptDetailsList: any = [];
 
-    
+
     receiptTotalNetAmt: any;
     balanceAmount: any;
 
-    
+
     prnt_inv_net_total_without_tax_sum: any;
     prnt_inv_total_tax_amount_sum: any;
     prnt_inv_net_total_with_tax_sum: any;
@@ -252,17 +255,72 @@ export class ExchangeDetailModal implements OnInit {
             fcn_exchange_making_rate: [{ value: 0 }, Validators.required],
             fcn_exchange_making_amt: [{ value: 0 }, Validators.required],
             fcn_exchange_net_amount: [{ value: 0 }, Validators.required],
-            
+
         });
-        this.strBranchcode = localStorage.getItem('userbranch');
+        this.strBranchcode = this.comFunc.branchCode;
 
     }
 
     ngOnInit(): void {
+        this.editExchangeItem()
         this.getExchangeStockCodes();
+    }
+    editExchangeItem() {
+        console.log(this.updateExchangeItems, 'updateExchangeItems');
+        console.log(this.exchangeForm.value, 'exchangeForm');
+        let value = this.updateExchangeItems[0]
+        this.exchangeItemEditId = value.BATCHID;
+
+        this.exchangeForm.controls.fcn_exchange_item_code.setValue(
+            value.STOCK_CODE
+        );
+
+        this.exchangeForm.controls.fcn_exchange_pcs.setValue(value.PCS);
+        this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
+            this.comFunc.decimalQuantityFormat(value.GROSSWT,'METAL')
+        );
+        this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(value.STONEWT);
+        this.exchangeForm.controls.fcn_exchange_net_wt.setValue(value.NETWT);
+        this.exchangeForm.controls.fcn_exchange_purity.setValue(value.PURITY);
+        this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(value.PUDIFF);
+        this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(
+            value.METAL_RATE
+        );
+        this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+            value.METALVALUEFC
+        );
+        this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(value.PUREWT);
+        this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
+            value.STONE_RATEFC
+        );
+        this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(
+            value.STONEVALUEFC
+        );
+        this.exchangeForm.controls.fcn_exchange_making_rate.setValue(
+            value.MKG_RATEFC
+        );
+        this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
+            value.MKGVALUEFC
+        );
+        this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
+            value.NETVALUEFC
+        );
+        this.exchangeForm.controls.fcn_exchange_division.setValue(
+            value.DIVISION_CODE
+        );
+        this.exchangeForm.controls.fcn_exchange_item_desc.setValue(
+            value.STOCK_DOCDESC
+        );
+        this.exchangeForm.controls.fcn_exchange_chargeable_wt.setValue(
+            value.CHARGABLEWT
+        );
+        this._exchangeItemchange.METAL_RATE_TYPE = value.RATE_TYPE;
+        this._exchangeItemchange.METAL_RATE = value.METAL_RATE;
+        this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT =
+            value.METAL_RATE_GMSFC;
+        this.exchangeFormMetalRateType = value.RATE_TYPE;
 
     }
-
     getExchangeStockCodes() {
         // this.suntechApi
         // .getRetailsalesExchangeLookup(this.strBranchcode)
@@ -351,10 +409,10 @@ export class ExchangeDetailModal implements OnInit {
                             _exchangeItem[0].PCS
                         );
                         this.exchangeForm.controls['fcn_exchange_gross_wt'].setValue(
-                            _exchangeItem[0].GROSSWT
+                            this.comFunc.decimalQuantityFormat(_exchangeItem[0].GROSSWT, 'METAL')
                         );
                         this.exchangeForm.controls['fcn_exchange_purity'].setValue(
-                            parseFloat(_exchangeItem[0].PURITY)
+                            this.comFunc.decimalQuantityFormat(parseFloat(_exchangeItem[0].PURITY),'PURITY')
                         );
                         this.standardPurity = this._exchangeItemchange.PURITY;
                         if (_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT > 0) {
@@ -495,7 +553,7 @@ export class ExchangeDetailModal implements OnInit {
     changeExNetAmt(event: any) {
         const value = event.target.value;
         if (value != '') {
-        
+
         } else {
             this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
                 this.zeroMQtyVal
@@ -823,7 +881,7 @@ export class ExchangeDetailModal implements OnInit {
             H_ORIGINCOUNTRY: '',
             H_PACKETNO: 0,
             H_DECLARATIONDATE: this.vocDataForm.value.vocdate,
-            PartyRoundValueFc: 0, 
+            PartyRoundValueFc: 0,
             ItemRoundValueFc: 0,
             H_Shipper: '',
             H_Miner: '',
@@ -832,7 +890,7 @@ export class ExchangeDetailModal implements OnInit {
             H_ShipmentMode: '',
             H_AirwayBill: '',
             VATAmountFCRound: 0,
-            VATONMAKING: false, 
+            VATONMAKING: false,
             OT_TRANSFER_TIME: '',
             QRCODEIMAGE: '',
             QRCODEVALUE: '',
@@ -965,6 +1023,7 @@ export class ExchangeDetailModal implements OnInit {
         };
     }
     addItemtoExchange(btn: any) {
+        debugger
         let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
         let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
         let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
@@ -977,8 +1036,6 @@ export class ExchangeDetailModal implements OnInit {
         let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
         let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
 
-        console.log(_exchangeMetalAmt);
-
 
         if (
             this.exchangeForm.value.fcn_exchange_item_code != '' &&
@@ -987,11 +1044,8 @@ export class ExchangeDetailModal implements OnInit {
             _exchangeNetAmt > 0 &&
             _exchangeNetAmt != ''
         ) {
-            // if (items_length == 0) this.exchange_items_slno_length = 1;
-            // else
-            //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
+
             let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
-            console.log('itemsLengths ex', itemsLengths);
 
             if (
                 this.exchangeItemEditId == '' ||
@@ -1002,17 +1056,12 @@ export class ExchangeDetailModal implements OnInit {
                 else itemsLengths = itemsLengths.ID + 1;
                 this.exchange_items_slno_length = itemsLengths;
 
-                console.log('itemsLengths ex add', itemsLengths);
-
             } else {
                 itemsLengths = this.exchangeItemEditId;
                 this.exchange_items_slno_length = itemsLengths;
             }
 
-            console.log('=====================this.exchange_items_slno_length===============');
-            console.log(this.exchange_items_slno_length);
-            console.log(this.exchange_items);
-            console.log('====================================');
+
             var values = {
                 ID: this.exchange_items_slno_length,
                 sn_no: this.exchange_items_slno_length,
@@ -1047,8 +1096,9 @@ export class ExchangeDetailModal implements OnInit {
                 this.exchangeItemEditId == undefined ||
                 this.exchangeItemEditId == null
             ) {
-                this.exchange_items.push(values);
+                // this.exchange_items.push(values);
                 this.newExchangeItem.emit(this.exchange_items);
+                this.exchangeFormItem.emit(this.exchangeForm);
             } else {
                 // this.exchange_items[this.exchangeItemEditId - 1] = values;
                 // this.exchangeItemEditId = '';
@@ -1058,18 +1108,11 @@ export class ExchangeDetailModal implements OnInit {
                     console.table(data.sn_no == this.exchangeItemEditId);
                     return data.sn_no == this.exchangeItemEditId;
                 });
-                // alert(preitemIndex)
-                console.log('====================================');
-                console.log(this.exchange_items);
-                console.log('====================================');
+                
                 if (preitemIndex != -1) {
                     values.sn_no = this.exchangeItemEditId;
                     this.exchange_items[preitemIndex] = values;
-                    console.log(
-                        '==============this.exchange_items[preitemIndex]======================'
-                    );
-                    console.log(values);
-                    console.log('====================================');
+                    this.newExchangeItem.emit(this.exchange_items);
                 }
             }
 
@@ -1083,7 +1126,7 @@ export class ExchangeDetailModal implements OnInit {
             this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
-            if (btn == 'saveBtn') 
+            if (btn == 'saveBtn')
                 this.modal.dismiss('Cross click');
             this.sumTotalValues();
 
@@ -1506,7 +1549,7 @@ export class ExchangeDetailModal implements OnInit {
             let _exchangeNetWt = _exchangeGrossWt - _exchangeStoneWt;
             let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
             this.exchangeForm.controls['fcn_exchange_net_wt'].setValue(
-                _exchangeNetWt
+                this.comFunc.decimalQuantityFormat(_exchangeNetWt, 'METAL')
             );
             this.exchangeForm.controls['fcn_exchange_chargeable_wt'].setValue(
                 event.target.value
@@ -1582,7 +1625,7 @@ export class ExchangeDetailModal implements OnInit {
         let total_exchange = 0;
         let total_received_amount = 0;
 
-        this.ordered_items.forEach(function (item:any) {
+        this.ordered_items.forEach(function (item: any) {
             console.log('item---------------------', item);
 
             total_sum = total_sum + parseFloat(item.total_amount);
@@ -1648,7 +1691,7 @@ export class ExchangeDetailModal implements OnInit {
         );
         this.order_items_total_net_amount_org = this.order_items_total_net_amount;
         this.sumReceiptItem();
-        
+
     }
 
     sumReceiptItem() {
@@ -1731,7 +1774,7 @@ export class ExchangeDetailModal implements OnInit {
             // +       total_tax_amt
         );
         console.log('=================invReturnSalesTotalPcs===================');
-      
+
         console.log('====================================');
     }
     sumExchangeItem() {
@@ -1928,12 +1971,12 @@ export class ExchangeDetailModal implements OnInit {
 
     @HostListener('document:keydown.escape', ['$event'])
     onKeydownHandler(event: KeyboardEvent) {
-      this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
-      if (this.lineItemService.isWarningModalOpen) {
-        event.preventDefault();
-        event.stopPropagation(); 
-      } else {
-        
-      }
+        this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
+        if (this.lineItemService.isWarningModalOpen) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+
+        }
     }
 }
