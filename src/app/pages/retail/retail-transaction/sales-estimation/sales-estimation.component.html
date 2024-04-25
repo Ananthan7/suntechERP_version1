@@ -1912,7 +1912,9 @@
                 <mat-form-field>
                   <mat-label>Metal Rate </mat-label>
                   <input type="number" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
-                    class="st_txt_right" matInput formControlName="fcn_exchange_metal_rate" readonly />
+                    class="st_txt_right" matInput 
+                    (change)="metalRateChange()"
+                    formControlName="fcn_exchange_metal_rate" [readonly]="viewOnly" />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
@@ -1933,7 +1935,7 @@
               <div class="col-md-3">
                 <mat-form-field>
                   <mat-label>Metal Amount</mat-label>
-                  <input type="number" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  <input type="text" AmountDecimalInput [max]="14"
                     class="st_txt_right" matInput formControlName="fcn_exchange_metal_amount"
                     (change)="changeExchangeMetalAmt($event)" [readonly]="viewOnly" />
                 </mat-form-field>

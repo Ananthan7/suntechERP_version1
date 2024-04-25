@@ -1028,7 +1028,7 @@ export class SalesEstimationComponent implements OnInit {
     getRetailEstimationMaster(data: any) {
         this.snackBar.open('Loading...');
         //   this.suntechApi.getRetailEstimationMaster(data)
-        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}`
+        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}/Mid=${data.MID}`
         this.suntechApi.getDynamicAPI(API).subscribe((res) => {
             this.snackBar.dismiss();
             console.log('===============getRetailEstimationMaster=====================');
@@ -2504,13 +2504,15 @@ export class SalesEstimationComponent implements OnInit {
         this.setExchangeCommaSep();
 
     }
-    setcommaSerperatedNumber(value:any,decimal:any){
-        return this.comFunc.commaSeperation(
-            this.comFunc.decimalQuantityFormat(
-                this.comFunc.emptyToZero(value), decimal)
-            )
-   
+    metalRateChange(){
+        let form = this.exchangeForm.value
+        let amount = (this.comFunc.emptyToZero(form.fcn_exchange_metal_rate) * 
+            this.comFunc.emptyToZero(form.fcn_exchange_chargeable_wt))
+        this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+            this.comFunc.setCommaSerperatedNumber(amount,'AMOUNT')
+        )
     }
+    
     setExchangeCommaSep() {
         this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
             this.comFunc.commaSeperation(
@@ -5322,6 +5324,8 @@ export class SalesEstimationComponent implements OnInit {
                             // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
                         }
 
+                    }else{
+                        this.viewOnly = true;
                     }
 
                 });
@@ -8489,7 +8493,7 @@ export class SalesEstimationComponent implements OnInit {
             parseFloat(standardValue) -
             parseFloat(this.exchangeForm.value.fcn_exchange_pure_weight)
         );
-        pureWeight = this.comFunc.emptyToZero(pureWeight)>0? pureWeight : 0
+        // pureWeight = this.comFunc.emptyToZero(pureWeight)>0? pureWeight : 0
         this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(pureWeight);
     }
     changeExNetAmt(event: any) {
@@ -9151,6 +9155,7 @@ export class SalesEstimationComponent implements OnInit {
         this.li_tax_amount_val = value;
         this.setNettAmt();
     }
+    
     setNettAmt() {
 
         const value =
