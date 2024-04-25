@@ -1573,5 +1573,7 @@
     <app-exchange-detail [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [customerDataForm]="customerDataForm"
     [vocDataForm]="vocDataForm" [customerDetailForm]="customerDetailForm" [ordered_items]="ordered_items"
     [exchangeForm]="exchangeForm" [updateExchangeItems]="exchangeEditItem"
-    (newExchangeItem)="updateExchangeItems($event)"></app-exchange-detail>
+    [_exchangeItemchange]="_exchangeItemchange" [exchange_items]="exchange_items"
+    (newExchangeItem)="addItemtoExchange($event)" 
+    (exchangeFormItem)="updateExchangeItems($event)"></app-exchange-detail>
   </ng-template>

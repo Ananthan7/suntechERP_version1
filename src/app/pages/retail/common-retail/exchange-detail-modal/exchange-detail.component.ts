@@ -51,6 +51,7 @@ export class ExchangeDetailModal implements OnInit {
 
     @Input() modal!: NgbModalRef;
     @Output() newExchangeItem = new EventEmitter<any>();
+    @Output() exchangeFormItem = new EventEmitter<any>();
 
     viewOnly: boolean = false;
 
@@ -58,7 +59,7 @@ export class ExchangeDetailModal implements OnInit {
     dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
     salesReturnsItems_forVoc: any = [];
     currentExchangeMetalPurchase: any[] = [];
-    exchange_items: any[] = [];
+    @Input() exchange_items: any[] = [];
     sales_returns_items: any = [];
     branch_tax_percentage: any;
     standardPurity: any = 0;
@@ -184,7 +185,7 @@ export class ExchangeDetailModal implements OnInit {
     retailSReturnVocNo: any = '0';
     metalPurchaseDataVocNo: any = '0';
     receiptEditId: any;
-    _exchangeItemchange: any;
+    @Input() _exchangeItemchange: any;
     exchangeFormMetalRateType = '';
 
     invMetalPurchaseTotalNettWeight: any;
@@ -266,55 +267,58 @@ export class ExchangeDetailModal implements OnInit {
     }
     editExchangeItem() {
         console.log(this.updateExchangeItems, 'updateExchangeItems');
-
-        this.exchangeItemEditId = this.updateExchangeItems.sn_no;
+        console.log(this.exchangeForm.value, 'exchangeForm');
+        let value = this.updateExchangeItems[0]
+        this.exchangeItemEditId = value.BATCHID;
 
         this.exchangeForm.controls.fcn_exchange_item_code.setValue(
-            this.updateExchangeItems.stock_code
+            value.STOCK_CODE
         );
 
-        this.exchangeForm.controls.fcn_exchange_pcs.setValue(this.updateExchangeItems.pcs);
-        this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(this.updateExchangeItems.gross_wt);
-        this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(this.updateExchangeItems.STONEWT);
-        this.exchangeForm.controls.fcn_exchange_net_wt.setValue(this.updateExchangeItems.weight);
-        this.exchangeForm.controls.fcn_exchange_purity.setValue(this.updateExchangeItems.PURITY);
-        this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(this.updateExchangeItems.purity_diff);
+        this.exchangeForm.controls.fcn_exchange_pcs.setValue(value.PCS);
+        this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
+            this.comFunc.decimalQuantityFormat(value.GROSSWT,'METAL')
+        );
+        this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(value.STONEWT);
+        this.exchangeForm.controls.fcn_exchange_net_wt.setValue(value.NETWT);
+        this.exchangeForm.controls.fcn_exchange_purity.setValue(value.PURITY);
+        this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(value.PUDIFF);
         this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(
-            this.updateExchangeItems.METAL_RATE
+            value.METAL_RATE
         );
         this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
-            this.updateExchangeItems.METALVALUEFC
+            value.METALVALUEFC
         );
-        this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(this.updateExchangeItems.PUREWT);
+        this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(value.PUREWT);
         this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
-            this.updateExchangeItems.STONE_RATEFC
+            value.STONE_RATEFC
         );
         this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(
-            this.updateExchangeItems.STONEVALUEFC
+            value.STONEVALUEFC
         );
         this.exchangeForm.controls.fcn_exchange_making_rate.setValue(
-            this.updateExchangeItems.MKG_RATEFC
+            value.MKG_RATEFC
         );
         this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
-            this.updateExchangeItems.MKGVALUEFC
+            value.MKGVALUEFC
         );
         this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
-            this.updateExchangeItems.NETVALUEFC
+            value.NETVALUEFC
         );
         this.exchangeForm.controls.fcn_exchange_division.setValue(
-            this.updateExchangeItems.DIVISION_CODE
+            value.DIVISION_CODE
         );
         this.exchangeForm.controls.fcn_exchange_item_desc.setValue(
-            this.updateExchangeItems.STOCK_DOCDESC
+            value.STOCK_DOCDESC
         );
         this.exchangeForm.controls.fcn_exchange_chargeable_wt.setValue(
-            this.updateExchangeItems.CHARGABLEWT
+            value.CHARGABLEWT
         );
-        this._exchangeItemchange.METAL_RATE_TYPE = this.updateExchangeItems.RATE_TYPE;
-        this._exchangeItemchange.METAL_RATE = this.updateExchangeItems.METAL_RATE;
+        this._exchangeItemchange.METAL_RATE_TYPE = value.RATE_TYPE;
+        this._exchangeItemchange.METAL_RATE = value.METAL_RATE;
         this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT =
-            this.updateExchangeItems.METAL_RATE_GMSFC;
-        this.exchangeFormMetalRateType = this.updateExchangeItems.RATE_TYPE;
+            value.METAL_RATE_GMSFC;
+        this.exchangeFormMetalRateType = value.RATE_TYPE;
 
     }
     getExchangeStockCodes() {
@@ -1019,6 +1023,7 @@ export class ExchangeDetailModal implements OnInit {
         };
     }
     addItemtoExchange(btn: any) {
+        debugger
         let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
         let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
         let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
@@ -1091,11 +1096,9 @@ export class ExchangeDetailModal implements OnInit {
                 this.exchangeItemEditId == undefined ||
                 this.exchangeItemEditId == null
             ) {
-                // values.FORMDETAILS = this.exchangeForm.value
-                this.exchange_items.push(values);
-                console.log(this.exchange_items);
-                console.log('====================================');
+                // this.exchange_items.push(values);
                 this.newExchangeItem.emit(this.exchange_items);
+                this.exchangeFormItem.emit(this.exchangeForm);
             } else {
                 // this.exchange_items[this.exchangeItemEditId - 1] = values;
                 // this.exchangeItemEditId = '';
@@ -1109,6 +1112,7 @@ export class ExchangeDetailModal implements OnInit {
                 if (preitemIndex != -1) {
                     values.sn_no = this.exchangeItemEditId;
                     this.exchange_items[preitemIndex] = values;
+                    this.newExchangeItem.emit(this.exchange_items);
                 }
             }
 
