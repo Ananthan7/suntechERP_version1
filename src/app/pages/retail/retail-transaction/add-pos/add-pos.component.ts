@@ -2428,6 +2428,7 @@ export class AddPosComponent implements OnInit {
     }
     this.modalReference.result.then(
       (result: any) => {
+        this.imageURL = []
         this.closeResult = `Closed with: ${result}`;
         this.salesReturnEditId = '';
         this.orderedItemEditId = '';
@@ -2435,6 +2436,7 @@ export class AddPosComponent implements OnInit {
         this.receiptDetailView = false;
       },
       (reason: any) => {
+        this.imageURL = []
         this.salesReturnEditId = '';
         this.orderedItemEditId = '';
         this.exchangeItemEditId = '';
@@ -6840,16 +6842,21 @@ this.netTotal= this.order_items_total_net_amount;
       });
     }
   }
-
+  imageURL:any[] = []
+  getStockImage(){
+      let API = 'RetailSalesItemImage/'+this.lineItemForm.value.fcn_li_item_code
+      this.suntechApi.getDynamicAPI(API)
+      .subscribe((resp: any) => {
+          console.log(resp.response);
+          let data = resp.response
+          data.forEach((element:any) => {
+              this.imageURL.push(element.imagepath)
+          });
+      })
+  }
 
   async getStockDesc(event: any) {
-    // var strBranchcode = localStorage.getItem('userbranch');
-    // var strUser = localStorage.getItem('username');
-    // var strBranchcode = 'MOE';
-    // var strUser = 'Admin';
-    console.log('====================================');
-    console.log('called', event.target.value);
-    console.log('====================================');
+    this.getStockImage()
 
     this.li_tax_amount_val = 0.0;
     var gross_amount_val = 0.0;
