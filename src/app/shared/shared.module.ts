@@ -80,7 +80,8 @@ import { AttachmentUploadComponent } from './common/attachment-upload/attachment
 import { AuthCheckerComponent } from './common/auth-checker/auth-checker.component';
 import { NumericFilterDirective } from './directives/single-digit-numeric';
 import { GridSearchComponent } from './common/grid-search/grid-search.component';
-
+import { ImageSliderComponent } from './common/image-slider/image-slider.component';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -117,6 +118,7 @@ import { GridSearchComponent } from './common/grid-search/grid-search.component'
     AttachmentUploadComponent,
     AuthCheckerComponent,
     GridSearchComponent,
+    ImageSliderComponent,
   ],
   imports: [
     CommonModule,
@@ -162,7 +164,7 @@ import { GridSearchComponent } from './common/grid-search/grid-search.component'
     MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule, DragDropModule,
-    MatTableModule,
+    MatTableModule, NgbCarouselModule,
     MatRadioModule, MatCardModule
   ],
   exports: [
@@ -181,6 +183,7 @@ import { GridSearchComponent } from './common/grid-search/grid-search.component'
     AuthCheckerComponent,
     AttachmentUploadComponent,
     GridSearchComponent,
+    ImageSliderComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     DecimalFormatPipe,
@@ -237,7 +240,7 @@ import { GridSearchComponent } from './common/grid-search/grid-search.component'
     MatDatepickerModule, MatNativeDateModule,
     MatRippleModule,
     MatTooltipModule, MatProgressBarModule,
-    MatDialogModule,
+    MatDialogModule,NgbCarouselModule,
     MatCheckboxModule, MatProgressSpinnerModule,
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,

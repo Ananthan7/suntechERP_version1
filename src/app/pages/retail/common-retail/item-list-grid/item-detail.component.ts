@@ -405,9 +405,21 @@ export class ItemDetailTable implements OnInit {
             day = ('0' + date.getDate()).slice(-2);
         return [date.getFullYear(), mnth, day].join('-');
     }
+    imageURL:any[] = []
+    getStockImage(){
+        let API = 'RetailSalesItemImage/'+this.lineItemForm.value.fcn_li_item_code
+        this.suntechApi.getDynamicAPI(API)
+        .subscribe((resp: any) => {
+            console.log(resp.response);
+            let data = resp.response
+            data.forEach((element:any) => {
+                this.imageURL.push(element.imagepath)
+            });
+        })
+    }
     getStockDesc(event: any) {
 
-
+        this.getStockImage()
         this.li_tax_amount_val = 0.0;
         var gross_amount_val = 0.0;
         this.li_net_amount_val = 0.0;
