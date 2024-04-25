@@ -31,6 +31,7 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
+  userbranch = localStorage.getItem('userbranch');
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -41,6 +42,41 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
     private comService: CommonServiceService
   ) {}
 
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  SupplierData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Supplier",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "BRANCH_CODE = '"+ this.userbranch+"' AND AC_OnHold = 0",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  
   metalBranchTransferOutRepairDetailsForm: FormGroup = this.formBuilder.group({
     stockCode:[''],
     stockCodeDes:[''],
@@ -600,4 +636,30 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
       }
     });
   }
+
+  stockCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.metalBranchTransferOutRepairDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION );
+  }
+  toStockCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
+    this.metalBranchTransferOutRepairDetailsForm.controls.toStockCodeDesc.setValue(e.DESCRIPTION );
+  }
+
+  supplierSelected(e:any){
+    console.log(e);
+    this.metalBranchTransferOutRepairDetailsForm.controls.supplier.setValue(e.ACCODE);
+    this.metalBranchTransferOutRepairDetailsForm.controls.supplierDesc.setValue(e['ACCOUNT HEAD']);
+
+  }
+
+  
+
+  locationCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairDetailsForm.controls.LoactionFrom.setValue(e.LOCATION_CODE);
+  }
+
 }
