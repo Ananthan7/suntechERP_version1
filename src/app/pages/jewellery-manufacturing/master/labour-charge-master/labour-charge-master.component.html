@@ -8,7 +8,7 @@
   </div>
   <!-- modal header component -->
   <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteMeltingType()"></modal-header>
+    (deleteClick)="deleteMeltingType()" [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
   <!-- content section -->
   <div class="row">
     <!-- <div class="container-fluid pt-3"> -->
@@ -58,9 +58,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="labourType">
+                  <mat-select formControlName="labourType"  [disabled]="viewMode" >
                     <mat-option *ngFor="let option of DialabourTypeList"
-                      [disabled]="viewMode" [value]="option.value"
+                     [value]="option.value"
                       (onSelectionChange)="onlabourtypeChange()">
                       {{ option.name }}
                     </mat-option>
@@ -72,9 +72,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="unitList">
+                  <mat-select formControlName="unitList" [disabled]="viewMode">
                     <mat-option *ngFor="let option of unitList"
-                      [disabled]="viewMode" [value]="option.value">
+                      [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -87,9 +87,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="method">
+                  <mat-select formControlName="method" [disabled]="viewMode">
                     <mat-option *ngFor="let option of methodList"
-                      [disabled]="ViewModemethod" [value]="option.value">
+                       [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -240,9 +240,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="settingType">
+                  <mat-select formControlName="settingType" [disabled]="viewMode">
                     <mat-option *ngFor="let option of settingTypeList"
-                      [disabled]="viewModeSetting" [value]="option.value">
+                     [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -297,7 +297,7 @@
                 </mat-form-field>
                 <master-search [MasterSearchData]="stockCodeData"
                   (newRowClick)="stockCodeSelected($event)"
-                  *ngIf=" viewDisable || viewDisable1 == false"></master-search>
+                  *ngIf=" viewDisable == false"></master-search>
               </div>
             </div>
             <div class="row mb-2">
@@ -326,9 +326,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="metallabourType">
+                  <mat-select formControlName="metallabourType" [disabled]="viewMode">
                     <mat-option *ngFor="let option of labourTypeList"
-                      [disabled]="viewMode  || stockcodeDisable || viewDisable1" [value]="option.value">
+                      [disabled]=" stockcodeDisable" [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -379,7 +379,7 @@
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData"
                   (newRowClick)="colorDataSelected($event)"
-                  *ngIf=" viewDisable || viewDisable1 == false"></master-search>
+                  *ngIf=" viewDisable == false"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Cost Rate *
                 :</label>
@@ -480,9 +480,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="metalunitList">
+                  <mat-select formControlName="metalunitList" [disabled]="viewMode">
                     <mat-option *ngFor="let option of unitList"
-                      [disabled]="viewMode || stockcodeDisable" [value]="option.value"
+                      [disabled]="stockcodeDisable" [value]="option.value"
                       (onSelectionChange)="unitSelected()">
                       {{ option.name }}
                     </mat-option>

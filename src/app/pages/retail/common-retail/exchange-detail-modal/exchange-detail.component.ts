@@ -223,18 +223,14 @@ export class ExchangeDetailModal implements OnInit {
         private suntechApi: SuntechAPIService,
         public dialog: MatDialog,
         private formBuilder: FormBuilder,
-        private snackBar: MatSnackBar,
-        private router: Router,
+        
         private renderer: Renderer2,
         public comFunc: CommonServiceService,
-        // public service: NgxBarcodeScannerService,
-        private acRoute: ActivatedRoute,
-        private inDb: IndexedDbService,
         private datePipe: DatePipe,
         public lineItemService: ItemDetailService,
 
     ) {
-        this.strUser = localStorage.getItem('username');
+        this.strUser = this.comFunc.userName;
         this.exchangeForm = this.formBuilder.group({
             fcn_exchange_division: ['', Validators.required],
             fcn_exchange_item_code: ['', Validators.required],
@@ -262,10 +258,11 @@ export class ExchangeDetailModal implements OnInit {
     }
 
     ngOnInit(): void {
-        this.editExchangeItem()
+        this.editExchangeItem() //to edit 
         this.getExchangeStockCodes();
     }
     editExchangeItem() {
+        if(this.updateExchangeItems[0].FLAG == 'NEW') return
         console.log(this.updateExchangeItems, 'updateExchangeItems');
         console.log(this.exchangeForm.value, 'exchangeForm');
         let value = this.updateExchangeItems[0]
@@ -1022,6 +1019,7 @@ export class ExchangeDetailModal implements OnInit {
 
         };
     }
+    /**use: To pass data to parent grid */
     addItemtoExchange(btn: any) {
         debugger
         let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
