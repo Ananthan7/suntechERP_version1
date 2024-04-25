@@ -135,10 +135,10 @@
 
                             <div *dxTemplate="let data of 'defaultAlloy'">
                                 <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                <grid-search [MasterSearchData]="defaultAlloy" *ngIf="!viewMode"
+                                <master-search [MasterSearchData]="defaultAlloy" *ngIf="!viewMode"
                                     (newRowClick)="defaultAlloySelected($event,data,'defaultAlloy')"
                                     style="width: 60%;">
-                                </grid-search>
+                                </master-search>
                             </div>
 
                             <div *dxTemplate="let data of 'alloyper'">
