@@ -5252,10 +5252,10 @@ export class SalesEstimationComponent implements OnInit {
                             _exchangeItem[0].PCS
                         );
                         this.exchangeForm.controls['fcn_exchange_gross_wt'].setValue(
-                            this.setcommaSerperatedNumber(_exchangeItem[0].GROSSWT,'METAL')
+                            this.comFunc.setCommaSerperatedNumber(_exchangeItem[0].GROSSWT,'METAL')
                         );
                         this.exchangeForm.controls['fcn_exchange_purity'].setValue(
-                            this.setcommaSerperatedNumber(_exchangeItem[0].PURITY,'PURITY')
+                            this.comFunc.setCommaSerperatedNumber(_exchangeItem[0].PURITY,'PURITY')
                         );
                         this.standardPurity = this._exchangeItemchange.PURITY;
                         if (_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT > 0) {
@@ -5274,7 +5274,7 @@ export class SalesEstimationComponent implements OnInit {
                             );
                         } else {
                             this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
-                                this.setcommaSerperatedNumber(0,'METAL_RATE')
+                                this.comFunc.setCommaSerperatedNumber(0,'METAL_RATE')
                             );
                         }
 
