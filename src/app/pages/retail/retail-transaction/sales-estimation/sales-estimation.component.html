@@ -1556,7 +1556,7 @@
   <!-- Sales Return Modal -->
   <ng-template #adjust_sale_return_modal let-modal modal-lg>
     <app-sales-return [modalTitle]="'Dynamic Modal Title'" [modal]="modal" [editItemDetail]="isEditable"
-      [viewOnlyDetail]="viewOnly" [updatedGridItem]="salesReturnDataToEdit"
+      [viewOnlyDetail]="viewOnly" (salesReturnItemsChange)="handleSalesReturnItemsChange($event)" [updatedGridItem]="salesReturnDataToEdit"
       (salesReturnsItemsChange)="addSalesReturnItem($event)"
       [filteredSalesReturnBranchOptions]="filteredSalesReturnBranchOptions"></app-sales-return>
   </ng-template>

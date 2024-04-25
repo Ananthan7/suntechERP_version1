@@ -48,8 +48,8 @@ export class SalesEstimationComponent implements OnInit {
     @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
     @ViewChild('more_customer_detail_modal') public more_customer_detail_modal!: NgbModal;
     isEditable: boolean = false;
-    
-  private cssFilePath = '../../../assets/estimation_pdf.scss';
+
+    private cssFilePath = '../../../assets/estimation_pdf.scss';
     // public more_customer_detail_modal!: NgbModal;
 
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -381,6 +381,7 @@ export class SalesEstimationComponent implements OnInit {
 
     currentLineItems: any = [];
     currentsalesReturnItems: any = [];
+    salesReturnEmittedList: any = [];
     currentExchangeMetalPurchase: any[] = [];
     currentExchangeMetalPurchaseGst: any[] = [];
 
@@ -432,7 +433,7 @@ export class SalesEstimationComponent implements OnInit {
     order_items_total_net_amount_org: any;
     order_items_total_gross_amount: any;
     order_items_total_netvalue_sum: any;
-    order_items_total_discount_amount: string='0.00';
+    order_items_total_discount_amount: string = '0.00';
     // order_total_sales_returns: any = 0.0;
     order_total_exchange: any;
     // order_received_amount: any;
@@ -1246,7 +1247,7 @@ export class SalesEstimationComponent implements OnInit {
                         // if (divisionMS == 'M') {
                         // values.gross_amt = data.NETVALUEFC;
                         // this.currentLineItems[index].GROSS_AMT = data.NETVALUEFC;
-                        
+
                         values.gross_amt = data.NETVALUEFC;
                         this.currentLineItems[index].GROSS_AMT = data.NETVALUEFC;
                         // } else {
@@ -1321,7 +1322,7 @@ export class SalesEstimationComponent implements OnInit {
                         this.currentsalesReturnItems.push(data);
                         this.currentsalesReturnItems.rid = this.comFunc.generateNumber();
                     });
-                this.retailSReturnDataPost = retailSReturnData;
+                // this.retailSReturnDataPost = retailSReturnData;
                 // this.retailSReturnDataPost.retailSReturnDetails = [];
 
                 this.sumTotalValues();
@@ -5929,7 +5930,7 @@ export class SalesEstimationComponent implements OnInit {
             total_sum = total_sum + parseFloat(item.total_amount);
             tax_sum = tax_sum + parseFloat(item.tax_amount);
             net_sum = net_sum + parseFloat(item.net_amount);
-            total_pcs = total_pcs +  parseFloat(item.pcs);
+            total_pcs = total_pcs + parseFloat(item.pcs);
             total_weight = total_weight + parseFloat(item.weight);
             total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
             total_making_amt = total_making_amt + parseFloat(item.making_amt);
@@ -5992,8 +5993,8 @@ export class SalesEstimationComponent implements OnInit {
         this.grossTotal = this.order_items_total_gross_amount;
         this.totalTax = this.order_items_total_tax;
         this.itemTotal = this.order_items_total_netvalue_sum;
-        // this.netTotal = this.order_items_total_gross_amount; 
-        this.netTotal = this.order_items_total_gross_amount + (this.order_items_total_discount_amount_sum);
+        this.netTotal = this.order_items_total_discount_amount ? this.order_items_total_gross_amount - Number(this.order_items_total_discount_amount) : this.order_items_total_gross_amount;
+        // this.netTotal = this.order_items_total_gross_amount + (this.order_items_total_discount_amount_sum);
 
         // order_items_total_gross_amount
         // : 
@@ -6854,9 +6855,9 @@ export class SalesEstimationComponent implements OnInit {
             }
 
         this.setRetailSalesDataPost();
+        this.setSalesReturnDetailsPostData();
         this.setDetailsData();
         if (!this.viewOnly && !this.editOnly) this.setKaratList();
-        // this.setSalesReturnDetailsPostData();
         // this.setMetalPurchaseDataPost();
 
         // alert(this.retailSalesDataPost.VOCNO);
@@ -6873,8 +6874,8 @@ export class SalesEstimationComponent implements OnInit {
             // alert('this.currentExchangeMetalPurchase.length ' + this.currentExchangeMetalPurchase.length);
             // alert(this.currentsalesReturnItems.length)
             // alert(this.currentExchangeMetalPurchase.length)
-            if (this.currentsalesReturnItems.length == 0)
-                this.retailSReturnDataPost = null;
+            // if (this.currentsalesReturnItems.length == 0)
+            //     this.retailSReturnDataPost = null;
             if (this.currentExchangeMetalPurchase.length == 0)
                 this.metalPurchaseDataPost = null;
             const postData = {
@@ -7208,7 +7209,7 @@ export class SalesEstimationComponent implements OnInit {
                                 if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && traNo == '') {
 
                                     this.posPlanetFileInsert();
-                                   
+
 
                                 }
                                 setTimeout(() => {
@@ -7429,45 +7430,45 @@ export class SalesEstimationComponent implements OnInit {
                 console.error('Print content element not found');
                 return;
             }
-    
+
             var WindowPrt = window.open('', '_blank', 'width=300,height=600');
             if (WindowPrt === null) {
                 console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
                 return;
             }
-    
+
             WindowPrt.document.write('<html><head><title>SunTech - POS ' + new Date().toISOString() + '</title></head>');
 
             const linkElement = WindowPrt.document.createElement('link');
             linkElement.setAttribute('rel', 'stylesheet');
             linkElement.setAttribute('type', 'text/css');
-             linkElement.setAttribute('href', this.cssFilePath);
+            linkElement.setAttribute('href', this.cssFilePath);
             WindowPrt.document.head.appendChild(linkElement);
-             // WindowPrt.document.body.prepend(qrCodeElement);
-      // WindowPrt.document.body.append(qrCodeElement);
-      WindowPrt.document.write(printContent.innerHTML);
-      // WindowPrt.document.write(qrCodeElement.outerHTML);
-      WindowPrt.document.write('</div></body></html>');
+            // WindowPrt.document.body.prepend(qrCodeElement);
+            // WindowPrt.document.body.append(qrCodeElement);
+            WindowPrt.document.write(printContent.innerHTML);
+            // WindowPrt.document.write(qrCodeElement.outerHTML);
+            WindowPrt.document.write('</div></body></html>');
 
 
-      WindowPrt.document.close();
-      WindowPrt.focus();
-          
+            WindowPrt.document.close();
+            WindowPrt.focus();
+
             // WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
             // WindowPrt.document.write('<body>');
             // WindowPrt.document.write(printContent.innerHTML);
             // WindowPrt.document.write('</body></html>');
             // WindowPrt.document.close();
             // WindowPrt.focus();
-    
+
             setTimeout(() => {
-                if (WindowPrt) { 
+                if (WindowPrt) {
                     WindowPrt.print();
                 } else {
                     console.error('Print window was closed before printing could occur.');
                 }
             }, 800);
-    
+
             console.log('printing... end ');
             console.log(printContent.innerHTML);
         } else {
@@ -7478,7 +7479,7 @@ export class SalesEstimationComponent implements OnInit {
             }
         }
     }
-    
+
     openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
         this.dialogBox = this.dialog.open(DialogboxComponent, {
             width: '40%',
@@ -9286,14 +9287,14 @@ export class SalesEstimationComponent implements OnInit {
             this.metalPurchaseDataPost.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
             this.metalPurchaseDataPost.SALESPERSON_NAME = this.salespersonName || '';
         }
-        if (this.retailSReturnDataPost != null && this.retailSReturnDataPost != '') {
-            this.retailSReturnDataPost.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
-            if (this.retailSReturnDataPost?.retailSReturnDetails?.length > 0)
-                this.retailSReturnDataPost.retailSReturnDetails.forEach((data: any) => {
-                    data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
-                    data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
-                });
-        }
+        // if (this.retailSReturnDataPost != null && this.retailSReturnDataPost != '') {
+        //     this.retailSReturnDataPost.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
+        //     if (this.retailSReturnDataPost?.retailSReturnDetails?.length > 0)
+        //         this.retailSReturnDataPost.retailSReturnDetails.forEach((data: any) => {
+        //             data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
+        //             data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
+        //         });
+        // }
     }
 
     setRetailSalesDataPost() {
@@ -9600,10 +9601,7 @@ export class SalesEstimationComponent implements OnInit {
             estimationDetail: this.currentLineItems,
         };
 
-        console.log('====================================');
-        console.log(this.retailSalesDataPost);
-        console.log('====================================');
-        // alert(this.retailSalesDataPost.POSCUSTCODE);
+       
     }
     setMetalPurchaseDataPost() {
 
@@ -9933,6 +9931,8 @@ export class SalesEstimationComponent implements OnInit {
         };
     }
     setSalesReturnDetailsPostData() {
+        console.log(this.sales_returns_items)
+        if(this.sales_returns_items.length > 0){
         this.retailSReturnDataPost = {
             MID: this.retailSReturnDataMID,
             BRANCH_CODE: this.strBranchcode,
@@ -10171,10 +10171,14 @@ export class SalesEstimationComponent implements OnInit {
             'PRINT_COUNT_CNTLCOPY': 0,
 
 
-            retailSReturnDetails: this.currentsalesReturnItems,
+            retailSReturnDetails: this.salesReturnEmittedList
         };
+        console.log(this.retailSReturnDataPost)}
+        
     }
-
+    handleSalesReturnItemsChange(salesReturnItems: any) {
+        this.salesReturnEmittedList = salesReturnItems;
+      }
     /** start customer detail form */
     nameChange(event: any) {
         const value = event.target.value.toString().trim();
