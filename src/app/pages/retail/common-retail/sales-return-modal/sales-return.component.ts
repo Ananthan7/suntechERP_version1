@@ -44,6 +44,8 @@ export class SalesReturnModal implements OnInit {
   @Input() modal!: NgbModalRef;
   @Output() newItemEvent = new EventEmitter<any>();
   @Output() salesReturnsItemsChange = new EventEmitter<any[]>();
+  @Output() salesReturnItemsChange = new EventEmitter<any>();
+
   @Input() orderedItems!: any[];
   @Input() editItemDetail: any;
   @Input() viewOnlyDetail: any;
@@ -422,7 +424,7 @@ export class SalesReturnModal implements OnInit {
             this.salesReturnForm.controls.fcn_returns_voc_type.setValue(
               this.updatedGridItem[0]?.slsReturn.POS_VOCTYPE
             );
-          }else{
+          } else {
             this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocTypesinSalesReturn[0].VOCTYPE)
           }
         }
@@ -466,9 +468,9 @@ export class SalesReturnModal implements OnInit {
               _response = resp.response[0];
               this.salesReturnsItems_forVoc = resp.response;
               let _vocdate = _response.VOCDATE.split(' ');
-              console.log(this.salesReturnsItems_forVoc,'this.salesReturnsItems_forVoc');
-              console.log(this.sales_returns_items,'sales_returns_items');
-              
+              console.log(this.salesReturnsItems_forVoc, 'this.salesReturnsItems_forVoc');
+              console.log(this.sales_returns_items, 'sales_returns_items');
+
               for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
                 for (let j = 0; j < this.sales_returns_items.length; j++) {
                   if (this.salesReturnsItems_forVoc[i].SRNO.toString() == this.sales_returns_items[j].sn_no.toString()) {
@@ -484,7 +486,7 @@ export class SalesReturnModal implements OnInit {
                   }
                 }
               }
-              console.log(this.salesReturnsItems_forVoc,'this.salesReturnsItems_forVoc');
+              console.log(this.salesReturnsItems_forVoc, 'this.salesReturnsItems_forVoc');
 
               this.salesReturnForm.controls['fcn_returns_sales_man'].setValue(
                 _response.SALESPERSON_CODE
@@ -595,9 +597,9 @@ export class SalesReturnModal implements OnInit {
       values.DISCOUNT = slsReturn.DISCOUNT;
       values.VAT_AMOUNTFC = slsReturn.VAT_AMOUNTFC;
       values.UNIQUEID = slsReturn.UNIQUEID;
-      let checkstokcode:any[] = this.sales_returns_pre_items.filter((item:any)=> item.stock_code == slsReturn.STOCK_CODE)
-      console.log(values,'values');
-      if(checkstokcode.length==0){
+      let checkstokcode: any[] = this.sales_returns_pre_items.filter((item: any) => item.stock_code == slsReturn.STOCK_CODE)
+      console.log(values, 'values');
+      if (checkstokcode.length == 0) {
         this.sales_returns_pre_items.push(values);
       }
     } else {
@@ -632,7 +634,7 @@ export class SalesReturnModal implements OnInit {
     // if(this.updatedGridItem.length>0){
     //   this.sales_returns_items = values.filter((item:any)=> item.stock_code != this.updatedGridItem[0].stock_code);
     // }else{
-      this.sales_returns_items = values
+    this.sales_returns_items = values
     // }
 
     for (let i = 0; i < this.sales_returns_items.length; i++) {
@@ -766,7 +768,7 @@ export class SalesReturnModal implements OnInit {
       DT_BRANCH_CODE: this.salesReturnForm.value.fcn_returns_branch,
       DT_VOCNO: this.salesReturnForm.value.fcn_returns_voc_no,
       DT_VOCTYPE: this.salesReturnForm.value.fcn_returns_voc_type,
-      DT_YEARMONTH: this.salesReturnForm.value.fcn_returns_fin_year,
+      DT_YEARMONTH: this.salesReturnForm.value.fcn_returns_fin_year.toString(),
       // GIFT_ITEM: this.comFunc.stringToBoolean(items?.GIFT_ITEM) || false,
       // HSNCODE: items?.HSNCODE || '',
       // VATCODE: items?.VATCODE || '',
@@ -809,7 +811,7 @@ export class SalesReturnModal implements OnInit {
       OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME || '',
       // IssueGiftVoucher:
       //   this.comFunc.stringToBoolean(items?.ISSUEGIFTVOUCHER) || false,
-
+      "COMPONENT_PRICE_TYPE": "",
       "CGST_PER": this.comFunc.emptyToZero(items['CGST_PER']),
       "CGST_AMOUNTFC": this.comFunc.emptyToZero(items['CGST_AMOUNTFC']),
       "CGST_AMOUNTCC": this.comFunc.emptyToZero(items['CGST_AMOUNTCC']),
@@ -839,6 +841,60 @@ export class SalesReturnModal implements OnInit {
       "WASTAGEAMOUNTFC": this.comFunc.emptyToZero(items['WASTAGEAMOUNTFC']),
       "WASTAGEAMOUNTCC": this.comFunc.emptyToZero(items['WASTAGEAMOUNTCC']),
       "DIVISIONMS": items['DIVISIONMS'] || ' ',
+      "DUFIX_CERTCHARGECC": 0,
+      "DUFIX_CERTCHARGEFC": 0,
+      "DUFIX_CLRSTNRATECC": 0,
+      "DUFIX_CLRSTNRATEFC": 0,
+      "DUFIX_CLRSTNVALUECC": 0,
+      "DUFIX_CLRSTNVALUEFC": 0,
+      "DUFIX_DCHARGABLEWEIGHT": 0,
+      "DUFIX_DIACARAT": 0,
+      "DUFIX_DIACTRATECC": 0,
+      "DUFIX_DIACTRATEFC": 0,
+      "DUFIX_DIAPCS": 0,
+      "DUFIX_DIAVALUECC": 0,
+      "DUFIX_DIAVALUEFC": 0,
+      "DUFIX_DKARAT_CODE": "",
+      "DUFIX_DLABRATECC": 0,
+      "DUFIX_DLABRATEFC": 0,
+      "DUFIX_DLABUNIT": 0,
+      "DUFIX_DWASTAGE": 0,
+      "DUFIX_DWASTAGEAMOUNTCC": 0,
+      "DUFIX_DWASTAGEAMOUNTFC": 0,
+      "DUFIX_DWASTAGEPER": 0,
+      "DUFIX_FINEGOLD": 0,
+      "DUFIX_HMCHARGECC": 0,
+      "DUFIX_HMCHARGEFC": 0,
+      "DUFIX_LABOURCC": 0,
+      "DUFIX_LABOURFC": 0,
+      "DUFIX_MASTERFINEGOLD": 0,
+      "DUFIX_METAL_WT": 0,
+      "DUFIX_METALGROSSWT": 0,
+      "DUFIX_METALVALUECC": 0,
+      "DUFIX_METALVALUEFC": 0,
+      "DUFIX_METLA_WT": 0,
+      "DUFIX_PEARL_AMTCC": 0,
+      "DUFIX_PEARL_AMTFC": 0,
+      "DUFIX_PEARL_PCS": 0,
+      "DUFIX_PEARL_WT": 0,
+      "DUFIX_PUDIFF": 0,
+      "DUFIX_PURITY": 0,
+      "DUFIX_STONECARAT": 0,
+      "DUFIX_STONEPCS": 0,
+      "GIFT_ITEM": true,
+
+      "GSTMAKINGAMT_CC": 0,
+      "INCLUSIVE": true,
+      "GSTMAKINGPER": 0,
+      "GSTMETALAMT_CC": 0,
+      "GSTMETALAMT_FC": 0,
+      "GSTMETALPER": 0,
+      "GSTOTHERAMT_CC": 0,
+      "LESSTHANCOST_USER": "",
+      "NEWUNIQUEID": 0,
+      "STOCKCHECKOTHERBRANCH": true,
+      "VATCODE": "",
+      "GSTOTHERPER": 0,
       // INCLUSIVE: false,
       // OLDRATE: '',
       // OLDAMOUNT: '',
@@ -913,8 +969,12 @@ export class SalesReturnModal implements OnInit {
         temp_sales_return_items.SRNO = this.salesReturnEditId;
 
         this.currentsalesReturnItems[preitemIndex] = temp_sales_return_items;
+        this.salesReturnItemsChange.emit(this.currentsalesReturnItems);
+
       } else {
         this.currentsalesReturnItems.push(temp_sales_return_items);
+        this.salesReturnItemsChange.emit(this.currentsalesReturnItems);
+
       }
     } else {
       // this.currentsalesReturnItems[this.salesReturnEditId - 1] =
@@ -1480,15 +1540,13 @@ export class SalesReturnModal implements OnInit {
       REMARKSNEW: '',
       REC_MODE: '',
       GENSEQNO: 0, //need
-      CCSALESCOMMISIONAmountCC: 0,
-      CCSALESCOMMISIONAmountFC: 0,
       GroupRef: '',
       INTIALPROMOTION: false,
       POSORDERADVVATAMTLC: 0,
       POSORDERADVVATAMTFC: 0,
       FROM_TOUCH: false,
-      Agent_Commission: false,
-      AgentCommission_Per: 0,
+      AGENT_COMMISSION: false,
+      AGENTCOMMISSION_PER: 0,
       CALCULATE_LOYALTY: false,
       TRAYN: false,
       TRANO: '',
@@ -1502,7 +1560,6 @@ export class SalesReturnModal implements OnInit {
       VoucherRedeemed: '',
       QRCODEIMAGE: '',
       QRCODEVALUE: '',
-      CERTIFICATEPRINTED: 0,
       BOARDINGPASS: '',
       WITHOUTVAT: false,
       FLIGHTNO: '',
@@ -1526,17 +1583,27 @@ export class SalesReturnModal implements OnInit {
       CUST_LANGUAGE: this.customerDetails?.CUST_LANGUAGE || '',
 
 
-
       'PRINT_COUNT': 0,
       'GST_TOTALFC': 0,
       'GST_TOTALCC': 0,
       'GST_STATE_CODE': '0',
       PANNO: this.customerDetails?.PANCARDNO || '0',
       'GST_NUMBER': '',
+      'SERVICE_INVOICE': true,
+      'POSREFERENCEREPAIRINVOICE': '',
+      'PLANETRESPONEFLG': true,
+      'PLANETRESPONSEFLG': true,
+      'NEWMID': 0,
+      'DISCOUNTUSERNAME': '',
+      'EINVOICEFLG': true,
+      'EINVOICEQRIMAGE': '',
+      'EINVOICERESPONSE': '',
+      'EMIRATESSKYWARDSMILE': true,
+      'EXCLUDEGSTVAT': 0,
       'TRA_ID_TYPE': '0',
       'POSCUSTIDNO': '0',
-      "POS_CREDITLIMIT_AUTHORIZED_USER": '0',
-      "POS_CREDITLIMIT_AUTHORIZED_REMARK": '0',
+      'POS_CREDITLIMIT_AUTHORIZED_USER': '0',
+      'POS_CREDITLIMIT_AUTHORIZED_REMARK': '0',
       'TOTALCESS_AMOUNTFC': 0,
       'TOTALCESS_AMOUNTCC': 0,
       'FORM_60': false,
@@ -1544,6 +1611,7 @@ export class SalesReturnModal implements OnInit {
       'REFBY_CUSTCODE': '0',
       'PRINT_COUNT_ACCOPY': 0,
       'PRINT_COUNT_CNTLCOPY': 0,
+
 
 
       retailSReturnDetails: this.currentsalesReturnItems,
@@ -1555,9 +1623,9 @@ export class SalesReturnModal implements OnInit {
     this.lineItemService.openWarningModal(() => this.modal.dismiss('Cross click'));
     if (this.lineItemService.isWarningModalOpen) {
       event.preventDefault();
-      event.stopPropagation(); 
+      event.stopPropagation();
     } else {
-      
+
     }
   }
 }
