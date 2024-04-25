@@ -2391,20 +2391,22 @@ export class SalesEstimationComponent implements OnInit {
         this.searchVocNoSalRet();
 
     }
-
+    exchangeEditItem:any;
     editTableExchangeItem(event: any) {
         this.exchangeItemEditId = event.data.sn_no;
         event.cancel = true;
         const value: any = this.currentExchangeMetalPurchase.filter(
             (data: any) => data.SRNO == event.data.sn_no
-        )[0];
+        );
+        this.exchangeEditItem = value
+        // const value:any = event.data
         console.log(
             '===============editTable==currentExchangeMetalPurchase==================='
         );
         console.log(value);
+        console.log(this.exchange_items);
         console.log('====================================');
         event.component.refresh();
-
         this.open(this.oldgoldmodal);
 
         this.exchangeForm.controls.fcn_exchange_item_code.setValue(
@@ -4923,8 +4925,14 @@ export class SalesEstimationComponent implements OnInit {
             this.currentExchangeMetalPurchaseGst;
         console.log(this.metalPurchaseMain);
     }
-
-    addItemtoExchange(btn: any) {
+    updateExchangeItems(newExchangeItem: any) {
+        this.exchangeForm = newExchangeItem;
+        console.log(this.exchangeForm.value,'this.exchangeForm');
+    }
+    addItemtoExchange(newExchangeItem: any) {
+        debugger
+        console.log(newExchangeItem,'newExchangeItem');
+        // this.exchange_items = newExchangeItem;
         let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
         let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
         let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
@@ -4952,7 +4960,7 @@ export class SalesEstimationComponent implements OnInit {
             //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
             let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
             console.log('itemsLengths ex', itemsLengths);
-
+            
             if (
                 this.exchangeItemEditId == '' ||
                 this.exchangeItemEditId == undefined ||
@@ -5042,7 +5050,7 @@ export class SalesEstimationComponent implements OnInit {
             this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
-            if (btn == 'saveBtn') this.modalReference.close();
+            // if (btn == 'saveBtn') this.modalReference.close();
             this.sumTotalValues();
 
             this.setMetalPurchaseDataPost();
@@ -7786,9 +7794,7 @@ export class SalesEstimationComponent implements OnInit {
         this.ordered_items = newOrder;
     }
 
-    updateExchangeItems(newExchangeItem: any[]) {
-        this.exchange_items = newExchangeItem;
-    }
+    
     validateMinSalePrice() {
         const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
         const grossWt = this.lineItemForm.value.fcn_li_gross_wt;
