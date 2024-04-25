@@ -738,7 +738,7 @@ export class ProcessMasterComponent implements OnInit {
       "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
       "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
       "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
-      "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
+      "LOSS_ON_GROSS": this.viewchangeYorN(this.processMasterForm.value.loss_on_gross),
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
       "APPLY_SETTING": this.viewchangeYorN(this.processMasterForm.value.ApplySetting),
