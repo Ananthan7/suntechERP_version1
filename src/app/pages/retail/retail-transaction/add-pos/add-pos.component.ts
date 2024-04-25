@@ -1832,6 +1832,7 @@ export class AddPosComponent implements OnInit {
           }
         });
     }
+    console.log(this.ordered_items)
   }
 
   getMaritalStatus() {
@@ -5678,6 +5679,7 @@ export class AddPosComponent implements OnInit {
     let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.strBranchcode}&STOCK_CODE=${_exchangeCode}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
+        if (resp.status == "Success") {
         this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
 
         _exchangeItem = resp.response.filter((i: any) => i.STOCK_CODE == _exchangeCode.toUpperCase());
@@ -5760,6 +5762,9 @@ export class AddPosComponent implements OnInit {
 
           // focus
           // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
+        }}
+        else{
+          this.viewOnly = true;
         }
       });
   }
