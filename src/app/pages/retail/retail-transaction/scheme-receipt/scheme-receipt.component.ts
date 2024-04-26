@@ -870,7 +870,7 @@ export class SchemeReceiptComponent implements OnInit {
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch,
       "VOCTYPE": this.receiptDetailsForm.value.VocType,
       "VOCNO": this.receiptDetailsForm.value.VocNo,
-      "VOCDATE": this.commonService.formatDateTime(new Date(this.receiptDetailsForm.value.VocDate)),
+      "VOCDATE": this.commonService.formatYYMMDD(new Date(this.receiptDetailsForm.value.VocDate)),
       "VALUE_DATE": this.commonService.formatDateTime(this.currentDate),
       "YEARMONTH": this.receiptDetailsForm.value.YEARMONTH,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",
@@ -957,12 +957,6 @@ export class SchemeReceiptComponent implements OnInit {
       return;
     }
     this.setFormData()
-
-    // if (this.editFlag) {
-    //   this.submitEditedForm(this.formdata);
-    //   return;
-    // }
-    console.log(this.formdata,'this.formdata');
     
     this.commonService.showSnackBarMsg('MSG81447');
     this.isloadingSave = true;
