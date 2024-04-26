@@ -1353,8 +1353,8 @@ export class AddPosComponent implements OnInit {
             this.amlNameValidationData = false;
           } else {
             this.amlNameValidationData = true;
-            if(!this.viewOnly)
-            this.openDialog('Warning', 'Pending for approval', true);
+            if (!this.viewOnly)
+              this.openDialog('Warning', 'Pending for approval', true);
           }
         /**end set customer data */
 
@@ -1643,7 +1643,7 @@ export class AddPosComponent implements OnInit {
 
   }
   onChanges(): void {
-    this.customerDataForm.value.tourVatRefuncYN.valueChanges.subscribe((isChecked:any) => {
+    this.customerDataForm.value.tourVatRefuncYN.valueChanges.subscribe((isChecked: any) => {
       const tourVatRefundNoControl = this.customerDataForm.value.tourVatRefundNo;
       if (isChecked) {
         tourVatRefundNoControl.enable();
@@ -1794,7 +1794,7 @@ export class AddPosComponent implements OnInit {
     };
 
   }
-  
+
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
       this.suntechApi
@@ -2814,14 +2814,14 @@ export class AddPosComponent implements OnInit {
 
     // this.getStockDesc(events);
   }
-  metalRateChange(){
-        let form = this.exchangeForm.value
-        let amount = (this.comFunc.emptyToZero(form.fcn_exchange_metal_rate) * 
-            this.comFunc.emptyToZero(form.fcn_exchange_chargeable_wt))
-        this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
-            this.comFunc.setCommaSerperatedNumber(amount,'AMOUNT')
-        )
-    }
+  metalRateChange() {
+    let form = this.exchangeForm.value
+    let amount = (this.comFunc.emptyToZero(form.fcn_exchange_metal_rate) *
+      this.comFunc.emptyToZero(form.fcn_exchange_chargeable_wt))
+    this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+      this.comFunc.setCommaSerperatedNumber(amount, 'AMOUNT')
+    )
+  }
   editTableSalesReturn(event: any) {
     this.salesReturnEditId = event.data.ID;
     event.cancel = true;
@@ -5682,90 +5682,91 @@ export class AddPosComponent implements OnInit {
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
-        this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
+          this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
 
-        _exchangeItem = resp.response.filter((i: any) => i.STOCK_CODE == _exchangeCode.toUpperCase());
+          _exchangeItem = resp.response.filter((i: any) => i.STOCK_CODE == _exchangeCode.toUpperCase());
 
-        this._exchangeItemchange = _exchangeItem[0];
-        _karatCode = _exchangeItem[0].KARAT_CODE;
-        _karatRateRec = this.karatRateDetails.filter(function (i: any) {
-          return i.KARAT_CODE == _karatCode;
-        });
+          this._exchangeItemchange = _exchangeItem[0];
+          _karatCode = _exchangeItem[0].KARAT_CODE;
+          _karatRateRec = this.karatRateDetails.filter(function (i: any) {
+            return i.KARAT_CODE == _karatCode;
+          });
 
-        this.exchangeForm.controls['fcn_exchange_division'].setValue(
-          _exchangeItem[0].DIVISION_CODE
-        );
-        this.exchangeForm.controls['fcn_exchange_item_code'].setValue(
-          _exchangeItem[0].STOCK_CODE
-        );
-        this.exchangeForm.controls['fcn_exchange_item_desc'].setValue(
-          _exchangeItem[0].STOCK_DESCRIPTION
-        );
-        this.exchangeForm.controls['fcn_exchange_purity'].setValue(
-          this.comFunc.decimalQuantityFormat(_exchangeItem[0].PURITY, 'PURITY')
-
-          // _exchangeItem[0].PURITY
-        );
-        this.standardPurity = this._exchangeItemchange.PURITY;
-        this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
-          // this.comFunc.transformDecimalVB(
-          //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_24KARAT, 'METAL_RATE')
-
-
-          // _exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT
-
-          // ) // type not showing so this..
-          // this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE_PERGMS_24KARAT) // type not showing so this..
-          //  this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE)
-          // _karatRateRec[0].KARAT_RATE
-        );
-        this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
-
-        if (_exchangeItem[0].INCLUDE_STONE == false) {
-          // this.exchangeForm.con
-          this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', true);
-          this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', true);
-          this.comFunc.formControlSetReadOnly(
-            'fcn_exchange_stone_amount',
-            true
+          this.exchangeForm.controls['fcn_exchange_division'].setValue(
+            _exchangeItem[0].DIVISION_CODE
           );
-          this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', true);
-          this.comFunc.formControlSetReadOnly(
-            'fcn_exchange_chargeable_wt',
-            true
+          this.exchangeForm.controls['fcn_exchange_item_code'].setValue(
+            _exchangeItem[0].STOCK_CODE
           );
-          // this.exchangeForm.controls.fcn_exchange_stone_wt.disable();
-          // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
-          this.removeValidationsForForms(this.exchangeForm, [
-            'fcn_exchange_stone_wt',
-            'fcn_exchange_stone_rate',
-            'fcn_exchange_stone_amount',
-            'fcn_exchange_net_wt',
-            'fcn_exchange_chargeable_wt',
-          ]);
-          // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
-          // this.exchangeForm.controls.fcn_exchange_stone_wt.updateValueAndValidity();
+          this.exchangeForm.controls['fcn_exchange_item_desc'].setValue(
+            _exchangeItem[0].STOCK_DESCRIPTION
+          );
+          this.exchangeForm.controls['fcn_exchange_purity'].setValue(
+            this.comFunc.decimalQuantityFormat(_exchangeItem[0].PURITY, 'PURITY')
 
-          // focus
-          // this.renderer.selectRootElement('#fcn_exchange_purity').focus();
-        } else {
-          this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', false);
-          this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', false);
-          this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', false);
-          this.comFunc.formControlSetReadOnly(
-            'fcn_exchange_stone_amount',
-            false
+            // _exchangeItem[0].PURITY
           );
-          this.comFunc.formControlSetReadOnly(
-            'fcn_exchange_chargeable_wt',
-            false
-          );
+          this.standardPurity = this._exchangeItemchange.PURITY;
+          this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+            // this.comFunc.transformDecimalVB(
+            //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_24KARAT, 'METAL_RATE')
 
-          // focus
-          // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
-        }}
-        else{
+
+            // _exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT
+
+            // ) // type not showing so this..
+            // this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE_PERGMS_24KARAT) // type not showing so this..
+            //  this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE)
+            // _karatRateRec[0].KARAT_RATE
+          );
+          this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
+
+          if (_exchangeItem[0].INCLUDE_STONE == false) {
+            // this.exchangeForm.con
+            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', true);
+            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', true);
+            this.comFunc.formControlSetReadOnly(
+              'fcn_exchange_stone_amount',
+              true
+            );
+            this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', true);
+            this.comFunc.formControlSetReadOnly(
+              'fcn_exchange_chargeable_wt',
+              true
+            );
+            // this.exchangeForm.controls.fcn_exchange_stone_wt.disable();
+            // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
+            this.removeValidationsForForms(this.exchangeForm, [
+              'fcn_exchange_stone_wt',
+              'fcn_exchange_stone_rate',
+              'fcn_exchange_stone_amount',
+              'fcn_exchange_net_wt',
+              'fcn_exchange_chargeable_wt',
+            ]);
+            // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
+            // this.exchangeForm.controls.fcn_exchange_stone_wt.updateValueAndValidity();
+
+            // focus
+            // this.renderer.selectRootElement('#fcn_exchange_purity').focus();
+          } else {
+            this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', false);
+            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', false);
+            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', false);
+            this.comFunc.formControlSetReadOnly(
+              'fcn_exchange_stone_amount',
+              false
+            );
+            this.comFunc.formControlSetReadOnly(
+              'fcn_exchange_chargeable_wt',
+              false
+            );
+
+            // focus
+            // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
+          }
+        }
+        else {
           this.viewOnly = true;
         }
       });
@@ -6606,7 +6607,7 @@ export class AddPosComponent implements OnInit {
 
     this.order_items_total_net_amount_org = this.order_items_total_net_amount;
 
-this.netTotal= this.order_items_total_net_amount;
+    this.netTotal = this.order_items_total_net_amount;
 
 
     let IgstVatData: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
@@ -6842,16 +6843,16 @@ this.netTotal= this.order_items_total_net_amount;
       });
     }
   }
-  imageURL:any[] = []
-  getStockImage(){
-      let API = 'RetailSalesItemImage/'+this.lineItemForm.value.fcn_li_item_code
-      this.suntechApi.getDynamicAPI(API)
+  imageURL: any[] = []
+  getStockImage() {
+    let API = 'RetailSalesItemImage/' + this.lineItemForm.value.fcn_li_item_code
+    this.suntechApi.getDynamicAPI(API)
       .subscribe((resp: any) => {
-          console.log(resp.response);
-          let data = resp.response
-          data.forEach((element:any) => {
-              this.imageURL.push(element.imagepath)
-          });
+        console.log(resp.response);
+        let data = resp.response
+        data.forEach((element: any) => {
+          this.imageURL.push(element.imagepath)
+        });
       })
   }
 
@@ -6906,6 +6907,18 @@ this.netTotal= this.order_items_total_net_amount;
               // if (resp.status == 'Success') {
               if (stockInfoResult.RESULT_TYPE == 'Success') {
                 this.newLineItem = stockInfos;
+
+                if (!this.comFunc.stringToBoolean(this.newLineItem.ALLOW_NEGATIVE.toString())) {
+
+                  const res = this.ordered_items.filter((data: any) => data.stock_code == this.newLineItem.STOCK_CODE);
+                  if (res.length > 0) {
+                    this.snackBar.open('Stock Already Exists', 'OK', {
+                      duration: 2000
+                    });
+                    return;
+                  }
+
+                }
                 this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
                 this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
                 this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
@@ -6937,6 +6950,7 @@ this.netTotal= this.order_items_total_net_amount;
                 this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
                   stockInfos.BALANCE_QTY
                 );
+                this.setGrossWtFocus();
                 this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
                   stockInfos.STONE_WT || this.zeroSQtyVal
                 ); // need field
@@ -6990,7 +7004,7 @@ this.netTotal= this.order_items_total_net_amount;
 
                   console.log(this.lineItemForm.controls)
                   console.log(this.zeroAmtVal)
-                  console.log( this.comFunc.decimalQuantityFormat(this.zeroAmtVal, 'METAL_RATE'))
+                  console.log(this.comFunc.decimalQuantityFormat(this.zeroAmtVal, 'METAL_RATE'))
                   this.lineItemForm.controls['fcn_ad_rate_type'].setValue(
                     stockInfos.RATE_TYPE != 'NULL' ? stockInfos.RATE_TYPE : ''
                   );
@@ -7542,29 +7556,29 @@ this.netTotal= this.order_items_total_net_amount;
   saveAndContinue(type: any) {
     this.isPrintingEnabled = false;
     if (type == 'continue') {
-        this.resetSalesReturnGrid()
-        this.salesReturnForm.reset();
-        this.lineItemForm.reset();
-        this.exchangeForm.reset();
-        this.customerDetailForm.reset();
-        this.customerDetailForm.reset();
-        this.customerDataForm.reset();
-        this.lineItemForm.reset();
-        this.ordered_items = [];
-        this.sales_returns_items = [];
-        this.exchange_items = [];
-        this.open(this.mymodal, false, null, false, false)
+      this.resetSalesReturnGrid()
+      this.salesReturnForm.reset();
+      this.lineItemForm.reset();
+      this.exchangeForm.reset();
+      this.customerDetailForm.reset();
+      this.customerDetailForm.reset();
+      this.customerDataForm.reset();
+      this.lineItemForm.reset();
+      this.ordered_items = [];
+      this.sales_returns_items = [];
+      this.exchange_items = [];
+      this.open(this.mymodal, false, null, false, false)
     }
     else {
-        this.isPrintingEnabled = true;
+      this.isPrintingEnabled = true;
     }
-}
+  }
 
-resetSalesReturnGrid() {
-  this.sales_returns_items.forEach((element: any, index: any) => {
+  resetSalesReturnGrid() {
+    this.sales_returns_items.forEach((element: any, index: any) => {
       element.sn_no = index + 1
-  });
-}
+    });
+  }
   // saveAndContinue(type: any) {
   //   if (type == 'continue') {
   //     this.addNew();
@@ -8196,60 +8210,60 @@ resetSalesReturnGrid() {
     console.log('printing...');
     let _validate = this.validateBeforePrint();
     if (_validate[0] === true) {
-        const printContent = document.getElementById('print_invoice');
-        if (!printContent) {
-            console.error('Print content element not found');
-            return;
-        }
+      const printContent = document.getElementById('print_invoice');
+      if (!printContent) {
+        console.error('Print content element not found');
+        return;
+      }
 
-        var WindowPrt = window.open('', '_blank', 'width=300,height=600');
-        if (WindowPrt === null) {
-            console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-            return;
-        }
+      var WindowPrt = window.open('', '_blank', 'width=300,height=600');
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
 
-        WindowPrt.document.write('<html><head><title>SunTech - POS ' + new Date().toISOString() + '</title></head>');
+      WindowPrt.document.write('<html><head><title>SunTech - POS ' + new Date().toISOString() + '</title></head>');
 
-        const linkElement = WindowPrt.document.createElement('link');
-        linkElement.setAttribute('rel', 'stylesheet');
-        linkElement.setAttribute('type', 'text/css');
-        linkElement.setAttribute('href', this.cssFilePath);
-        WindowPrt.document.head.appendChild(linkElement);
-        // WindowPrt.document.body.prepend(qrCodeElement);
-        // WindowPrt.document.body.append(qrCodeElement);
-        WindowPrt.document.write(printContent.innerHTML);
-        // WindowPrt.document.write(qrCodeElement.outerHTML);
-        WindowPrt.document.write('</div></body></html>');
+      const linkElement = WindowPrt.document.createElement('link');
+      linkElement.setAttribute('rel', 'stylesheet');
+      linkElement.setAttribute('type', 'text/css');
+      linkElement.setAttribute('href', this.cssFilePath);
+      WindowPrt.document.head.appendChild(linkElement);
+      // WindowPrt.document.body.prepend(qrCodeElement);
+      // WindowPrt.document.body.append(qrCodeElement);
+      WindowPrt.document.write(printContent.innerHTML);
+      // WindowPrt.document.write(qrCodeElement.outerHTML);
+      WindowPrt.document.write('</div></body></html>');
 
 
-        WindowPrt.document.close();
-        WindowPrt.focus();
+      WindowPrt.document.close();
+      WindowPrt.focus();
 
-        // WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
-        // WindowPrt.document.write('<body>');
-        // WindowPrt.document.write(printContent.innerHTML);
-        // WindowPrt.document.write('</body></html>');
-        // WindowPrt.document.close();
-        // WindowPrt.focus();
+      // WindowPrt.document.write('<style>body { width: 280px; font-family: "Courier New", Courier, monospace; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 5px; text-align: left; } </style>');
+      // WindowPrt.document.write('<body>');
+      // WindowPrt.document.write(printContent.innerHTML);
+      // WindowPrt.document.write('</body></html>');
+      // WindowPrt.document.close();
+      // WindowPrt.focus();
 
-        setTimeout(() => {
-            if (WindowPrt) {
-                WindowPrt.print();
-            } else {
-                console.error('Print window was closed before printing could occur.');
-            }
-        }, 800);
-
-        console.log('printing... end ');
-        console.log(printContent.innerHTML);
-    } else {
-        if (typeof _validate[1] === 'string') {
-            this.snackBar.open(_validate[1], 'OK');
+      setTimeout(() => {
+        if (WindowPrt) {
+          WindowPrt.print();
         } else {
-            console.error('Error message is not a string:', _validate[1]);
+          console.error('Print window was closed before printing could occur.');
         }
+      }, 800);
+
+      console.log('printing... end ');
+      console.log(printContent.innerHTML);
+    } else {
+      if (typeof _validate[1] === 'string') {
+        this.snackBar.open(_validate[1], 'OK');
+      } else {
+        console.error('Error message is not a string:', _validate[1]);
+      }
     }
-}
+  }
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
     this.dialogBox = this.dialog.open(
       DialogboxComponent, {
@@ -8290,7 +8304,7 @@ resetSalesReturnGrid() {
       } else if (this.blockNegativeStock == 'W') {
         if (this.lineItemPcs < value) {
           this.openDialog(
-            'Warning5',
+            'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
             false
           );
@@ -8352,9 +8366,8 @@ resetSalesReturnGrid() {
 
   changeGrossWt(event: any) {
     const value = event.target.value;
+    this.setGrossWtFocus();
     if (value != '') {
-
-
       if (this.blockNegativeStock == 'B') {
         if (this.lineItemGrossWt < value) {
           this.openDialog(
@@ -8379,7 +8392,7 @@ resetSalesReturnGrid() {
       } else if (this.blockNegativeStock == 'W') {
         if (this.lineItemGrossWt < value) {
           this.openDialog(
-            'Warning9',
+            'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
             false
           );
@@ -8426,7 +8439,7 @@ resetSalesReturnGrid() {
         if (this.blockMinimumPrice == 'B') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
             this.openDialog(
-              'Warning6',
+              'Warning',
 
               `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
               } `,
@@ -8448,7 +8461,7 @@ resetSalesReturnGrid() {
         else if (this.blockMinimumPrice == 'W') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
             this.openDialog(
-              'Warning7',
+              'Warning',
               `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
               }`,
               false
@@ -8477,7 +8490,7 @@ resetSalesReturnGrid() {
 
       } else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning8', this.comFunc.getMsgByID('MSG1721'), true);
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             if (this.divisionMS == 'M') {
@@ -8594,7 +8607,7 @@ resetSalesReturnGrid() {
       }
       else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning9', this.comFunc.getMsgByID('MSG1721'), true);
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
@@ -8693,7 +8706,7 @@ resetSalesReturnGrid() {
 
 
     this.openDialog(
-      'Warning5',
+      'Warning',
       `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
       }`,
       bOrW == 'B' ? true : false
@@ -8792,7 +8805,7 @@ resetSalesReturnGrid() {
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_rate.setValue(
@@ -8816,7 +8829,7 @@ resetSalesReturnGrid() {
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -9371,7 +9384,7 @@ resetSalesReturnGrid() {
 
         } else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning11', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_gross_amount.setValue(
@@ -9499,7 +9512,7 @@ resetSalesReturnGrid() {
         ) {
           this.netAmtFunc(event);
         } else {
-          this.openDialog('Warning12', this.comFunc.getMsgByID('MSG1914'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -9521,7 +9534,7 @@ resetSalesReturnGrid() {
           this.netAmtFunc(event);
         } else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning13', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -9982,11 +9995,10 @@ resetSalesReturnGrid() {
     // return ((percent / 100) * total).toFixed(2);
   }
   setMetalRate(karatCode: any) {
-
     const value: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
     )[0].KARAT_RATE;
-
+    
     this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
       this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
     );
@@ -11943,8 +11955,8 @@ resetSalesReturnGrid() {
       });
 
       this.attachmentForm.reset();
-this.attachmentForm.markAsPristine();
-this.attachmentForm.markAsUntouched();
+      this.attachmentForm.markAsPristine();
+      this.attachmentForm.markAsUntouched();
 
       // this.submitAttachment();
     } else {
@@ -12181,9 +12193,9 @@ this.attachmentForm.markAsUntouched();
       });
     } else {
       if (value !== '') {
-     
-      let res: any = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
-        this.comFunc.emptyToZero(value));
+
+        let res: any = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount_org) +
+          this.comFunc.emptyToZero(value));
 
 
         this.netTotal = res;
@@ -12304,11 +12316,19 @@ this.attachmentForm.markAsUntouched();
   }
 
   checkDiscountEligible() {
-    let posRoundOffRange =  Number(localStorage.getItem('POSROUNDOFFRANGE')) || 0;
+    let posRoundOffRange = Number(localStorage.getItem('POSROUNDOFFRANGE')) || 0;
     if (posRoundOffRange == 0) {
-        this.isNoDiscountAllowed = true;
+      this.isNoDiscountAllowed = true;
     }
     else
-        this.isNoDiscountAllowed = false;
-}
+      this.isNoDiscountAllowed = false;
+  }
+  setGrossWtFocus() {
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && !this.validatePCS) {
+      this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
+      this.snackBar.open('Gross Wt should not 0', 'OK', {
+        duration: 2000
+      });
+    }
+  }
 }

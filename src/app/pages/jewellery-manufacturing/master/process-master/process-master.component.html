@@ -28,6 +28,7 @@
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode"
                                             maxlength="6" [readonly]="editableMode || viewMode"
+                                            (focusout)="checkCodeExists($event)"
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 
@@ -46,7 +47,7 @@
                                             formControlName="processDesc"
                                             maxlength="40"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable" />
+                                            [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -58,12 +59,11 @@
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
                                         <mat-select
-                                            formControlName="processType">
+                                            formControlName="processType" [disabled]="viewMode">
                                             <mat-option
                                                 *ngFor="let option of processTypeList"
                                                 [value]="option.SRNO"
-                                                (focus)="showAlertIfCodeIsEmpty()"
-                                                [disabled]="viewMode || codeEnable" >
+                                                (focus)="showAlertIfCodeIsEmpty()" >
                                                 {{ option.ENGLISH }}
                                             </mat-option>
                                         </mat-select>
@@ -71,7 +71,7 @@
                                 </div>
                                 <label for="input"
                                     class="col-sm-1  col-form-label">Standard
-                                    Time * :</label>
+                                    Time :</label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="yourContent"
                                     [viewMode]="viewMode"
@@ -103,7 +103,7 @@
                                 </div>
                                 <label for="input"
                                     class="col-sm-1 col-form-label">Maximum
-                                    Time* :</label>
+                                    Time :</label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="maxContent"
                                         [durationToSplit]="maxTime"
@@ -122,13 +122,13 @@
                                 <div class="col-sm-3">
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
-                                        <input type="text" matInput
-                                            AmountDecimalInput
+                                        <input type="number" matInput
+                                            
                                             style="text-align: right;"
                                             maxlength="5"
                                             formControlName="Position"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable"  />
+                                            [readonly]="viewMode "  />
                                     </mat-form-field>
                                 </div>
                                 <label for="input"
@@ -141,9 +141,10 @@
                                             style="text-align: right;"
                                             NumberOnly
                                             formControlName="trayWeight"
-                                            maxlength="12"
+                                            maxlength="6"
+                                            MetalDecimalInput
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable"  />
+                                            [readonly]="viewMode "  />
                                         <!-- <input type="number" matInput style="text-align: right;"
                                             formControlName="trayWeight"  [readonly]="viewMode" /> -->
                                     </mat-form-field>
@@ -159,7 +160,7 @@
                                             maxlength="6"
                                             formControlName="approvalCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable"  />
+                                            [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="approvalCodeData"
@@ -176,7 +177,7 @@
                                             maxlength="6"
                                             formControlName="approvalProcess"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable" />
+                                            [readonly]="viewMode" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="approvalProcessData"
@@ -194,7 +195,7 @@
                                         <input type="text" matInput
                                             formControlName="recStockCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable"  />
+                                            [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="StockProcessData"
@@ -221,7 +222,7 @@
                                             formControlName="labour_charge"
                                             maxlength="15"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode || codeEnable" />
+                                            [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -232,7 +233,7 @@
                             <div class="form-check mt-md-5">
                                 <mat-checkbox formControlName="loss"
                                     class="example-margin"
-                                    (change)="onlossChange($event)"
+                                    (change)="onlossChange()"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                     [disabled]="viewMode">
                                     Loss *</mat-checkbox>
@@ -245,7 +246,7 @@
                             <div class="form-check">
                                 <mat-checkbox formControlName="recovery"
                                     class="example-margin"
-                                    (change)="onRecovery($event)"
+                                    (change)="onRecovery()"
                                     [disabled]="viewMode"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                      >
@@ -258,7 +259,7 @@
                             <div class="form-check">
                                 <mat-checkbox formControlName="allowGain"
                                     class="example-margin"
-                                    (change)="onAllowGain($event)"
+                                    (change)="onAllowGain()"
                                     [disabled]="viewMode">
                                     Allow Gain * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="AllowGain">
@@ -346,13 +347,13 @@
                                     Code :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput class="text-right"
+                                        <input type="text" matInput
                                             formControlName="accountStart"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountStartData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode && searchModeLoss"
                                         (newRowClick)="accountStartSelected($event)">
                                     </master-search>
                                 </div>
@@ -364,7 +365,7 @@
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMiddleData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode && searchModeRecov"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
                                 </div>
@@ -376,7 +377,7 @@
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountEndData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode && searchModeAllow"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>
                                 </div>

@@ -276,7 +276,7 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
       'THREE': 3,
-      'METAL_RATE': Number(this.allCompanyParameters.MRATEDECIMALS),
+      'METAL_RATE': Number(this.allCompanyParameters[0].MRATEDECIMALS),
     };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
@@ -296,6 +296,7 @@ export class CommonServiceService {
     if (value == '' || value == 0) {
       value = `${0}.${str}`;
     }
+    
     // Split the value into integer and fractional parts
     const parts = value.toString().split('.');
     let integerPart = parts[0];
@@ -393,6 +394,9 @@ export class CommonServiceService {
     amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
     let convertedAmount = 0;
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+    console.log('=====cctofc===============================');
+    console.log(result);
+    console.log('====================================');
     if (result[0].MUL_DIV == 'M') {
       convertedAmount = amount / rate;
       return convertedAmount;

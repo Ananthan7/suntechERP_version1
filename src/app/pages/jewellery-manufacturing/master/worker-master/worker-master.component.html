@@ -129,9 +129,9 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" class="text-right" matInput 
-                                    maxlength="12"    [readonly]="viewMode|| codeEnable" 
+                    [readonly]="viewMode|| codeEnable" 
                                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                                    MetalDecimalInput [max]="10" formControlName="TargetPcs" />
+                                     maxlength="10" formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
                     </div>
