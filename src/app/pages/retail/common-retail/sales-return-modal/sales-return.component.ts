@@ -1393,7 +1393,7 @@ export class SalesReturnModal implements OnInit {
     this.retailSReturnDataPost = {
       MID: this.retailSReturnDataMID,
       BRANCH_CODE: this.strBranchcode,
-      VOCTYPE: 'SRE',
+      VOCTYPE: 'PSR',
 
       VOCNO: this.retailSReturnVocNo,
 

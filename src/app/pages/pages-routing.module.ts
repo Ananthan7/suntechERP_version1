@@ -30,7 +30,7 @@ const routes: Routes = [
     loadChildren: () => import('../pages/retail/retail.module').then(m => m.RetailModule)
   },
   {
-    path: 'component-wise-diamond',
+    path: 'Wholesale',
     loadChildren: () => import('../pages/wholesale/wholesale.module').then(m => m.WholesaleModule)
   },
  

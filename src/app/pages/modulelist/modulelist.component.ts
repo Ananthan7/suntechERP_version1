@@ -75,7 +75,7 @@ export class ModulelistComponent implements OnInit {
         //   10: '../../assets/images/lp-icons/4.png'
         // }
         this.menuList.forEach(data => {
-          if (data.MODULE_NAME == 'Boiling') {
+          if (data.MID == 2) {
             data.imageUrl = '../../assets/images/lp-icons/Page_3.png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Page-1_5.png'
           } else if (data.MID == 14) {

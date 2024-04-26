@@ -1028,7 +1028,7 @@ export class SalesEstimationComponent implements OnInit {
     getRetailEstimationMaster(data: any) {
         this.snackBar.open('Loading...');
         //   this.suntechApi.getRetailEstimationMaster(data)
-        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}`
+        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}/Mid=${data.MID}`
         this.suntechApi.getDynamicAPI(API).subscribe((res) => {
             this.snackBar.dismiss();
             console.log('===============getRetailEstimationMaster=====================');
@@ -2325,11 +2325,6 @@ export class SalesEstimationComponent implements OnInit {
     }
 
     editTable(event: any) {
-        console.log(event);
-        // console.log(event.component);
-        // console.log(event.component.state());
-        console.log(event.data);
-        console.log(event.settings);
         this.newLineItem = event.data;
         event.cancel = true;
         this.isEditable = true;
@@ -2337,22 +2332,13 @@ export class SalesEstimationComponent implements OnInit {
         const value: any = this.currentLineItems.filter(
             (data: any) => data.SRNO == event.data.sn_no
         )[0];
-        console.log(
-            '===============editTable==currentLineItems==================='
-        );
-        console.log(value);
-        console.log('====================================');
+
         event.component.refresh();
 
         console.log(this.li_item_code_val);
 
 
         this.open(this.mymodal, false, null, false, true);
-
-        // this.updateBtn = true;
-
-        // this.newLineItem = value;
-
     }
     salesReturnDataToEdit: any[] = [];
     editTableSalesReturn(event: any) {
@@ -2391,22 +2377,21 @@ export class SalesEstimationComponent implements OnInit {
         this.searchVocNoSalRet();
 
     }
-    exchangeEditItem:any;
+
+    /**use: exchange table edit funtion */
     editTableExchangeItem(event: any) {
         this.exchangeItemEditId = event.data.sn_no;
         event.cancel = true;
         const value: any = this.currentExchangeMetalPurchase.filter(
-            (data: any) => data.SRNO == event.data.sn_no
-        );
-        this.exchangeEditItem = value
-        // const value:any = event.data
+            (data) => data.SRNO == event.data.sn_no
+        )[0];
         console.log(
             '===============editTable==currentExchangeMetalPurchase==================='
         );
         console.log(value);
-        console.log(this.exchange_items);
         console.log('====================================');
         event.component.refresh();
+
         this.open(this.oldgoldmodal);
 
         this.exchangeForm.controls.fcn_exchange_item_code.setValue(
@@ -2418,32 +2403,60 @@ export class SalesEstimationComponent implements OnInit {
 
         // alert(value.DT_VOCNO);
         this.exchangeForm.controls.fcn_exchange_pcs.setValue(value.PCS);
-        this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(value.GROSSWT);
-        this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(value.STONEWT);
-        this.exchangeForm.controls.fcn_exchange_net_wt.setValue(value.NETWT);
-        this.exchangeForm.controls.fcn_exchange_purity.setValue(value.PURITY);
-        this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(value.PUDIFF);
+        this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
+            this.comFunc.decimalQuantityFormat(value.GROSSWT, 'METAL')
+        );
+        this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(
+            this.comFunc.decimalQuantityFormat(value.STONEWT, 'STONE')
+        );
+        this.exchangeForm.controls.fcn_exchange_net_wt.setValue(
+            // value.NETWT
+            this.comFunc.decimalQuantityFormat(value.NETWT, 'METAL')
+
+        );
+        this.exchangeForm.controls.fcn_exchange_purity.setValue(
+            this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
+        );
+        this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(
+            this.comFunc.decimalQuantityFormat(value.PUDIFF, 'AMOUNT')
+            // value.PUDIFF
+        );
         this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(
-            value.METAL_RATE
+            // value.METAL_RATE
+            this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE')
+
         );
         this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
-            value.METALVALUEFC
+            this.comFunc.decimalQuantityFormat(value.METALVALUEFC, 'AMOUNT')
+            // value.METALVALUEFC
         );
-        this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(value.PUREWT);
+        this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(
+            this.comFunc.decimalQuantityFormat(value.PUREWT, 'AMOUNT')
+            // value.PUREWT
+        );
         this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
-            value.STONE_RATEFC
+            this.comFunc.decimalQuantityFormat(value.STONE_RATEFC, 'AMOUNT')
+            // value.STONE_RATEFC
         );
         this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(
-            value.STONEVALUEFC
+            // value.STONEVALUEFC
+            this.comFunc.decimalQuantityFormat(value.STONEVALUEFC, 'AMOUNT')
+
         );
         this.exchangeForm.controls.fcn_exchange_making_rate.setValue(
-            value.MKG_RATEFC
+            // value.MKG_RATEFC
+            this.comFunc.decimalQuantityFormat(value.MKG_RATEFC, 'AMOUNT')
+
         );
         this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
-            value.MKGVALUEFC
+            // value.MKGVALUEFC
+            this.comFunc.decimalQuantityFormat(value.MKGVALUEFC, 'AMOUNT')
+
         );
         this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
-            value.NETVALUEFC
+            // value.NETVALUEFC
+            this.comFunc.decimalQuantityFormat(value.NETVALUEFC, 'AMOUNT')
+
         );
         this.exchangeForm.controls.fcn_exchange_division.setValue(
             value.DIVISION_CODE
@@ -2452,20 +2465,108 @@ export class SalesEstimationComponent implements OnInit {
             value.STOCK_DOCDESC
         );
         this.exchangeForm.controls.fcn_exchange_chargeable_wt.setValue(
-            value.CHARGABLEWT
+            // value.CHARGABLEWT
+            this.comFunc.decimalQuantityFormat(value.CHARGABLEWT, 'METAL')
+
         );
+        // for jawahara
+        this.exchangeForm.controls.fcn_exchange_scrap_bag_no.setValue(
+            value.BAGNO
+        );
+        this.exchangeForm.controls.fcn_exchange_scrap_bag_desc.setValue(
+            value.BAGREMARKS
+        );
+        this.exchangeForm.controls.fcn_exchange_location.setValue(
+            value.LOCTYPE_CODE
+        );
+        this.exchangeForm.controls.fcn_exchange_jawahara.setValue(
+            value.JAWAHARAYN.toString()
+        );
+        this.exchangeForm.controls.fcn_exchange_resale_recycle.setValue(
+            value.RESALERECYCLE.toString()
+        );
+        this.exchangeForm.controls.fcn_exchange_cash_exchange.setValue(
+            value.CASHEXCHANGE.toString()
+        );
+
         this._exchangeItemchange.METAL_RATE_TYPE = value.RATE_TYPE;
         this._exchangeItemchange.METAL_RATE = value.METAL_RATE;
         this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT =
-            value.METAL_RATE_GMSFC;
-        // value.METAL_RATE_PERGMS_ITEMKARAT;
-        // METAL_RATE_GMSFC
+            value.METAL_RATE_PERGMS_ITEMKARAT;
+
         this.exchangeFormMetalRateType = value.RATE_TYPE;
         // this.sales_returns_items_slno_length = 1;
         // this.sales_returns_total_amt = value.NETVALUEFC;
         // this.salesReturnEditCode = value.STOCK_CODE;
         // this.salesReturnEditAmt = value.NETVALUEFC;
         // this.searchVocNoSalRet();
+
+        this.setExchangeCommaSep();
+
+    }
+    metalRateChange(){
+        let form = this.exchangeForm.value
+        let amount = (this.comFunc.emptyToZero(form.fcn_exchange_metal_rate) * 
+            this.comFunc.emptyToZero(form.fcn_exchange_chargeable_wt))
+        this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+            this.comFunc.setCommaSerperatedNumber(amount,'AMOUNT')
+        )
+    }
+    
+    setExchangeCommaSep() {
+        this.exchangeForm.controls.fcn_exchange_gross_wt.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt), 'METAL'))
+        );
+        this.exchangeForm.controls.fcn_exchange_stone_wt.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_wt),
+                    'STONE')
+            )
+        );
+        this.exchangeForm.controls.fcn_exchange_net_wt.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt),
+                    'METAL')));
+        this.exchangeForm.controls.fcn_exchange_chargeable_wt.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_chargeable_wt),
+                    'METAL')));
+        this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight),
+                    'METAL')));
+        this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.decimalQuantityFormat(
+                    this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_purity_diff),
+                    'METAL')));
+        this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
+            this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_stone_rate ?? this.zeroAmtVal)
+        );
+        this.exchangeForm.controls.fcn_exchange_stone_amount.setValue(
+            this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_stone_amount)) ?? this.zeroAmtVal)
+        );
+        this.exchangeForm.controls.fcn_exchange_making_rate.setValue(
+            this.comFunc.commaSeperation(
+                this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_rate)))
+        );
+        this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
+            this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_making_amt ?? this.zeroAmtVal)
+        );
+        this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+            this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_metal_amount ?? this.zeroAmtVal)
+        );
+        this.exchangeForm.controls.fcn_exchange_net_amount.setValue(
+            this.comFunc.commaSeperation(this.exchangeForm.value.fcn_exchange_net_amount ?? this.zeroAmtVal)
+        );
     }
     getSalesPersonMaster() {
         this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList')
@@ -4927,12 +5028,10 @@ export class SalesEstimationComponent implements OnInit {
     }
     updateExchangeItems(newExchangeItem: any) {
         this.exchangeForm = newExchangeItem;
-        console.log(this.exchangeForm.value,'this.exchangeForm');
+        console.log(this.exchangeForm.value, 'this.exchangeForm');
     }
-    addItemtoExchange(newExchangeItem: any) {
-        debugger
-        console.log(newExchangeItem,'newExchangeItem');
-        // this.exchange_items = newExchangeItem;
+    /** addexchange item */
+    addItemtoExchange(btn: any) {
         let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
         let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
         let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
@@ -4960,7 +5059,7 @@ export class SalesEstimationComponent implements OnInit {
             //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
             let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
             console.log('itemsLengths ex', itemsLengths);
-            
+
             if (
                 this.exchangeItemEditId == '' ||
                 this.exchangeItemEditId == undefined ||
@@ -5050,7 +5149,7 @@ export class SalesEstimationComponent implements OnInit {
             this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
             this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
-            // if (btn == 'saveBtn') this.modalReference.close();
+            if (btn == 'saveBtn') this.modalReference.close();
             this.sumTotalValues();
 
             this.setMetalPurchaseDataPost();
@@ -5065,6 +5164,7 @@ export class SalesEstimationComponent implements OnInit {
                 this.openDialog('Warning', 'Invalid Net Amount', true);
         }
     }
+
 
     changeBranch(e: any) {
         console.log(this.dataForm.value.branch);
@@ -5152,10 +5252,10 @@ export class SalesEstimationComponent implements OnInit {
                             _exchangeItem[0].PCS
                         );
                         this.exchangeForm.controls['fcn_exchange_gross_wt'].setValue(
-                            _exchangeItem[0].GROSSWT
+                            this.comFunc.setCommaSerperatedNumber(_exchangeItem[0].GROSSWT,'METAL')
                         );
                         this.exchangeForm.controls['fcn_exchange_purity'].setValue(
-                            parseFloat(_exchangeItem[0].PURITY)
+                            this.comFunc.setCommaSerperatedNumber(_exchangeItem[0].PURITY,'PURITY')
                         );
                         this.standardPurity = this._exchangeItemchange.PURITY;
                         if (_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT > 0) {
@@ -5173,7 +5273,9 @@ export class SalesEstimationComponent implements OnInit {
                                 // _karatRateRec[0].KARAT_RATE
                             );
                         } else {
-                            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('0.000000');
+                            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+                                this.comFunc.setCommaSerperatedNumber(0,'METAL_RATE')
+                            );
                         }
 
                         this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
@@ -5222,6 +5324,8 @@ export class SalesEstimationComponent implements OnInit {
                             // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
                         }
 
+                    }else{
+                        this.viewOnly = true;
                     }
 
                 });
@@ -7794,7 +7898,7 @@ export class SalesEstimationComponent implements OnInit {
         this.ordered_items = newOrder;
     }
 
-    
+
     validateMinSalePrice() {
         const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
         const grossWt = this.lineItemForm.value.fcn_li_gross_wt;
@@ -8384,12 +8488,12 @@ export class SalesEstimationComponent implements OnInit {
             this.exchangeForm.value.fcn_exchange_net_wt * this.standardPurity
         );
         // console.log('')
-        const pureWeight = this.comFunc.transformDecimalVB(
+        let pureWeight:any = this.comFunc.transformDecimalVB(
             this.comFunc.mQtyDecimals,
             parseFloat(standardValue) -
             parseFloat(this.exchangeForm.value.fcn_exchange_pure_weight)
         );
-
+        // pureWeight = this.comFunc.emptyToZero(pureWeight)>0? pureWeight : 0
         this.exchangeForm.controls.fcn_exchange_purity_diff.setValue(pureWeight);
     }
     changeExNetAmt(event: any) {
@@ -9051,6 +9155,7 @@ export class SalesEstimationComponent implements OnInit {
         this.li_tax_amount_val = value;
         this.setNettAmt();
     }
+    
     setNettAmt() {
 
         const value =
@@ -9601,7 +9706,7 @@ export class SalesEstimationComponent implements OnInit {
             estimationDetail: this.currentLineItems,
         };
 
-       
+
     }
     setMetalPurchaseDataPost() {
 
@@ -9613,8 +9718,8 @@ export class SalesEstimationComponent implements OnInit {
             'POPCUSTCODE': this.customerDetails['CODE'] || '',
             MID: this.metalPurchaseDataMID,
             BRANCH_CODE: this.strBranchcode,
-            VOCTYPE: 'PEP',
-            // VOCTYPE: 'POP',
+            // VOCTYPE: 'PEP',
+            VOCTYPE: 'POP',
             // VOCTYPE: this.vocType,
             // VOCNO: this.vocDataForm.value.fcn_voc_no,
             VOCNO: this.metalPurchaseDataVocNo,
@@ -9932,253 +10037,254 @@ export class SalesEstimationComponent implements OnInit {
     }
     setSalesReturnDetailsPostData() {
         console.log(this.sales_returns_items)
-        if(this.sales_returns_items.length > 0){
-        this.retailSReturnDataPost = {
-            MID: this.retailSReturnDataMID,
-            BRANCH_CODE: this.strBranchcode,
-            VOCTYPE: 'SRE',
-            // VOCTYPE: 'PSR',
-            // VOCTYPE: this.vocType,
-            // VOCNO: this.vocDataForm.value.fcn_voc_no,
-            VOCNO: this.retailSReturnVocNo,
+        if (this.sales_returns_items.length > 0) {
+            this.retailSReturnDataPost = {
+                MID: this.retailSReturnDataMID,
+                BRANCH_CODE: this.strBranchcode,
+                // VOCTYPE: 'SRE',
+                VOCTYPE: 'PSR',
+                // VOCTYPE: this.vocType,
+                // VOCNO: this.vocDataForm.value.fcn_voc_no,
+                VOCNO: this.retailSReturnVocNo,
 
-            VOCDATE: this.convertDateWithTimeZero(
-                new Date(this.vocDataForm.value.vocdate).toISOString()
-            ),
-            YEARMONTH: this.baseYear,
-            PARTYNAME: this.customerDataForm.value.fcn_customer_name,
-            TEL1: this.customerDetails?.TEL1 || '',
-            TEL2: this.customerDetails?.TEL2 || '',
-            SALESPERSON_CODE: this.vocDataForm.value.sales_person, //need
-            RATE_TYPE: '', //need_input
-            METAL_RATE: 0, //need_input
-            SALES_ORDER: 0, //need_input
-            TOTAL_PCS: this.comFunc.emptyToZero(this.invReturnSalesTotalPcs),
-            TOTAL_GRWT: this.comFunc.emptyToZero(this.invReturnSalesTotalWeight),
-            TOTAL_PUWT: this.comFunc.emptyToZero(this.invReturnSalesTotalPureWeight),
-            TOTAL_MKGVALUE_FC: this.comFunc.emptyToZero(
-                this.invReturnSalesTotalMakingAmt
-            ),
-            TOTAL_MKGVALUE_CC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalMakingAmt)
-            ),
-            TOTAL_METALVALUE_FC: this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalMetalAmt)
-            ),
-            TOTAL_METALVALUE_CC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalMetalAmt)
-            ),
-            TOTAL_STONEVALUE_FC: this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                this.invReturnSalesTotalStoneAmt
-            ),
-            TOTAL_STONEVALUE_CC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalStoneAmt)
-            ),
-            TOTAL_PUDIFF: this.invReturnSalesTotalPurityDiff, //need
-            TOTAL_STONEDIFF: this.invReturnSalesTotalStoneDiff, //need
-            TOTAL_DISCVALUE_FC: this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                this.invReturnSalesTotalDisAmt
-            ), //need
-            TOTAL_DISCVALUE_CC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalDisAmt)
-            ), //need
-            // TOTAL_DISCVALUE_FC: this.prnt_inv_total_dis_amt, //need
-            NETVALUE_FC: this.comFunc.transformDecimalVB(
-                this.comFunc.amtDecimals,
-                this.invReturnSalesTotalNetAmt
-            ),
-            NETVALUE_CC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalNetAmt)
-            ),
-            REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.salesReturnForm.value.fcn_returns_voc_no}`,
-            // REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.salesReturnForm.value.fcn_returns_voc_no} - ${this.currentsalesReturnItems[0].UNIQUEID}`,
-            SYSTEM_DATE: new Date().toISOString(),
-            // SYSTEM_DATE: '',
-            RETURNMID: 0,
-            RETURNVOCNO: 0,
-            RETURNVOCTYPE: '',
-            RETURN_VALUE_FC: 0,
-            RETURN_VALUE_CC: 0,
+                VOCDATE: this.convertDateWithTimeZero(
+                    new Date(this.vocDataForm.value.vocdate).toISOString()
+                ),
+                YEARMONTH: this.baseYear,
+                PARTYNAME: this.customerDataForm.value.fcn_customer_name,
+                TEL1: this.customerDetails?.TEL1 || '',
+                TEL2: this.customerDetails?.TEL2 || '',
+                SALESPERSON_CODE: this.vocDataForm.value.sales_person, //need
+                RATE_TYPE: '', //need_input
+                METAL_RATE: 0, //need_input
+                SALES_ORDER: 0, //need_input
+                TOTAL_PCS: this.comFunc.emptyToZero(this.invReturnSalesTotalPcs),
+                TOTAL_GRWT: this.comFunc.emptyToZero(this.invReturnSalesTotalWeight),
+                TOTAL_PUWT: this.comFunc.emptyToZero(this.invReturnSalesTotalPureWeight),
+                TOTAL_MKGVALUE_FC: this.comFunc.emptyToZero(
+                    this.invReturnSalesTotalMakingAmt
+                ),
+                TOTAL_MKGVALUE_CC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalMakingAmt)
+                ),
+                TOTAL_METALVALUE_FC: this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalMetalAmt)
+                ),
+                TOTAL_METALVALUE_CC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalMetalAmt)
+                ),
+                TOTAL_STONEVALUE_FC: this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    this.invReturnSalesTotalStoneAmt
+                ),
+                TOTAL_STONEVALUE_CC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalStoneAmt)
+                ),
+                TOTAL_PUDIFF: this.invReturnSalesTotalPurityDiff, //need
+                TOTAL_STONEDIFF: this.invReturnSalesTotalStoneDiff, //need
+                TOTAL_DISCVALUE_FC: this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    this.invReturnSalesTotalDisAmt
+                ), //need
+                TOTAL_DISCVALUE_CC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalDisAmt)
+                ), //need
+                // TOTAL_DISCVALUE_FC: this.prnt_inv_total_dis_amt, //need
+                NETVALUE_FC: this.comFunc.transformDecimalVB(
+                    this.comFunc.amtDecimals,
+                    this.invReturnSalesTotalNetAmt
+                ),
+                NETVALUE_CC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalNetAmt)
+                ),
+                REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.salesReturnForm.value.fcn_returns_voc_no}`,
+                // REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.salesReturnForm.value.fcn_returns_voc_no} - ${this.currentsalesReturnItems[0].UNIQUEID}`,
+                SYSTEM_DATE: new Date().toISOString(),
+                // SYSTEM_DATE: '',
+                RETURNMID: 0,
+                RETURNVOCNO: 0,
+                RETURNVOCTYPE: '',
+                RETURN_VALUE_FC: 0,
+                RETURN_VALUE_CC: 0,
 
-            PURCHASEMID: 0, //need
-            PURCHASEVOCNO: 0, //need
-            PURCHASEVOCTYPE: '',
-            PURCHASE_VALUE_FC: 0, //need
-            PURCHASE_VALUE_CC: 0, //need
-            ADJUST_ADVANCE: 0, //need
+                PURCHASEMID: 0, //need
+                PURCHASEVOCNO: 0, //need
+                PURCHASEVOCTYPE: '',
+                PURCHASE_VALUE_FC: 0, //need
+                PURCHASE_VALUE_CC: 0, //need
+                ADJUST_ADVANCE: 0, //need
 
-            DISCOUNT: 0,
-            // DISCOUNT: this.invReturnSalesTotalDisPer, //need_input
-            SUBTOTAL: this.invReturnSalesTotalNetAmt, //need_input
-            ROUNDOFF: 0,
-            NETTOTAL: this.invReturnSalesTotalNetTotal, //need_input
-            RECEIPT_TOTAL: this.invReturnSalesTotalNetTotal, //need
-            REFUND: 0,
-            FLAG_EDIT_ALLOW: 'N',
-            NAVSEQNO: 0, //need
-            MOBILE: this.customerDataForm.value.fcn_customer_mobile,
-            POBOX: this.customerDetails?.POBOX_NO || '',
-            EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
-            POSCUSTCODE: this.customerDetails?.CODE || '',
-            ITEM_CURRENCY: this.comFunc.compCurrency,
-            ITEM_CURR_RATE: 1,
-            ADJUST_ADVANCECC: 0, //need_input
+                DISCOUNT: 0,
+                // DISCOUNT: this.invReturnSalesTotalDisPer, //need_input
+                SUBTOTAL: this.invReturnSalesTotalNetAmt, //need_input
+                ROUNDOFF: 0,
+                NETTOTAL: this.invReturnSalesTotalNetTotal, //need_input
+                RECEIPT_TOTAL: this.invReturnSalesTotalNetTotal, //need
+                REFUND: 0,
+                FLAG_EDIT_ALLOW: 'N',
+                NAVSEQNO: 0, //need
+                MOBILE: this.customerDataForm.value.fcn_customer_mobile,
+                POBOX: this.customerDetails?.POBOX_NO || '',
+                EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
+                POSCUSTCODE: this.customerDetails?.CODE || '',
+                ITEM_CURRENCY: this.comFunc.compCurrency,
+                ITEM_CURR_RATE: 1,
+                ADJUST_ADVANCECC: 0, //need_input
 
-            DISCOUNTCC: 0, //need_input
-            SUBTOTALCC: this.comFunc.FCToCC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalNetAmt)
-            ),
-            NETTOTALCC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalNetTotal)
-            ),
-            RECEIPT_TOTALCC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalNetTotal)
-            ), //need_input
-            REFUNDCC: 0, //need_input
-            FLAG_UPDATED: 'N',
-            FLAG_INPROCESS: 'N',
-            NATIONALITY: this.customerDetailForm.value.fcn_cust_detail_nationality
-                //  || this.customerDetails?.NATIONALITY
-                || '',
-            TYPE: this.customerDetails?.TYPE || '',
+                DISCOUNTCC: 0, //need_input
+                SUBTOTALCC: this.comFunc.FCToCC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalNetAmt)
+                ),
+                NETTOTALCC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalNetTotal)
+                ),
+                RECEIPT_TOTALCC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalNetTotal)
+                ), //need_input
+                REFUNDCC: 0, //need_input
+                FLAG_UPDATED: 'N',
+                FLAG_INPROCESS: 'N',
+                NATIONALITY: this.customerDetailForm.value.fcn_cust_detail_nationality
+                    //  || this.customerDetails?.NATIONALITY
+                    || '',
+                TYPE: this.customerDetails?.TYPE || '',
 
-            D2DTRANSFER: 'F',
-            SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.salesReturnForm.value.fcn_returns_voc_no}-${this.salesReturnForm.value.fcn_returns_fin_year}`, // need_input update from api -
-            // SalesReference: '', // need_input update from api -
-            RSCUSTIDNO: this.customerDetails?.POSCUSTIDNO || '',
-            TRANS_CODES: '',
-            CONSIGNMENTPARTY: '',
-            TOTALVAT_AMOUNTFC: this.invReturnSalesTotalTaxAmt,
-            TOTALVAT_AMOUNTLC: this.comFunc.CCToFC(
-                this.comFunc.compCurrency,
-                this.comFunc.emptyToZero(this.invReturnSalesTotalTaxAmt)
-            ),
+                D2DTRANSFER: 'F',
+                SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.salesReturnForm.value.fcn_returns_voc_no}-${this.salesReturnForm.value.fcn_returns_fin_year}`, // need_input update from api -
+                // SalesReference: '', // need_input update from api -
+                RSCUSTIDNO: this.customerDetails?.POSCUSTIDNO || '',
+                TRANS_CODES: '',
+                CONSIGNMENTPARTY: '',
+                TOTALVAT_AMOUNTFC: this.invReturnSalesTotalTaxAmt,
+                TOTALVAT_AMOUNTLC: this.comFunc.CCToFC(
+                    this.comFunc.compCurrency,
+                    this.comFunc.emptyToZero(this.invReturnSalesTotalTaxAmt)
+                ),
 
-            RSSTATE: '',
+                RSSTATE: '',
 
-            GSTVATAMOUNTFC: 0,
-            GSTVATAMOUNTCC: 0,
-            // GSTVATAMOUNTFC: this.invReturnSalesTotalTaxAmt,
-            // GSTVATAMOUNTCC: this.comFunc.CCToFC(
-            //   this.comFunc.compCurrency,
-            //   this.comFunc.emptyToZero(this.invReturnSalesTotalTaxAmt)
-            // ),
-            CCPOSTINGDONE: 0,
+                GSTVATAMOUNTFC: 0,
+                GSTVATAMOUNTCC: 0,
+                // GSTVATAMOUNTFC: this.invReturnSalesTotalTaxAmt,
+                // GSTVATAMOUNTCC: this.comFunc.CCToFC(
+                //   this.comFunc.compCurrency,
+                //   this.comFunc.emptyToZero(this.invReturnSalesTotalTaxAmt)
+                // ),
+                CCPOSTINGDONE: 0,
 
-            LOCALREMARKSNEW: '',
-            AUTOPOSTING: false,
-            MACHINEID: '',
-            POSTDATE: this.vocDataForm.value.vocdate, //need
-            INVREF: 0,
-            SCHEMESALESFIXINGPUREWT: 0,
-            INCLUDEVAT: false,
-            WAYBILLNO: '',
-            WAYBILLDATE: this.dummyDate, //need
-            HTUSERNAME: this.strUser || '', //need
-            REMARKSNEW: '',
-            REC_MODE: '',
-            GENSEQNO: 0, //need
-            CCSALESCOMMISIONAmountCC: 0,
-            CCSALESCOMMISIONAmountFC: 0,
-            GroupRef: '',
-            INTIALPROMOTION: false,
-            POSORDERADVVATAMTLC: 0,
-            POSORDERADVVATAMTFC: 0,
-            FROM_TOUCH: false,
-            Agent_Commission: false,
-            AgentCommission_Per: 0,
-            CALCULATE_LOYALTY: false,
-            TRAYN: false,
-            TRANO: '',
-            POSReferenceRepairInvoice: '',
-            RSLOGINMID: 0,
-            VATAMOUNTFCROUND: 0,
-            ONLINERATE: false,
-            EmiratesSkywardsMile: false,
-            PLANETQRURL: '',
-            OT_TRANSFER_TIME: '',
-            VoucherRedeemed: '',
-            QRCODEIMAGE: '',
-            QRCODEVALUE: '',
-            CERTIFICATEPRINTED: 0,
-            BOARDINGPASS: '',
-            WITHOUTVAT: false,
-            FLIGHTNO: '',
-            BOARDINGFROM: '',
-            BOARDINGDATE: this.dummyDate, //need
-            BOOKVOCNO: '',
+                LOCALREMARKSNEW: '',
+                AUTOPOSTING: false,
+                MACHINEID: '',
+                POSTDATE: this.vocDataForm.value.vocdate, //need
+                INVREF: 0,
+                SCHEMESALESFIXINGPUREWT: 0,
+                INCLUDEVAT: false,
+                WAYBILLNO: '',
+                WAYBILLDATE: this.dummyDate, //need
+                HTUSERNAME: this.strUser || '', //need
+                REMARKSNEW: '',
+                REC_MODE: '',
+                GENSEQNO: 0, //need
+                CCSALESCOMMISIONAmountCC: 0,
+                CCSALESCOMMISIONAmountFC: 0,
+                GroupRef: '',
+                INTIALPROMOTION: false,
+                POSORDERADVVATAMTLC: 0,
+                POSORDERADVVATAMTFC: 0,
+                FROM_TOUCH: false,
+                Agent_Commission: false,
+                AgentCommission_Per: 0,
+                CALCULATE_LOYALTY: false,
+                TRAYN: false,
+                TRANO: '',
+                POSReferenceRepairInvoice: '',
+                RSLOGINMID: 0,
+                VATAMOUNTFCROUND: 0,
+                ONLINERATE: false,
+                EmiratesSkywardsMile: false,
+                PLANETQRURL: '',
+                OT_TRANSFER_TIME: '',
+                VoucherRedeemed: '',
+                QRCODEIMAGE: '',
+                QRCODEVALUE: '',
+                CERTIFICATEPRINTED: 0,
+                BOARDINGPASS: '',
+                WITHOUTVAT: false,
+                FLIGHTNO: '',
+                BOARDINGFROM: '',
+                BOARDINGDATE: this.dummyDate, //need
+                BOOKVOCNO: '',
 
-            CITY:
-                this.customerDetailForm.value.fcn_cust_detail_city ||
-                // this.customerDetails?.CITY ||
-                '',
-            STATE: this.customerDetails?.STATE || '',
-            ADDRESS:
-                this.customerDetailForm.value.fcn_cust_detail_address ||
-                // this.customerDetails?.ADDRESS ||
-                '',
-            COUNTRY_CODE:
-                this.customerDetailForm.value.fcn_cust_detail_country ||
-                // this.customerDetails?.COUNTRY_CODE ||
-                '',
-            CUST_LANGUAGE: this.customerDetails?.CUST_LANGUAGE || '',
+                CITY:
+                    this.customerDetailForm.value.fcn_cust_detail_city ||
+                    // this.customerDetails?.CITY ||
+                    '',
+                STATE: this.customerDetails?.STATE || '',
+                ADDRESS:
+                    this.customerDetailForm.value.fcn_cust_detail_address ||
+                    // this.customerDetails?.ADDRESS ||
+                    '',
+                COUNTRY_CODE:
+                    this.customerDetailForm.value.fcn_cust_detail_country ||
+                    // this.customerDetails?.COUNTRY_CODE ||
+                    '',
+                CUST_LANGUAGE: this.customerDetails?.CUST_LANGUAGE || '',
 
-            // PRINT_COUNT: '0',
-            // GST_TOTALFC: '0.000',
-            // GST_TOTALCC: '0.000',
-            // PANNO: '',
-            // GST_STATE_CODE: '',
-            // GST_NUMBER: '',
-            // EXCLUDEGSTVAT: '0',
-            // TRA_ID_TYPE: '',
-            // POSCUSTIDNO: '',
-            // TOTALCESS_AMOUNTCC: '0.000',
-            // TOTALCESS_AMOUNTFC: '0.000',
-            // FORM_60: 'False',
-            // COMP_WISE_INVOICE: 'False',
-            // SERVICE_INVOICE: 'False',
-            // REFBY_CUSTCODE: '',
-            // PRINT_COUNT_ACCOPY: '0',
-            // PRINT_COUNT_CNTLCOPY: '0',
+                // PRINT_COUNT: '0',
+                // GST_TOTALFC: '0.000',
+                // GST_TOTALCC: '0.000',
+                // PANNO: '',
+                // GST_STATE_CODE: '',
+                // GST_NUMBER: '',
+                // EXCLUDEGSTVAT: '0',
+                // TRA_ID_TYPE: '',
+                // POSCUSTIDNO: '',
+                // TOTALCESS_AMOUNTCC: '0.000',
+                // TOTALCESS_AMOUNTFC: '0.000',
+                // FORM_60: 'False',
+                // COMP_WISE_INVOICE: 'False',
+                // SERVICE_INVOICE: 'False',
+                // REFBY_CUSTCODE: '',
+                // PRINT_COUNT_ACCOPY: '0',
+                // PRINT_COUNT_CNTLCOPY: '0',
 
-            'PRINT_COUNT': 0,
-            'GST_TOTALFC': 0,
-            'GST_TOTALCC': 0,
-            'GST_STATE_CODE': '0',
-            PANNO: this.customerDetails?.PANCARDNO || '0',
-            'GST_NUMBER': '',
-            'TRA_ID_TYPE': '0',
-            'POSCUSTIDNO': '0',
-            "POS_CREDITLIMIT_AUTHORIZED_USER": '0',
-            "POS_CREDITLIMIT_AUTHORIZED_REMARK": '0',
-            'TOTALCESS_AMOUNTFC': 0,
-            'TOTALCESS_AMOUNTCC': 0,
-            'FORM_60': false,
-            'COMP_WISE_INVOICE': false,
-            'REFBY_CUSTCODE': '0',
-            'PRINT_COUNT_ACCOPY': 0,
-            'PRINT_COUNT_CNTLCOPY': 0,
+                'PRINT_COUNT': 0,
+                'GST_TOTALFC': 0,
+                'GST_TOTALCC': 0,
+                'GST_STATE_CODE': '0',
+                PANNO: this.customerDetails?.PANCARDNO || '0',
+                'GST_NUMBER': '',
+                'TRA_ID_TYPE': '0',
+                'POSCUSTIDNO': '0',
+                "POS_CREDITLIMIT_AUTHORIZED_USER": '0',
+                "POS_CREDITLIMIT_AUTHORIZED_REMARK": '0',
+                'TOTALCESS_AMOUNTFC': 0,
+                'TOTALCESS_AMOUNTCC': 0,
+                'FORM_60': false,
+                'COMP_WISE_INVOICE': false,
+                'REFBY_CUSTCODE': '0',
+                'PRINT_COUNT_ACCOPY': 0,
+                'PRINT_COUNT_CNTLCOPY': 0,
 
 
-            retailSReturnDetails: this.salesReturnEmittedList
-        };
-        console.log(this.retailSReturnDataPost)}
-        
+                retailSReturnDetails: this.salesReturnEmittedList
+            };
+            console.log(this.retailSReturnDataPost)
+        }
+
     }
     handleSalesReturnItemsChange(salesReturnItems: any) {
         this.salesReturnEmittedList = salesReturnItems;
-      }
+    }
     /** start customer detail form */
     nameChange(event: any) {
         const value = event.target.value.toString().trim();
