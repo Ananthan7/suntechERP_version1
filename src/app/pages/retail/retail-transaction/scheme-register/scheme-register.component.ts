@@ -859,8 +859,8 @@ export class SchemeRegisterComponent implements OnInit {
 
   /**USE: set form data for saving */
   setFormData() {
-    this.setPostData();
-    let formValue = this.schemeRegistrationForm.value
+    this.setPostData(); // To set data to detail array
+    let formValue = this.schemeRegistrationForm.value;
 
     this.detailArray.forEach((item: any, i: any) => {
       // delete item.schemeData['ID'];
@@ -905,6 +905,9 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BRANCH`, this.commonService.branchCode);
       this.formdata.append(`Model.model[${i}].schemeData.SALESPERSON_CODE`, formValue.Salesman);
       this.formdata.append(`Model.model[${i}].schemeData.SALESMAN_NAME`, formValue.SalesmanName);
+      this.formdata.append(`Model.model[${i}].schemeData.userName`, this.commonService.EditDetail.USERNAME || '');
+      this.formdata.append(`Model.model[${i}].schemeData.editReason`, this.commonService.EditDetail.REASON || '');
+      this.formdata.append(`Model.model[${i}].schemeData.editDesc`, this.commonService.EditDetail.DESCRIPTION || '');
       this.SchemeMasterDetails.forEach((data: any, index: any) => {
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`, data.UNIQUEID ? data.UNIQUEID : '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_CODE`, formValue.Code);

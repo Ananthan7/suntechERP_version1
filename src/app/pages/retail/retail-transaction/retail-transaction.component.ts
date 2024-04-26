@@ -314,6 +314,9 @@ export class RetailTransactionComponent implements OnInit {
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           if(!flag){
+            this.CommonService.EditDetail.REASON =  this.authForm.value.reason
+            this.CommonService.EditDetail.DESCRIPTION =  this.authForm.value.description
+            this.CommonService.EditDetail.PASSWORD =  this.authForm.value.password
             this.modalReferenceUserAuth.close(true);
             this.authForm.reset();
           }

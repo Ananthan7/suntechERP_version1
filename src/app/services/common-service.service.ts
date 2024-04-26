@@ -9,6 +9,7 @@ Chart.register(...registerables);
 import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
+import { EditReasonModel } from '../shared/data/edit-reason';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,14 @@ export class CommonServiceService {
   menuName: any;
   componentName: any;
   queryParamAPI: any;
-  //POS datas
+  
+  EditDetail: EditReasonModel = {
+    USERNAME: localStorage.getItem('username') || '',
+    PASSWORD: '',
+    REASON: '',
+    DESCRIPTION: ''
+  }
+  
   //service for ADD POS starts
   amtDecimals: any
   amtFormat: any

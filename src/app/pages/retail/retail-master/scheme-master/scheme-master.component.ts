@@ -353,27 +353,28 @@ export class SchemeMasterComponent implements OnInit {
   };
 
   setPostData() {
+    let form = this.schemeMasterForm.value
     return {
       "MID": this.content?.MID || 0,
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
-      "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code.toUpperCase()),
-      "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
+      "SCHEME_CODE": this.comService.nullToString(form.code.toUpperCase()),
+      "SCHEME_NAME": this.comService.nullToString(form.description),
       "SCHEME_UNIT": 1,
-      "SCHEME_BONUS": this.comService.emptyToZero(this.schemeMasterForm.value.bonusInstallment),
-      "SCHEME_PERIOD": this.comService.emptyToZero(this.schemeMasterForm.value.tenurePeriod),
-      "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
-      "SCHEME_AMOUNT": this.comService.emptyToZero(this.schemeMasterForm.value.installmentAmount),
-      "SCHEME_METALCURRENCY": this.schemeMasterForm.value.depositIn || '',
-      "CANCEL_CHARGE": this.comService.emptyToZero(this.schemeMasterForm.value.cancelCharges),
-      "SCHEME_FREQUENCY": this.comService.nullToString(this.schemeMasterForm.value.frequency),
-      "STATUS": this.schemeMasterForm.value.schemeStatus,
-      "START_DATE": this.schemeMasterForm.value.startDate,
+      "SCHEME_BONUS": this.comService.emptyToZero(form.bonusInstallment),
+      "SCHEME_PERIOD": this.comService.emptyToZero(form.tenurePeriod),
+      "SCHEME_REMARKS": this.comService.nullToString(form.remarks),
+      "SCHEME_AMOUNT": this.comService.emptyToZero(form.installmentAmount),
+      "SCHEME_METALCURRENCY": form.depositIn || '',
+      "CANCEL_CHARGE": this.comService.emptyToZero(form.cancelCharges),
+      "SCHEME_FREQUENCY": this.comService.nullToString(form.frequency),
+      "STATUS": form.schemeStatus,
+      "START_DATE": form.startDate,
       "SCHEME_CURRENCY_CODE": '',
-      "PREFIX_CODE": this.comService.nullToString(this.schemeMasterForm.value.prefixCode),
-      "BONUS_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeTwo),
-      "CANCEL_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeThree),
-      "INST_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeone),
-      "SCHEME_FIXEDAMT": this.schemeMasterForm.value.SCHEMEFIXEDAMT
+      "PREFIX_CODE": this.comService.nullToString(form.prefixCode),
+      "BONUS_RECTYPE": this.comService.nullToString(form.receiptModeTwo),
+      "CANCEL_RECTYPE": this.comService.nullToString(form.receiptModeThree),
+      "INST_RECTYPE": this.comService.nullToString(form.receiptModeone),
+      "SCHEME_FIXEDAMT": form.SCHEMEFIXEDAMT
     }
   }
   setInitialValues() {
@@ -453,9 +454,13 @@ export class SchemeMasterComponent implements OnInit {
     if (this.submitFormValidation()) {
       return
     }
-    let API = 'SchemeMaster/UpdateSchemeMaster/' + this.branchCode + "/" + this.schemeMasterForm.value.code
-    let postData = this.setPostData()
+    let postData:any = this.setPostData()
+    postData.userName = this.comService.nullToString(this.comService.EditDetail.USERNAME)
+    postData.editReason = this.comService.EditDetail.REASON
+    postData.editDesc =  this.comService.EditDetail.DESCRIPTION
+    
     this.isloadingSave = true;
+    let API = 'SchemeMaster/UpdateSchemeMaster/' + this.branchCode + "/" + this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloadingSave = false;

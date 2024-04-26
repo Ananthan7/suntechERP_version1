@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://20.46.145.227:92/api/",
+    "//baseUrl": "http://20.46.145.227:92/api/",
     "//baseUrl": "http://192.168.1.30:83/api/",
-    "//baseUrl": "http://185.56.89.191:190/api/"
+    "baseUrl": "http://185.56.89.191:190/api/"
 }
