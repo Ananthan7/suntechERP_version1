@@ -36,6 +36,7 @@ export class HorizontaltopbarComponent implements OnInit {
   valueset: any;
   userName: any = localStorage.getItem('username')
   userBranch: any = localStorage.getItem('userbranch')
+  BRANCH_DESCRIPTION: any;
   /**
    * Language Listing
    */
@@ -78,6 +79,10 @@ export class HorizontaltopbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let  branchParameter:any  = localStorage.getItem('BRANCH_PARAMETER')
+    branchParameter = JSON.parse(branchParameter)
+    this.BRANCH_DESCRIPTION = branchParameter.DESCRIPTION
+
     this.element = document.documentElement;
     this.layoutMode = LAYOUT_MODE;
     this.initialize();
