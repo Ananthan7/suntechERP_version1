@@ -571,7 +571,7 @@ export class ProcessMasterComponent implements OnInit {
         const formValue = this.processMasterForm.value;
 
         if (!formValue.processCode) {
-          this.toastr.error('process Code cannot be empty');
+          this.toastr.error('Process Code cannot be empty');
           return;
         }
         if (!formValue.processDesc) {
@@ -579,7 +579,7 @@ export class ProcessMasterComponent implements OnInit {
           return;
         }
         if (!formValue.processType) {
-          this.toastr.error('processType cannot be empty');
+          this.toastr.error('Process Type cannot be empty');
           return;
         }
         if (!formValue.WIPaccount) {
