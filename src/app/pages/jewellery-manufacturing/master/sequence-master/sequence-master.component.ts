@@ -453,8 +453,8 @@ export class SequenceMasterComponent implements OnInit {
           "UNIT_RATE": item.UNIT_RATE || 0,
           "UNIT": this.commonService.nullToString(item.UNIT),
           "NO_OF_UNITS": item.NO_OF_UNITS || 0,
-          "STD_TIME": this.handleDurationUpdate(item.STD_TIME),
-          "MAX_TIME": this.handleDurationUpdate(item.MAX_TIME),
+          "STD_TIME": item.STD_TIME,
+          "MAX_TIME": item.MAX_TIME,
           "STD_LOSS": item.STD_LOSS || 0,
           "MIN_LOSS": item.MIN_LOSS || 0,
           "MAX_LOSS": item.MAX_LOSS || 0,
@@ -512,7 +512,7 @@ export class SequenceMasterComponent implements OnInit {
     let max = this.commonService.emptyToZero(data['MAX_LOSS'])
     let std = this.commonService.emptyToZero(data['STD_LOSS'])
     if (max < std) {
-      this.commonService.toastErrorByMsgId('Maximum loss cannot be less than std loss')
+      this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')
       this.dataSource[data.SRNO].MAX_LOSS = 0
     }
   }

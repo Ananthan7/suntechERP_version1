@@ -510,11 +510,11 @@ export class ProcessMasterComponent implements OnInit {
         const formValue = this.processMasterForm.value;
     
         if (!formValue.processCode) {
-          this.toastr.error('processCode cannot be empty');
+          this.toastr.error('process Code cannot be empty');
           return;
         }
         if (!formValue.processDesc) {
-          this.toastr.error('Deescription cannot be empty');
+          this.toastr.error('Description cannot be empty');
           return;
         }
         if (!formValue.processType) {
