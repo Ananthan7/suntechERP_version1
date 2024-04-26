@@ -700,7 +700,7 @@
                 <input matInput [matDatepicker]="expDate"
                   name="fcn_customer_exp_date"
                   formControlName="fcn_customer_exp_date"
-                  placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+                  placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" />
                 <mat-datepicker-toggle matSuffix
                   [for]="expDate"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate"
@@ -1707,7 +1707,7 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Rec No.</mat-label>
-                  <input type="text" matInput formControlName="advanceRecNo"
+                  <input type="number" class="text-right" matInput formControlName="advanceRecNo"
                     value id="advanceRecNo"
                     (change)="changeAdvanceVocNo($event)"
                     [readonly]="viewOnly" />
@@ -3056,7 +3056,7 @@
                 <input matInput [matDatepicker]="expDateCust"
                   name="fcn_customer_exp_date"
                   formControlName="fcn_customer_exp_date"
-                  placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+                  placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" />
                 <mat-datepicker-toggle matSuffix
                   [for]="expDateCust"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate"
@@ -3148,10 +3148,11 @@
                       [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
                   </mat-form-field>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" *ngIf="!!this.lineItemForm.value.fcn_li_location">
                   <mat-form-field>
                     <mat-label>Location </mat-label>
                     <input type="text" matInput
+
                       formControlName="fcn_li_location" id="fcn_li_location"
                       [readonly]="viewOnly" />
                     <!-- BUG_01711 - Should be able to enter location.-->
@@ -3206,11 +3207,11 @@
                         newDictionary?.lblGrossWeight || "Gross Wt"
                         }}</mat-label>
                       <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
-                      <input class="st_txt_right" [maxLength]="14" type="number"
+                      <input class="st_txt_right" [maxLength]="14" type="text"
                         [min]="0"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput formControlName="fcn_li_gross_wt"
-                        id="fcn_li_gross_wt" (change)="changeGrossWt($event)"
+                        id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()" (change)="changeGrossWt($event)"
                         [readonly]="viewOnly" MetalDecimalInput />
                       <mat-error *ngIf="
                           lineItemForm.controls.fcn_li_gross_wt.hasError(
@@ -3245,7 +3246,7 @@
                     *ngIf="this.divisionMS == 'S' ? false : true">
                     <mat-form-field>
                       <mat-label>Net Wt </mat-label>
-                      <input type="number" class="st_txt_right" [min]="0"
+                      <input type="text" class="st_txt_right" [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         max="{{ this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) }}"
@@ -3271,7 +3272,7 @@
                   <div class="col-md-6">
                     <mat-form-field>
                       <mat-label>Pure Weight</mat-label>
-                      <input class="st_txt_right" type="number" [min]="0"
+                      <input class="st_txt_right" type="text" [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput formControlName="fcn_li_pure_wt"
@@ -3284,7 +3285,7 @@
                   <div class="col-md-6">
                     <mat-form-field>
                       <mat-label>Metal Rate</mat-label>
-                      <input class="st_txt_right" type="number" [min]="0"
+                      <input class="st_txt_right" type="text" [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput formControlName="fcn_ad_metal_rate"
@@ -3294,7 +3295,7 @@
                   <div class="col-md-6">
                     <mat-form-field>
                       <mat-label>Metal Amount</mat-label>
-                      <input class="st_txt_right" type="number" [min]="0"
+                      <input class="st_txt_right" type="text-sm-center" [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput
@@ -3308,7 +3309,7 @@
                   <div class="col-md-4">
                     <mat-form-field>
                       <mat-label>Stone Rate</mat-label>
-                      <input class="st_txt_right" type="number" [min]="0"
+                      <input class="st_txt_right" type="text" [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput formControlName="fcn_ad_stone_rate"
@@ -3328,7 +3329,7 @@
                         formControlName="fcn_ad_stone_amount"
                         value="{{ li_stone_amount_val }}"
                         (change)="changeStoneAmt($event)"
-                        readonly]="!isStoneIncluded" />
+                        [readonly]="!isStoneIncluded" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -3906,7 +3907,7 @@
             <mat-label>Expiry Date</mat-label>
             <input matInput [matDatepicker]="expDateAttachment" name="expDate"
               formControlName="expDate"
-              placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+              placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" />
             <mat-datepicker-toggle matSuffix
               [for]="expDateAttachment"></mat-datepicker-toggle>
             <mat-datepicker [startAt]="currentDate"
