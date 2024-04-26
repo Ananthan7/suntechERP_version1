@@ -140,7 +140,7 @@ export class SequenceMasterComponent implements OnInit {
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
     if (event.target.value == '') return
-    if (this.editMode == true  || this.viewMode == true) return
+    if (this.editMode == true || this.viewMode == true) return
     let API = 'SequenceMasterDJ/CheckIfSeqCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -180,15 +180,15 @@ export class SequenceMasterComponent implements OnInit {
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
                 obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                obj.POINTS = item.POINTS || 0,
-                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                obj.GAIN_AC = "",
-                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
+                  obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
+                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                  obj.POINTS = item.POINTS || 0,
+                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                  obj.GAIN_AC = "",
+                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
             });
@@ -253,6 +253,8 @@ export class SequenceMasterComponent implements OnInit {
       this.updateWorkerMaster()
       return
     }
+
+
     if (this.sequenceMasterForm.invalid && this.selectedSequence) {
       this.toastr.error('select all required fields & Process')
       return
@@ -440,6 +442,7 @@ export class SequenceMasterComponent implements OnInit {
   /**USE: set Selected Sequence data */
   setSelectedSequence() {
     this.selectedSequence = []
+
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true) {
         this.selectedSequence.push({
@@ -508,14 +511,20 @@ export class SequenceMasterComponent implements OnInit {
   stdLossChanged(data: any) {
     this.checkLossCondition(data)
   }
+
   checkLossCondition(data: any) {
     let max = this.commonService.emptyToZero(data['MAX_LOSS'])
     let std = this.commonService.emptyToZero(data['STD_LOSS'])
     if (max < std) {
       this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')
       this.dataSource[data.SRNO].MAX_LOSS = 0
+      return false;
     }
+    return true;
   }
+
+
+
   // maxLoss Change
   maxLossChanged(data: any) {
     console.log(data, 'data');

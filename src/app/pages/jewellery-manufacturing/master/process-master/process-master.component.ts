@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild,  } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -20,15 +20,16 @@ export class ProcessMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
   codeMode: boolean = false;
-  searchModeLoss: boolean = true;
-  searchModeRecov: boolean = true;
-  searchModeAllow: boolean = true;
+  searchModeLoss: boolean = false;
+  searchModeRecov: boolean = false;
+  searchModeAllow: boolean = false;
   codeEnable: boolean = true;
+  editMode: boolean = true;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
-  formattedTime: any;
-  formattedMaxTime: any;
+  formattedTime: number = 0;
+  formattedMaxTime: number = 0;
   islossReadOnly = true;
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
@@ -61,6 +62,7 @@ export class ProcessMasterComponent implements OnInit {
   labelPosition: 'before' | 'after' = 'after';
   disabled = false;
   value: any;
+  searchlookup: boolean = false;
   showMaxContentAlert(): void {
     if (this.processMasterForm.value.processCode == '') {
       this.commonService.toastErrorByMsgId('processcode cannot be empty')
@@ -77,6 +79,10 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+   this. searchModeLoss= false;
+   this. searchModeRecov=false;
+   this.  searchModeAllow=false;
     // this.islossReadOnly = true;
     // this.isRecovReadOnly = true;
     // this.isAlloWGainReadOnly = true;
@@ -93,10 +99,14 @@ export class ProcessMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
       this.codeMode = true;
+      this.editMode = true;
       this.setFormValues();
+      this.onlossChange();
+      this.onRecovery();
+      this.onAllowGain();
 
     }
-    
+
   }
 
 
@@ -146,12 +156,12 @@ export class ProcessMasterComponent implements OnInit {
     AutoTransfer: [false],
     ApplySetting: [false],
     loss_standard: [''],
-    loss_min: ['', [Validators.required, this.minValueValidator]],
+    loss_min: [''],
     loss_max: [''],
     standard_start: [''],
     standard_end: [''],
     min_start: [''],
-    min_end: ['', [Validators.min(0)]],
+    min_end: [''],
     max: [''],
 
   })
@@ -164,7 +174,7 @@ export class ProcessMasterComponent implements OnInit {
       this.codeEnable = false;
     }
   }
- 
+
 
   checkCode(): boolean {
     if (this.processMasterForm.value.processCode == '') {
@@ -172,7 +182,7 @@ export class ProcessMasterComponent implements OnInit {
       return true
     }
     return false
-  } 
+  }
   minValueValidator(control: FormControl) {
     const value = control.value;
     if (value < 5) {
@@ -185,26 +195,26 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode|| this.editMode ) return
     let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.checkifExists) {
-        this.toastr.error(result.message || 'Process Code Already Exists!', '', {
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          this.toastr.error(result.message || 'Process Code Already Exists!', '', {
+            closeButton: true,
+            timeOut: 5000, // Optional: Set the duration for the toastr message
+            progressBar: true // Optional: Show a progress bar
+          });
+          this.processMasterForm.controls.processCode.setValue('');
+        }
+      }, err => {
+        this.toastr.error('An error occurred. Please try again later.', 'Error', {
           closeButton: true,
-          timeOut: 5000, // Optional: Set the duration for the toastr message
-          progressBar: true // Optional: Show a progress bar
+          timeOut: 5000,
+          progressBar: true
         });
         this.processMasterForm.controls.processCode.setValue('');
-      }
-    }, err => {
-      this.toastr.error('An error occurred. Please try again later.', 'Error', {
-        closeButton: true,
-        timeOut: 5000,
-        progressBar: true
-      });
-      this.processMasterForm.controls.processCode.setValue('');
-    });0.
+      }); 0.
 
     this.subscriptions.push(Sub)
   }
@@ -221,7 +231,7 @@ export class ProcessMasterComponent implements OnInit {
     console.log(duration)
   }
 
-  updateMaximumTime(duration: any[]) {
+  updateMaximumTime(duration: any) {
     // this.maxContent.maximumTime.totalDays = duration[0] || 0;
     // this.maxContent.maximumTime.totalHours = duration[1] || 0;
     // this.maxContent.maximumTime.totalMinutes = duration[2] || 0;
@@ -325,7 +335,7 @@ export class ProcessMasterComponent implements OnInit {
     private commonService: CommonServiceService,
   ) {
     // this.setInitialValues()
-  
+
   }
 
 
@@ -365,7 +375,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   private setInitialValues() {
-    this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    //this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     // this.processMasterForm.controls.loss_standard.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     // this.processMasterForm.controls.loss_min.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
@@ -397,7 +407,7 @@ export class ProcessMasterComponent implements OnInit {
 
     this.processMasterForm.controls.loss.setValue(this.viewchangeYorN(this.content.ALLOW_LOSS));
     this.processMasterForm.controls.loss_on_gross.setValue(this.viewchangeYorN(this.content.LOSS_ON_GROSS));
-    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.onchangeCheckBox(this.content.TIMEON_PROCESS));
+    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.content.TIMEON_PROCESS);
     this.processMasterForm.controls.RecoveryProcess.setValue(this.viewchangeYorN(this.content.RECOVERY_PROCESS));
     this.processMasterForm.controls.Metal.setValue(this.viewchangeYorN(this.content.ALLOW_METAL));
     this.processMasterForm.controls.Stone.setValue(this.viewchangeYorN(this.content.ALLOW_STONE));
@@ -419,16 +429,60 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
     this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
     this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
-    this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
-    this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
-    this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
-    this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
+
+    // this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
+    // this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
+    // this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
+    // this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
     this.processMasterForm.controls.labour_charge.setValue(this.content.LABCHRG_PERHOUR);
-    this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
-    this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
+    // this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
+    // this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
     this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
+
+
+
+    this.processMasterForm.controls.loss_standard.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.STD_LOSS));
+
+    this.processMasterForm.controls.loss_min.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.MIN_LOSS));
+
+    this.processMasterForm.controls.loss_max.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.MAX_LOSS));
+
+    this.processMasterForm.controls.standard_end.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.RECOV_MIN));
+
+    this.processMasterForm.controls.min_end.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.RECOV_VAR1));
+
+        this.processMasterForm.controls.trayWeight.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,
+            this.content.TRAY_WT));
+
+    // this.processMasterForm.controls.loss_standard.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.STD_LOSS));
+
+    // this.processMasterForm.controls.loss_standard.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.STD_LOSS));
+
 
 
     // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
@@ -484,23 +538,30 @@ export class ProcessMasterComponent implements OnInit {
       this.validateLossRange();
     }
 
-
-    if(this.formattedTime > this.formattedMaxTime)
-      {
-        this.toastr.error('Standard Time  should not be Greater than Maximum Time');
-      }
-      else
-      {
-
+    if(this.processMasterForm.value.TimeCalculateonProcess == true && this.formattedTime == 0  && this.formattedMaxTime == 0){
+      console.log(this.formattedTime);
+      console.log(this.formattedMaxTime);
       
-    if (this.lossData == false) {
-      this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
+          this.toastr.error('Standard Time  and  Maximum Time must be Required');
+        
     }
-    // else {
+    else
+    {
 
-    //   if (this.formattedTime > this.formattedMaxTime) {
-    //     this.toastr.error('Maximum time should not be less than Standard time');
-    //   }
+    if (this.formattedTime > this.formattedMaxTime) {
+      this.toastr.error('Standard Time  should not be Greater than Maximum Time');
+    }
+    else {
+
+
+      if (this.lossData == false) {
+        this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
+      }
+      // else {
+
+      //   if (this.formattedTime > this.formattedMaxTime) {
+      //     this.toastr.error('Maximum time should not be less than Standard time');
+      //   }
       else {
         if (this.content && this.content.FLAG == 'EDIT') {
           this.updateProcessMaster()
@@ -508,9 +569,9 @@ export class ProcessMasterComponent implements OnInit {
         }
 
         const formValue = this.processMasterForm.value;
-    
+
         if (!formValue.processCode) {
-          this.toastr.error('process Code cannot be empty');
+          this.toastr.error('Process Code cannot be empty');
           return;
         }
         if (!formValue.processDesc) {
@@ -518,7 +579,7 @@ export class ProcessMasterComponent implements OnInit {
           return;
         }
         if (!formValue.processType) {
-          this.toastr.error('processType cannot be empty');
+          this.toastr.error('Process Type cannot be empty');
           return;
         }
         if (!formValue.WIPaccount) {
@@ -530,8 +591,8 @@ export class ProcessMasterComponent implements OnInit {
           "MID": 0,
           "PROCESS_CODE": this.processMasterForm.value.processCode || "",
           "DESCRIPTION": this.processMasterForm.value.processDesc || "",
-          "STD_TIME": this.formattedTime || "",
-          "MAX_TIME": this.formattedMaxTime || "",
+          "STD_TIME": this.formattedTime ||0,
+          "MAX_TIME": this.formattedMaxTime || 0 ,
           "LOSS_ACCODE": this.processMasterForm.value.accountStart,
           "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
           "CURRENCY_CODE": "",
@@ -621,10 +682,11 @@ export class ProcessMasterComponent implements OnInit {
         this.subscriptions.push(Sub);
 
         console.log(this.processMasterForm.value.stand_time);
-        }
       }
     }
-    
+  }
+}
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -688,17 +750,24 @@ export class ProcessMasterComponent implements OnInit {
 
   updateProcessMaster() {
     console.log(this.processMasterForm.value);
-    if (this.processMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
+    // if (this.processMasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    if(this.processMasterForm.value.TimeCalculateonProcess == true && this.formattedTime == 0  && this.formattedMaxTime == 0){
+      console.log(this.formattedTime);
+      console.log(this.formattedMaxTime);
+          this.toastr.error('Standard Time  and  Maximum Time must be Required'); 
     }
+    else
+    {
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.processCode
     let postData = {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "",
       "DESCRIPTION": this.processMasterForm.value.processDesc || "",
-      "STD_TIME": this.formattedTime || "",
-      "MAX_TIME": this.formattedMaxTime || "",
+      "STD_TIME": this.formattedTime || 0,
+      "MAX_TIME": this.formattedMaxTime || 0,
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -730,7 +799,7 @@ export class ProcessMasterComponent implements OnInit {
       "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(this.processMasterForm.value.DeductPureWeight),
       "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
-      "ALLOW_GAIN":this.processMasterForm.value.AllowGain,
+      "ALLOW_GAIN": this.processMasterForm.value.AllowGain,
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
@@ -738,10 +807,10 @@ export class ProcessMasterComponent implements OnInit {
       "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
       "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
       "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
-      "LOSS_ON_GROSS": this.viewchangeYorN(this.processMasterForm.value.loss_on_gross),
+      "LOSS_ON_GROSS": this.onchangeCheckBox(this.processMasterForm.value.loss_on_gross),
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
-      "APPLY_SETTING": this.viewchangeYorN(this.processMasterForm.value.ApplySetting),
+      "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
       "TIMEON_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.TimeCalculateonProcess),
       "STONE_INCLUDED": this.onchangeCheckBox(this.processMasterForm.value.StoneIncluded),
       "RECOVERY_PROCESS": this.onchangeCheckBox(this.processMasterForm.value.RecoveryProcess),
@@ -755,6 +824,7 @@ export class ProcessMasterComponent implements OnInit {
       "ISACCUPDT": true,
       "TREE_NO": this.onchangeCheckBox(this.processMasterForm.value.HaveTreeNo),
     }
+
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -780,7 +850,7 @@ export class ProcessMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
+  }
 
   /**USE: delete worker master from row */
   deleteProcessMaster() {
@@ -837,23 +907,31 @@ export class ProcessMasterComponent implements OnInit {
     });
   }
 
-  onlossChange(event: any) {
+   onlossChange() {
     if (this.processMasterForm.value.loss == true) {
       this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
+      this.islossReadOnly = false;
+
+      this.searchModeLoss = true;
+      
+
     }
     else {
+      this.islossReadOnly = true;
+   
+      this.searchModeLoss = false;
+
       this.processMasterForm.get('accountStart')?.clearValidators();
+      this.processMasterForm.controls.loss_min.setValue(0);
+      this.processMasterForm.controls.loss_max.setValue(0);
+      this.processMasterForm.controls.accountStart.setValue(0);
+      this.processMasterForm.controls.loss_standard.setValue(0);
     }
 
-    this.islossReadOnly = !this.islossReadOnly;
-    console.log(event);
-    this.searchModeLoss = !this.searchModeLoss;
- this.processMasterForm.controls.loss_min.setValue(0);
- this.processMasterForm.controls.loss_max.setValue(0);
- this.processMasterForm.controls.accountStart.setValue(0);
- this.processMasterForm.controls.loss_standard.setValue(0);
-//  this.processMasterForm.controls.min_end.setValue(0);
+
    
+    //  this.processMasterForm.controls.min_end.setValue(0);
+
     // Update the validation status after setting or clearing validators
     //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
 
@@ -861,41 +939,46 @@ export class ProcessMasterComponent implements OnInit {
 
 
 
-  onRecovery(event: any) {
+  onRecovery() {
     if (this.processMasterForm.value.recovery == true) {
       this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
+      this.isRecovReadOnly = false;
+      this.searchModeRecov = true;
     }
     else {
+      this.isRecovReadOnly = true;
+      this.searchModeRecov = false;
       this.processMasterForm.get('accountMiddle')?.clearValidators();
+      this.processMasterForm.controls.min_end.setValue(0);
+      this.processMasterForm.controls.standard_end.setValue(0);
+      this.processMasterForm.controls.accountMiddle.setValue(0);
     }
 
-    this.isRecovReadOnly = !this.isRecovReadOnly;
-    this.searchModeRecov = !this.searchModeRecov;
-    this.processMasterForm.controls.min_end.setValue(0);
-    this.processMasterForm.controls.standard_end.setValue(0);
-   this.processMasterForm.controls.accountMiddle.setValue(0);
-      // this.processMasterForm.controls.standard_end.setValue('');
-     
+
+
+    // this.processMasterForm.controls.standard_end.setValue('');
+
 
     console.log(event);
 
   }
 
-  onAllowGain(event: any) {
+  onAllowGain() {
 
-    if (this.processMasterForm.value.RecoveryProcess == true) {
+    if (this.processMasterForm.value.allowGain == true) {
       this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
+      this.isAlloWGainReadOnly = false;
+      this.searchModeAllow = true;
     }
     else {
+      this.isAlloWGainReadOnly = true;
+      this.searchModeAllow = false;
       this.processMasterForm.get('accountEnd')?.clearValidators();
+      this.processMasterForm.controls.accountEnd.setValue(0);
     }
 
-    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
-    this.searchModeAllow = !this.searchModeAllow;
-    console.log(event);
 
-      this.processMasterForm.controls.accountEnd.setValue(0);
-    
+
   }
 
   onRecovStockCode(event: any) {
