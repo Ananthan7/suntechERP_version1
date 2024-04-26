@@ -8304,7 +8304,7 @@ export class AddPosComponent implements OnInit {
       } else if (this.blockNegativeStock == 'W') {
         if (this.lineItemPcs < value) {
           this.openDialog(
-            'Warning5',
+            'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
             false
           );
@@ -8392,7 +8392,7 @@ export class AddPosComponent implements OnInit {
       } else if (this.blockNegativeStock == 'W') {
         if (this.lineItemGrossWt < value) {
           this.openDialog(
-            'Warning9',
+            'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
             false
           );
@@ -8439,7 +8439,7 @@ export class AddPosComponent implements OnInit {
         if (this.blockMinimumPrice == 'B') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
             this.openDialog(
-              'Warning6',
+              'Warning',
 
               `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
               } `,
@@ -8461,7 +8461,7 @@ export class AddPosComponent implements OnInit {
         else if (this.blockMinimumPrice == 'W') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
             this.openDialog(
-              'Warning7',
+              'Warning',
               `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
               }`,
               false
@@ -8490,7 +8490,7 @@ export class AddPosComponent implements OnInit {
 
       } else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning8', this.comFunc.getMsgByID('MSG1721'), true);
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             if (this.divisionMS == 'M') {
@@ -8607,7 +8607,7 @@ export class AddPosComponent implements OnInit {
       }
       else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning9', this.comFunc.getMsgByID('MSG1721'), true);
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
@@ -8706,7 +8706,7 @@ export class AddPosComponent implements OnInit {
 
 
     this.openDialog(
-      'Warning5',
+      'Warning',
       `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
       }`,
       bOrW == 'B' ? true : false
@@ -8805,7 +8805,7 @@ export class AddPosComponent implements OnInit {
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_rate.setValue(
@@ -8829,7 +8829,7 @@ export class AddPosComponent implements OnInit {
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning4', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -9384,7 +9384,7 @@ export class AddPosComponent implements OnInit {
 
         } else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning11', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_gross_amount.setValue(
@@ -9512,7 +9512,7 @@ export class AddPosComponent implements OnInit {
         ) {
           this.netAmtFunc(event);
         } else {
-          this.openDialog('Warning12', this.comFunc.getMsgByID('MSG1914'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1914'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -9534,7 +9534,7 @@ export class AddPosComponent implements OnInit {
           this.netAmtFunc(event);
         } else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning13', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_net_amount.setValue(
