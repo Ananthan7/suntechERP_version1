@@ -1200,11 +1200,13 @@ export class AddPosComponent implements OnInit {
     // });
   }
   getRetailSalesMaster(data: any) {
+       
     this.snackBar.open('Loading...');
     let API = `RetailSalesDataInDotnet/GetRetailSalesData/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}/Mid=${data.MID}`
+    console.log('getRetailSalesMaster vocno', data.VOCNO);
     this.suntechApi.getDynamicAPI(API).subscribe((res) => {
       this.snackBar.dismiss();
-      console.log(res, 'getRetailSalesMaster');
+      // console.log(res, 'getRetailSalesMaster');
       const posCustomer = res.response.customer;
       const retailSaleData = res.response.retailSales;
       const retailSReturnData = res.response.retailsReturn;
@@ -1220,11 +1222,11 @@ export class AddPosComponent implements OnInit {
         const karatRate = res.response.karatRate;
         this.retailSaleDataVocNo = retailSaleData.VOCNO;
         this.retailSReturnVocNo = retailSReturnData.VOCNO;
-        this.metalPurchaseDataVocNo = metalPurchaseData.VOCNO;
+        this.metalPurchaseDataVocNo = metalPurchaseData?.VOCNO;
 
         this.retailSalesMID = retailSaleData.MID;
         this.retailSReturnDataMID = retailSReturnData.MID;
-        this.metalPurchaseDataMID = metalPurchaseData.MID;
+        this.metalPurchaseDataMID = metalPurchaseData?.MID;
         // alert(this.retailSaleDataVocNo);
         // alert(this.retailSReturnVocNo);
         // alert(this.metalPurchaseDataVocNo);
@@ -1274,6 +1276,8 @@ export class AddPosComponent implements OnInit {
         this.customerDataForm.controls.fcn_customer_code.setValue(
           posCustomer.CODE
         );
+        this.getUserAttachments();
+
         this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
           posCustomer.MOBILE
         );
@@ -1340,10 +1344,10 @@ export class AddPosComponent implements OnInit {
           posCustomer.NATIONALITY
         );
         this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-          posCustomer.POSCUSTIDEXP_DATE
+          this.dummyDateCheck(posCustomer.POSCUSTIDEXP_DATE)
         );
         this.customerDataForm.controls.fcn_customer_exp_date.setValue(
-          posCustomer.POSCUSTIDEXP_DATE
+          this.dummyDateCheck( posCustomer.POSCUSTIDEXP_DATE)
         );
 
         this.customerDetails = posCustomer;
@@ -2384,7 +2388,7 @@ export class AddPosComponent implements OnInit {
           this.customerDataForm.value.fcn_customer_id_type
         );
         this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-          this.customerDataForm.value.fcn_customer_exp_date
+          this.dummyDateCheck(this.customerDataForm.value.fcn_customer_exp_date)
         );
         setTimeout(() => {
           if (custForm == true)
@@ -3491,10 +3495,10 @@ export class AddPosComponent implements OnInit {
             );
 
             this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-              this.customerDetails.POSCUSTIDEXP_DATE
+              this.dummyDateCheck(this.customerDetails.POSCUSTIDEXP_DATE)
             );
             this.customerDataForm.controls.fcn_customer_exp_date.setValue(
-              this.customerDetails.POSCUSTIDEXP_DATE
+              this.dummyDateCheck(this.customerDetails.POSCUSTIDEXP_DATE)
             );
 
             // this.snackBar.open('Customer details saved successfully');
@@ -3724,10 +3728,10 @@ export class AddPosComponent implements OnInit {
             );
 
             this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-              result.POSCUSTIDEXP_DATE
+              this.dummyDateCheck( result.POSCUSTIDEXP_DATE)
             );
             this.customerDataForm.controls.fcn_customer_exp_date.setValue(
-              result.POSCUSTIDEXP_DATE
+              this.dummyDateCheck( result.POSCUSTIDEXP_DATE)
             );
 
 
@@ -3799,7 +3803,7 @@ export class AddPosComponent implements OnInit {
         this.snackBar.dismiss();
 
         if (resp?.status.toString().trim() == 'Success') {
-          this.transAttachmentList = resp.response;
+          this.transAttachmentList = resp.response || [];
 
           this.transAttachmentList.map(data => {
 
@@ -6908,17 +6912,18 @@ export class AddPosComponent implements OnInit {
               if (stockInfoResult.RESULT_TYPE == 'Success') {
                 this.newLineItem = stockInfos;
 
-                if (!this.comFunc.stringToBoolean(this.newLineItem.ALLOW_NEGATIVE.toString())) {
+                // need field from jebaraj
+                // if (!this.comFunc.stringToBoolean(this.newLineItem.ALLOW_NEGATIVE.toString())) {
 
-                  const res = this.ordered_items.filter((data: any) => data.stock_code == this.newLineItem.STOCK_CODE);
-                  if (res.length > 0) {
-                    this.snackBar.open('Stock Already Exists', 'OK', {
-                      duration: 2000
-                    });
-                    return;
-                  }
+                //   const res = this.ordered_items.filter((data: any) => data.stock_code == this.newLineItem.STOCK_CODE);
+                //   if (res.length > 0) {
+                //     this.snackBar.open('Stock Already Exists', 'OK', {
+                //       duration: 2000
+                //     });
+                //     return;
+                //   }
 
-                }
+                // }
                 this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
                 this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
                 this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
@@ -8365,11 +8370,12 @@ export class AddPosComponent implements OnInit {
   }
 
   changeGrossWt(event: any) {
-    const value = event.target.value;
+    const value = this.comFunc.emptyToZero(event.target.value);
+    
     this.setGrossWtFocus();
-    if (value != '') {
+    if (event.target.value != '') {
       if (this.blockNegativeStock == 'B') {
-        if (this.lineItemGrossWt < value) {
+        if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
             'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
@@ -8390,7 +8396,7 @@ export class AddPosComponent implements OnInit {
         }
 
       } else if (this.blockNegativeStock == 'W') {
-        if (this.lineItemGrossWt < value) {
+        if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
             'Warning9',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
@@ -12127,6 +12133,8 @@ export class AddPosComponent implements OnInit {
   }
 
   async getFinancialYear() {
+    console.log(' this.vocDataForm.value.vocdate ',  this.vocDataForm.value.vocdate);
+    
     const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
     const res = await this.suntechApi.getDynamicAPI(API).toPromise()
     // .subscribe((resp) => {
