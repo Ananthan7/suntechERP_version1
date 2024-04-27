@@ -46,9 +46,9 @@ export class DurationPickerComponent implements OnInit {
     console.log(this.durationToSplit)
 
     this.durationPickerForm = this.formBuilder.group({
-      days: [''],
-      hours: [''],
-      minutes: [''],
+      days:[this.days[0].value],
+      hours: [this.minutes[0].value],
+      minutes: [this.seconds[0].value],
     });
 
     if (this.durationToSplit && this.durationToSplit !== "") {

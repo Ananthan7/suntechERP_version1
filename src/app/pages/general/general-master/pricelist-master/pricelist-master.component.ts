@@ -20,7 +20,7 @@ export class PricelistMasterComponent implements OnInit {
   currentDate: any = new Date();
   viewMode: boolean = false;
   editMode: boolean = false;
-  required : boolean = false;
+  required: boolean = false;
 
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
@@ -54,8 +54,8 @@ export class PricelistMasterComponent implements OnInit {
   ];
   isDisabled = false;
 
- 
- 
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -74,22 +74,48 @@ export class PricelistMasterComponent implements OnInit {
       priceSign: ['+'],
       priceValue: ['', [Validators.required]],
       finalPriceSign: ['+'],
-      finalPriceValue: ['', [Validators.required]],
+      finalPriceValue: [''],
       addlValueSign: ['+'],
-      addlValue: ['', [Validators.required]],
+      addlValue: [''],
       priceRoundoff: [false],
       dontCalculate: [false],
       roundoff_digit: [''],
     });
+
     this.initializeForm();
+   
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setAllInitialValues();
+      this.setFormValues()
     }
     if (this.content.FLAG == 'EDIT') {
       this.editMode = true;
+      this.setFormValues()
       this.setAllInitialValues();
+      this.setInitialValues();
     }
+
+  }
+
+  setFormValues() {
+    if (!this.content) return
+
+    this.priceListMasterForm.controls.finalPriceValue.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.FINALPRICE_VALUE));
+
+    this.priceListMasterForm.controls.addlValue.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.ADDLVALUE));
+  }
+
+  private setInitialValues() {
+    console.log(this.commonService.amtFormat)
+    this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
 
@@ -110,7 +136,7 @@ export class PricelistMasterComponent implements OnInit {
         err => alert(err)
       );
   }
- 
+
 
 
   update() {
@@ -149,7 +175,7 @@ export class PricelistMasterComponent implements OnInit {
       // this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
       // this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
       // this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    //  this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      //  this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     } catch (error) {
       console.error('Error in initializeForm:', error);
     }
@@ -202,10 +228,10 @@ export class PricelistMasterComponent implements OnInit {
       "MID": this.content ? this.content.MID : 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "DONTCALCULATE": this.priceListMasterForm.value.dontCalculate,
-      "FINALPRICE_SIGN": this.priceListMasterForm.value.finalPriceSign,
-      "FINALPRICE_VALUE": this.priceListMasterForm.value.finalPriceValue,
-      "ADDLVALUE": this.priceListMasterForm.value.addlValue,
-      "ADDLVALUE_SIGN": this.priceListMasterForm.value.addlValueSign,
+      "FINALPRICE_SIGN": this.priceListMasterForm.value.finalPriceSign || '',
+      "FINALPRICE_VALUE": this.priceListMasterForm.value.finalPriceValue || 0,
+      "ADDLVALUE": this.priceListMasterForm.value.addlValue || 0,
+      "ADDLVALUE_SIGN": this.priceListMasterForm.value.addlValueSign || '',
       "PRICE_ROUDOFF": this.priceListMasterForm.value.priceRoundoff,
       "ROUNDOFF_DIGIT": this.priceListMasterForm.value.roundoff_digit || 0,
       "PRICE_FORMULA": "",
@@ -330,7 +356,7 @@ export class PricelistMasterComponent implements OnInit {
       const selectedPriceType = this.priceTypeList.find(pt => pt.value === this.priceListMasterForm.value.priceMethod);
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.required = false;
-         this.viewMode = false;
+        this.viewMode = false;
 
         this.priceListMasterForm.controls.priceSign.disable();
         //  this.priceListMasterForm.controls.priceValue.disable();
@@ -392,12 +418,12 @@ export class PricelistMasterComponent implements OnInit {
           }).then(() => {
             // Clear the input value
             this.priceListMasterForm.controls.priceCode.setValue('');
-           
+
             //this.codeEnable = true;
             setTimeout(() => {
               this.renderer.selectRootElement('#priceCode').focus();
-            },500);
-            
+            }, 500);
+
           });
         }
       }, err => {
@@ -406,5 +432,5 @@ export class PricelistMasterComponent implements OnInit {
 
     this.subscriptions.push(sub);
   }
-  
+
 }
