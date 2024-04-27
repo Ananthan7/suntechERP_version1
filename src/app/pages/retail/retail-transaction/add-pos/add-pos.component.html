@@ -1389,8 +1389,10 @@
                 <td>
                   <input type="text" class="form-control textboxcorner" id
                     [(ngModel)]="receiptTotalNetAmt"
-                    value="{{ receiptTotalNetAmt | decimalFormat:'AMOUNT' }}" aria-describedby
-                    [placeholder]="zeroAmtVal" readonly />
+                  aria-describedby
+                    [placeholder]="zeroAmtVal" readonly 
+                    AmountDecimalInput
+                    />
                   <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
                       value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
                 </td>
@@ -1522,19 +1524,19 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount LC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="cashAmtLC" id="cashAmtLC"
-                    [placeholder]="zeroAmtVal" readonly />
+                    [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount FC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="cashAmtFC" id="cashAmtFC"
                     (focusout)="
                       changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
-                    " [placeholder]="zeroAmtVal" [readonly]="viewOnly" />
+                    " [placeholder]="zeroAmtVal" AmountDecimalInput [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       cashreceiptForm.controls.cashAmtFC.hasError('required')
                     ">
@@ -1599,7 +1601,7 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount </mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="cardAmtFC" id="cardAmtFC"
                     [placeholder]="zeroAmtVal" [readonly]="viewOnly"
                     AmountDecimalInput />
@@ -1741,7 +1743,7 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="advanceAmount" id="advanceAmount"
                     [readonly]="viewOnly" AmountDecimalInput />
                   <mat-error *ngIf="
@@ -1765,18 +1767,18 @@
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Vat Amount Paid LC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="advanceVatAmountLC"
                     id="advanceVatAmountLC" [placeholder]="zeroAmtVal"
-                    readonly />
+                    readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Vat Amount Paid FC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="advanceVatAmountFC"
-                    id="advanceVatAmountFC" [placeholder]="zeroAmtVal"
+                    id="advanceVatAmountFC" AmountDecimalInput [placeholder]="zeroAmtVal"
                     readonly />
                 </mat-form-field>
               </div>
@@ -1817,7 +1819,7 @@
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="othersAmtFC" id="othersAmtFC"
                     [placeholder]="zeroAmtVal" [readonly]="viewOnly"
                     AmountDecimalInput />
@@ -1902,7 +1904,7 @@
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="giftAmtFC" id="giftAmtFC"
                     [placeholder]="zeroAmtVal" [readonly]="viewOnly"
                     AmountDecimalInput />
@@ -1953,15 +1955,15 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount LC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="customerAmtLC" id="customerAmtLC"
-                    [placeholder]="zeroAmtVal" readonly />
+                    [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount FC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="customerAmtFC" id="customerAmtFC"
                     (focusout)="
                       changeReceiptAmtFC(
@@ -1969,7 +1971,8 @@
                         'customerReceiptForm',
                         'customerAmtLC'
                       )
-                    " [placeholder]="zeroAmtVal" [readonly]="viewOnly" />
+                    " [placeholder]="zeroAmtVal" [readonly]="viewOnly"
+                    AmountDecimalInput />
 
                   <mat-error *ngIf="
                       customerReceiptForm.controls.customerAmtFC.hasError(
