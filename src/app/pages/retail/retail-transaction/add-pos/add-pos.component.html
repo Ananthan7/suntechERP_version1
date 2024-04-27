@@ -420,7 +420,7 @@
         <div class="col-md-1 d-flex justify-content-center align-items-center">
           <div>
             <button type="button" color="primary" mat-flat-button
-              (click)="addNew()" [disabled]="viewOnly">
+              (click)="addNew()" >
               New
             </button>
           </div>
@@ -715,8 +715,8 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3 mt-3">
-              <mat-checkbox color="primary" formControlName="tourVatRefuncYN">
+            <div class="col-md-3 mt-3" [style.pointer-events]="viewOnly ? 'none' : 'auto' ">
+              <mat-checkbox color="primary" formControlName="tourVatRefuncYN" >
                 Tourist VAT Refund
               </mat-checkbox>
             </div>
@@ -740,9 +740,9 @@
             Import Sales Order
           </button> -->
 
-          <button type="button" mat-flat-button color="primary"
+          <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
             (click)="openUserAttachmentModal()">
-            Add Attachment
+           {{ !viewOnly ?  'Add Attachment' : 'View Attachment' }}
           </button>
         </div>
 
@@ -1389,7 +1389,7 @@
                 <td>
                   <input type="text" class="form-control textboxcorner" id
                     [(ngModel)]="receiptTotalNetAmt"
-                    value="{{ receiptTotalNetAmt }}" aria-describedby
+                    value="{{ receiptTotalNetAmt | decimalFormat:'AMOUNT' }}" aria-describedby
                     [placeholder]="zeroAmtVal" readonly />
                   <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
                       value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
