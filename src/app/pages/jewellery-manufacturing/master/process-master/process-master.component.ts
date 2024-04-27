@@ -417,7 +417,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.RefineryAutoProcess.setValue(this.onchangeCheckBox(this.content.DF_REFINERY));
     this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.onchangeCheckBox(this.content.AUTO_LOSS));
     this.processMasterForm.controls.HaveTreeNo.setValue(this.viewchangeYorN(this.content.TREE_NO));
-    this.processMasterForm.controls.allowGain.setValue(this.viewchangeYorN(this.content.ALLOW_GAIN));
+    this.processMasterForm.controls.allowGain.setValue(this.onchangeCheckBox(this.content.ALLOW_GAIN));
     this.processMasterForm.controls.StoneIncluded.setValue(this.viewchangeYorN(this.content.STONE_INCLUDED));
 
 
@@ -543,7 +543,6 @@ export class ProcessMasterComponent implements OnInit {
       console.log(this.formattedMaxTime);
       
           this.toastr.error('Standard Time  and  Maximum Time must be Required');
-        
     }
     else
     {
@@ -553,20 +552,22 @@ export class ProcessMasterComponent implements OnInit {
     }
     else {
 
-
       if (this.lossData == false) {
         this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
       }
-      // else {
-
-      //   if (this.formattedTime > this.formattedMaxTime) {
-      //     this.toastr.error('Maximum time should not be less than Standard time');
-      //   }
+     
       else {
         if (this.content && this.content.FLAG == 'EDIT') {
           this.updateProcessMaster()
           return
         }
+
+
+        // if(this.processMasterForm.value.accountStart == '' || this.processMasterForm.value.accountMiddle == '' || this.processMasterForm.value.accountEnd == ''){
+        //   this.toastr.error('Account Code Cannot be Empty');
+        // }
+        // else
+        // {
 
         const formValue = this.processMasterForm.value;
 
@@ -624,7 +625,7 @@ export class ProcessMasterComponent implements OnInit {
           "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(this.processMasterForm.value.DeductPureWeight),
           "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
           "APPR_CODE": this.processMasterForm.value.approvalCode || "",
-          "ALLOW_GAIN": this.processMasterForm.value.AllowGain,
+          "ALLOW_GAIN": this.onchangeCheckBox(this.processMasterForm.value.allowGain),
           "STD_GAIN": 0,
           "MIN_GAIN": 0,
           "MAX_GAIN": 0,
@@ -685,8 +686,7 @@ export class ProcessMasterComponent implements OnInit {
       }
     }
   }
-}
-
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -766,8 +766,8 @@ export class ProcessMasterComponent implements OnInit {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "",
       "DESCRIPTION": this.processMasterForm.value.processDesc || "",
-      "STD_TIME": this.formattedTime || 0,
-      "MAX_TIME": this.formattedMaxTime || 0,
+      "STD_TIME": this.formattedTime ||0,
+      "MAX_TIME": this.formattedMaxTime || 0 ,
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -799,7 +799,7 @@ export class ProcessMasterComponent implements OnInit {
       "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(this.processMasterForm.value.DeductPureWeight),
       "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
-      "ALLOW_GAIN": this.processMasterForm.value.AllowGain,
+      "ALLOW_GAIN": this.onchangeCheckBox(this.processMasterForm.value.allowGain),
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
@@ -907,7 +907,17 @@ export class ProcessMasterComponent implements OnInit {
     });
   }
 
+  
+ 
+
+
+
    onlossChange() {
+
+    if(this.processMasterForm.value.accountStart == ''){
+      this.toastr.error('Account Code Cannot be Empty');
+    }
+
     if (this.processMasterForm.value.loss == true) {
       this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
       this.islossReadOnly = false;
@@ -940,6 +950,12 @@ export class ProcessMasterComponent implements OnInit {
 
 
   onRecovery() {
+
+    if(this.processMasterForm.value.accountMiddle == ''){
+      this.toastr.error('Account Code Cannot be Empty');
+    }
+  
+  
     if (this.processMasterForm.value.recovery == true) {
       this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
       this.isRecovReadOnly = false;
@@ -964,6 +980,10 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   onAllowGain() {
+
+    if(this.processMasterForm.value.accountEnd == ''){
+      this.toastr.error('Account Code Cannot be Empty');
+    }
 
     if (this.processMasterForm.value.allowGain == true) {
       this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);

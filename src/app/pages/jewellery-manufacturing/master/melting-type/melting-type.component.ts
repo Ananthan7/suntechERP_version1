@@ -35,9 +35,9 @@ export class MeltingTypeComponent implements OnInit {
   editCode: boolean = false;
   allStockCodes: any;
   filteredStockCodes: any[] | undefined;
-  codeEnable :  boolean = true;
+  codeEnable: boolean = true;
   rowData: any;
-
+  dele: boolean = false;
   karatval: any;
   purityval: any;
 
@@ -45,7 +45,7 @@ export class MeltingTypeComponent implements OnInit {
   codeInput!: ElementRef;
 
   ngAfterViewInit(): void {
-      this.codeInput.nativeElement.focus();
+    this.codeInput.nativeElement.focus();
   }
 
 
@@ -59,6 +59,7 @@ export class MeltingTypeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+ this.dele = true;
     this.viewModeField = true;
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -67,9 +68,10 @@ export class MeltingTypeComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.editCode = true;
       this.viewMode = false;
+      this.dele = false;
       this.setFormValues();
     }
-}
+  }
 
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
@@ -119,49 +121,49 @@ export class MeltingTypeComponent implements OnInit {
 
 
 
-  codeEnabled(){
+  codeEnabled() {
     if (this.meltingTypeForm.value.WorkerCode == '') {
-    this.codeEnable = true;
+      this.codeEnable = true;
     }
-    else{
+    else {
       this.codeEnable = false;
     }
-   
+
   }
 
-    addTableData() {
-      const formValue = this.meltingTypeForm.value;
-    
-      if (!formValue.code) {
-        this.toastr.error('Code cannot be empty');
-        return;
-      }
-    
-      if (!formValue.description) {
-        this.toastr.error('Description cannot be empty');
-        return;
-      }
-      if (!formValue.color) {
-        this.toastr.error('Color cannot be empty');
-        return;
-      }
-      let length = this.tableData.length;
-      this.slNo = length + 1;
-      let data = {
-        "UNIQUEID": 0,
-        "SRNO": this.slNo,
-        "MELTYPE_CODE": "Y",
-        "MELTYPE_DESCRIPTION": "",
-        "KARAT_CODE": this.meltingTypeForm.value.karat,
-        "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
-        "DIVISION_CODE": this.meltingTypeForm.value.divCode,
-        "DEF_ALLOY_STOCK": "",
-        "DEF_ALLOY_DESCRIPTION": "",
-        "ALLOY_PER": "",
-      };
-      this.tableData.push(data);
-      console.log(data);
-  }  
+  addTableData() {
+    const formValue = this.meltingTypeForm.value;
+
+    if (!formValue.code) {
+      this.toastr.error('Code cannot be empty');
+      return;
+    }
+
+    if (!formValue.description) {
+      this.toastr.error('Description cannot be empty');
+      return;
+    }
+    if (!formValue.color) {
+      this.toastr.error('Color cannot be empty');
+      return;
+    }
+    let length = this.tableData.length;
+    this.slNo = length + 1;
+    let data = {
+      "UNIQUEID": 0,
+      "SRNO": this.slNo,
+      "MELTYPE_CODE": "Y",
+      "MELTYPE_DESCRIPTION": "",
+      "KARAT_CODE": this.meltingTypeForm.value.karat,
+      "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
+      "DIVISION_CODE": this.meltingTypeForm.value.divCode,
+      "DEF_ALLOY_STOCK": "",
+      "DEF_ALLOY_DESCRIPTION": "",
+      "ALLOY_PER": "",
+    };
+    this.tableData.push(data);
+    console.log(data);
+  }
   formSubmit() {
 
     const totalAlloyPer = this.tableData
@@ -177,21 +179,32 @@ export class MeltingTypeComponent implements OnInit {
       }
       return; // Exit the method if the total alloy percentage is not 100
     }
-  
+
     // Check if any Default Alloy is empty
     const defaultAlloyEmpty = this.tableData.some(item => !item.DEF_ALLOY_STOCK);
-  
+
+    const defaultAlloyPer = this.tableData.some(item => item.ALLOY_PER == 0);
+
+    if(defaultAlloyPer){
+      this.toastr.error("Alloy %  cannot be Zero's ");
+    }
+    else
+    {
+
     if (defaultAlloyEmpty) {
-      this.toastr.error('Default Alloy cannot be empty');
+      this.toastr.error('Zero alloy % Cannot be Added');
       // return; // Exit the method if any Default Alloy is empty
     }
+    else {
+
+
       if (this.content?.FLAG == 'VIEW') return
-      if (this.content?.FLAG == 'EDIT') { 
+      if (this.content?.FLAG == 'EDIT') {
         this.updateMeltingType();
         return;
       }
-      
-    
+
+
       if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
         let API = 'MeltingType/InsertMeltingType';
         let postData = {
@@ -210,7 +223,7 @@ export class MeltingTypeComponent implements OnInit {
 
         let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
           (result) => {
-            console.log('result',result)
+            console.log('result', result)
             if (result.response) {
               if (result.status == 'Success') {
                 Swal.fire({
@@ -228,7 +241,7 @@ export class MeltingTypeComponent implements OnInit {
                 });
               }
             } else {
-            console.log(result,'result')
+              console.log(result, 'result')
               this.toastr.error('The Code Already Exists');
             }
           },
@@ -238,8 +251,10 @@ export class MeltingTypeComponent implements OnInit {
       } else {
         this.toastr.error('Fill All Mandatory Field and provide table data');
       }
+    }
+  }
 }
-  
+
   getRowDataForColumn(arg0: string) {
     throw new Error('Method not implemented.');
   }
@@ -293,10 +308,10 @@ export class MeltingTypeComponent implements OnInit {
   karatcodeSelected(e: any) {
     console.log(e);
     this.meltingTypeForm.controls.karat.setValue(e.KARAT_CODE);
-  
-   
 
-    
+
+
+
     this.meltingTypeForm.controls.purity.setValue(e.STD_PURITY);
 
     console.log(this.meltingTypeForm.value.karat);
@@ -392,7 +407,7 @@ export class MeltingTypeComponent implements OnInit {
       .subscribe((result: any) => {
         console.log(result);
 
-       let data = result.response;
+        let data = result.response;
 
         this.meltingTypeForm.controls.mid.setValue(data.MID);
         this.meltingTypeForm.controls.code.setValue(data.MELTYPE_CODE);
@@ -532,7 +547,7 @@ export class MeltingTypeComponent implements OnInit {
       // Display confirmation dialog before deleting
       Swal.fire({
         title: 'Are you sure?',
-        text: 'This action cannot be undone!',
+        text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -544,19 +559,19 @@ export class MeltingTypeComponent implements OnInit {
           this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
           this.resetSrNumber()
         }
-        
+
       });
-      
+
     } else {
       // Display error message if no record is selected
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-resetSrNumber(){
- this.tableData.forEach((data, index) => {
-  data.SRNO = index+1
- });
-}
+  resetSrNumber() {
+    this.tableData.forEach((data, index) => {
+      data.SRNO = index + 1
+    });
+  }
 
   defaultAlloy: MasterSearchModel = {
     PAGENO: 1,
