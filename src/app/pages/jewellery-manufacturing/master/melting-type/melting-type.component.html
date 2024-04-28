@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
+<modal-header [isViewDelete]="!viewMode"  [isViewDelete]="!dele" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
         <form [formGroup]="meltingTypeForm">
