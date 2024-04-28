@@ -788,7 +788,7 @@
                           <dxi-column dataField="metal_rate"
                             caption="Metal Value" [width]="100"
                             [allowEditing]="false"
-                            [format]="amountDecimalFormat"></dxi-column>
+                            [format]="metalDecimalFormat"></dxi-column>
 
                           <dxi-column dataField="total_amount"
                             caption="Mkg amount" alignment="right"
@@ -798,8 +798,8 @@
                           <dxi-column dataField="net_amount"
                             caption="Total amount" alignment="right"
                             format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
-                            [allowEditing]="false" precision="2"
+                            [format]="amountDecimalFormat"
+                            [allowEditing]="false" 
                             [width]="150">
                           </dxi-column>
                           <!-- <dxi-column caption="Actions" [width]="100" [allowEditing]="false">
@@ -3087,7 +3087,7 @@
             SAVE
           </button>
           <button class="ms-1" mat-flat-button color="warn"
-            (click)="modal.dismiss('Cross click')">
+            (click)="closeAddCustomerModal()">
             CANCEL
           </button>
           &nbsp;

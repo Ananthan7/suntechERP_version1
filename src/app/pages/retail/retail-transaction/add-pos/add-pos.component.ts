@@ -78,6 +78,7 @@ export class AddPosComponent implements OnInit {
   isRateCannotLessCost: boolean = false;
 
   amountDecimalFormat: any;
+  metalDecimalFormat: any;
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
   gridWeghtDecimalFormat: any;
@@ -1788,6 +1789,10 @@ export class AddPosComponent implements OnInit {
 
     this.getSalesReturnVocTypes();
 
+    this.metalDecimalFormat = {
+      type: 'fixedPoint',
+      precision: Number(this.comFunc.allCompanyParameters[0].MRATEDECIMALS),
+    };
     this.amountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -1799,7 +1804,7 @@ export class AddPosComponent implements OnInit {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.comFunc.allbranchMaster?.BAMTDECIMALS,
-      currency: 'AED'
+      currency: this.comFunc.compCurrency
     };
 
   }
@@ -2340,6 +2345,10 @@ export class AddPosComponent implements OnInit {
   }
   customizeDate(data: any) {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
+  }
+  closeAddCustomerModal(){
+    this.resetCustomerData()
+    this.modalReference.close()
   }
 
   open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false) {
@@ -3620,7 +3629,13 @@ export class AddPosComponent implements OnInit {
       }
     }
   }
-
+  resetCustomerData(){
+    this.customerDetailForm.reset();
+    this.customerDataForm.reset();
+    this.customerDetails = {};
+    this.inv_customer_name = '';
+    this.customerDataForm.controls['fcn_customer_name'].setValue('');
+  }
   onCustomerNameFocus(value: any = null) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
@@ -3781,11 +3796,7 @@ export class AddPosComponent implements OnInit {
         });
     } else {
       this.amlNameValidationData = true;
-      this.customerDetailForm.reset();
-      this.customerDataForm.reset();
-      this.customerDetails = {};
-      this.inv_customer_name = '';
-      this.customerDataForm.controls['fcn_customer_name'].setValue('');
+      this.resetCustomerData()
       //alert('Enter valid mobile number');
     }
 
