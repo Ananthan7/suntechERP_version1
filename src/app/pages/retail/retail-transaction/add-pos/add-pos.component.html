@@ -1463,7 +1463,7 @@
         </div>
 
         <div class="row mt-2" >
-          <div class="col-md-6 col-xl-6" *ngIf="viewOnly" (click)="auditTrailClick()">
+          <div class="col-md-6 col-xl-6" *ngIf="this.viewOnly||isPrintingEnabled" (click)="auditTrailClick()">
             <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
                 <i class="fa fa-book"></i> 

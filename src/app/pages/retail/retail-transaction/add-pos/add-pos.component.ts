@@ -8233,7 +8233,7 @@ export class AddPosComponent implements OnInit {
       return
     }
     let postData =  {
-      "MID": this.comFunc.emptyToZero(this.content.MID),
+      "MID": this.comFunc.emptyToZero(this.content?.MID),
       "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
       "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -12466,7 +12466,7 @@ export class AddPosComponent implements OnInit {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
       VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
       VOCNO: this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
-      MID: this.comFunc.emptyToZero(this.content.MID),
+      MID: this.comFunc.emptyToZero(this.content?.MID),
       YEARMONTH: this.comFunc.nullToString(this.baseYear),
     }
     this.auditTrailComponent?.showDialog(params)
