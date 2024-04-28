@@ -29,6 +29,8 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { environment } from 'src/environments/environment';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { IndexedApiService } from 'src/app/services/indexed-api.service';
+import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
+import { AuditTrailModel } from 'src/app/shared/data/audit-trial-model';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -42,7 +44,7 @@ interface VocTypesEx {
   styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
-  // [x: string]: any;
+  @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
   @Input() content!: any;
 
   @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
@@ -8220,9 +8222,49 @@ export class AddPosComponent implements OnInit {
   //   }
   // }
 
+  printReceiptDetailsWeb(){
+    let _validate = this.validateBeforePrint();
+    if (_validate[0] === false) {
+      if (typeof _validate[1] === 'string') {
+        this.snackBar.open(_validate[1], 'OK');
+      } else {
+        console.error('Error message is not a string:', _validate[1]);
+      }
+      return
+    }
+    let postData =  {
+      "MID": this.comFunc.emptyToZero(this.content.MID),
+      "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+      "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+      "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+      "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+    }
+    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb',postData)
+    .subscribe((result:any)=>{
+      console.log(result);
+      let data = result.response
+      var WindowPrt = window.open('', '_blank', 'width=300,height=600');
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
+      let printContent = data[0].HTMLOUT
+      WindowPrt.document.write(printContent);
+
+      WindowPrt.document.close();
+      WindowPrt.focus();
+
+      setTimeout(() => {
+        if (WindowPrt) {
+          WindowPrt.print();
+        } else {
+          console.error('Print window was closed before printing could occur.');
+        }
+      }, 800);
+    })
+  }
 
   printInvoice() {
-    console.log('printing...');
     let _validate = this.validateBeforePrint();
     if (_validate[0] === true) {
       const printContent = document.getElementById('print_invoice');
@@ -12417,5 +12459,16 @@ export class AddPosComponent implements OnInit {
         { value: 'Diamond', label: 'Diamond' },
       ];
     }
+  }
+
+  auditTrailClick(){
+    let params: AuditTrailModel = {
+      BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
+      VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+      VOCNO: this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+      MID: this.comFunc.emptyToZero(this.content.MID),
+      YEARMONTH: this.comFunc.nullToString(this.baseYear),
+    }
+    this.auditTrailComponent?.showDialog(params)
   }
 }

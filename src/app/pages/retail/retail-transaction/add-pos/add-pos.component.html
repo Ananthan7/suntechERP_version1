@@ -1436,7 +1436,7 @@
           </div>
 
           <div *ngIf="this.viewOnly||isPrintingEnabled"
-            class="col-md-6 col-xl-6" (click)="printInvoice()">
+            class="col-md-6 col-xl-6" (click)="printReceiptDetailsWeb()">
             <!-- *ngIf="!viewOnly" -->
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
@@ -1451,7 +1451,7 @@
               </div>
             </div>
           </div> -->
-          <div class="col-md-6 col-xl-6 mt-2"
+          <div class="col-md-6 col-xl-6 "
             (click)="viewOnly || isSaved ? '' : saveOrder('continue')"
             *ngIf="!viewOnly">
             <div class="touch-big-button touch-big-button-black">
@@ -1462,16 +1462,17 @@
           </div>
         </div>
 
-        <div class="row mt-2" *ngIf="!viewOnly">
-          <!-- <div class="col-md-6 col-xl-6">
+        <div class="row mt-2" >
+          <div class="col-md-6 col-xl-6" *ngIf="viewOnly" (click)="auditTrailClick()">
             <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
-                <i class="fa fa-search"></i> <span> Search</span>
+                <i class="fa fa-book"></i> 
+                <span> Audit Trail</span>
               </div>
             </div>
-          </div> -->
+          </div>
 
-          <div class="col-md-6 col-xl-6" (click)="cancelBill()">
+          <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" (click)="cancelBill()">
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
                 <i class="fa fa-window-close"></i> <span> Cancel Bill</span>
@@ -4140,3 +4141,4 @@
     </div>
   </div>
 </ng-template>
+<audit-trail></audit-trail>
