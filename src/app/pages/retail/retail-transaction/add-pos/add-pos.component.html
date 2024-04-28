@@ -788,7 +788,7 @@
                           <dxi-column dataField="metal_rate"
                             caption="Metal Value" [width]="100"
                             [allowEditing]="false"
-                            [format]="amountDecimalFormat"></dxi-column>
+                            [format]="metalDecimalFormat"></dxi-column>
 
                           <dxi-column dataField="total_amount"
                             caption="Mkg amount" alignment="right"
@@ -798,8 +798,8 @@
                           <dxi-column dataField="net_amount"
                             caption="Total amount" alignment="right"
                             format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }"
-                            [allowEditing]="false" precision="2"
+                            [format]="amountDecimalFormat"
+                            [allowEditing]="false" 
                             [width]="150">
                           </dxi-column>
                           <!-- <dxi-column caption="Actions" [width]="100" [allowEditing]="false">
@@ -1389,8 +1389,10 @@
                 <td>
                   <input type="text" class="form-control textboxcorner" id
                     [(ngModel)]="receiptTotalNetAmt"
-                    value="{{ receiptTotalNetAmt | decimalFormat:'AMOUNT' }}" aria-describedby
-                    [placeholder]="zeroAmtVal" readonly />
+                  aria-describedby
+                    [placeholder]="zeroAmtVal" readonly 
+                    AmountDecimalInput
+                    />
                   <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
                       value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
                 </td>
@@ -1434,7 +1436,7 @@
           </div>
 
           <div *ngIf="this.viewOnly||isPrintingEnabled"
-            class="col-md-6 col-xl-6" (click)="printInvoice()">
+            class="col-md-6 col-xl-6" (click)="printReceiptDetailsWeb()">
             <!-- *ngIf="!viewOnly" -->
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
@@ -1449,7 +1451,7 @@
               </div>
             </div>
           </div> -->
-          <div class="col-md-6 col-xl-6 mt-2"
+          <div class="col-md-6 col-xl-6 "
             (click)="viewOnly || isSaved ? '' : saveOrder('continue')"
             *ngIf="!viewOnly">
             <div class="touch-big-button touch-big-button-black">
@@ -1460,16 +1462,17 @@
           </div>
         </div>
 
-        <div class="row mt-2" *ngIf="!viewOnly">
-          <!-- <div class="col-md-6 col-xl-6">
+        <div class="row mt-2" >
+          <div class="col-md-6 col-xl-6" *ngIf="this.viewOnly||isPrintingEnabled" (click)="auditTrailClick()">
             <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
-                <i class="fa fa-search"></i> <span> Search</span>
+                <i class="fa fa-book"></i> 
+                <span> Audit Trail</span>
               </div>
             </div>
-          </div> -->
+          </div>
 
-          <div class="col-md-6 col-xl-6" (click)="cancelBill()">
+          <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" (click)="cancelBill()">
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
                 <i class="fa fa-window-close"></i> <span> Cancel Bill</span>
@@ -1522,19 +1525,19 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount LC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="cashAmtLC" id="cashAmtLC"
-                    [placeholder]="zeroAmtVal" readonly />
+                    [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount FC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="cashAmtFC" id="cashAmtFC"
                     (focusout)="
                       changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
-                    " [placeholder]="zeroAmtVal" [readonly]="viewOnly" />
+                    " [placeholder]="zeroAmtVal" AmountDecimalInput [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       cashreceiptForm.controls.cashAmtFC.hasError('required')
                     ">
@@ -1599,7 +1602,7 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount </mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="cardAmtFC" id="cardAmtFC"
                     [placeholder]="zeroAmtVal" [readonly]="viewOnly"
                     AmountDecimalInput />
@@ -1741,7 +1744,7 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="advanceAmount" id="advanceAmount"
                     [readonly]="viewOnly" AmountDecimalInput />
                   <mat-error *ngIf="
@@ -1765,18 +1768,18 @@
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Vat Amount Paid LC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="advanceVatAmountLC"
                     id="advanceVatAmountLC" [placeholder]="zeroAmtVal"
-                    readonly />
+                    readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Vat Amount Paid FC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="advanceVatAmountFC"
-                    id="advanceVatAmountFC" [placeholder]="zeroAmtVal"
+                    id="advanceVatAmountFC" AmountDecimalInput [placeholder]="zeroAmtVal"
                     readonly />
                 </mat-form-field>
               </div>
@@ -1817,7 +1820,7 @@
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="othersAmtFC" id="othersAmtFC"
                     [placeholder]="zeroAmtVal" [readonly]="viewOnly"
                     AmountDecimalInput />
@@ -1902,7 +1905,7 @@
               <div class="col-md-6">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="giftAmtFC" id="giftAmtFC"
                     [placeholder]="zeroAmtVal" [readonly]="viewOnly"
                     AmountDecimalInput />
@@ -1953,15 +1956,15 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount LC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="customerAmtLC" id="customerAmtLC"
-                    [placeholder]="zeroAmtVal" readonly />
+                    [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount FC</mat-label>
-                  <input type="number" class="st_txt_right" matInput
+                  <input type="text" class="st_txt_right" matInput
                     formControlName="customerAmtFC" id="customerAmtFC"
                     (focusout)="
                       changeReceiptAmtFC(
@@ -1969,7 +1972,8 @@
                         'customerReceiptForm',
                         'customerAmtLC'
                       )
-                    " [placeholder]="zeroAmtVal" [readonly]="viewOnly" />
+                    " [placeholder]="zeroAmtVal" [readonly]="viewOnly"
+                    AmountDecimalInput />
 
                   <mat-error *ngIf="
                       customerReceiptForm.controls.customerAmtFC.hasError(
@@ -3083,7 +3087,7 @@
             SAVE
           </button>
           <button class="ms-1" mat-flat-button color="warn"
-            (click)="modal.dismiss('Cross click')">
+            (click)="closeAddCustomerModal()">
             CANCEL
           </button>
           &nbsp;
@@ -4137,3 +4141,4 @@
     </div>
   </div>
 </ng-template>
+<audit-trail></audit-trail>
