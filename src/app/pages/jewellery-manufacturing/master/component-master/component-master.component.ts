@@ -58,13 +58,14 @@ export class ComponentMasterComponent implements OnInit {
       this.setFormValues();
       this.editableMode = true;
       this.editMode = true;
-      this.viewMode = true
+      
     }
 
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
     this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
     let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
+    
   }
 
  

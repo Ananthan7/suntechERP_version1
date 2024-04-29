@@ -20,12 +20,12 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Prefix Code :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="prefixcode"  oninput="this.value = this.value.toUpperCase()" />
+                          <input type="text" matInput formControlName="prefixcode"  oninput="this.value = this.value.toUpperCase()" maxlength="6" [readonly]="editableMode || viewMode" [disabled]="viewMode"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="prefixcodedes" oninput="this.value = this.value.toUpperCase()"/>
+                          <input type="text" matInput formControlName="prefixcodedes" oninput="this.value = this.value.toUpperCase()" maxlength="50" [readonly]="editableMode || viewMode" [disabled]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -33,21 +33,21 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Last No :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="lastno" />
+                          <input type="number" matInput formControlName="lastno"  [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" formControlName="jobcardprefix">
                           <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" formControlName="jobcardprefix"  [readonly]="viewMode"> 
                             Exclusive For Job Card
                           </label>
                         </div>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" formControlName="schemeprefix">
                           <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" formControlName="schemeprefix" [readonly]="viewMode">
                             Exclusive For Scheme
                           </label>
                         </div>
@@ -57,21 +57,21 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Tag Wt :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="tagWt" class="text-right"/>
+                          <input type="text" matInput formControlName="tagWt" class="text-right" [max]="2" MetalDecimalInput [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" formControlName="setrefprefix">
                           <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" formControlName="setrefprefix" [readonly]="viewMode">
                             Set Ref Prefix
                           </label>
                         </div>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" formControlName="refinervprefix">
                           <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" formControlName="refinervprefix" [readonly]="viewMode">
                             Exclusive For Refinery
                           </label>
                         </div>
@@ -81,16 +81,16 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Branch :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="branch"/>
+                          <input type="text" matInput formControlName="branch" [readonly]="viewMode"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="BranchCodeData"
-                        (newRowClick)="branchCodeSelected($event)">
+                        (newRowClick)="branchCodeSelected($event)" *ngIf="!viewMode">
                     </master-search>
                       </div>
                       <div class="col-md-3 offset-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" formControlName="designprefix">
-                          <label class="form-check-label">
+                          <label class="form-check-label">  
+                          <input class="form-check-input" type="checkbox" formControlName="designprefix" [readonly]="viewMode">
                             Design Prefix
                           </label>
                         </div>
@@ -100,7 +100,7 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Suffix Code :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="suffixcode" />
+                          <input type="text" matInput formControlName="suffixcode" maxlength="6" [readonly]="viewMode"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -108,10 +108,10 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">HSN :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="hsn" />
+                          <input type="text" matInput formControlName="hsn" [readonly]="viewMode"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="HSNCodeData"
-                                      (newRowClick)="HSNCenterSelected($event)">
+                                      (newRowClick)="HSNCenterSelected($event)" *ngIf="!viewMode"> 
                                   </master-search>
                       </div>
                     </div>

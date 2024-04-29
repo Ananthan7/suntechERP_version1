@@ -19,6 +19,8 @@ export class MetalPrefixMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any;
   tableData: any[] = [];
+  editableMode: boolean = false;
+  viewMode: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -32,6 +34,31 @@ export class MetalPrefixMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.setCompanyCurrency()
+    this.setFormValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true
+    
+      this.setFormValues()
+    } else if (this.content.FLAG == 'EDIT') {
+      this.editableMode = true;
+     this.setFormValues()
+    }
+  }
+  setFormValues() {
+    console.log(this.content);
+    if (!this.content) return
+    this.metalprefixForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
+    this.metalprefixForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
+    this.metalprefixForm.controls.lastno.setValue(this.content.LAST_NO)
+    this.metalprefixForm.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.metalprefixForm.controls.currencyRate.setValue(this.content.CONV_RATE)
+    this.metalprefixForm.controls.refinervprefix.setValue(this.content.COST_CODE)
+    this.metalprefixForm.controls.setrefprefix.setValue(this.content.JOB_PREFIX)
+    this.metalprefixForm.controls.jobcardprefix.setValue(this.content.JOB_PREFIX)
+    this.metalprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
+    this.metalprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
+    this.metalprefixForm.controls.tagWt.setValue(this.content.TAG_WT)
+    this.metalprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -126,7 +153,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     let postData = {
       "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
       "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
-      "LAST_NO": this.metalprefixForm.value.lastno || "",
+      "LAST_NO": this.commonService.nullToString(this.metalprefixForm.value.lastno),
       "CURRENCY_CODE": this.commonService.nullToString(this.metalprefixForm.value.currency),
       "CONV_RATE": this.commonService.emptyToZero(this.metalprefixForm.value.currencyRate),
       "COST_CODE": " ",

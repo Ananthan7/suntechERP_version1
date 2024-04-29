@@ -168,6 +168,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
     
   }
 
