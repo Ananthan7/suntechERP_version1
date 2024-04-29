@@ -15,6 +15,8 @@ import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-de
   styleUrls: ['./metal-issue.component.scss']
 })
 export class MetalIssueComponent implements OnInit {
+  @Input() content!: any;
+  private subscriptions: Subscription[] = [];
 
   currentFilter: any;
   divisionMS: any = 'ID';
@@ -27,15 +29,13 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Stock Code', field: 'STOCK_CODE' },
     { title: 'Division', field: 'DIVCODE' },
     { title: 'Description', field: 'STOCK_DESCRIPTION' },
-    { title: 'Carat', field: 'GROSS_WT' },
+    { title: 'Gross wt', field: 'GROSS_WT' },
     { title: 'Process', field: 'PROCESS_CODE' },
     { title: 'Worker', field: 'WORKER_CODE' },
-    { title: 'Amount.', field: 'AMOUNTFC' },];
+    { title: 'Amount.', field: 'AMOUNTFC' },
+  ];
   metalIssueDetailsData: any[] = [];
-  @Input() content!: any;
   userName = localStorage.getItem('username');
-  branchCode?: String;
-  yearMonth?: String;
   srNo: any = 0;
   vocMaxDate = new Date();
   currentDate = new Date();
@@ -43,23 +43,25 @@ export class MetalIssueComponent implements OnInit {
   viewOnly: boolean = false;
   selectedIndexes: any = [];
   getdata!: any[];
-  private subscriptions: Subscription[] = [];
   tableRowCount: number = 0;
-  detailData: any[] = [];
   selectRowIndex: any;
   selectedKey: number[] = []
   viewMode: boolean = false;
+  isloading: boolean = false;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
     time: [new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()],
     vocdate: ['', [Validators.required]],
-    enteredBy: [''],
-    vocno: [1],
-    worker: [''],
+    SALESPERSON_CODE: [''],
+    VOCNO: [0],
+    MID: [0],
+    worker: ['', [Validators.required]],
     workerDes: [''],
-    remarks: [''],
-    FLAG: [null]
+    REMARKS: [''],
+    FLAG: [null],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
   });
 
   constructor(
@@ -74,20 +76,77 @@ export class MetalIssueComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
-
-    this.setvalues()
-    this.setAllInitialValues()
-    if(this.content?.FLAG){
-      this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
-    }
-       if (this.content.FLAG == 'VIEW') {
+    //this.content provide the data and flag from main grid to the form
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
       }
+      this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
+      this.setAllInitialValues()
+    } else {
+      this.setNewFormValues()
+    }
+  }
+  setNewFormValues() {
+    this.metalIssueForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
+    this.metalIssueForm.controls.YEARMONTH.setValue(this.comService.yearSelected)
+    this.metalIssueForm.controls.BRANCH_CODE.setValue(this.comService.branchCode)
   }
 
+  setAllInitialValues() {
+    if (!this.content?.FLAG) return
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `JobMetalIssueMasterDJ/GetJobMetalIssueMasterDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.metalIssueForm.controls.voctype.setValue(data.VOCTYPE)
+          this.metalIssueForm.controls.VOCNO.setValue(data.VOCNO)
+          this.metalIssueForm.controls.MID.setValue(data.MID)
+          this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
+          this.metalIssueForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
+          this.metalIssueForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
+          this.metalIssueForm.controls.YEARMONTH.setValue(data.YEARMONTH)
+          this.metalIssueForm.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
+          this.metalIssueForm.controls.SALESPERSON_CODE.setValue(data.SMAN)
+          this.metalIssueForm.controls.REMARKS.setValue(data.REMARKS)
+          let part = data.DOCTIME.split('T')
+          this.metalIssueForm.controls.time.setValue(part[1])
 
+          this.setDetailsToHeaderGrid(data.Details) //set to main grid
+          data.Details.forEach((element: any) => {
+            this.tableData.push({
+              jobNumber: element.JOB_NUMBER,
+              jobNumDes: element.JOB_DESCRIPTION,
+              processCode: element.PROCESS_CODE,
+              processCodeDesc: element.PROCESS_NAME,
+              workerCode: element.WORKER_CODE,
+              workerCodeDes: element.WORKER_NAME,
+              pcs: element.PCS,
+              purity: element.PURITY,
+              grossWeight: element.GROSS_WT,
+              netWeight: element.NET_WT,
+            })
+          });
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  // use : to recalculate index number
+  setDetailsToHeaderGrid(data: any[]) {
+    data.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
+      item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+    })
+    this.metalIssueDetailsData = data
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -98,107 +157,51 @@ export class MetalIssueComponent implements OnInit {
       this.metalIssueDetailsData.splice(element - 1, 1)
     })
   }
-  openaddmetalissue(data?: any) {
-    console.log(data)
-    if (data) {
-      data[0] = this.metalIssueForm.value;
-    } else {
-      data = [{ HEADERDETAILS: this.metalIssueForm.value }]
+  onRowClickHandler(event: any) {
+    this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    this.openAddMetalIssue(selectedData)
+  }
+  openAddMetalIssue(dataToParent?: any) {
+    if (this.submitValidations(this.metalIssueForm.value)) {
+      return
     }
+    if (dataToParent) {
+      dataToParent.HEADERDETAILS = this.metalIssueForm.value;
+    } else {
+      dataToParent = [{ HEADERDETAILS: this.metalIssueForm.value }]
+    }
+    console.log(dataToParent, 'dataToParent to parent');
+
     const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    console.log(data,'data')
-    modalRef.componentInstance.content = data
+    modalRef.componentInstance.content = dataToParent
     modalRef.result.then((postData) => {
-     
       if (postData) {
-     
-        console.log('Data from modal:', postData);
-        this.metalIssueDetailsData.push(postData);
-        console.log(this.metalIssueDetailsData);
         this.setValuesToHeaderGrid(postData);
-
       }
     });
   }
-  onRowClickHandler(event: any) {
-
-    this.selectRowIndex = (event.dataIndex)
-    let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    this.openaddmetalissue(selectedData)
-    console.log(selectedData)
-    console.log("fired.")
-    console.log(this.selectRowIndex, event);
-
-  }
-
-
-
   setValuesToHeaderGrid(detailDataToParent: any) {
-
-
-    if (detailDataToParent.SRNO) {
-      this.swapObjects(this.metalIssueDetailsData, [detailDataToParent], (detailDataToParent.SRNO - 1))
+    console.log(detailDataToParent, 'detailDataToParent');
+    if (detailDataToParent.SRNO != 0) {
+      this.metalIssueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
-      this.tableRowCount += 1
-      detailDataToParent.SRNO = this.tableRowCount
+      detailDataToParent.SRNO = this.metalIssueDetailsData.length + 1
+      this.metalIssueDetailsData.push(detailDataToParent);
     }
-
     this.tableData.push(detailDataToParent)
-
-    if (detailDataToParent) {
-      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
-    }
-    //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
-
   }
-  swapObjects(array1: any, array2: any, index: number) {
-    // Check if the index is valid
-    if (index >= 0 && index < array1.length) {
-      array1[index] = array2[0];
-    } else {
-      console.error('Invalid index');
-    }
-  }
-
-  // openaddmetalissue() {
-  //   this.srNo= this.srNo+1;
-  //   const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
-  //     size: 'xl',
-  //     backdrop: true,//'static'
-  //     keyboard: false,
-  //     windowClass: 'modal-full-width',
-  //   });
-  //   modalRef.result.then((postData) => {
-  //     console.log(postData);      
-  //     if (postData) {
-  //       console.log('Data from modal:', postData);    
-  //       if (postData.reopen= true) {
-  //         this.openaddmetalissue();    
-  //       }   
-  //       this.metalIssueDetailsData.push(postData);
-  //     }
-  //   });
-  //   modalRef.componentInstance.data = this.metalIssueDetailsData;
-  // }
-
 
 
   stock_codetemp(data: any, value: any) {
     console.log(data);
     this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
-
-  // deleteTableData(): void{
-  //   this.tableRowCount = 0;
-  //   console.log(this.selectRowIndex)
-  //   this.tableData.splice(this.selectRowIndex, 1) 
-  // }
 
   removeLineItemsGrid(event: any) {
   }
@@ -216,7 +219,7 @@ export class MetalIssueComponent implements OnInit {
   }
 
 
-  enteredByCodeData: MasterSearchModel = {
+  SALESPERSON_CODEData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
@@ -228,9 +231,8 @@ export class MetalIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  enteredByCodeSelected(e: any) {
-    console.log(e);
-    this.metalIssueForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
+  SALESPERSON_CODESelected(e: any) {
+    this.metalIssueForm.controls.SALESPERSON_CODE.setValue(e.SALESPERSON_CODE);
   }
 
   workerCodeData: MasterSearchModel = {
@@ -267,81 +269,20 @@ export class MetalIssueComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
-  setAllInitialValues() {
-    console.log(this.content)
-    if (!this.content) return
-    let API = `JobMetalIssueMasterDJ/GetJobMetalIssueMasterDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          this.metalIssueDetailsData = data.Details
-          data.Details.forEach((element: any) => {
-            this.tableData.push({
-              jobNumber: element.JOB_NUMBER,
-              jobNumDes: element.JOB_DESCRIPTION,
-              processCode: element.PROCESS_CODE,
-              processCodeDesc: element.PROCESS_NAME,
-              workerCode: element.WORKER_CODE,
-              workerCodeDes: element.WORKER_NAME,
-              pcs: element.PCS,
-              purity: element.PURITY,
-              grossWeight: element.GROSS_WT,
-              netWeight: element.NET_WT,
-
-
-            })
-          });
-          this.metalIssueForm.controls.voctype.setValue(data.VOCTYPE)
-          this.metalIssueForm.controls.vocno.setValue(data.VOCNO)
-          this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
-          this.metalIssueForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
-          this.metalIssueForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
-          
-
-
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-
-  }
-
-
-
-  setvalues() {
-    this.metalIssueForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
-  }
-
   removedata() {
     this.tableData.pop();
   }
 
-
-  formSubmit() {
-
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
-    }
-    if (this.metalIssueForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
-    let postData = {
-      "MID": 0,
-      "VOCTYPE": this.metalIssueForm.value.voctype || "",
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.metalIssueForm.value.VOCNO,
-      "VOCDATE": this.metalIssueForm.value.vocdate || "",
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2024-02-23T14:21:27.753Z",
+  setPostData() {
+    let form = this.metalIssueForm.value
+    return {
+      "MID": this.comService.emptyToZero(form.MID),
+      "VOCTYPE": this.comService.nullToString(form.voctype),
+      "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
+      "VOCNO": this.comService.emptyToZero(form.VOCNO),
+      "VOCDATE": this.comService.nullToString(form.vocdate),
+      "YEARMONTH": this.comService.nullToString(form.YEARMONTH),
+      "DOCTIME": this.comService.nullToString(form.vocdate),
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "METAL_RATE_TYPE": "",
@@ -355,21 +296,45 @@ export class MetalIssueComponent implements OnInit {
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_PURE_WT": 0,
-      "SMAN": "string",
-      "REMARKS": this.metalIssueForm.value.remarks || "",
+      "SMAN": this.comService.nullToString(this.metalIssueForm.value.SALESPERSON_CODE),
+      "REMARKS": this.metalIssueForm.value.REMARKS || "",
       "NAVSEQNO": 0,
       "FIX_UNFIX": true,
       "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "SYSTEM_DATE": "2023-10-20T11:14:53.662Z",
+      "POSTDATE": this.comService.nullToString(form.vocdate),
+      "SYSTEM_DATE": this.comService.nullToString(form.vocdate),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.metalIssueDetailsData
     }
+  }
+  submitValidations(form: any) {
+    if (form.worker == '') {
+      this.comService.toastErrorByMsgId('Worker is required')
+      return true
+    }
+    if (form.vocdate == '') {
+      this.comService.toastErrorByMsgId('Worker is required')
+      return true
+    }
+    return false
+  }
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
+    }
+    if (this.submitValidations(this.metalIssueForm.value)) {
+      return
+    }
 
+    let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
+    let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
@@ -387,67 +352,28 @@ export class MetalIssueComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.comService.toastErrorByMsgId('Not saved')
+        console.log(err);
+      })
     this.subscriptions.push(Sub)
   }
-
-  setFormValues() {
-    if (!this.content) return
-    console.log(this.content, 'qqq');
-
-    this.metalIssueForm.controls.voctype.setValue(this.content.VOCTYPE)
-    this.metalIssueForm.controls.vocno.setValue(this.content.VOCNO)
-    this.metalIssueForm.controls.vocdate.setValue(this.content.VOCDATE)
-    this.metalIssueForm.controls.time.setValue(this.content.DOCTIME)
-    this.metalIssueForm.controls.remarks.setValue(this.content.REMARKS)
-  }
-
 
   update() {
     if (this.metalIssueForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${this.branchCode}/${this.metalIssueForm.value.voctype}/${this.metalIssueForm.value.vocno}/${this.commonService.yearSelected}`
-    let postData = {
-      "MID": 0,
-      "VOCTYPE": this.metalIssueForm.value.voctype || "",
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.metalIssueForm.value.vocno || "",
-      "VOCDATE": this.metalIssueForm.value.vocdate || "",
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2024-02-27T05:14:20.276Z",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "METAL_RATE_TYPE": "",
-      "METAL_RATE": 0,
-      "TOTAL_AMOUNTFC_METAL": 0,
-      "TOTAL_AMOUNTLC_METAL": 0,
-      "TOTAL_AMOUNTFC_MAKING": 0,
-      "TOTAL_AMOUNTLC_MAKING": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_PURE_WT": 0,
-      "SMAN": "",
-      "REMARKS": this.metalIssueForm.value.remarks || "",
-      "NAVSEQNO": 0,
-      "FIX_UNFIX": true,
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "SYSTEM_DATE": "2023-10-20T11:14:53.662Z",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "Details": this.metalIssueDetailsData
-    }
-
+    let form = this.metalIssueForm.value
+    let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${form.BRANCH_CODE}/${form.voctype}/${form.VOCNO}/${form.YEARMONTH}`
+    let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -465,9 +391,12 @@ export class MetalIssueComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.comService.toastErrorByMsgId('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -495,7 +424,8 @@ export class MetalIssueComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + this.metalIssueForm.value.branchCode + this.metalIssueForm.value.voctype + this.metalIssueForm.value.vocno + this.metalIssueForm.value.yearMonth
+        let form = this.metalIssueForm.value
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + form.BRANCH_CODE + form.voctype + form.VOCNO + form.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

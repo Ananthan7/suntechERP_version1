@@ -45,7 +45,7 @@ export class MasterSearchComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    if (!this.MasterSearchData.LOAD_ONCLICK) {
+    if (!this.MasterSearchData?.LOAD_ONCLICK) {
       this.loadData();
     }
   }
@@ -84,7 +84,7 @@ export class MasterSearchComponent implements OnInit {
   /**use: first call to load data */
   loadData() {
     this.dataSource = []
-    if (this.MasterSearchData.API_VALUE && this.MasterSearchData.API_VALUE != '') {
+    if (this.MasterSearchData?.API_VALUE && this.MasterSearchData?.API_VALUE != '') {
       this.getAPIValue()
       return
     }
@@ -172,7 +172,7 @@ export class MasterSearchComponent implements OnInit {
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
     this.overlayPanels.hide();
-    this.dropDown.close()
+    // this.dropDown.close()
   }
   dorpdownToggle(event: any) {
     if (!event){

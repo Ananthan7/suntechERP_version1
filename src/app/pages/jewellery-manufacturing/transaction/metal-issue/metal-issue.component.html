@@ -6,17 +6,18 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" [isloading]="isloading"
+ (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueForm">
-            <div class="container-fluid pt-3">
+            <div class="p-3">
                 <div class="row">
                     <div class="col-md-10">
                         <div class="row m-2">
                             <div class="col-md-5">
                                 <div class=" row">
-                                    <h6>{{branchCode}} - {{companyName}}</h6>
+                                    <h6>{{metalIssueForm.value.BRANCH_CODE}} - {{companyName}}</h6>
                                 </div>
                                 <div class=" row">
                                     <label for="inputPassword"
@@ -43,7 +44,8 @@
                                         <mat-form-field style="width: 100%">
                                             <!-- <input  type="datetime" matInput  formControlName="time"> -->
                                             <input type="datetime" matInput
-                                                formControlName="time"  class="text-right"/>
+                                                formControlName="time" readonly
+                                                class="text-right" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -82,14 +84,14 @@
                                         By:</label>
                                     <div class="col-md-7">
                                         <span>
-                                            <mat-form-field style="width: 90%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
-                                                    formControlName="enteredBy"
+                                                    formControlName="SALESPERSON_CODE"
                                                     [readonly]="viewMode" />
                                             </mat-form-field>
                                             <master-search
-                                                [MasterSearchData]="enteredByCodeData"
-                                                (newRowClick)="enteredByCodeSelected($event)"
+                                                [MasterSearchData]="SALESPERSON_CODEData"
+                                                (newRowClick)="SALESPERSON_CODESelected($event)"
                                                 *ngIf="!viewMode">
                                             </master-search>
                                         </span>
@@ -107,7 +109,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 class="text-right"
-                                                formControlName="vocno"
+                                                formControlName="VOCNO"
                                                 readonly />
                                         </mat-form-field>
                                     </div>
@@ -120,7 +122,7 @@
                                         :</label>
                                     <div class="col-md-7 d-flex">
                                         <span>
-                                            <mat-form-field style="width: 30%;">
+                                            <mat-form-field style="width: 20%;">
                                                 <input type="text" matInput
                                                     formControlName="worker"
                                                     [readonly]="viewMode" />
@@ -147,10 +149,11 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-sm-3 d-flex">
-                                <menu-buttons [viewAddBtn]="true"
+                                <menu-buttons *ngIf="!viewMode"
+                                    [viewAddBtn]="true"
                                     [viewDeleteBtn]="true"
                                     [viewImportBtn]="false"
-                                    (addClick)="openaddmetalissue()"
+                                    (addClick)="openAddMetalIssue()"
                                     (deleteClick)="deleteClicked()">
                                 </menu-buttons>
                                 <div>
@@ -166,16 +169,13 @@
                                 <dx-data-grid #dataGrid id="gridContainer"
                                     keyExpr="SRNO"
                                     [dataSource]="metalIssueDetailsData"
-                                    [showBorders]="true"
+                                    [showBorders]="true" [showRowLines]="true"
                                     [allowColumnResizing]="true"
                                     (onSelectionChanged)="onSelectionChanged($event)"
                                     (onRowClick)="onRowClickHandler($event)">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-
-                                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
-                          </dxo-editing> -->
                                     <dxo-selection
-                                        mode="multiple"></dxo-selection>
+                                        mode="single"></dxo-selection>
 
                                     <dxi-column *ngFor="let data of columnhead"
                                         dataField="{{ data.field }}"
@@ -187,15 +187,18 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="row my-2">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Remarks
-                                        :</label>
-                                    <div class="col-md-9">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="remarks" />
-                                        </mat-form-field>
-                                    </div>
+                                    <span>
+                                        <label for="inputPassword"
+                                            class="col-sm-3 col-form-label">Remarks
+                                            :</label>
+                                        <div class="col-md-9">
+                                            <mat-form-field
+                                                style="width: 100%;">
+                                                <input type="text" matInput
+                                                    formControlName="REMARKS" />
+                                            </mat-form-field>
+                                        </div>
+                                    </span>
                                 </div>
                             </div>
                         </div>
