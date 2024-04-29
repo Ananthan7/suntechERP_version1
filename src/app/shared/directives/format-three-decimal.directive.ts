@@ -4,29 +4,25 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
   selector: '[ThreeDecimalInput]'
 })
 export class FormatThreeDecimalDirective {
-  @Input() numberLimit: any;
+  @Input() max: any;
+  @Input() min: any;
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private commonService: CommonServiceService,
   ) {
   }
-  decimalCount: number = 0
   @HostListener('keypress', ['$event']) onKeyPress(event: any) {
-    console.log('Key pressed:', event.target.value);
     var keyCode = event.which ? event.which : event.keyCode;
-    if(keyCode === 46){
-      this.decimalCount+=1
-    }
-    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && this.decimalCount==1);
+    const currentValue = event.target.value;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && currentValue.indexOf('.') === -1);
     return isValid;  
   }
-  @Input() max: any;
-  @Input() min: any;
+
   @HostListener('input', ['$event']) onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
-    let AMTDECIMAL:any = 3 //hardcoded for six decimal
+    let AMTDECIMAL:any = 3
 
     // Split the value into integer and fractional parts
     const parts = value.split('.');
@@ -44,7 +40,7 @@ export class FormatThreeDecimalDirective {
   @HostListener('blur', ['$event']) onBlur(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;
-    let AMTCount:any = 3 //hardcoded for six decimal
+    let AMTCount:any = 3
     let zeroArr:any[] = ['','0','00','000','0000']
     let str = ''
     let x = 1
@@ -63,13 +59,9 @@ export class FormatThreeDecimalDirective {
     // Split the value into integer and fractional parts
     const parts = value.split('.');
     let integerPart = parts[0];
-    if(integerPart.length > this.numberLimit){
-      integerPart = '0'
-    }else{
-      integerPart = integerPart.toString()
-    }
-    // integerPart = Number(integerPart).toLocaleString('en-US', { style: 'decimal' })
+    integerPart = Number(integerPart).toString()
     let fractionalPart = parts[1];
+   
     
     if(!fractionalPart){
       fractionalPart = ''

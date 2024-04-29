@@ -5,24 +5,21 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
   selector: '[MetalDecimalInput]'
 })
 export class MetalDecimalDirective {
+  @Input() max: any;
+  @Input() min: any;
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private commonService: CommonServiceService,
   ) {
   }
-  decimalCount: number = 0
   @HostListener('keypress', ['$event']) onKeyPress(event: any) {
-    console.log('Key pressed:', event.target.value);
     var keyCode = event.which ? event.which : event.keyCode;
-    if(keyCode === 46){
-      this.decimalCount+=1
-    }
-    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && this.decimalCount==1);
+    const currentValue = event.target.value;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && currentValue.indexOf('.') === -1);
     return isValid;  
   }
-  @Input() max: any;
-  @Input() min: any;
+  
   @HostListener('input', ['$event']) onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
@@ -41,6 +38,7 @@ export class MetalDecimalDirective {
       input.value = `${integerPart}.${fractionalPart}`;
     }
   }
+
   @HostListener('blur', ['$event']) onBlur(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;

@@ -7,14 +7,10 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 export class DecimalInputDirective {
 
   constructor(private el: ElementRef,private commonService: CommonServiceService) { }
-  decimalCount: number = 0
   @HostListener('keypress', ['$event']) onKeyPress(event: any) {
-    console.log('Key pressed:', event.target.value);
     var keyCode = event.which ? event.which : event.keyCode;
-    if(keyCode === 46){
-      this.decimalCount+=1
-    }
-    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && this.decimalCount==1);
+    const currentValue = event.target.value;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || (keyCode === 46 && currentValue.indexOf('.') === -1);
     return isValid;  
   }
   @HostListener('input', ['$event']) onInputChange(event: Event): void {
