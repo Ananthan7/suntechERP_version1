@@ -9,7 +9,8 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)="deleteWorkerMaster()"></modal-header>
+        (deleteClick)="deleteWorkerMaster()" [isViewDelete]="!dele"   [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
+        [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
     <!-- content section -->
     <div class="row">
         <form [formGroup]="sequenceMasterForm">

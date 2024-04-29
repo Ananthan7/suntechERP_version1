@@ -33,6 +33,7 @@ export class WorkerMasterComponent implements OnInit {
   readonlyMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = true;
+  dele: boolean = false;
 
 
   // @ViewChild('codeInput')
@@ -116,6 +117,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
@@ -128,7 +130,8 @@ export class WorkerMasterComponent implements OnInit {
       this.editMode = true;
       this.codeEnable = false;
       this.setFormValues();
-      this.selectProcessWithSP()
+      this.selectProcessWithSP();
+      this.dele = false;
     }
 
   }

@@ -25,6 +25,7 @@ export class SequenceMasterComponent implements OnInit {
   viewMode: boolean = false;
   codeEnable: boolean = true;
   editMode: boolean = false;
+  dele: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -67,8 +68,10 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
+    this.dele = true;
     if (this.content.FLAG == 'EDIT') {
       this.editMode = true
+      this.dele = false;
       this.setFormValues();
     } else if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;

@@ -21,6 +21,7 @@ export class PricelistMasterComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   required: boolean = false;
+  dele: boolean = false;
 
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
@@ -66,6 +67,7 @@ export class PricelistMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.dele = true;
 
     this.priceListMasterForm = this.formBuilder.group({
       priceCode: ['', [Validators.required]],
@@ -82,7 +84,7 @@ export class PricelistMasterComponent implements OnInit {
       roundoff_digit: [''],
     });
 
-    this.initializeForm();
+    //this.initializeForm();
    
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -91,9 +93,9 @@ export class PricelistMasterComponent implements OnInit {
     }
     if (this.content.FLAG == 'EDIT') {
       this.editMode = true;
+      this.dele = false;
       this.setFormValues()
-      this.setAllInitialValues();
-      this.setInitialValues();
+
     }
 
   }
