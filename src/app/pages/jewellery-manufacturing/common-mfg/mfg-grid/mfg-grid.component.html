@@ -55,7 +55,7 @@
 
         <dxi-column *ngFor="let data of orderedItemsHead"
             dataField="{{data.FIELD_NAME}}"
-            caption="{{data.DISPLAY_NAME}}" [allowEditing]="true"
+            caption="{{data.FIELD_NAME}}" [allowEditing]="true"
             [format]="data.FORMAT" [alignment]="data.ALLIGNMENT"
             [visible]="data.FIELD_NAME != 'Id' || data.FIELD_NAME != 'MID'">
         </dxi-column>
