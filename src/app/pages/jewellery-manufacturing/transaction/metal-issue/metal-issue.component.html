@@ -154,7 +154,7 @@
                                     [viewDeleteBtn]="true"
                                     [viewImportBtn]="false"
                                     (addClick)="openAddMetalIssue()"
-                                    (deleteClick)="deleteClicked()">
+                                    (deleteClick)="deleteRowClicked()">
                                 </menu-buttons>
                                 <div>
                                     <mat-form-field style="width: 70%;">
@@ -164,6 +164,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--  (onSelectionChanged)="onSelectionChanged($event)"-->
                         <div class="row mb-2">
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer"
@@ -171,8 +172,8 @@
                                     [dataSource]="metalIssueDetailsData"
                                     [showBorders]="true" [showRowLines]="true"
                                     [allowColumnResizing]="true"
-                                    (onSelectionChanged)="onSelectionChanged($event)"
-                                    (onRowClick)="onRowClickHandler($event)">
+                                    (onRowClick)="onRowClickHandler($event)"
+                                    (onRowDblClick)="onRowDblClickHandler($event)">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-selection
                                         mode="single"></dxo-selection>

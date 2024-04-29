@@ -88,6 +88,7 @@ export class MasterSearchComponent implements OnInit {
       this.getAPIValue()
       return
     }
+    if(!this.MasterSearchData) return
     let param = {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
@@ -105,8 +106,7 @@ export class MasterSearchComponent implements OnInit {
         this.dataSource = result.dynamicData[0]
         let dataCount = result.dynamicData[1]
         this.totalItems = dataCount.COUNT
-
-        this.dataSourceHead = Object.keys(this.dataSource[0]);
+        if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
       }
       // else {
@@ -148,10 +148,10 @@ export class MasterSearchComponent implements OnInit {
   }
 
   showOverlayPanel(event?: Event) {
-    if (this.MasterSearchData.LOAD_ONCLICK) {
+    if (this.MasterSearchData?.LOAD_ONCLICK) {
       this.loadData();
     }
-    if (this.MasterSearchData.SEARCH_VALUE) {
+    if (this.MasterSearchData?.SEARCH_VALUE) {
       this.loadData();
     }
     this.overlayPanels.show(event);

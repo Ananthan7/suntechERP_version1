@@ -45,7 +45,6 @@ export class MetalIssueComponent implements OnInit {
   getdata!: any[];
   tableRowCount: number = 0;
   selectRowIndex: any;
-  selectedKey: number[] = []
   viewMode: boolean = false;
   isloading: boolean = false;
 
@@ -115,8 +114,10 @@ export class MetalIssueComponent implements OnInit {
           let part = data.DOCTIME.split('T')
           this.metalIssueForm.controls.time.setValue(part[1])
 
-          this.setDetailsToHeaderGrid(data.Details) //set to main grid
-          data.Details.forEach((element: any) => {
+          this.metalIssueDetailsData = data.Details
+          this.reCalculateSRNO() //set to main grid
+
+          this.metalIssueDetailsData.forEach((element: any) => {
             this.tableData.push({
               jobNumber: element.JOB_NUMBER,
               jobNumDes: element.JOB_DESCRIPTION,
@@ -140,24 +141,51 @@ export class MetalIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   // use : to recalculate index number
-  setDetailsToHeaderGrid(data: any[]) {
-    data.forEach((item: any, index: any) => {
+  reCalculateSRNO() {
+    this.metalIssueDetailsData.forEach((item: any, index: any) => {
       item.SRNO = index + 1
       item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
     })
-    this.metalIssueDetailsData = data
   }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  deleteClicked(): void {
-    console.log(this.selectedKey, 'data')
-    this.selectedKey.forEach((element: any) => {
-      this.metalIssueDetailsData.splice(element - 1, 1)
-    })
+  deleteRowClicked(): void {
+    if (!this.selectRowIndex) {
+      Swal.fire({
+        title: '',
+        text: 'Please select row to remove from grid!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+          this.metalIssueDetailsData = this.metalIssueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+          this.reCalculateSRNO()
+        }
+      }
+    )
   }
   onRowClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
+    console.log(this.selectRowIndex);
+  }
+  onRowDblClickHandler(event: any) {
     this.selectRowIndex = (event.dataIndex)
     let selectedData = event.data
     this.openAddMetalIssue(selectedData)
@@ -251,22 +279,6 @@ export class MetalIssueComponent implements OnInit {
     console.log(e);
     this.metalIssueForm.controls.worker.setValue(e.WORKER_CODE);
     this.metalIssueForm.controls.workerDes.setValue(e.DESCRIPTION);
-  }
-
-
-  onSelectionChanged(event: any) {
-
-
-    this.selectedKey = event.selectedRowKeys;
-    console.log(this.selectedKey, 'srno')
-    let indexes: Number[] = [];
-    this.metalIssueDetailsData.reduce((acc, value, index) => {
-      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
-        acc.push(index);
-      }
-      return acc;
-    }, indexes);
-    this.selectedIndexes = indexes;
   }
 
   removedata() {
