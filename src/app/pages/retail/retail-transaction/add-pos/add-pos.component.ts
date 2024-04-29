@@ -8093,7 +8093,7 @@ export class AddPosComponent implements OnInit {
                 // this.close('reloadMainGrid');
 
                 this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
-
+               
                 console.log('==================tourVatRefuncYN==================');
                 const traNo = this.customerDataForm.value.tourVatRefundNo || '';
                 console.log(this.posPlanetIssuing, this.customerDataForm.value.tourVatRefuncYN, traNo);
@@ -8109,7 +8109,8 @@ export class AddPosComponent implements OnInit {
                 this.snackBar.open('POS Saved', 'OK');
 
                 this.saveAndContinue(type);
-
+                this.content.MID = res.response.retailSales.MID
+                console.log(this.content.MID,'middddddddddd');
 
                 setTimeout(() => {
                   // location.reload();
