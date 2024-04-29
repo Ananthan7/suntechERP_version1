@@ -2989,7 +2989,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>ID Card</mat-label>
+                <mat-label>ID Number</mat-label>
                 <input type="text" matInput
                   formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
                   appNoEmptySpace />
@@ -2998,7 +2998,7 @@
                       'required'
                     )
                   ">
-                  ID Card is <strong>required</strong>
+                  ID Number is <strong>required</strong>
                 </mat-error>
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_cust_detail_idcard.hasError(
@@ -3006,7 +3006,7 @@
                     )
                   ">
                   <!-- ID Card must be 15 characters long. -->
-                  ID Card be at least
+                  ID Number be at least
                   {{
                   customerDetailForm
                   .get("fcn_cust_detail_idcard")
@@ -3019,7 +3019,7 @@
                       'maxlength'
                     )
                   ">
-                  ID Card must not exceed
+                  ID Number must not exceed
                   {{
                   customerDetailForm
                   .get("fcn_cust_detail_idcard")
