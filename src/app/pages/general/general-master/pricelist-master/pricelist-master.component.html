@@ -28,6 +28,7 @@
                                                 maxlength="6" #priceCode
                                                 formControlName="priceCode"
                                                 (focusout)="checkWorkerExists($event)"
+                                                (keyup)="codeEnabled()"
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
@@ -41,7 +42,7 @@
                                             <input type="text" matInput
                                                 #description
                                                 formControlName="description"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode || codeEnable"
                                                 (input)="description.value = description.value.toUpperCase()"
                                                 maxlength="40" />
                                         </mat-form-field>
@@ -61,7 +62,7 @@
                                                 <mat-option
                                                     *ngFor="let priceType of priceTypeList"
                                                     [value]="priceType.value"
-                                                    [disabled]="viewMode"> 
+                                                    [disabled]="viewMode || codeEnable"> 
                                                     {{ priceType.type }}
                                                 </mat-option>
                                             </mat-select>
@@ -74,7 +75,7 @@
                                                 <mat-option
                                                     *ngFor="let option of allOperatorList"
                                                     [value]="option.operator"
-                                                    [disabled]="viewMode">
+                                                    [disabled]="viewMode || codeEnable">
                                                     {{ option.operator }}
                                                 </mat-option>
                                             </mat-select>
@@ -91,7 +92,7 @@
                                                 matInput AmountDecimalInput
                                                 formControlName="priceValue"
                                                 [required]="required"
-                                                [readonly]="viewMode" />
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
 
                                         <mat-form-field
@@ -101,7 +102,7 @@
                                                 <mat-option
                                                     *ngFor="let option of operatorsList"
                                                     [value]="option.value"
-                                                    [disabled]="viewMode">
+                                                    [disabled]="viewMode || codeEnable">
                                                     {{ option.operation }}
                                                 </mat-option>
                                             </mat-select>
@@ -110,7 +111,7 @@
                                             <input type="text"
                                                 class="text-right" matInput
                                                 AmountDecimalInput
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode || codeEnable"
                                                 formControlName="finalPriceValue"
                                                 [required]="required" />
                                         </mat-form-field>
@@ -131,7 +132,7 @@
                                                 <mat-option
                                                     *ngFor="let option of operatorsList"
                                                     [value]="option.value"
-                                                    [disabled]="viewMode">
+                                                    [disabled]="viewMode || codeEnable">
                                                     {{ option.operation }}
                                                 </mat-option>
                                             </mat-select>
@@ -143,7 +144,7 @@
                                                 AmountDecimalInput
                                                 (input)="onInputChange($event,'addlValue', 5)"
                                                 formControlName="addlValue"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode || codeEnable"
                                                 [required]="required" />
                                         </mat-form-field>
                                     </div>
@@ -155,7 +156,7 @@
                                         <section class="example-section">
                                             <mat-checkbox class="example-margin"
                                                 formControlName="priceRoundoff"
-                                                [disabled]="viewMode">Round
+                                                [disabled]="viewMode || codeEnable">Round
                                                 off
                                                 Digits </mat-checkbox>
                                         </section>
@@ -168,7 +169,7 @@
                                                     [max]="13"
                                                     matInput
                                                     formControlName="roundoff_digit"
-                                                    [readonly]="viewMode"
+                                                    [readonly]="viewMode || codeEnable"
                                                     class="text-right" />
                                             </mat-form-field>
                                         </div>
@@ -181,7 +182,7 @@
                                             <mat-checkbox
                                                 formControlName="dontCalculate"
                                                 class="example-margin"
-                                                [disabled]="viewMode">Dont
+                                                [disabled]="viewMode || codeEnable">Dont
                                                 Calculate On Cost
                                                 Change</mat-checkbox>
                                         </section>
