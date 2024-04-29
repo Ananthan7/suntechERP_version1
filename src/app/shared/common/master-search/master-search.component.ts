@@ -154,7 +154,7 @@ export class MasterSearchComponent implements OnInit {
     if (this.MasterSearchData.SEARCH_VALUE) {
       this.loadData();
     }
-    // this.overlayPanels.show(event);
+    this.overlayPanels.show(event);
   }
   onHidePanel() {
     if (this.MasterSearchData.SEARCH_VALUE != '') {
@@ -171,7 +171,7 @@ export class MasterSearchComponent implements OnInit {
     }
     this.MasterSearchData.PAGENO = 1
     this.MasterSearchData.SEARCH_VALUE = ''
-    // this.overlayPanels.hide();
+    this.overlayPanels.hide();
     this.dropDown.close()
   }
   dorpdownToggle(event: any) {
@@ -187,9 +187,9 @@ export class MasterSearchComponent implements OnInit {
   }
   //handle Row Click of table
   handleRowClick(event: any) {
-    this.dropDown.close()
     this.newRowClick.emit(event)
     this.closeOverlayPanel()
+    // this.dropDown.close()
   }
 
   //search Value Change
