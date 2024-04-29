@@ -29,7 +29,7 @@ export class FormatSixDecimalDirective {
 
     // Split the value into integer and fractional parts
     const parts = value.split('.');
-    let integerPart = parts[0];
+    let integerPart = this.commonService.emptyToZero(parts[0]).toString();
     let fractionalPart = parts[1];
     if (this.max && integerPart.length > this.max) {
       integerPart = integerPart.slice(0, this.max);

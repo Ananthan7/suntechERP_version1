@@ -280,9 +280,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="grossWeight"
-                                                [readonly]="viewMode" [max]="6"
-                                                style="text-align: right;"
-                                                MetalDecimalInput />
+                                                [readonly]="viewMode" MetalDecimalInput [max]="6"
+                                                class="text-right"/>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword"
