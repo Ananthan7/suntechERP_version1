@@ -21,6 +21,8 @@ export class PricelistMasterComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   required: boolean = false;
+  dele: boolean = false;
+  codeEnable: boolean = true;
 
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
@@ -66,6 +68,8 @@ export class PricelistMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.dele = true;
+
 
     this.priceListMasterForm = this.formBuilder.group({
       priceCode: ['', [Validators.required]],
@@ -82,8 +86,8 @@ export class PricelistMasterComponent implements OnInit {
       roundoff_digit: [''],
     });
 
+
     this.initializeForm();
-   
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setAllInitialValues();
@@ -91,15 +95,27 @@ export class PricelistMasterComponent implements OnInit {
     }
     if (this.content.FLAG == 'EDIT') {
       this.editMode = true;
+      this.dele = false;
+      this.codeEnable = false;
       this.setFormValues()
-      this.setAllInitialValues();
-      this.setInitialValues();
+
     }
 
   }
 
   setFormValues() {
     if (!this.content) return
+
+    this.priceListMasterForm.controls.priceCode.setValue(this.content.PRICE_CODE);
+    this.priceListMasterForm.controls.description.setValue(this.content.DESCRIPTION);
+    this.priceListMasterForm.controls.priceMethod.setValue(this.content.PRICE_METHOD);
+    this.priceListMasterForm.controls.priceValue.setValue(this.content.PRICE_VALUE);
+    this.priceListMasterForm.controls.finalPriceSign.setValue(this.content.FINALPRICE_SIGN);
+    this.priceListMasterForm.controls.addlValueSign.setValue(this.content.ADDLVALUE_SIGN);
+    this.priceListMasterForm.controls.roundoff_digit.setValue(this.content.ROUNDOFF_DIGIT);
+
+
+
 
     this.priceListMasterForm.controls.finalPriceValue.setValue(
       this.commonService.transformDecimalVB(
@@ -112,12 +128,12 @@ export class PricelistMasterComponent implements OnInit {
         this.content.ADDLVALUE));
   }
 
-  private setInitialValues() {
-    console.log(this.commonService.amtFormat)
-    this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+  // private setInitialValues() {
+  //   console.log(this.commonService.amtFormat)
+  //   this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+  //   this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
-  }
+  // }
 
   formSubmit() {
     console.log(this.priceListMasterForm.value.priceMethod);
@@ -171,14 +187,12 @@ export class PricelistMasterComponent implements OnInit {
   }
 
   private initializeForm() {
-    try {
-      // this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-      // this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-      // this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-      //  this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    } catch (error) {
-      console.error('Error in initializeForm:', error);
-    }
+
+    this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.priceListMasterForm.controls.roundoff_digit.setValue(0)
+
   }
   setAllInitialValues() {
     if (!this.content) return
@@ -419,7 +433,7 @@ export class PricelistMasterComponent implements OnInit {
             // Clear the input value
             this.priceListMasterForm.controls.priceCode.setValue('');
 
-            //this.codeEnable = true;
+            this.codeEnable = true;
             setTimeout(() => {
               this.renderer.selectRootElement('#priceCode').focus();
             }, 500);
@@ -432,5 +446,13 @@ export class PricelistMasterComponent implements OnInit {
 
     this.subscriptions.push(sub);
   }
+  codeEnabled() {
+    if (this.priceListMasterForm.value.WorkerCode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
 
+  }
 }
