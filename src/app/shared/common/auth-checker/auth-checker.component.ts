@@ -102,13 +102,13 @@ export class AuthCheckerComponent implements OnInit {
         option[optVal2].toLowerCase().includes(filterValue)
     );
   }
-
-  submitAuth() {
-    if(!this.authForm.value.reason){
+  // submit function input flag is for validate pswd before submit
+  submitAuth(flag?:any) {
+    if(!this.authForm.value.reason && !flag){
       this.CommonService.toastErrorByMsgId('Reason required')
       return
     }
-    if (!this.authForm.invalid) {
+    if (!this.authForm.invalid || flag) {
       let API = 'ValidatePassword/ValidateEditDelete';
       const postData = {
         // "Username": this.authForm.value.username,
@@ -117,11 +117,17 @@ export class AuthCheckerComponent implements OnInit {
       };
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-          this.modalReferenceUserAuth.close(true);
-          this.authSubmit.emit('Success')
-          this.authForm.reset();
+          if(!flag){
+            this.CommonService.EditDetail.REASON =  this.authForm.value.reason
+            this.CommonService.EditDetail.DESCRIPTION =  this.authForm.value.description
+            this.CommonService.EditDetail.PASSWORD =  this.authForm.value.password
+            this.modalReferenceUserAuth.close(true);
+            this.authSubmit.emit('Success')
+            this.authForm.reset();
+          }
         } else {
           this.CommonService.showSnackBarMsg(resp.message)
+          this.authForm.controls.password.setValue('')
         }
       });
       this.subscriptions.push(sub)

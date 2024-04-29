@@ -3,7 +3,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { AuditTrailModel } from '../../data/audit-trial-model';
 
 @Component({
   selector: 'audit-trail',
@@ -28,7 +27,7 @@ export class AuditTrailComponent implements OnInit {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
-      currency: this.commonService.compCurrency
+      currency: 'AED'
     };
   }
 
@@ -53,7 +52,7 @@ export class AuditTrailComponent implements OnInit {
     this.getPostedData(formData)
   }
  
-  getPostedData(formData: AuditTrailModel) {
+  getPostedData(formData: any) {
     let API = `SchemeCurrencyReceipt/GetAuditTrial` +
       `/${formData.BRANCH_CODE}` +
       `/${formData.VOCTYPE}/${formData.VOCNO}` +

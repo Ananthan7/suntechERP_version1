@@ -29,6 +29,7 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+  @Input() isloading: boolean = false;
 
   @Input() isViewMore: boolean = true;
   @Input() isViewPrint: boolean = true;

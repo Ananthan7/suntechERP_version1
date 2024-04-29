@@ -1,6 +1,7 @@
 <!-- ngb drop down -->
-<!-- <span class="dropdown dropsMain" ngbDropdown display="dynamic" #dropdown="ngbDropdown"
-    (hidden)="onHidePanel()">
+<span class="dropdown dropsMain" ngbDropdown 
+    (openChange)="dorpdownToggle($event)"
+    #dropdown="ngbDropdown">
     <i class="fa fa-search search-btn" name="search"
         (click)="showOverlayPanel($event)" 
         aria-haspopup="true" aria-expanded="true"
@@ -10,11 +11,11 @@
         <div class="p-2">
             <div
                 class="d-flex justify-content-between border-bottom searchspan">
-                <h6>{{MasterSearchData?.SEARCH_HEADING}}</h6>
+                <h6>{{MasterSearchData.SEARCH_HEADING}}</h6>
                 <i (click)="closeOverlayPanel()"
                     class="fas fa-times icon-common"></i>
             </div>
-            <div class="row" *ngIf="MasterSearchData?.VIEW_INPUT">
+            <div class="row" *ngIf="MasterSearchData.VIEW_INPUT">
                 <div class="col-md-6 p-2">
                     <mat-form-field style="width: 100%">
                         <mat-label>Search</mat-label>
@@ -33,7 +34,7 @@
                     </button>
                 </div>
             </div>
-            <div class="letters" *ngIf="MasterSearchData?.VIEW_INPUT">
+            <div class="letters" *ngIf="MasterSearchData.VIEW_INPUT">
                 <ng-container *ngFor="let item of alphabetSource">
                     <a (click)="alphabetClicked(item)">{{item}}</a>
                 </ng-container>
@@ -62,9 +63,9 @@
             </div>
         </div>
     </div>
-</span> -->
+</span>
 <!-- prime ng drop down -->
-<span >
+<!-- <span >
     <button (click)="showOverlayPanel($event)" 
         style="border: none; background-color: transparent;padding-top: 6px;">
         <i class="fa fa-search searchIcon"></i>
@@ -121,4 +122,4 @@
            </div>
         </ng-template>
     </p-overlayPanel>
-</span>
+</span> -->

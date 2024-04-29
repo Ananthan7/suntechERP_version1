@@ -9,6 +9,7 @@ Chart.register(...registerables);
 import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
+import { EditReasonModel } from '../shared/data/edit-reason';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,12 @@ export class CommonServiceService {
   enableJawahara: boolean = false;
   posIdNoCompulsory: boolean = false;
   compAcCode: any;
-
+  EditDetail: EditReasonModel = {
+    USERNAME: localStorage.getItem('username') || '',
+    PASSWORD: '',
+    REASON: '',
+    DESCRIPTION: ''
+  }
   public allMessageBoxData: any;
   public allCompanyParams: any;
   public allCompanyParameters: any;
@@ -246,6 +252,11 @@ export class CommonServiceService {
       timeOut: 3000,
     })
   }
+  toastSuccessByText(Msg: string, Description?: string) {
+    this.toastr.success(Msg, Description ? Description : '', {
+      timeOut: 3000,
+    })
+  }
   toastInfoByMsgId(MsgId: string, Description?: string) {
     this.toastr.info(this.getMsgByID(MsgId), Description ? Description : '', {
       timeOut: 3000,
@@ -260,7 +271,10 @@ export class CommonServiceService {
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
-    return this.allCompanyParameters ? this.allCompanyParameters[0][parameter] : ''
+    let value = this.allCompanyParameters ? this.allCompanyParameters[0][parameter] : ''
+    if(value.toString().toUpperCase() == 'TRUE') value = true
+    if(value.toString().toUpperCase() == 'FALSE') value = false
+    return value
   }
   setCommaSerperatedNumber(value: any, decimal: any) {
     return this.commaSeperation(

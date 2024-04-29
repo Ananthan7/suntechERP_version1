@@ -82,6 +82,7 @@ import { NumericFilterDirective } from './directives/single-digit-numeric';
 import { GridSearchComponent } from './common/grid-search/grid-search.component';
 import { ImageSliderComponent } from './common/image-slider/image-slider.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { FavoriteMenusComponent } from './common/favorite-menus/favorite-menus.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -119,6 +120,7 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
     AuthCheckerComponent,
     GridSearchComponent,
     ImageSliderComponent,
+    FavoriteMenusComponent
   ],
   imports: [
     CommonModule,
@@ -184,6 +186,7 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
     AttachmentUploadComponent,
     GridSearchComponent,
     ImageSliderComponent,
+    FavoriteMenusComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     DecimalFormatPipe,

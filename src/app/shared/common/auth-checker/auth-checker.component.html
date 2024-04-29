@@ -19,6 +19,7 @@
               type="password"
               matInput
               formControlName="password"
+              (focusout)="submitAuth(1)"
               appNoEmptySpace />
             <mat-error *ngIf="authForm.controls.password.hasError('required')">
               Password is <strong>required</strong>

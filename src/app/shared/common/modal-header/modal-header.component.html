@@ -11,7 +11,8 @@
                     <button type="button" class="btn btn-primary text-center"
                         [disabled]="disableSaveBtn"
                         (click)="saveClicked()">
-                        Save
+                        <span class="loader" *ngIf="isloading"></span>       
+                        <span *ngIf="!isloading">Save</span>
                     </button>
                 </ng-template>
             </div>

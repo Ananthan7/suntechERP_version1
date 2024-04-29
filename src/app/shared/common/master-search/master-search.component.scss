@@ -1,18 +1,18 @@
 ::ng-deep {
   .searchDropdown {
     position: absolute;
+    z-index: 1090 !important;
     min-width: 46rem;
     min-height: 20rem;
     padding: 6px;
-    // }
-    // .p-overlaypanel {
+  // }
+  // .p-overlaypanel {
     background: #ffffff;
     color: rgba(0, 0, 0, 0.87);
     border: 0 none;
     border-radius: 4px;
     box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
   }
-
 
   .p-overlaypanel {
     z-index: 1070 !important;
@@ -25,11 +25,6 @@
   .mat-form-field {
     font-size: 13px !important;
   }
-}
-
-.dropsMain {
-  // position: relative;
-  z-index: 9999 !important;
 }
 
 .search-btn {
