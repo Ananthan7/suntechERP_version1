@@ -187,12 +187,12 @@ export class MeltingTypeComponent implements OnInit {
 
     if(defaultAlloyPer){
       this.toastr.error("Alloy %  cannot be Zero's ");
+      return;
     }
-    else
-    {
+
 
     if (defaultAlloyEmpty) {
-      this.toastr.error('Zero alloy % Cannot be Added');
+      this.toastr.error('Default Alloy cannot be empty');
       // return; // Exit the method if any Default Alloy is empty
     }
     else {
@@ -253,7 +253,7 @@ export class MeltingTypeComponent implements OnInit {
       }
     }
   }
-}
+
 
   getRowDataForColumn(arg0: string) {
     throw new Error('Method not implemented.');
