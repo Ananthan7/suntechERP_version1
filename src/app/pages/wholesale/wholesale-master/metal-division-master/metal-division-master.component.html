@@ -16,12 +16,12 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="code" maxlength="1"/>
+                            <input type="text" matInput formControlName="code" maxlength="6" oninput="this.value = this.value.toUpperCase()" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-5">
                           <mat-form-field style="width: 90%;">
-                            <input type="text" matInput formControlName="codedes" />
+                            <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" maxlength="50"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -49,7 +49,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Abbreviation :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="Abbreviation" />
+                            <input type="text" matInput formControlName="Abbreviation" oninput="this.value = this.value.toUpperCase()" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">

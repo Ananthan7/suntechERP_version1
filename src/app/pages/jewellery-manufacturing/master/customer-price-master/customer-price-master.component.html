@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Wise Stone/Labour Master</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Wise Stone / Labour Master</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -204,6 +204,7 @@
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000" [width]="100">
+                  <dxo-format type="fixedPoint" precision="2"></dxo-format>
                 </dxi-column>
               </dx-data-grid>
             </mat-tab>
