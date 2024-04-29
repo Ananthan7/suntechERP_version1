@@ -106,6 +106,8 @@ export class AddPosComponent implements OnInit {
   public isCustProcessing = false;
   isNoDiscountAllowed: boolean = false;
 
+
+  isNetAmountChange: boolean = false;
   lineItemModalForSalesReturn: boolean = false;
   salesReturnRowData: any;
   salesReturnRowDataSRNO: any;
@@ -155,6 +157,7 @@ export class AddPosComponent implements OnInit {
   blockMinimumPrice: any;
   blockMinimumPriceValue: any;
   validatePCS: any;
+  enablePieces: boolean = false;
 
   receiptModesTypes: any;
   receiptModesList: any;
@@ -2346,7 +2349,7 @@ export class AddPosComponent implements OnInit {
   customizeDate(data: any) {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
-  closeAddCustomerModal(){
+  closeAddCustomerModal() {
     this.resetCustomerData()
     this.modalReference.close()
   }
@@ -2646,6 +2649,7 @@ export class AddPosComponent implements OnInit {
               this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
               this.disableSaveBtn = false;
               this.validatePCS = stockInfos.VALIDATE_PCS;
+              this.enablePieces = stockInfos.ENABLE_PCS;
               this.managePcsGrossWt();
 
               this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
@@ -3629,7 +3633,7 @@ export class AddPosComponent implements OnInit {
       }
     }
   }
-  resetCustomerData(){
+  resetCustomerData() {
     this.customerDetailForm.reset();
     this.customerDataForm.reset();
     this.customerDetails = {};
@@ -4624,6 +4628,7 @@ export class AddPosComponent implements OnInit {
           value.MKGMTLNETRATE // changed at 20/3/2024
         );
         this.validatePCS = false;
+        this.enablePieces = false;
         this.managePcsGrossWt();
         // this.manageCalculations();
       }, 100);
@@ -6932,17 +6937,17 @@ export class AddPosComponent implements OnInit {
 
 
                 // need field from jebaraj
-                // if (!this.comFunc.stringToBoolean(this.newLineItem.ALLOW_NEGATIVE.toString())) {
+                if (!this.newLineItem.DONT_ALLOW_DUPLICATE) {
 
-                //   const res = this.ordered_items.filter((data: any) => data.stock_code == this.newLineItem.STOCK_CODE);
-                //   if (res.length > 0) {
-                //     this.snackBar.open('Stock Already Exists', 'OK', {
-                //       duration: 2000
-                //     });
-                //     return;
-                //   }
+                  const res = this.ordered_items.filter((data: any) => data.stock_code == this.newLineItem.STOCK_CODE);
+                  if (res.length > 0) {
+                    this.snackBar.open('Stock Already Exists', 'OK', {
+                      duration: 2000
+                    });
+                    return;
+                  }
 
-                // }
+                }
                 this.newLineItem.HSN_CODE = stockInfoTaxes[0]?.HSN_CODE;
                 this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
                 this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
@@ -6953,7 +6958,7 @@ export class AddPosComponent implements OnInit {
                 this.setGiftType();
 
 
-                this.isStoneIncluded = this.comFunc.stringToBoolean(stockInfos.STONE);
+                this.isStoneIncluded = stockInfos.STONE;
                 this.lineItemForm.controls['fcn_li_item_code'].setValue(
                   stockInfos.STOCK_CODE
                 );
@@ -7004,6 +7009,7 @@ export class AddPosComponent implements OnInit {
                   stockInfoPrice.MIN_SAL_PRICE
                 );
                 this.validatePCS = stockInfos.VALIDATE_PCS;
+                this.enablePieces = stockInfos.ENABLE_PCS;
                 this.managePcsGrossWt();
 
                 // this.lineItemForm.controls['fcn_li_rate'].setValue(stockInfos.RATE); // got value =0
@@ -7476,7 +7482,7 @@ export class AddPosComponent implements OnInit {
   // }
 
   managePcsGrossWt() {
-    if (this.validatePCS == true) {
+    if (this.validatePCS == true || this.enablePieces == true) {
       if (!this.viewOnly)
         this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
@@ -8093,7 +8099,7 @@ export class AddPosComponent implements OnInit {
                 // this.close('reloadMainGrid');
 
                 this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
-               
+
                 console.log('==================tourVatRefuncYN==================');
                 const traNo = this.customerDataForm.value.tourVatRefundNo || '';
                 console.log(this.posPlanetIssuing, this.customerDataForm.value.tourVatRefuncYN, traNo);
@@ -8110,7 +8116,7 @@ export class AddPosComponent implements OnInit {
 
                 this.saveAndContinue(type);
                 this.content.MID = res.response.retailSales.MID
-                console.log(this.content.MID,'middddddddddd');
+                console.log(this.content.MID, 'middddddddddd');
 
                 setTimeout(() => {
                   // location.reload();
@@ -8234,7 +8240,7 @@ export class AddPosComponent implements OnInit {
   //   }
   // }
 
-  printReceiptDetailsWeb(){
+  printReceiptDetailsWeb() {
     let _validate = this.validateBeforePrint();
     if (_validate[0] === false) {
       if (typeof _validate[1] === 'string') {
@@ -8244,36 +8250,36 @@ export class AddPosComponent implements OnInit {
       }
       return
     }
-    let postData =  {
+    let postData = {
       "MID": this.comFunc.emptyToZero(this.content?.MID),
       "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
       "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
       "YEARMONTH": this.comFunc.nullToString(this.baseYear),
     }
-    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb',postData)
-    .subscribe((result:any)=>{
-      console.log(result);
-      let data = result.response
-      var WindowPrt = window.open('', '_blank', 'width=300,height=600');
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
-      let printContent = data[0].HTMLOUT
-      WindowPrt.document.write(printContent);
-
-      WindowPrt.document.close();
-      WindowPrt.focus();
-
-      setTimeout(() => {
-        if (WindowPrt) {
-          WindowPrt.print();
-        } else {
-          console.error('Print window was closed before printing could occur.');
+    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+      .subscribe((result: any) => {
+        console.log(result);
+        let data = result.response
+        var WindowPrt = window.open('', '_blank', 'width=300,height=600');
+        if (WindowPrt === null) {
+          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+          return;
         }
-      }, 800);
-    })
+        let printContent = data[0].HTMLOUT
+        WindowPrt.document.write(printContent);
+
+        WindowPrt.document.close();
+        WindowPrt.focus();
+
+        setTimeout(() => {
+          if (WindowPrt) {
+            WindowPrt.print();
+          } else {
+            console.error('Print window was closed before printing could occur.');
+          }
+        }, 800);
+      })
   }
 
   printInvoice() {
@@ -8343,8 +8349,9 @@ export class AddPosComponent implements OnInit {
   }
 
   changePCS(event: any) {
+    this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
-    if (event.target.value != '' && this.validatePCS == true) {
+    if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
 
 
       if (this.blockNegativeStock == 'B') {
@@ -8405,7 +8412,7 @@ export class AddPosComponent implements OnInit {
         this.manageCalculations();
       }
     } else {
-      if (this.validatePCS == true)
+      if (this.validatePCS == true || this.enablePieces)
         this.lineItemForm.controls['fcn_li_gross_wt'].setValue(this.zeroMQtyVal);
       this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
 
@@ -8435,6 +8442,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeGrossWt(event: any) {
+    this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
 
     this.setGrossWtFocus();
@@ -8443,7 +8451,7 @@ export class AddPosComponent implements OnInit {
         if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
             'Warning',
-            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue1?',
             true
           );
           this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -8464,7 +8472,7 @@ export class AddPosComponent implements OnInit {
         if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
             'Warning',
-            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+            'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue2?',
             false
           );
           this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -8848,6 +8856,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeRate(event: any) {
+    this.isNetAmountChange = false;
     this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
       this.zeroAmtVal
 
@@ -8894,7 +8903,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
       if (this.divisionMS == 'S') {
-        if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+        if (this.lineItemModalForSalesReturn || (this.lineItemForm.value.fcn_li_rate) >= parseFloat(this.newLineItem.STOCK_COST)) {
 
           this.rateFunc(value);
         }
@@ -8926,6 +8935,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeTotalAmt(event: any, nettAmt = null) {
+    this.isNetAmountChange = false;
     this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
       this.zeroAmtVal
 
@@ -9048,6 +9058,7 @@ export class AddPosComponent implements OnInit {
     this.setExNetAmt();
   }
   changeStoneRate(event: any) {
+    this.isNetAmountChange = false;
     if (event.target.value != '') {
       // this.setStoneAmt();
       this.manageCalculations();
@@ -9419,6 +9430,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeGrossAmt(event: any) {
+    this.isNetAmountChange = false;
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_gross_amount'));
     if (event.target.value != '') {
       let totalAmt = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
@@ -9525,7 +9537,7 @@ export class AddPosComponent implements OnInit {
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
       );
     } else {
-      totalAmt = this.comFunc.transformDecimalVB(
+      totalAmt = this.isNetAmountChange ? grossAmt : this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
       );
@@ -9541,6 +9553,10 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
     this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
     this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
+    // this.lineItemForm.controls.fcn_li_rate.setValue(totalAmt);
+
+
+
 
 
     if (this.divisionMS == 'M') {
@@ -9566,7 +9582,7 @@ export class AddPosComponent implements OnInit {
   }
   async changeNettAmt(event: any) {
 
-
+    this.isNetAmountChange = true;
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_net_amount'));
     const netAmtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
     if (event.target.value != '') {
@@ -9757,7 +9773,8 @@ export class AddPosComponent implements OnInit {
 
         }
       } else {
-        mkgvalue =
+
+        mkgvalue = this.isNetAmountChange ? this.lineItemForm.value.fcn_li_gross_amount - this.lineItemForm.value.fcn_li_discount_amount :
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) *
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
       }
@@ -9787,7 +9804,8 @@ export class AddPosComponent implements OnInit {
 
 
 
-    localStorage.setItem('fcn_li_rate', this.lineItemForm.value.fcn_li_rate);
+    this.isNetAmountChange ? localStorage.setItem('fcn_li_rate', ((this.lineItemForm.value.fcn_li_gross_amount / this.lineItemForm.value.fcn_li_gross_wt).toString())) :
+      localStorage.setItem('fcn_li_rate', this.lineItemForm.value.fcn_li_rate);
 
     /** set all total amount */
     let stoneAmt = this.comFunc.emptyToZero(
@@ -9872,7 +9890,10 @@ export class AddPosComponent implements OnInit {
 
   }
   lineItemCommaSeparation() {
-    this.lineItemForm.controls['fcn_li_rate'].setValue(
+    this.isNetAmountChange ? this.lineItemForm.controls['fcn_li_rate'].setValue(
+      this.comFunc.commaSeperation(this.comFunc
+        .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(((this.lineItemForm.value.fcn_li_gross_amount / this.lineItemForm.value.fcn_li_gross_wt)))))
+    ) : this.lineItemForm.controls['fcn_li_rate'].setValue(
       this.comFunc.commaSeperation(this.comFunc
         .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
     );
@@ -10078,6 +10099,7 @@ export class AddPosComponent implements OnInit {
     );
   }
   changeStoneWt(event: any) {
+    this.isNetAmountChange = false;
     const value = event.target.value;
     // alert(value + '_' + this.lineItemForm.value.fcn_li_gross_wt);
     if (value != '') {
@@ -10152,6 +10174,7 @@ export class AddPosComponent implements OnInit {
   // }
 
   changeNettWt(event: any) {
+    this.isNetAmountChange = false;
     if (event.target.value != '') {
       const value = this.comFunc.transformDecimalVB(
         this.comFunc.mQtyDecimals,
@@ -10170,6 +10193,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeStoneAmt(event: any) {
+    this.isNetAmountChange = false;
     if (event.target.value != '') {
       if (
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) == 0
@@ -12306,6 +12330,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeFinalDiscount(event: any) {
+    this.isNetAmountChange = false;
     const value = event.target.value;
     const posRoundOffRange = Number(localStorage.getItem('POSROUNDOFFRANGE')) || 0;
 
@@ -12402,6 +12427,7 @@ export class AddPosComponent implements OnInit {
     }
   }
   changeCurRate(e: any) {
+    this.isNetAmountChange = false;
     console.log(e);
     let value = e.target.value;
     if (value != '') {
@@ -12451,7 +12477,7 @@ export class AddPosComponent implements OnInit {
       this.isNoDiscountAllowed = false;
   }
   setGrossWtFocus() {
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && !this.validatePCS) {
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && !this.validatePCS ) {
       this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
       this.snackBar.open('Gross Wt should not 0', 'OK', {
         duration: 2000
@@ -12473,7 +12499,7 @@ export class AddPosComponent implements OnInit {
     }
   }
 
-  auditTrailClick(){
+  auditTrailClick() {
     let params: AuditTrailModel = {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
       VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
