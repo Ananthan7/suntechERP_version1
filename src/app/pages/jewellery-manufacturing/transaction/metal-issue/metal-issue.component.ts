@@ -53,7 +53,7 @@ export class MetalIssueComponent implements OnInit {
     time: [new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()],
     vocdate: ['', [Validators.required]],
     SALESPERSON_CODE: [''],
-    VOCNO: [0],
+    VOCNO: [''],
     MID: [0],
     worker: ['', [Validators.required]],
     workerDes: [''],
