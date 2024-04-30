@@ -284,6 +284,7 @@
                                             <input type="text" matInput
                                                 formControlName="GROSS_WT"
                                                 [readonly]="viewMode"
+                                                (focusout)="calculateNetWt()"
                                                 MetalDecimalInput [max]="6"
                                                 class="text-right" />
                                         </mat-form-field>
@@ -294,7 +295,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="netWeight"
+                                                formControlName="NET_WT"
                                                 [readonly]="viewMode"
                                                 class="text-right"
                                                 MetalDecimalInput [max]="13" />
@@ -311,6 +312,7 @@
                                                 formControlName="STONE_WT"
                                                 [readonly]="viewMode"
                                                 class="text-right"
+                                                (focusout)="calculateNetWt()"
                                                 StoneDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
@@ -334,6 +336,13 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
+                                                formControlName="toDIVCODE"
+                                                [readonly]="viewMode" />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput
                                                 formControlName="toStockCode"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
@@ -342,13 +351,6 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCodeDes"
-                                                [readonly]="viewMode" />
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="stockCodeDes"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>

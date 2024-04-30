@@ -34,6 +34,29 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Worker', field: 'WORKER_CODE' },
     { title: 'Amount.', field: 'AMOUNTFC' },
   ];
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  SALESPERSON_CODEData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entered by',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
   metalIssueDetailsData: any[] = [];
   userName = localStorage.getItem('username');
   srNo: any = 0;
@@ -80,6 +103,9 @@ export class MetalIssueComponent implements OnInit {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
       }
+      if(this.content.FLAG == 'DELETE'){
+        this.deleteRecord()
+      }
       this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
     } else {
@@ -104,7 +130,7 @@ export class MetalIssueComponent implements OnInit {
           this.metalIssueForm.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.metalIssueForm.controls.VOCNO.setValue(data.VOCNO)
           this.metalIssueForm.controls.MID.setValue(data.MID)
-          this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
+          this.metalIssueForm.controls.vocdate.setValue(new Date(data.VOCDATE))
           this.metalIssueForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
           this.metalIssueForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
           this.metalIssueForm.controls.YEARMONTH.setValue(data.YEARMONTH)
@@ -197,7 +223,7 @@ export class MetalIssueComponent implements OnInit {
     if (dataToParent) {
       dataToParent.HEADERDETAILS = this.metalIssueForm.value;
     } else {
-      dataToParent = [{ HEADERDETAILS: this.metalIssueForm.value }]
+      dataToParent = { HEADERDETAILS: this.metalIssueForm.value }
     }
     console.log(dataToParent, 'dataToParent to parent');
 
@@ -245,35 +271,10 @@ export class MetalIssueComponent implements OnInit {
   customizeDate(data: any) {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
-
-
-  SALESPERSON_CODEData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 1,
-    SEARCH_FIELD: 'SALESPERSON_CODE',
-    SEARCH_HEADING: 'Entered by',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "SALESPERSON_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
   SALESPERSON_CODESelected(e: any) {
     this.metalIssueForm.controls.SALESPERSON_CODE.setValue(e.SALESPERSON_CODE);
   }
 
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
 
   workerCodeSelected(e: any) {
     console.log(e);
@@ -292,9 +293,9 @@ export class MetalIssueComponent implements OnInit {
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
-      "VOCDATE": this.comService.nullToString(form.vocdate),
+      "VOCDATE": this.comService.formatDateTime(form.vocdate),
       "YEARMONTH": this.comService.nullToString(form.YEARMONTH),
-      "DOCTIME": this.comService.nullToString(form.vocdate),
+      "DOCTIME": this.comService.formatDateTime(form.vocdate),
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "METAL_RATE_TYPE": "",
@@ -313,8 +314,8 @@ export class MetalIssueComponent implements OnInit {
       "NAVSEQNO": 0,
       "FIX_UNFIX": true,
       "AUTOPOSTING": true,
-      "POSTDATE": this.comService.nullToString(form.vocdate),
-      "SYSTEM_DATE": this.comService.nullToString(form.vocdate),
+      "POSTDATE": this.comService.formatDateTime(form.vocdate),
+      "SYSTEM_DATE": this.comService.formatDateTime(form.vocdate),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
@@ -350,7 +351,7 @@ export class MetalIssueComponent implements OnInit {
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -389,7 +390,7 @@ export class MetalIssueComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -413,7 +414,7 @@ export class MetalIssueComponent implements OnInit {
   }
 
   deleteRecord() {
-    if (!this.content.VOCTYPE) {
+    if (!this.content) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -437,7 +438,9 @@ export class MetalIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let form = this.metalIssueForm.value
-        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + form.BRANCH_CODE + form.VOCTYPE + form.VOCNO + form.YEARMONTH
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + 
+        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
+        this.content.VOCNO+ '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
