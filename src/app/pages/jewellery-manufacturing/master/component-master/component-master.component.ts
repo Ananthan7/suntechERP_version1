@@ -223,7 +223,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: " types = 'type master'",
+    WHERECONDITION: "TYPES = 'SETTING TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

@@ -6,7 +6,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteRecord()"></modal-header>
+    (deleteClick)="deleteRecord()"  [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode" [isViewMore]="!viewMode" [isViewDelete]="!dele"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceSchemaMasterForm">
@@ -22,16 +23,18 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="priceCode" #priceCode
+                                                formControlName="priceCode" id="code" #priceCode
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()"
                                                 placeholder="Code"
-                                                maxlength="20" />
+                                                [readonly]="viewMode || editMode"
+                                                maxlength="20" (keyup)="codeEnabled()"/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput #Description
                                                 formControlName="priceDescription"
+                                                [readonly]="viewMode || codeEnable"
                                                 (input)="Description.value = Description.value.toUpperCase()"
                                                 placeholder="Description" />
                                         </mat-form-field>
@@ -45,11 +48,11 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price1" (input)="enableNextField('price1', 'price2')"/>
+                                                formControlName="price1"   [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceCodeSelected($event, 'price1')">
+                                            (newRowClick)="priceCodeSelected($event, 'price1')"  *ngIf="viewMode == false">
                                         </master-search>
                                     </div>
                                     <label for="inputPassword"
@@ -58,7 +61,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price3" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"/>
+                                                formControlName="price3" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -71,7 +74,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price5" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
+                                                formControlName="price5" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -86,7 +89,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price2" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"/>
+                                                formControlName="price2" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -99,7 +102,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price4" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"/>
+                                                formControlName="price4" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"

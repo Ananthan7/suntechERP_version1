@@ -577,7 +577,7 @@ export class ProcessMasterComponent implements OnInit {
               return;
             }
             else if (this.processMasterForm.value.accountStart == '') {
-              this.toastr.error('Account Start Cannot be Empty');
+              this.toastr.error('Loss Account Code Cannot be Empty');
               return;
             }
           }
@@ -592,14 +592,14 @@ export class ProcessMasterComponent implements OnInit {
               return;
             }
             else if (this.processMasterForm.value.accountMiddle == '') {
-              this.toastr.error('Account Middle Cannot be Empty');
+              this.toastr.error('Recovery Account Code Cannot be Empty');
               return;
             }
           }
 
           if (this.processMasterForm.value.allowGain == true) {
             if (this.processMasterForm.value.accountEnd == '') {
-              this.toastr.error('Account End Cannot be Empty');
+              this.toastr.error('Gain Account Code Cannot be Empty');
               return;
             }
           }
