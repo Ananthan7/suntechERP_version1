@@ -159,10 +159,10 @@ export class MfgGridComponent implements OnInit {
       });
     }
 
-    if (this.vocType == 'GEN') {
-      this.getSchemeMaturedAPI()
-      return
-    }
+    // if (this.vocType == 'GEN') {
+    //   this.getSchemeMaturedAPI()
+    //   return
+    // }
     let params = {
       "PAGENO": this.pageIndex,
       "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
