@@ -49,11 +49,11 @@ export class MetalIssueComponent implements OnInit {
   isloading: boolean = false;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: ['', [Validators.required]],
+    VOCTYPE: ['', [Validators.required]],
     time: [new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()],
     vocdate: ['', [Validators.required]],
     SALESPERSON_CODE: [''],
-    VOCNO: [0],
+    VOCNO: [''],
     MID: [0],
     worker: ['', [Validators.required]],
     workerDes: [''],
@@ -87,7 +87,7 @@ export class MetalIssueComponent implements OnInit {
     }
   }
   setNewFormValues() {
-    this.metalIssueForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.metalIssueForm.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
     this.metalIssueForm.controls.YEARMONTH.setValue(this.comService.yearSelected)
     this.metalIssueForm.controls.BRANCH_CODE.setValue(this.comService.branchCode)
@@ -101,7 +101,7 @@ export class MetalIssueComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.metalIssueForm.controls.voctype.setValue(data.VOCTYPE)
+          this.metalIssueForm.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.metalIssueForm.controls.VOCNO.setValue(data.VOCNO)
           this.metalIssueForm.controls.MID.setValue(data.MID)
           this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
@@ -289,7 +289,7 @@ export class MetalIssueComponent implements OnInit {
     let form = this.metalIssueForm.value
     return {
       "MID": this.comService.emptyToZero(form.MID),
-      "VOCTYPE": this.comService.nullToString(form.voctype),
+      "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCDATE": this.comService.nullToString(form.vocdate),
@@ -322,12 +322,12 @@ export class MetalIssueComponent implements OnInit {
     }
   }
   submitValidations(form: any) {
-    if (form.worker == '') {
-      this.comService.toastErrorByMsgId('Worker is required')
+    if (form.VOCTYPE == '') {
+      this.comService.toastErrorByMsgId('VOCTYPE is required')
       return true
     }
     if (form.vocdate == '') {
-      this.comService.toastErrorByMsgId('Worker is required')
+      this.comService.toastErrorByMsgId('vocdate is required')
       return true
     }
     return false
@@ -380,7 +380,7 @@ export class MetalIssueComponent implements OnInit {
       return
     }
     let form = this.metalIssueForm.value
-    let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${form.BRANCH_CODE}/${form.voctype}/${form.VOCNO}/${form.YEARMONTH}`
+    let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -437,7 +437,7 @@ export class MetalIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let form = this.metalIssueForm.value
-        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + form.BRANCH_CODE + form.voctype + form.VOCNO + form.YEARMONTH
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + form.BRANCH_CODE + form.VOCTYPE + form.VOCNO + form.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
