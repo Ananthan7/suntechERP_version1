@@ -24,7 +24,7 @@ export class MetalIssueComponent implements OnInit {
   columnhead: any[] = [
     { title: 'SRNO', field: 'SRNO' },
     { title: 'Job Id', field: 'JOB_NUMBER' },
-    { title: 'Uniq job Id', field: 'JOB_SO_NUMBER' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID' },
     { title: 'Design', field: 'DESIGN_CODE' },
     { title: 'Stock Code', field: 'STOCK_CODE' },
     { title: 'Division', field: 'DIVCODE' },
@@ -32,7 +32,7 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Gross wt', field: 'GROSS_WT' },
     { title: 'Process', field: 'PROCESS_CODE' },
     { title: 'Worker', field: 'WORKER_CODE' },
-    { title: 'Amount.', field: 'AMOUNTFC' },
+    { title: 'Amount.', field: 'TOTAL_AMOUNTFC' },
   ];
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -69,6 +69,7 @@ export class MetalIssueComponent implements OnInit {
   tableRowCount: number = 0;
   selectRowIndex: any;
   viewMode: boolean = false;
+  isSaved: boolean = false;
   isloading: boolean = false;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
@@ -102,6 +103,11 @@ export class MetalIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.isSaved = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.isSaved = true;
       }
       if(this.content.FLAG == 'DELETE'){
         this.deleteRecord()
@@ -350,6 +356,7 @@ export class MetalIssueComponent implements OnInit {
         this.isloading = false;
         if (result.response) {
           if (result.status.trim() == "Success") {
+            this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
@@ -389,6 +396,7 @@ export class MetalIssueComponent implements OnInit {
         this.isloading = false;
         if (result.response) {
           if (result.status == "Success") {
+            this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',

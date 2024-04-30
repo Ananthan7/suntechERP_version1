@@ -27,14 +27,15 @@
                                         <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumber"
+                                                (focusout)="jobNumberValidate($event)"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
-                                                formControlName="subJobNoDes"
-                                                [readonly]="viewMode" />
+                                                formControlName="jobNumDes"
+                                                readonly />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="jobNumberCodeData"
@@ -51,6 +52,7 @@
                                         <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="subJobNo"
+                                                (focusout)="subJobNumberValidate($event)"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                         <!-- <master-search [MasterSearchData]="subJobNoCodeData"
@@ -60,7 +62,7 @@
                                         <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="subJobNoDes"
-                                                [readonly]="viewMode" />
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -139,7 +141,7 @@
                                                 <mat-form-field
                                                     style="width: 100%;">
                                                     <input type="text" matInput
-                                                        formControlName="DESIGN_CODE"
+                                                        formControlName="unqDesignId"
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                             </div>
@@ -227,19 +229,22 @@
                                 </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Stock
-                                        Code * :</label>
+                                        class="col-sm-3 col-form-label">
+                                        Stock Code * :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
-                                                [readonly]="viewMode" />
+                                                placeholder="divcode"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-6">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="stockCode"
+                                                placeholder="stockcode"
+                                                (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                         <master-search
@@ -284,7 +289,7 @@
                                             <input type="text" matInput
                                                 formControlName="GROSS_WT"
                                                 [readonly]="viewMode"
-                                                (focusout)="calculateNetWt()"
+                                                (focusout)="grossValidate()"
                                                 MetalDecimalInput [max]="6"
                                                 class="text-right" />
                                         </mat-form-field>
@@ -312,7 +317,7 @@
                                                 formControlName="STONE_WT"
                                                 [readonly]="viewMode"
                                                 class="text-right"
-                                                (focusout)="calculateNetWt()"
+                                                (focusout)="stoneValidate()"
                                                 StoneDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
@@ -337,13 +342,15 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toDIVCODE"
-                                                [readonly]="viewMode" />
+                                                placeholder="divcode"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
+                                                placeholder="stockcode"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -351,7 +358,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCodeDes"
-                                                [readonly]="viewMode" />
+                                                placeholder="description"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -388,8 +396,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="stockCodeDes"
-                                                [readonly]="viewMode"
-                                                style="text-align: right;" />
+                                                placeholder="description"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 offset-3">
