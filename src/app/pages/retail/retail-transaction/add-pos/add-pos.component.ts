@@ -2559,7 +2559,7 @@ export class AddPosComponent implements OnInit {
     );
 
     this.sales_returns_total_amt = this.sales_returns_items.reduce(
-      (preVal: any, curVal: any) => parseFloat(preVal) + parseFloat(curVal.total_amount),
+      (preVal: any, curVal: any) => parseFloat(preVal) + parseFloat(curVal.net_amount),
       0
     );
 
@@ -2878,7 +2878,7 @@ export class AddPosComponent implements OnInit {
     );
     this.salesReturnForm.controls.fcn_returns_branch.setValue(
       // value.DT_BRANCH_CODE
-      data[0]
+      data[0].replace('$', '')
     );
     this.salesReturnForm.controls.fcn_returns_voc_type.setValue(
       // value.DT_VOCTYPE
@@ -4695,7 +4695,7 @@ export class AddPosComponent implements OnInit {
         parseFloat(this.sales_returns_total_amt) +
         parseFloat(this.comFunc.transformDecimalVB(
           this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          parseFloat(slsReturn.TOTAL_AMOUNTFC)
+          parseFloat(slsReturn.TOTALWITHVATFC)
         ));
       console.log('====================================');
       // this.sales_returns_total_amt =
@@ -4746,7 +4746,7 @@ export class AddPosComponent implements OnInit {
         ) {
           this.sales_returns_total_amt =
             parseFloat(this.sales_returns_total_amt) -
-            parseFloat(this.sales_returns_pre_items[i].total_amount);
+            parseFloat(this.sales_returns_pre_items[i].slsReturn.TOTALWITHVATFC);
           this.sales_returns_pre_items.splice(i, 1);
           this.currentsalesReturnItems.splice(i, 1);
         }
@@ -5755,7 +5755,7 @@ export class AddPosComponent implements OnInit {
           this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
             // this.comFunc.transformDecimalVB(
             //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_24KARAT, 'METAL_RATE')
+            this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT, 'METAL_RATE')
 
 
             // _exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT
@@ -6508,7 +6508,8 @@ export class AddPosComponent implements OnInit {
     this.invReturnSalesTotalTaxAmt = total_tax_amt;
     this.invReturnSalesTotalNetTotal = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
-      net_sum + total_tax_amt
+      net_sum 
+      // + total_tax_amt
     );
     console.log('=================invReturnSalesTotalPcs===================');
     console.log(
@@ -7288,7 +7289,7 @@ export class AddPosComponent implements OnInit {
               console.table(this.sales_returns_pre_items);
               this.sales_returns_total_amt = this.sales_returns_items.reduce(
                 (preVal: any, curVal: any) =>
-                  parseFloat(preVal) + parseFloat(curVal.total_amount),
+                  parseFloat(preVal) + parseFloat(curVal.net_amount),
                 0
               );
               this.sales_returns_pre_items = this.sales_returns_items;
@@ -9053,7 +9054,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         // _exchangeMetalRate * _exchangeNetWt
         this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_rate) *
-        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt)
       )
     );
   }
@@ -11143,8 +11144,8 @@ export class AddPosComponent implements OnInit {
 
       RSSTATE: '',
 
-      GSTVATAMOUNTFC: 0,
-      GSTVATAMOUNTCC: 0,
+      GSTVATAMOUNTFC:this.invReturnSalesTotalTaxAmt,
+      GSTVATAMOUNTCC:this.invReturnSalesTotalTaxAmt,
       // GSTVATAMOUNTFC: this.invReturnSalesTotalTaxAmt,
       // GSTVATAMOUNTCC: this.comFunc.CCToFC(
       //   this.comFunc.compCurrency,
