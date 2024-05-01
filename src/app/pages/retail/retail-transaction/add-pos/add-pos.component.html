@@ -2577,7 +2577,7 @@
                 {{ slsReturn.GROSSWT | decimalFormat : "METAL" }}
               </td>
               <td style="text-align: right">
-                {{ slsReturn.TOTAL_AMOUNTFC | decimalFormat : "AMOUNT" }}
+                {{ slsReturn.MKG_RATECC | decimalFormat : "AMOUNT" }}
               </td>
               <td style="text-align: center">
                 <input [disabled]="viewOnly" type="checkbox"
@@ -2585,7 +2585,7 @@
                   [checked]="
                     checkSelectedVal(
                       slsReturn.STOCK_CODE,
-                      slsReturn.TOTAL_AMOUNTFC,
+                      slsReturn.MKG_RATECC,
                       slsReturn.SRNO
                     )
                   " (change)="addSalesReturnOnSelect($event, slsReturn, id)" />
