@@ -722,6 +722,14 @@ export class CommonServiceService {
     });
     return queryParamAPI
   }
+
+  getAutopostingFlag() {
+    let autoPostingFlag
+    this.route.queryParams.subscribe((data: any) => {
+      autoPostingFlag = data.autoPosting;
+    });
+    return autoPostingFlag
+  }
   generateNumber() {
     return Math.floor(1000 + Math.random() * 9000)
   }
