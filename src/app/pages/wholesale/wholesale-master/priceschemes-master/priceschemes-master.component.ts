@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +21,11 @@ export class PriceschemesMasterComponent implements OnInit {
   price4SearchEnable:boolean = false;
   price5SearchEnable:boolean = false;
 
+  codeEnable:boolean = true;
+  viewMode: boolean = false;
+  editMode: boolean = false;
+  dele: boolean = false;
+
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -37,13 +42,14 @@ export class PriceschemesMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private renderer: Renderer2,
 
   ) { }
 
   ngOnInit(): void {
-    this.initializeForm();
-    this.setAllInitialValues();
+    this.dele = true;
+    this.renderer.selectRootElement('#code')?.focus();
 
     this.priceSchemaMasterForm = this.formBuilder.group({
       priceCode: ['', [Validators.required]],
@@ -55,6 +61,23 @@ export class PriceschemesMasterComponent implements OnInit {
       price5: [{ value: '', disabled: true }],
     })
 
+
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    } else if (this.content.FLAG == 'EDIT') {
+      this.viewMode = false;
+      this.editMode = true;
+      this.codeEnable = false;
+      this.dele = false;
+
+      this.price3SearchEnable = true;
+      this.price2SearchEnable = true;
+      this.price4SearchEnable = true;
+      this.price5SearchEnable = true;
+    }
+
+    this.initializeForm();
+    this.setAllInitialValues();
   }
 
   enableNextField(currentField: string, nextField: string) {
@@ -101,6 +124,7 @@ export class PriceschemesMasterComponent implements OnInit {
 
 
 priceCodeSelected(e: any, controlName: string) {
+  if (this.checkCode()) return
   if(controlName == 'price1'){
     this.price2SearchEnable = true;
   }
@@ -381,4 +405,21 @@ private getNextFieldName(currentField: string): string {
     }
   }
 
+  checkCode(): boolean {
+    if (this.priceSchemaMasterForm.value.priceCode == '') {
+      this.commonService.toastErrorByMsgId('please enter Price  code')
+      return true
+    }
+    return false
+  }
+
+  codeEnabled() {
+    if (this.priceSchemaMasterForm.value.priceCode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
 }

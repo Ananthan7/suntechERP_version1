@@ -16,31 +16,32 @@
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="row">
+                        <div class="row border-bottom">
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Job
-                                        Number * :</label>
+                                        class="col-sm-4 col-form-label">
+                                        Job Number * :
+                                    </label>
                                     <div class="col-md-3">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumber"
-                                                [readonly]="viewMode"
-                                                class="text-right" />
+                                                (focusout)="jobNumberValidate($event)"
+                                                [readonly]="viewMode" />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput
+                                                formControlName="jobNumDes"
+                                                readonly />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="jobNumberCodeData"
                                             (newRowClick)="jobNumberCodeSelected($event)"
-                                            *ngIf="!viewMode"></master-search>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="subJobNoDes"
-                                                [readonly]="viewMode"
-                                                class="text-right" />
-                                        </mat-form-field>
+                                            *ngIf="!viewMode">
+                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
@@ -48,21 +49,20 @@
                                         class="col-sm-4 col-form-label">Sub Job
                                         No : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="subJobNo"
-                                                [readonly]="viewMode"
-                                                class="text-right" />
+                                                (focusout)="subJobNumberValidate($event)"
+                                                [readonly]="viewMode" />
                                         </mat-form-field>
                                         <!-- <master-search [MasterSearchData]="subJobNoCodeData"
                                             (newRowClick)="subJobNoCodeSelected($event)"></master-search> -->
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="subJobNoDes"
-                                                [readonly]="viewMode"
-                                                class="text-right" />
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -71,22 +71,24 @@
                                         class="col-sm-4 col-form-label">Process
                                         Code * :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="processCode"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="processCodeData"
-                                            (newRowClick)="processCodeSelected($event)"
-                                            *ngIf="!viewMode"></master-search>
+
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="processCodeDesc"
                                                 [readonly]="viewMode">
                                         </mat-form-field>
+                                        <master-search
+                                            [MasterSearchData]="processCodeData"
+                                            (newRowClick)="processCodeSelected($event)"
+                                            *ngIf="!viewMode">
+                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
@@ -94,9 +96,17 @@
                                         class="col-sm-4 col-form-label">Worker
                                         Code * : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="workerCode"
+                                                [readonly]="viewMode" />
+                                        </mat-form-field>
+                                        
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput
+                                                formControlName="workerCodeDes"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                         <master-search
@@ -104,19 +114,12 @@
                                             (newRowClick)="workerCodeSelected($event)"
                                             *ngIf="!viewMode"></master-search>
                                     </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="workerCodeDes"
-                                                [readonly]="viewMode" />
-                                        </mat-form-field>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-12 col-form-label my-2">Design</label>
+                                    <label class="col-sm-12 col-form-label ms-4">
+                                        Design</label>
                                     <div class="col-md-6">
                                         <div class="upload-btn-wrapper">
                                             <button
@@ -138,7 +141,7 @@
                                                 <mat-form-field
                                                     style="width: 100%;">
                                                     <input type="text" matInput
-                                                        formControlName="designCode"
+                                                        formControlName="unqDesignId"
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                             </div>
@@ -157,7 +160,7 @@
                                     <div class="col-md-12">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="unqDesignId"
+                                                formControlName="DESIGN_CODE"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -183,7 +186,7 @@
                                                 (change)="onFileChanged($event)">
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <!-- <div class="col-md-12">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 matInput
@@ -191,7 +194,7 @@
                                                 style="text-align: right;"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 
@@ -206,7 +209,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="treeNumber"
-                                                [readonly]="viewMode" maxlength="8"
+                                                [readonly]="viewMode"
+                                                maxlength="8"
                                                 class="text-right" NumberOnly />
                                         </mat-form-field>
                                     </div>
@@ -225,19 +229,22 @@
                                 </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Stock
-                                        Code * :</label>
+                                        class="col-sm-3 col-form-label">
+                                        Stock Code * :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="subStockCode"
-                                                [readonly]="viewMode" />
+                                                formControlName="DIVCODE"
+                                                placeholder="divcode"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-6">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="stockCode"
+                                                placeholder="stockcode"
+                                                (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                         <master-search
@@ -254,7 +261,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="pcs"
-                                                [readonly]="viewMode" maxlength="8"
+                                                [readonly]="viewMode"
+                                                maxlength="8"
                                                 style="text-align: right;"
                                                 NumberOnly />
                                         </mat-form-field>
@@ -265,7 +273,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="purity"
+                                                formControlName="PURITY"
                                                 [readonly]="viewMode"
                                                 style="text-align: right;"
                                                 SixDecimalInput />
@@ -279,9 +287,11 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="grossWeight"
-                                                [readonly]="viewMode" MetalDecimalInput [max]="6"
-                                                class="text-right"/>
+                                                formControlName="GROSS_WT"
+                                                [readonly]="viewMode"
+                                                (focusout)="grossValidate()"
+                                                MetalDecimalInput [max]="6"
+                                                class="text-right" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword"
@@ -290,10 +300,10 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="netWeight"
-                                                [readonly]="viewMode" [max]="13"
-                                                style="text-align: right;"
-                                                MetalDecimalInput />
+                                                formControlName="NET_WT"
+                                                [readonly]="viewMode"
+                                                class="text-right"
+                                                MetalDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -304,10 +314,11 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="stoneWeight"
+                                                formControlName="STONE_WT"
                                                 [readonly]="viewMode"
-                                                style="text-align: right;"
-                                                StoneDecimalInput />
+                                                class="text-right"
+                                                (focusout)="stoneValidate()"
+                                                StoneDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword"
@@ -316,10 +327,10 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="pureWeight"
-                                                [readonly]="viewMode" [max]="13"
-                                                style="text-align: right;"
-                                                MetalDecimalInput />
+                                                formControlName="PURE_WT"
+                                                [readonly]="viewMode"
+                                                class="text-right"
+                                                MetalDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -330,7 +341,16 @@
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
+                                                formControlName="toDIVCODE"
+                                                placeholder="divcode"
+                                                readonly />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput
                                                 formControlName="toStockCode"
+                                                placeholder="stockcode"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -338,14 +358,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCodeDes"
-                                                [readonly]="viewMode" />
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="stockCodeDes"
-                                                [readonly]="viewMode" />
+                                                placeholder="description"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -382,8 +396,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="stockCodeDes"
-                                                [readonly]="viewMode"
-                                                style="text-align: right;" />
+                                                placeholder="description"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3 offset-3">
@@ -473,8 +487,8 @@
 
                 <div class="row my-2">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
-                            [showBorders]="true"
+                        <dx-data-grid #dataGrid id="gridContainer"
+                            [showBorders]="true" [dataSource]="tableData"
                             [allowColumnReordering]="true"
                             [allowColumnResizing]="true"
                             [columnAutoWidth]="true">

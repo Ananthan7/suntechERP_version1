@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-component-size-set',
@@ -27,6 +28,7 @@ export class ComponentSizeSetComponent implements OnInit {
   selectedIndexes: any = [];
   indexes: any[] = [];
   componentSizeType: any[] = [];
+  componentSizeDesc: any[] = [];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -42,14 +44,14 @@ export class ComponentSizeSetComponent implements OnInit {
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
-  codetemp(data: any, value: any) {
-    console.log(data);
-    this.tableData[value.data.SRNO - 1].COMPSIZE_CODE = data.target.value;
-  }
+  // codetemp(data: any, value: any) {
+  //   console.log(data);
+  //   this.tableData[value.data.SRNO - 1].COMPSIZE_CODE =  data.data.value;
+  // }
 
-  descriptiontemp(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].COMPONENT_DESCRIPTION = data.target.value;
-  }
+  // descriptiontemp(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].COMPONENT_DESCRIPTION = data.data.value;
+  // }
 
   ngOnInit(): void {
 
@@ -66,8 +68,13 @@ export class ComponentSizeSetComponent implements OnInit {
     const Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         this.componentSizeType = result.response;
+      //  this.componentSizeDesc = result.response.DESCRIPTIONW;
+
         this.componentSizeType.sort((a, b) => a.COMPSIZE_CODE - b.COMPSIZE_CODE);
+       //  this.componentSizeDesc.sort((a, b) => a.DESCRIPTION - b.COMPSIZE_CODE);
+        
         console.log(this.componentSizeType); // Log here to check the data
+      
         this.setFormValues();
       }
     });
@@ -78,7 +85,7 @@ export class ComponentSizeSetComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
-    this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)
+    this.componentsizesetmasterForm.controls.description.setValue(this.content.COMPONENT_DESCRIPTION)
   }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
@@ -133,6 +140,30 @@ export class ComponentSizeSetComponent implements OnInit {
 
   deleteTableData() {
 
+    if (this.selectedIndexes.length > 0) {
+      // Display confirmation dialog before deleting
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Proceed with deletion if user confirms
+          this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+          this.resetSrNumber()
+        }
+
+      });
+
+    } else {
+      // Display error message if no record is selected
+      this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+    }
+
     for (let i = 0; i < this.tableData.length; i++) {
 
 
@@ -144,6 +175,12 @@ export class ComponentSizeSetComponent implements OnInit {
         }
       }
     }
+  }
+
+  resetSrNumber() {
+    this.tableData.forEach((data, index) => {
+      data.SRNO = index + 1
+    });
   }
 
 
@@ -164,7 +201,7 @@ export class ComponentSizeSetComponent implements OnInit {
       "MID": 0,
       "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
       "DESCRIPTION": this.componentsizesetmasterForm.value.description || "",
-      "detail": this.tableData
+      "detail": this.tableData,
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -297,5 +334,13 @@ export class ComponentSizeSetComponent implements OnInit {
       }
     });
   }
-
+  onCodeSelect(event: MatSelectChange, data: any) {
+    const selectedCode = event.value.COMPSIZE_CODE;
+    // Find the corresponding description for the selected code
+    const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
+    // Update the description in the grid data
+    data.data.COMPONENT_DESCRIPTION = selectedDescription;
+    data.data.COMPSIZE_CODE = selectedCode;
+  }
+  
 }

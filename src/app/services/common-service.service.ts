@@ -78,6 +78,10 @@ export class CommonServiceService {
   ) {
   }
 
+  getCurrecnyRate(currencyCode:string){
+    let currdata = this.allBranchCurrency.filter((item:any)=> item.CURRENCY_CODE == currencyCode)
+    return this.setCommaSerperatedNumber(currdata[0].CONV_RATE,'RATE')
+  }
   priceToTextWithCurrency(price: any, currency: any) {
     const parts = price.toFixed(2).split('.');
     const integerPart = Number(parts[0]);
@@ -233,7 +237,8 @@ export class CommonServiceService {
     return JSON.parse(item)
   }
   showSnackBarMsg(MessageOrID: string) {
-    this.snackBar.open(this.getMsgByID(MessageOrID) || MessageOrID, 'Close', {
+    let Msg = this.getMsgByID(MessageOrID)
+    this.snackBar.open(Msg || MessageOrID, 'Close', {
       duration: 5000, // Duration in milliseconds (e.g., 3000 for 3 seconds)
       panelClass: ['custom-snackbar'],
     });

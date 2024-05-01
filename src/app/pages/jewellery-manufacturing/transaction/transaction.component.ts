@@ -31,6 +31,7 @@ import { JobAllocationComponent } from './job-allocation/job-allocation.componen
 import { JobTransactionsComponent } from './job-transactions/job-transactions.component';
 import { ProcessTransferNewComponent } from './process-transfer-new/process-transfer-new.component';
 import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
+import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
 
 @Component({
   selector: 'app-transaction',
@@ -39,11 +40,14 @@ import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
 })
 export class TransactionComponent implements OnInit {
   @ViewChild(MfgGridComponent) mfgGridComponent?: MfgGridComponent;
+  @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
+
   //variables
   menuTitle: any;
   componentName: any;
   PERMISSIONS: any;
   componentSelected: any;
+  dataToEdit: any;
   private componentDbList: any = {}
 
   constructor(
@@ -59,14 +63,23 @@ export class TransactionComponent implements OnInit {
   }
 
   viewRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'VIEW'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'VIEW'
+    this.openModalView(this.dataToEdit)
   }
   editRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'EDIT'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'EDIT'
+    this.openModalView(this.dataToEdit)
+  }
+  deleteBtnClicked(e: any) {
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'DELETE'
+    this.openModalView(this.dataToEdit)
+    // this.authCheckerComponent?.openAuthModal();
+  }
+  authSubmit(){
+    this.openModalView(this.dataToEdit)
   }
   //  open forms in modal
   openModalView(data?: any) {
