@@ -28,6 +28,7 @@
                                             placeholder="CODE" #codeInput1
                                             oninput="this.value = this.value.toUpperCase()"
                                             formControlName="processCode"
+                                            id="code"
                                             maxlength="6" [readonly]="editableMode || viewMode"
                                             (focusout)="checkCodeExists($event)"
                                             (keyup)="codeEnabled()" />

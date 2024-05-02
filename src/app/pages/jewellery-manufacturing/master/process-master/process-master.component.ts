@@ -197,7 +197,7 @@ export class ProcessMasterComponent implements OnInit {
       return; // Exit the function if in edit mode
     }
 
-    if (event.target.value == '' || this.viewMode || this.editMode) {
+    if (event.target.value == '' || this.viewMode) {
       return;
     }
     // let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
@@ -438,12 +438,12 @@ export class ProcessMasterComponent implements OnInit {
 
     this.processMasterForm.controls.loss.setValue(this.viewchangeYorN(this.content.ALLOW_LOSS));
     this.processMasterForm.controls.loss_on_gross.setValue(this.viewchangeYorN(this.content.LOSS_ON_GROSS));
-    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.content.TIMEON_PROCESS);
+    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.viewchangeYorN(this.content.TIMEON_PROCESS));
     this.processMasterForm.controls.RecoveryProcess.setValue(this.viewchangeYorN(this.content.RECOVERY_PROCESS));
     this.processMasterForm.controls.Metal.setValue(this.viewchangeYorN(this.content.ALLOW_METAL));
     this.processMasterForm.controls.Stone.setValue(this.viewchangeYorN(this.content.ALLOW_STONE));
     this.processMasterForm.controls.Consumable.setValue(this.viewchangeYorN(this.content.ALLOW_CONSUMABLE));
-    this.processMasterForm.controls.ApprovalRequired.setValue(this.onchangeCheckBox(this.content.APPROVAL_REQUIRED));
+    this.processMasterForm.controls.ApprovalRequired.setValue(this.viewchangeYorN(this.content.APPROVAL_REQUIRED));
     this.processMasterForm.controls.NonQuantity.setValue(this.viewchangeYorN(this.content.NON_QUANTITY));
     this.processMasterForm.controls.RefineryAutoProcess.setValue(this.onchangeCheckBox(this.content.DF_REFINERY));
     this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.onchangeCheckBox(this.content.AUTO_LOSS));
