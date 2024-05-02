@@ -251,6 +251,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   /**USE:  final save API call*/
   formSubmit() {
+   
     if (this.content?.FLAG == 'VIEW') return
     if (this.content?.FLAG == 'EDIT') {
       this.updateWorkerMaster()
@@ -263,6 +264,10 @@ export class SequenceMasterComponent implements OnInit {
       return
     }
 
+  // // Check loss condition with the postData
+  // if (!this.checkLossCondition()) {
+  //   return; // Prevent form submission if condition fails
+  // }
     let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
     let postData = {
       "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode.toUpperCase() || "",
@@ -459,8 +464,8 @@ export class SequenceMasterComponent implements OnInit {
           "UNIT_RATE": item.UNIT_RATE || 0,
           "UNIT": this.commonService.nullToString(item.UNIT),
           "NO_OF_UNITS": item.NO_OF_UNITS || 0,
-          "STD_TIME": item.STD_TIME,
-          "MAX_TIME": item.MAX_TIME,
+          "STD_TIME":  item.STD_TIME,
+          "MAX_TIME":  item.MAX_TIME,
           "STD_LOSS": item.STD_LOSS || 0,
           "MIN_LOSS": item.MIN_LOSS || 0,
           "MAX_LOSS": item.MAX_LOSS || 0,
@@ -511,7 +516,7 @@ export class SequenceMasterComponent implements OnInit {
     this.sequenceMasterData.SEARCH_VALUE = event.target.value
   }
   // stdLoss Change
-  stdLossChanged(data: any) {
+  stdLossChanged(data:any) {
     this.checkLossCondition(data)
   }
 
@@ -527,10 +532,9 @@ export class SequenceMasterComponent implements OnInit {
   }
 
 
-
   // maxLoss Change
-  maxLossChanged(data: any) {
-    console.log(data, 'data');
+  maxLossChanged(data:any) {
+   console.log(data, 'data');
     this.checkLossCondition(data)
   }
 
