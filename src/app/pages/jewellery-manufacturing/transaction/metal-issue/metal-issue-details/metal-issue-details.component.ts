@@ -64,6 +64,28 @@ export class MetalIssueDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     VOCNO: [''],
     VOCDATE: [''],
@@ -206,17 +228,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.Description);
   }
 
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
+
   workerCodeSelected(e: any) {
     console.log(e);
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
@@ -224,17 +237,6 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   }
 
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
 
 
   jobchange() {
@@ -311,8 +313,6 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (this.submitValidations(this.metalIssueDetailsForm.value)) return;
     let form = this.metalIssueDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
-
-    console.log(form,'.................');
 
     let postData = {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),

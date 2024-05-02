@@ -222,16 +222,16 @@ export class MetalIssueComponent implements OnInit {
     let selectedData = event.data
     this.openAddMetalIssue(selectedData)
   }
-  openAddMetalIssue(dataToParent?: any) {
+  openAddMetalIssue(dataToChild?: any) {
     if (this.submitValidations(this.metalIssueForm.value)) {
       return
     }
-    if (dataToParent) {
-      dataToParent.HEADERDETAILS = this.metalIssueForm.value;
+    if (dataToChild) {
+      dataToChild.HEADERDETAILS = this.metalIssueForm.value;
     } else {
-      dataToParent = { HEADERDETAILS: this.metalIssueForm.value }
+      dataToChild = { HEADERDETAILS: this.metalIssueForm.value }
     }
-    console.log(dataToParent, 'dataToParent to parent');
+    console.log(dataToChild, 'dataToChild to parent');
 
     const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
       size: 'xl',
@@ -239,7 +239,7 @@ export class MetalIssueComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = dataToParent
+    modalRef.componentInstance.content = dataToChild
     modalRef.result.then((postData) => {
       if (postData) {
         this.setValuesToHeaderGrid(postData);
