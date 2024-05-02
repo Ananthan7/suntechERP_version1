@@ -524,9 +524,8 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          console.log(data,'data');
-          
-          if (data[0]) {
+          if (data) {
+           console.log(data,'data');
             
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
