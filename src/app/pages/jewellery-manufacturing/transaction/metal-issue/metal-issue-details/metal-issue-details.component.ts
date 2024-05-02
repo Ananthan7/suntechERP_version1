@@ -64,6 +64,28 @@ export class MetalIssueDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     VOCNO: [''],
     VOCDATE: [''],
@@ -81,7 +103,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     workerCodeDes: ['', [Validators.required]],
     pictureName: [''],
     DESIGN_CODE: [''],
-    partCode: [''],
+    PART_CODE: [''],
     unqDesignId: [''],
     uniqueId: [''],
     treeNumber: [''],
@@ -206,17 +228,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.Description);
   }
 
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
+
   workerCodeSelected(e: any) {
     console.log(e);
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
@@ -224,17 +237,6 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   }
 
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
 
 
   jobchange() {
@@ -312,8 +314,6 @@ export class MetalIssueDetailsComponent implements OnInit {
     let form = this.metalIssueDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
 
-    console.log(form,'.................');
-
     let postData = {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
@@ -363,7 +363,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "AMOUNTFC": this.comService.emptyToZero(form.amountFc),
       "AMOUNTLC": this.comService.emptyToZero(form.amountLc),
       "PICTURE_NAME": this.comService.nullToString(form.pictureName),
-      "PART_CODE": this.comService.nullToString(form.partCode),
+      "PART_CODE": this.comService.nullToString(form.PART_CODE),
       "MASTER_METAL": form.masterMetal,
       "STONE_WT": this.comService.emptyToZero(form.STONE_WT),
       "NET_WT": this.comService.emptyToZero(form.NET_WT),
@@ -488,6 +488,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.subJobNumberValidate()
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')
@@ -524,9 +525,8 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          console.log(data,'data');
-          
-          if (data[0]) {
+          if (data) {
+           console.log(data,'data');
             
           } else {
             this.comService.toastErrorByMsgId('MSG1531')

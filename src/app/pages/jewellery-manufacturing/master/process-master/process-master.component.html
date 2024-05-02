@@ -30,6 +30,7 @@
                                             formControlName="processCode"
                                             maxlength="6" [readonly]="editableMode || viewMode"
                                             (focusout)="checkCodeExists($event)"
+                                            id="code"
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 
@@ -235,7 +236,7 @@
                                     class="example-margin"
                                     (change)="onlossChange()"
                                     (focus)="showAlertIfCodeIsEmpty()"
-                                    [disabled]="viewMode">
+                                    [disabled]="viewMode || codeEnable">
                                     Loss *</mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
                                     (change)="onlossChange($event)">
@@ -247,7 +248,7 @@
                                 <mat-checkbox formControlName="recovery"
                                     class="example-margin"
                                     (change)="onRecovery()"
-                                    [disabled]="viewMode"
+                                    [disabled]="viewMode || codeEnable"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                      >
                                     Recovery * </mat-checkbox>
@@ -261,7 +262,7 @@
                                     class="example-margin"
                                     (change)="onAllowGain()"
                                     (focus)="showAlertIfCodeIsEmpty()"
-                                    [disabled]="viewMode">
+                                    [disabled]="viewMode || codeEnable">
                                     Allow Gain * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="AllowGain">
                                 <label class="form-check-label">
@@ -405,33 +406,33 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="FinalProcess"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Final Process</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Setting"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Setting</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="LabProcess"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Lab Process</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="WaxProcess"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Wax Process</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Stone"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Stone </mat-checkbox>
                                     </div>
@@ -442,35 +443,35 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="MergePices"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Merge Pieces</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="LockWeight"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Lock Weight</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="HaveTreeNo"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Have Tree No</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="NonQuantity"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Non Quantity </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="Consumable"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Consumable </mat-checkbox>
                                     </div>
@@ -482,7 +483,7 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="RefineryAutoProcess"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Refinery Auto Process
                                         </mat-checkbox>
@@ -490,7 +491,7 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="ApplyAutoLossToRefinery"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Apply Auto Loss to Refinery
                                         </mat-checkbox>
@@ -498,20 +499,20 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="RepairProcess"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Repair Process </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Metal"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Metal </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="ApprovalRequired"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Approval Required </mat-checkbox>
                                     </div>
@@ -523,21 +524,21 @@
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="DeductPureWeight"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Deduct Pure Weight </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="StoneIncluded"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Stone Included </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="TimeCalculateonProcess"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Time Calculate on
                                             Process</mat-checkbox>
@@ -546,14 +547,14 @@
                                         <mat-checkbox
                                             formControlName="RecoveryProcess"
                                             (change)="onRecovStockCode($event)"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Recovery Process</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox
                                             formControlName="AutoTransfer"
-                                            [disabled]="viewMode"
+                                            [disabled]="viewMode|| codeEnable"
                                             class="example-margin">
                                             Auto Transfer</mat-checkbox>
                                     </div>

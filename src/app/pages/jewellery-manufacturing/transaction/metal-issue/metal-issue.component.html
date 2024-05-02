@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading"
-    [isViewAuditTrail]="isSaved"
+    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
     (cancelClick)="close()" [isViewDelete]="false"
     [isViewSave]="!viewMode"></modal-header>
 <div class="row">
@@ -68,12 +68,12 @@
                                             <input matInput
                                                 [matDatepicker]="vocdate"
                                                 formControlName="vocdate"
-                                                [readonly]="viewMode"
+                                                [readonly]="isSaved"
                                                 placeholder="DD/MM/YYYY"
                                                 DateValidation />
                                             <mat-datepicker-toggle matSuffix
                                                 [for]="vocdate"></mat-datepicker-toggle>
-                                            <mat-datepicker
+                                            <mat-datepicker [disabled]="isSaved"
                                                 [startAt]="currentDate"
                                                 #vocdate></mat-datepicker>
                                         </mat-form-field>

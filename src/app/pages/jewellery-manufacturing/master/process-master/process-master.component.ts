@@ -69,7 +69,7 @@ export class ProcessMasterComponent implements OnInit {
   searchlookup: boolean = false;
   showMaxContentAlert(): void {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('processcode cannot be empty')
+      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
     }
   }
   @ViewChild('codeInput1') codeInput1!: ElementRef;
@@ -105,6 +105,7 @@ export class ProcessMasterComponent implements OnInit {
       this.editableMode = true;
       this.codeMode = true;
       this.editMode = true;
+      this.codeEnable = false;
       this.setFormValues();
       this.onlossChange();
       this.onRecovery();
@@ -496,11 +497,15 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.Consumable.setValue(this.viewchangeYorN(this.content.ALLOW_CONSUMABLE));
     this.processMasterForm.controls.ApprovalRequired.setValue(this.viewchangeYorN(this.content.APPROVAL_REQUIRED));
     this.processMasterForm.controls.NonQuantity.setValue(this.viewchangeYorN(this.content.NON_QUANTITY));
-    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.onchangeCheckBox(this.content.DF_REFINERY));
-    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.onchangeCheckBox(this.content.AUTO_LOSS));
+    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.viewchangeYorN(this.content.DF_REFINERY));
+    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.viewchangeYorN(this.content.AUTO_LOSS));
     this.processMasterForm.controls.HaveTreeNo.setValue(this.viewchangeYorN(this.content.TREE_NO));
     this.processMasterForm.controls.allowGain.setValue(this.viewchangeYorN(this.content.ALLOW_GAIN));
     this.processMasterForm.controls.StoneIncluded.setValue(this.viewchangeYorN(this.content.STONE_INCLUDED));
+    this.processMasterForm.controls.AutoTransfer.setValue(this.onchangeCheckBoxNum(this.content.AUTOTRANSFER));
+
+
+ 
 
 
 
@@ -752,7 +757,7 @@ export class ProcessMasterComponent implements OnInit {
               "SETTING_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.Setting),
               "POINTS": 0,
               "LOCK_WEIGHT": this.onchangeCheckBoxNum(this.processMasterForm.value.LockWeight),
-              "AUTOTRANSFER": 0,
+              "AUTOTRANSFER":  this.onchangeCheckBoxNum(this.processMasterForm.value.AutoTransfer),
               "MASTER_WEIGHT": 0,
               "MERGE_BLOCK": this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices),
               "LAB_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.LabProcess),
@@ -1047,7 +1052,7 @@ export class ProcessMasterComponent implements OnInit {
               "SETTING_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.Setting),
               "POINTS": 0,
               "LOCK_WEIGHT": this.onchangeCheckBoxNum(this.processMasterForm.value.LockWeight),
-              "AUTOTRANSFER": 0,
+              "AUTOTRANSFER":  this.onchangeCheckBoxNum(this.processMasterForm.value.AutoTransfer),
               "MASTER_WEIGHT": 0,
               "MERGE_BLOCK": this.onchangeCheckBoxNum(this.processMasterForm.value.MergePices),
               "LAB_PROCESS": this.onchangeCheckBoxNum(this.processMasterForm.value.LabProcess),
