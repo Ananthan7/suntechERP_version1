@@ -5080,8 +5080,10 @@ export class AddPosComponent implements OnInit {
       //   this.comFunc.compCurrency,
       //   this.comFunc.emptyToZero(data.mkg_amount)
       // ), // metal amount
-      RATE_TYPE: data.METAL_RATE_TYPE || '',
-      METAL_RATE: this.comFunc.emptyToZero(data.METAL_RATE),
+      RATE_TYPE: '',
+      // data.METAL_RATE_TYPE || '',
+      METAL_RATE:0,
+      //  this.comFunc.emptyToZero(data.METAL_RATE),
       // METAL_RATE: this.comFunc.emptyToZero(data.metalRate),
 
       METAL_RATE_GMSFC: this.comFunc.transformDecimalVB(
@@ -5126,7 +5128,7 @@ export class AddPosComponent implements OnInit {
       OZWT: data.ozWeight || 0, // need_input
       SUPPLIER: '', // need_input
       BATCHSRNO: 0, // need_input
-      STOCK_DOCDESC: this.exchangeForm.value.fcn_exchange_item_desc || '',
+      STOCK_DOCDESC: this.exchangeForm.value.fcn_exchange_item_desc.toUpperCase() || '',
       BAGNO: this.exchangeForm.value.fcn_exchange_scrap_bag_no?.toString() || '',
       BAGREMARKS: this.exchangeForm.value.fcn_exchange_scrap_bag_desc || '',
       WASTAGEPER: 0.0,
@@ -5174,7 +5176,7 @@ export class AddPosComponent implements OnInit {
       MTL_SIZE: '',
       MTL_COLOR: '',
       MTL_DESIGN: '',
-      BARCODE: '',
+      BARCODE: data.stock_code,
       ORDER_STATUS: false,
       PORDER_REF: '',
       BARCODEDPCS: '0',
@@ -5401,14 +5403,14 @@ export class AddPosComponent implements OnInit {
       "OZSILVER_PUREWT": '0.000',
       "CONV_FACTOR_OZ": '0.000000',
       "PUR_REF": '',
-      "BATCHID": '1',
+      "BATCHID": '0',
       "STAMPCHARGE_RATEFC": '0.000000',
       "STAMPCHARGE_RATECC": '0.000000',
       "STAMPCHARGE_AMTFC": '0.000',
       "STAMPCHARGE_AMTCC": '0.000',
       "STAMPCHARGE": false,
-      "ACTUALGROSSWT": '439.600',
-      "ACTUALPURITY": '0.75000000',
+      "ACTUALGROSSWT": '',
+      "ACTUALPURITY": '',
       "MELTINGLOSS": '0.000',
       "DRAFTIMPORTFLG": false,
       "FIXMID": '0',
@@ -5437,7 +5439,7 @@ export class AddPosComponent implements OnInit {
       "MKGPREMIUMACCODE": '',
       "DETLINEREMARKS": '',
       "MUD_WT": '0.000',
-      "GST_CODE": 'VAT',
+      "GST_CODE": '',
       "HALLMARKING": '',
       "DISCAMTFC": '0.000',
       "DISCAMTCC": '0.000',
@@ -5461,7 +5463,7 @@ export class AddPosComponent implements OnInit {
       "NEWUNIQUEID": 0,
       "DETAILPCS": 0,
       "D_REMARKS": "",
-      "DONE_REEXPORTYN": true,
+      "DONE_REEXPORTYN": false,
 
     };
 
@@ -9061,7 +9063,7 @@ export class AddPosComponent implements OnInit {
 
   setOzWt() {
     this.ozWeight = this.comFunc.transformDecimalVB(
-      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      this.comFunc.allbranchMaster?.BSQTYDECIMALS,
       this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight || 0) /
       31.1035
     );
@@ -10600,7 +10602,7 @@ export class AddPosComponent implements OnInit {
       VALUE_DATE: this.vocDataForm.value.vocdate,
       SALESPERSON_CODE: this.vocDataForm.value.sales_person, //need
       RATE_TYPE: this._exchangeItemchange?.METAL_RATE_TYPE || '', //need_input
-      METAL_RATE: this.exchangeForm.value.fcn_exchange_metal_rate || 0, //need_input
+      METAL_RATE: this._exchangeItemchange?.METAL_RATE || 0, //need_input
       FIXED: 1,
       TOTAL_PCS: this.comFunc.emptyToZero(this.invMetalPurchaseTotalPcs),
       TOTAL_GRWT: this.comFunc.emptyToZero(
@@ -10680,7 +10682,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.emptyToZero(this.invMetalPurchaseTotalNetAmt), this.vocDataForm.value.txtCurRate
       ), //need_input
       REMARKS: '',
-      FLAG_EDIT_ALLOW: 'Y',
+      FLAG_EDIT_ALLOW: 'N',
       TOTAL_OZWT: this.comFunc.emptyToZero(this.invMetalPurchaseTotalOzWt), //need_input
       ROUND_VALUE_CC: 0, //need_input
       NAVSEQNO: 0, //need
@@ -10705,9 +10707,9 @@ export class AddPosComponent implements OnInit {
       CURRRECAMOUNTFC: 0,
       CURRRECAMOUNTCC: 0,
       TOTAL_DISCOUNTWT: 0, //need_input
-      CUSTOMER_NAME: '', //need_input
+      CUSTOMER_NAME:this.customerDataForm.value.fcn_customer_name|| '', //need_input
       MACHINEID: '', //need_input
-      AUTOPOSTING: false, //need_input
+      AUTOPOSTING:this.isAutoPosting,
       AUTHORIZEDPOSTING: true,
       CANCELLEDPOSTING: false,
       PURITYQUALITYCHECK: false,
@@ -10729,7 +10731,7 @@ export class AddPosComponent implements OnInit {
       GENSEQNO: 0, //need
       ShipmentCompany: '',
       Shipmentport: '',
-      POSCUSTIDNO: this.customerDetails?.CODE || '',
+      POSCUSTIDNO: '',
       HVAT_AMOUNT_CC: 0,
       HVAT_AMOUNT_FC: 0,
       HTOTALAMOUNTWITHVAT_CC: this.comFunc.FCToCC(
@@ -10750,12 +10752,12 @@ export class AddPosComponent implements OnInit {
       FROM_TOUCH: false,
       TAX_Applicable: false,
       POSPricesFixed: false,
-      CUSTOMER_ADDRESS:
-        this.customerDetailForm.value.fcn_cust_detail_address || '',
+      CUSTOMER_ADDRESS:'',
+        // this.customerDetailForm.value.fcn_cust_detail_address || '',
       H_DECLARATIONNO: '',
       H_ORIGINCOUNTRY: '',
       H_PACKETNO: 0,
-      H_DECLARATIONDATE: this.vocDataForm.value.vocdate,
+      H_DECLARATIONDATE:'',
       PartyRoundValueFc: 0, //need_input
       ItemRoundValueFc: 0,
       H_Shipper: '',
@@ -10889,7 +10891,7 @@ export class AddPosComponent implements OnInit {
       'GST_TYPE': '',
       'GST_TOTALFC': '0.000',
       'GST_TOTALCC': '0.000',
-      'CUSTOMER_MOBILE': '',
+      'CUSTOMER_MOBILE': this.customerDataForm.value.fcn_customer_mobile,
       'CUSTOMER_EMAIL': '',
       'GST_GROUP': '',
       'FIXING_PROCESS': false,
@@ -10976,7 +10978,7 @@ export class AddPosComponent implements OnInit {
 
       // new fields added 27-12-2023
       "DISCOUNT_PERGRM": 0,
-      "EXCLUDE_VAT": true,
+      "EXCLUDE_VAT": false,
       "H_AIRWAYBILL": "",
       "H_BASIS": "",
       "H_DESTINATION": "",
@@ -10987,12 +10989,12 @@ export class AddPosComponent implements OnInit {
       "ITEMROUNDVALUEFC": 0,
       "NEWMID": 0,
       "PARTYROUNDVALUEFC": 0,
-      "PARTYTRANSWISE_METALVATONMAKING": true,
+      "PARTYTRANSWISE_METALVATONMAKING": false,
       "PLACEOFSUPPLY": "",
-      "POSPRICESFIXED": true,
+      "POSPRICESFIXED": false,
       "SHIPMENTCOMPANY": "",
       "SHIPMENTPORT": "",
-      "TAX_APPLICABLE": true,
+      "TAX_APPLICABLE": false,
       "TRANSFER_BRANCH": "",
       "VATAMOUNTFCROUND": 0,
       "VATAMOUNTFCROUNDCC": 0,
