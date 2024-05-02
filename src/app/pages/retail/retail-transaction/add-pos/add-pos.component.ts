@@ -10681,7 +10681,7 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.invMetalPurchaseTotalNetAmt), this.vocDataForm.value.txtCurRate
       ), //need_input
-      REMARKS: '',
+      REMARKS: `Metal Purchase Ref :POS-${this.vocDataForm.value.fcn_voc_no}`,
       FLAG_EDIT_ALLOW: 'N',
       TOTAL_OZWT: this.comFunc.emptyToZero(this.invMetalPurchaseTotalOzWt), //need_input
       ROUND_VALUE_CC: 0, //need_input
