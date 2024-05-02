@@ -146,6 +146,7 @@ export class AddPosComponent implements OnInit {
   zeroSQtyVal: any;
 
   salespersonName: string = '';
+  salespersonDescName: string = '';
   branchOptions: string[] = [''];
   filteredBranchOptions!: Observable<any[]>;
   filteredSalesReturnBranchOptions!: Observable<any[]>;
@@ -2068,6 +2069,7 @@ export class AddPosComponent implements OnInit {
         IGST_AMOUNTCC,
         REC_BRANCHCODE = '',
         FYEARCODE = '';
+        let PAYMENT_MODE = '';
 
       if (this.selectedTabIndex == 0) {
         RECEIPT_MODE = this.cashreceiptForm.value.paymentsCash.toString();
@@ -2083,7 +2085,7 @@ export class AddPosComponent implements OnInit {
         IGST_AMOUNTFC = 0;
         IGST_AMOUNTCC = 0;
         CARD_NO = '0';
-
+        PAYMENT_MODE='CASH'
         ARECMID = 0;
       } else if (this.selectedTabIndex == 1) {
         RECEIPT_MODE = this.creditCardReceiptForm.value.paymentsCreditCard.toString();
@@ -2099,7 +2101,7 @@ export class AddPosComponent implements OnInit {
         IGST_AMOUNTFC = 0;
         IGST_AMOUNTCC = 0;
         CARD_NO = (this.creditCardReceiptForm.value.cardCCNo).toString();
-
+        PAYMENT_MODE='CARD'
         ARECMID = 0;
       } else if (this.selectedTabIndex == 2) {
         RECEIPT_MODE = this.advanceReceiptForm.value.paymentsAdvance.toString();
@@ -2117,6 +2119,7 @@ export class AddPosComponent implements OnInit {
         // IGST_AMOUNTCC = baseCtrl.FCToCC(
         //     baseCtrl.compCurrency, this.comFunc.emptyToZero(receiptAmtLC.text));
         CARD_NO = '0';
+        PAYMENT_MODE='ADVANCE';
         REC_BRANCHCODE = this.advanceReceiptForm.value.advanceBranch;
         FYEARCODE = this.advanceReceiptForm.value.advanceYear;
         ARECMID = this.advanceReceiptDetails['MID'];
@@ -2133,7 +2136,8 @@ export class AddPosComponent implements OnInit {
         IGST_ACCODE = "0";
         IGST_AMOUNTFC = 0;
         IGST_AMOUNTCC = 0;
-        CARD_NO = '0';
+        PAYMENT_MODE='OTHERS'
+        CARD_NO = '0'; 
 
         ARECMID = 0;
       } else if (this.selectedTabIndex == 4) {
@@ -2150,6 +2154,7 @@ export class AddPosComponent implements OnInit {
         IGST_AMOUNTFC = 0;
         IGST_AMOUNTCC = 0;
         CARD_NO = '0';
+        PAYMENT_MODE='GIFT'
         ARECMID = 0;
 
       } else if (this.selectedTabIndex == 5) {
@@ -2166,7 +2171,7 @@ export class AddPosComponent implements OnInit {
         IGST_AMOUNTFC = 0;
         IGST_AMOUNTCC = 0;
         CARD_NO = '0';
-
+        PAYMENT_MODE='CUSTOMER'
         ARECMID = 0;
       }
 
@@ -2261,7 +2266,7 @@ export class AddPosComponent implements OnInit {
         "POS_CREDIT_ACNAME": "0",
         "DT_YEARMONTH": this.baseYear || localStorage.getItem('YEAR'),
         // "DT_YEARMONTH": "2022",
-        "RECEIPT_TYPE": RECEIPT_MODE,
+        "RECEIPT_TYPE": PAYMENT_MODE,
         "GIFT_CARD_BRANCH": "0",
         "WOOCOMCARDID": "0",
 
@@ -4146,6 +4151,9 @@ export class AddPosComponent implements OnInit {
     this.salespersonName = this.salesPersonOptions.filter(
       (data) => data.SALESPERSON_CODE == value
     )[0]?.SP_SHORTNAME;
+    this.salespersonDescName = this.salesPersonOptions.filter(
+      (data) => data.SALESPERSON_CODE == value
+    )[0]?.DESCRIPTION;
   }
   changeIdtype(val: any) {
     //this.customerDataForm.controls.id_number.setValue(val);
@@ -4211,9 +4219,9 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(items.DISCOUNTVALUECC), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC: this.order_items_total_gross_amount,
+      NETVALUEFC:this.invReturnSalesTotalNetTotal,
       //  items.NETVALUEFC,
-      NETVALUECC: this.order_items_total_gross_amount,
+      NETVALUECC:this.invReturnSalesTotalNetTotal,
       //  this.comFunc.FCToCC(
       //   this.vocDataForm.value.txtCurrency,
       //   this.comFunc.emptyToZero(items.NETVALUECC), this.vocDataForm.value.txtCurRate
@@ -4223,7 +4231,7 @@ export class AddPosComponent implements OnInit {
       STONEDIFF: this.comFunc.emptyToZero(items.STONEDIFF),
       PONO: items?.PONO || 0,
       LOCTYPE_CODE: items.LOCTYPE_CODE || '',
-      SUPPLIER: items?.SUPPLIER || '',
+      SUPPLIER:'',
       STOCK_DOCDESC: items.STOCK_DOCDESC || '',
       // PONO: this.salesReturnForm.value.fcn_returns_voc_no,
       // PONO: '0',
@@ -5940,11 +5948,13 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC: this.order_items_total_gross_amount,
+      NETVALUEFC: parseFloat(this.lineItemForm.value.fcn_li_gross_amount.replace(/,/g, '')),
+      
       // this.comFunc.emptyToZero(
       //   this.lineItemForm.value.fcn_li_gross_amount
       // ),
-      NETVALUECC: this.order_items_total_gross_amount,
+      NETVALUECC: parseFloat(this.lineItemForm.value.fcn_li_gross_amount.replace(/,/g, '')),
+
       // this.comFunc.FCToCC(
       //   this.vocDataForm.value.txtCurrency,
       //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount), this.vocDataForm.value.txtCurRate
@@ -6279,7 +6289,7 @@ export class AddPosComponent implements OnInit {
       "EXCLUDEGSTVAT": data.EXCLUDEGSTVAT,
 
     };
-    console.log(data);
+    console.log(temp_pos_item_data);
 
     let _taxamount = 0;
     _taxamount = data.PRICE1LC * (this.branch_tax_percentage / 100);
@@ -6992,7 +7002,7 @@ export class AddPosComponent implements OnInit {
                 this.newLineItem.GST_CODE = stockInfoTaxes[0]?.GST_CODE;
                 this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
                 this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
-                this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.IGST_ACCODE;
+                this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
                 this.newLineItem.IGST_PER = stockInfoTaxes[0]?.IGST_PER;
                 this.newLineItem.GPC_POSSALES_AC = stockInfoTaxes[0]?.GPC_POSSALES_AC;
                 this.newLineItem.TAGLINES = stockInfos?.TAGLINES;
@@ -10389,8 +10399,8 @@ export class AddPosComponent implements OnInit {
       ADJUST_ADVANCE: 0, //need
       DISCOUNT: this.order_items_total_discount_amount || this.zeroAmtVal, // need_input
       SUBTOTAL:  this.order_items_total_gross_amount,
-      NETTOTAL: this.order_items_total_gross_amount,
-      RECEIPT_TOTAL: this.comFunc.emptyToZero(this.receiptTotalNetAmt),
+      NETTOTAL: this.comFunc.emptyToZero(this.receiptTotalNetAmt),
+      RECEIPT_TOTAL:this.comFunc.emptyToZero(this.receiptTotalNetAmt),
       // this.comFunc.transformDecimalVB(
       //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
       //   this.comFunc.CCToFC(
@@ -10420,10 +10430,11 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.order_items_total_gross_amount), this.vocDataForm.value.txtCurRate
       ),
-      NETTOTALCC: this.comFunc.CCToFC(
-        this.vocDataForm.value.txtCurrency,
-        this.comFunc.emptyToZero(this.order_items_total_gross_amount), this.vocDataForm.value.txtCurRate
-      ),
+      NETTOTALCC:this.comFunc.emptyToZero(this.receiptTotalNetAmt),
+      //  this.comFunc.CCToFC(
+      //   this.vocDataForm.value.txtCurrency,
+      //   this.comFunc.emptyToZero(this.order_items_total_gross_amount), this.vocDataForm.value.txtCurRate
+      // ),
       RECEIPT_TOTALCC: this.comFunc.emptyToZero(this.receiptTotalNetAmt),
       REFUNDCC: 0,
       // PENDING: 1,
@@ -10445,7 +10456,7 @@ export class AddPosComponent implements OnInit {
 
       // etc fields
       RS_FIXED: false, //need
-      SALESREFERENCE: '',
+      SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.vocDataForm.value.fcn_voc_no}-${this.baseYear}`,
       TRANS_CODES: '',
       CONSIGNMENTPARTY: '',
       TOTALVAT_AMOUNTFC: this.comFunc.transformDecimalVB(
@@ -10549,10 +10560,10 @@ export class AddPosComponent implements OnInit {
       GST_TOTALFC: 0,
       GST_TOTALCC: 0,
       GST_STATE_CODE: '',
-      PANNO: '',
+      PANNO: this.customerDetails.PANCARDNO,
       GST_NUMBER: '',
       TRA_ID_TYPE: '',
-      POSCUSTIDNO: '',
+      POSCUSTIDNO: this.customerDetails.POSCUSTIDNO,
       POS_CREDITLIMIT_AUTHORIZED_USER: '',
       POS_CREDITLIMIT_AUTHORIZED_REMARK: '',
       TOTALCESS_AMOUNTFC: 0,
@@ -10574,6 +10585,7 @@ export class AddPosComponent implements OnInit {
       "DTREMARKS": "",
       "GROUPREF": "",
       "NEWMID": 0,
+      "POSCUSTIDEXP_DATE":this.customerDetails.POSCUSTIDEXP_DATE ,
       RetailDetails: this.currentLineItems,
     };
     console.log('====================================');
@@ -10715,7 +10727,7 @@ export class AddPosComponent implements OnInit {
       PURITYQUALITYCHECK: false,
       CREDITDAY: 0,
       POSTDATE: this.vocDataForm.value.vocdate, //need
-      SALESPERSON_NAME: this.salespersonName, //need
+      SALESPERSON_NAME: this.salespersonDescName, //need
       TOTAL_AMT_FC: 0,
       TOTAL_WASTQTY: 0,
       TESTINGPARTY: '',
@@ -10731,7 +10743,7 @@ export class AddPosComponent implements OnInit {
       GENSEQNO: 0, //need
       ShipmentCompany: '',
       Shipmentport: '',
-      POSCUSTIDNO: '',
+      POSCUSTIDNO: this.customerDetails.POSCUSTIDNO,
       HVAT_AMOUNT_CC: 0,
       HVAT_AMOUNT_FC: 0,
       HTOTALAMOUNTWITHVAT_CC: this.comFunc.FCToCC(
@@ -10757,7 +10769,8 @@ export class AddPosComponent implements OnInit {
       H_DECLARATIONNO: '',
       H_ORIGINCOUNTRY: '',
       H_PACKETNO: 0,
-      H_DECLARATIONDATE:this.vocDataForm.value.vocdate,
+      H_DECLARATIONDATE:'',
+      // this.vocDataForm.value.vocdate,
       PartyRoundValueFc: 0, //need_input
       ItemRoundValueFc: 0,
       H_Shipper: '',
@@ -11074,7 +11087,7 @@ export class AddPosComponent implements OnInit {
       //   this.vocDataForm.value.txtCurrency,
       //   this.comFunc.emptyToZero(this.invReturnSalesTotalNetAmt), this.vocDataForm.value.txtCurRate
       // ),
-      REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.salesReturnForm.value.fcn_returns_voc_no}`,
+      REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.vocDataForm.value.fcn_voc_no}`,
       // REMARKS: `S/Return Ref : ${this.salesReturnForm.value.fcn_returns_voc_type} - ${this.salesReturnForm.value.fcn_returns_voc_no} - ${this.currentsalesReturnItems[0].UNIQUEID}`,
       SYSTEM_DATE: new Date().toISOString(),
       // SYSTEM_DATE: '',
@@ -11133,7 +11146,7 @@ export class AddPosComponent implements OnInit {
       TYPE: this.customerDetails?.TYPE || '',
 
       D2DTRANSFER: 'F',
-      SALESREFERENCE: `$${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.salesReturnForm.value.fcn_returns_voc_no}-${this.salesReturnForm.value.fcn_returns_fin_year}`, // need_input update from api -
+      SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.salesReturnForm.value.fcn_returns_voc_no}-${this.salesReturnForm.value.fcn_returns_fin_year}`,
       // SalesReference: '', // need_input update from api -
       RSCUSTIDNO:'',
       //  this.customerDetails?.POSCUSTIDNO || '',
