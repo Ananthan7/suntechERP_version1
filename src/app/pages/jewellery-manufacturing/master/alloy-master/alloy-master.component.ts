@@ -24,12 +24,13 @@ export class AlloyMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+ 
   numericValue!: number;
   branchCode: any = localStorage.getItem('userbranch');
   currencyDt: any;
   editableMode: boolean = false;
   editMode: boolean = false;
-
+  codeEnable: boolean = true;
 
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
@@ -81,6 +82,7 @@ export class AlloyMasterComponent implements OnInit {
     weightAvgCost: [''],
     weightAvgCostDes: [''],
   });
+  
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
@@ -377,7 +379,15 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  codeEnabled() {
+    if (this.alloyMastereForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
 
+  }
 
   priceCodeSelected(e: any) {
     if (this.checkStockCode()) return
@@ -469,8 +479,16 @@ export class AlloyMasterComponent implements OnInit {
       return true
     }
     return false
-    // }
+    // } 
   }
+  checkCode() {
+    if (this.alloyMastereForm.value.code == '') {
+        this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
+        return true;
+    }
+    return false;
+}
+
   priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)

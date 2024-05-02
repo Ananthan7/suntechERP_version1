@@ -199,6 +199,7 @@ export class StonePricingMasterComponent implements OnInit {
     issue_rate: ['', [Validators.required]],
     selling: [''],
     selling_rate: [''],
+    sieve_desc:[''],
   })
 
   constructor(
