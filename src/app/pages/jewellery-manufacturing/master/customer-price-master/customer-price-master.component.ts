@@ -22,23 +22,40 @@ export class CustomerPriceMasterComponent implements OnInit {
   editMode: boolean = false;
   checkBoxesMode: string;
   divisionMS: any = 'ID';
-  columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO',,'WEIGHT_FROM','WEIGHT_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER'];
-  columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'CODE'},
-   { title:'DIVISION_CODE', field: 'DIVISION_CODE'},
-   { title:'SHAPE', field: 'SHAPE'},
-   { title:'DIVISION', field: 'DIVISION'},
-   { title:'METHOD', field: 'METHOD'},
-   { title:'UNITCODE', field: 'UNITCODE'},
-   { title:'CARATWT_FROM', field: 'CARATWT_FROM'},
-   { title:'CARATWT_TO', field: 'CARATWT_TO'},
-   { title:'CURRENCY_CODE', field: 'CURRENCYCODE'},
-   { title:'CRACCODE', field: 'CRACCODE'},
-   { title:'COST_RATE', field: 'COST_RATE'},
-   { title:'SELLING_RATE', field: 'SELLING_RATE'},   
-];
-  columnheader2:any[] = ['DESIGN_CODE','LABOUR_CODE','LABTYPE','METHOD','DIVISION','CURRENCY_CODE','UNITCODE','COST_RATE','SELLING_PER','CRACCODE','DIVISION_CODE','SELLING_RATE','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
+  columnheader: any[] = ['PRICE_CODE', 'SIEVE', 'SIEVE_TO', 'SIEVE_SET', 'SHAPE', 'COLOR', 
+  'CLARITY', 'SIZE_FROM', 'SIZE_TO', , 'WEIGHT_FROM', 'WEIGHT_TO', 'CARAT_WT', 
+  'CURRANCY', 'ISSUE_RATE', 'SELLING_RATE', 'SELLING_PER'];
+  // columnheader: any[] = [
+  // { title: '', field: 'SELECT1',cellTemplate: 'limitTemplate' },
+  // { title: 'SIEVE', field: 'SIEVE',cellTemplate: '' },
+  // { title: 'DIVISION_CODE', field: 'DIVISION_CODE' },
+  // { title: 'SHAPE', field: 'SHAPE',cellTemplate: '' },
+  // { title: 'DIVISION', field: 'DIVISION',cellTemplate: '' },
+  // { title: 'METHOD', field: 'METHOD',cellTemplate: '' },
+  // { title: 'UNITCODE', field: 'UNITCODE',cellTemplate: '' },
+  // { title: 'CARATWT_FROM', field: 'CARATWT_FROM',cellTemplate: '' },
+  // { title: 'CARATWT_TO', field: 'CARATWT_TO',cellTemplate: '' },
+  // { title: 'CURRENCY_CODE', field: 'CURRENCYCODE',cellTemplate: '' },
+  // { title: 'CRACCODE', field: 'CRACCODE',cellTemplate: '' },
+  // { title: 'COST_RATE', field: 'COST_RATE',cellTemplate: '' },
+  // { title: 'SELLING_RATE', field: 'SELLING_RATE',cellTemplate: '' },
+  // ];
+  columnheader1: any[] = [{ title: 'LABOUR_CODE', field: 'CODE' },
+  { title: 'DIVISION_CODE', field: 'DIVISION_CODE' },
+  { title: 'SHAPE', field: 'SHAPE' },
+  { title: 'DIVISION', field: 'DIVISION' },
+  { title: 'METHOD', field: 'METHOD' },
+  { title: 'UNITCODE', field: 'UNITCODE' },
+  { title: 'CARATWT_FROM', field: 'CARATWT_FROM' },
+  { title: 'CARATWT_TO', field: 'CARATWT_TO' },
+  { title: 'CURRENCY_CODE', field: 'CURRENCYCODE' },
+  { title: 'CRACCODE', field: 'CRACCODE' },
+  { title: 'COST_RATE', field: 'COST_RATE' },
+  { title: 'SELLING_RATE', field: 'SELLING_RATE' },
+  ];
+  columnheader2: any[] = ['DESIGN_CODE', 'LABOUR_CODE', 'LABTYPE', 'METHOD', 'DIVISION', 'CURRENCY_CODE', 'UNITCODE', 'COST_RATE', 'SELLING_PER', 'CRACCODE', 'DIVISION_CODE', 'SELLING_RATE', 'CUSTOMER_CODE', 'REFMID', 'DT_VALID_FROM'];
   subscriptions: any;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   tableDatalabour: any[] = [];
   tableDatastone: any[] = [];
@@ -46,8 +63,8 @@ export class CustomerPriceMasterComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   value: any;
-  rateInput: any; 
-  text="Deduct";
+  rateInput: any;
+  text = "Deduct";
   myNumber: any;
   allMode: string;
   selectedKeys: any[] = [];
@@ -64,8 +81,8 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  
-  
+
+
 
 
 
@@ -77,36 +94,32 @@ export class CustomerPriceMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
-  ) { 
+  ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
- 
+
   ngOnInit(): void {
-  
+    this.renderer.selectRootElement('#customercode')?.focus();
     this.renderer.selectRootElement('#customercode')?.focus();
 
-    this.renderer.selectRootElement('#customercode')?.focus();
+    this.getStonePriceData()
+    this.getLabourChargeMasterList()
+    if (this.content?.FLAG == 'VIEW') {
+      this.viewFormValues();
+      this.viewMode = true
+      this.editMode = true;
+    } else if (this.content?.FLAG == 'EDIT'){
+      this.editableMode = true;
+      this.editMode = true;
+      this.setFormValues();
+    }
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
+    this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
 
-    this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response;
-          data.forEach((item: any, i: any) => {
-            item.SELECT1 = false
-            item.SRNO = i + 1;
-            item.SELLING_PER = item.SELLING_PER + "%";
-          });
-          this.tableDatastone = data;
-          
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-
-
+  }
+  getLabourChargeMasterList() {
     // this.commonService.toastSuccessByMsgId('MSG81447');
     let API1 = 'LabourChargeMasterDj/GetLabourChargeMasterList'
     let Sub1: Subscription = this.dataService.getDynamicAPI(API1)
@@ -122,56 +135,27 @@ export class CustomerPriceMasterComponent implements OnInit {
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
-
-
-    console.log(API1);
-
-    // const apiUrl = 'CustomerPriceMaster/GetCustomerStonePricingMasterGrid';  
-    // let postData = {
-    //   "strCode": "TBG-5.4-5.7",
-    //   "strType": "LABO",
-    //   "strVocDate": "2024-02-07"
-    // }
-   
-    // let sub: Subscription = this.dataService.postDynamicAPI(apiUrl,postData).subscribe((result) => {
-    //   if (result.status == 'Success' ) {
-    //          // console.log(result.dynamicData[0]);
-    //           this.tableDatalabour = result.dynamicData[0]
-    //           console.log(this.tableDatalabour);
-    //   } 
-    // });
-
-    // let getdata = {
-    //   "strCode": "BLKRD+11-12",
-    //   "strType": "STO",
-    //   "strVocDate": "2024-02-07"
-    // }
-    // let subu: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
-    //   if (result.status == 'Success' ) {
-    //          // console.log(result.dynamicData[0]);
-    //           this.tableDatastone = result.dynamicData[0]
-    //           console.log(this.tableDatastone);
-    //   } 
-    // });
-
-    console.log(this.content.FLAG);
-    if (this.content.FLAG == 'VIEW') {
-      this.viewFormValues();
-      this.viewMode = true
-      this.editMode = true;
-    }
-    else (this.content.FLAG == 'EDIT')
-    {
-      this.editableMode = true;
-      this.editMode = true;
-      this.setFormValues();
-    }
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-    this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
-    
   }
+  getStonePriceData() {
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response;
+          data.forEach((item: any, i: any) => {
+            item.SELECT1 = false
+            item.SRNO = i + 1;
+            item.SELLING_PER = item.SELLING_PER + "%";
+          });
+          this.tableDatastone = data;
 
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+
+  }
   selectRow(rowKey: any) {
     if (!this.selectedKeys.includes(rowKey)) {
       this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
@@ -181,99 +165,99 @@ export class CustomerPriceMasterComponent implements OnInit {
 
 
   customerpricemasterForm: FormGroup = this.formBuilder.group({
-    customercode :['',[Validators.required]],
-    desc :[''],
-    pricecode : ['',[Validators.required]],
-    labourtype:['',[Validators.required]],
-    addonrate : [''],
-    margin:[''],
-    markup:[''],
-    metal_loss:[''],
-    date:[new Date(),''],
-    text:[''],
-    changePrice:[''],
-    
-   });
+    customercode: ['', [Validators.required]],
+    desc: [''],
+    pricecode: ['', [Validators.required]],
+    labourtype: ['', [Validators.required]],
+    addonrate: [''],
+    margin: [''],
+    markup: [''],
+    metal_loss: [''],
+    date: [new Date(), ''],
+    text: [''],
+    changePrice: [''],
+
+  });
 
 
-  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-//   onInput(event: Event): void {
-//     const inputValue = (event.target as HTMLInputElement).value;
+  //   onInput(event: Event): void {
+  //     const inputValue = (event.target as HTMLInputElement).value;
 
-//     // Remove any non-digit characters except for the first decimal point
-//     const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
+  //     // Remove any non-digit characters except for the first decimal point
+  //     const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
 
-//     // Extract the integer part and the decimal part
-//     const parts = sanitizedValue.split('.');
-//     let integerPart = parts[0];
-//     const decimalPart = parts[1] || '';
+  //     // Extract the integer part and the decimal part
+  //     const parts = sanitizedValue.split('.');
+  //     let integerPart = parts[0];
+  //     const decimalPart = parts[1] || '';
 
-//     // Take only the first 3 characters for the integer part
-//     integerPart = integerPart.slice(0, 3);
+  //     // Take only the first 3 characters for the integer part
+  //     integerPart = integerPart.slice(0, 3);
 
-//     // Combine integer part and decimal part
-//     let limitedValue = integerPart;
-//     if (decimalPart.length > 0) {
-//         limitedValue += '.' + decimalPart.slice(0, 3 - integerPart.length);
-//     }
+  //     // Combine integer part and decimal part
+  //     let limitedValue = integerPart;
+  //     if (decimalPart.length > 0) {
+  //         limitedValue += '.' + decimalPart.slice(0, 3 - integerPart.length);
+  //     }
 
-//     // Update the input value
-//     (event.target as HTMLInputElement).value = limitedValue;
-// }
+  //     // Update the input value
+  //     (event.target as HTMLInputElement).value = limitedValue;
+  // }
 
-labourTypeList = [
-  {
-    name: 'MAKING',
-    value: 'MAKING'
-  },
-  {
-    name: 'POLISH',
-    value: 'POLISH'
-  },
-  {
-    name: 'FINISHING',
-    value: 'FINISHING'
-  },
-  {
-    name: 'CASTING',
-    value: 'CASTING'
-  },
-  {
-    name: 'GENERAL',
-    value: 'GENERAL'
-  },
-  {
-    name: 'RHODIUM',
-    value: 'RHODIUM'
-  },
-  {
-    name: 'STAMPING',
-    value: 'STAMPING'
-  },
-  {
-    name: 'WASTAGE',
-    value: 'WASTAGE'
-  },
-];
+  labourTypeList = [
+    {
+      name: 'MAKING',
+      value: 'MAKING'
+    },
+    {
+      name: 'POLISH',
+      value: 'POLISH'
+    },
+    {
+      name: 'FINISHING',
+      value: 'FINISHING'
+    },
+    {
+      name: 'CASTING',
+      value: 'CASTING'
+    },
+    {
+      name: 'GENERAL',
+      value: 'GENERAL'
+    },
+    {
+      name: 'RHODIUM',
+      value: 'RHODIUM'
+    },
+    {
+      name: 'STAMPING',
+      value: 'STAMPING'
+    },
+    {
+      name: 'WASTAGE',
+      value: 'WASTAGE'
+    },
+  ];
 
-formatNumber(): void {
-  let numericValue = parseFloat(this.myNumber.replace(/,/g, '.'));
+  formatNumber(): void {
+    let numericValue = parseFloat(this.myNumber.replace(/,/g, '.'));
 
-  // Check if the parsed numeric value is not NaN
-  if (!isNaN(numericValue)) {
-    // Format the numeric value with commas as thousands separators
-    let formattedValue = numericValue.toLocaleString();
-    this.myNumber = formattedValue;
-  } else {
-    // If the parsed value is NaN, set the input value to an empty string
-    this.myNumber = '';
+    // Check if the parsed numeric value is not NaN
+    if (!isNaN(numericValue)) {
+      // Format the numeric value with commas as thousands separators
+      let formattedValue = numericValue.toLocaleString();
+      this.myNumber = formattedValue;
+    } else {
+      // If the parsed value is NaN, set the input value to an empty string
+      this.myNumber = '';
+    }
   }
-}
 
   change(event: any) {
     console.log(event);
@@ -281,14 +265,14 @@ formatNumber(): void {
   }
 
 
-  customerCodeScpSelected(e:any){
-    console.log(e); 
+  customerCodeScpSelected(e: any) {
+    console.log(e);
     this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
     this.customerpricemasterForm.controls.desc.setValue(e['ACCOUNT HEAD']);
   }
 
-  setFormValues(){
-    
+  setFormValues() {
+
     if (!this.content) return
     this.customerpricemasterForm.controls.customercode.setValue(this.content.CUSTOMER_CODE)
     this.customerpricemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
@@ -303,7 +287,7 @@ formatNumber(): void {
   }
 
   viewFormValues() {
-  
+
     if (!this.content) return
     this.customerpricemasterForm.controls.customercode.setValue(this.content.CUSTOMER_CODE)
     this.customerpricemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
@@ -317,81 +301,78 @@ formatNumber(): void {
     this.customerpricemasterForm.controls.addonrate.setValue(this.content.ADD_ON_RATE)
 
   }
-
-  formSubmit(){
-
-    if (this.customerpricemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    if (this.content && this.content.FLAG == 'VIEW') return
-    if(this.content && this.content.FLAG == 'EDIT'){
-      this.update()
-      return
-    }
-    // if (this.customerpricemasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+  
+   /**use: checkbox change */
+   changedCheckbox(event: any) {
+    this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
+  }
+  setCustomerPriceDetails() {
+    console.log(this.tableDatastone, 'tableDatastone')
 
 
-    let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
-    let postData = {
+    let selectedPriceDetailData = this.tableDatastone.filter((item:any)=> item.SELECT1 == true)
+    console.log(selectedPriceDetailData, 'selectedPriceDetailData')
+    let data:any[] = []
+    selectedPriceDetailData.forEach(element => {
+      data.push({
+        "REFMID": element.MID,
+        "CUSTOMER_CODE": "",
+        "PRICE_CODE": "",
+        "DESCRIPTION": "",
+        "SHAPE": "",
+        "COLOR": "",
+        "CLARITY": "",
+        "SIZE_FROM": "",
+        "SIZE_TO": "",
+        "CURRENCYCODE": "",
+        "ISSUE_RATE": 0,
+        "SELLING_RATE": 0,
+        "UPDATE_ON": "2023-11-28T05:47:14.178Z",
+        "CARAT_WT": 0,
+        "SIEVE": "",
+        "SELLING_PER": 0,
+        "UNITCODE": "",
+        "LABTYPE": "",
+        "METHOD": "",
+        "DIVISION": "",
+        "CRACCODE": "",
+        "COST_RATE": 0,
+        "CARATWT_FROM": 0,
+        "CARATWT_TO": 0,
+        "ACCESSORIES": 0,
+        "PRICE_TYPE": 0,
+        "SIEVE_SET": "",
+        "WEIGHT_FROM": 0,
+        "WEIGHT_TO": 0,
+        "SIEVE_TO": "",
+        "CUSTOMER_NAME": "",
+        "DT_VALID_FROM": "2023-11-28T05:47:14.178Z",
+        "PRICECODE": "",
+        "SRNO": 0
+      })
+    });
+   return data
+  }
+  setPostData() {
+    return {
       "MID": 0,
       "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode,
-      "DESCRIPTION":  this.customerpricemasterForm.value.desc,
-      "GOLD_LOSS_PER":  this.customerpricemasterForm.value.metal_loss || 0,
+      "DESCRIPTION": this.customerpricemasterForm.value.desc,
+      "GOLD_LOSS_PER": this.customerpricemasterForm.value.metal_loss || 0,
       "UPDATE_ON": "2023-11-28T05:47:14.177Z",
       "PRICECODE": this.customerpricemasterForm.value.pricecode,
       "MARGIN_PER": this.customerpricemasterForm.value.margin || 0,
       "LAB_TYPE": this.customerpricemasterForm.value.labourtype,
-      "MARKUP_PER":  this.customerpricemasterForm.value.markup || 0,
-      "CUSTOMER_NAME":  this.customerpricemasterForm.value.text,
+      "MARKUP_PER": this.customerpricemasterForm.value.markup || 0,
+      "CUSTOMER_NAME": this.customerpricemasterForm.value.text,
       "PRINT_COUNT": 0,
       "VALID_FROM": this.customerpricemasterForm.value.date,
-      "ADD_ON_RATE":this.customerpricemasterForm.value.addonrate || 0,
+      "ADD_ON_RATE": this.customerpricemasterForm.value.addonrate || 0,
       "CURRENCY_CODE": "str",
       "CURRENCY_RATE": 0,
       "MAIN_VOCTYPE": "string",
-      "CUSTOMER_PRICE_DET": [
-        {
-          "REFMID": 0,
-          "CUSTOMER_CODE": "",
-          "PRICE_CODE": "",
-          "DESCRIPTION": "",
-          "SHAPE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SIZE_FROM": "",
-          "SIZE_TO": "",
-          "CURRENCYCODE": "",
-          "ISSUE_RATE": 0,
-          "SELLING_RATE": 0,
-          "UPDATE_ON": "2023-11-28T05:47:14.178Z",
-          "CARAT_WT": 0,
-          "SIEVE": "",
-          "SELLING_PER": 0,
-          "UNITCODE": "",
-          "LABTYPE": "",
-          "METHOD": "",
-          "DIVISION": "",
-          "CRACCODE": "",
-          "COST_RATE": 0,
-          "CARATWT_FROM": 0,
-          "CARATWT_TO": 0,
-          "ACCESSORIES": 0,
-          "PRICE_TYPE": 0,
-          "SIEVE_SET": "",
-          "WEIGHT_FROM": 0,
-          "WEIGHT_TO": 0,
-          "SIEVE_TO": "",
-          "CUSTOMER_NAME": "",
-          "DT_VALID_FROM": "2023-11-28T05:47:14.178Z",
-          "PRICECODE": "",
-          "SRNO": 0
-        }
-      ],
+      "CUSTOMER_PRICE_DET": this.setCustomerPriceDetails(),
+
       "CUSTOMER_LABCHRG_DET": [
         {
           "REFMID": 0,
@@ -432,11 +413,35 @@ formatNumber(): void {
         }
       ]
     }
-  
+  }
+
+  formSubmit() {
+
+    // if (this.customerpricemasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
+    }
+    // if (this.customerpricemasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+
+    let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
+    let postData = this.setPostData()
+    console.log(postData, 'postDatapostData');
+
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -455,116 +460,23 @@ formatNumber(): void {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
-    this.subscriptions.push(Sub)
+    // this.subscriptions.push(Sub)
   }
 
-  update(){
+  update() {
     if (this.customerpricemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/'+this.content.PRICECODE
-    let postData = {
-      "MID": 0,
-      "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
-      "DESCRIPTION":  this.customerpricemasterForm.value.desc || "",
-      "GOLD_LOSS_PER":  this.customerpricemasterForm.value.metal_loss || 0,
-      "UPDATE_ON": "2023-11-28T05:47:14.177Z",
-      "PRICECODE": this.customerpricemasterForm.value.pricecode || "",
-      "MARGIN_PER": this.customerpricemasterForm.value.margin || 0,
-      "LAB_TYPE": this.customerpricemasterForm.value.labourtype || "",
-      "MARKUP_PER":  this.customerpricemasterForm.value.markup || 0,
-      "CUSTOMER_NAME":  this.customerpricemasterForm.value.text,
-      "PRINT_COUNT": 0,
-      "VALID_FROM": this.customerpricemasterForm.value.date,
-      "ADD_ON_RATE":this.customerpricemasterForm.value.addonrate || 0,
-      "CURRENCY_CODE": "str",
-      "CURRENCY_RATE": 0,
-      "MAIN_VOCTYPE": "string",
-      "CUSTOMER_PRICE_DET": [
-        {
-          "REFMID": 0,
-          "CUSTOMER_CODE": "",
-          "PRICE_CODE": "",
-          "DESCRIPTION": "",
-          "SHAPE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SIZE_FROM": "",
-          "SIZE_TO": "",
-          "CURRENCYCODE": "",
-          "ISSUE_RATE": 0,
-          "SELLING_RATE": 0,
-          "UPDATE_ON": "2023-11-28T05:47:14.178Z",
-          "CARAT_WT": 0,
-          "SIEVE": "",
-          "SELLING_PER": 0,
-          "UNITCODE": "",
-          "LABTYPE": "",
-          "METHOD": "",
-          "DIVISION": "",
-          "CRACCODE": "",
-          "COST_RATE": 0,
-          "CARATWT_FROM": 0,
-          "CARATWT_TO": 0,
-          "ACCESSORIES": 0,
-          "PRICE_TYPE": 0,
-          "SIEVE_SET": "",
-          "WEIGHT_FROM": 0,
-          "WEIGHT_TO": 0,
-          "SIEVE_TO": "",
-          "CUSTOMER_NAME": "",
-          "DT_VALID_FROM": "2023-11-28T05:47:14.178Z",
-          "PRICECODE": "",
-          "SRNO": 0
-        }
-      ],
-      "CUSTOMER_LABCHRG_DET": [
-        {
-          "REFMID": 0,
-          "CUSTOMER_CODE": "",
-          "LABOUR_CODE": "",
-          "LABTYPE": "",
-          "METHOD": "",
-          "DIVISION": "",
-          "SHAPE": "",
-          "SIZE_FROM": "",
-          "SIZE_TO": "",
-          "CURRENCYCODE": "",
-          "UNITCODE": "",
-          "COST_RATE": 0,
-          "SELLING_RATE": 0,
-          "LAST_UPDATE": "2023-11-28T05:47:14.178Z",
-          "CRACCODE": "",
-          "ACCESSORIES": 0,
-          "DIVISION_CODE": "",
-          "SELLING_PER": 0,
-          "CARATWT_FROM": 0,
-          "CARATWT_TO": 0,
-          "SIEVE": "",
-          "DT_VALID_FROM": "2023-11-28T05:47:14.178Z",
-          "PRICECODE": "",
-          "SRNO": 0,
-          "PROCESS_TYPE": ""
-        }
-      ],
-      "CUSTOMER_PRICE_ACCOUNT_DET": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "PRICECODE": "",
-          "ACCODE": "",
-          "ACCOUNT_HEAD": "",
-          "CALC_ON_GROSS": true
-        }
-      ]
-    }
-   
+
+    let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/' + this.content.PRICECODE
+    let postData = this.setPostData()
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

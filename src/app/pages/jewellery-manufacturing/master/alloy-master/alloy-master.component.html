@@ -21,10 +21,10 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%">
                                         <input type="text" id="code" matInput (focusout)="prefixCodeValidate()"
-                                            formControlName="code" [readonly]=" viewMode"
+                                            formControlName="code" [readonly]="editableMode || viewMode"
                                             oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
-                                    <master-search *ngIf="!viewMode" [MasterSearchData]="codeData"
+                                    <master-search *ngIf="!editMode && !viewMode" [MasterSearchData]="codeData"
                                         (newRowClick)="codeSelected($event)"></master-search>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%">
                                         <input type="text" matInput formControlName="costCenter"
-                                            [readonly]="viewMode" />
+                                        [readonly]=" viewMode || codeEnable" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="costCenterData"
                                         (newRowClick)="costCenterSelected($event)"></master-search>
