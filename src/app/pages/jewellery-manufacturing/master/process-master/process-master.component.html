@@ -30,6 +30,7 @@
                                             formControlName="processCode"
                                             maxlength="6" [readonly]="editableMode || viewMode"
                                             (focusout)="checkCodeExists($event)"
+                                            id="code"
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 

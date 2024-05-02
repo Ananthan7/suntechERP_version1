@@ -266,9 +266,6 @@ export class SequenceMasterComponent implements OnInit {
       this.toastr.error('select all required fields & Process')
       return
     }
-    // "STD_LOSS": item.STD_LOSS || 0,
-    // "MIN_LOSS": item.MIN_LOSS || 0,
-    // "MAX_LOSS": item.MAX_LOSS || 0,
     this.dataSource.forEach((item: any) => {
       //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
@@ -332,6 +329,25 @@ export class SequenceMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
+
+    this.dataSource.forEach((item: any) => {
+      //this.checkCondtion = false;
+      if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
+        this.checkCondtion = true;
+        this.toastr.error('Max loss must be Greater than the Standard Loss')
+      }
+
+      if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
+        this.checkCondtion = false
+
+      }
+    })
+
+    if (this.checkCondtion == true) {
+      console.log(this.checkCondtion)
+      return;
+    }
+
 
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = {
