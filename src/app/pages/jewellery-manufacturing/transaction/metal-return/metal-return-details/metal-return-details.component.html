@@ -6,7 +6,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewContinue]="true"></modal-header>
+    [isViewSave]="!viewMode" [isViewDelete]="false" [isViewMore]="false"
+    [isViewContinue]="!viewMode"></modal-header>
 <!-- content section -->
 <!-- content section -->
 <div class="row">
@@ -126,7 +127,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="partcode"
+                                        formControlName="PART_CODE"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -182,7 +183,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="treeNumber"
-                                        [readonly]="viewMode" NumberOnly />
+                                        [readonly]="viewMode" NumberOnly 
+                                        maxlength="15" class="text-right"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -224,15 +226,38 @@
                                 </mat-form-field>
                             </div>
                         </div>
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-3 col-form-label">Return To *
+                                :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput
+                                        formControlName="ReturnToStockCode"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                                <master-search
+                                    [MasterSearchData]="stockCodeData"
+                                    (newRowClick)="ReturnTostockCodeSelected($event)"
+                                    *ngIf="!viewMode"></master-search>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="ReturnToStockCodeDesc"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label">Pcs :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
+                                    <input type="text" matInput
                                         formControlName="pcs"
-                                        style="text-align: right;"
+                                        class="text-right" maxlength="10"
                                         [readonly]="viewMode" NumberOnly />
                                 </mat-form-field>
                             </div>
@@ -240,7 +265,7 @@
                                 class="col-sm-3 col-form-label">Purity:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
+                                    <input type="text" matInput
                                         formControlName="PURITY" class="text-right"
                                         [readonly]="viewMode" SixDecimalInput [max]="4" />
                                 </mat-form-field>
@@ -252,11 +277,11 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
-                                        formControlName="grossWeight"
+                                    <input type="text" matInput
+                                        formControlName="GROSS_WT"
                                         style="text-align: right;"
                                         [readonly]="viewMode"
-                                        MetalDecimalInput />
+                                        MetalDecimalInput [max]="13" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -280,11 +305,11 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
+                                    <input type="text" matInput
                                         formControlName="STONE_WT"
                                         style="text-align: right;"
                                         [readonly]="viewMode"
-                                        StoneDecimalInput />
+                                        StoneDecimalInput [max]="13" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -293,29 +318,29 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="PURE_WT" [max]="13"
+                                        formControlName="PURE_WT"
                                         style="text-align: right;"
                                         [readonly]="viewMode"
-                                        MetalDecimalInput />
+                                        MetalDecimalInput [max]="13"/>
                                 </mat-form-field>
                             </div>
 
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label">Remarks
                                 :</label>
                             <div class="col-md-9">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="remarks"
+                                        formControlName="remarks" maxlength="14"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-6">
-                        <div class="row justify-content-end">
+                        <!-- <div class="row justify-content-end">
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
@@ -334,7 +359,7 @@
                                         AmountDecimalInput />
                                 </mat-form-field>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row  justify-content-end">
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
@@ -374,7 +399,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
+                                    <input type="text" matInput
                                         formControlName="purityDiff"
                                         style="text-align: right;"
                                         [readonly]="viewMode"
@@ -383,7 +408,7 @@
                             </div>
                             <div class="col-sm-3 offset-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
+                                    <input type="text" matInput
                                         formControlName="totalRateLc"
                                         style="text-align: right;"
                                         [readonly]="viewMode"

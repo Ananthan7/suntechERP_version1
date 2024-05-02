@@ -5,7 +5,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+[isViewDelete]="false" [isViewSave]="!viewMode" 
+[isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"></modal-header>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12">
@@ -27,7 +29,7 @@
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="vocNo" readonly
+                                        formControlName="VOCNO" readonly
                                         style="text-align: right;" />
                                 </mat-form-field>
                             </div>
@@ -41,19 +43,15 @@
                                     <input type="text" matInput formControlName="vocDate" />
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 100%">
-                                    <!-- <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                                        placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker> -->
-
                                     <input matInput DateValidation
                                         (dateChange)="formatDate($event)"
                                         [matDatepicker]="vocDate"
                                         formControlName="vocDate"
+                                        [readonly]="isSaved"
                                         placeholder="DD/MM/YYYY" />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker #vocDate></mat-datepicker>
+                                    <mat-datepicker #vocDate [disabled]="isSaved"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
@@ -186,6 +184,8 @@
                                 caption="Process"></dxi-column>
                             <dxi-column dataField="DESIGN_CODE"
                                 caption="Design"></dxi-column>
+                            <dxi-column dataField="DIVCODE"
+                                caption="Division"></dxi-column>
                             <dxi-column dataField="STOCK_CODE"
                                 caption="Stock Code"></dxi-column>
                             <dxi-column dataField="WORKER_CODE"
@@ -196,11 +196,8 @@
                                 caption="Carat"></dxi-column>
                             <dxi-column dataField="RATE_TYPE"
                                 caption="Rate"></dxi-column>
-                            <dxi-column dataField="DIVCODE"
-                                caption="Division"></dxi-column>
-                            <dxi-column dataField="TOTAL_AMOUNTFC"
-                                caption="Amount"></dxi-column>
-
+                            <dxi-column dataField="GROSS_WT"
+                                caption="GROSS Wt"></dxi-column>
                             <dxo-summary>
                                 <dxi-total-item column="Carat" summaryType="sum"
                                     displayFormat="000.000" precision="2">
@@ -224,8 +221,8 @@
                             <div class="col-md-9">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="remarks"
-                                        [readonly]="viewMode" />
+                                        formControlName="REMARKS"
+                                        [readonly]="viewMode" maxlength="40" />
                                 </mat-form-field>
                             </div>
                         </div>

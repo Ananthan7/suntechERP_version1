@@ -25,17 +25,11 @@ export class MetalReturnComponent implements OnInit {
   metalReturnDetailsData: any[] = [];
   columnhead: any[] = [''];
   branchCode?: String;
-  yearMonth?: String;
-  vocMaxDate = new Date();
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
-  tableRowCount: number = 0;
   selectRowIndex: any;
   viewMode: boolean = false;
-
-  allMode: string;
-  checkBoxesMode: string;
-
+  isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
   user: MasterSearchModel = {
@@ -50,7 +44,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -62,7 +55,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -74,8 +66,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -97,7 +87,7 @@ export class MetalReturnComponent implements OnInit {
     process: [''],
     worker: [''],
     location: [''],
-    remarks: [''],
+    REMARKS: [''],
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: ['']
@@ -112,41 +102,31 @@ export class MetalReturnComponent implements OnInit {
     private commonService: CommonServiceService,
 
   ) {
-    this.allMode = 'allPages';
-    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    // this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
   ngOnInit(): void {
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-
     if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+      this.isSaved = true;
+      if (this.content.FLAG == 'DELETE') {
+        this.isSaved = false;
+        this.deleteMeltingType()
+      }
       this.metalReturnForm.controls.FLAG.setValue(this.content.FLAG)
-    }
-    if (this.content && this.content.FLAG == 'EDIT') {
       this.setAllInitialValues()
-      return
+    } else {
+      this.setNewFormValue()
     }
-    if (this.content && this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.setAllInitialValues()
-      return
-    }
-    this.setInitialValues()
   }
- 
-  
-
-
-  setInitialValues() {
+  setNewFormValue() {
     this.branchCode = this.commonService.branchCode;
-    // this.companyName = this.commonService.companyName;
-    this.yearMonth = this.commonService.yearSelected;
     this.metalReturnForm.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.metalReturnForm.controls.vocDate.setValue(this.currentDate)
     this.metalReturnForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.metalReturnForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
-    //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -183,18 +163,18 @@ export class MetalReturnComponent implements OnInit {
               Rate: element.RATE_TYPE,
               Division: element.DIVCODE,
               Amount: element.NET_WT,
-
-
             })
           });
           this.metalReturnForm.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.metalReturnForm.controls.VOCNO.setValue(data.VOCNO)
           this.metalReturnForm.controls.vocDate.setValue(data.VOCDATE)
+          this.metalReturnForm.controls.REMARKS.setValue(data.REMARKS)
+          this.metalReturnForm.controls.enteredBy.setValue(data.SMAN)
+          this.metalReturnForm.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.metalReturnForm.controls.process.setValue(data.Details[0].PROCESS_CODE)
           this.metalReturnForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
-          this.metalReturnForm.controls.enteredBy.setValue(data.Details[0].SMAN)
           this.metalReturnForm.controls.location.setValue(data.Details[0].LOCTYPE_CODE)
-          this.metalReturnForm.controls.remarks.setValue(data.Details[0].REMARKS)
+          this.metalReturnForm.controls.BRANCH_CODE.setValue(data.Details[0].BRANCH_CODE)
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -256,40 +236,47 @@ export class MetalReturnComponent implements OnInit {
     this.selectRowIndex = event.data.SRNO
   }
   onRowDoubleClickHandler(event: any) {
-    this.selectRowIndex =  event.data.SRNO
+    this.selectRowIndex = event.data.SRNO
     let selectedData = event.data
     this.openAddMetalReturnDetail(selectedData)
   }
-  
+
   deleteTableData(): void {
-    this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) =>  element.SRNO != this.selectRowIndex)
+    this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
     this.recalculateSRNO()
   }
   recalculateSRNO(): void {
-    this.metalReturnDetailsData.forEach((element: any,index:any) => { element.SRNO = index+1})
+    this.metalReturnDetailsData.forEach((element: any, index: any) => {
+      element.SRNO = index + 1
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+    })
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
     console.log(detailDataToParent, 'detailDataToParent');
     if (detailDataToParent.SRNO != 0) {
       this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
-      detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
+      // detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
       this.metalReturnDetailsData.push(detailDataToParent);
+      this.recalculateSRNO()
     }
   }
 
-  setPostData(){
+  setPostData() {
     let form = this.metalReturnForm.value
+    let currRate = this.commonService.getCurrecnyRate(this.commonService.compCurrency)
+    console.log(form);
+
     return {
-      "MID": 0,
+      "MID": this.commonService.emptyToZero(this.content?.MID),
       "VOCTYPE": form.VOCTYPE,
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": form.VOCNO,
+      "BRANCH_CODE": form.BRANCH_CODE,
+      "VOCNO": this.commonService.emptyToZero(form.VOCNO),
       "VOCDATE": this.commonService.formatDateTime(new Date(form.vocDate)),
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2024-03-05T12:13:39.290Z",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
+      "YEARMONTH": form.YEARMONTH,
+      "DOCTIME": this.commonService.formatDateTime(new Date(form.vocDate)),
+      "CURRENCY_CODE": this.commonService.compCurrency,
+      "CURRENCY_RATE": this.commonService.emptyToZero(currRate),
       "METAL_RATE_TYPE": "",
       "METAL_RATE": 0,
       "TOTAL_AMOUNTFC_METAL": 0,
@@ -301,8 +288,8 @@ export class MetalReturnComponent implements OnInit {
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_PURE_WT": 0,
-      "SMAN": "string",
-      "REMARKS": form.remarks,
+      "SMAN": this.commonService.nullToString(form.enteredBy),
+      "REMARKS": this.commonService.nullToString(form.REMARKS),
       "NAVSEQNO": 0,
       "FIX_UNFIX": true,
       "AUTOPOSTING": true,
@@ -317,7 +304,7 @@ export class MetalReturnComponent implements OnInit {
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-       this.updateMeltingType()
+      this.updateMeltingType()
       return
     }
 
@@ -342,7 +329,7 @@ export class MetalReturnComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.metalReturnForm.reset()
-                this.tableData = []
+                this.isSaved = true;
                 this.close('reloadMainGrid')
               }
             });
@@ -359,7 +346,8 @@ export class MetalReturnComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-    let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${this.branchCode}/${this.metalReturnForm.value.VOCTYPE}/${this.metalReturnForm.value.VOCNO}/${this.commonService.yearSelected}`
+    let form = this.metalReturnForm.value
+    let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -375,7 +363,6 @@ export class MetalReturnComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.metalReturnForm.reset()
-                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
@@ -388,7 +375,7 @@ export class MetalReturnComponent implements OnInit {
   }
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
-    if (!this.content.WORKER_CODE) {
+    if (!this.content.VOCNO) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -411,7 +398,9 @@ export class MetalReturnComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMetalReturnMasterDJ/DeleteJobMetalReturnMasterDJ/' + this.metalReturnForm.value.brnachCode + this.metalReturnForm.value.VOCTYPE + this.metalReturnForm.value.VOCNO + this.metalReturnForm.value.yearMoth;
+        let API = 'JobMetalReturnMasterDJ/DeleteJobMetalReturnMasterDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -425,7 +414,6 @@ export class MetalReturnComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.metalReturnForm.reset()
-                    this.tableData = []
                     this.close('reloadMainGrid')
                   }
                 });
@@ -439,7 +427,6 @@ export class MetalReturnComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.metalReturnForm.reset()
-                    this.tableData = []
                     this.close()
                   }
                 });

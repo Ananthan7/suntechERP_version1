@@ -103,7 +103,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     workerCodeDes: ['', [Validators.required]],
     pictureName: [''],
     DESIGN_CODE: [''],
-    partCode: [''],
+    PART_CODE: [''],
     unqDesignId: [''],
     uniqueId: [''],
     treeNumber: [''],
@@ -363,7 +363,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "AMOUNTFC": this.comService.emptyToZero(form.amountFc),
       "AMOUNTLC": this.comService.emptyToZero(form.amountLc),
       "PICTURE_NAME": this.comService.nullToString(form.pictureName),
-      "PART_CODE": this.comService.nullToString(form.partCode),
+      "PART_CODE": this.comService.nullToString(form.PART_CODE),
       "MASTER_METAL": form.masterMetal,
       "STONE_WT": this.comService.emptyToZero(form.STONE_WT),
       "NET_WT": this.comService.emptyToZero(form.NET_WT),
@@ -488,6 +488,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.subJobNumberValidate()
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')

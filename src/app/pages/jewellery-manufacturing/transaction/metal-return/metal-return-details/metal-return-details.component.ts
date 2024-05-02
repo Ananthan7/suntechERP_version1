@@ -103,7 +103,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     workerCode: ['', [Validators.required]],
     workerCodeDesc: [''],
     designCode: [''],
-    partcode: [''],
+    PART_CODE: [''],
     makingRateFc: [''],
     makingRateLc: [''],
     makingAmountLC: [''],
@@ -112,6 +112,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     location: ['', [Validators.required]],
     stockCode: ['', [Validators.required]],
     stockCodeDesc: [''],
+    ReturnToStockCode: [''],
+    ReturnToStockCodeDesc: [''],
     pcs: [''],
     PURITY: [''],
     GROSS_WT: [''],
@@ -134,6 +136,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     VOCDATE: [''],
     BRANCH_CODE: [''],
     YEARMONTH: [''],
+    KARAT_CODE: [''],
+    DIVCODE: [''],
     FLAG: [null]
   });
 
@@ -147,7 +151,6 @@ export class MetalReturnDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.setNewFormValue()
     if (this.content) {
       this.metalReturnDetailsForm.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
@@ -156,14 +159,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
     this.setInitialValue()
   }
-  setNewFormValue(){
-    this.setValueWithDecimal('PURE_WT', 0, 'THREE')
-    this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
-    this.setValueWithDecimal('PURITY', 0, 'PURITY')
-    this.setValueWithDecimal('NET_WT', 0, 'THREE')
-    this.setValueWithDecimal('KARAT', 0, 'THREE')
-    this.setValueWithDecimal('STONE_WT', 0, 'STONE')
-  }
+  
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
@@ -183,17 +179,21 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.workerCode.setValue(this.content.WORKER_CODE)
     this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(this.content.WORKER_NAME)
     this.metalReturnDetailsForm.controls.designCode.setValue(this.content.DESIGN_CODE)
-    this.metalReturnDetailsForm.controls.STONE_WT.setValue(this.content.STONE_WT)
-    this.metalReturnDetailsForm.controls.PURE_WT.setValue(this.content.PURE_WT)
     this.metalReturnDetailsForm.controls.pcs.setValue(this.content.PCS)
-    this.metalReturnDetailsForm.controls.PURITY.setValue(this.content.PURITY)
-    this.metalReturnDetailsForm.controls.GROSS_WT.setValue(this.content.GROSS_WT)
-    this.metalReturnDetailsForm.controls.NET_WT.setValue(this.content.NET_WT)
     this.metalReturnDetailsForm.controls.stockCode.setValue(this.content.STOCK_CODE)
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(this.content.STOCK_DESCRIPTION)
     this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
-    this.metalReturnDetailsForm.controls.partcode.setValue(this.content.PART_CODE)
+    this.metalReturnDetailsForm.controls.PART_CODE.setValue(this.content.PART_CODE)
+    this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(this.content.KARAT_CODE)
+    this.metalReturnDetailsForm.controls.DIVCODE.setValue(this.content.DIVCODE)
 
+    this.setValueWithDecimal('PURE_WT', this.content.PURE_WT, 'THREE')
+    this.setValueWithDecimal('GROSS_WT', this.content.GROSS_WT, 'METAL')
+    this.setValueWithDecimal('PURITY', this.content.PURITY, 'PURITY')
+    this.setValueWithDecimal('NET_WT', this.content.NET_WT, 'THREE')
+    this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
+    this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
+    console.log(this.metalReturnDetailsForm.value,'this.metalReturnDetailsForm.value');
   };
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.metalReturnDetailsForm.controls[formControlName].setValue(
@@ -225,9 +225,12 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.DESCRIPTION);
+  }
+  ReturnTostockCodeSelected(e: any) {
+    this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
+    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.DESCRIPTION);
   }
 
   close(data?: any) {
@@ -255,18 +258,18 @@ export class MetalReturnDetailsComponent implements OnInit {
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
       "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
-      "JOB_NUMBER": form.jobNumber,
+      "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.subJobNo),
-      "UNQ_JOB_ID": this.comService.emptyToZero(form.subJobNo),
+      "UNQ_JOB_ID": this.comService.nullToString(form.subJobNo),
       "JOB_DESCRIPTION": form.subJobNoDes,
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
       "DESIGN_CODE": form.designCode,
-      "DIVCODE": "s",
-      "STOCK_CODE": form.stockCode,
-      "STOCK_DESCRIPTION": form.stockCodeDesc,
+      "DIVCODE": this.comService.nullToString(form.DIVCODE),
+      "STOCK_CODE": this.comService.nullToString(form.stockCode),
+      "STOCK_DESCRIPTION": this.comService.nullToString(form.stockCodeDesc),
       "SUB_STOCK_CODE": "0",
-      "KARAT_CODE": "",
+      "KARAT_CODE": this.comService.nullToString(form.KARAT_CODE),
       "PCS": form.pcs,
       "GROSS_WT": form.GROSS_WT,
       "PURITY": form.PURITY,
@@ -287,22 +290,22 @@ export class MetalReturnDetailsComponent implements OnInit {
       "TOTAL_RATELC": this.comService.emptyToZero(form.totalRateLc),
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "PROCESS_CODE": form.processCode,
-      "PROCESS_NAME": form.processCodeDesc,
-      "WORKER_CODE": form.workerCode,
-      "WORKER_NAME": form.workerCodeDesc,
+      "PROCESS_CODE": this.comService.nullToString(form.processCode),
+      "PROCESS_NAME": this.comService.nullToString(form.processCodeDesc),
+      "WORKER_CODE": this.comService.nullToString(form.workerCode),
+      "WORKER_NAME": this.comService.nullToString(form.workerCodeDesc),
       "UNQ_DESIGN_ID": "",
       "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": form.location,
+      "LOCTYPE_CODE": this.comService.nullToString(form.location),
       "RETURN_STOCK": "",
       "SUB_RETURN_STOCK": "",
-      "STONE_WT": form.STONE_WT,
-      "NET_WT": form.NET_WT,
-      "PART_CODE": "",
-      "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": "DMR",
-      "DT_VOCNO": 0,
+      "STONE_WT": this.comService.emptyToZero(form.STONE_WT),
+      "NET_WT": this.comService.emptyToZero(form.NET_WT),
+      "PART_CODE": this.comService.nullToString(form.PART_CODE),
+      "DT_BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
+      "DT_VOCTYPE": this.comService.nullToString(form.VOCTYPE),
+      "DT_VOCNO": this.comService.emptyToZero(form.VOCNO),
       "DT_YEARMONTH": form.YEARMONTH,
       "PUDIFF": 0,
       "JOB_PURITY": 0
@@ -416,19 +419,19 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalReturnDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(data[0].STOCK_DESCRIPTION)
-          this.metalReturnDetailsForm.controls.PURE_WT.setValue(data[0].PUREWT)
           this.metalReturnDetailsForm.controls.pcs.setValue(data[0].PCS)
           this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
           this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
-          this.metalReturnDetailsForm.controls.GROSS_WT.setValue(data[0].METAL)
-          this.metalReturnDetailsForm.controls.PURITY.setValue(data[0].PURITY)
-          this.metalReturnDetailsForm.controls.NET_WT.setValue(data[0].NETWT)
-          this.metalReturnDetailsForm.controls.STONE_WT.setValue(data[0].STONE)
           this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
+          this.metalReturnDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
 
-
-
+          this.setValueWithDecimal('PURE_WT', data[0].PURE_WT, 'THREE')
+          this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')
+          this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
+          this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
+          this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
+          this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -460,7 +463,8 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.jobNumberDetailData = data
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
-
+            this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
 
             this.subJobNumberValidate()
           } else {

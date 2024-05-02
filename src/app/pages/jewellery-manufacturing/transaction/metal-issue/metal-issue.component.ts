@@ -103,12 +103,8 @@ export class MetalIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
-        this.isSaved = true;
       }
-      if (this.content.FLAG == 'EDIT') {
-        this.viewMode = false;
-        this.isSaved = true;
-      }
+      this.isSaved = true;
       if(this.content.FLAG == 'DELETE'){
         this.deleteRecord()
       }
