@@ -19,9 +19,11 @@ export class WaxProcessComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   @Input() content!: any;
+  srno = 0;
   tableData: any[] = [];
+  tableDataJob: any[] = [];
   private subscriptions: Subscription[] = [];
-  isReadOnly:boolean=true;
+  isReadOnly: boolean = true;
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
@@ -29,10 +31,10 @@ export class WaxProcessComponent implements OnInit {
 
   userName = localStorage.getItem('username');
   userbranch = localStorage.getItem('userbranch');
-  branchParmeter:any= localStorage.getItem('BRANCH_PARAMETER');
-  strBranchcode:any= '';
+  branchParmeter: any = localStorage.getItem('BRANCH_PARAMETER');
+  strBranchcode: any = '';
 
-  
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -85,7 +87,7 @@ export class WaxProcessComponent implements OnInit {
   }
   description: any;
 
- 
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -95,7 +97,7 @@ export class WaxProcessComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private suntechApi: SuntechAPIService,
-  ) { 
+  ) {
     this.strBranchcode = localStorage.getItem('userbranch');
   }
 
@@ -106,24 +108,15 @@ export class WaxProcessComponent implements OnInit {
     // console.log(this.branchParmeter);
     let data = this.branchParmeter.split(',');
     this.description = data[4].substring(15);
-  
+
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    
-    this.getJobNumberDetails();
+
     // console.log(this.content);
     if (this.content) {
-      this.setFormValues()
+      // this.setFormValues()
     }
 
-  }
-
-  getJobNumberDetails() {   
-    this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=14529`).subscribe((result) => {
-      // console.log(this.tableData);
-      console.log(result.dynamicData);
-      this.tableData = result.dynamicData
-    });
   }
 
   userDataSelected(value: any) {
@@ -149,89 +142,100 @@ export class WaxProcessComponent implements OnInit {
   }
 
   jobNumberDataSelected(data: any, value: any) {
-    console.log(value);
-    console.log(data);
-    this.tableData[value.data.SRNO - 1].job_number = data.job_number;
-    this.tableData[value.data.SRNO - 1].design = data.job_description;
-  //   this.tableData[value.data.SRNO - 1].job_number = data.jobNumber;
-   }
-
-  designtextevent(data: any, value: any) {
-   this.tableData[value.data.SRNO - 1].design = data.job_description;
+    let jobNumberData = [];
+    jobNumberData = this.tableDataJob.filter((item: any) => item.JOB_NUMBER == data.job_number)
+    if (jobNumberData.length > 0) {
+      this.toastr.error('Same Job Number cannot be added.')
+    }
+    else {
+      // console.log(value);
+      console.log(data);
+      this.tableDataJob[value.data.SRNO - 1].JOB_NUMBER = data.job_number;
+      // this.tableData[value.data.SRNO - 1].design = data.job_description;
+      this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=${data.job_number}`).subscribe((result) => {
+        console.log(result.dynamicData);
+        console.log(result.dynamicData[0]); 
+        this.tableDataJob.push(result.dynamicData[0][0]);
+      });
+    }
   }
 
-  partytextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].party = data.target.value;
-   }
+  // designtextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].design = data.job_description;
+  // }
 
-  Sotextevent(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].So = data.target.value;
-  }
+  // partytextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].party = data.target.value;
+  // }
 
-  SoDatetextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].SoDate = data.target.value;
-  }
+  // Sotextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].So = data.target.value;
+  // }
 
-  DelDatetextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].DelDate = data.target.value;
-  }
+  // SoDatetextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].SoDate = data.target.value;
+  // }
 
-  GrossWttextevent(data: any, value: any) {
-   this.tableData[value.data.SRNO - 1].GrossWt = data.target.value;
-   }
+  // DelDatetextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].DelDate = data.target.value;
+  // }
 
-  MetalWttextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].MetalWt = data.target.value;
-  }
+  // GrossWttextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].GrossWt = data.target.value;
+  // }
 
-  StoneWttextevent(data: any, value: any) {
-     this.tableData[value.data.SRNO - 1].StoneWt = data.target.value;
-  }
+  // MetalWttextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].MetalWt = data.target.value;
+  // }
 
-  OrderPcstextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].OrderPcs = data.OrderPcs;
-  }
+  // StoneWttextevent(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].StoneWt = data.target.value;
+  // }
 
-  IssuePcstextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].IssuePcs = data.IssuePcs;
-  }
+  // OrderPcstextevent(data: any, value: any) {
+  //   // this.tableData[value.data.SRNO - 1].OrderPcs = data.OrderPcs;
+  // }
 
- 
+  // IssuePcstextevent(data: any, value: any) {
+  //   // this.tableData[value.data.SRNO - 1].IssuePcs = data.IssuePcs;
+  // }
+
+
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype: ['',[Validators.required]],
-    vocdate: ['',[Validators.required]],
-    vocno: ['',[Validators.required]],
-    processcode: ['',[Validators.required]],
-    workercode: ['',[Validators.required]],
+    voctype: ['', [Validators.required]],
+    vocdate: ['', [Validators.required]],
+    vocno: ['', [Validators.required]],
+    processcode: ['', [Validators.required]],
+    workercode: ['', [Validators.required]],
     enteredBy: [''],
     remarks: [''],
   });
 
 
-  setFormValues() {
-    if (!this.content) return
-    this.waxprocessFrom.controls.job_number.setValue(this.content.APPR_CODE)
-    this.waxprocessFrom.controls.design.setValue(this.content.job_description)
+  // setFormValues() {
+  //   if (!this.content) return
+  //   this.waxprocessFrom.controls.job_number.setValue(this.content.APPR_CODE)
+  //   this.waxprocessFrom.controls.design.setValue(this.content.job_description)
 
-
-    this.dataService.getDynamicAPI('JobWaxIssue/GetJobWaxIssue/' + this.content.job_number).subscribe((data) => {
-      if (data.status == 'Success') {
-        this.tableData = data.response.WaxProcessDetails;
-      }
-    });
-
-  }
+  //   this.dataService.getDynamicAPI('JobWaxIssue/GetJobWaxIssue/' + this.content.job_number).subscribe((data) => {
+  //     if (data.status == 'Success') {
+  //       // this.tableData = data.response.WaxProcessDetails;
+  //       console.log(data.response.WaxProcessDetails);
+        
+  //     }
+  //   });
+  // }
 
 
 
   adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
+    let length = this.tableDataJob.length;
+    this.srno = length + 1;
     let data = {
-      "UNIQUEID": 12345,
-      "WAX_CODE": "test",
-      "SRNO": srno,
+      "UNIQUEID": 0,
+      "WAX_CODE": "",
+      "SRNO": this.srno,
       "job_number": "",
       "design": "",
       "party": "",
@@ -245,10 +249,11 @@ export class WaxProcessComponent implements OnInit {
       "IssuePcs": ""
 
     };
-    this.tableData.push(data);
+    this.tableDataJob.push(data);
   }
+
   removedata() {
-    this.tableData.pop();
+    this.tableDataJob.pop();
   }
 
   formSubmit() {

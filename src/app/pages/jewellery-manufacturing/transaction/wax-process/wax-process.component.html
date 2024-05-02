@@ -34,7 +34,8 @@
                   <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY" DateValidation />
+                  <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
+                    placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
@@ -44,7 +45,8 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc Number * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno"  style="text-align: right;" />
+                  <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno"
+                    style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -80,12 +82,12 @@
             </div>
           </div>
           <div class="col-2">
-            </div>
-            
+          </div>
+
           <div class="col-3">
             <div class="p-2 bd-highlight">
               <h6>Posted</h6>
-          </div>
+            </div>
           </div>
 
         </div>
@@ -93,104 +95,95 @@
         <div class="row">
           <div class="col-md-12">
             <div class="row">
-              <!-- <div class="col-3 d-flex">
-                      <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-primary apporoval-add-btn"
-                              (click)="adddata()">
-                              Add
-                          </button>
-                      </div>
-                      <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-outline-primary apporoval-del-btn"
-                              (click)="removedata()">
-                              Delete
-                          </button>
-                      </div>
-                  </div> -->
-              <div class="col-md-3 d-flex mb-2">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" [viewImportBtn]="false" (addClick)="  adddata()"
-                  (deleteClick)="removedata()">
+              <div class="col-md-3 mb-2">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" [viewImportBtn]="false"
+                  (addClick)="  adddata()" (deleteClick)="removedata()">
                 </menu-buttons>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                  [showRowLines]="true" class="mt-5"   [allowColumnReordering]="true"
-                  [allowColumnResizing]="true"
-                  [columnAutoWidth]="true">
-                  <dxo-editing  mode="cell" ></dxo-editing>
+                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataJob" [showBorders]="true"
+                  [showColumnLines]="true" [showRowLines]="true"  [allowColumnReordering]="true"
+                  [allowColumnResizing]="true" [columnAutoWidth]="true">
+                  <dxo-editing mode="cell"></dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
-                 
-                    <dxi-column dataField="SRNO" caption="SI No"> </dxi-column>
-                    <dxi-column dataField="job_number" caption="Job Number" cellTemplate="jobNumbertemp">
-                    </dxi-column>
-                    <dxi-column dataField="design" caption="Design" cellTemplate="designtemp">
-                    </dxi-column>
-                    <dxi-column dataField="party" caption="Party" cellTemplate="partytemp"> </dxi-column>
-                    <dxi-column dataField="So" caption="S.O " cellTemplate="Sotemp">
-                    </dxi-column>
 
-                    <dxi-column dataField="SoDate" caption="S.O Date" cellTemplate="SoDatetemp"> </dxi-column>
-                    <dxi-column dataField="DelDate" caption="Del Date" cellTemplate="DelDatetemp"> </dxi-column>
-                    <dxi-column dataField="GrossWt" caption="GrossWt" cellTemplate="GrossWttemp">
-                    </dxi-column>
-                    <dxi-column dataField="MetalWt" caption="MetalWt" cellTemplate="MetalWttemp"> </dxi-column>
-                    <dxi-column dataField="StoneWt" caption="StoneWt" cellTemplate="StoneWttemp">
-                    </dxi-column>
-                    <dxi-column dataField="OrdPcs" caption="Ord Pcs" cellTemplate="OrdPcstemp">
-                    </dxi-column>
-                    <dxi-column dataField="IssuePcs" caption="Issue Pcs" cellTemplate="IssuePcstemp">
-                    </dxi-column>             
+                  <dxi-column dataField="SRNO" caption="SI No"> </dxi-column>
+                  <dxi-column dataField="JOB_NUMBER" caption="Job Number" cellTemplate="jobNumbertemp">
+                  </dxi-column>
+                  <dxi-column dataField="DESIGN_CODE" caption="Design">
+                  </dxi-column>
+                  <dxi-column dataField="PARTYCODE" caption="Party"> </dxi-column>
+                  <dxi-column dataField="JOB_SO_NUMBER" caption="S.O" >
+                  </dxi-column>
+
+                  <dxi-column dataField="JOB_SO_DATE" caption="S.O Date"> </dxi-column>
+                  <dxi-column dataField="DELIVERY_DATE" caption="Del Date"> </dxi-column>
+                  <dxi-column dataField="GROSS_WT" caption="GrossWt">
+                  </dxi-column>
+                  <dxi-column dataField="METAL_WT" caption="MetalWt"> </dxi-column>
+                  <dxi-column dataField="STONE_WT" caption="StoneWt">
+                  </dxi-column>
+                  <dxi-column dataField="TOTAL_PCS" caption="Ord Pcs">
+                  </dxi-column>
+                  <dxi-column dataField="ISSUE_PCS" caption="Issue Pcs">
+                  </dxi-column>
 
                   <div *dxTemplate="let data of 'jobNumbertemp'">
-                    <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                    <a href="javascript:void(0)" class="mx-1"  [innerHTML]="data.value"></a>
                     <master-search [MasterSearchData]="jobNumberCodeData"
                       (newRowClick)="jobNumberDataSelected($event,data)">
                     </master-search>
                   </div>
-                  <div *dxTemplate="let data of 'designtemp'">
-                    <input type="text" [value]="data.value" (change)="designtextevent($event,data)" [attr.readonly]= "isReadOnly"  />
+                  <!-- <div *dxTemplate="let data of 'designtemp'">
+                    <input type="text" [value]="data.value" (change)="designtextevent($event,data)"
+                      [attr.readonly]="isReadOnly" />
                   </div>
                   <div *dxTemplate="let data of 'partytemp'">
-                    <input type="text" [value]="data.value" (change)="partytextevent($event,data)"  />
+                    <input type="text" [value]="data.value" (change)="partytextevent($event,data)" />
                   </div>
                   <div *dxTemplate="let data of 'Sotemp'">
                     <input type="text" [value]="data.value" (change)="Sotextevent($event,data)" />
                   </div>
                   <div *dxTemplate="let data of 'SoDatetemp'">
-                    <input type="date" [value]="data.value" (change)="SoDatetextevent($event,data)"  />
+                    <input type="date" [value]="data.value" (change)="SoDatetextevent($event,data)" />
                   </div>
                   <div *dxTemplate="let data of 'DelDatetemp'">
-                    <input type="date" [value]="data.value" (change)="DelDatetextevent($event,data)"  />
+                    <input type="date" [value]="data.value" (change)="DelDatetextevent($event,data)" />
                   </div>
                   <div *dxTemplate="let data of 'GrossWttemp'">
-                    <input type="number" [value]="data.value" (change)="GrossWttextevent($event,data)"  class="text-right"  MetalDecimalInput />
+                    <input type="number" [value]="data.value" (change)="GrossWttextevent($event,data)"
+                      class="text-right" MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'MetalWttemp'">
-                    <input type="number" [value]="data.value" (change)="MetalWttextevent($event,data)"  class="text-right"  MetalDecimalInput />
+                    <input type="number" [value]="data.value" (change)="MetalWttextevent($event,data)"
+                      class="text-right" MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'StoneWttemp'">
-                    <input type="number" [value]="data.value" (change)="StoneWttextevent($event,data)"  class="text-right"  MetalDecimalInput  />
+                    <input type="number" [value]="data.value" (change)="StoneWttextevent($event,data)"
+                      class="text-right" MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'OrdPcstemp'">
-                    <input type="number" [value]="data.value" (change)="OrderPcstextevent($event,data)" class="text-right"  MetalDecimalInput />
+                    <input type="number" [value]="data.value" (change)="OrderPcstextevent($event,data)"
+                      class="text-right" MetalDecimalInput />
                   </div>
                   <div *dxTemplate="let data of 'IssuePcstemp'">
-                    <input type="number" (change)="IssuePcstextevent($event,data)"  class="text-right"  MetalDecimalInput/>
-                  </div>
+                    <input type="number" (change)="IssuePcstextevent($event,data)" class="text-right"
+                      MetalDecimalInput />
+                  </div> -->
                   <dxo-summary>
                     <dxi-total-item column="GrossWt">
                     </dxi-total-item>
-                    <dxi-total-item column="OrdPcs">
+                    <dxi-total-item column="TOTAL_PCS">
                     </dxi-total-item>
-                    <dxi-total-item column="IssuePcs">
-                    </dxi-total-item>               
+                    <dxi-total-item column="ISSUE_PCS">
+                    </dxi-total-item>
                   </dxo-summary>
                 </dx-data-grid>
               </div>
-               <div class="col-md-4">
+              <div class="col-md-4">
                 <div class="row my-2">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
                   <div class="col-md-9">
@@ -202,7 +195,7 @@
               </div>
             </div>
 
-            
+
           </div>
 
 
