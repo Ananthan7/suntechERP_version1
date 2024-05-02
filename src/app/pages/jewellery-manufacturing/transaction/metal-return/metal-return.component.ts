@@ -25,20 +25,11 @@ export class MetalReturnComponent implements OnInit {
   metalReturnDetailsData: any[] = [];
   columnhead: any[] = [''];
   branchCode?: String;
-  yearMonth?: String;
-  vocMaxDate = new Date();
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
-  tableRowCount: number = 0;
-  detailData: any[] = [];
   selectRowIndex: any;
-  selectedKey: number[] = [];
-  selectedIndexes: any = [];
   viewMode: boolean = false;
-
-  allMode: string;
-  checkBoxesMode: string;
-
+  isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
   user: MasterSearchModel = {
@@ -53,7 +44,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -65,7 +55,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -77,8 +66,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -92,16 +79,18 @@ export class MetalReturnComponent implements OnInit {
   }
   metalReturnForm: FormGroup = this.formBuilder.group({
 
-    vocType: ['', [Validators.required]],
-    vocNo: [1],
+    VOCTYPE: ['', [Validators.required]],
+    VOCNO: [''],
     vocDate: [''],
     vocTime: [new Date().toTimeString().slice(0, 5), [Validators.required]],
     enteredBy: [''],
     process: [''],
     worker: [''],
     location: [''],
-    remarks: [''],
-    FLAG: [null]
+    REMARKS: [''],
+    FLAG: [null],
+    YEARMONTH: [''],
+    BRANCH_CODE: ['']
   });
 
   constructor(
@@ -113,38 +102,31 @@ export class MetalReturnComponent implements OnInit {
     private commonService: CommonServiceService,
 
   ) {
-    this.allMode = 'allPages';
-    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    // this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
   ngOnInit(): void {
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
     if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+      this.isSaved = true;
+      if (this.content.FLAG == 'DELETE') {
+        this.isSaved = false;
+        this.deleteMeltingType()
+      }
       this.metalReturnForm.controls.FLAG.setValue(this.content.FLAG)
-    }
-    if (this.content && this.content.FLAG == 'EDIT') {
       this.setAllInitialValues()
-      return
+    } else {
+      this.setNewFormValue()
     }
-    if (this.content && this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.setAllInitialValues()
-      return
-    }
-    this.setInitialValues()
   }
- 
-  
-
-
-  setInitialValues() {
+  setNewFormValue() {
     this.branchCode = this.commonService.branchCode;
-    // this.companyName = this.commonService.companyName;
-    this.yearMonth = this.commonService.yearSelected;
+    this.metalReturnForm.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.metalReturnForm.controls.vocDate.setValue(this.currentDate)
-    this.metalReturnForm.controls.vocType.setValue(this.commonService.getqueryParamVocType())
-    //this.commonService.getqueryParamVocType()
+    this.metalReturnForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
+    this.metalReturnForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -181,18 +163,18 @@ export class MetalReturnComponent implements OnInit {
               Rate: element.RATE_TYPE,
               Division: element.DIVCODE,
               Amount: element.NET_WT,
-
-
             })
           });
-          this.metalReturnForm.controls.vocType.setValue(data.VOCTYPE)
-          this.metalReturnForm.controls.vocNo.setValue(data.VOCNO)
+          this.metalReturnForm.controls.VOCTYPE.setValue(data.VOCTYPE)
+          this.metalReturnForm.controls.VOCNO.setValue(data.VOCNO)
           this.metalReturnForm.controls.vocDate.setValue(data.VOCDATE)
+          this.metalReturnForm.controls.REMARKS.setValue(data.REMARKS)
+          this.metalReturnForm.controls.enteredBy.setValue(data.SMAN)
+          this.metalReturnForm.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.metalReturnForm.controls.process.setValue(data.Details[0].PROCESS_CODE)
           this.metalReturnForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
-          this.metalReturnForm.controls.enteredBy.setValue(data.Details[0].SMAN)
           this.metalReturnForm.controls.location.setValue(data.Details[0].LOCTYPE_CODE)
-          this.metalReturnForm.controls.remarks.setValue(data.Details[0].REMARKS)
+          this.metalReturnForm.controls.BRANCH_CODE.setValue(data.Details[0].BRANCH_CODE)
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -225,112 +207,76 @@ export class MetalReturnComponent implements OnInit {
   }
 
   locationCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnForm.controls.location.setValue(e.LOCATION_CODE);
   }
-
-  openaddmetalreturn(data?: any) {
-    console.log(data)
-    if (data) {
-      data[0] = this.metalReturnForm.value;
+  /**use: open detail screen */
+  openAddMetalReturnDetail(dataToChild?: any) {
+    if (dataToChild) {
+      dataToChild.FLAG = this.content?.FLAG || ''
+      dataToChild.HEADERDETAILS = this.metalReturnForm.value;
     } else {
-      data = [{ HEADERDETAILS: this.metalReturnForm.value }]
+      dataToChild = { HEADERDETAILS: this.metalReturnForm.value }
     }
+    console.log(dataToChild, 'dataToChild')
+
     const modalRef: NgbModalRef = this.modalService.open(MetalReturnDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    console.log(data, 'data')
-    modalRef.componentInstance.content = data
-    modalRef.result.then((postData) => {
-      if (postData) {
-        console.log('Data from modal:', postData);
-        this.metalReturnDetailsData.push(postData);
-        console.log(this.metalReturnDetailsData);
-        this.setValuesToHeaderGrid(postData);
-
+    modalRef.componentInstance.content = dataToChild
+    modalRef.result.then((dataToParent) => {
+      if (dataToParent) {
+        this.setValuesToHeaderGrid(dataToParent);
       }
-
     });
   }
   onRowClickHandler(event: any) {
-
-    this.selectRowIndex = (event.dataIndex)
+    this.selectRowIndex = event.data.SRNO
+  }
+  onRowDoubleClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
     let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    this.openaddmetalreturn(selectedData)
+    this.openAddMetalReturnDetail(selectedData)
+  }
 
-
+  deleteTableData(): void {
+    this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
+    this.recalculateSRNO()
+  }
+  recalculateSRNO(): void {
+    this.metalReturnDetailsData.forEach((element: any, index: any) => {
+      element.SRNO = index + 1
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+    })
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
     console.log(detailDataToParent, 'detailDataToParent');
-    if (detailDataToParent.SRNO) {
-      console.log(this.metalReturnDetailsData);
-
-      this.swapObjects(this.metalReturnDetailsData, [detailDataToParent], (detailDataToParent.SRNO - 1))
+    if (detailDataToParent.SRNO != 0) {
+      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
-      this.tableRowCount += 1
-      detailDataToParent.SRNO = this.tableRowCount
-      // this.tableRowCount += 1
-      // this.content.SRNO = this.tableRowCount
-    }
-    if (detailDataToParent) {
-      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+      // detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
+      this.metalReturnDetailsData.push(detailDataToParent);
+      this.recalculateSRNO()
     }
   }
-  swapObjects(array1: any, array2: any, index: number) {
-    // Check if the index is valid
-    if (index >= 0 && index < array1.length) {
-      array1[index] = array2[0];
-    } else {
-      console.error('Invalid index');
-    }
-  }
-  deleteTableData(): void {
-    console.log(this.selectedKey, 'data')
-    this.selectedKey.forEach((element: any) => {
-      this.metalReturnDetailsData.splice(element.SRNO - 1, 1)
-    })
-  }
-  onSelectionChanged(event: any) {
 
+  setPostData() {
+    let form = this.metalReturnForm.value
+    let currRate = this.commonService.getCurrecnyRate(this.commonService.compCurrency)
+    console.log(form);
 
-    this.selectedKey = event.selectedRowKeys;
-    console.log(this.selectedKey, 'srno')
-    let indexes: Number[] = [];
-    this.metalReturnDetailsData.reduce((acc, value, index) => {
-      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
-        acc.push(index);
-      }
-      return acc;
-    }, indexes);
-    this.selectedIndexes = indexes;
-  }
-
-  formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-       this.updateMeltingType()
-      return
-    }
-
-    if (this.metalReturnForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
-    let postData = {
-      "MID": 0,
-      "VOCTYPE": this.metalReturnForm.value.vocType,
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.metalReturnForm.value.vocNo,
-      "VOCDATE": this.metalReturnForm.value.vocDate,
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2024-03-05T12:13:39.290Z",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
+    return {
+      "MID": this.commonService.emptyToZero(this.content?.MID),
+      "VOCTYPE": form.VOCTYPE,
+      "BRANCH_CODE": form.BRANCH_CODE,
+      "VOCNO": this.commonService.emptyToZero(form.VOCNO),
+      "VOCDATE": this.commonService.formatDateTime(new Date(form.vocDate)),
+      "YEARMONTH": form.YEARMONTH,
+      "DOCTIME": this.commonService.formatDateTime(new Date(form.vocDate)),
+      "CURRENCY_CODE": this.commonService.compCurrency,
+      "CURRENCY_RATE": this.commonService.emptyToZero(currRate),
       "METAL_RATE_TYPE": "",
       "METAL_RATE": 0,
       "TOTAL_AMOUNTFC_METAL": 0,
@@ -342,8 +288,8 @@ export class MetalReturnComponent implements OnInit {
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_PURE_WT": 0,
-      "SMAN": "string",
-      "REMARKS": this.metalReturnForm.value.remarks,
+      "SMAN": this.commonService.nullToString(form.enteredBy),
+      "REMARKS": this.commonService.nullToString(form.REMARKS),
       "NAVSEQNO": 0,
       "FIX_UNFIX": true,
       "AUTOPOSTING": true,
@@ -354,6 +300,21 @@ export class MetalReturnComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.metalReturnDetailsData,
     }
+  }
+
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updateMeltingType()
+      return
+    }
+
+    if (this.metalReturnForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -368,7 +329,7 @@ export class MetalReturnComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.metalReturnForm.reset()
-                this.tableData = []
+                this.isSaved = true;
                 this.close('reloadMainGrid')
               }
             });
@@ -385,99 +346,9 @@ export class MetalReturnComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-    let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${this.branchCode}/${this.metalReturnForm.value.vocType}/${this.metalReturnForm.value.vocNo}/${this.commonService.yearSelected}`
-    let postData = {
-
-      "MID": 0,
-      "VOCTYPE": this.metalReturnForm.value.vocType,
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.metalReturnForm.value.vocNo,
-      "VOCDATE": this.metalReturnForm.value.vocDate,
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2024-03-07T05:31:29.356Z",
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "METAL_RATE_TYPE": "string",
-      "METAL_RATE": 0,
-      "TOTAL_AMOUNTFC_METAL": 0,
-      "TOTAL_AMOUNTLC_METAL": 0,
-      "TOTAL_AMOUNTFC_MAKING": 0,
-      "TOTAL_AMOUNTLC_MAKING": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_PURE_WT": 0,
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "FIX_UNFIX": true,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "SYSTEM_DATE": "2024-03-07T05:31:29.356Z",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "Details": [
-        {
-          "SRNO": 0,
-          "VOCNO": 0,
-          "VOCTYPE": "str",
-          "VOCDATE": "2024-03-07T05:31:29.357Z",
-          "JOB_NUMBER": "string",
-          "JOB_DATE": "2024-03-07T05:31:29.357Z",
-          "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "string",
-          "JOB_DESCRIPTION": "string",
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
-          "DIVCODE": "s",
-          "STOCK_CODE": "string",
-          "STOCK_DESCRIPTION": "string",
-          "SUB_STOCK_CODE": "string",
-          "KARAT_CODE": "stri",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "PURITY": 0,
-          "PURE_WT": 0,
-          "RATE_TYPE": "string",
-          "METAL_RATE": 0,
-          "CURRENCY_CODE": "stri",
-          "CURRENCY_RATE": 0,
-          "METAL_GRM_RATEFC": 0,
-          "METAL_GRM_RATELC": 0,
-          "METAL_AMOUNTFC": 0,
-          "METAL_AMOUNTLC": 0,
-          "MAKING_RATEFC": 0,
-          "MAKING_RATELC": 0,
-          "MAKING_AMOUNTFC": 0,
-          "MAKING_AMOUNTLC": 0,
-          "TOTAL_RATEFC": 0,
-          "TOTAL_RATELC": 0,
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTLC": 0,
-          "PROCESS_CODE": "string",
-          "PROCESS_NAME": "string",
-          "WORKER_CODE": "string",
-          "WORKER_NAME": "string",
-          "UNQ_DESIGN_ID": "string",
-          "WIP_ACCODE": "string",
-          "UNIQUEID": 0,
-          "LOCTYPE_CODE": "string",
-          "RETURN_STOCK": "string",
-          "SUB_RETURN_STOCK": "string",
-          "STONE_WT": 0,
-          "NET_WT": 0,
-          "PART_CODE": "string",
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string",
-          "PUDIFF": 0,
-          "JOB_PURITY": 0
-        }
-      ]
-    }
+    let form = this.metalReturnForm.value
+    let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -492,7 +363,6 @@ export class MetalReturnComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.metalReturnForm.reset()
-                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
@@ -505,7 +375,7 @@ export class MetalReturnComponent implements OnInit {
   }
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
-    if (!this.content.WORKER_CODE) {
+    if (!this.content.VOCNO) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -528,7 +398,9 @@ export class MetalReturnComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMetalReturnMasterDJ/DeleteJobMetalReturnMasterDJ/' + this.metalReturnForm.value.brnachCode + this.metalReturnForm.value.voctype + this.metalReturnForm.value.vocNo + this.metalReturnForm.value.yearMoth;
+        let API = 'JobMetalReturnMasterDJ/DeleteJobMetalReturnMasterDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -542,7 +414,6 @@ export class MetalReturnComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.metalReturnForm.reset()
-                    this.tableData = []
                     this.close('reloadMainGrid')
                   }
                 });
@@ -556,7 +427,6 @@ export class MetalReturnComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.metalReturnForm.reset()
-                    this.tableData = []
                     this.close()
                   }
                 });
