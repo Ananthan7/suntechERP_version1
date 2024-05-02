@@ -167,7 +167,7 @@
                                             [readonly]="viewMode" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="fristtransaction"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate" #fristtransaction></mat-datepicker>
+                                        <mat-datepicker [startAt]="currentDate" #fristtransaction [disabled]="true"></mat-datepicker>
                                         <!-- <input type="text" matInput
                                             formControlName="fristtransaction" [readonly]="true"/> -->
                                     </mat-form-field>
@@ -182,7 +182,7 @@
                                             [readonly]="viewMode" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="lasttransaction"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate" #lasttransaction></mat-datepicker>
+                                        <mat-datepicker [startAt]="currentDate" #lasttransaction [disabled]="true"></mat-datepicker>
                                         <!-- <input type="text" matInput
                                             formControlName="lasttransaction" [readonly]="true"/> -->
                                     </mat-form-field>
@@ -274,7 +274,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Fc" [max]="12"
-                                            class="text-right"   [readonly]="viewMode" />
+                                            class="text-right"   [readonly]="viewMode"  />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

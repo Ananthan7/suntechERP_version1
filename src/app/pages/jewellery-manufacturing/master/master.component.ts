@@ -22,6 +22,7 @@ import { CustomerPriceMasterComponent } from './customer-price-master/customer-p
 import { ComponentMasterComponent } from './component-master/component-master.component';
 import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-updation.component';
 import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
+import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -30,6 +31,7 @@ import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
 })
 export class MasterComponent implements OnInit {
   @ViewChild(MfgGridComponent) mfgGridComponent?: MfgGridComponent;
+  @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
 
   //variables
   menuTitle: any
@@ -41,6 +43,7 @@ export class MasterComponent implements OnInit {
   orderedItemsHead: any[] = [];
   private componentDbList: any = {}
   srNo:any=0;
+  dataToEdit: any;
   //subscription variable
   subscriptions$!: Subscription;
   constructor(
@@ -63,14 +66,23 @@ export class MasterComponent implements OnInit {
   }
 
   viewRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'VIEW'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'VIEW'
+    this.openModalView(this.dataToEdit)
   }
   editRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'EDIT'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'EDIT'
+    this.openModalView(this.dataToEdit)
+  }
+  deleteBtnClicked(e: any) {
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'DELETE'
+    this.openModalView(this.dataToEdit)
+    // this.authCheckerComponent?.openAuthModal();
+  }
+  authSubmit(){
+    this.openModalView(this.dataToEdit)
   }
   openModalView(data?: any) {
     this.componentDbList = {

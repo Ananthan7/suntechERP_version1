@@ -109,12 +109,16 @@ export class PricelistMasterComponent implements OnInit {
     this.priceListMasterForm.controls.priceCode.setValue(this.content.PRICE_CODE);
     this.priceListMasterForm.controls.description.setValue(this.content.DESCRIPTION);
     this.priceListMasterForm.controls.priceMethod.setValue(this.content.PRICE_METHOD);
-    this.priceListMasterForm.controls.priceValue.setValue(this.content.PRICE_VALUE);
+  //  this.priceListMasterForm.controls.priceValue.setValue(this.content.PRICE_VALUE);
     this.priceListMasterForm.controls.finalPriceSign.setValue(this.content.FINALPRICE_SIGN);
     this.priceListMasterForm.controls.addlValueSign.setValue(this.content.ADDLVALUE_SIGN);
     this.priceListMasterForm.controls.roundoff_digit.setValue(this.content.ROUNDOFF_DIGIT);
 
 
+    this.priceListMasterForm.controls.priceValue.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.PRICE_VALUE));
 
 
     this.priceListMasterForm.controls.finalPriceValue.setValue(

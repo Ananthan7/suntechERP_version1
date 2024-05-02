@@ -26,6 +26,7 @@ export class SequenceMasterComponent implements OnInit {
   codeEnable: boolean = true;
   editMode: boolean = false;
   dele: boolean = false;
+  checkCondtion: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -198,8 +199,10 @@ export class SequenceMasterComponent implements OnInit {
           })
           console.log(this.dataSource, 'this.dataSource');
           this.dataSource.forEach((obj: any) => {
-            obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
-            obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
+            // obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
+            // obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
+            obj.STD_TIME = obj.STD_TIME;
+            obj.MAX_TIME = obj.MAX_TIME;
           })
           this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
           this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
@@ -251,6 +254,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   /**USE:  final save API call*/
   formSubmit() {
+
     if (this.content?.FLAG == 'VIEW') return
     if (this.content?.FLAG == 'EDIT') {
       this.updateWorkerMaster()
@@ -262,7 +266,29 @@ export class SequenceMasterComponent implements OnInit {
       this.toastr.error('select all required fields & Process')
       return
     }
+    this.dataSource.forEach((item: any) => {
+      //this.checkCondtion = false;
+      if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
+        this.checkCondtion = true;
+        this.toastr.error('Max loss must be Greater than the Standard Loss')
+      }
 
+      if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
+        this.checkCondtion = false
+
+      }
+    })
+
+    if (this.checkCondtion == true) {
+      console.log(this.checkCondtion)
+      return;
+    }
+
+
+    // // Check loss condition with the postData
+    // if (!this.checkLossCondition()) {
+    //   return; // Prevent form submission if condition fails
+    // }
     let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
     let postData = {
       "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode.toUpperCase() || "",
@@ -296,11 +322,32 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
   updateWorkerMaster() {
     if (this.selectedSequence.length == 0 && this.sequenceMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
+
+    this.dataSource.forEach((item: any) => {
+      //this.checkCondtion = false;
+      if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
+        this.checkCondtion = true;
+        this.toastr.error('Max loss must be Greater than the Standard Loss')
+      }
+
+      if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
+        this.checkCondtion = false
+
+      }
+    })
+
+    if (this.checkCondtion == true) {
+      console.log(this.checkCondtion)
+      return;
+    }
+
 
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = {
@@ -335,6 +382,7 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -525,7 +573,6 @@ export class SequenceMasterComponent implements OnInit {
     }
     return true;
   }
-
 
 
   // maxLoss Change

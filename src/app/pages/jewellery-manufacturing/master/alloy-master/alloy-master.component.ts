@@ -110,7 +110,7 @@ export class AlloyMasterComponent implements OnInit {
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
-    console.log(this.content.FLAG);
+    // console.log(this.content.FLAG);
 
     if (this.content.FLAG == 'EDIT') {
       this.isDisabled = !this.isDisabled;
@@ -163,9 +163,9 @@ export class AlloyMasterComponent implements OnInit {
   @ViewChild('codeInput')
   codeInput!: ElementRef;
 
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
-  }
+  // ngAfterViewInit(): void {
+  //   this.codeInput.nativeElement.focus();
+  // }
 
   setInitialValues() {
     console.log(this.content, 'content');
@@ -431,8 +431,14 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.description.setValue(e.DESCRIPTION)
     this.prefixCodeValidate()
   }
-  prefixCodeValidate() {
-    let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.alloyMastereForm.value.code
+
+    prefixCodeValidate() {
+      const code = this.alloyMastereForm.value.code;
+      if (!code) {
+        // Handle case where code is empty
+        return;
+      }
+    let API = `PrefixMaster/GetPrefixMasterDetail/${code}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
