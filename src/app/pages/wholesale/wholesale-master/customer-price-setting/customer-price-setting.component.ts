@@ -60,7 +60,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
+    private suntechApi: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
@@ -75,6 +75,8 @@ export class CustomerPriceSettingComponent implements OnInit {
       this.approveDisable = false;
      this.setFormValues()
     }
+
+    this.getGroupDetails()
   }
   setFormValues() {
     console.log(this.content);
@@ -210,6 +212,16 @@ export class CustomerPriceSettingComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  getGroupDetails() {
+    this.suntechApi.getDynamicAPI('UspGetPricingDetails').subscribe((result) => {
+      if (result.response) {
+        this.tableData = result.response;
+      }
+    });
+  }
+
+
   formSubmit(){
 
     if(this.customerpricesettingForm.value.enteredBy == ''){
@@ -331,7 +343,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       ]
     }
     
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if(result.status == "Success"){
@@ -469,7 +481,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     }
     
   
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+    let Sub: Subscription = this.suntechApi.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if(result.status == "Success"){
@@ -518,7 +530,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let API = 'CustomerVendorPricingMaster/DeleteCustomerVendorPricingMaster/' + this.content.CUSTOMER_CODE
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        let Sub: Subscription = this.suntechApi.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
