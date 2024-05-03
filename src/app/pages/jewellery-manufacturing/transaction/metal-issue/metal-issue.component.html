@@ -184,9 +184,17 @@
                                     <dxi-column *ngFor="let data of columnhead"
                                         dataField="{{ data.field }}"
                                         caption="{{ data.title }}"
+                                        [format]="data.format"
                                         [allowEditing]="true" alignment="center"
                                         backgroundcolor="#000">
                                     </dxi-column>
+                                    <dxo-summary>
+                                        <dxi-total-item column="TOTAL_AMOUNTFC" 
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                    </dxo-summary>
                                 </dx-data-grid>
                             </div>
                             <div class="col-md-4">

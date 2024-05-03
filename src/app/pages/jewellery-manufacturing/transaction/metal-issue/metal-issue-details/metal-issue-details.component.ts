@@ -243,7 +243,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.formSubmit()
   }
 
-  jobcontinue(data?: any) {
+  jobcontinue() {
     this.formSubmit()
   }
 

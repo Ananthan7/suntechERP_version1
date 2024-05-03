@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'modal-header',
@@ -49,6 +50,8 @@ export class ModalHeaderComponent implements OnInit {
 
   branchCode: any = localStorage.getItem('userbranch')
   userName: any = localStorage.getItem('username')
+  app_version: string = environment.app_version
+
   constructor() { }
 
   ngOnInit(): void {

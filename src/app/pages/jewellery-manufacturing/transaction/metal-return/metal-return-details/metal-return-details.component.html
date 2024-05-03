@@ -5,8 +5,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (continueClick)="continueBtnClick()"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
+    (continueClick)="formSubmit('CONTINUE')"
     [isViewSave]="!viewMode" [isViewDelete]="false" [isViewMore]="false"
     [isViewContinue]="!viewMode"></modal-header>
 <!-- content section -->
@@ -212,6 +212,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="stockCode"
+                                        (focusout)="stockCodeValidate($event)"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search

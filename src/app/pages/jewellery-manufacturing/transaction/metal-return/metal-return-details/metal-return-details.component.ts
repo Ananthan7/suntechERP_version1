@@ -240,22 +240,22 @@ export class MetalReturnDetailsComponent implements OnInit {
     // this.activeModal.close(data);
   }
  
-  continue() { }
-
-  submitValidations(){
-    let form = this.metalReturnDetailsForm.value
-    if (form.jobNumber == '') {
-      this.toastr.error('Job Number required')
-      return
-    }
-    return false;
+  resetStockDetails() { 
+    this.metalReturnDetailsForm.controls.stockCode.setValue('')
+    this.metalReturnDetailsForm.controls.stockCodeDesc.setValue('')
+    this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue('')
+    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue('')
+    this.setValueWithDecimal('PURE_WT', 0, 'THREE')
+    this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
+    this.setValueWithDecimal('PURITY', 0, 'PURITY')
+    this.setValueWithDecimal('NET_WT', 0, 'THREE')
+    this.setValueWithDecimal('KARAT', 0, 'THREE')
+    this.setValueWithDecimal('STONE_WT', 0, 'STONE')
   }
-  formSubmit() {
-    if (this.submitValidations()) return;
+  setPostData(){
     let form = this.metalReturnDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
-
-    let postData = {
+    return{
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
@@ -312,12 +312,30 @@ export class MetalReturnDetailsComponent implements OnInit {
       "PUDIFF": 0,
       "JOB_PURITY": 0
     }
+  }
+
+  submitValidations(){
+    let form = this.metalReturnDetailsForm.value
+    if (form.jobNumber == '') {
+      this.toastr.error('Job Number required')
+      return
+    }
+    return false;
+  }
+  /**use: to save data to grid*/
+  formSubmit(flag:any) {
+    if (this.submitValidations()) return;
+    let dataToparent = {
+      FLAG: flag,
+      POSTDATA: this.setPostData()
+    }
     // this.close(postData);
-    this.saveDetail.emit(postData);
+    this.saveDetail.emit(dataToparent);
+    if (flag == 'CONTINUE'){
+      this.resetStockDetails()
+    }
   }
-  continueBtnClick(){
-    
-  }
+  
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (!this.content.WORKER_CODE) {
@@ -424,6 +442,8 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalReturnDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(data[0].STOCK_DESCRIPTION)
+          this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(data[0].STOCK_CODE)
+          this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(data[0].STOCK_DESCRIPTION)
           this.metalReturnDetailsForm.controls.pcs.setValue(data[0].PCS)
           this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
           this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
@@ -452,6 +472,13 @@ export class MetalReturnDetailsComponent implements OnInit {
     console.log(this.metalReturnDetailsForm.value.BRANCH_CODE);
     
     if (event.target.value == '') return
+    // let postData = {
+    //   "SPID": "064",
+    //   "parameter": {
+    //     'BRANCHCODE': this.comService.nullToString(this.branchCode),
+    //     'JOBNO': this.comService.nullToString(event.target.value),
+    //   }
+    // }
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -476,6 +503,43 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
 
             this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  stockCodeValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "046",
+      "parameter": {
+        strStockCode:  event.target.value,                                                  
+        strBranchCode:  this.comService.nullToString(this.branchCode),                                      
+        strVocType:  this.content.HEADERDETAILS.VOCTYPE,                                                  
+        strUserName:  this.comService.nullToString(this.userName),                                         
+        strLocation:  '',                                                
+        strPartyCode:   '',                                                  
+        strVocDate:   this.comService.formatDDMMYY(this.comService.currentDate)
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data) {
+           console.log(data,'data');
+            
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             return

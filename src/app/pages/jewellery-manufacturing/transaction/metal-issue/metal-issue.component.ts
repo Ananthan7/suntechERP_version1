@@ -22,17 +22,21 @@ export class MetalIssueComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
-    { title: 'SRNO', field: 'SRNO' },
-    { title: 'Job Id', field: 'JOB_NUMBER' },
-    { title: 'Uniq job Id', field: 'UNQ_JOB_ID' },
-    { title: 'Design', field: 'DESIGN_CODE' },
-    { title: 'Stock Code', field: 'STOCK_CODE' },
-    { title: 'Division', field: 'DIVCODE' },
-    { title: 'Description', field: 'STOCK_DESCRIPTION' },
-    { title: 'Gross wt', field: 'GROSS_WT' },
-    { title: 'Process', field: 'PROCESS_CODE' },
-    { title: 'Worker', field: 'WORKER_CODE' },
-    { title: 'Amount.', field: 'TOTAL_AMOUNTFC' },
+    { title: 'SRNO', field: 'SRNO', format: '' },
+    { title: 'Job Id', field: 'JOB_NUMBER', format: '' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '' },
+    { title: 'Design', field: 'DESIGN_CODE', format: '' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '' },
+    { title: 'Division', field: 'DIVCODE', format: '' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '' },
+    { title: 'Gross wt', field: 'GROSS_WT', format: '' },
+    { title: 'Process', field: 'PROCESS_CODE', format: '' },
+    { title: 'Worker', field: 'WORKER_CODE', format: '' },
+    { title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    }},
   ];
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -71,6 +75,7 @@ export class MetalIssueComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  gridAmountDecimalFormat:any;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     VOCTYPE: ['', [Validators.required]],
@@ -94,11 +99,15 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
-    private commonService: CommonServiceService,
   ) { }
 
 
   ngOnInit(): void {
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    };
     //this.content provide the data and flag from main grid to the form
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
@@ -114,6 +123,7 @@ export class MetalIssueComponent implements OnInit {
       this.setNewFormValues()
     }
   }
+ 
   setNewFormValues() {
     this.metalIssueForm.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
@@ -123,7 +133,7 @@ export class MetalIssueComponent implements OnInit {
 
   setAllInitialValues() {
     if (!this.content?.FLAG) return
-    this.commonService.showSnackBarMsg('MSG81447');
+    this.comService.showSnackBarMsg('MSG81447');
     let API = `JobMetalIssueMasterDJ/GetJobMetalIssueMasterDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -161,10 +171,10 @@ export class MetalIssueComponent implements OnInit {
           });
 
         } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
+          this.comService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }

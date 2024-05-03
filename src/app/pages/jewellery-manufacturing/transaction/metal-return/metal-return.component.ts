@@ -16,13 +16,13 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./metal-return.component.scss']
 })
 export class MetalReturnComponent implements OnInit {
-  @Input() content!: any;
   @ViewChild('metalReturnDetailScreen') public MetalReturnDetailScreen!: NgbModal;
+  @Input() content!: any;
   modalReference!: NgbModalRef;
+  dataToDetailScreen: any;
   
   divisionMS: any = 'ID';
   orders: any = [];
-  private subscriptions: Subscription[] = [];
   currentFilter: any;
   tableData: any[] = ['Process', 'Worker', 'Job No', 'Sub.Job No', 'Design', 'Stock Code', 'Gross Wt.', 'Net Wt.', 'Purity', 'Pure Wt.'];
   metalReturnDetailsData: any[] = [];
@@ -34,6 +34,7 @@ export class MetalReturnComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
+  private subscriptions: Subscription[] = [];
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -212,7 +213,6 @@ export class MetalReturnComponent implements OnInit {
   locationCodeSelected(e: any) {
     this.metalReturnForm.controls.location.setValue(e.LOCATION_CODE);
   }
-  dataToDetailScreen: any
   /**use: open detail screen */
   openAddMetalReturnDetail(dataToChild?: any) {
     if (dataToChild) {
@@ -221,31 +221,33 @@ export class MetalReturnComponent implements OnInit {
     } else {
       dataToChild = { HEADERDETAILS: this.metalReturnForm.value }
     }
-    console.log(dataToChild, 'dataToChild')
-    this.dataToDetailScreen = dataToChild
+    this.dataToDetailScreen = dataToChild //input variable to pass data to child
     this.modalReference = this.modalService.open(this.MetalReturnDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    this.modalReference.componentInstance.content = dataToChild
-    this.modalReference.result.then((dataToParent) => {
-      if (dataToParent) {
-        // this.setValuesToHeaderGrid(dataToParent);
-      }
-    });
+    // this.modalReference.componentInstance.content = dataToChild
+    // this.modalReference.result.then((dataToParent) => {
+    //   if (dataToParent) {
+    //     this.setValuesToHeaderGrid(dataToParent);
+    //   }
+    // });
   }
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    console.log(detailDataToParent, 'detailDataToParent');
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
     if (detailDataToParent.SRNO != 0) {
       this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
-      // detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
       this.metalReturnDetailsData.push(detailDataToParent);
       this.recalculateSRNO()
     }
-    this.modalReference.close()
+    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if(DATA.FLAG == 'CONTINUE'){
+      this.commonService.showSnackBarMsg('Details added successfully')
+    };
   }
   closeDetailScreen(){
     this.modalReference.close()
