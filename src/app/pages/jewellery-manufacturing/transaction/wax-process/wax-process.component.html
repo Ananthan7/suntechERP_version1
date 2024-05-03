@@ -97,7 +97,7 @@
             <div class="row">
               <div class="col-md-3 mb-2">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" [viewImportBtn]="false"
-                  (addClick)="  adddata()" (deleteClick)="removedata()">
+                  (addClick)="adddata()" (deleteClick)="removedata()">
                 </menu-buttons>
               </div>
             </div>
@@ -105,7 +105,7 @@
               <div class="col">
                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableDataJob" [showBorders]="true"
                   [showColumnLines]="true" [showRowLines]="true"  [allowColumnReordering]="true"
-                  [allowColumnResizing]="true" [columnAutoWidth]="true">
+                  [allowColumnResizing]="true" [columnAutoWidth]="true" [height]="200">
                   <dxo-editing mode="cell"></dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>

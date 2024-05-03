@@ -567,6 +567,7 @@ export class MeltingTypeComponent implements OnInit {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
+  
   resetSrNumber() {
     this.tableData.forEach((data, index) => {
       data.SRNO = index + 1
