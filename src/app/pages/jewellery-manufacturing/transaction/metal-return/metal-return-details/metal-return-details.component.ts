@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./metal-return-details.component.scss']
 })
 export class MetalReturnDetailsComponent implements OnInit {
-
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
@@ -235,7 +236,8 @@ export class MetalReturnDetailsComponent implements OnInit {
 
   close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    this.closeDetail.emit()
+    // this.activeModal.close(data);
   }
  
   continue() { }
@@ -310,9 +312,12 @@ export class MetalReturnDetailsComponent implements OnInit {
       "PUDIFF": 0,
       "JOB_PURITY": 0
     }
-    this.close(postData);
+    // this.close(postData);
+    this.saveDetail.emit(postData);
   }
-
+  continueBtnClick(){
+    
+  }
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (!this.content.WORKER_CODE) {
@@ -403,7 +408,7 @@ export class MetalReturnDetailsComponent implements OnInit {
       "SPID": "040",
       "parameter": {
         'strUNQ_JOB_ID': this.metalReturnDetailsForm.value.subJobNo,
-        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strBranchCode': this.comService.nullToString(this.metalReturnDetailsForm.value.BRANCH_CODE),
         'strCurrenctUser': ''
       }
     }
@@ -442,6 +447,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   jobNumberValidate(event: any) {
+    console.log(this.content);
+    console.log(this.branchCode);
+    console.log(this.metalReturnDetailsForm.value.BRANCH_CODE);
+    
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",

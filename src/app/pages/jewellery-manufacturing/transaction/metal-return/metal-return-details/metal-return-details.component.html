@@ -6,6 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    (continueClick)="continueBtnClick()"
     [isViewSave]="!viewMode" [isViewDelete]="false" [isViewMore]="false"
     [isViewContinue]="!viewMode"></modal-header>
 <!-- content section -->
@@ -424,6 +425,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="jobPcs"
+                                        class="text-right"
                                         [readonly]="viewMode" NumberOnly />
                                 </mat-form-field>
                             </div>

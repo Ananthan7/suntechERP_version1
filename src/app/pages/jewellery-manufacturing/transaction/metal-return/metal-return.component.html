@@ -232,3 +232,8 @@
         </form>
     </div>
 </div>
+<ng-template #metalReturnDetailScreen>
+    <app-metal-return-details [content]="dataToDetailScreen"
+    (saveDetail)="setValuesToHeaderGrid($event)"
+    (closeDetail)="closeDetailScreen()"></app-metal-return-details>
+</ng-template>

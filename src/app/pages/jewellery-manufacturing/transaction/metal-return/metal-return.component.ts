@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -16,9 +16,12 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./metal-return.component.scss']
 })
 export class MetalReturnComponent implements OnInit {
+  @Input() content!: any;
+  @ViewChild('metalReturnDetailScreen') public MetalReturnDetailScreen!: NgbModal;
+  modalReference!: NgbModalRef;
+  
   divisionMS: any = 'ID';
   orders: any = [];
-  @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
   tableData: any[] = ['Process', 'Worker', 'Job No', 'Sub.Job No', 'Design', 'Stock Code', 'Gross Wt.', 'Net Wt.', 'Purity', 'Pure Wt.'];
@@ -209,6 +212,7 @@ export class MetalReturnComponent implements OnInit {
   locationCodeSelected(e: any) {
     this.metalReturnForm.controls.location.setValue(e.LOCATION_CODE);
   }
+  dataToDetailScreen: any
   /**use: open detail screen */
   openAddMetalReturnDetail(dataToChild?: any) {
     if (dataToChild) {
@@ -218,20 +222,35 @@ export class MetalReturnComponent implements OnInit {
       dataToChild = { HEADERDETAILS: this.metalReturnForm.value }
     }
     console.log(dataToChild, 'dataToChild')
-
-    const modalRef: NgbModalRef = this.modalService.open(MetalReturnDetailsComponent, {
+    this.dataToDetailScreen = dataToChild
+    this.modalReference = this.modalService.open(this.MetalReturnDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = dataToChild
-    modalRef.result.then((dataToParent) => {
+    this.modalReference.componentInstance.content = dataToChild
+    this.modalReference.result.then((dataToParent) => {
       if (dataToParent) {
-        this.setValuesToHeaderGrid(dataToParent);
+        // this.setValuesToHeaderGrid(dataToParent);
       }
     });
   }
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    console.log(detailDataToParent, 'detailDataToParent');
+    if (detailDataToParent.SRNO != 0) {
+      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+    } else {
+      // detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
+      this.metalReturnDetailsData.push(detailDataToParent);
+      this.recalculateSRNO()
+    }
+    this.modalReference.close()
+  }
+  closeDetailScreen(){
+    this.modalReference.close()
+  }
+
   onRowClickHandler(event: any) {
     this.selectRowIndex = event.data.SRNO
   }
@@ -250,16 +269,6 @@ export class MetalReturnComponent implements OnInit {
       element.SRNO = index + 1
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
     })
-  }
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    console.log(detailDataToParent, 'detailDataToParent');
-    if (detailDataToParent.SRNO != 0) {
-      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
-    } else {
-      // detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
-      this.metalReturnDetailsData.push(detailDataToParent);
-      this.recalculateSRNO()
-    }
   }
 
   setPostData() {
