@@ -165,9 +165,9 @@
                                             <mat-form-field
                                                 style="width: 100%;">
                                                 <input type="text"
-                                                    
-                                                    [max]="13"
+                                                    maxlength="5"
                                                     matInput
+                                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                                                     formControlName="roundoff_digit"
                                                     [readonly]="viewMode || codeEnable"
                                                     class="text-right" />

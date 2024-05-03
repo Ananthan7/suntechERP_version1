@@ -704,9 +704,12 @@ export class ProcessMasterComponent implements OnInit {
               }
             }
 
-            if (this.processMasterForm.value.RecoveryProcess == true && this.processMasterForm.value.recovery == false) {
+            if (this.processMasterForm.value.RecoveryProcess == true && this.processMasterForm.value.recovery == false ) {
 
               this.toastr.error('Recovery Must be Filled');
+            }
+            else if(this.processMasterForm.value.recStockCode == false){
+              this.toastr.error('Recov Stock Code Must be Filled');
             }
             else{
 

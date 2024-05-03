@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -27,6 +27,7 @@ export class SequenceMasterComponent implements OnInit {
   editMode: boolean = false;
   dele: boolean = false;
   checkCondtion: boolean = false;
+  checkTimeCondtion: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -65,11 +66,14 @@ export class SequenceMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) {
     this.getTableData()
   }
   ngOnInit(): void {
     this.dele = true;
+    this.renderer.selectRootElement('#code')?.focus();
+
     if (this.content.FLAG == 'EDIT') {
       this.editMode = true
       this.dele = false;
@@ -124,10 +128,15 @@ export class SequenceMasterComponent implements OnInit {
           this.dataSource = result.response
           this.sortWithMID()
 
+          // "STD_TIME": item.STD_TIME,
+          // "MAX_TIME": item.MAX_TIME,
+
           this.dataSource.forEach((item: any, index: any) => {
             item.SRNO = index + 1
             item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
             item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
+            item.STD_TIME = this.commonService.decimalQuantityFormat(item.STD_TIME, 'METAL')
+            item.MAX_TIME = this.commonService.decimalQuantityFormat(item.MAX_TIME, 'METAL')
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
@@ -141,6 +150,9 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
+
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
     if (event.target.value == '') return
@@ -158,6 +170,9 @@ export class SequenceMasterComponent implements OnInit {
           }).then((result: any) => {
             if (result.value) {
             }
+            setTimeout(() => {
+              this.renderer.selectRootElement('#code').focus();
+            }, 500);
           });
           this.sequenceMasterForm.controls.sequenceCode.setValue('')
         }
@@ -166,6 +181,8 @@ export class SequenceMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
+
   // check sequence exists and fill grid
   checkSequenceExists() {
     if (this.sequenceMasterForm.value.sequenceCode == '') return
@@ -184,15 +201,17 @@ export class SequenceMasterComponent implements OnInit {
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
                 obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                  obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                  obj.POINTS = item.POINTS || 0,
-                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                  obj.GAIN_AC = "",
-                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
+                obj.STD_TIME = this.commonService.decimalQuantityFormat(item.STD_TIME, 'METAL')
+                obj.MAX_TIME = this.commonService.decimalQuantityFormat(item.MAX_TIME, 'METAL')
+                obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
+                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                obj.POINTS = item.POINTS || 0,
+                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                obj.GAIN_AC = "",
+                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
             });
@@ -266,6 +285,7 @@ export class SequenceMasterComponent implements OnInit {
       this.toastr.error('select all required fields & Process')
       return
     }
+
     this.dataSource.forEach((item: any) => {
       //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
@@ -281,6 +301,24 @@ export class SequenceMasterComponent implements OnInit {
 
     if (this.checkCondtion == true) {
       console.log(this.checkCondtion)
+      return;
+    }
+   
+    this.dataSource.forEach((item: any) => {
+      //this.checkCondtion = false;
+      if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
+        this.checkTimeCondtion = true;
+        this.toastr.error('Max Time must be Greater than the Standard Time')
+      }
+
+      if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
+        this.checkTimeCondtion = false
+
+      }
+    })
+
+    if (this.checkTimeCondtion == true) {
+      console.log(this.checkTimeCondtion)
       return;
     }
 
@@ -334,7 +372,7 @@ export class SequenceMasterComponent implements OnInit {
       //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
         this.checkCondtion = true;
-        this.toastr.error('Max loss must be Greater than the Standard Loss')
+        this.toastr.error('Max loss must be Greater than the Std Loss')
       }
 
       if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
@@ -348,6 +386,23 @@ export class SequenceMasterComponent implements OnInit {
       return;
     }
 
+    this.dataSource.forEach((item: any) => {
+      //this.checkCondtion = false;
+      if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
+        this.checkTimeCondtion = true;
+        this.toastr.error('Max Time must be Greater than the Std Time')
+      }
+
+      if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
+        this.checkTimeCondtion = false
+
+      }
+    })
+
+    if (this.checkTimeCondtion == true) {
+      console.log(this.checkTimeCondtion)
+      return;
+    }
 
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = {
