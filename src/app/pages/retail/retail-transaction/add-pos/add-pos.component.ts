@@ -566,6 +566,7 @@ export class AddPosComponent implements OnInit {
   orderedItemEditId: any;
   salesReturnEditId: any;
   salesReturnEditCode: any = '';
+  salesReturnVocNumber: any = '';
   salesReturnEditAmt: any = '';
   exchangeItemEditId: any;
   retailSaleDataVocNo: any = '0';
@@ -4272,11 +4273,11 @@ export class AddPosComponent implements OnInit {
       ),
       NETVALUEFC: this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.invReturnSalesTotalNetTotal
+        this.sales_returns_total_amt
       ),
       NETVALUECC: this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.invReturnSalesTotalNetTotal
+        this.sales_returns_total_amt
       ),
       PUDIFF: this.comFunc.emptyToZero(items.PUDIFF), //need_input
       STONEDIFF: this.comFunc.emptyToZero(items.STONEDIFF),
@@ -4534,7 +4535,6 @@ export class AddPosComponent implements OnInit {
       "VATCODE": ""
 
     };
-
     // temp_sales_return_items.SRNO = slno;
 
     // need to update
@@ -5923,7 +5923,14 @@ export class AddPosComponent implements OnInit {
   //   });
   // }
   setPosItemData(sno: any, data: any) {
+    let fcn_li_rate = this.lineItemForm.value.fcn_li_rate;
 
+    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.replace(/,/g, ''));
+    
+    
+    let fcn_ad_metal_rate = this.lineItemForm.value.fcn_ad_metal_rate;
+
+    fcn_ad_metal_rate = (fcn_ad_metal_rate === null || fcn_ad_metal_rate === '') ? 0 : parseFloat(fcn_ad_metal_rate.replace(/,/g, ''));    
     let temp_pos_item_data: any = {
       // new values
       // "UNIQUEID": 0,
@@ -5952,10 +5959,13 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount), this.vocDataForm.value.txtCurRate
       ), // metal amount
-      RATE_TYPE: data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
-      METAL_RATE: this.comFunc.emptyToZero(
-        this.lineItemForm.value.fcn_ad_metal_rate
-      ),
+      RATE_TYPE:'',
+      //  data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
+      METAL_RATE: this.newLineItem.METAL_RATE_PERGMS_24KARAT??0,
+
+      // this.comFunc.emptyToZero(
+      //   this.lineItemForm.value.fcn_ad_metal_rate
+      // ),
 
       METAL_RATE_GMSFC: this.comFunc.emptyToZero(
         this.lineItemForm.value.fcn_ad_metal_rate
@@ -6042,7 +6052,8 @@ export class AddPosComponent implements OnInit {
       STKTRANMKGCOST: 0,
       //  data.STOCK_COST,
       MAINSTOCKCODE: data.MAIN_STOCK_CODE, //need field
-      MKGMTLNETRATE:this.comFunc.emptyToZero(parseFloat(this.lineItemForm.value.fcn_ad_metal_rate)+parseFloat(this.lineItemForm.value.fcn_li_rate)),
+      MKGMTLNETRATE: this.comFunc.emptyToZero(fcn_ad_metal_rate + fcn_li_rate),
+      // MKGMTLNETRATE:this.comFunc.emptyToZero(parseFloat(this.lineItemForm.value.fcn_ad_metal_rate)+parseFloat(this.lineItemForm.value.fcn_li_rate)),
 
       MTL_SIZE: '',
       MTL_COLOR: '',
@@ -7278,12 +7289,14 @@ export class AddPosComponent implements OnInit {
       this.sales_returns_total_amt = 0;
       this.salesReturnEditCode = '';
       this.salesReturnEditAmt = '';
+      this.salesReturnVocNumber='';
 
       //  this.fcn_returns_voc_no_val = event.target.value;
       console.log(this.salesReturnForm.value.fcn_returns_fin_year);
       console.log(this.salesReturnForm.value.fcn_returns_branch);
       console.log(this.salesReturnForm.value.fcn_returns_voc_type);
       console.log(this.salesReturnForm.value.fcn_returns_voc_no);
+      this.salesReturnVocNumber=this.salesReturnForm.value.fcn_returns_voc_no;
       let _response;
 
       let fin_year = this.salesReturnForm.value.fcn_returns_fin_year;
@@ -10500,7 +10513,7 @@ export class AddPosComponent implements OnInit {
 
       // etc fields
       RS_FIXED: false, //need
-      SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}- ${this.salesReturnForm.value.fcn_returns_voc_no}-${this.baseYear}`,
+      SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.salesReturnVocNumber}-${this.baseYear}`,
       TRANS_CODES: '',
       CONSIGNMENTPARTY: '',
       TOTALVAT_AMOUNTFC: this.comFunc.transformDecimalVB(
@@ -10618,6 +10631,7 @@ export class AddPosComponent implements OnInit {
       PRINT_COUNT_ACCOPY: 0,
       PRINT_COUNT_CNTLCOPY: 0,
       SOURCEOFWEALTHANDFUNDS: '',
+      POSCUSTIDEXP_DATE: this.customerDataForm.value.fcn_customer_exp_date,
       "AGENT_COMMISSION": false,
       "EMIRATESSKYWARDSMILE": false,
       "HOLDBARCODE": false,
@@ -10629,7 +10643,7 @@ export class AddPosComponent implements OnInit {
       "DTREMARKS": "",
       "GROUPREF": "",
       "NEWMID": 0,
-      "POSCUSTIDEXP_DATE": this.customerDetails.POSCUSTIDEXP_DATE,
+      
       RetailDetails: this.currentLineItems,
     };
     console.log('====================================');
@@ -10657,8 +10671,8 @@ export class AddPosComponent implements OnInit {
       ITEM_CURR_RATE: this.vocDataForm.value.txtCurRate || 1,
       VALUE_DATE: this.vocDataForm.value.vocdate,
       SALESPERSON_CODE: this.vocDataForm.value.sales_person, //need
-      RATE_TYPE: this._exchangeItemchange?.METAL_RATE_TYPE || '', //need_input
-      METAL_RATE: this._exchangeItemchange?.METAL_RATE || 0, //need_input
+      RATE_TYPE:this.newLineItem.RATE_TYPE,
+      METAL_RATE:this.newLineItem.METAL_RATE,
       FIXED: 1,
       TOTAL_PCS: this.comFunc.emptyToZero(this.invMetalPurchaseTotalPcs),
       TOTAL_GRWT: this.comFunc.emptyToZero(
