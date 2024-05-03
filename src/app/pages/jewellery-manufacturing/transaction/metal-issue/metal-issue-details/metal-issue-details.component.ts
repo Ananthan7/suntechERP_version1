@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./metal-issue-details.component.scss']
 })
 export class MetalIssueDetailsComponent implements OnInit {
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() data!: any;
   @Input() content!: any;
   @Input() isViewChangeJob: boolean = true;
@@ -194,6 +196,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('NET_WT', this.content.NET_WT, 'THREE')
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
+    this.setValueWithDecimal('jobPurity', this.content.JOB_PURITY, 'PURITY')
 
     this.tableData = [{
       DIVCODE: this.content.DIVCODE,
@@ -238,19 +241,10 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
 
 
-
-  jobchange() {
-    this.formSubmit()
-  }
-
-  jobcontinue(data?: any) {
-    this.formSubmit()
-  }
-
-
   close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    this.closeDetail.emit()
   }
 
   closed(data?: any) {
@@ -285,36 +279,30 @@ export class MetalIssueDetailsComponent implements OnInit {
       };
     }
   }
-
-  submitValidations(form: any) {
-    if (form.jobNumber == '') {
-      this.comService.toastErrorByMsgId('Job number is required')
-      return true
-    }
-    if (form.workerCode == '') {
-      this.comService.toastErrorByMsgId('Worker code is required')
-      return true
-    }
-    if (form.processCode == '') {
-      this.comService.toastErrorByMsgId('Process code is required')
-      return true
-    }
-    if (form.stockCode == '') {
-      this.comService.toastErrorByMsgId('Stock code is required')
-      return true
-    }
-    if (form.GROSS_WT == '') {
-      this.comService.toastErrorByMsgId('Stock code is required')
-      return true
-    }
-    return false
+  changeJobClicked(){
+    this.formSubmit('CONTINUE')
+    this.metalIssueDetailsForm.reset()
   }
-  formSubmit() {
-    if (this.submitValidations(this.metalIssueDetailsForm.value)) return;
+  resetStockDetails() { 
+    this.metalIssueDetailsForm.controls.stockCode.setValue('')
+    this.metalIssueDetailsForm.controls.stockCodeDes.setValue('')
+    this.metalIssueDetailsForm.controls.toStockCode.setValue('')
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue('')
+    this.metalIssueDetailsForm.controls.DIVCODE.setValue('')
+    this.metalIssueDetailsForm.controls.toDIVCODE.setValue('')
+    this.setValueWithDecimal('PURE_WT', 0, 'THREE')
+    this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
+    this.setValueWithDecimal('PURITY', 0, 'PURITY')
+    this.setValueWithDecimal('NET_WT', 0, 'THREE')
+    this.setValueWithDecimal('KARAT', 0, 'THREE')
+    this.setValueWithDecimal('STONE_WT', 0, 'STONE')
+    this.tableData[0].STOCK_CODE = ''
+  }
+  setPostData(){
     let form = this.metalIssueDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
 
-    let postData = {
+    return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
@@ -377,8 +365,46 @@ export class MetalIssueDetailsComponent implements OnInit {
       "JOB_PURITY": this.comService.emptyToZero(form.jobPurity),
       "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT
     }
-    this.closed(postData);
   }
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.jobNumber) == '') {
+      this.comService.toastErrorByMsgId('Job number is required')
+      return true
+    }
+    if (this.comService.nullToString(form.workerCode) == '') {
+      this.comService.toastErrorByMsgId('Worker code is required')
+      return true
+    }
+    if (this.comService.nullToString(form.processCode) == '') {
+      this.comService.toastErrorByMsgId('Process code is required')
+      return true
+    }
+    if (this.comService.nullToString(form.stockCode) == '') {
+      this.comService.toastErrorByMsgId('Stock code is required')
+      return true
+    }
+    if (this.comService.emptyToZero(form.GROSS_WT) == 0) {
+      this.comService.toastErrorByMsgId('Gross weight is required')
+      return true
+    }
+    return false
+  }
+  /**use: to save data to grid*/
+  formSubmit(flag:any) {
+    if (this.submitValidations(this.metalIssueDetailsForm.value)) return;
+    let dataToparent = {
+      FLAG: flag,
+      POSTDATA: this.setPostData()
+    }
+    // this.close(postData);
+    this.saveDetail.emit(dataToparent);
+    if (flag == 'CONTINUE'){
+      this.resetStockDetails()
+    }
+  }
+  // formSubmit() {
+  //   this.closed(postData);
+  // }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.metalIssueDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
@@ -489,6 +515,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
             this.subJobNumberValidate()
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')

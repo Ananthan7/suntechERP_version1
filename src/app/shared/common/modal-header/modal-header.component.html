@@ -1,5 +1,5 @@
 <div class="items border-bottom">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <div class="d-flex justify-content-start text-start">
             <div class="p-1" *ngIf="isViewSave">
                 <button type="button" class="btn btn-primary text-center"
@@ -138,6 +138,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="pt-2" style="color: grey;">
+            <span>Branch: {{branchCode}} ,&nbsp;</span>
+            <span>Version: {{app_version}}</span>
         </div>
     </div>
 

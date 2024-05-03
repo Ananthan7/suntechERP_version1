@@ -6,8 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (changeJobClick)="jobchange()" (continueClick)="jobcontinue($event)"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
+    (changeJobClick)="changeJobClicked()" (continueClick)="formSubmit('CONTINUE')"
     [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
     [isViewMore]="false"></modal-header>
 <div class="row">
@@ -20,7 +20,7 @@
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">
+                                        class="col-sm-4 col-form-label pt-1">
                                         Job Number * :
                                     </label>
                                     <div class="col-md-3">
@@ -76,13 +76,12 @@
                                                 formControlName="processCode"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
-
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="processCodeDesc"
-                                                [readonly]="viewMode">
+                                                readonly>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="processCodeData"
@@ -99,9 +98,8 @@
                                         <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="workerCode"
-                                                [readonly]="viewMode" />
+                                                readonly/>
                                         </mat-form-field>
-                                        
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 80%;">
@@ -158,10 +156,10 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-12">
-                                        <mat-form-field style="width: 100%;">
+                                        <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="DESIGN_CODE"
-                                                [readonly]="viewMode" />
+                                                readonly/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -187,12 +185,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <mat-form-field style="width: 100%;">
+                                        <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
-                                                matInput
                                                 formControlName="PART_CODE"
-                                                style="text-align: right;"
-                                                [readonly]="viewMode" />
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -221,9 +217,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="jobPurity"
-                                                style="text-align: right;"
-                                                [readonly]="viewMode" [max]="6"
-                                                MetalDecimalInput />
+                                               class="text-right"
+                                                readonly/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -274,8 +269,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="PURITY"
-                                                [readonly]="viewMode"
-                                                style="text-align: right;"
+                                                readonly class="text-right"
                                                 SixDecimalInput />
                                         </mat-form-field>
                                     </div>
@@ -301,8 +295,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="NET_WT"
-                                                [readonly]="viewMode"
-                                                class="text-right"
+                                                readonly class="text-right"
                                                 MetalDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
@@ -328,8 +321,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="PURE_WT"
-                                                [readonly]="viewMode"
-                                                class="text-right"
+                                                readonly class="text-right"
                                                 MetalDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
@@ -351,7 +343,7 @@
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
                                                 placeholder="stockcode"
-                                                [readonly]="viewMode" />
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -381,7 +373,7 @@
                                             (newRowClick)="locationCodeSelected($event)"
                                             *ngIf="!viewMode"></master-search>
                                     </div>
-                                    <div class="col-md-3 offset-3">
+                                    <!-- <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 formControlName="totalAmountFc"
@@ -389,7 +381,7 @@
                                                 style="text-align: right;"
                                                 AmountDecimalInput />
                                         </mat-form-field>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-6">
@@ -400,7 +392,7 @@
                                                 readonly />
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3 offset-3">
+                                    <!-- <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 formControlName="totalAmountLc"
@@ -408,7 +400,7 @@
                                                 style="text-align: right;"
                                                 AmountDecimalInput />
                                         </mat-form-field>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword"
@@ -418,12 +410,11 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 formControlName="purityDiff"
-                                                [readonly]="viewMode"
-                                                style="text-align: right;"
+                                                readonly class="text-right"
                                                 MetalDecimalInput />
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3 offset-3">
+                                    <!-- <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 formControlName="amountFc"
@@ -431,7 +422,7 @@
                                                 style="text-align: right;"
                                                 AmountDecimalInput />
                                         </mat-form-field>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword"
@@ -441,12 +432,11 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="jobPcs"
-                                                [readonly]="viewMode"
-                                                style="text-align: right;"
+                                                readonly class="text-right"
                                                 NumberOnly />
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3 offset-3">
+                                    <!-- <div class="col-md-3 offset-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 formControlName="amountLc"
@@ -454,7 +444,7 @@
                                                 style="text-align: right;"
                                                 AmountDecimalInput />
                                         </mat-form-field>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-6">
@@ -495,7 +485,7 @@
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-selection mode="single"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                             <dxi-column *ngFor="let data of columnhead"

@@ -5,7 +5,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
+    (continueClick)="formSubmit('CONTINUE')"
     [isViewSave]="!viewMode" [isViewDelete]="false" [isViewMore]="false"
     [isViewContinue]="!viewMode"></modal-header>
 <!-- content section -->
@@ -35,7 +36,7 @@
                                 <mat-form-field style="width: 100%">
                                     <input type="text" matInput name="jobDes"
                                         formControlName="jobDes"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,7 +46,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
+                                    <input type="text" matInput
                                         formControlName="subJobNo"
                                         style="text-align: right;">
                                 </mat-form-field>
@@ -54,7 +55,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="subJobNoDes"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -77,7 +78,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="processCodeDesc"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -100,7 +101,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="workerCodeDesc"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -116,7 +117,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="designCode"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -128,7 +129,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="PART_CODE"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -184,7 +185,7 @@
                                     <input type="text" matInput
                                         formControlName="treeNumber"
                                         [readonly]="viewMode" NumberOnly 
-                                        maxlength="15" class="text-right"/>
+                                        maxlength="25" class="text-right"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -194,7 +195,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        [readonly]="viewMode">
+                                        readonly>
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="locationCodeData"
@@ -211,6 +212,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="stockCode"
+                                        (focusout)="stockCodeValidate($event)"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
@@ -222,7 +224,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="stockCodeDesc"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -245,7 +247,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="ReturnToStockCodeDesc"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -267,7 +269,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="PURITY" class="text-right"
-                                        [readonly]="viewMode" SixDecimalInput [max]="4" />
+                                        readonly SixDecimalInput [max]="4" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -292,7 +294,7 @@
                                     <input type="text" matInput
                                         formControlName="NET_WT"
                                         style="text-align: right;" [max]="13"
-                                        [readonly]="viewMode"
+                                        readonly
                                         MetalDecimalInput />
                                 </mat-form-field>
                             </div>
@@ -320,7 +322,7 @@
                                     <input type="text" matInput
                                         formControlName="PURE_WT"
                                         style="text-align: right;"
-                                        [readonly]="viewMode"
+                                        readonly
                                         MetalDecimalInput [max]="13"/>
                                 </mat-form-field>
                             </div>
@@ -424,6 +426,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="jobPcs"
+                                        class="text-right"
                                         [readonly]="viewMode" NumberOnly />
                                 </mat-form-field>
                             </div>
