@@ -34,6 +34,11 @@ export class MetalReturnComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
+  gridAmountDecimalFormat:any = {
+    type: 'fixedPoint',
+    precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+    currency: this.commonService.compCurrency
+  };
   private subscriptions: Subscription[] = [];
 
   user: MasterSearchModel = {
@@ -332,7 +337,7 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -366,7 +371,7 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',

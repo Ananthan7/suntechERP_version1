@@ -24,21 +24,25 @@ export class MetalIssueComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
-    { title: 'SRNO', field: 'SRNO', format: '' },
-    { title: 'Job Id', field: 'JOB_NUMBER', format: '' },
-    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '' },
-    { title: 'Design', field: 'DESIGN_CODE', format: '' },
-    { title: 'Stock Code', field: 'STOCK_CODE', format: '' },
-    { title: 'Division', field: 'DIVCODE', format: '' },
-    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '' },
-    { title: 'Gross wt', field: 'GROSS_WT', format: '' },
-    { title: 'Process', field: 'PROCESS_CODE', format: '' },
-    { title: 'Worker', field: 'WORKER_CODE', format: '' },
+    { title: 'SRNO', field: 'SRNO', format: '',alignment: 'center' },
+    { title: 'Job Id', field: 'JOB_NUMBER', format: '',alignment: 'left' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '',alignment: 'left' },
+    { title: 'Design', field: 'DESIGN_CODE', format: '',alignment: 'left' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '',alignment: 'left' },
+    { title: 'Division', field: 'DIVCODE', format: '',alignment: 'left' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '',alignment: 'left' },
+    { title: 'Gross wt', field: 'GROSS_WT', format: {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    },alignment: 'right' },
+    { title: 'Process', field: 'PROCESS_CODE', format: '',alignment: 'left' },
+    { title: 'Worker', field: 'WORKER_CODE', format: '',alignment: 'left' },
     { title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
       type: 'fixedPoint',
       precision: this.comService.allbranchMaster?.BAMTDECIMALS,
       currency: this.comService.compCurrency
-    }},
+    },alignment: 'right'},
   ];
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,

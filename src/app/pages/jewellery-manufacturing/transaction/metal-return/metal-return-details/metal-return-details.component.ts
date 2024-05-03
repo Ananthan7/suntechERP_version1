@@ -160,11 +160,11 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
     this.setInitialValue()
   }
-  
+
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
-    this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE ;
+    this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.metalReturnDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalReturnDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
     this.metalReturnDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
@@ -173,7 +173,7 @@ export class MetalReturnDetailsComponent implements OnInit {
 
     this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.metalReturnDetailsForm.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
-    this.metalReturnDetailsForm.controls.subJobNo.setValue(this.content.JOB_SO_NUMBER)
+    this.metalReturnDetailsForm.controls.subJobNo.setValue(this.content.UNQ_JOB_ID)
     this.metalReturnDetailsForm.controls.subJobNoDes.setValue(this.content.JOB_DESCRIPTION)
     this.metalReturnDetailsForm.controls.processCode.setValue(this.content.PROCESS_CODE)
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(this.content.PROCESS_NAME)
@@ -194,7 +194,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.setValueWithDecimal('NET_WT', this.content.NET_WT, 'THREE')
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
-    console.log(this.metalReturnDetailsForm.value,'this.metalReturnDetailsForm.value');
+    console.log(this.metalReturnDetailsForm.value, 'this.metalReturnDetailsForm.value');
   };
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.metalReturnDetailsForm.controls[formControlName].setValue(
@@ -215,8 +215,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
-    this.metalReturnDetailsForm.controls.subJobNo.setValue(e.job_number);
-    this.metalReturnDetailsForm.controls.subJobNoDes.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   ProcessCodeSelected(e: any) {
@@ -239,8 +237,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.closeDetail.emit()
     // this.activeModal.close(data);
   }
- 
-  resetStockDetails() { 
+
+  resetStockDetails() {
     this.metalReturnDetailsForm.controls.stockCode.setValue('')
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue('')
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue('')
@@ -252,10 +250,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.setValueWithDecimal('KARAT', 0, 'THREE')
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
   }
-  setPostData(){
+  setPostData() {
     let form = this.metalReturnDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
-    return{
+    return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
@@ -314,7 +312,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
   }
 
-  submitValidations(){
+  submitValidations() {
     let form = this.metalReturnDetailsForm.value
     if (form.jobNumber == '') {
       this.toastr.error('Job Number required')
@@ -323,7 +321,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     return false;
   }
   /**use: to save data to grid*/
-  formSubmit(flag:any) {
+  formSubmit(flag: any) {
     if (this.submitValidations()) return;
     let dataToparent = {
       FLAG: flag,
@@ -331,11 +329,11 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
     // this.close(postData);
     this.saveDetail.emit(dataToparent);
-    if (flag == 'CONTINUE'){
+    if (flag == 'CONTINUE') {
       this.resetStockDetails()
     }
   }
-  
+
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (!this.content.WORKER_CODE) {
@@ -438,6 +436,7 @@ export class MetalReturnDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
           this.metalReturnDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalReturnDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
@@ -467,10 +466,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   jobNumberValidate(event: any) {
-    console.log(this.content);
-    console.log(this.branchCode);
-    console.log(this.metalReturnDetailsForm.value.BRANCH_CODE);
-    
     if (event.target.value == '') return
     // let postData = {
     //   "SPID": "064",
@@ -495,10 +490,8 @@ export class MetalReturnDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            console.log(data, 'pppp')
             this.jobNumberDetailData = data
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
-            this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
 
@@ -521,13 +514,13 @@ export class MetalReturnDetailsComponent implements OnInit {
     let postData = {
       "SPID": "046",
       "parameter": {
-        strStockCode:  event.target.value,                                                  
-        strBranchCode:  this.comService.nullToString(this.branchCode),                                      
-        strVocType:  this.content.HEADERDETAILS.VOCTYPE,                                                  
-        strUserName:  this.comService.nullToString(this.userName),                                         
-        strLocation:  '',                                                
-        strPartyCode:   '',                                                  
-        strVocDate:   this.comService.formatDDMMYY(this.comService.currentDate)
+        strStockCode: event.target.value,
+        strBranchCode: this.comService.nullToString(this.branchCode),
+        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strUserName: this.comService.nullToString(this.userName),
+        strLocation: '',
+        strPartyCode: '',
+        strVocDate: this.comService.formatDDMMYY(this.comService.currentDate)
       }
     }
 
@@ -538,8 +531,8 @@ export class MetalReturnDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data) {
-           console.log(data,'data');
-            
+            console.log(data, 'data');
+
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             return

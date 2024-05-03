@@ -196,6 +196,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('NET_WT', this.content.NET_WT, 'THREE')
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
+    this.setValueWithDecimal('jobPurity', this.content.JOB_PURITY, 'PURITY')
 
     this.tableData = [{
       DIVCODE: this.content.DIVCODE,
@@ -278,17 +279,24 @@ export class MetalIssueDetailsComponent implements OnInit {
       };
     }
   }
+  changeJobClicked(){
+    this.formSubmit('CONTINUE')
+    this.metalIssueDetailsForm.reset()
+  }
   resetStockDetails() { 
     this.metalIssueDetailsForm.controls.stockCode.setValue('')
-    this.metalIssueDetailsForm.controls.stockCodeDesc.setValue('')
-    this.metalIssueDetailsForm.controls.ReturnToStockCode.setValue('')
-    this.metalIssueDetailsForm.controls.ReturnToStockCodeDesc.setValue('')
+    this.metalIssueDetailsForm.controls.stockCodeDes.setValue('')
+    this.metalIssueDetailsForm.controls.toStockCode.setValue('')
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue('')
+    this.metalIssueDetailsForm.controls.DIVCODE.setValue('')
+    this.metalIssueDetailsForm.controls.toDIVCODE.setValue('')
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
     this.setValueWithDecimal('PURITY', 0, 'PURITY')
     this.setValueWithDecimal('NET_WT', 0, 'THREE')
     this.setValueWithDecimal('KARAT', 0, 'THREE')
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
+    this.tableData[0].STOCK_CODE = ''
   }
   setPostData(){
     let form = this.metalIssueDetailsForm.value
@@ -507,6 +515,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
             this.subJobNumberValidate()
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')

@@ -185,10 +185,15 @@
                                         dataField="{{ data.field }}"
                                         caption="{{ data.title }}"
                                         [format]="data.format"
-                                        [allowEditing]="true" alignment="center"
+                                        [allowEditing]="true" [alignment]="data.alignment"
                                         backgroundcolor="#000">
                                     </dxi-column>
                                     <dxo-summary>
+                                        <dxi-total-item column="GROSS_WT" 
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
                                         <dxi-total-item column="TOTAL_AMOUNTFC" 
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"

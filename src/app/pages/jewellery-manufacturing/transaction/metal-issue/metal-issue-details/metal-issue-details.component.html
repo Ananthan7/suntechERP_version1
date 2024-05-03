@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-    (changeJobClick)="formSubmit('CONTINUE')" (continueClick)="formSubmit('CONTINUE')"
+    (changeJobClick)="changeJobClicked()" (continueClick)="formSubmit('CONTINUE')"
     [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
     [isViewMore]="false"></modal-header>
 <div class="row">
