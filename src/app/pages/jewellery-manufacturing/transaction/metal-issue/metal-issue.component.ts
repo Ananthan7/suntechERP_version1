@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -15,8 +15,10 @@ import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-de
   styleUrls: ['./metal-issue.component.scss']
 })
 export class MetalIssueComponent implements OnInit {
+  @ViewChild('metalIssueDetailScreen') public MetalIssueDetailScreen!: NgbModal;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+  modalReference!: NgbModalRef;
 
   currentFilter: any;
   divisionMS: any = 'ID';
@@ -228,6 +230,7 @@ export class MetalIssueComponent implements OnInit {
     let selectedData = event.data
     this.openAddMetalIssue(selectedData)
   }
+  dataToDetailScreen:any; //data to pass to child
   openAddMetalIssue(dataToChild?: any) {
     if (this.submitValidations(this.metalIssueForm.value)) {
       return
@@ -238,22 +241,24 @@ export class MetalIssueComponent implements OnInit {
       dataToChild = { HEADERDETAILS: this.metalIssueForm.value }
     }
     console.log(dataToChild, 'dataToChild to parent');
+    this.dataToDetailScreen = dataToChild //input variable to pass data to child
 
-    const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
+    this.modalReference = this.modalService.open(this.MetalIssueDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = dataToChild
-    modalRef.result.then((postData) => {
-      if (postData) {
-        this.setValuesToHeaderGrid(postData);
-      }
-    });
+    // modalRef.componentInstance.content = dataToChild
+    // modalRef.result.then((postData) => {
+    //   if (postData) {
+    //     this.setValuesToHeaderGrid(postData);
+    //   }
+    // });
   }
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    console.log(detailDataToParent, 'detailDataToParent');
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
     if (detailDataToParent.SRNO != 0) {
       this.metalIssueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
@@ -261,8 +266,14 @@ export class MetalIssueComponent implements OnInit {
       this.metalIssueDetailsData.push(detailDataToParent);
     }
     this.tableData.push(detailDataToParent)
+    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if(DATA.FLAG == 'CONTINUE'){
+      this.comService.showSnackBarMsg('Details added successfully')
+    };
   }
-
+  closeDetailScreen(){
+    this.modalReference.close()
+  }
 
   stock_codetemp(data: any, value: any) {
     console.log(data);
