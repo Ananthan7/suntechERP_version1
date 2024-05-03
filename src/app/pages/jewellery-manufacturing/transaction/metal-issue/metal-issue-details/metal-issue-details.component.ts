@@ -359,24 +359,24 @@ export class MetalIssueDetailsComponent implements OnInit {
     }
   }
   submitValidations(form: any) {
-    if (form.jobNumber == '') {
+    if (this.comService.nullToString(form.jobNumber) == '') {
       this.comService.toastErrorByMsgId('Job number is required')
       return true
     }
-    if (form.workerCode == '') {
+    if (this.comService.nullToString(form.workerCode) == '') {
       this.comService.toastErrorByMsgId('Worker code is required')
       return true
     }
-    if (form.processCode == '') {
+    if (this.comService.nullToString(form.processCode) == '') {
       this.comService.toastErrorByMsgId('Process code is required')
       return true
     }
-    if (form.stockCode == '') {
+    if (this.comService.nullToString(form.stockCode) == '') {
       this.comService.toastErrorByMsgId('Stock code is required')
       return true
     }
-    if (form.GROSS_WT == '') {
-      this.comService.toastErrorByMsgId('Stock code is required')
+    if (this.comService.emptyToZero(form.GROSS_WT) == 0) {
+      this.comService.toastErrorByMsgId('Gross weight is required')
       return true
     }
     return false
