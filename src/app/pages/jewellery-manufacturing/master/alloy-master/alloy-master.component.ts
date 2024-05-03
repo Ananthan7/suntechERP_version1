@@ -19,6 +19,7 @@ export class AlloyMasterComponent implements OnInit {
   viewMode: boolean = false;
   isDisabled: boolean = false;
   tableData: any[] = [];
+  isChecked: boolean = false;
   userName = localStorage.getItem('username');
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
@@ -81,6 +82,9 @@ export class AlloyMasterComponent implements OnInit {
     vendorRef: [''],
     weightAvgCost: [''],
     weightAvgCostDes: [''],
+    allowpcs:[false],
+    excludeTransferWt:[false],
+    silveralloy:['']
   });
   
   //number validation
@@ -189,6 +193,9 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
     this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
     this.alloyMastereForm.controls.hsncode.setValue(this.content.HSN_CODE)
+    this.alloyMastereForm.controls.allowpcs.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
+    this.alloyMastereForm.controls.excludeTransferWt.setValue(this.viewchangeYorN(this.content.EXCLUDE_TRANSFER_WT))
+    this.alloyMastereForm.controls.silveralloy.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -576,11 +583,23 @@ export class AlloyMasterComponent implements OnInit {
     }
     this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
   }
+  onchangeCheckBox(e: any) {
+    console.log(e);
+    if (e == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  viewchangeYorN(e: any) {
+    console.log(e);
 
-
-
-
-
+    if (e == 'Y') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
@@ -896,7 +915,7 @@ export class AlloyMasterComponent implements OnInit {
       PACKET_ITEM: true,
       PACKET_WT: 0,
       SALES_TAGLINES: "",
-      ALLOW_ZEROPCS: true,
+      ALLOW_ZEROPCS:   true,
       NOOF_CERT: this.commonService.emptyToZero(this.alloyMastereForm.value.noofcert),
       ADDITIONAL_RATEFC: 0,
       ADDITIONAL_RATELC: 0,

@@ -191,7 +191,7 @@ export class JobcardComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Country type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
