@@ -265,6 +265,7 @@ export class AddPosComponent implements OnInit {
 
   stoneWtPreVal = 0;
 
+  isCCTransaction: boolean = false;
   customerDetails: any = {};
 
   customerDataForm: FormGroup;
@@ -2104,6 +2105,7 @@ export class AddPosComponent implements OnInit {
       if (this.selectedTabIndex == 0) {
         RECEIPT_MODE = this.cashreceiptForm.value.paymentsCash.toString();
         ARECVOCNO = '';
+        this.isCCTransaction = false;
         AMOUNT_FC = this.comFunc.emptyToZero(this.cashreceiptForm.value.cashAmtFC);
         AMOUNT_CC = this.comFunc.FCToCC(
           this.vocDataForm.value.txtCurrency,
@@ -2119,6 +2121,7 @@ export class AddPosComponent implements OnInit {
         ARECMID = 0;
       } else if (this.selectedTabIndex == 1) {
         RECEIPT_MODE = this.creditCardReceiptForm.value.paymentsCreditCard.toString();
+        this.isCCTransaction = true;
         ARECVOCNO = '';
         AMOUNT_FC = this.comFunc.emptyToZero(this.creditCardReceiptForm.value.cardAmtFC);
         COMMISSION_RATE = this.comFunc.emptyToZero(AMOUNT_FC * (this.commisionForCreditCardPayments / 100));
@@ -2138,6 +2141,7 @@ export class AddPosComponent implements OnInit {
       } else if (this.selectedTabIndex == 2) {
         RECEIPT_MODE = this.advanceReceiptForm.value.paymentsAdvance.toString();
         ARECVOCNO = this.advanceReceiptForm.value.advanceRecNo;
+        this.isCCTransaction = false;
         AMOUNT_FC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceAmount);
         AMOUNT_CC = this.comFunc.FCToCC(
           this.vocDataForm.value.txtCurrency,
@@ -2158,6 +2162,7 @@ export class AddPosComponent implements OnInit {
       } else if (this.selectedTabIndex == 3) {
         RECEIPT_MODE = this.othersReceiptForm.value.paymentsOthers.toString();
         ARECVOCNO = '';
+        this.isCCTransaction = false;
         AMOUNT_FC = this.comFunc.emptyToZero(this.othersReceiptForm.value.othersAmtFC);
         AMOUNT_CC = this.comFunc.FCToCC(
           this.vocDataForm.value.txtCurrency,
@@ -2175,6 +2180,7 @@ export class AddPosComponent implements OnInit {
       } else if (this.selectedTabIndex == 4) {
         RECEIPT_MODE = this.giftReceiptForm.value.paymentsCreditGIftVoc.toString();
         ARECVOCNO = '';
+        this.isCCTransaction = false;
         AMOUNT_FC = this.comFunc.emptyToZero(this.giftReceiptForm.value.giftAmtFC);
         AMOUNT_CC = this.comFunc.FCToCC(
           this.vocDataForm.value.txtCurrency,
@@ -2192,6 +2198,7 @@ export class AddPosComponent implements OnInit {
       } else if (this.selectedTabIndex == 5) {
         RECEIPT_MODE = this.customerReceiptForm.value.customAcCodeList.toString();
         ARECVOCNO = '';
+        this.isCCTransaction = false;
         AMOUNT_FC = this.comFunc.emptyToZero(this.customerReceiptForm.value.customerAmtFC);
         AMOUNT_CC = this.comFunc.FCToCC(
           this.vocDataForm.value.txtCurrency,
@@ -2271,7 +2278,7 @@ export class AddPosComponent implements OnInit {
         "GIFT_CARDNO": "",
         "OT_TRANSFER_TIME": "",
         "CARD_NO": CARD_NO,
-        "CARD_HOLDER": this.customerDataForm.value.fcn_customer_name,
+        "CARD_HOLDER":this.isCCTransaction? this.customerDataForm.value.fcn_customer_name:'',
         "CARD_VALID": "0",
         "CREDITDAYS": "0",
         "VALUE_DATE": new Date().toISOString(),
@@ -2286,11 +2293,11 @@ export class AddPosComponent implements OnInit {
         "SGST_PER": "0.00",
         "SGST_AMOUNTFC": "0.000",
         "SGST_AMOUNTCC": "0.000",
-        "IGST_PER": this.newLineItem.IGST_PER ?? "0.00",
+        "IGST_PER":this.isCCTransaction? this.newLineItem.IGST_PER :'0',
         "IGST_AMOUNTFC": IGST_AMOUNT,
         "IGST_AMOUNTCC": IGST_AMOUNT,
-        "HSN_CODE": this.newLineItem.HSN_CODE ?? "0",
-        "GST_CODE": this.newLineItem.GST_CODE ?? "0",
+        "HSN_CODE":this.isCCTransaction? this.newLineItem.HSN_CODE:'',
+        "GST_CODE":this.isCCTransaction? this.newLineItem.GST_CODE :'',
         "CGST_ACCODE": "0",
         "REC_COMM_AMOUNTFC": COMMISSION_RATE,
         "REC_COMM_AMOUNTCC": COMMISSION_RATE,
@@ -4237,8 +4244,9 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(items.MKGVALUECC), this.vocDataForm.value.txtCurRate
       ),
-      RATE_TYPE: this.divisionMS == "S" ? '' : items.RATE_TYPE,
-      METAL_RATE: items.METAL_RATE,
+      RATE_TYPE:this.newLineItem.RATE_TYPE,
+      METAL_RATE:this.newLineItem.METAL_RATE,
+
       METAL_RATE_GMSFC: items.METAL_RATE_GMSFC,
       METAL_RATE_GMSCC: items.METAL_RATE_GMSCC,
       METALVALUEFC: items.METALVALUEFC,
@@ -4262,14 +4270,14 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(items.DISCOUNTVALUECC), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC: this.invReturnSalesTotalNetTotal,
-      //  items.NETVALUEFC,
-      NETVALUECC: this.invReturnSalesTotalNetTotal,
-      //  this.comFunc.FCToCC(
-      //   this.vocDataForm.value.txtCurrency,
-      //   this.comFunc.emptyToZero(items.NETVALUECC), this.vocDataForm.value.txtCurRate
-      // ),
-
+      NETVALUEFC: this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        this.invReturnSalesTotalNetTotal
+      ),
+      NETVALUECC: this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        this.invReturnSalesTotalNetTotal
+      ),
       PUDIFF: this.comFunc.emptyToZero(items.PUDIFF), //need_input
       STONEDIFF: this.comFunc.emptyToZero(items.STONEDIFF),
       PONO: items?.PONO || 0,
@@ -4394,7 +4402,7 @@ export class AddPosComponent implements OnInit {
       // "CGST_ACCODE": this.comFunc.emptyToZero(items['CGST_ACCODE']),
       // "SGST_ACCODE": this.comFunc.emptyToZero(items['SGST_ACCODE']),
       "SGST_ACCODE": items['SGST_ACCODE'] || '',
-      "IGST_ACCODE": this.newLineItem.IGST_ACCODE,
+      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS,
       // items['IGST_ACCODE'] || '',
       "TOTAL_AMOUNTFC": this.sales_returns_items.reduce((acc: any, curr: any) => acc + parseFloat(curr.mkg_amount), 0) || 0,
       //  items['TOTAL_AMOUNTFC'] || 0,
@@ -5991,12 +5999,12 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC: parseFloat(this.lineItemForm.value.fcn_li_gross_amount.replace(/,/g, '')),
-
-      // this.comFunc.emptyToZero(
-      //   this.lineItemForm.value.fcn_li_gross_amount
-      // ),
-      NETVALUECC: parseFloat(this.lineItemForm.value.fcn_li_gross_amount.replace(/,/g, '')),
+      NETVALUEFC:this.comFunc.emptyToZero(
+        this.lineItemForm.value.fcn_li_net_amount
+      ),
+      NETVALUECC: this.comFunc.emptyToZero(
+        this.lineItemForm.value.fcn_li_net_amount
+      ),
 
       // this.comFunc.FCToCC(
       //   this.vocDataForm.value.txtCurrency,
@@ -6034,11 +6042,7 @@ export class AddPosComponent implements OnInit {
       STKTRANMKGCOST: 0,
       //  data.STOCK_COST,
       MAINSTOCKCODE: data.MAIN_STOCK_CODE, //need field
-      MKGMTLNETRATE: this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) +
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
-      ),
+      MKGMTLNETRATE:this.comFunc.emptyToZero(parseFloat(this.lineItemForm.value.fcn_ad_metal_rate)+parseFloat(this.lineItemForm.value.fcn_li_rate)),
 
       MTL_SIZE: '',
       MTL_COLOR: '',
@@ -6170,25 +6174,14 @@ export class AddPosComponent implements OnInit {
       IGST_ACCODE: this.newLineItem.IGST_ACCODE,
       TOTAL_AMOUNTFC: this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.CCToFC(
-          this.vocDataForm.value.txtCurrency,
-          this.comFunc.emptyToZero(this.order_items_total_amount), this.vocDataForm.value.txtCurRate
-        )
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) +
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
       ),
-      // this.comFunc.emptyToZero(
-      //   this.order_items_total_gross_amount
-      // ),
       TOTAL_AMOUNTCC: this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.CCToFC(
-          this.vocDataForm.value.txtCurrency,
-          this.comFunc.emptyToZero(this.order_items_total_amount), this.vocDataForm.value.txtCurRate
-        )
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) +
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
       ),
-      // this.comFunc.FCToCC(
-      //   this.vocDataForm.value.txtCurrency,
-      //   this.comFunc.emptyToZero(this.order_items_total_gross_amount), this.vocDataForm.value.txtCurRate
-      // ),
       CGST_CTRLACCODE: '',
       SGST_CTRLACCODE: '',
       IGST_CTRLACCODE: '',
@@ -6263,13 +6256,13 @@ export class AddPosComponent implements OnInit {
       "LOYALTY_POINTS": '0.00',
       "SALES_TAGLINES": this.newLineItem.TAGLINES ?? '',
       // this.lineItemForm.value.fcn_tab_details || '',
-      "GPC_STONEDIFF_AC": '0',
-      "GPC_STONEVALUESALES_AC": '0',
+      "GPC_STONEDIFF_AC": this.newLineItem.GPC_STONEDIFF_AC ?? '0',
+      "GPC_STONEVALUESALES_AC": this.newLineItem.GPC_STONEVALUESALES_AC ?? '0',
       "GPC_POSSALES_AC": this.newLineItem.GPC_POSSALES_AC ?? '0',
-      "GPC_KUNDANVALUESALES_AC": '0',
-      "GPC_POSSALESSR_AC": '0',
-      "GPC_METALAMT_AC": '0',
-      "GPC_PHYSICALSTOCK_AC": '0',
+      "GPC_KUNDANVALUESALES_AC":  this.newLineItem.GPC_KUNDANVALUESALES_AC ?? '0',
+      "GPC_POSSALESSR_AC": this.newLineItem.GPC_POSSALESSR_AC ?? '0',
+      "GPC_METALAMT_AC": this.newLineItem.GPC_METALAMT_AC ?? '0',
+      "GPC_PHYSICALSTOCK_AC": this.newLineItem.GPC_PHYSICALSTOCK_AC ?? '0',
       "GPC_WASTAGE_AC": '0',
       "GPC_STAMPCHARGE_AC": '0',
       "COUNTRY_CODE": '',
@@ -6653,7 +6646,7 @@ export class AddPosComponent implements OnInit {
       total_sum = total_sum + parseFloat(item.total_amount);
       tax_sum = tax_sum + parseFloat(item.tax_amount);
       net_sum = net_sum + parseFloat(item.net_amount);
-      total_pcs = total_pcs + item.pcs;
+      total_pcs =  total_pcs +  parseFloat(item.pcs);
       total_weight = total_weight + parseFloat(item.weight);
       total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
       total_making_amt = total_making_amt + parseFloat(item.making_amt);
@@ -7046,8 +7039,15 @@ export class AddPosComponent implements OnInit {
                 this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
                 this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
                 this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
+                 this.newLineItem.IGST_ACCODE_NON_POS = stockInfoTaxes[0]?.IGST_ACCODE;
                 this.newLineItem.IGST_PER = stockInfoTaxes[0]?.IGST_PER;
-                this.newLineItem.GPC_POSSALES_AC = stockInfoTaxes[0]?.GPC_POSSALES_AC;
+                // this.newLineItem.GPC_POSSALES_AC = stockInfos[0]?.GPC_POSSALES_AC;
+                // this.newLineItem.GPC_STONEDIFF_AC = stockInfos[0]?.GPC_STONEDIFF_AC;
+                // this.newLineItem.GPC_STONEVALUESALES_AC = stockInfos[0]?.GPC_STONEVALUESALES_AC;
+                // this.newLineItem.GPC_KUNDANVALUESALES_AC = stockInfos[0]?.GPC_KUNDANVALUESALES_AC;
+                // this.newLineItem.GPC_POSSALESSR_AC = stockInfos[0]?.GPC_POSSALESSR_AC;
+                // this.newLineItem.GPC_METALAMT_AC = stockInfos[0]?.GPC_METALAMT_AC;
+                //   this.newLineItem.GPC_PHYSICALSTOCK_AC = stockInfos[0]?.GPC_PHYSICALSTOCK_AC;
                 this.newLineItem.TAGLINES = stockInfos?.TAGLINES;
 
                 this.divisionMS = stockInfos.DIVISIONMS;
@@ -10441,7 +10441,8 @@ export class AddPosComponent implements OnInit {
       ), //need
       ADJUST_ADVANCE: 0, //need
       DISCOUNT: this.order_items_total_discount_amount || this.zeroAmtVal, // need_input
-      SUBTOTAL: this.order_items_total_gross_amount,
+      SUBTOTAL: 0,
+      // this.order_items_total_gross_amount,
       NETTOTAL: this.comFunc.emptyToZero(this.receiptTotalNetAmt),
       RECEIPT_TOTAL: this.comFunc.emptyToZero(this.receiptTotalNetAmt),
       // this.comFunc.transformDecimalVB(
@@ -10499,7 +10500,7 @@ export class AddPosComponent implements OnInit {
 
       // etc fields
       RS_FIXED: false, //need
-      SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.vocDataForm.value.fcn_voc_no}-${this.baseYear}`,
+      SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}- ${this.salesReturnForm.value.fcn_returns_voc_no}-${this.baseYear}`,
       TRANS_CODES: '',
       CONSIGNMENTPARTY: '',
       TOTALVAT_AMOUNTFC: this.comFunc.transformDecimalVB(
@@ -10770,7 +10771,7 @@ export class AddPosComponent implements OnInit {
       PURITYQUALITYCHECK: false,
       CREDITDAY: 0,
       POSTDATE: this.vocDataForm.value.vocdate, //need
-      SALESPERSON_NAME: this.salespersonDescName, //need
+      SALESPERSON_NAME: '',
       TOTAL_AMT_FC: 0,
       TOTAL_WASTQTY: 0,
       TESTINGPARTY: '',
@@ -10789,14 +10790,8 @@ export class AddPosComponent implements OnInit {
       POSCUSTIDNO: this.customerDetails.POSCUSTIDNO,
       HVAT_AMOUNT_CC: 0,
       HVAT_AMOUNT_FC: 0,
-      HTOTALAMOUNTWITHVAT_CC: this.comFunc.FCToCC(
-        this.vocDataForm.value.txtCurrency,
-        this.comFunc.emptyToZero(this.invMetalPurchaseTotalNetAmt), this.vocDataForm.value.txtCurRate
-      ),
-      HTOTALAMOUNTWITHVAT_FC: this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(this.invMetalPurchaseTotalNetAmt)
-      ), // need_input
+      HTOTALAMOUNTWITHVAT_CC:0,
+      HTOTALAMOUNTWITHVAT_FC: 0,
       INTERNALUNFIX: false,
       InternalFixedQty: 0,
       DIRECTFIXINGREF: '',
@@ -11189,7 +11184,6 @@ export class AddPosComponent implements OnInit {
 
       D2DTRANSFER: 'F',
       SALESREFERENCE: `${this.salesReturnForm.value.fcn_returns_branch.toUpperCase()}-${this.salesReturnForm.value.fcn_returns_voc_type}-${this.salesReturnForm.value.fcn_returns_voc_no}-${this.salesReturnForm.value.fcn_returns_fin_year}`,
-      // SalesReference: '', // need_input update from api -
       RSCUSTIDNO: '',
       //  this.customerDetails?.POSCUSTIDNO || '',
       TRANS_CODES: '',
