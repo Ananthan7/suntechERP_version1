@@ -5967,13 +5967,8 @@ export class AddPosComponent implements OnInit {
       //   this.lineItemForm.value.fcn_ad_metal_rate
       // ),
 
-      METAL_RATE_GMSFC: this.comFunc.emptyToZero(
-        this.lineItemForm.value.fcn_ad_metal_rate
-      ), //need_input
-      METAL_RATE_GMSCC: this.comFunc.FCToCC(
-        this.vocDataForm.value.txtCurrency,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate), this.vocDataForm.value.txtCurRate
-      ),
+      METAL_RATE_GMSFC: this.newLineItem.METAL_RATE_PERGMS_24KARAT??0,
+      METAL_RATE_GMSCC: this.newLineItem.METAL_RATE_PERGMS_24KARAT??0,
 
       // "METAL_RATE_GMSFC": 18.1, // jeba
       // "METAL_RATE_GMSCC": 19.1, // jeba
@@ -6267,15 +6262,15 @@ export class AddPosComponent implements OnInit {
       "LOYALTY_POINTS": '0.00',
       "SALES_TAGLINES": this.newLineItem.TAGLINES ?? '',
       // this.lineItemForm.value.fcn_tab_details || '',
-      "GPC_STONEDIFF_AC": this.newLineItem.GPC_STONEDIFF_AC ?? '0',
-      "GPC_STONEVALUESALES_AC": this.newLineItem.GPC_STONEVALUESALES_AC ?? '0',
-      "GPC_POSSALES_AC": this.newLineItem.GPC_POSSALES_AC ?? '0',
-      "GPC_KUNDANVALUESALES_AC":  this.newLineItem.GPC_KUNDANVALUESALES_AC ?? '0',
-      "GPC_POSSALESSR_AC": this.newLineItem.GPC_POSSALESSR_AC ?? '0',
-      "GPC_METALAMT_AC": this.newLineItem.GPC_METALAMT_AC ?? '0',
-      "GPC_PHYSICALSTOCK_AC": this.newLineItem.GPC_PHYSICALSTOCK_AC ?? '0',
-      "GPC_WASTAGE_AC": '0',
-      "GPC_STAMPCHARGE_AC": '0',
+      "GPC_STONEDIFF_AC": this.newLineItem.GPC_STONEDIFF ?? '',
+      "GPC_STONEVALUESALES_AC": this.newLineItem.GPC_STONEDIFFVALUE ?? '',
+      "GPC_POSSALES_AC": this.newLineItem.GPC_POSSALES_AC ?? '',
+      "GPC_KUNDANVALUESALES_AC":  this.newLineItem.GPC_KUNDANVALUESALES_AC ?? '',
+      "GPC_POSSALESSR_AC": this.newLineItem.GPC_POSSALESSR_AC ?? '',
+      "GPC_METALAMT_AC": this.newLineItem.GPC_METALAMT_AC ?? '',
+      "GPC_PHYSICALSTOCK_AC": this.newLineItem.GPC_PHYSICALSTOCK_AC ?? '',
+      "GPC_WASTAGE_AC": this.newLineItem.GPC_WASTAGE_AC ?? '',
+      "GPC_STAMPCHARGE_AC":  this.newLineItem.GPC_STAMPCHARGE_AC ?? '',
       "COUNTRY_CODE": '',
       "UNIT_CODE": '0',
       "FLAGESTK": '0',
@@ -7692,7 +7687,7 @@ export class AddPosComponent implements OnInit {
       data.DT_YEARMONTH = this.baseYear || localStorage.getItem('YEAR');
       data.OT_TRANSFER_TIME = new Date();
       // new fields added - 27-12-2023
-      data.ORIGINALKARAT_RATE = data.ORIGINALKARAT_RATE || 0;
+      data.ORIGINALKARAT_RATE =Number(data.POPKARAT_RATE)|| 0;
 
     });
     console.log('================this.karatRateDetails====================');
@@ -10339,7 +10334,7 @@ export class AddPosComponent implements OnInit {
       );
     if (this.metalPurchaseDataPost != null && this.metalPurchaseDataPost != '') {
       this.metalPurchaseDataPost.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
-      this.metalPurchaseDataPost.SALESPERSON_NAME = this.salespersonName || '';
+      this.metalPurchaseDataPost.SALESPERSON_NAME = this.salespersonDescName || '';
     }
     if (this.retailSReturnDataPost != null && this.retailSReturnDataPost != '') {
       this.retailSReturnDataPost.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
@@ -11326,7 +11321,7 @@ export class AddPosComponent implements OnInit {
       "PLANETRESPONSEFLG": false,
       //  true,
       "POSREFERENCEREPAIRINVOICE": "",
-
+      "POSCUSTIDEXP_DATE": this.customerDetails.POSCUSTIDEXP_DATE,
       retailSReturnDetails: this.currentsalesReturnItems,
     };
   }
