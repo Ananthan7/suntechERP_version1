@@ -30,7 +30,7 @@
                                             formControlName="processCode"
                                             maxlength="6" [readonly]="editableMode || viewMode"
                                             (focusout)="checkCodeExists($event)"
-                                            id="code"
+                                            id="code" appNoEmptySpace
                                             (keyup)="codeEnabled()" />
                                         <mat-error
                                             *ngIf="processMasterForm.controls.processCode.touched 
@@ -47,7 +47,7 @@
                                             oninput="this.value = this.value.toUpperCase()"
                                             placeholder="DESCRIPTION"
                                             formControlName="processDesc"
-                                            maxlength="40"
+                                            maxlength="40" appNoEmptySpace
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode" />
                                     </mat-form-field>
@@ -123,13 +123,13 @@
                                 <div class="col-sm-3">
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
-                                        <input type="number" matInput
-                                            
-                                            style="text-align: right;"
-                                            maxlength="5"
+                                        <input type="text" matInput
+                                        class="text-right"
+                                          maxlength="5"
                                             formControlName="Position"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode "  />
+                                            onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
+                                            [readonly]="viewMode"  />
                                     </mat-form-field>
                                 </div>
                                 <label for="input"

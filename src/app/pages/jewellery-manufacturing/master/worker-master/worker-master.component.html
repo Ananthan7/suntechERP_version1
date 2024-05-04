@@ -23,7 +23,7 @@
                                 <input type="text" matInput placeholder="CODE"
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
-                                    [readonly]="viewMode || editMode" #code
+                                    [readonly]="viewMode || editMode" #code appNoEmptySpace
                                     oninput="this.value = this.value.toUpperCase()"
                                     (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()"/>
                                 <mat-error
@@ -36,7 +36,7 @@
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
                                     placeholder="DESCRIPTION" UpperCaseDirective
-                                    formControlName="WorkerDESCRIPTION"
+                                    formControlName="WorkerDESCRIPTION" appNoEmptySpace
                                     #WorkerDESCRIPTION  [readonly]="viewMode || codeEnable"  oninput="this.value = this.value.toUpperCase()"
                                     (input)="WorkerDESCRIPTION.value = WorkerDESCRIPTION.value.toUpperCase()" />
                             </mat-form-field>

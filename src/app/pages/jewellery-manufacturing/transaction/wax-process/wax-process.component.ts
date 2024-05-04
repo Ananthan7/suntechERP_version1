@@ -155,7 +155,8 @@ export class WaxProcessComponent implements OnInit {
       this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=${data.job_number}`).subscribe((result) => {
         console.log(result.dynamicData);
         console.log(result.dynamicData[0]); 
-        this.tableDataJob.push(result.dynamicData[0][0]);
+        let index = this.tableDataJob.length-1;
+        this.tableDataJob[index]=result.dynamicData[0][0];
       });
     }
   }
@@ -234,6 +235,10 @@ export class WaxProcessComponent implements OnInit {
     this.srno = length + 1;
     let data = {
       "UNIQUEID": 0,
+      "DT_VOCTYPE": "str",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": this.yearMonth,
       "WAX_CODE": "",
       "SRNO": this.srno,
       "job_number": "",
@@ -288,27 +293,28 @@ export class WaxProcessComponent implements OnInit {
       "POSTDATE": "",
       "PRINT_COUNT": 0,
       "SYSTEM_DATE": "2023-10-20T10:24:24.037Z",
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "DT_VOCTYPE": "str",
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth,
-          "SRNO": 0,
-          "job_number": "",
-          "design": "",
-          "party": "",
-          "So": "",
-          "SoDate": "",
-          "DelDate": "",
-          "GrossWt": "0.000",
-          "MetalWt": "0.000",
-          "StoneWt": "0.000",
-          "OrderPcs": "",
-          "IssuePcs": ""
-        }
-      ]
+      "Details": this.tableDataJob,
+      // [
+      //   {
+      //     "UNIQUEID": 0,
+      //     "DT_VOCTYPE": "str",
+      //     "DT_BRANCH_CODE": this.branchCode,
+      //     "DT_VOCNO": 0,
+      //     "DT_YEARMONTH": this.yearMonth,
+      //     "SRNO": 0,
+      //     "job_number": "",
+      //     "design": "",
+      //     "party": "",
+      //     "So": "",
+      //     "SoDate": "",
+      //     "DelDate": "",
+      //     "GrossWt": "0.000",
+      //     "MetalWt": "0.000",
+      //     "StoneWt": "0.000",
+      //     "OrderPcs": "",
+      //     "IssuePcs": ""
+      //   }
+      // ]
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

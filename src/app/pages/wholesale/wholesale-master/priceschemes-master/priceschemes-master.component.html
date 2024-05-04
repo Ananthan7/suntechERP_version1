@@ -24,6 +24,7 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="priceCode" id="code" #priceCode
+                                                appNoEmptySpace
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()"
                                                 placeholder="Code"
                                                 [readonly]="viewMode || editMode"
@@ -34,6 +35,7 @@
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput #Description
+                                            appNoEmptySpace
                                                 formControlName="priceDescription"
                                                 [readonly]="viewMode || codeEnable"
                                                 (input)="Description.value = Description.value.toUpperCase()"
@@ -49,7 +51,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price1"   [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
+                                                formControlName="price1"  appNoEmptySpace [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"

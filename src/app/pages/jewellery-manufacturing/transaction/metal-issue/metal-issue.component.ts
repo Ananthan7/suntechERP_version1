@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -15,24 +15,34 @@ import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-de
   styleUrls: ['./metal-issue.component.scss']
 })
 export class MetalIssueComponent implements OnInit {
+  @ViewChild('metalIssueDetailScreen') public MetalIssueDetailScreen!: NgbModal;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+  modalReference!: NgbModalRef;
 
   currentFilter: any;
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
-    { title: 'SRNO', field: 'SRNO' },
-    { title: 'Job Id', field: 'JOB_NUMBER' },
-    { title: 'Uniq job Id', field: 'UNQ_JOB_ID' },
-    { title: 'Design', field: 'DESIGN_CODE' },
-    { title: 'Stock Code', field: 'STOCK_CODE' },
-    { title: 'Division', field: 'DIVCODE' },
-    { title: 'Description', field: 'STOCK_DESCRIPTION' },
-    { title: 'Gross wt', field: 'GROSS_WT' },
-    { title: 'Process', field: 'PROCESS_CODE' },
-    { title: 'Worker', field: 'WORKER_CODE' },
-    { title: 'Amount.', field: 'TOTAL_AMOUNTFC' },
+    { title: 'SRNO', field: 'SRNO', format: '',alignment: 'center' },
+    { title: 'Job Id', field: 'JOB_NUMBER', format: '',alignment: 'left' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '',alignment: 'left' },
+    { title: 'Design', field: 'DESIGN_CODE', format: '',alignment: 'left' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '',alignment: 'left' },
+    { title: 'Division', field: 'DIVCODE', format: '',alignment: 'left' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '',alignment: 'left' },
+    { title: 'Gross wt', field: 'GROSS_WT', format: {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    },alignment: 'right' },
+    { title: 'Process', field: 'PROCESS_CODE', format: '',alignment: 'left' },
+    { title: 'Worker', field: 'WORKER_CODE', format: '',alignment: 'left' },
+    { title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    },alignment: 'right'},
   ];
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -71,6 +81,7 @@ export class MetalIssueComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  gridAmountDecimalFormat:any;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     VOCTYPE: ['', [Validators.required]],
@@ -94,11 +105,15 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
-    private commonService: CommonServiceService,
   ) { }
 
 
   ngOnInit(): void {
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    };
     //this.content provide the data and flag from main grid to the form
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
@@ -114,6 +129,7 @@ export class MetalIssueComponent implements OnInit {
       this.setNewFormValues()
     }
   }
+ 
   setNewFormValues() {
     this.metalIssueForm.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
@@ -123,7 +139,7 @@ export class MetalIssueComponent implements OnInit {
 
   setAllInitialValues() {
     if (!this.content?.FLAG) return
-    this.commonService.showSnackBarMsg('MSG81447');
+    this.comService.showSnackBarMsg('MSG81447');
     let API = `JobMetalIssueMasterDJ/GetJobMetalIssueMasterDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -161,10 +177,10 @@ export class MetalIssueComponent implements OnInit {
           });
 
         } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
+          this.comService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -218,6 +234,7 @@ export class MetalIssueComponent implements OnInit {
     let selectedData = event.data
     this.openAddMetalIssue(selectedData)
   }
+  dataToDetailScreen:any; //data to pass to child
   openAddMetalIssue(dataToChild?: any) {
     if (this.submitValidations(this.metalIssueForm.value)) {
       return
@@ -228,22 +245,24 @@ export class MetalIssueComponent implements OnInit {
       dataToChild = { HEADERDETAILS: this.metalIssueForm.value }
     }
     console.log(dataToChild, 'dataToChild to parent');
+    this.dataToDetailScreen = dataToChild //input variable to pass data to child
 
-    const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
+    this.modalReference = this.modalService.open(this.MetalIssueDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = dataToChild
-    modalRef.result.then((postData) => {
-      if (postData) {
-        this.setValuesToHeaderGrid(postData);
-      }
-    });
+    // modalRef.componentInstance.content = dataToChild
+    // modalRef.result.then((postData) => {
+    //   if (postData) {
+    //     this.setValuesToHeaderGrid(postData);
+    //   }
+    // });
   }
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    console.log(detailDataToParent, 'detailDataToParent');
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
     if (detailDataToParent.SRNO != 0) {
       this.metalIssueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
@@ -251,8 +270,14 @@ export class MetalIssueComponent implements OnInit {
       this.metalIssueDetailsData.push(detailDataToParent);
     }
     this.tableData.push(detailDataToParent)
+    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if(DATA.FLAG == 'CONTINUE'){
+      this.comService.showSnackBarMsg('Details added successfully')
+    };
   }
-
+  closeDetailScreen(){
+    this.modalReference.close()
+  }
 
   stock_codetemp(data: any, value: any) {
     console.log(data);

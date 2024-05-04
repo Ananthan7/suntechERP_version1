@@ -29,6 +29,7 @@ export class ComponentSizeSetComponent implements OnInit {
   indexes: any[] = [];
   componentSizeType: any[] = [];
   componentSizeDesc: any[] = [];
+  selectedOption: any; 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -68,13 +69,13 @@ export class ComponentSizeSetComponent implements OnInit {
     const Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         this.componentSizeType = result.response;
-      //  this.componentSizeDesc = result.response.DESCRIPTIONW;
+        //  this.componentSizeDesc = result.response.DESCRIPTIONW;
 
         this.componentSizeType.sort((a, b) => a.COMPSIZE_CODE - b.COMPSIZE_CODE);
-       //  this.componentSizeDesc.sort((a, b) => a.DESCRIPTION - b.COMPSIZE_CODE);
-        
+        //  this.componentSizeDesc.sort((a, b) => a.DESCRIPTION - b.COMPSIZE_CODE);
+
         console.log(this.componentSizeType); // Log here to check the data
-      
+
         this.setFormValues();
       }
     });
@@ -113,8 +114,9 @@ export class ComponentSizeSetComponent implements OnInit {
     };
 
     this.tableData.push(data);
-  }
 
+    this.selectedOptions.push(null);
+  }
 
 
   close(data?: any) {
@@ -204,30 +206,31 @@ export class ComponentSizeSetComponent implements OnInit {
       "detail": this.tableData,
     }
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentsizesetmasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+        .subscribe((result) => {
+          if (result.response) {
+            if (result.status == "Success") {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.componentsizesetmasterForm.reset()
+                  this.tableData = []
+                  this.close('reloadMainGrid')
+                }
+              });
+            }
+          } else {
+            this.toastr.error('Not saved')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+        }, err => alert(err))
+      this.subscriptions.push(Sub)
+    }
+
 
   update() {
     if (this.componentsizesetmasterForm.invalid) {
@@ -334,13 +337,24 @@ export class ComponentSizeSetComponent implements OnInit {
       }
     });
   }
+  selectedOptions: any[] = Array(this.tableData.length).fill(null);
+
   onCodeSelect(event: MatSelectChange, data: any) {
+    console.log(data);
+    
+    let index = data.data.SRNO - 1;
     const selectedCode = event.value.COMPSIZE_CODE;
     // Find the corresponding description for the selected code
     const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
+    
     // Update the description in the grid data
-    data.data.COMPONENT_DESCRIPTION = selectedDescription;
-    data.data.COMPSIZE_CODE = selectedCode;
+    // data.data.COMPONENT_DESCRIPTION = selectedDescription;
+    // data.data.COMPSIZE_CODE = selectedCode;
+
+    let lastIndex = this.tableData.length - 1
+
+    this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
+    this.tableData[index].COMPSIZE_CODE = selectedCode;
   }
-  
+
 }

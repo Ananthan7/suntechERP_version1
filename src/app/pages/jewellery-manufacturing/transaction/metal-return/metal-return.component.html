@@ -6,8 +6,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-[isViewDelete]="false" [isViewSave]="!viewMode" 
-[isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"></modal-header>
+    [isViewDelete]="false" [isViewSave]="!viewMode"
+    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"></modal-header>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12">
@@ -51,7 +51,8 @@
                                         placeholder="DD/MM/YYYY" />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker #vocDate [disabled]="isSaved"></mat-datepicker>
+                                    <mat-datepicker #vocDate
+                                        [disabled]="isSaved"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
@@ -121,7 +122,8 @@
                                         formControlName="location"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="locationCodeData"
+                                <master-search
+                                    [MasterSearchData]="locationCodeData"
                                     (newRowClick)="locationCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -168,7 +170,7 @@
                     <div class="col-md-12">
                         <dx-data-grid id="gridContainer"
                             [dataSource]="metalReturnDetailsData"
-                            [showBorders]="true"
+                            [showBorders]="true" [showRowLines]="true"
                             (onRowClick)="onRowClickHandler($event)"
                             (onRowDblClick)="onRowDoubleClickHandler($event)"
                             [allowColumnResizing]="true">
@@ -193,23 +195,18 @@
                             <dxi-column dataField="JOB_DESCRIPTION"
                                 caption="Description"></dxi-column>
                             <dxi-column dataField="KARAT_CODE"
-                                caption="Carat"></dxi-column>
+                                caption="Karat code"></dxi-column>
                             <dxi-column dataField="RATE_TYPE"
                                 caption="Rate"></dxi-column>
-                            <dxi-column dataField="GROSS_WT"
-                                caption="GROSS Wt"></dxi-column>
+                            <dxi-column dataField="Carat"
+                                caption="GROSS Wt" [format]="gridAmountDecimalFormat"></dxi-column>
                             <dxo-summary>
-                                <dxi-total-item column="Carat" summaryType="sum"
-                                    displayFormat="000.000" precision="2">
-                                </dxi-total-item>
-
                                 <dxi-total-item column="Amount"
-                                    summaryType="sum" displayFormat="0.00"
-                                    precision="2">
+                                    summaryType="sum"
+                                    [valueFormat]="gridAmountDecimalFormat"
+                                    displayFormat="{0}">
                                 </dxi-total-item>
-
                             </dxo-summary>
-
                         </dx-data-grid>
                     </div>
 
@@ -232,3 +229,8 @@
         </form>
     </div>
 </div>
+<ng-template #metalReturnDetailScreen>
+    <app-metal-return-details [content]="dataToDetailScreen"
+        (saveDetail)="setValuesToHeaderGrid($event)"
+        (closeDetail)="closeDetailScreen()"></app-metal-return-details>
+</ng-template>

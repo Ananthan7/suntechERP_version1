@@ -22,7 +22,7 @@
                         [readonly]="editableMode || viewMode" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="customerCodeData"
-                      (newRowClick)="customerCodeScpSelected($event)"></master-search>
+                      (newRowClick)="customerCodeScpSelected($event)" *ngIf="viewMode == false"></master-search>
                   </div>
                 </div>
 
@@ -40,8 +40,8 @@
                   <div class="col-md-7">
                     <mat-form-field>
                       <mat-label>Select</mat-label>
-                      <mat-select formControlName="labourtype">
-                        <mat-option *ngFor="let option of labourTypeList" [disabled]="viewMode" [value]="option.value">
+                      <mat-select formControlName="labourtype"  [disabled]="viewMode">
+                        <mat-option *ngFor="let option of labourTypeList" [value]="option.value">
                           {{ option.name }}
                         </mat-option>
                       </mat-select>

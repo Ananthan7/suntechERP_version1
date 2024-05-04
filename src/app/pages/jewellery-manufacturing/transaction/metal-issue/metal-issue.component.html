@@ -184,9 +184,22 @@
                                     <dxi-column *ngFor="let data of columnhead"
                                         dataField="{{ data.field }}"
                                         caption="{{ data.title }}"
-                                        [allowEditing]="true" alignment="center"
+                                        [format]="data.format"
+                                        [allowEditing]="true" [alignment]="data.alignment"
                                         backgroundcolor="#000">
                                     </dxi-column>
+                                    <dxo-summary>
+                                        <dxi-total-item column="GROSS_WT" 
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="TOTAL_AMOUNTFC" 
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                    </dxo-summary>
                                 </dx-data-grid>
                             </div>
                             <div class="col-md-4">
@@ -212,3 +225,9 @@
         </form>
     </div>
 </div>
+
+<ng-template #metalIssueDetailScreen>
+    <app-metal-issue-details [content]="dataToDetailScreen"
+    (saveDetail)="setValuesToHeaderGrid($event)"
+    (closeDetail)="closeDetailScreen()"></app-metal-issue-details>
+</ng-template>

@@ -139,7 +139,7 @@ priceCodeSelected(e: any, controlName: string) {
   }
   
   if (this.isSameAccountCodeSelected(e.PRICE_CODE)) {
-    this.commonService.toastErrorByMsgId('cannot select the same account code');
+    this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
     return;
   }
 
@@ -150,7 +150,7 @@ priceCodeSelected(e: any, controlName: string) {
       this.enableNextField(controlName, nextFieldName);
     }
   } catch (error) {
-    console.error('Error in priceCodeSelected:', error);
+    console.error('Error in Price Code Selected:', error);
   }
 }
 
@@ -203,7 +203,7 @@ private getNextFieldName(currentField: string): string {
   update() {
     if (!this.validateForm()) return;
 
-    let API = `PriceSchemeMaster/UpdatePriceSchemeMaster`;
+    let API = 'PriceSchemeMaster/UpdatePriceSchemeMaster/'+this.content.MID;
     let postData = this.createPostData();
 
     try {
@@ -217,7 +217,7 @@ private getNextFieldName(currentField: string): string {
         );
     } catch (error) {
       console.error('Error in update:', error);
-      this.toastr.error('Error while updating the form');
+      this.toastr.error('Error while Updating the Form');
     }
   }
 
@@ -236,7 +236,7 @@ private getNextFieldName(currentField: string): string {
       });
     } catch (error) {
       console.error('Error in deleteRecord:', error);
-      this.toastr.error('Error while deleting the record');
+      this.toastr.error('Error while Deleting the Record');
     }
   }
 
@@ -286,7 +286,7 @@ private getNextFieldName(currentField: string): string {
       })
     } catch (error) {
       console.error('Error in initializeForm:', error);
-      this.toastr.error('Error while initializing the form');
+      this.toastr.error('Error while Initializing the Form');
     }
   }
 
@@ -391,7 +391,7 @@ private getNextFieldName(currentField: string): string {
 
   validateForm() {
     if (this.priceSchemaMasterForm.invalid) {
-      this.toastr.error('Select all required fields');
+      this.toastr.error('Select all Required Fields');
       return false;
     }
     return true;
@@ -407,7 +407,7 @@ private getNextFieldName(currentField: string): string {
 
   checkCode(): boolean {
     if (this.priceSchemaMasterForm.value.priceCode == '') {
-      this.commonService.toastErrorByMsgId('please enter Price  code')
+      this.commonService.toastErrorByMsgId('Please enter the Price Code')
       return true
     }
     return false

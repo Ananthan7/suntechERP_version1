@@ -84,17 +84,39 @@
                 </mat-form-field>
               </div>
             </div> -->
-            <div *dxTemplate="let data of 'codetemp'">
-              <div>
+            <!-- <div *dxTemplate="let data of 'codetemp'">
+         
                 <mat-form-field style="width: 85%; margin-left: 7px;">
-                  <mat-select (selectionChange)="onCodeSelect($event, data)" *ngIf="componentSizeType.length > 0">
+                  <mat-select (selectionChange)="onCodeSelect($event, data)" *ngIf="componentSizeType.length > 0" >
                     <mat-option *ngFor="let option of componentSizeType" [value]="option" style="width: 100%;">
                       {{ option.COMPSIZE_CODE }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-              </div>
+          
+            </div> -->
+
+            <!-- <div *dxTemplate="let data of 'codetemp'">
+              <mat-form-field style="width: 85%; margin-left: 7px;">
+                <mat-select [(value)]="selectedOption" (selectionChange)="onCodeSelect($event, data)" *ngIf="componentSizeType && componentSizeType.length > 0">
+                  <mat-option *ngFor="let option of componentSizeType" [value]="option">
+                    {{ option.COMPSIZE_CODE }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
+             -->
+
+             <div *dxTemplate="let data of 'codetemp'">
+              <mat-form-field style="width: 100%; margin-left: 7px;"> <!-- Adjusted width -->
+                <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]" (selectionChange)="onCodeSelect($event, data)" *ngIf="componentSizeType && componentSizeType.length > 0">
+                  <mat-option *ngFor="let option of componentSizeType" [value]="option">
+                    {{ option.COMPSIZE_CODE }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
             
 
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -16,10 +16,13 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./metal-return.component.scss']
 })
 export class MetalReturnComponent implements OnInit {
+  @ViewChild('metalReturnDetailScreen') public MetalReturnDetailScreen!: NgbModal;
+  @Input() content!: any;
+  modalReference!: NgbModalRef;
+  dataToDetailScreen: any;
+  
   divisionMS: any = 'ID';
   orders: any = [];
-  @Input() content!: any;
-  private subscriptions: Subscription[] = [];
   currentFilter: any;
   tableData: any[] = ['Process', 'Worker', 'Job No', 'Sub.Job No', 'Design', 'Stock Code', 'Gross Wt.', 'Net Wt.', 'Purity', 'Pure Wt.'];
   metalReturnDetailsData: any[] = [];
@@ -31,6 +34,12 @@ export class MetalReturnComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
+  gridAmountDecimalFormat:any = {
+    type: 'fixedPoint',
+    precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+    currency: this.commonService.compCurrency
+  };
+  private subscriptions: Subscription[] = [];
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -217,21 +226,38 @@ export class MetalReturnComponent implements OnInit {
     } else {
       dataToChild = { HEADERDETAILS: this.metalReturnForm.value }
     }
-    console.log(dataToChild, 'dataToChild')
-
-    const modalRef: NgbModalRef = this.modalService.open(MetalReturnDetailsComponent, {
+    this.dataToDetailScreen = dataToChild //input variable to pass data to child
+    this.modalReference = this.modalService.open(this.MetalReturnDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = dataToChild
-    modalRef.result.then((dataToParent) => {
-      if (dataToParent) {
-        this.setValuesToHeaderGrid(dataToParent);
-      }
-    });
+    // this.modalReference.componentInstance.content = dataToChild
+    // this.modalReference.result.then((dataToParent) => {
+    //   if (dataToParent) {
+    //     this.setValuesToHeaderGrid(dataToParent);
+    //   }
+    // });
   }
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
+    if (detailDataToParent.SRNO != 0) {
+      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+    } else {
+      this.metalReturnDetailsData.push(detailDataToParent);
+      this.recalculateSRNO()
+    }
+    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if(DATA.FLAG == 'CONTINUE'){
+      this.commonService.showSnackBarMsg('Details added successfully')
+    };
+  }
+  closeDetailScreen(){
+    this.modalReference.close()
+  }
+
   onRowClickHandler(event: any) {
     this.selectRowIndex = event.data.SRNO
   }
@@ -250,16 +276,6 @@ export class MetalReturnComponent implements OnInit {
       element.SRNO = index + 1
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
     })
-  }
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    console.log(detailDataToParent, 'detailDataToParent');
-    if (detailDataToParent.SRNO != 0) {
-      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
-    } else {
-      // detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
-      this.metalReturnDetailsData.push(detailDataToParent);
-      this.recalculateSRNO()
-    }
   }
 
   setPostData() {
@@ -321,7 +337,7 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -355,7 +371,7 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
