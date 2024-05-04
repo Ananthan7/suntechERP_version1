@@ -131,7 +131,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     totalAmountLc: [''],
     purityDiff: [''],
     amountFc: [''],
-    jobPcs: ['1'],
+    JOB_PCS: [''],
     amountLc: [''],
     masterMetal: [false],
     FLAG: [null]
@@ -190,6 +190,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(this.content.DESIGN_CODE)
     this.metalIssueDetailsForm.controls.location.setValue(this.content.LOCATION_CODE);
     this.metalIssueDetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(this.content.EXCLUDE_TRANSFER_WT);
+    this.metalIssueDetailsForm.controls.JOB_PCS.setValue(this.content.JOB_PCS);
     this.setValueWithDecimal('PURE_WT', this.content.PURE_WT, 'THREE')
     this.setValueWithDecimal('GROSS_WT', this.content.GROSS_WT, 'METAL')
     this.setValueWithDecimal('PURITY', this.content.PURITY, 'PURITY')
@@ -201,6 +202,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.tableData = [{
       DIVCODE: this.content.DIVCODE,
       STOCK_CODE: this.content.STOCK_CODE,
+      METAL: this.content.GROSS_WT,
+      STONE: this.content.STONE_WT,
     }]
   };
   locationCodeSelected(e: any) {
@@ -319,7 +322,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "STOCK_DESCRIPTION": this.comService.nullToString(form.stockCodeDes),
       "SUB_STOCK_CODE": this.comService.nullToString(form.subStockCode),
       "KARAT_CODE": this.comService.nullToString(form.KARAT_CODE),
-      "JOB_PCS": form.jobPcs,
+      "JOB_PCS": form.JOB_PCS,
       "PCS": form.pcs,
       "GROSS_WT": form.GROSS_WT,
       "PURITY": form.PURITY,
@@ -412,12 +415,14 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   stoneValidate(){
     if(this.calculateNetWt()){
-      this.setValueWithDecimal('STONE_WT',0, 'STONE')
+      this.setValueWithDecimal('GROSS_WT',this.tableData[0].METAL, 'METAL')
+      this.setValueWithDecimal('STONE_WT',this.tableData[0].STONE, 'STONE')
     }
   }
   grossValidate(){
     if(this.calculateNetWt()){
-      this.setValueWithDecimal('GROSS_WT',0, 'STONE')
+      this.setValueWithDecimal('GROSS_WT',this.tableData[0].METAL, 'METAL')
+      this.setValueWithDecimal('STONE_WT',this.tableData[0].STONE, 'STONE')
     }
   }
   /**use: for stone wt and gross wt calculation */
@@ -449,7 +454,6 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           this.tableData = data
-
           this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalIssueDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
@@ -466,6 +470,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
           this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
           this.metalIssueDetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
+          this.metalIssueDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
 
           this.metalIssueDetailsForm.controls.pcs.setValue(data[0].PCS)
           this.setValueWithDecimal('PURE_WT', data[0].PURE_WT, 'THREE')

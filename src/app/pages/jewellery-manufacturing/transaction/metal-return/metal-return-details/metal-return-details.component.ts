@@ -29,6 +29,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   viewMode: boolean = false;
   userName = localStorage.getItem('username');
   data: any;
+  subJoBDetailData: any[] = [];
 
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -84,13 +85,14 @@ export class MetalReturnDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 201,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
   }
 
 
@@ -130,7 +132,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     totalRateFc: [''],
     purityDiff: [''],
     totalRateLc: [''],
-    jobPcs: [''],
+    JOB_PCS: [''],
     jobPcsDate: [''],
     VOCTYPE: [''],
     VOCNO: [''],
@@ -139,6 +141,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     YEARMONTH: [''],
     KARAT_CODE: [''],
     DIVCODE: [''],
+    METAL_STONE: [''],
     FLAG: [null]
   });
 
@@ -159,6 +162,7 @@ export class MetalReturnDetailsComponent implements OnInit {
       }
     }
     this.setInitialValue()
+    this.setStockCodeCondition()
   }
 
   setInitialValue() {
@@ -201,7 +205,38 @@ export class MetalReturnDetailsComponent implements OnInit {
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
   }
-
+  setStockCodeCondition() {
+    let form = this.metalReturnDetailsForm.value
+    let val = `@strBranch_Code='${form.BRANCH_CODE}',`
+    val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
+    val += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.processCode}',`
+    val += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
+    this.stockCodeData.WHERECONDITION = val
+  }
+  stoneValidate() {
+    if (this.calculateNetWt()) {
+      this.setValueWithDecimal('GROSS_WT', this.subJoBDetailData[0].METAL, 'METAL')
+      this.setValueWithDecimal('STONE_WT', this.subJoBDetailData[0].STONE, 'STONE')
+    }
+  }
+  grossValidate() {
+    if (this.calculateNetWt()) {
+      this.setValueWithDecimal('GROSS_WT', this.subJoBDetailData[0].METAL, 'METAL')
+      this.setValueWithDecimal('STONE_WT', this.subJoBDetailData[0].STONE, 'STONE')
+    }
+  }
+  /**use: for stone wt and gross wt calculation */
+  private calculateNetWt(): boolean {
+    let form = this.metalReturnDetailsForm.value
+    let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
+    let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
+    if (STONE_WT > GROSS_WT) {
+      this.comService.toastErrorByMsgId('Stone weight cannot be greater than gross weight')
+      return true
+    }
+    this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
+    return false;
+  }
   WorkerCodeSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
@@ -432,10 +467,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        console.log(postData, 'uuu')
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          this.subJoBDetailData = data
           this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
           this.metalReturnDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
@@ -449,6 +484,8 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
           this.metalReturnDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
+          this.metalReturnDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
+          this.metalReturnDetailsForm.controls.METAL_STONE.setValue(data[0].METAL_STONE)
 
           this.setValueWithDecimal('PURE_WT', data[0].PURE_WT, 'THREE')
           this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')
@@ -456,6 +493,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
+          this.setStockCodeCondition()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }

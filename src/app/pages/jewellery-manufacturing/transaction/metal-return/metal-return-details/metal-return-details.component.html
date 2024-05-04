@@ -282,6 +282,7 @@
                                     <input type="text" matInput
                                         formControlName="GROSS_WT"
                                         style="text-align: right;"
+                                        (focusout)="grossValidate()"
                                         [readonly]="viewMode"
                                         MetalDecimalInput [max]="13" />
                                 </mat-form-field>
@@ -310,6 +311,7 @@
                                     <input type="text" matInput
                                         formControlName="STONE_WT"
                                         style="text-align: right;"
+                                        (focusout)="stoneValidate()"
                                         [readonly]="viewMode"
                                         StoneDecimalInput [max]="13" />
                                 </mat-form-field>
@@ -425,7 +427,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="jobPcs"
+                                        formControlName="JOB_PCS"
                                         class="text-right"
                                         [readonly]="viewMode" NumberOnly />
                                 </mat-form-field>
