@@ -84,7 +84,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr cdkDrag class="drag-item" *ngFor="let data of dataSource;let i=index">
+                            <tr   class="drag-item" *ngFor="let data of dataSource;let i=index">
                                 <td>
                                     <mat-checkbox class="inputSec" [disabled]="viewMode" [(ngModel)]="data['isChecked']"
                                         (change)="changedCheckbox(data)">
@@ -154,23 +154,23 @@
                                 </td>
 
                                 <td>
-                                    <input type="text" [disabled]="!data['isChecked']" [(ngModel)]="data['STD_LOSS']"
+                                    <input type="number" [disabled]="!data['isChecked']" [(ngModel)]="data['STD_LOSS']"
                                         (change)="stdLossChanged(data)" MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right; width: 86px;" />
                                 </td>
                                 <td>
-                                    <input type="text" [disabled]="!data['isChecked']" [(ngModel)]="data['MAX_LOSS']"
+                                    <input type="number" [disabled]="!data['isChecked']" [(ngModel)]="data['MAX_LOSS']"
                                         (change)="maxLossChanged(data)" MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right;width: 86px;" />
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;" [disabled]="!data['isChecked']"
-                                        [(ngModel)]="data['STD_TIME']" class="text-right" 
+                                    <input type="number" style="width: 100%;" [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['STD_TIME']"  (change)="stdTimeChanged(data)"class="text-right" 
                                         [readonly]="viewMode" />
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;" [disabled]="!data['isChecked']"
-                                        [(ngModel)]="data['MAX_TIME']" class="text-right" 
+                                    <input type="number" style="width: 100%;" [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['MAX_TIME']"  (change)="maxTimeChanged(data)" class="text-right" 
                                         [readonly]="viewMode" />
                                 </td>
                                 <td>
