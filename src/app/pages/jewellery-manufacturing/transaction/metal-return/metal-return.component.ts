@@ -316,7 +316,7 @@ export class MetalReturnComponent implements OnInit {
   }
 
   formSubmit() {
-    if (this.metalReturnForm.invalid) {
+    if (this.metalReturnForm.invalid || this.metalReturnDetailsData.length == 0) {
       this.toastr.error('select all required fields')
       return
     }
