@@ -21,13 +21,13 @@
                                 class="col-sm-4 col-form-label">Voucher *
                                 :</label>
                             <div class="col-sm-4 ">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="VOCTYPE" readonly />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="VOCNO" readonly
                                         style="text-align: right;" />
@@ -42,7 +42,7 @@
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="vocDate" />
                                 </mat-form-field> -->
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field appearance="outline" style="width: 100%">
                                     <input matInput DateValidation
                                         (dateChange)="formatDate($event)"
                                         [matDatepicker]="vocDate"
@@ -56,7 +56,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="time-local" matInput
                                         formControlName="vocTime"
                                         class="text-right" />
@@ -68,7 +68,7 @@
                                 class="col-sm-4 col-form-label">Entered
                                 By:</label>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 85%;">
+                                <mat-form-field appearance="outline" style="width: 85%;">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
                                         [readonly]="viewMode" />
@@ -85,7 +85,7 @@
                             <label for="input"
                                 class="col-sm-4 col-form-label">Process:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field appearance="outline" style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="process"
                                         [readonly]="viewMode" />
@@ -101,7 +101,7 @@
                             <label for="input"
                                 class="col-sm-4 col-form-label">Worker:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field appearance="outline" style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
                                         [readonly]="viewMode" />
@@ -117,7 +117,7 @@
                             <label for="input"
                                 class="col-sm-4 col-form-label">Location:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%">
+                                <mat-form-field appearance="outline" style="width: 70%">
                                     <input type="text" matInput
                                         formControlName="location"
                                         [readonly]="viewMode" />
