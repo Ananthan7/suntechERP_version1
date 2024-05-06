@@ -1440,7 +1440,8 @@ export class AddPosComponent implements OnInit {
               rate: data.MKG_RATECC || 0,
               metal_rate: data.METAL_RATE || 0,
               taxPer: data.VAT_PER || 0,
-              metal_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
+              metal_amt: data.METALVALUECC,
+              // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
               stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
             };
 
@@ -1455,8 +1456,8 @@ export class AddPosComponent implements OnInit {
             const divisionMS: any = this.comFunc.getDivisionMS(data.DIVISION_CODE);
             this.currentLineItems[index].divisionMS = divisionMS;
             if (divisionMS == 'M') {
-              values.gross_amt = data.NETVALUEFC;
-              this.currentLineItems[index].GROSS_AMT = data.NETVALUEFC;
+              values.gross_amt = data.TOTAL_AMOUNTCC;
+              this.currentLineItems[index].GROSS_AMT = data.TOTAL_AMOUNTCC;
             } else {
               values.gross_amt = data.MKGVALUEFC;
               this.currentLineItems[index].GROSS_AMT = data.MKGVALUEFC;
@@ -2768,7 +2769,7 @@ export class AddPosComponent implements OnInit {
     );
     this.lineItemForm.controls.fcn_li_gross_amount.setValue(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.NETVALUEFC)
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTAL_AMOUNTCC)
     );
     // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
     this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
@@ -5874,6 +5875,11 @@ export class AddPosComponent implements OnInit {
         }
         else {
           this.viewOnly = true;
+          this.openDialog(
+            'Failed',
+            this.comFunc.getMsgByID('MSG1464'),
+            true
+          );
         }
       });
   }
