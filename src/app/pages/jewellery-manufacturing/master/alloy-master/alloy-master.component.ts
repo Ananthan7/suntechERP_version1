@@ -129,8 +129,7 @@ export class AlloyMasterComponent implements OnInit {
       this.editMode = true;
       this.viewMode = true
       this.setInitialValues()
-    }
-
+    }  
   }
 
   setupFormSubscription(): void {
