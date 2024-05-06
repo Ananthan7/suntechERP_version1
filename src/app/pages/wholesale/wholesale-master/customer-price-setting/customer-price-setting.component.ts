@@ -214,12 +214,32 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
 
   getGroupDetails() {
-    this.suntechApi.getDynamicAPI('UspGetPricingDetails').subscribe((result) => {
-      if (result.response) {
-        this.tableData = result.response;
-      }
-    });
-  }
+    let API = 'UspGetPricingDetails'
+    let postDataDetails = {
+      "DivisionCode": "G",
+      "StockCodeCheck": "N",
+      "DesignCodeCheck": "N",
+      "FilterGroup1": "CATEGORY",
+      "FilterGroup2": "Sub Category",
+      "FilterGroup3": "",
+      "FilterGroup4": "",
+      "FilterGroup5": "",
+      "FilterGroup6": "",
+      "FilterValue1": "",
+      "FilterValue2": "",
+      "FilterValue3": "",
+      "FilterValue4": "",
+      "FilterValue5": "",
+      "FilterValue6": ""
+    }
+      let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postDataDetails)
+      .subscribe((result) => {
+        if (result.response) {
+          console.log();          
+        }
+      })
+    }
+  
 
 
   formSubmit(){

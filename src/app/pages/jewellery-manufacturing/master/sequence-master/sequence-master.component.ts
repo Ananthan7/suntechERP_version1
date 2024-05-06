@@ -7,7 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-sequence-master',
   templateUrl: './sequence-master.component.html',
@@ -82,7 +82,12 @@ export class SequenceMasterComponent implements OnInit {
       this.viewMode = true;
       this.setFormValues();
       
+      
     }
+  }
+
+  onDragStarted(event: CdkDragStart, index: number) {
+    // handle drag start event
   }
 
   codeEnabled() {
@@ -309,7 +314,7 @@ export class SequenceMasterComponent implements OnInit {
       //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
         this.checkTimeCondtion = true;
-        this.toastr.error('Max Time must be Greater than the Standard Time')
+       this.toastr.error('Max Time must be Greater than the Standard Time')
       }
 
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {

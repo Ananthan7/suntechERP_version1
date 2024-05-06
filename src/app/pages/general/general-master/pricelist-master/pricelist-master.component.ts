@@ -148,10 +148,10 @@ export class PricelistMasterComponent implements OnInit {
       return;
     }
 
-    if (this.priceListMasterForm.value.description) {
-      this.toastr.error('Description Cannot be empty');
-    }
-    else {
+    // if (this.priceListMasterForm.value.description) {
+    //   this.toastr.error('Description Cannot be empty');
+    // }
+    // else {
 
 
       if (!this.validateForm()) return;
@@ -165,7 +165,7 @@ export class PricelistMasterComponent implements OnInit {
           err => alert(err)
         );
     }
-  }
+  
 
 
   update() {
