@@ -126,12 +126,12 @@ export class WorkerMasterComponent implements OnInit {
     this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
 
-    if (this.content.FLAG == 'VIEW') {
+    if (this.content?.FLAG == 'VIEW') {
       this.viewMode = true;
       this.isViewMode = true;
       this.setFormValues();
       this.selectProcessWithSP()
-    } else if (this.content.FLAG == 'EDIT') {
+    } else if (this.content?.FLAG == 'EDIT') {
       this.viewMode = false;
       this.editMode = true;
       this.codeEnable = false;
@@ -139,7 +139,6 @@ export class WorkerMasterComponent implements OnInit {
       this.selectProcessWithSP();
       this.dele = false;
     }
-
   }
 
   checkCode(): boolean {
@@ -161,11 +160,12 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   setInitialValues() {
-    // this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'THREE'))
-    // this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.workerMasterForm.controls.TargetPcs.setValue(0)
   }
 
   setFormValues() {
