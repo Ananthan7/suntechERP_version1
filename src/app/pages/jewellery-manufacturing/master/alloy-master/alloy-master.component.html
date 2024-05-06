@@ -215,7 +215,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="weightAvgCost"
-                                            style="text-align: right" [readonly]="viewMode" AmountDecimalInput />
+                                            style="text-align: right" [readonly]="viewMode|| codeEnable" AmountDecimalInput />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
@@ -246,7 +246,7 @@
                                     <h6>%</h6>
                                 </div>
                                 <div class="col-sm-2">
-                                    <h6>{{ alloyMastereForm.value.currency }}</h6>
+                                    <h6> Cost({{ alloyMastereForm.value.currency }})</h6>
                                 </div>
                                 <div class="col-sm-2">
                                     <h6>LC</h6>
@@ -274,7 +274,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Fc" [max]="12"
-                                            class="text-right"   [readonly]="viewMode"  />
+                                            class="text-right"   readonly  />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -306,7 +306,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput AmountDecimalInput formControlName="price2Fc" [max]="12"
-                                            class="text-right" [readonly]="viewMode"/>
+                                            class="text-right" readonly/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -338,7 +338,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="price3Fc" AmountDecimalInput [max]="12"
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -370,7 +370,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="price4Fc" AmountDecimalInput [max]="12"
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -402,7 +402,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="price5Fc" AmountDecimalInput [max]="12"
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

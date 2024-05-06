@@ -316,13 +316,12 @@ export class MetalReturnComponent implements OnInit {
   }
 
   formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.updateMeltingType()
+    if (this.metalReturnForm.invalid || this.metalReturnDetailsData.length == 0) {
+      this.toastr.error('select all required fields')
       return
     }
-
-    if (this.metalReturnForm.invalid) {
-      this.toastr.error('select all required fields')
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updateMeltingType()
       return
     }
 
@@ -359,10 +358,6 @@ export class MetalReturnComponent implements OnInit {
   }
 
   updateMeltingType() {
-    if (this.metalReturnForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
     let form = this.metalReturnForm.value
     let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData()

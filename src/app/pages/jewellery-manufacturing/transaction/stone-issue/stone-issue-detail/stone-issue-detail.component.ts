@@ -14,11 +14,10 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./stone-issue-detail.component.scss']
 })
 export class StoneIssueDetailComponent implements OnInit {
-
+  @Input() content!: any;
   columnhead1: any[] = ['Div', 'Stock Code','Shape', 'Color', 'Clarity', 'Size', 'Sieve Set', 'Pcs'];
   serialNo : any;
   subJobNo: any;
-  @Input() content!: any;
   tableData: any[] = [];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -101,7 +100,7 @@ export class StoneIssueDetailComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  stoneissuedetailsFrom: FormGroup = this.formBuilder.group({
+  stoneIssueDetailsFrom: FormGroup = this.formBuilder.group({
     jobNumber: ['', [Validators.required]],
     jobDes: [''],
     subjobnumber: ['', [Validators.required]],
@@ -113,11 +112,10 @@ export class StoneIssueDetailComponent implements OnInit {
     processname: [''],
     worker: ['', [Validators.required]],
     workername: [''],
-    stock: ['', [Validators.required]],
     stockCode: [''],
     stockDes: [''],
     batchid: [''],
-    location: ['', [Validators.required]],
+    location: [''],
     pieces: [],
     shape: [''],
     clarity: [''],
@@ -134,6 +132,14 @@ export class StoneIssueDetailComponent implements OnInit {
     otheratt: [],
     remarks: [''],
     consignment:[false],
+    VOCTYPE: [''],
+    VOCNO: [''],
+    VOCDATE: [''],
+    BRANCH_CODE: [''],
+    YEARMONTH: [''],
+    KARAT_CODE: [''],
+    DIVCODE: [''],
+    METAL_STONE: [''],
     FLAG: [null]
   });
 
@@ -152,12 +158,12 @@ export class StoneIssueDetailComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     // this.srNo= srNo;
     console.log(this.content);
-    this.setFormValues() 
     if (this.content) {
-      this.stoneissuedetailsFrom.controls.FLAG.setValue(this.content[0].FLAG)
-    }
-    if (this.content[0].FLAG == 'VIEW') {
-      this.viewMode = true;
+      this.stoneIssueDetailsFrom.controls.FLAG.setValue(this.content.HEADERDETAILS.FLAG)
+      if (this.content.HEADERDETAILS.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
+      this.setFormValues() 
     }
   }
     
@@ -178,38 +184,37 @@ export class StoneIssueDetailComponent implements OnInit {
 
   locationCodeSelected(e: any) {
     console.log(e);
-    this.stoneissuedetailsFrom.controls.location.setValue(e.LOCATION_CODE);
+    this.stoneIssueDetailsFrom.controls.location.setValue(e.LOCATION_CODE);
   }
 
   jobNumberCodeSelected(e: any) {
     console.log(e);
-    this.stoneissuedetailsFrom.controls.jobNumber.setValue(e.job_number);
-    this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
+    this.stoneIssueDetailsFrom.controls.jobNumber.setValue(e.job_number);
+    this.stoneIssueDetailsFrom.controls.jobDes.setValue(e.job_description);
     this.subJobNo=`${e.job_number}/${this.serialNo}`;
-    this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.subJobNo);
-    this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
+    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.subJobNo);
+    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
-    // this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
-    // this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
+    // this.stoneIssueDetailsFrom.controls.designcode.setValue(e.job_number);
+    // this.stoneIssueDetailsFrom.controls.partcode.setValue(e.job_description);
   }
 
   processCodeSelected(e: any) {
     console.log(e);
-    this.stoneissuedetailsFrom.controls.process.setValue(e.Process_Code);
-    this.stoneissuedetailsFrom.controls.processname.setValue(e.Description);
+    this.stoneIssueDetailsFrom.controls.process.setValue(e.Process_Code);
+    this.stoneIssueDetailsFrom.controls.processname.setValue(e.Description);
   }
 
   workerCodeSelected(e: any) {
     console.log(e);
-    this.stoneissuedetailsFrom.controls.worker.setValue(e.WORKER_CODE);
-    this.stoneissuedetailsFrom.controls.workername.setValue(e.DESCRIPTION);
+    this.stoneIssueDetailsFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.stoneIssueDetailsFrom.controls.workername.setValue(e.DESCRIPTION);
   }
   
   stockCodeSelected(e: any) {
     console.log(e);
-    this.stoneissuedetailsFrom.controls.stock.setValue(e.Item);
-    this.stoneissuedetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
-    this.stoneissuedetailsFrom.controls.stockDes.setValue(e.STOCK_DESCRIPTION);
+    this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
+    this.stoneIssueDetailsFrom.controls.stockDes.setValue(e.STOCK_DESCRIPTION);
   }
 
   close(data?: any) {
@@ -230,29 +235,28 @@ export class StoneIssueDetailComponent implements OnInit {
 
   continueClick(){
     this.formSubmit();
-    this.stoneissuedetailsFrom.controls.stock.setValue('')
-    this.stoneissuedetailsFrom.controls.stockDes.setValue('')
-    this.stoneissuedetailsFrom.controls.sieve.setValue('')
-    this.stoneissuedetailsFrom.controls.shape.setValue('')
-    this.stoneissuedetailsFrom.controls.color.setValue('')
-    this.stoneissuedetailsFrom.controls.clarity.setValue('')
-    this.stoneissuedetailsFrom.controls.size.setValue('')
-    this.stoneissuedetailsFrom.controls.pieces.setValue('')
-    this.stoneissuedetailsFrom.controls.process.setValue('')
-    this.stoneissuedetailsFrom.controls.processname.setValue('')
-    this.stoneissuedetailsFrom.controls.worker.setValue('')
-    this.stoneissuedetailsFrom.controls.workername.setValue('')
-    this.stoneissuedetailsFrom.controls.location.setValue('')
-    this.stoneissuedetailsFrom.controls.consignment.setValue('')
-    this.stoneissuedetailsFrom.controls.sieveset.setValue('')
-    this.stoneissuedetailsFrom.controls.remarks.setValue('')
-    this.stoneissuedetailsFrom.controls.sieveset.setValue('')
-    this.stoneissuedetailsFrom.controls.otheratt.setValue('')
-    this.stoneissuedetailsFrom.controls.unitrate.setValue('')
-    this.stoneissuedetailsFrom.controls.amount.setValue('')
-    this.stoneissuedetailsFrom.controls.stockCode.setValue('')
-    this.stoneissuedetailsFrom.controls.carat.setValue('')
-    this.stoneissuedetailsFrom.controls.batchid.setValue('')
+    this.stoneIssueDetailsFrom.controls.stockDes.setValue('')
+    this.stoneIssueDetailsFrom.controls.sieve.setValue('')
+    this.stoneIssueDetailsFrom.controls.shape.setValue('')
+    this.stoneIssueDetailsFrom.controls.color.setValue('')
+    this.stoneIssueDetailsFrom.controls.clarity.setValue('')
+    this.stoneIssueDetailsFrom.controls.size.setValue('')
+    this.stoneIssueDetailsFrom.controls.pieces.setValue('')
+    this.stoneIssueDetailsFrom.controls.process.setValue('')
+    this.stoneIssueDetailsFrom.controls.processname.setValue('')
+    this.stoneIssueDetailsFrom.controls.worker.setValue('')
+    this.stoneIssueDetailsFrom.controls.workername.setValue('')
+    this.stoneIssueDetailsFrom.controls.location.setValue('')
+    this.stoneIssueDetailsFrom.controls.consignment.setValue('')
+    this.stoneIssueDetailsFrom.controls.sieveset.setValue('')
+    this.stoneIssueDetailsFrom.controls.remarks.setValue('')
+    this.stoneIssueDetailsFrom.controls.sieveset.setValue('')
+    this.stoneIssueDetailsFrom.controls.otheratt.setValue('')
+    this.stoneIssueDetailsFrom.controls.unitrate.setValue('')
+    this.stoneIssueDetailsFrom.controls.amount.setValue('')
+    this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
+    this.stoneIssueDetailsFrom.controls.carat.setValue('')
+    this.stoneIssueDetailsFrom.controls.batchid.setValue('')
   }
 
   onchangeCheckBox(e: any){
@@ -269,259 +273,103 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
-    }
-    if (this.stoneissuedetailsFrom.invalid) {
+    if (this.stoneIssueDetailsFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
+    let form = this.stoneIssueDetailsFrom.value
+    console.log(form,'form');
+    
     let postData = {
-      "SRNO": this.serialNo,
-      "VOCNO": 0,
-      "VOCTYPE": "STI",
-      "VOCDATE": "2023-10-19T06:55:16.030Z",
-      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobNumber,
-      "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.subjobnumber),
+      "SRNO": this.comService.emptyToZero(this.content?.SRNO),
+      "VOCNO": this.comService.emptyToZero(form.VOCNO),
+      "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
+      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
+      "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobnumber),
       "UNQ_JOB_ID": "",
-      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobDes,
+      "JOB_DESCRIPTION": form.jobDes,
       "BRANCH_CODE": this.branchCode,
-      "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode,
+      "DESIGN_CODE": form.designcode,
       "DIVCODE": "",
-      "STOCK_CODE": this.stoneissuedetailsFrom.value.stock,
-      "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stockDes ,
-      "SIEVE": this.stoneissuedetailsFrom.value.sieve,
-      "SHAPE": this.stoneissuedetailsFrom.value.shape,
-      "COLOR": this.stoneissuedetailsFrom.value.color,
-      "CLARITY": this.stoneissuedetailsFrom.value.clarity,
-      "SIZE": this.comService.nullToString(this.stoneissuedetailsFrom.value.size),
+      "STOCK_CODE": form.stock,
+      "STOCK_DESCRIPTION": form.stockDes ,
+      "SIEVE": form.sieve,
+      "SHAPE": form.shape,
+      "COLOR": form.color,
+      "CLARITY": form.clarity,
+      "SIZE": this.comService.nullToString(form.size),
       "JOB_PCS": 0,
-      "PCS": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.pieces),
+      "PCS": this.comService.emptyToZero(form.pieces),
       "GROSS_WT": 0,
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "RATEFC": 0,
       "RATELC": 0,
-      "AMOUNTFC": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.unitrate),
-      "AMOUNTLC": this.comService.emptyToZero(this.stoneissuedetailsFrom.value.amount),
-      "PROCESS_CODE": this.stoneissuedetailsFrom.value.process,
-      "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname,
-      "WORKER_CODE": this.stoneissuedetailsFrom.value.worker,
-      "WORKER_NAME": this.stoneissuedetailsFrom.value.workername,
+      "AMOUNTFC": this.comService.emptyToZero(form.unitrate),
+      "AMOUNTLC": this.comService.emptyToZero(form.amount),
+      "PROCESS_CODE": form.process,
+      "PROCESS_NAME": form.processname,
+      "WORKER_CODE": form.worker,
+      "WORKER_NAME": form.workername,
       "UNQ_DESIGN_ID": "",
       "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": this.stoneissuedetailsFrom.value.location,
+      "LOCTYPE_CODE": form.location,
       "PICTURE_NAME": "",
-      "PART_CODE": this.stoneissuedetailsFrom.value.partcode,
+      "PART_CODE": form.partcode,
       "REPAIRJOB": 0,
       "BASE_CONV_RATE": 0,
       "DT_BRANCH_CODE": this.branchCode,
       "DT_VOCTYPE": "STI",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
-      "CONSIGNMENT": this.onchangeCheckBox(this.stoneissuedetailsFrom.value.consignment),
+      "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
       "SIEVE_SET": "string",
       "SUB_STOCK_CODE": "0",
       "D_REMARKS": "string",
-      "SIEVE_DESC": this.stoneissuedetailsFrom.value.sieveset,
+      "SIEVE_DESC": form.sieveset,
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": "string",
     }
-    // if (postData.reopen=true) {
-    //   this.closed(postData);
-    // }else{
-    //   this.close(postData);
-    // }
-  //  this.postdata;
     this.closed(postData);
   }
 
   setFormValues() {
-    if (!this.content) return
     console.log(this.content);
+    if (!this.content) return
+    this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
+    this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
+    this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
+    this.stoneIssueDetailsFrom.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
+    this.stoneIssueDetailsFrom.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+    this.stoneIssueDetailsFrom.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
 
-    this.stoneissuedetailsFrom.controls.jobNumber.setValue(this.content[0].JOB_NUMBER)
-    this.stoneissuedetailsFrom.controls.jobDes.setValue(this.content[0].JOB_DESCRIPTION)
-    this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.content[0].JOB_SO_NUMBER)
-    this.stoneissuedetailsFrom.controls.subjobDes.setValue(this.content[0].JOB_DESCRIPTION)
-    this.stoneissuedetailsFrom.controls.designcode.setValue(this.content[0].DESIGN_CODE)
-    this.stoneissuedetailsFrom.controls.stock.setValue(this.content[0].STOCK_CODE)
-    this.stoneissuedetailsFrom.controls.stockCode.setValue(this.content[0].STOCK_DESCRIPTION)
-    this.stoneissuedetailsFrom.controls.sieve.setValue(this.content[0].SIEVE)
-    this.stoneissuedetailsFrom.controls.shape.setValue(this.content[0].SHAPE)
-    this.stoneissuedetailsFrom.controls.color.setValue(this.content[0].COLOR)
-    this.stoneissuedetailsFrom.controls.clarity.setValue(this.content[0].CLARITY)
-    this.stoneissuedetailsFrom.controls.size.setValue(this.content[0].SIZE)
-    this.stoneissuedetailsFrom.controls.pieces.setValue(this.content[0].PCS)
-    this.stoneissuedetailsFrom.controls.process.setValue(this.content[0].PROCESS_CODE)
-    this.stoneissuedetailsFrom.controls.processname.setValue(this.content[0].PROCESS_NAME)
-    this.stoneissuedetailsFrom.controls.worker.setValue(this.content[0].WORKER_CODE)
-    this.stoneissuedetailsFrom.controls.workername.setValue(this.content[0].WORKER_NAME)
-    this.stoneissuedetailsFrom.controls.location.setValue(this.content[0].LOCTYPE_CODE)
-    this.stoneissuedetailsFrom.controls.sieveset.setValue(this.content[0].SIEVE_SET)
-    this.stoneissuedetailsFrom.controls.remarks.setValue(this.content[0].D_REMARKS)
-    this.stoneissuedetailsFrom.controls.amount.setValue(this.content[0].AMOUNTLC)
-    this.stoneissuedetailsFrom.controls.carat.setValue(this.content[0].Carat)
+    this.stoneIssueDetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
+    this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
+    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.JOB_SO_NUMBER)
+    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(this.content.JOB_DESCRIPTION)
+    this.stoneIssueDetailsFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
+    this.stoneIssueDetailsFrom.controls.stockDes.setValue(this.content.STOCK_DESCRIPTION)
+    this.stoneIssueDetailsFrom.controls.stockCode.setValue(this.content.STOCK_CODE)
+    this.stoneIssueDetailsFrom.controls.sieve.setValue(this.content.SIEVE)
+    this.stoneIssueDetailsFrom.controls.shape.setValue(this.content.SHAPE)
+    this.stoneIssueDetailsFrom.controls.color.setValue(this.content.COLOR)
+    this.stoneIssueDetailsFrom.controls.clarity.setValue(this.content.CLARITY)
+    this.stoneIssueDetailsFrom.controls.size.setValue(this.content.SIZE)
+    this.stoneIssueDetailsFrom.controls.pieces.setValue(this.content.PCS)
+    this.stoneIssueDetailsFrom.controls.process.setValue(this.content.PROCESS_CODE)
+    this.stoneIssueDetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
+    this.stoneIssueDetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
+    this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.WORKER_NAME)
+    this.stoneIssueDetailsFrom.controls.location.setValue(this.content.LOCTYPE_CODE)
+    this.stoneIssueDetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
+    this.stoneIssueDetailsFrom.controls.remarks.setValue(this.content.D_REMARKS)
+    this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
+    this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.Carat)
+    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
   }
-
-
-  update() {
-    if (this.stoneissuedetailsFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/' + this.stoneissuedetailsFrom.value.branchCode + this.stoneissuedetailsFrom.value.yearMonth
-  //   let postData = {
-  //     "SRNO": 0,
-  //     "VOCNO": 0,
-  //     "VOCTYPE": "STI",
-  //     "VOCDATE": "2023-10-19T06:55:16.030Z",
-  //     "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber,
-  //     "JOB_DATE": "2023-10-19T06:55:16.030Z",
-  //     "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber ,
-  //     "UNQ_JOB_ID": "",
-  //     "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobdes,
-  //     "BRANCH_CODE": this.branchCode,
-  //     "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode,
-  //     "DIVCODE": "",
-  //     "STOCK_CODE": this.stoneissuedetailsFrom.value.stock,
-  //     "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stockDes ,
-  //     "SIEVE": this.stoneissuedetailsFrom.value.sieve,
-  //     "SHAPE": this.stoneissuedetailsFrom.value.shape,
-  //     "COLOR": this.stoneissuedetailsFrom.value.color,
-  //     "CLARITY": this.stoneissuedetailsFrom.value.clarity,
-  //     "SIZE": this.stoneissuedetailsFrom.value.size,
-  //     "JOB_PCS": 0,
-  //     "PCS": this.stoneissuedetailsFrom.value.pieces,
-  //     "GROSS_WT": 0,
-  //     "CURRENCY_CODE": "",
-  //     "CURRENCY_RATE": 0,
-  //     "RATEFC": 0,
-  //     "RATELC": 0,
-  //     "AMOUNTFC": this.stoneissuedetailsFrom.value.unitrate,
-  //     "AMOUNTLC": this.stoneissuedetailsFrom.value.amount,
-  //     "PROCESS_CODE": this.stoneissuedetailsFrom.value.process,
-  //     "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname,
-  //     "WORKER_CODE": this.stoneissuedetailsFrom.value.worker,
-  //     "WORKER_NAME": this.stoneissuedetailsFrom.value.workername,
-  //     "UNQ_DESIGN_ID": "",
-  //     "WIP_ACCODE": "",
-  //     "UNIQUEID": 0,
-  //     "LOCTYPE_CODE": this.stoneissuedetailsFrom.value.location,
-  //     "PICTURE_NAME": "",
-  //     "PART_CODE": this.stoneissuedetailsFrom.value.partcode,
-  //     "REPAIRJOB": 0,
-  //     "BASE_CONV_RATE": 0,
-  //     "DT_BRANCH_CODE": this.branchCode,
-  //     "DT_VOCTYPE": "STI",
-  //     "DT_VOCNO": 0,
-  //     "DT_YEARMONTH": this.yearMonth,
-  //     "CONSIGNMENT": this.stoneissuedetailsFrom.value.consignment,
-  //     "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
-  //     "SUB_STOCK_CODE": "0",
-  //     "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
-  //     "SIEVE_DESC": this.stoneissuedetailsFrom.value.sieveset,
-  //     "EXCLUDE_TRANSFER_WT": true,
-  //     "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt,
-  //   }
-
-  //   let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-  //     .subscribe((result) => {
-  //       if (result.response) {
-  //         if (result.status == "Success") {
-  //           Swal.fire({
-  //             title: result.message || 'Success',
-  //             text: '',
-  //             icon: 'success',
-  //             confirmButtonColor: '#336699',
-  //             confirmButtonText: 'Ok'
-  //           }).then((result: any) => {
-  //             if (result.value) {
-  //               this.stoneissuedetailsFrom.reset()
-  //               this.tableData = []
-  //               this.close('reloadMainGrid')
-  //             }
-  //           });
-  //         }
-  //       } else {
-  //         this.toastr.error('Not saved')
-  //       }
-  //     }, err => alert(err))
-  //   this.subscriptions.push(Sub)
-   }
-
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/' + this.stoneissuedetailsFrom.value.branchCode + this.stoneissuedetailsFrom.value.yearMonth
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.stoneissuedetailsFrom.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.stoneissuedetailsFrom.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
-    });
-  }
-
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
@@ -532,7 +380,7 @@ export class StoneIssueDetailComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.stoneissuedetailsFrom.value.subjobnumber,
+        'strUNQ_JOB_ID': this.stoneIssueDetailsFrom.value.subjobnumber,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -541,29 +389,28 @@ export class StoneIssueDetailComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        console.log(postData, 'uuu')
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          this.stoneissuedetailsFrom.controls.process.setValue(data[0].PROCESS)
-          this.stoneissuedetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          this.stoneissuedetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.stoneissuedetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-          this.stoneissuedetailsFrom.controls.stock.setValue(data[0].ITEM)
-          this.stoneissuedetailsFrom.controls.stockDes.setValue(data[0].STOCK_DESCRIPTION)
-          this.stoneissuedetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
-          this.stoneissuedetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
-          // this.stoneissuedetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
-          // this.stoneissuedetailsFrom.controls.pieces.setValue(data[0].pieces)
-          // this.stoneissuedetailsFrom.controls.size.setValue(data[0].SIZE)
-          // this.stoneissuedetailsFrom.controls.sieve.setValue(data[0].SIEVE)
-          // this.stoneissuedetailsFrom.controls.carat.setValue(data[0].KARAT_CODE)
-          // this.stoneissuedetailsFrom.controls.sieveDesc.setValue(data[0].COLOR)
-          // this.stoneissuedetailsFrom.controls.pieces.setValue(data[0].unitrate)
-          // this.stoneissuedetailsFrom.controls.shape.setValue(data[0].SHAPE)
-          // this.stoneissuedetailsFrom.controls.stockbal.setValue(data[0].SIEVE_SET)
+          this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
+          this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
+          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
+          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.stoneIssueDetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.stoneIssueDetailsFrom.controls.stockDes.setValue(data[0].STOCK_DESCRIPTION)
+          this.stoneIssueDetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+          this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
+          this.stoneIssueDetailsFrom.controls.carat.setValue(data[0].KARAT)
+
+          // this.stoneIssueDetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
+          // this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].pieces)
+          // this.stoneIssueDetailsFrom.controls.size.setValue(data[0].SIZE)
+          // this.stoneIssueDetailsFrom.controls.sieve.setValue(data[0].SIEVE)
+          // this.stoneIssueDetailsFrom.controls.sieveDesc.setValue(data[0].COLOR)
+          // this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].unitrate)
+          // this.stoneIssueDetailsFrom.controls.shape.setValue(data[0].SHAPE)
+          // this.stoneIssueDetailsFrom.controls.stockbal.setValue(data[0].SIEVE_SET)
          
-  
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -593,8 +440,8 @@ export class StoneIssueDetailComponent implements OnInit {
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             console.log(data, 'pppp')
             this.jobNumberDetailData = data
-            this.stoneissuedetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
-            this.stoneissuedetailsFrom.controls.subjobDes.setValue(data[0].JOB_DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
+            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].JOB_DESCRIPTION)
   
   
             this.subJobNumberValidate()

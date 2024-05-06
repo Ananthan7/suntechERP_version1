@@ -21,12 +21,12 @@
                 <div class="row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Voucher * :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="voctype" readonly [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 70%">
+                    <mat-form-field appearance="outline" style="width: 70%">
                       <input type="text" matInput formControlName="vocno" style="text-align: right;" readonly [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
@@ -36,12 +36,12 @@
                 <div class="row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Base Currency:</label>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 80%">
+                    <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="basecurrency" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 80%">
+                    <mat-form-field appearance="outline" style="width: 80%">
                       <input type="number" matInput formControlName="basecurrencyrate" />
                     </mat-form-field>
                   </div>
@@ -53,7 +53,7 @@
                 <div class="row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Date :</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field appearance="outline" style="width: 100%">
                       <input matInput [matDatepicker]="vocDate" [max]="vocMaxDate" name="vocDate"
                         formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode"/>
                       <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
@@ -66,12 +66,12 @@
                 <div class="row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Currency * :</label>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 80%">
+                    <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="currency" readonly [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 80%">
+                    <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="currencyrate" style="text-align: right;" readonly
                         SixDecimalInput [readonly]="viewMode"/>
                     </mat-form-field>
@@ -85,7 +85,7 @@
                   <div class="row">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Entered By:</label>
                     <div class="col-md-8">
-                      <mat-form-field style="width: 70%">
+                      <mat-form-field appearance="outline" style="width: 70%">
                         <input type="text" matInput formControlName="enteredBy" [readonly]="viewMode"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
@@ -97,14 +97,14 @@
                   <div class="row">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Worker :</label>
                     <div class="col-md-4">
-                      <mat-form-field style="width: 80%">
+                      <mat-form-field appearance="outline" style="width: 80%">
                         <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
                       </master-search>
                     </div>
                     <div class="col-md-4">
-                      <mat-form-field style="width: 80%">
+                      <mat-form-field appearance="outline" style="width: 80%">
                         <input type="text" matInput formControlName="workername" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
@@ -183,12 +183,12 @@
                 <!-- <div class="row">
                     <div class="col-md-12">
                       <div class="col-md-3">
-                        <mat-form-field style="width: 30%; left: 1065px">
+                        <mat-form-field appearance="outline" style="width: 30%; left: 1065px">
                           <input type="text" matInput formControlName="amountTotal" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
-                        <mat-form-field style="width: 30%; bottom: 56px; left: 769px">
+                        <mat-form-field appearance="outline" style="width: 30%; bottom: 56px; left: 769px">
                           <input type="text" matInput formControlName="caratTotal" />
                         </mat-form-field>
                       </div>
@@ -202,7 +202,7 @@
                   <div class="row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Narration :</label>
                     <div class="col-md-8">
-                      <mat-form-field style="width: 70%">
+                      <mat-form-field appearance="outline" style="width: 70%">
                         <input type="text" matInput formControlName="narration" />
                       </mat-form-field>
                     </div>
@@ -216,3 +216,8 @@
     </div>
   </div>
 </div>
+<ng-template #stoneIssueDetailScreen>
+  <app-stone-issue-detail [content]="dataToDetailScreen"
+  (saveDetail)="setValuesToHeaderGrid($event)"
+  (closeDetail)="closeDetailScreen()"></app-stone-issue-detail>
+</ng-template>

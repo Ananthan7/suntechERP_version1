@@ -20,6 +20,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
+  viewMode: boolean = false;
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
   HEADERDETAILS: any;
   StockDetailData: SavedataModel = {
     DETAIL_FORM_DATA: {},
@@ -47,6 +50,28 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 6,
+    SEARCH_FIELD: 'CUSTOMER_CODE',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "account_mode in ('B','R','P')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -59,6 +84,100 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+  costCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  prefixCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  price1CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price2CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price3CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price4CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price5CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  onFileChanged(event: any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result;
+      };
+    }
+  }
   productiondetailsFrom: FormGroup = this.formBuilder.group({
     VOCNO: [0],
     jobno: [''],
@@ -155,6 +274,47 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
+  }
+  customerCodeScpSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.customer.setValue(e.ACCODE);
+    this.productiondetailsFrom.controls.customerDesc.setValue(e['ACCOUNT HEAD']);
+  }
+  karatCodeSelected(e:any){
+    console.log(e);
+    this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
+  }
+  costCodeSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.costcode.setValue(e.COST_CODE);
+  }
+  prefixCodeSelected(e:any){
+    console.log(e);
+    this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
+  }
+  price1CodeSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.price1PER.setValue(e.PRICE_CODE);
+  }
+
+  price2CodeSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.price2PER.setValue(e.PRICE_CODE);
+  }
+
+  price3CodeSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.price3PER.setValue(e.PRICE_CODE);
+  }
+
+  price4CodeSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.price4PER.setValue(e.PRICE_CODE);
+  }
+
+  price5CodeSelected(e: any) {
+    console.log(e);
+    this.productiondetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
   }
 
   /**USE: jobnumber validate API call */
