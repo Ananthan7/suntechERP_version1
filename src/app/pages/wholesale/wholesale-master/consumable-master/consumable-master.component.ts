@@ -134,7 +134,7 @@ export class ConsumableMasterComponent implements OnInit {
   vendorCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
