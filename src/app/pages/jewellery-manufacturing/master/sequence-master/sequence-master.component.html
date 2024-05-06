@@ -84,7 +84,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr   class="drag-item" *ngFor="let data of dataSource;let i=index">
+                            <tr *ngFor="let data of dataSource; let i=index" class="drag-item" 
+                        cdkDrag [cdkDragDisabled]="viewMode">
                                 <td>
                                     <mat-checkbox class="inputSec" [disabled]="viewMode" [(ngModel)]="data['isChecked']"
                                         (change)="changedCheckbox(data)">
