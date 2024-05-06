@@ -467,6 +467,7 @@ export class AlloyMasterComponent implements OnInit {
           this.alloyMastereForm.controls.subCategory.setValue(data.SUBCATEGORY_CODE)
           this.alloyMastereForm.controls.brand.setValue(data.BRAND_CODE)
           this.alloyMastereForm.controls.description.setValue(data.DESCRIPTION)
+          this.alloyMastereForm.controls.code.setValue(data.PREFIX_CODE + data.LAST_NO)
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
