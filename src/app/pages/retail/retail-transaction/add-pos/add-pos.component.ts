@@ -1751,7 +1751,7 @@ export class AddPosComponent implements OnInit {
     this.autoPosting = this.comFunc.getAutopostingFlag();
     this.isAutoPosting = this.comFunc.stringToBoolean(this.autoPosting);
     this.vocType = this.comFunc.getqueryParamVocType();
-    this.mainVocType = this.comFunc.getqueryParamVocType();
+    this.mainVocType = this.comFunc.getqueryParamMainVocType();
     // this.baseYear = this.content.YEARMONTH;
     this.vocDataForm.controls.voc_type.setValue(this.vocType);
 
@@ -1827,10 +1827,10 @@ export class AddPosComponent implements OnInit {
 
     this.getSalesReturnVocTypes();
 
-    this.metalDecimalFormat = {
-      type: 'fixedPoint',
-      precision: Number(this.comFunc.allCompanyParameters[0].MRATEDECIMALS),
-    };
+    // this.metalDecimalFormat = {
+    //   type: 'fixedPoint',
+    //   precision: Number(this.comFunc.allCompanyParameters[0].MRATEDECIMALS),
+    // };
     this.amountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.comFunc.allbranchMaster?.BAMTDECIMALS,
