@@ -301,7 +301,7 @@ export class StoneIssueComponent implements OnInit {
     };
   }
   closeDetailScreen(){
-    // this.modalReference.close()
+    this.modalReference.close()
   }
   // addRow(): void {
   //   const newRow = this.formBuilder.group({
@@ -376,12 +376,13 @@ export class StoneIssueComponent implements OnInit {
     }
     return false
   }
+  /**use: final save */
   formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
+    if (this.submitValidations(this.stoneissueFrom.value)) {
       return
     }
-    if (this.submitValidations(this.stoneissueFrom.value)) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
       return
     }
 
@@ -392,7 +393,7 @@ export class StoneIssueComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -427,11 +428,6 @@ export class StoneIssueComponent implements OnInit {
 
 
   update() {
-    if (this.stoneissueFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
     let API = `JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/${this.branchCode}/${this.stoneissueFrom.value.voctype}/${this.stoneissueFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -439,7 +435,7 @@ export class StoneIssueComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',

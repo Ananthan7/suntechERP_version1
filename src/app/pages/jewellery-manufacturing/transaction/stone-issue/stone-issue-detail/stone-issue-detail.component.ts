@@ -112,11 +112,10 @@ export class StoneIssueDetailComponent implements OnInit {
     processname: [''],
     worker: ['', [Validators.required]],
     workername: [''],
-    DIVCODE: ['', [Validators.required]],
     stockCode: [''],
     stockDes: [''],
     batchid: [''],
-    location: ['', [Validators.required]],
+    location: [''],
     pieces: [],
     shape: [''],
     clarity: [''],
@@ -133,6 +132,14 @@ export class StoneIssueDetailComponent implements OnInit {
     otheratt: [],
     remarks: [''],
     consignment:[false],
+    VOCTYPE: [''],
+    VOCNO: [''],
+    VOCDATE: [''],
+    BRANCH_CODE: [''],
+    YEARMONTH: [''],
+    KARAT_CODE: [''],
+    DIVCODE: [''],
+    METAL_STONE: [''],
     FLAG: [null]
   });
 
@@ -206,7 +213,6 @@ export class StoneIssueDetailComponent implements OnInit {
   
   stockCodeSelected(e: any) {
     console.log(e);
-    this.stoneIssueDetailsFrom.controls.stock.setValue(e.Item);
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockDes.setValue(e.STOCK_DESCRIPTION);
   }
@@ -229,7 +235,6 @@ export class StoneIssueDetailComponent implements OnInit {
 
   continueClick(){
     this.formSubmit();
-    this.stoneIssueDetailsFrom.controls.stock.setValue('')
     this.stoneIssueDetailsFrom.controls.stockDes.setValue('')
     this.stoneIssueDetailsFrom.controls.sieve.setValue('')
     this.stoneIssueDetailsFrom.controls.shape.setValue('')
@@ -273,6 +278,8 @@ export class StoneIssueDetailComponent implements OnInit {
       return
     }
     let form = this.stoneIssueDetailsFrom.value
+    console.log(form,'form');
+    
     let postData = {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
@@ -331,7 +338,14 @@ export class StoneIssueDetailComponent implements OnInit {
 
   setFormValues() {
     console.log(this.content);
-    if (!this.content.JOB_NUMBER) return
+    if (!this.content) return
+    this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
+    this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
+    this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
+    this.stoneIssueDetailsFrom.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
+    this.stoneIssueDetailsFrom.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+    this.stoneIssueDetailsFrom.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
+
     this.stoneIssueDetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
     this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.JOB_SO_NUMBER)
@@ -375,7 +389,6 @@ export class StoneIssueDetailComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        console.log(postData, 'uuu')
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
@@ -383,22 +396,21 @@ export class StoneIssueDetailComponent implements OnInit {
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-          this.stoneIssueDetailsFrom.controls.stock.setValue(data[0].ITEM)
-          this.stoneIssueDetailsFrom.controls.stockDes.setValue(data[0].STOCK_DESCRIPTION)
           this.stoneIssueDetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.stoneIssueDetailsFrom.controls.stockDes.setValue(data[0].STOCK_DESCRIPTION)
           this.stoneIssueDetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
           this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
+          this.stoneIssueDetailsFrom.controls.carat.setValue(data[0].KARAT)
+
           // this.stoneIssueDetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
           // this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].pieces)
           // this.stoneIssueDetailsFrom.controls.size.setValue(data[0].SIZE)
           // this.stoneIssueDetailsFrom.controls.sieve.setValue(data[0].SIEVE)
-          // this.stoneIssueDetailsFrom.controls.carat.setValue(data[0].KARAT_CODE)
           // this.stoneIssueDetailsFrom.controls.sieveDesc.setValue(data[0].COLOR)
           // this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].unitrate)
           // this.stoneIssueDetailsFrom.controls.shape.setValue(data[0].SHAPE)
           // this.stoneIssueDetailsFrom.controls.stockbal.setValue(data[0].SIEVE_SET)
          
-  
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }

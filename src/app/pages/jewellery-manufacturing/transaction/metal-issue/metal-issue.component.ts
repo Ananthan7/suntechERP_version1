@@ -361,14 +361,14 @@ export class MetalIssueComponent implements OnInit {
     return false
   }
   formSubmit() {
+    if (this.submitValidations(this.metalIssueForm.value)) {
+      return
+    }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.submitValidations(this.metalIssueForm.value)) {
-      return
-    }
-
+  
     let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
     let postData = this.setPostData()
     this.isloading = true;
@@ -404,10 +404,6 @@ export class MetalIssueComponent implements OnInit {
   }
 
   update() {
-    if (this.metalIssueForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
     let form = this.metalIssueForm.value
     let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData()
