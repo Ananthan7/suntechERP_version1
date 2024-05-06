@@ -7,7 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-sequence-master',
   templateUrl: './sequence-master.component.html',
@@ -81,7 +81,13 @@ export class SequenceMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
+      
+      
     }
+  }
+
+  onDragStarted(event: CdkDragStart, index: number) {
+    // handle drag start event
   }
 
   codeEnabled() {
@@ -201,17 +207,17 @@ export class SequenceMasterComponent implements OnInit {
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
                 obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                obj.STD_TIME = this.commonService.decimalQuantityFormat(item.STD_TIME, 'METAL')
+                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
+                  obj.STD_TIME = this.commonService.decimalQuantityFormat(item.STD_TIME, 'METAL')
                 obj.MAX_TIME = this.commonService.decimalQuantityFormat(item.MAX_TIME, 'METAL')
                 obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                obj.POINTS = item.POINTS || 0,
-                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                obj.GAIN_AC = "",
-                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                  obj.POINTS = item.POINTS || 0,
+                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                  obj.GAIN_AC = "",
+                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
             });
@@ -282,7 +288,7 @@ export class SequenceMasterComponent implements OnInit {
 
 
     if (this.sequenceMasterForm.invalid && this.selectedSequence) {
-      this.toastr.error('select all required fields & Process')
+      this.toastr.error('Select all required fields & Process')
       return
     }
 
@@ -303,12 +309,12 @@ export class SequenceMasterComponent implements OnInit {
       console.log(this.checkCondtion)
       return;
     }
-   
+
     this.dataSource.forEach((item: any) => {
       //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
         this.checkTimeCondtion = true;
-        this.toastr.error('Max Time must be Greater than the Standard Time')
+       this.toastr.error('Max Time must be Greater than the Standard Time')
       }
 
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
@@ -364,7 +370,7 @@ export class SequenceMasterComponent implements OnInit {
 
   updateWorkerMaster() {
     if (this.selectedSequence.length == 0 && this.sequenceMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('Select all required fields')
       return
     }
 
@@ -613,14 +619,22 @@ export class SequenceMasterComponent implements OnInit {
   PrefixCodeChange(event: any) {
     this.sequenceMasterData.SEARCH_VALUE = event.target.value
   }
-  // stdLoss Change
-  stdLossChanged(data: any) {
-    this.checkLossCondition(data)
-  }
 
-  checkLossCondition(data: any) {
-    let max = this.commonService.emptyToZero(data['MAX_LOSS'])
-    let std = this.commonService.emptyToZero(data['STD_LOSS'])
+
+  // checkLossCondition(data: any) {
+  //   let max = this.commonService.emptyToZero(data['MAX_LOSS'])
+  //   let std = this.commonService.emptyToZero(data['STD_LOSS'])
+  //   if (max < std) {
+  //     this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')
+  //     this.dataSource[data.SRNO].MAX_LOSS = 0
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
+   checkLossCondition(data: any) {
+    let max: number = parseFloat(data['MAX_LOSS'])
+    let std: number = parseFloat(data['STD_LOSS'])
     if (max < std) {
       this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')
       this.dataSource[data.SRNO].MAX_LOSS = 0
@@ -629,12 +643,51 @@ export class SequenceMasterComponent implements OnInit {
     return true;
   }
 
+  // stdLoss Change
+  stdLossChanged(data: any) {
+    this.checkLossCondition(data)
+  }
 
   // maxLoss Change
   maxLossChanged(data: any) {
     console.log(data, 'data');
     this.checkLossCondition(data)
   }
+
+  // checkTimeCondition(data: any) {
+  //   let max = this.commonService.emptyToZero(data['MAX_TIME'])
+  //   let std = this.commonService.emptyToZero(data['STD_TIME'])
+  //   if (max < std) {
+  //     this.commonService.toastErrorByMsgId('Max Time cannot be less than Std Time')
+  //     this.dataSource[data.SRNO].MAX_TIME = 0
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
+  checkTimeCondition(data: any) {
+    let max: number = parseFloat(data['MAX_TIME'])
+    let std: number = parseFloat(data['STD_TIME'])
+    if (max < std) {
+      this.commonService.toastErrorByMsgId('Max Time cannot be less than Std Time')
+      this.dataSource[data.SRNO].MAX_TIME = 0
+      return false;
+    }
+    return true;
+  }
+  // stdLoss Change
+  stdTimeChanged(data: any) {
+    this.checkTimeCondition(data)
+  }
+
+  // maxLoss Change
+  maxTimeChanged(data: any) {
+    console.log(data, 'data');
+    this.checkTimeCondition(data)
+  }
+
+
+
 
   /**USE: close modal window */
   close(data?: any) {

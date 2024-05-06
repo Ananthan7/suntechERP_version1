@@ -9,6 +9,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
 
+
 @Component({
   selector: 'app-worker-master',
   templateUrl: './worker-master.component.html',
@@ -34,6 +35,10 @@ export class WorkerMasterComponent implements OnInit {
   editMode: boolean = false;
   codeEnable: boolean = true;
   dele: boolean = false;
+  btndisable: boolean = false;
+
+  filteredData: any[] = []; // Data source for the filtered grid
+  searchTerm: string = '';
 
 
   // @ViewChild('codeInput')
@@ -100,6 +105,7 @@ export class WorkerMasterComponent implements OnInit {
     MonthlyTarget: [null],
     YearlyTarget: [null],
     Active: [true]
+   
   })
 
   constructor(
@@ -113,7 +119,7 @@ export class WorkerMasterComponent implements OnInit {
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.setInitialValues()
-
+    this.filteredData = this.tableData; 
   }
 
   ngOnInit(): void {
@@ -451,30 +457,67 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**select process API call */
+  // selectProcessMasterList() {
+  //   this.btndisable = true;
+  //   if (this.content && this.content.FLAG == 'EDIT') return
+  //   if (this.workerMasterForm.value.WorkerCode == '') {
+  //     this.commonService.toastErrorByMsgId('Worker Code Required');
+  //     return
+  //   }
+
+  //   this.commonService.toastSuccessByMsgId('MSG81447');
+  //   let API = 'ProcessMasterDj/GetProcessMasterDJList'
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         let data = result.response;
+  //         data.forEach((item: any, i: any) => {
+  //           item.SELECT1 = false
+  //           item.SRNO = i + 1;
+  //         });
+  //         this.tableData = data
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG1531')
+  //     })
+  //   this.subscriptions.push(Sub)
+
+  // }
+
   selectProcessMasterList() {
-    if (this.content && this.content.FLAG == 'EDIT') return
+    this.btndisable = true;
+    if (this.content && this.content.FLAG == 'EDIT') return;
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('Worker Code Required');
-      return
+      return;
     }
-
+  
     this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+    let API = 'ProcessMasterDj/GetProcessMasterDJList';
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response;
           data.forEach((item: any, i: any) => {
-            item.SELECT1 = false
+            item.SELECT1 = false;
             item.SRNO = i + 1;
           });
-          this.tableData = data
+  
+          // Apply search filtering if a search term is provided
+          if (this.searchTerm.trim() !== '') {
+            this.tableData = data.filter((item:any) =>
+              item.PROCESS_CODE.toLowerCase().includes(this.searchTerm.trim().toLowerCase())
+            );
+          } else {
+            this.tableData = data;
+          }
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+        this.commonService.toastErrorByMsgId('MSG1531');
+      });
+    this.subscriptions.push(Sub);
   }
+  
 
   // /**use: to check worker exists in db */
   // checkWorkerExists(event: any) {
@@ -608,6 +651,19 @@ export class WorkerMasterComponent implements OnInit {
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
+  }
+
+  search() {
+    console.log("hitrttt");
+    if (this.searchTerm.trim() !== '') {
+      // Filter data based on search term
+      this.filteredData = this.tableData.filter(item =>
+        item.PROCESS_CODE.toLowerCase().includes(this.searchTerm.trim().toLowerCase())
+      );
+    } else {
+      // If search term is empty, display all data
+      this.filteredData = this.tableData;
+    }
   }
 
   ngOnDestroy() {

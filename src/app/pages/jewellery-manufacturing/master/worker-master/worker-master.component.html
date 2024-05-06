@@ -220,12 +220,19 @@
                             <button type="button" mat-flat-button
                                 color="primary"
                                 (click)="selectProcessMasterList()"
-                                [disabled]="viewMode || codeEnable">
+                                [disabled]="viewMode || codeEnable || btndisable">
                                 Select Process
                             </button>
                         </div>
                     </div>
                     <div class="row">
+
+               
+                        <!-- <div class="col-md-6">
+                            <input type="text" [(ngModel)]="searchTerm" placeholder="Enter Process Code">
+                            <button (click)="search()">Search</button>
+                        </div> -->
+                        
                         <dx-data-grid #dataGrid id="gridContainer" width="100%"
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO"
@@ -243,6 +250,7 @@
                             </dxo-editing> -->
                             <!-- <dxo-selection mode="multiple"
                                 [showCheckBoxesMode]= "isViewMode ? 'never':'always'"></dxo-selection> -->
+                               
                             <dxi-column width="auto" dataField="SELECT1" caption
                                 cellTemplate="limitTemplate"
                                 alignment="right"></dxi-column>

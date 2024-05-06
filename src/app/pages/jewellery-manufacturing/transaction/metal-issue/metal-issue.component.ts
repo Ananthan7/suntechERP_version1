@@ -31,7 +31,7 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Stock Code', field: 'STOCK_CODE', format: '',alignment: 'left' },
     { title: 'Division', field: 'DIVCODE', format: '',alignment: 'left' },
     { title: 'Description', field: 'STOCK_DESCRIPTION', format: '',alignment: 'left' },
-    { title: 'Gross wt', field: 'GROSS_WT', format: {
+    { title: 'Gross WT', field: 'GROSS_WT', format: {
       type: 'fixedPoint',
       precision: this.comService.allbranchMaster?.BAMTDECIMALS,
       currency: this.comService.compCurrency

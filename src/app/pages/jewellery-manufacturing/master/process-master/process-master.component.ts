@@ -277,7 +277,7 @@ export class ProcessMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 95,
     SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
@@ -460,11 +460,11 @@ export class ProcessMasterComponent implements OnInit {
   private setInitialValues() {
     //this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.processMasterForm.controls.loss_standard.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.processMasterForm.controls.loss_min.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.processMasterForm.controls.loss_max.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.processMasterForm.controls.standard_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.processMasterForm.controls.min_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.processMasterForm.controls.loss_standard.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.processMasterForm.controls.loss_min.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.processMasterForm.controls.loss_max.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.processMasterForm.controls.standard_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.processMasterForm.controls.min_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
 
@@ -684,7 +684,7 @@ export class ProcessMasterComponent implements OnInit {
 
             if (this.processMasterForm.value.recovery == true) {
               if (this.processMasterForm.value.standard_end == '') {
-                this.toastr.error('Recovery Standard Recovery Cannot be Empty');
+                this.toastr.error('Recovery Standard Cannot be Empty');
                 return;
               }
               else if (this.processMasterForm.value.min_end == '') {
@@ -706,25 +706,18 @@ export class ProcessMasterComponent implements OnInit {
 
             if (this.processMasterForm.value.RecoveryProcess == true && this.processMasterForm.value.recovery == false ) {
 
-              this.toastr.error('Recovery Must be Filled');
+              this.toastr.error('Recovery & Recov Stock Code Must be Filled');
             }
-            else if(this.processMasterForm.value.recStockCode == false){
-              this.toastr.error('Recov Stock Code Must be Filled');
-            }
+           
             else{
 
-            // if(this.processMasterForm.value.accountStart == '' || this.processMasterForm.value.accountMiddle == '' || this.processMasterForm.value.accountEnd == ''){
-            //   this.toastr.error('Account Code Cannot be Empty');
-            // }
-            // else
-            // {
 
             const formValue = this.processMasterForm.value;
 
             if (!formValue.processCode) {
               this.toastr.error('Process Code cannot be empty');
               return;
-            }
+            } 
             if (!formValue.processDesc) {
               this.toastr.error('Description cannot be empty');
               return;
@@ -1209,6 +1202,7 @@ export class ProcessMasterComponent implements OnInit {
       this.islossReadOnly = true;
       this.lossDisable = true;
       this.processMasterForm.controls.loss_on_gross.setValue('')
+      this.processMasterForm.controls.recovery.setValue('')
       this.searchModeLoss = false;
 
       this.processMasterForm.get('accountStart')?.clearValidators();

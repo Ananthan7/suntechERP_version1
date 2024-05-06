@@ -90,7 +90,7 @@ export class PricelistMasterComponent implements OnInit {
     this.initializeForm();
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
-      this.setAllInitialValues();
+      // this.setAllInitialValues();
       this.setFormValues()
     }
     if (this.content.FLAG == 'EDIT') {
@@ -109,11 +109,13 @@ export class PricelistMasterComponent implements OnInit {
     this.priceListMasterForm.controls.priceCode.setValue(this.content.PRICE_CODE);
     this.priceListMasterForm.controls.description.setValue(this.content.DESCRIPTION);
     this.priceListMasterForm.controls.priceMethod.setValue(this.content.PRICE_METHOD);
-  //  this.priceListMasterForm.controls.priceValue.setValue(this.content.PRICE_VALUE);
+    //  this.priceListMasterForm.controls.priceValue.setValue(this.content.PRICE_VALUE);
     this.priceListMasterForm.controls.finalPriceSign.setValue(this.content.FINALPRICE_SIGN);
     this.priceListMasterForm.controls.addlValueSign.setValue(this.content.ADDLVALUE_SIGN);
     this.priceListMasterForm.controls.roundoff_digit.setValue(this.content.ROUNDOFF_DIGIT);
-
+    this.priceListMasterForm.controls.dontCalculate.setValue(this.content.DONTCALCULATE);
+    this.priceListMasterForm.controls.dontCalculate.setValue(this.content.DONTCALCULATE);
+    this.priceListMasterForm.controls.priceRoundoff.setValue(this.content.PRICE_ROUDOFF)
 
     this.priceListMasterForm.controls.priceValue.setValue(
       this.commonService.transformDecimalVB(
@@ -145,18 +147,25 @@ export class PricelistMasterComponent implements OnInit {
       this.update();
       return;
     }
-    if (!this.validateForm()) return;
 
-    let API = 'PriceMaster/InsertPriceMaster';
-    let postData = this.createPostData();
+    if (this.priceListMasterForm.value.description) {
+      this.toastr.error('Description Cannot be empty');
+    }
+    else {
 
-    this.dataService.postDynamicAPI(API, postData)
-      .subscribe(
-        result => this.handleApiResponse(result),
-        err => alert(err)
-      );
+
+      if (!this.validateForm()) return;
+
+      let API = 'PriceMaster/InsertPriceMaster';
+      let postData = this.createPostData();
+
+      this.dataService.postDynamicAPI(API, postData)
+        .subscribe(
+          result => this.handleApiResponse(result),
+          err => alert(err)
+        );
+    }
   }
-
 
 
   update() {

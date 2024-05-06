@@ -21,18 +21,16 @@ export class MetalReturnComponent implements OnInit {
   modalReference!: NgbModalRef;
   dataToDetailScreen: any;
   
-  divisionMS: any = 'ID';
-  orders: any = [];
-  currentFilter: any;
-  tableData: any[] = ['Process', 'Worker', 'Job No', 'Sub.Job No', 'Design', 'Stock Code', 'Gross Wt.', 'Net Wt.', 'Purity', 'Pure Wt.'];
+  tableData: any = [];
+  tableDataHead: any[] = ['PROCESS', 'WORKER', 'JOB_NUMBER', 'UNQ_JOB_ID', 'DESIGN_CODE', 'STOCK_CODE', 'METAL', 'NETWT', 'PURITY', 'PUREWT'];
   metalReturnDetailsData: any[] = [];
   columnhead: any[] = [''];
   branchCode?: String;
   currentDate: any = this.commonService.currentDate;
-  userName = this.commonService.userName;
   selectRowIndex: any;
   viewMode: boolean = false;
   isSaved: boolean = false;
+  isloading: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   gridAmountDecimalFormat:any = {
     type: 'fixedPoint',
@@ -157,23 +155,22 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.metalReturnDetailsData = data.Details
-          console.log(this.tableData, 'table')
-          data.Details.forEach((element: any) => {
-            this.tableData.push({
-              SRNO: element.SRNO,
-              Job_id: element.JOB_NUMBER,
-              Unq_job_id: element.UNQ_JOB_ID,
-              Process: element.PROCESS_CODE,
-              Design: element.DESIGN_CODE,
-              Stock_Code: element.STOCK_CODE,
-              Worker: element.WORKER_CODE,
-              Description: element.JOB_DESCRIPTION,
-              Carat: element.KARAT_CODE,
-              Rate: element.RATE_TYPE,
-              Division: element.DIVCODE,
-              Amount: element.NET_WT,
-            })
-          });
+          // data.Details.forEach((element: any) => {
+          //   this.tableData.push({
+          //     SRNO: element.SRNO,
+          //     Job_id: element.JOB_NUMBER,
+          //     Unq_job_id: element.UNQ_JOB_ID,
+          //     Process: element.PROCESS_CODE,
+          //     Design: element.DESIGN_CODE,
+          //     Stock_Code: element.STOCK_CODE,
+          //     Worker: element.WORKER_CODE,
+          //     Description: element.JOB_DESCRIPTION,
+          //     Carat: element.KARAT_CODE,
+          //     Rate: element.RATE_TYPE,
+          //     Division: element.DIVCODE,
+          //     Amount: element.NET_WT,
+          //   })
+          // });
           this.metalReturnForm.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.metalReturnForm.controls.VOCNO.setValue(data.VOCNO)
           this.metalReturnForm.controls.vocDate.setValue(data.VOCDATE)
@@ -206,13 +203,13 @@ export class MetalReturnComponent implements OnInit {
   }
 
   ProcessCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnForm.controls.process.setValue(e.Process_Code);
+    this.processWorkerValidate()
   }
 
   WorkerCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnForm.controls.worker.setValue(e.WORKER_CODE);
+    this.processWorkerValidate()
   }
 
   locationCodeSelected(e: any) {
@@ -331,9 +328,10 @@ export class MetalReturnComponent implements OnInit {
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
     let postData = this.setPostData()
-
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
@@ -353,7 +351,10 @@ export class MetalReturnComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.toastr.error('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -365,9 +366,10 @@ export class MetalReturnComponent implements OnInit {
     let form = this.metalReturnForm.value
     let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData()
-
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -386,7 +388,10 @@ export class MetalReturnComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err =>{
+        this.isloading = false;
+        this.toastr.error('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
   /**USE: delete Melting Type From Row */
@@ -456,39 +461,38 @@ export class MetalReturnComponent implements OnInit {
     });
   }
 
-  processCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+  processWorkerValidate() {
+    let form = this.metalReturnForm.value
+    let postData = {
+      "SPID": "063",
+      "parameter": {
+        strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),
+        strProcess_Code: this.commonService.nullToString(form.process),    
+        strWorker_Code: this.commonService.nullToString(form.worker),
+        strUserName: this.commonService.nullToString(this.commonService.userName),
+      }
+    }
 
-  processSelected(e: any) {
-    console.log(e);
-    this.metalReturnForm.controls.process.setValue(e.Process_Code);
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data) {
+            this.tableData = data
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
-
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE ',
-    SEARCH_HEADING: 'WORKER CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  workerSelected(e: any) {
-    console.log(e);
-    this.metalReturnForm.controls.worker.setValue(e.WORKER_CODE);
-  }
-
 
 }

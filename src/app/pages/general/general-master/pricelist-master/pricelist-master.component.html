@@ -26,6 +26,7 @@
                                             <input type="text" matInput
                                                 [readonly]="viewMode || editMode"
                                                 maxlength="6" #priceCode
+                                                appNoEmptySpace
                                                 formControlName="priceCode"
                                                 (focusout)="checkWorkerExists($event)"
                                                 (keyup)="codeEnabled()"
@@ -40,7 +41,7 @@
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                #description
+                                                #description appNoEmptySpace
                                                 formControlName="description"
                                                 [readonly]="viewMode || codeEnable"
                                                 (input)="description.value = description.value.toUpperCase()"

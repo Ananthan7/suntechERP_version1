@@ -54,3 +54,7 @@
 .mat-input-element {
   font-size: 14px !important;
 }
+
+.disabled {
+  cursor:none; /* Change cursor to indicate dragging is disabled */
+}
