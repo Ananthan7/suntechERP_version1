@@ -19,13 +19,13 @@ import { event } from 'devextreme/events';
 export class StoneIssueComponent implements OnInit {
 
   currentFilter: any;
-  srNo:any=0;
+  srNo: any = 0;
   divisionMS: any = 'ID';
   orders: any = [];
   // columnhead:any[] = ['SR No.','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
-  stoneIssueData : any[] =[];
+  stoneIssueData: any[] = [];
   userName = localStorage.getItem('username');
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
@@ -40,19 +40,19 @@ export class StoneIssueComponent implements OnInit {
   selectedIndexes: any = [];
   viewMode: boolean = false;
 
-    user: MasterSearchModel = {
-      PAGENO: 1,
-      RECORDS: 10,
-      LOOKUPID: 73,
-      SEARCH_FIELD: 'UsersName',
-      SEARCH_HEADING: 'User',
-      SEARCH_VALUE: '',
-      WHERECONDITION: "UsersName<> ''",
-      VIEW_INPUT: true,
-      VIEW_TABLE: true,
-      LOAD_ONCLICK: true,
+  user: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
- 
+
 
   CurrencyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -80,8 +80,21 @@ export class StoneIssueComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
 
+  stoneissueFrom: FormGroup = this.formBuilder.group({
+    voctype: ['', [Validators.required]],
+    vocno: ['1', [Validators.required]],
+    vocDate: [],
+    enteredBy: [''],
+    currency: [''],
+    currencyrate: [''],
+    worker: ['',],
+    workername: [''],
+    narration: [''],
+    caratTotal: [''],
+    amountTotal: [''],
+    total: [''],
+  });
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -93,50 +106,67 @@ export class StoneIssueComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // this.gridAmountDecimalFormat = {
+    //   type: 'fixedPoint',
+    //   precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+    //   currency: this.comService.compCurrency
+    // };
+
+    //this.content provide the data and flag from main grid to the form
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+      // this.isSaved = true;
+      if (this.content.FLAG == 'DELETE') {
+        this.deleteRecord()
+      }
+      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
+      this.setAllInitialValues()
+    } else {
+      this.setvalues()
+      this.setCompanyCurrency()
+    }
+
+
+  }
+  setvalues() {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.setCompanyCurrency()
-    this.setAllInitialValues()
-    
-      if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    }
-    if (this.content?.FLAG) {
-      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
-    }
-    this.setvalues()
+    this.stoneissueFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.stoneissueFrom.controls.vocDate.setValue(this.comService.currentDate)
   }
   setAllInitialValues() {
     console.log(this.content)
     if (!this.content) return
     let API = `JobStoneIssueMasterDJ/GetJobStoneIssueMasterDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.response) {
-        let data = result.response
-        this.detailData= data.Details
-        if (this.detailData.length > 0) {
-          this.detailData.forEach((element: any) => {
-            element.FLAG = this.content ? this.content.FLAG : null
-          this.stoneIssueData.push({
-            SRNO: element.SRNO,
-            JOB_NUMBER: element.JOB_NUMBER,
-            UNQ_JOB_ID: element.UNQ_JOB_ID,
-            DESIGN_CODE: element.DESIGN_CODE,
-            STOCK_CODE: element.STOCK_CODE,
-            DIVCODE: element.DIVCODE,
-            STOCK_DESCRIPTION: element.STOCK_DESCRIPTION,
-            Carat: element.JOB_DESCRIPTION,
-            Rate: element.RATEFC,
-            PROCESS_CODE: element.PROCESS_CODE,
-            AMOUNTLC: element.AMOUNTFC,
-            WORKER_CODE: element.WORKER_CODE,
-            SIEVE_SET: element.SIEVE_SET,
-          })
-        });
-       } else {
-              this.comService.toastErrorByMsgId('Detail data not found')
-            }
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.detailData = data.Details
+          if (this.detailData.length > 0) {
+            this.detailData.forEach((element: any) => {
+              element.FLAG = this.content ? this.content.FLAG : null
+              this.stoneIssueData.push({
+                SRNO: element.SRNO,
+                JOB_NUMBER: element.JOB_NUMBER,
+                UNQ_JOB_ID: element.UNQ_JOB_ID,
+                DESIGN_CODE: element.DESIGN_CODE,
+                STOCK_CODE: element.STOCK_CODE,
+                DIVCODE: element.DIVCODE,
+                STOCK_DESCRIPTION: element.STOCK_DESCRIPTION,
+                Carat: element.JOB_DESCRIPTION,
+                Rate: element.RATEFC,
+                PROCESS_CODE: element.PROCESS_CODE,
+                AMOUNTLC: element.AMOUNTFC,
+                WORKER_CODE: element.WORKER_CODE,
+                SIEVE_SET: element.SIEVE_SET,
+              })
+            });
+          } else {
+            this.comService.toastErrorByMsgId('Detail data not found')
+          }
           this.stoneissueFrom.controls.currency.setValue(data.CURRENCY_CODE)
           this.stoneissueFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
           this.stoneissueFrom.controls.worker.setValue(data.WORKER)
@@ -153,23 +183,22 @@ export class StoneIssueComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-    
-  }
 
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
- 
+
 
   userDataSelected(value: any) {
     console.log(value);
     this.stoneissueFrom.controls.enteredBy.setValue(value.UsersName);
   }
 
-  CurrencyCodeSelected(e:any){
+  CurrencyCodeSelected(e: any) {
     console.log(e);
     // this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
     // this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
@@ -185,35 +214,11 @@ export class StoneIssueComponent implements OnInit {
     }
   }
 
-  WorkerCodeSelected(e:any){
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION);
   }
-
-  // openaddstoneissuedetail() {
-  //   // let i = 0;
-  //   this.srNo= this.srNo+1;
-  //   const modalRef: NgbModalRef = this.modalService.open(StoneIssueDetailComponent, {
-  //     size: 'xl',
-  //     backdrop: true,//'static'
-  //     keyboard: false,
-  //     windowClass: 'modal-full-width',
-  //   });
-
-  //   modalRef.result.then((postData) => {
-  //     // console.log(postData);      
-  //     if (postData) {
-  //       console.log('Data from modal:', postData);    
-  //       if (postData.reopen= true) {
-  //         this.openaddstoneissuedetail();
-  //       }   
-  //       this.stoneIssueData.push(postData);
-
-  //     }
-  //   });
-  //   modalRef.componentInstance.content = this.srNo;
-  // }
 
   deleteTableData(): void {
     console.log(this.selectedKey, 'data')
@@ -234,28 +239,6 @@ export class StoneIssueComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
- 
-
-  stoneissueFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocno:['1',[Validators.required]],
-    vocDate:[],
-    enteredBy:[''],
-    currency:[''],
-    currencyrate:[''],
-    worker:['',],
-    workername:[''],
-    narration:[''],
-    caratTotal:[''],
-    amountTotal:[''],
-    total:[''],
-  });
-
-  setvalues(){
-    this.stoneissueFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.stoneissueFrom.controls.vocDate.setValue(this.comService.currentDate)
-
-  }
   setCompanyCurrency() {
     let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
     this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -353,12 +336,12 @@ export class StoneIssueComponent implements OnInit {
   //   });
   // }
 
-  removedata(){
+  removedata() {
     this.tableData.pop();
   }
 
-  formSubmit(){
-    if(this.content && this.content.FLAG == 'EDIT'){
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -366,14 +349,14 @@ export class StoneIssueComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
     let postData = {
       "MID": 0,
       "VOCTYPE": this.stoneissueFrom.value.voctype,
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.stoneissueFrom.value.vocno,
-      "VOCDATE": this.stoneissueFrom.value.vocDate ,
+      "VOCDATE": this.stoneissueFrom.value.vocDate,
       "YEARMONTH": this.yearMonth,
       "DOCTIME": "2023-10-19T06:55:16.030Z",
       "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
@@ -396,11 +379,11 @@ export class StoneIssueComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.stoneIssueData,
     }
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -423,8 +406,8 @@ export class StoneIssueComponent implements OnInit {
   }
 
   setFormValues() {
-    if(!this.content) return
-    console.log(this.content);    
+    if (!this.content) return
+    console.log(this.content);
     this.stoneissueFrom.controls.voctype.setValue(this.content.VOCTYPE)
     this.stoneissueFrom.controls.vocno.setValue(this.content.VOCNO)
     this.stoneissueFrom.controls.vocDate.setValue(this.content.VOCDATE)
@@ -436,12 +419,12 @@ export class StoneIssueComponent implements OnInit {
   }
 
 
-  update(){
+  update() {
     if (this.stoneissueFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = `JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/${this.branchCode}/${this.stoneissueFrom.value.voctype}/${this.stoneissueFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
       "MID": 0,
@@ -523,13 +506,13 @@ export class StoneIssueComponent implements OnInit {
           "EXCLUDE_TRANSFER_WT": true,
           "OTHER_ATTR": "string"
         }
-      ] 
+      ]
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -550,7 +533,7 @@ export class StoneIssueComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -575,7 +558,7 @@ export class StoneIssueComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/' + this.stoneissueFrom.value.branchCode +  this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.yearMonth
+        let API = 'JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/' + this.stoneissueFrom.value.branchCode + this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -616,7 +599,7 @@ export class StoneIssueComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
