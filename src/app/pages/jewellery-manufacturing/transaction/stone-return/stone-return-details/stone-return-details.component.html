@@ -17,12 +17,12 @@
             Job Number * :</label>
           <div class="col-sm-8">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobno" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobno" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -32,13 +32,13 @@
           <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No * :</label>
           <div class="col-sm-8">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobno" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
               &nbsp;
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobDesc" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -49,7 +49,7 @@
           </label>
           <div class="col-md-3">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 70%">
+              <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="designcode" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
@@ -60,7 +60,7 @@
           </label>
           <div class="col-md-3">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 70%">
+              <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="salesorderno" [readonly]="viewMode" class="text-right" NumberOnly
                 />
               </mat-form-field>
@@ -83,12 +83,12 @@
           <label for="inputPassword" class="col-sm-3 col-form-label">Process * :</label>
           <div class="col-sm-7">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="process" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>&nbsp;
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="processname" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -99,12 +99,12 @@
             Worker * :</label>
           <div class="col-sm-7">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>&nbsp;
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="workername" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -115,12 +115,12 @@
             Stock * :</label>
           <div class="col-sm-7">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stock" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>&nbsp;
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stock" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -130,7 +130,7 @@
           <label for="inputPassword" class="col-sm-3 col-form-label">Batch ID :</label>
           <div class="col-sm-5">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="batchid" [readonly]="viewMode"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
@@ -145,12 +145,12 @@
             </div>
             <div class="col-sm-1"></div>
             <div class="col-sm-4">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="broken" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
             <div class="col-sm-4">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="broken" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -171,7 +171,7 @@
           <label for="inputPassword" class="col-sm-4 col-form-label">Location * :</label>
           <div class="col-md-7">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="location" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -187,7 +187,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="pieces" [readonly]="viewMode" class="text-right" NumberOnly/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
@@ -198,7 +198,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="size" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -207,7 +207,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="sieve" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -218,7 +218,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="carat" [readonly]="viewMode" ThreeDecimalInput class="text-right"/>
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
@@ -229,7 +229,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="color" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -238,7 +238,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="sieveset" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -249,7 +249,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="unitrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
               </mat-form-field>
             </div>
@@ -258,7 +258,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="shape" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -267,7 +267,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="clarity" [readonly]="viewMode"/>
               </mat-form-field>
             </div>
@@ -278,7 +278,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="amount" [readonly]="viewMode" AmountDecimalInput class="text-right"/>
               </mat-form-field>
             </div>
@@ -287,7 +287,7 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="pointerwt" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
               </mat-form-field>
             </div>

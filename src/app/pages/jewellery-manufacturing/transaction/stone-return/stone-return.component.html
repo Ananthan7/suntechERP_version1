@@ -20,12 +20,12 @@
             <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Voucher * :</label>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field style="width: 100%;">
                   <input type="number" matInput formControlName="vocno" [readonly]="viewMode" class="text-right"/>
                 </mat-form-field>
               </div>
@@ -33,7 +33,7 @@
             <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Voucher Date :</label>
               <div class="col-sm-7">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field style="width: 100%;">
                   <input matInput [matDatepicker]="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY"
                     DateValidation [readonly]="viewMode"/>
                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
@@ -44,14 +44,14 @@
             <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Entered By :</label>
               <div class="col-md-8">
-                <mat-form-field appearance="outline" style="width: 75%;">
+                <mat-form-field style="width: 75%;">
                   <input type="text" matInput formControlName="enterdBy" [readonly]="viewMode"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
               <!-- <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 140%;">
+                <mat-form-field style="width: 140%;">
                   <input type="text" matInput formControlName="enteredByName" [readonly]="viewMode"/>
                 </mat-form-field>
               </div> -->
@@ -60,12 +60,12 @@
             <!-- <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Worker :</label>
               <div class="col-sm-3">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 140%;">
+                <mat-form-field style="width: 140%;">
                   <input type="text" matInput formControlName="workername" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
@@ -75,14 +75,14 @@
             <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Base Currency :</label>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 70%;">
+                <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="basecurrency" [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
                   (newRowClick)="baseCurrencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="basecurrencyrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
                 </mat-form-field>
               </div>
@@ -90,14 +90,14 @@
             <div class="row mb-2">
               <label for="input" class="col-sm-3 col-form-label">Currency * :</label>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 70%;">
+                <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="currency" [readonly]="viewMode"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
                   (newRowClick)="currencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="currencyrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
                 </mat-form-field>
               </div>
@@ -130,7 +130,7 @@
                   (addClick)="openaddstonereturndetails()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
                 <div class="col-sm-3">
-                  <mat-form-field appearance="outline" style="width: 80%;">
+                  <mat-form-field style="width: 80%;">
                     <input type="text" matInput />
                   </mat-form-field>
                   <master-search>
@@ -163,7 +163,7 @@
                 <div class="row">
                   <label for="input" class="col-sm-2 col-form-label">Remarks : </label>
                   <div class="col-sm-4">
-                    <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="remark" />
                     </mat-form-field>
                   </div>
