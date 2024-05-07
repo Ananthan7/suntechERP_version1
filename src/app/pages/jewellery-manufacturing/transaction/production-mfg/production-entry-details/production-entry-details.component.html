@@ -132,10 +132,13 @@
                 <label for="input" class="col-sm-2 col-form-label">Design
                   :</label>
                 <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
+                  <mat-form-field style="width: 70%;">
                     <input type="text" matInput formControlName="DESIGN_CODE" />
                   </mat-form-field>
+                   <master-search [MasterSearchData]="designCodeData"
+                (newRowClick)="designSelected($event)"></master-search>
                 </div>
+               
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput
@@ -227,7 +230,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="number" matInput  
+                    <input type="text" matInput  
                       class="text-right" formControlName="price1" NumberOnly />
                   </mat-form-field>
                   <master-search [MasterSearchData]="price1CodeData"
@@ -262,7 +265,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="number" matInput
+                    <input type="text" matInput
                       class="text-right" formControlName="price2" NumberOnly />
                   </mat-form-field>
                   <master-search [MasterSearchData]="price2CodeData"
@@ -291,7 +294,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="number" matInput
+                    <input type="text" matInput
                       class="text-right" formControlName="price3" NumberOnly />
                   </mat-form-field>
                   <master-search [MasterSearchData]="price3CodeData"
@@ -347,8 +350,8 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="number" matInput
-                      class="text-right" formControlName="price4" NumberOnly />
+                    <input type="text" matInput
+                      class="text-right" formControlName="price5" NumberOnly />
                   </mat-form-field>
                   <master-search [MasterSearchData]="price5CodeData"
                   (newRowClick)="price5CodeSelected($event)"></master-search>
@@ -447,14 +450,20 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row justify-content-between">
-                <label for="input"
-                  class="col-sm-4 col-form-label text-primary">Price
-                  Scheme</label>
+              <div class="row-sm-4">
+                <div class="col-md-2">
+                  <div class="price_box">
+                      <a>PriceScheme</a>
+                      <master-search [MasterSearchData]="priceSchemeData"
+                          (newRowClick)="priceSchemeValidate($event)"></master-search>
+                      <a>{{productiondetailsFrom.value.pricescheme}}</a>
+                  </div>
+              </div>
+              </div>
                 <div class="col-md-8">
                   <div class="col-md-2">
                     <div class="upload-btn-wrapper">
-                        <button class="btn btnnew" [disabled]="viewMode">
+                        <button class="btn btnnew" [disabled]="viewMode" style="margin-left: 187px;">
                             Item Image
                         </button>
                         <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
@@ -463,12 +472,13 @@
 
                     <div class="image_box">
                         <div class="img_box">
-                            <img src="{{ urls }}" style="width: 209px; height: 163px" />
+                            <img src="{{ urls }}" style="width: 209px; height: 163px; margin-left: 160px;"
+                            />
                         </div>
                     </div>
                 </div>    
                 </div>
-              </div>
+            
             </div>
           </div>
         </mat-tab>

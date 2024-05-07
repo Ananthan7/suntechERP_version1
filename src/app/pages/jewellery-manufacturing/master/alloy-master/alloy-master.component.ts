@@ -84,7 +84,8 @@ export class AlloyMasterComponent implements OnInit {
     weightAvgCostDes: [''],
     allowpcs:[false],
     excludeTransferWt:[false],
-    silveralloy:['']
+    silveralloy:[''],
+    picture_name:['']
   });
   
   //number validation
@@ -447,7 +448,6 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.description.setValue(e.DESCRIPTION)
     this.prefixCodeValidate()
   }
-
     prefixCodeValidate() {
       const code = this.alloyMastereForm.value.code;
       if (!code) {
@@ -665,7 +665,7 @@ export class AlloyMasterComponent implements OnInit {
       SUPPLIER_REF: "",
       DESIGN_CODE: this.commonService.nullToString(this.alloyMastereForm.value.design),
       SET_REF: this.commonService.nullToString(this.alloyMastereForm.value.design),
-      PICTURE_NAME: "",
+      PICTURE_NAME: this.commonService.nullToString(this.alloyMastereForm.value.picture_name),
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: 0,
       STOCK_LCCOST: 0,
@@ -1201,4 +1201,5 @@ export class AlloyMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
+  
 }

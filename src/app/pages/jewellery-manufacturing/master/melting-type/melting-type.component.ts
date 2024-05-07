@@ -156,7 +156,7 @@ export class MeltingTypeComponent implements OnInit {
       "MELTYPE_DESCRIPTION": "",
       "KARAT_CODE": this.meltingTypeForm.value.karat,
       "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
-      "DIVISION_CODE": this.meltingTypeForm.value.divCode,
+      "DIVISION_CODE": 'Y',
       "DEF_ALLOY_STOCK": "",
       "DEF_ALLOY_DESCRIPTION": "",
       "ALLOY_PER": "",
