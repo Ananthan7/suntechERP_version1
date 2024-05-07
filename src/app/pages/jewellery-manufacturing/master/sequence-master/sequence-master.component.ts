@@ -17,6 +17,8 @@ export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
 
   dataSource: any[] = [];
+  tableData:any[] = []
+  processSearch: string = '';
   selectedSequence: any[] = [];
   currentFilter: any;
   showFilterRow!: boolean;
@@ -73,16 +75,14 @@ export class SequenceMasterComponent implements OnInit {
   ngOnInit(): void {
     this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
-
-    if (this.content.FLAG == 'EDIT') {
-      this.editMode = true
-      this.dele = false;
+    if (this.content?.FLAG) {
       this.setFormValues();
-    } else if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.setFormValues();
-      
-      
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true
+        this.dele = false;
+      } else if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
     }
   }
 
@@ -124,6 +124,16 @@ export class SequenceMasterComponent implements OnInit {
   lossAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
   }
+  
+  searchFromGrid(event:any) {
+    if(event.target.value == ''){
+      this.dataSource = this.tableData
+    }
+    const results:any = []
+    this.dataSource = this.dataSource.filter(obj =>
+      obj.PROCESS_CODE.toLowerCase().startsWith(event.target.value.toLowerCase())
+    );
+  }
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
@@ -132,10 +142,8 @@ export class SequenceMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response
+          this.tableData = result.response
           this.sortWithMID()
-
-          // "STD_TIME": item.STD_TIME,
-          // "MAX_TIME": item.MAX_TIME,
 
           this.dataSource.forEach((item: any, index: any) => {
             item.SRNO = index + 1
@@ -147,7 +155,7 @@ export class SequenceMasterComponent implements OnInit {
             item.orderId = this.dataSource.length
           })
 
-          if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
+          if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
             this.checkSequenceExists()
           }
         } else {
@@ -277,62 +285,52 @@ export class SequenceMasterComponent implements OnInit {
     const minutesTime = Math.floor(time % 60);
     return daysTime + ":" + hoursTime + ':' + minutesTime;
   }
-  /**USE:  final save API call*/
-  formSubmit() {
-
-    if (this.content?.FLAG == 'VIEW') return
-    if (this.content?.FLAG == 'EDIT') {
-      this.updateWorkerMaster()
-      return
-    }
-
-
+  submitValidation() {
     if (this.sequenceMasterForm.invalid && this.selectedSequence) {
       this.toastr.error('Select all required fields & Process')
-      return
+      return true;
     }
-
     this.dataSource.forEach((item: any) => {
-      //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
         this.checkCondtion = true;
         this.toastr.error('Max loss must be Greater than the Standard Loss')
       }
-
       if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
         this.checkCondtion = false
 
       }
     })
-
     if (this.checkCondtion == true) {
-      console.log(this.checkCondtion)
-      return;
+      return true;
     }
 
     this.dataSource.forEach((item: any) => {
-      //this.checkCondtion = false;
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
         this.checkTimeCondtion = true;
-       this.toastr.error('Max Time must be Greater than the Standard Time')
+        this.toastr.error('Max Time must be Greater than the Standard Time')
       }
 
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
         this.checkTimeCondtion = false
-
       }
     })
-
     if (this.checkTimeCondtion == true) {
-      console.log(this.checkTimeCondtion)
-      return;
+      return true;
     }
-
-
+    return false;
+  }
+  /**USE:  final save API call*/
+  formSubmit() {
+    if (this.content?.FLAG == 'VIEW') return
+    if (this.submitValidation()) return;
     // // Check loss condition with the postData
     // if (!this.checkLossCondition()) {
     //   return; // Prevent form submission if condition fails
     // }
+    if (this.content?.FLAG == 'EDIT') {
+      this.updateWorkerMaster()
+      return
+    }
     let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
     let postData = {
       "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode.toUpperCase() || "",
@@ -348,7 +346,7 @@ export class SequenceMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -369,47 +367,6 @@ export class SequenceMasterComponent implements OnInit {
 
 
   updateWorkerMaster() {
-    if (this.selectedSequence.length == 0 && this.sequenceMasterForm.invalid) {
-      this.toastr.error('Select all required fields')
-      return
-    }
-
-    this.dataSource.forEach((item: any) => {
-      //this.checkCondtion = false;
-      if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
-        this.checkCondtion = true;
-        this.toastr.error('Max loss must be Greater than the Std Loss')
-      }
-
-      if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
-        this.checkCondtion = false
-
-      }
-    })
-
-    if (this.checkCondtion == true) {
-      console.log(this.checkCondtion)
-      return;
-    }
-
-    this.dataSource.forEach((item: any) => {
-      //this.checkCondtion = false;
-      if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
-        this.checkTimeCondtion = true;
-        this.toastr.error('Max Time must be Greater than the Std Time')
-      }
-
-      if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
-        this.checkTimeCondtion = false
-
-      }
-    })
-
-    if (this.checkTimeCondtion == true) {
-      console.log(this.checkTimeCondtion)
-      return;
-    }
-
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = {
       "SEQ_CODE": this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode),
@@ -425,7 +382,7 @@ export class SequenceMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: this.commonService.getMsgByID('MSG2186') || result.message,
+              title: this.commonService.getMsgByID('MSG2443') || result.message,
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -533,6 +490,8 @@ export class SequenceMasterComponent implements OnInit {
       });
       return
     }
+    this.processSearch = ''
+    this.dataSource = this.tableData;
     this.dataSource.forEach((item: any, index: number) => {
       if (value.MID == item.MID) {
         item.isChecked = value.isChecked
@@ -632,7 +591,7 @@ export class SequenceMasterComponent implements OnInit {
   //   return true;
   // }
 
-   checkLossCondition(data: any) {
+  checkLossCondition(data: any) {
     let max: number = parseFloat(data['MAX_LOSS'])
     let std: number = parseFloat(data['STD_LOSS'])
     if (max < std) {
