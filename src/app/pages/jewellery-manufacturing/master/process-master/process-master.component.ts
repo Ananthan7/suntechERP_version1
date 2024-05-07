@@ -6,8 +6,6 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { DurationPickerComponent } from 'src/app/shared/common/duration-picker/duration-picker.component';
-
 import Swal from 'sweetalert2';
 
 @Component({
@@ -251,6 +249,7 @@ export class ProcessMasterComponent implements OnInit {
         this.onAllowGain();
         this.dele = false;
       } else if (this.content.FLAG == 'DELETE'){
+        this.viewMode = true;
         this.deleteProcessMaster()
       }
     }

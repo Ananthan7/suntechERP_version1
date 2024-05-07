@@ -17,7 +17,7 @@ export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
 
   dataSource: any[] = [];
-  tableData:any[] = []
+  tableData: any[] = []
   processSearch: string = '';
   selectedSequence: any[] = [];
   currentFilter: any;
@@ -82,6 +82,9 @@ export class SequenceMasterComponent implements OnInit {
         this.dele = false;
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteSequenceMaster()
       }
     }
   }
@@ -124,12 +127,12 @@ export class SequenceMasterComponent implements OnInit {
   lossAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
   }
-  
-  searchFromGrid(event:any) {
-    if(event.target.value == ''){
+
+  searchFromGrid(event: any) {
+    if (event.target.value == '') {
       this.dataSource = this.tableData
     }
-    const results:any = []
+    const results: any = []
     this.dataSource = this.dataSource.filter(obj =>
       obj.PROCESS_CODE.toLowerCase().startsWith(event.target.value.toLowerCase())
     );
@@ -149,8 +152,6 @@ export class SequenceMasterComponent implements OnInit {
             item.SRNO = index + 1
             item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
             item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
-            item.STD_TIME = this.commonService.decimalQuantityFormat(item.STD_TIME, 'METAL')
-            item.MAX_TIME = this.commonService.decimalQuantityFormat(item.MAX_TIME, 'METAL')
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
@@ -197,7 +198,7 @@ export class SequenceMasterComponent implements OnInit {
   }
 
 
-  // check sequence exists and fill grid
+  // use: check sequence exists and fill grid
   checkSequenceExists() {
     if (this.sequenceMasterForm.value.sequenceCode == '') return
     let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + this.sequenceMasterForm.value.sequenceCode
@@ -215,28 +216,23 @@ export class SequenceMasterComponent implements OnInit {
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
                 obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                  obj.STD_TIME = this.commonService.decimalQuantityFormat(item.STD_TIME, 'METAL')
-                obj.MAX_TIME = this.commonService.decimalQuantityFormat(item.MAX_TIME, 'METAL')
+                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
                 obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                  obj.POINTS = item.POINTS || 0,
-                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                  obj.GAIN_AC = "",
-                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                obj.POINTS = item.POINTS || 0,
+                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                obj.GAIN_AC = "",
+                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
             });
           })
-          console.log(this.dataSource, 'this.dataSource');
-          this.dataSource.forEach((obj: any) => {
-            // obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
-            // obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
-            obj.STD_TIME = obj.STD_TIME;
-            obj.MAX_TIME = obj.MAX_TIME;
-          })
+          // this.dataSource.forEach((obj: any) => {
+          //   obj.STD_TIME = this.commonService.convertTimeMinutesToDHM(obj.STD_TIME)
+          //   obj.MAX_TIME = this.commonService.convertTimeMinutesToDHM(obj.MAX_TIME)
+          // })
           this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
           this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
           this.reCalculateSRNO()
@@ -401,8 +397,8 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**USE: delete worker master from row */
-  deleteWorkerMaster() {
+  /**USE: delete  master from row */
+  deleteSequenceMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.SEQ_CODE) {
       Swal.fire({

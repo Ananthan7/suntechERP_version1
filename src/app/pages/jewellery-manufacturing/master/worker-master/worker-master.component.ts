@@ -137,6 +137,7 @@ export class WorkerMasterComponent implements OnInit {
         this.codeEnable = false;
         this.dele = false;
       } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
         this.deleteWorkerMaster()
       }
     }
