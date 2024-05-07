@@ -1699,7 +1699,8 @@ export class AddPosComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-
+    console.log(this.comFunc.allCompanyParameters,'this.allCompanyParameters');
+    
 
     /* this.receiptDetailsList = [
       {
