@@ -71,7 +71,7 @@
         <div class="row">
             <div class="col-md-11">
                 <div class="row ps-4">
-                    <div class="col-md-3">
+                    <div class="col-md-3" *ngIf="!viewMode">
                         <mat-form-field style="width: 60%">
                             <input type="text" matInput 
                                 [readonly]="viewMode"
