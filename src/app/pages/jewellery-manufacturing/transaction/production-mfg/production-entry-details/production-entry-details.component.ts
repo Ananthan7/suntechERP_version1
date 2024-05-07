@@ -343,6 +343,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   designSelected(value: any) {
     console.log(value);
     this.productiondetailsFrom.controls.DESIGN_CODE.setValue(value.DESIGN_CODE);
+    this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(value.DESIGN_DESCRIPTION);
   }
   priceSchemeValidate(e: any) {
     console.log('yap')

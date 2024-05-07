@@ -47,7 +47,7 @@ export class ProductionMfgComponent implements OnInit {
   labourChargeDetailToSave: any[] = [];
   productionMetalRateToSave: any[] = [];
   formDetailCount: number = 0;
-
+  viewMode: boolean = false;
   userName = this.commonService.userName;
   branchCode: string = '';
   yearMonth?: string;
@@ -90,6 +90,53 @@ export class ProductionMfgComponent implements OnInit {
     WHERECONDITION: "RATE_TYPE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  };
+  CurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  branchCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 5,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Users',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  userDataSelected(value: any) {
+    console.log(value);
+    this.productionFrom.controls.enteredby.setValue(value.UsersName);
+  }
+  branchSelected(e:any){
+    console.log(e); 
+    this.productionFrom.controls.branchto.setValue(e.BRANCH_CODE);
+  }
+  baseCurrencyCodeSelected(e: any) {
+    console.log(e);
+    this.productionFrom.controls.basecurrency.setValue(e.CURRENCY_CODE);
+    this.productionFrom.controls.basecurrencyrate.setValue(e.CONV_RATE);
   }
   // main form
   productionFrom: FormGroup = this.formBuilder.group({

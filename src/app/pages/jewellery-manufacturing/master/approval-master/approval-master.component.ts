@@ -347,11 +347,6 @@ isNumeric(event: any) {
         return !item.MOBILE_NO.trim() || !item.EMAIL_ID.trim();
       });
   
-      if (isEmpty) {
-        this.toastr.error("Mobile number and Email ID must be filled for all selected items");
-        return;
-      }
-  
       // Proceed with the update
       this.update();
       return;

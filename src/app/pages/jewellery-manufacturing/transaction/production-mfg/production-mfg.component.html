@@ -34,7 +34,7 @@
                   <label class="col-sm-4 col-form-label">
                     Voc Type<b>*</b></label>
                   <mat-form-field style="width: 50%;">
-                    <input type="text" matInput formControlName="voctype" />
+                    <input type="text" matInput formControlName="voctype" readonly/>
                   </mat-form-field>
                 </div>
               </div>
@@ -48,9 +48,9 @@
                     <mat-form-field style="width: 100%;">
                       <!-- <input type="date" matInput formControlName="vocdate" />
                         </mat-form-field> -->
-                      <input matInput [matDatepicker]="vocDate" name="vocDate"
+                      <input matInput [matDatepicker]="vocDate" name="vocDate" [max]="vocMaxDate"
                         formControlName="vocDate"
-                        placeholder="DD/MM/YYYY" DateValidation />
+                        placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode"/>
                       <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                       <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                     </mat-form-field>
@@ -76,9 +76,11 @@
                   <label class="col-sm-4 col-form-label">Entered
                     By</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 80%;">
                       <input type="text" matInput formControlName="enteredby" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="enteredByCodeData" *ngIf="!viewMode"
+                (newRowClick)="userDataSelected($event)"></master-search>
                   </div>
                 </div>
               </div>
@@ -89,7 +91,7 @@
                   <label for="input"
                     class="col-sm-4 pe-2 col-form-label">Currency *</label>
                   <div class="col-sm-2">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput
                         (change)="currencyDataSelected($event)"
                         formControlName="currency" />
@@ -168,10 +170,12 @@
                       <label class="col-sm-3 col-form-label">
                         Branch To</label>
                       <div class="col-md-5">
-                        <mat-form-field style="width: 100%;">
-                          <input type="number" matInput
+                        <mat-form-field style="width: 80%;">
+                          <input type="text" matInput
                             formControlName="branchto" />
                         </mat-form-field>
+                        <master-search [MasterSearchData]="branchCodeData"
+                        (newRowClick)="branchSelected($event)"></master-search>
                       </div>
                     </div>
                   </div>
@@ -188,10 +192,14 @@
                         </mat-form-field>
                       </div> &nbsp;
                       <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 80%;">
                           <input type="number" matInput
-                            formControlName="basecurrencyrate" />
+                            formControlName="basecurrencyrate" class="text-right"/>
                         </mat-form-field>
+                        <master-search
+                        [MasterSearchData]="CurrencyCodeData"
+                        (newRowClick)="baseCurrencyCodeSelected($event)">
+                      </master-search>
                       </div>
                     </div>
                   </div>

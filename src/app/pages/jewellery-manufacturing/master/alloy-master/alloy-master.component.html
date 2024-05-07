@@ -6,8 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()" (saveClick)="formSubmit()"
-    (deleteClick)="deleteMeltingType()"></modal-header>
+<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -33,7 +33,7 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%">
                                         <input type="text" matInput formControlName="costCenter"
-                                        [readonly]=" viewMode || codeEnable" />
+                                            [readonly]=" viewMode || codeEnable" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="costCenterData"
                                         (newRowClick)="costCenterSelected($event)"></master-search>
@@ -94,15 +94,18 @@
                             <div class="row mb-1">
                                 <div class="col-sm-12">
                                     <section class="example-section">
-                                        <mat-checkbox class="example-margin" formControlName="allowpcs" [disabled]="viewMode">Allow
+                                        <mat-checkbox class="example-margin" formControlName="allowpcs"
+                                            [disabled]="viewMode">Allow
                                             Pcs</mat-checkbox>
                                     </section>
                                     <section class="example-section">
-                                        <mat-checkbox class="example-margin" formControlName="excludeTransferWt" [disabled]="viewMode" >Exclude From Transfer
+                                        <mat-checkbox class="example-margin" formControlName="excludeTransferWt"
+                                            [disabled]="viewMode">Exclude From Transfer
                                             Wt</mat-checkbox>
                                     </section>
                                     <section class="example-section">
-                                        <mat-checkbox class="example-margin" formControlName="silveralloy"  [disabled]="viewMode">Silver
+                                        <mat-checkbox class="example-margin" formControlName="silveralloy"
+                                            [disabled]="viewMode">Silver
                                             Alloy</mat-checkbox>
                                     </section>
                                 </div>
@@ -167,7 +170,8 @@
                                             [readonly]="viewMode" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="fristtransaction"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate" #fristtransaction [disabled]="true"></mat-datepicker>
+                                        <mat-datepicker [startAt]="currentDate" #fristtransaction
+                                            [disabled]="true"></mat-datepicker>
                                         <!-- <input type="text" matInput
                                             formControlName="fristtransaction" [readonly]="true"/> -->
                                     </mat-form-field>
@@ -182,7 +186,8 @@
                                             [readonly]="viewMode" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="lasttransaction"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate" #lasttransaction [disabled]="true"></mat-datepicker>
+                                        <mat-datepicker [startAt]="currentDate" #lasttransaction
+                                            [disabled]="true"></mat-datepicker>
                                         <!-- <input type="text" matInput
                                             formControlName="lasttransaction" [readonly]="true"/> -->
                                     </mat-form-field>
@@ -215,13 +220,15 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="weightAvgCost"
-                                            style="text-align: right" [readonly]="viewMode|| codeEnable" AmountDecimalInput />
+                                            style="text-align: right" [readonly]="viewMode|| codeEnable"
+                                             />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="weightAvgCostDes"
-                                            style="text-align: right" [readonly]="viewMode" AmountDecimalInput />
+                                            style="text-align: right" [readonly]="viewMode" AmountDecimalInput
+                                             />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -258,11 +265,11 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="price1code"
-                                            [readonly]="viewMode" (change)="priceCodeone($event)"/>
+                                        <input type="text" matInput formControlName="price1code" [readonly]="viewMode"
+                                            (change)="priceCodeone($event)" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="priceCodeData"
-                                        (newRowClick)="priceOneCodeSelected($event)" ></master-search>
+                                        (newRowClick)="priceOneCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
@@ -273,8 +280,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price1Fc" [max]="12"
-                                            class="text-right"   readonly  />
+                                        <input type="text" matInput AmountDecimalInput formControlName="price1Fc"
+                                            [max]="12" class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -290,11 +297,11 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="price2code"
-                                            [readonly]="viewMode"  (change)="priceTwoCode($event)"/>
+                                        <input type="text" matInput formControlName="price2code" [readonly]="viewMode"
+                                            (change)="priceTwoCode($event)" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="priceCodeData"
-                                        (newRowClick)="priceTwoCodeSelected($event)" ></master-search>
+                                        (newRowClick)="priceTwoCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
@@ -305,8 +312,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price2Fc" [max]="12"
-                                            class="text-right" readonly/>
+                                        <input type="text" matInput AmountDecimalInput formControlName="price2Fc"
+                                            [max]="12" class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -322,8 +329,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="price3code"
-                                            [readonly]="viewMode"  (change)="priceThreeCode($event)"/>
+                                        <input type="text" matInput formControlName="price3code" [readonly]="viewMode"
+                                            (change)="priceThreeCode($event)" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceThreeCodeSelected($event)"></master-search>
@@ -337,8 +344,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="price3Fc" AmountDecimalInput [max]="12"
-                                            class="text-right" readonly />
+                                        <input type="text" matInput formControlName="price3Fc" AmountDecimalInput
+                                            [max]="12" class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -354,8 +361,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="price4code"
-                                            [readonly]="viewMode" (change)="priceFourCode($event)"/>
+                                        <input type="text" matInput formControlName="price4code" [readonly]="viewMode"
+                                            (change)="priceFourCode($event)" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceFourCodeSelected($event)"></master-search>
@@ -369,8 +376,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="price4Fc" AmountDecimalInput [max]="12"
-                                            class="text-right" readonly />
+                                        <input type="text" matInput formControlName="price4Fc" AmountDecimalInput
+                                            [max]="12" class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -386,8 +393,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="price5code"
-                                            [readonly]="viewMode" (change)="priceFiveCode($event)"/>
+                                        <input type="text" matInput formControlName="price5code" [readonly]="viewMode"
+                                            (change)="priceFiveCode($event)" />
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceFiveCodeSelected($event)"></master-search>
@@ -401,8 +408,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="price5Fc" AmountDecimalInput [max]="12"
-                                            class="text-right" readonly />
+                                        <input type="text" matInput formControlName="price5Fc" AmountDecimalInput
+                                            [max]="12" class="text-right" readonly />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -430,8 +437,9 @@
                                 <button class="btn btnnew" [disabled]="viewMode">
                                     Item Image
                                 </button>
-                                <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                    class="uploadproduct" [disabled]="viewMode" (change)="onFileChanged($event)" />
+                                <input type="file" name="uploadproduct" formControlName="picture_name"
+                                    accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" [disabled]="viewMode"
+                                    (change)="onFileChanged($event)" />
                             </div>
 
                             <div class="image_box">

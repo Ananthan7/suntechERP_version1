@@ -132,10 +132,13 @@
                 <label for="input" class="col-sm-2 col-form-label">Design
                   :</label>
                 <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
+                  <mat-form-field style="width: 70%;">
                     <input type="text" matInput formControlName="DESIGN_CODE" />
                   </mat-form-field>
+                   <master-search [MasterSearchData]="designCodeData"
+                (newRowClick)="designSelected($event)"></master-search>
                 </div>
+               
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput
