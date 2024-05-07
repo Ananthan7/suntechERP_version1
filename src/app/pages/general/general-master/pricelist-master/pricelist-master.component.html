@@ -27,6 +27,7 @@
                                                 [readonly]="viewMode || editMode"
                                                 maxlength="6" #priceCode
                                                 appNoEmptySpace
+                                                id="priceCode"
                                                 formControlName="priceCode"
                                                 (focusout)="checkWorkerExists($event)"
                                                 (keyup)="codeEnabled()"

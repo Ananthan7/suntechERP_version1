@@ -16,12 +16,12 @@ import Swal from 'sweetalert2';
 export class PriceschemesMasterComponent implements OnInit {
   priceSchemaMasterForm!: FormGroup;
   @Input() content!: any;
-  price3SearchEnable:boolean = false;
-  price2SearchEnable:boolean = false;
-  price4SearchEnable:boolean = false;
-  price5SearchEnable:boolean = false;
+  price3SearchEnable: boolean = false;
+  price2SearchEnable: boolean = false;
+  price4SearchEnable: boolean = false;
+  price5SearchEnable: boolean = false;
 
-  codeEnable:boolean = true;
+  codeEnable: boolean = true;
   viewMode: boolean = false;
   editMode: boolean = false;
   dele: boolean = false;
@@ -55,7 +55,7 @@ export class PriceschemesMasterComponent implements OnInit {
       priceCode: ['', [Validators.required]],
       priceDescription: ['', [Validators.required]],
       price1: ['', [Validators.required]],
-      price2: [{ value: '', disabled: true },Validators.required],
+      price2: [{ value: '', disabled: true }, Validators.required],
       price3: [{ value: '', disabled: true }],
       price4: [{ value: '', disabled: true }],
       price5: [{ value: '', disabled: true }],
@@ -80,13 +80,15 @@ export class PriceschemesMasterComponent implements OnInit {
     this.setAllInitialValues();
   }
 
+
+
   enableNextField(currentField: string, nextField: string) {
-   
+
     const currentControl = this.priceSchemaMasterForm.get(currentField);
     const nextControl = this.priceSchemaMasterForm.get(nextField);
 
     if (currentControl && nextControl) {
-     
+
       if (currentControl.value && currentControl.value !== nextControl.value) {
         nextControl.enable();
       } else {
@@ -94,7 +96,7 @@ export class PriceschemesMasterComponent implements OnInit {
         // If the current field is cleared, also clear and disable the next fields
         this.priceSchemaMasterForm.get(nextField)?.setValue('');
         this.disableNextFields(nextField);
-        
+
       }
     }
   }
@@ -109,67 +111,68 @@ export class PriceschemesMasterComponent implements OnInit {
       this.priceSchemaMasterForm.get(nextField)?.setValue('');
     }
   }
-  
-  
- /** checking for same account code selection */
- private isSameAccountCodeSelected(accountCode: any): boolean {
-  return (
-    this.priceSchemaMasterForm.value.price1 === accountCode ||
-    this.priceSchemaMasterForm.value.price2 === accountCode ||
-    this.priceSchemaMasterForm.value.price3 === accountCode ||
-    this.priceSchemaMasterForm.value.price4 === accountCode ||
-    this.priceSchemaMasterForm.value.price5 === accountCode
-  );
-}
 
 
-priceCodeSelected(e: any, controlName: string) {
-  if (this.checkCode()) return
-  if(controlName == 'price1'){
-    this.price2SearchEnable = true;
-  }
-  if(controlName == 'price2'){
-    this.price3SearchEnable = true;
-  }
-  if(controlName == 'price3'){
-    this.price4SearchEnable = true;
-  }
-  if(controlName == 'price4'){
-    this.price5SearchEnable = true;
-  }
-  
-  if (this.isSameAccountCodeSelected(e.PRICE_CODE)) {
-    this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
-    return;
+  /** checking for same account code selection */
+  private isSameAccountCodeSelected(accountCode: any): boolean {
+    return (
+      this.priceSchemaMasterForm.value.price1 === accountCode ||
+      this.priceSchemaMasterForm.value.price2 === accountCode ||
+      this.priceSchemaMasterForm.value.price3 === accountCode ||
+      this.priceSchemaMasterForm.value.price4 === accountCode ||
+      this.priceSchemaMasterForm.value.price5 === accountCode
+    );
   }
 
-  try {
-    this.priceSchemaMasterForm.controls[controlName].setValue(e.PRICE_CODE);
-    const nextFieldName = this.getNextFieldName(controlName);
-    if (nextFieldName !== '') {
-      this.enableNextField(controlName, nextFieldName);
+
+  priceCodeSelected(e: any, controlName: string) {
+    if (this.checkCode()) return
+    if (controlName == 'price1') {
+      this.price2SearchEnable = true;
     }
-  } catch (error) {
-    console.error('Error in Price Code Selected:', error);
-  }
-}
+    if (controlName == 'price2') {
+      this.price3SearchEnable = true;
+    }
+    if (controlName == 'price3') {
+      this.price4SearchEnable = true;
+    }
+    if (controlName == 'price4') {
+      this.price5SearchEnable = true;
+    }
 
-// Helper method to get the next field name based on the current field
-private getNextFieldName(currentField: string): string {
-   const fieldIndex = ['price1', 'price2', 'price3', 'price4', 'price5'].indexOf(currentField);
-   return fieldIndex !== -1 && fieldIndex < 4 ? `price${fieldIndex + 2}` : '';
-  // switch (currentField) {
-  //   case 'price2':
-  //     return 'price3';
-  //   case 'price3':
-  //     return 'price4';
-  //   case 'price4':
-  //     return 'price5';
-  //   // Add more cases as needed for your form structure
-  //   default:
-  //     return '';
-  // }
-}
+    if (this.isSameAccountCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
+      return;
+    }
+
+    try {
+      this.priceSchemaMasterForm.controls[controlName].setValue(e.PRICE_CODE);
+      const nextFieldName = this.getNextFieldName(controlName);
+      if (nextFieldName !== '') {
+        this.enableNextField(controlName, nextFieldName);
+      }
+
+    } catch (error) {
+      console.error('Error in Price Code Selected:', error);
+    }
+  }
+
+  // Helper method to get the next field name based on the current field
+  private getNextFieldName(currentField: string): string {
+    const fieldIndex = ['price1', 'price2', 'price3', 'price4', 'price5'].indexOf(currentField);
+    return fieldIndex !== -1 && fieldIndex < 4 ? `price${fieldIndex + 2}` : '';
+    // switch (currentField) {
+    //   case 'price2':
+    //     return 'price3';
+    //   case 'price3':
+    //     return 'price4';
+    //   case 'price4':
+    //     return 'price5';
+    //   // Add more cases as needed for your form structure
+    //   default:
+    //     return '';
+    // }
+  }
 
 
 
@@ -181,6 +184,18 @@ private getNextFieldName(currentField: string): string {
       return;
     }
     if (!this.validateForm()) return;
+
+    if (this.priceSchemaMasterForm.value.price4 !== '' && this.priceSchemaMasterForm.value.price3 == '') {
+
+      this.toastr.error('Price 3 cannot be empty');
+      return;
+    }
+
+    if (this.priceSchemaMasterForm.value.price5 !== '' && this.priceSchemaMasterForm.value.price4 == '') {
+
+      this.toastr.error('Price 4 cannot be empty');
+      return;
+    }
 
     let API = 'PriceSchemeMaster/InsertPriceSchemeMaster';
     let postData = this.createPostData();
@@ -203,7 +218,7 @@ private getNextFieldName(currentField: string): string {
   update() {
     if (!this.validateForm()) return;
 
-    let API = 'PriceSchemeMaster/UpdatePriceSchemeMaster/'+this.content.MID;
+    let API = 'PriceSchemeMaster/UpdatePriceSchemeMaster/' + this.content.MID;
     let postData = this.createPostData();
 
     try {
@@ -271,7 +286,7 @@ private getNextFieldName(currentField: string): string {
     }
   }
 
- 
+
 
   private initializeForm() {
     try {
