@@ -30,6 +30,7 @@ export class MetalReturnComponent implements OnInit {
   selectRowIndex: any;
   viewMode: boolean = false;
   isSaved: boolean = false;
+  isloading: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   gridAmountDecimalFormat:any = {
     type: 'fixedPoint',
@@ -315,21 +316,21 @@ export class MetalReturnComponent implements OnInit {
   }
 
   formSubmit() {
+    if (this.metalReturnForm.invalid || this.metalReturnDetailsData.length == 0) {
+      this.toastr.error('select all required fields')
+      return
+    }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
     }
 
-    if (this.metalReturnForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
     let postData = this.setPostData()
-
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
@@ -349,21 +350,21 @@ export class MetalReturnComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.toastr.error('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
 
   updateMeltingType() {
-    if (this.metalReturnForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
     let form = this.metalReturnForm.value
     let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData()
-
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -382,7 +383,10 @@ export class MetalReturnComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err =>{
+        this.isloading = false;
+        this.toastr.error('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
   /**USE: delete Melting Type From Row */

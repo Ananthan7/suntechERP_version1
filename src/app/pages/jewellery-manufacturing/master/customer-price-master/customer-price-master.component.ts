@@ -68,6 +68,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   myNumber: any;
   allMode: string;
   selectedKeys: any[] = [];
+  dele: boolean = false;
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -80,11 +81,6 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
-
-
-
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -100,23 +96,25 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dele = true;
     this.renderer.selectRootElement('#customercode')?.focus();
-    this.renderer.selectRootElement('#customercode')?.focus();
-
-    this.getStonePriceData()
-    this.getLabourChargeMasterList()
-    if (this.content?.FLAG == 'VIEW') {
+  //  this.renderer.selectRootElement('#customercode')?.focus();
+   
+    if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
       this.viewMode = true
       this.editMode = true;
-    } else if (this.content?.FLAG == 'EDIT'){
+    } else if (this.content.FLAG == 'EDIT'){
       this.editableMode = true;
       this.editMode = true;
+      this.dele = false;
       this.setFormValues();
     }
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
+    this.getStonePriceData()
+    this.getLabourChargeMasterList()
 
   }
   getLabourChargeMasterList() {

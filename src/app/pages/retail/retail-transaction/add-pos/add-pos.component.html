@@ -823,6 +823,11 @@
                               [customizeText]="customizeQty">
                             </dxi-total-item>
 
+                            <dxi-total-item column="metal_amt"     summaryType="sum" displayFormat="{0}"
+                            precision="2"
+                            [valueFormat]="gridAmountDecimalFormat">
+                          </dxi-total-item>
+
                             <dxi-total-item column="weight" summaryType="sum"
                               caption="Weight"
                               [valueFormat]="weightDecimalFormat"
