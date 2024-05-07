@@ -7,7 +7,7 @@ import { Component, OnInit, ViewChild, Renderer2, AfterViewInit, ElementRef, Inp
 import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // import { environment } from '../../../environments/environment';
 // import { SuntechapiService } from '../../suntechapi.service';
-import { from, noop, Observable } from 'rxjs';
+import { from, noop, Observable, Subscription } from 'rxjs';
 import { map, pairwise, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 // import { NgxBarcodeScannerService } from '@eisberg-labs/ngx-barcode-scanner';
@@ -5875,7 +5875,7 @@ export class AddPosComponent implements OnInit {
           }
         }
         else {
-          this.viewOnly = true;
+          // this.viewOnly = true;
           this.openDialog(
             'Failed',
             this.comFunc.getMsgByID('MSG1464'),
@@ -8188,6 +8188,12 @@ export class AddPosComponent implements OnInit {
                   this.submitAttachment();
 
                   this.saveAndContinue(type);
+                  let mid;
+                  mid=res.response.retailSales.MID;
+             
+                  if(mid){
+                    this.AccountPosting(mid);
+                  }
 
                 } else {
                   this.isSaved = false;
@@ -8227,9 +8233,17 @@ export class AddPosComponent implements OnInit {
                 this.submitAttachment();
 
                 this.snackBar.open('POS Saved', 'OK');
+                // this.AccountPosting();
 
                 this.saveAndContinue(type);
-                this.content.MID = res.response.retailSales.MID
+                let mid;
+                mid=res.response.retailSales.MID;
+                // this.content.MID = res.response.retailSales.MID;
+                // console.log(this.content.MID)
+                if(mid){
+                  this.AccountPosting(mid);
+                }
+               
                 console.log(this.content.MID, 'middddddddddd');
 
                 setTimeout(() => {
@@ -8281,6 +8295,33 @@ export class AddPosComponent implements OnInit {
       }
     }
   }
+
+  AccountPosting(mid:any) {
+    // if (!this.content) return
+    let params = {
+      BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
+      VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+      VOCNO: this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+      YEARMONTH: this.comFunc.nullToString(this.baseYear),
+      MID: mid,
+      ACCUPDATEYN: 'Y',
+      USERNAME: this.comFunc.userName,
+      MAINVOCTYPE: this.comFunc.getqueryParamMainVocType(),
+      HEADER_TABLE: this.comFunc.getqueryParamTable(),
+    }
+    let Sub: Subscription = this.suntechApi.getDynamicAPIwithParams('AccountPosting', params)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.comFunc.toastSuccessByMsgId(result.message || 'Posting Done')
+        } else {
+          this.comFunc.toastErrorByMsgId(result.message)
+        }
+      },
+        (err) => this.comFunc.toastErrorByMsgId("Server Error")
+      );
+    // this.subscriptions.push(Sub);
+  }
+
 
   addNew() {
     // localStorage.setItem('AddNewFlag', '1')
@@ -9076,7 +9117,6 @@ export class AddPosComponent implements OnInit {
         parseFloat(lsTotalAmt),
         nettAmt
       );
-      // this.netAmtFunc(event);
 
     } else {
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
@@ -9643,6 +9683,7 @@ export class AddPosComponent implements OnInit {
 
 
     let totalAmt;
+    let grossAmount='';
     if (this.divisionMS == 'M') {
       totalAmt = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -9651,23 +9692,34 @@ export class AddPosComponent implements OnInit {
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
       );
     } else {
-      totalAmt = this.isNetAmountChange ? grossAmt : this.comFunc.transformDecimalVB(
+      grossAmount=this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+      );
+      totalAmt = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
       );
     }
 
-    let discountAmt = this.comFunc.transformDecimalVB(
-      this.comFunc.allbranchMaster?.BAMTDECIMALS,
-      parseFloat(totalAmt) - parseFloat(grossAmt)
-    );
+    // let discountAmt =  this.comFunc.transformDecimalVB(
+    //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+    //   parseFloat(grossAmount)-parseFloat(totalAmt)
+    //   // parseFloat(totalAmt) - parseFloat(grossAmt)
+    // );
 
 
 
-    this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);
+    this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);  //1047
     this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
     this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
     // this.lineItemForm.controls.fcn_li_rate.setValue(totalAmt);
+
+    let discountAmt =  this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      parseFloat(totalAmt) - parseFloat(grossAmt)
+      // parseFloat(totalAmt) - parseFloat(grossAmt)
+    );
 
 
 
@@ -9888,7 +9940,7 @@ export class AddPosComponent implements OnInit {
         }
       } else {
 
-        mkgvalue = this.isNetAmountChange ? this.lineItemForm.value.fcn_li_gross_amount - this.lineItemForm.value.fcn_li_discount_amount :
+        mkgvalue =
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) *
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
       }
@@ -9918,7 +9970,7 @@ export class AddPosComponent implements OnInit {
 
 
 
-    this.isNetAmountChange ? localStorage.setItem('fcn_li_rate', ((this.lineItemForm.value.fcn_li_gross_amount / this.lineItemForm.value.fcn_li_gross_wt).toString())) :
+    this.isNetAmountChange ? localStorage.setItem('fcn_li_rate', ((this.lineItemForm.value.fcn_li_total_amount / this.lineItemForm.value.fcn_li_gross_wt).toString())) :
       localStorage.setItem('fcn_li_rate', this.lineItemForm.value.fcn_li_rate);
 
     /** set all total amount */
@@ -10006,7 +10058,7 @@ export class AddPosComponent implements OnInit {
   lineItemCommaSeparation() {
     this.isNetAmountChange ? this.lineItemForm.controls['fcn_li_rate'].setValue(
       this.comFunc.commaSeperation(this.comFunc
-        .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(((this.lineItemForm.value.fcn_li_gross_amount / this.lineItemForm.value.fcn_li_gross_wt)))))
+        .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(((this.lineItemForm.value.fcn_li_total_amount / this.lineItemForm.value.fcn_li_gross_wt)))))
     ) : this.lineItemForm.controls['fcn_li_rate'].setValue(
       this.comFunc.commaSeperation(this.comFunc
         .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)))
@@ -12265,7 +12317,7 @@ export class AddPosComponent implements OnInit {
       });
     });
 
-    this.snackBar.open('Loading...');
+    // this.snackBar.open('Loading...');
     this.suntechApi.postDynamicAPI('TransAttachments/InsertTransAttachments', modifiedFormData).subscribe(
       (res) => {
         this.snackBar.dismiss();

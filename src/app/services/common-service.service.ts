@@ -733,8 +733,8 @@ export class CommonServiceService {
     this.route.queryParams.subscribe((data: any) => {
       autoPostingFlag = data.autoPosting;
     });
-    return false; // hardcoded for discussion on 07-05-2024
-    // return autoPostingFlag
+    // return false; // hardcoded for discussion on 07-05-2024
+   return autoPostingFlag
   }
   generateNumber() {
     return Math.floor(1000 + Math.random() * 9000)
