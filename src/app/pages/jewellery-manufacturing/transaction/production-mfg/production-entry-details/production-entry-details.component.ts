@@ -165,6 +165,28 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  priceSchemeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 177,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Scheme',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: "DESIGN_CODE",
+    SEARCH_HEADING: "Design Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
 
   onFileChanged(event: any) {
     this.url = event.target.files[0].name
@@ -256,6 +278,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STOCK_CODE: [''],
     STOCK_DESCRIPTION: [''],
     JOB_SO_NUMBER: [''],
+    pricescheme:[''],
   });
 
   constructor(
@@ -294,27 +317,54 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   price1CodeSelected(e: any) {
     console.log(e);
-    this.productiondetailsFrom.controls.price1PER.setValue(e.PRICE_CODE);
+    this.productiondetailsFrom.controls.price1.setValue(e.PRICE_CODE);
   }
 
   price2CodeSelected(e: any) {
     console.log(e);
-    this.productiondetailsFrom.controls.price2PER.setValue(e.PRICE_CODE);
+    this.productiondetailsFrom.controls.price2.setValue(e.PRICE_CODE);
   }
 
   price3CodeSelected(e: any) {
     console.log(e);
-    this.productiondetailsFrom.controls.price3PER.setValue(e.PRICE_CODE);
+    this.productiondetailsFrom.controls.price3.setValue(e.PRICE_CODE);
   }
 
   price4CodeSelected(e: any) {
     console.log(e);
-    this.productiondetailsFrom.controls.price4PER.setValue(e.PRICE_CODE);
+    this.productiondetailsFrom.controls.price4.setValue(e.PRICE_CODE);
   }
 
   price5CodeSelected(e: any) {
     console.log(e);
-    this.productiondetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
+    this.productiondetailsFrom.controls.price5.setValue(e.PRICE_CODE);
+  }
+  
+  designSelected(value: any) {
+    console.log(value);
+    this.productiondetailsFrom.controls.DESIGN_CODE.setValue(value.DESIGN_CODE);
+  }
+  priceSchemeValidate(e: any) {
+    console.log('yap')
+    this.productiondetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
+    let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.productiondetailsFrom.value.pricescheme
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response) {
+
+          let data = result.response;
+          this.productiondetailsFrom.controls.price1.setValue(data.PRICE1)
+          this.productiondetailsFrom.controls.price2.setValue(data.PRICE2)
+          this.productiondetailsFrom.controls.price3.setValue(data.PRICE3)
+          this.productiondetailsFrom.controls.price4.setValue(data.PRICE4)
+          this.productiondetailsFrom.controls.price5.setValue(data.PRICE5)
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
   /**USE: jobnumber validate API call */
