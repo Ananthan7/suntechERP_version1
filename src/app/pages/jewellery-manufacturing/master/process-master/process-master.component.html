@@ -124,8 +124,7 @@
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
                                         <input type="text" matInput
-                                        class="text-right"
-                                          maxlength="5"
+                                            class="text-right" maxlength="5"
                                             formControlName="Position"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -349,6 +348,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
+                                            maxlength="6"
                                             formControlName="accountStart"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
@@ -361,6 +361,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
+                                            maxlength="6"
                                             formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
@@ -373,6 +374,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
+                                            maxlength="6"
                                             formControlName="accountEnd"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>

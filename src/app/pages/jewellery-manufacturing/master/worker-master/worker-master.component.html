@@ -240,9 +240,8 @@
                             [allowColumnResizing]="true"
                             (onSelectionChanged)="changedCheckbox($event)"
                             [showBorders]="true">
-                            <!-- <dxo-filter-row [visible]="showFilterRow"
-                                [applyFilter]="currentFilter"></dxo-filter-row>
-                            <dxo-header-filter
+                            <dxo-filter-row [visible]="true"></dxo-filter-row>
+                            <!-- <dxo-header-filter
                                 [visible]="showHeaderFilter"></dxo-header-filter> -->
                             <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
                             <dxo-paging [enabled]="false"></dxo-paging>
@@ -264,12 +263,12 @@
                                 caption="Sr No" alignment="center">
                             </dxi-column>
                             <dxi-column dataField="PROCESS_CODE" width="auto"
-                                caption="Process Code "
-                                [allowEditing]="true" alignment="center">
+                                caption="Process Code"
+                                [allowEditing]="true" alignment="left">
                             </dxi-column>
                             <dxi-column dataField="DESCRIPTION" width="auto"
                                 caption="Description" [allowEditing]="true"
-                                alignment="center">
+                                alignment="left">
                             </dxi-column>
                         </dx-data-grid>
                     </div>

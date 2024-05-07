@@ -23,7 +23,7 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   buttonField: boolean = true;
   viewMode: boolean = false;
-  viewModeBtn:boolean = true;
+  viewModeBtn: boolean = true;
   isViewMode: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
@@ -105,7 +105,7 @@ export class WorkerMasterComponent implements OnInit {
     MonthlyTarget: [null],
     YearlyTarget: [null],
     Active: [true]
-   
+
   })
 
   constructor(
@@ -119,25 +119,27 @@ export class WorkerMasterComponent implements OnInit {
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.setInitialValues()
-    this.filteredData = this.tableData; 
+    this.filteredData = this.tableData;
   }
 
   ngOnInit(): void {
     this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
-
-    if (this.content?.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.isViewMode = true;
+    if (this.content?.FLAG) {
       this.setFormValues();
       this.selectProcessWithSP()
-    } else if (this.content?.FLAG == 'EDIT') {
-      this.viewMode = false;
-      this.editMode = true;
-      this.codeEnable = false;
-      this.setFormValues();
-      this.selectProcessWithSP();
-      this.dele = false;
+      if (this.content?.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.isViewMode = true;
+      } else if (this.content?.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+        this.codeEnable = false;
+        this.dele = false;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteWorkerMaster()
+      }
     }
   }
 
@@ -210,7 +212,7 @@ export class WorkerMasterComponent implements OnInit {
       "EXP": 0,
       "TOTALSAL": 0,
       "ACCODE": form.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed ),
+      "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed),
       "SECRET_CODE": form.Password || "",
       "PROCESS_CODE": form.DefaultProcess || "",
       "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
@@ -263,7 +265,7 @@ export class WorkerMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -285,8 +287,8 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   updateWorkerMaster() {
-    this.viewModeBtn=false;
-     
+    this.viewModeBtn = false;
+
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -300,7 +302,7 @@ export class WorkerMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -491,7 +493,7 @@ export class WorkerMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Worker Code Required');
       return;
     }
-  
+
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'ProcessMasterDj/GetProcessMasterDJList';
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -502,10 +504,10 @@ export class WorkerMasterComponent implements OnInit {
             item.SELECT1 = false;
             item.SRNO = i + 1;
           });
-  
+
           // Apply search filtering if a search term is provided
           if (this.searchTerm.trim() !== '') {
-            this.tableData = data.filter((item:any) =>
+            this.tableData = data.filter((item: any) =>
               item.PROCESS_CODE.toLowerCase().includes(this.searchTerm.trim().toLowerCase())
             );
           } else {
@@ -517,7 +519,7 @@ export class WorkerMasterComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-  
+
 
   // /**use: to check worker exists in db */
   // checkWorkerExists(event: any) {
@@ -560,7 +562,7 @@ export class WorkerMasterComponent implements OnInit {
       return; // Exit the function if in edit mode
     }
 
-    if (event.target.value === '' || this.viewMode ||  this.editMode ) {
+    if (event.target.value === '' || this.viewMode || this.editMode) {
       return; // Exit the function if the input is empty or in view mode
     }
 
@@ -577,12 +579,12 @@ export class WorkerMasterComponent implements OnInit {
           }).then(() => {
             // Clear the input value
             this.workerMasterForm.controls.WorkerCode.setValue('');
-           
+
             this.codeEnable = true;
             setTimeout(() => {
               this.renderer.selectRootElement('#code').focus();
-            },500);
-            
+            }, 500);
+
           });
         }
       }, err => {
