@@ -27,7 +27,7 @@
                                         class="col-sm-4 col-form-label">Voucher
                                         Type * :</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="VOCTYPE"
                                                 readonly />
@@ -44,7 +44,7 @@
                                     <label for="inputPassword"
                                         class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline" style="width: 100%">
+                                        <mat-form-field style="width: 100%">
                                             <!-- <input  type="datetime" matInput  formControlName="time"> -->
                                             <input type="datetime" matInput
                                                 formControlName="time" readonly
@@ -61,10 +61,10 @@
                                         class="col-sm-4 col-form-label">Voucher
                                         Date :</label>
                                     <div class="col-md-7">
-                                        <!-- <mat-form-field appearance="outline" style="width: 100%;">
+                                        <!-- <mat-form-field style="width: 100%;">
                                             <input type="date" matInput  formControlName="vocdate"/>
                                         </mat-form-field> -->
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field style="width: 100%;">
                                             <input matInput
                                                 [matDatepicker]="vocdate"
                                                 formControlName="vocdate"
@@ -87,7 +87,7 @@
                                         By:</label>
                                     <div class="col-md-7">
                                         <span>
-                                            <mat-form-field appearance="outline" style="width: 80%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="SALESPERSON_CODE"
                                                     [readonly]="viewMode" />
@@ -109,7 +109,7 @@
                                         class="col-sm-4 col-form-label">Voucher
                                         No * :</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field style="width: 100%;">
                                             <input type="number" matInput
                                                 class="text-right"
                                                 formControlName="VOCNO"
@@ -125,12 +125,12 @@
                                         :</label>
                                     <div class="col-md-7 d-flex">
                                         <span>
-                                            <mat-form-field appearance="outline" style="width: 20%;">
+                                            <mat-form-field style="width: 20%;">
                                                 <input type="text" matInput
                                                     formControlName="worker"
                                                     [readonly]="viewMode" />
                                             </mat-form-field>
-                                            <mat-form-field appearance="outline"
+                                            <mat-form-field
                                                 style="width: 60%;margin-left: 4px;">
                                                 <input type="text" matInput
                                                     formControlName="workerDes"
@@ -160,7 +160,7 @@
                                     (deleteClick)="deleteRowClicked()">
                                 </menu-buttons>
                                 <div>
-                                    <mat-form-field appearance="outline" style="width: 70%;">
+                                    <mat-form-field style="width: 70%;">
                                         <input type="text" matInput />
                                     </mat-form-field>
                                     <master-search></master-search>
@@ -209,7 +209,7 @@
                                             class="col-sm-3 col-form-label">Remarks
                                             :</label>
                                         <div class="col-md-9">
-                                            <mat-form-field appearance="outline"
+                                            <mat-form-field
                                                 style="width: 100%;">
                                                 <input type="text" matInput
                                                     formControlName="REMARKS" />

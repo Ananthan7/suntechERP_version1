@@ -19,7 +19,7 @@
                         <div class="d-flex">
                             <label class="col-sm-4 col-form-label">
                                 Worker Code & Name * :</label>
-                            <mat-form-field appearance="outline" style="width: 20%">
+                            <mat-form-field style="width: 20%">
                                 <input type="text" matInput placeholder="CODE"
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
@@ -29,10 +29,10 @@
                                 <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
-                                  <strong>required</strong>
+                                  Worker Code <strong>required</strong>
                                 </mat-error>
                             </mat-form-field>
-                            <mat-form-field appearance="outline"
+                            <mat-form-field
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
                                     placeholder="DESCRIPTION" UpperCaseDirective
@@ -42,11 +42,11 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="row pt-2">
+                    <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
                                 Worker A/C code :</label>
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text" matInput
                                 [readonly]="viewMode || codeEnable"  maxlength="6"
                                     (focusout)="workerCodeChange($event,'WorkerAcCode')"
@@ -63,7 +63,7 @@
                         <span>
                             <label class="col-sm-4 col-form-label">
                                 Name of Supervisor :</label>
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
                                     (focusout)="workerCodeChange($event,'NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable" 
@@ -79,7 +79,7 @@
                         <span>
                             <label class="col-sm-4 col-form-label">
                                 Default Process :</label>
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
                                 [readonly]="viewMode || codeEnable" 
                                     (focusout)="processCodeChange($event,'DefaultProcess')"
@@ -95,7 +95,7 @@
                         <span class="col-sm-4 col-form-label">Loss Allowed
                             :</span>
                         <div class="col-sm-3">
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text" matInput 
                                     class="text-right" [max]="10"
                                     [readonly]="viewMode  || codeEnable" MetalDecimalInput
@@ -106,7 +106,7 @@
                         <span class="col-sm-3 col-form-label">Password
                             (optional) :</span>
                         <div class="col-sm-2">
-                            <mat-form-field appearance="outline" style="width: 100px">
+                            <mat-form-field style="width: 100px">
                                 <input type="password" matInput
                                     autocomplete="Password"
                                     [readonly]="viewMode || codeEnable" 
@@ -118,7 +118,7 @@
                         <span class="col-sm-4 col-form-label">Tray Weight
                             :</span>
                         <div class="col-sm-3">
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text"  matInput
                                     class="text-right"
                                     [readonly]="viewMode  || codeEnable" MetalDecimalInput [max]="10"
@@ -128,7 +128,7 @@
                         <span class="col-sm-3 col-form-label">Target Pcs
                             :</span>
                         <div class="col-sm-2">
-                            <mat-form-field appearance="outline" style="width: 100px">
+                            <mat-form-field style="width: 100px">
                                 <input type="text" class="text-right" matInput 
                     [readonly]="viewMode|| codeEnable" 
                                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -140,7 +140,7 @@
                         <span class="col-sm-4 col-form-label">Target Metal
                             Weight :</span>
                         <div class="col-sm-3">
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text" matInput MetalDecimalInput
                                      class="text-right"
                                     [readonly]="viewMode  || codeEnable" [max]="13"
@@ -150,7 +150,7 @@
                         <span class="col-sm-3 col-form-label">Target Carat
                             Weight :</span>
                         <div class="col-sm-2">
-                            <mat-form-field appearance="outline" style="width: 100px">
+                            <mat-form-field style="width: 100px">
                                 <input type="text" class="text-right"
                                      matInput MetalDecimalInput
                                     [readonly]="viewMode  || codeEnable" [max]="13"
@@ -162,7 +162,7 @@
                         <span class="col-sm-4 col-form-label">
                             Target Weight(GMS) :</span>
                         <div class="col-sm-3">
-                            <mat-form-field appearance="outline" style="width: 200px">
+                            <mat-form-field style="width: 150px">
                                 <input type="text" matInput 
                                 [readonly]="viewMode  || codeEnable"   class="text-right"
                                     MetalDecimalInput [max]="13"
@@ -218,6 +218,7 @@
                     <div class="row my-3">
                         <div class="col-md-6">
                             <button type="button" mat-flat-button
+                                color="primary"
                                 (click)="selectProcessMasterList()"
                                 [disabled]="viewMode || codeEnable || btndisable">
                                 Select Process
@@ -274,13 +275,13 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row my-3">
+            <div class="row my-3">
                 <div class="col-md-12">
                     <button type="button"  [disabled]="viewModeBtn" mat-flat-button color="primary" (click)="printBarcode()">Print
                         Barcode
                     </button>
                 </div>
-            </div> -->
+            </div>
         </form>
     </div>
 </div>  
