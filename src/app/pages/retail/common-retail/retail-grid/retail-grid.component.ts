@@ -210,10 +210,10 @@ export class RetailGridComponent implements OnInit {
               data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
             }
 
-            if (data.DATA_TYPE == 'datetime') {
-              data.FORMAT = 'dd-MM-yyyy';
-              data.DATATYPE = 'date';
-            }
+            // if (data.DATA_TYPE == 'datetime') {
+            //   data.FORMAT = 'dd-MM-yyyy';
+            //   data.DATATYPE = 'date';
+            // }
             if (data.DATA_TYPE == 'bit') {
               data.DATATYPE = 'boolean';
             }

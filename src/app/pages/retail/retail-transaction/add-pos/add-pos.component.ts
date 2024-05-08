@@ -31,6 +31,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { IndexedApiService } from 'src/app/services/indexed-api.service';
 import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 import { AuditTrailModel } from 'src/app/shared/data/audit-trial-model';
+import { ItemDetailService } from 'src/app/services/modal-service.service';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -84,7 +85,7 @@ export class AddPosComponent implements OnInit {
   gridWeghtDecimalFormat: any;
 
   posMode: string = 'ADD';
-  accountHeadDetails='';
+  accountHeadDetails = '';
   // baseImgUrl = baseImgUrl;
   maskVocDate: any = new Date();
   amlNameValidation;
@@ -740,6 +741,7 @@ export class AddPosComponent implements OnInit {
     private indexedDb: IndexedDbService,
 
     public indexedApiService: IndexedApiService,
+    public lineItemService: ItemDetailService,
 
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
@@ -767,7 +769,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_id_number: ['', Validators.required],
       fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
       fcn_customer_code: ['',],
-      fcn_customer_exp_date: ['',],
+      fcn_customer_exp_date: ['', Validators.required],
       tourVatRefuncYN: [false],
       tourVatRefundNo: ['']
     });
@@ -893,7 +895,7 @@ export class AddPosComponent implements OnInit {
       fcn_cust_detail_state: ['', [this.autoCompleteValidator(() => this.stateMaster, 'CODE')]],
 
       fcn_mob_code: ['', [Validators.required]],
-      fcn_customer_exp_date: ['',],
+      fcn_customer_exp_date: ['', [Validators.required]],
     });
 
     /** Start Receipt forms  */
@@ -1097,14 +1099,14 @@ export class AddPosComponent implements OnInit {
     );
   }
 
-  getAccountHead(parameterValue:string) {
+  getAccountHead(parameterValue: string) {
 
     const API = `AccountMaster/${parameterValue}`;
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res: any) => {
         if (res.status == "Success") {
           console.log('res', res);
-          this.accountHeadDetails=res.response.ACCOUNT_HEAD;
+          this.accountHeadDetails = res.response.ACCOUNT_HEAD;
 
         }
       });
@@ -1699,8 +1701,8 @@ export class AddPosComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    console.log(this.comFunc.allCompanyParameters,'this.allCompanyParameters');
-    
+    console.log(this.comFunc.allCompanyParameters, 'this.allCompanyParameters');
+
 
     /* this.receiptDetailsList = [
       {
@@ -2281,7 +2283,7 @@ export class AddPosComponent implements OnInit {
         "GIFT_CARDNO": "",
         "OT_TRANSFER_TIME": "",
         "CARD_NO": CARD_NO,
-        "CARD_HOLDER":this.isCCTransaction? this.customerDataForm.value.fcn_customer_name:'',
+        "CARD_HOLDER": this.isCCTransaction ? this.customerDataForm.value.fcn_customer_name : '',
         "CARD_VALID": "0",
         "CREDITDAYS": "0",
         "VALUE_DATE": new Date().toISOString(),
@@ -2296,11 +2298,11 @@ export class AddPosComponent implements OnInit {
         "SGST_PER": "0.00",
         "SGST_AMOUNTFC": "0.000",
         "SGST_AMOUNTCC": "0.000",
-        "IGST_PER":this.isCCTransaction? this.newLineItem.IGST_PER :'0',
+        "IGST_PER": this.isCCTransaction ? this.newLineItem.IGST_PER : '0',
         "IGST_AMOUNTFC": IGST_AMOUNT,
         "IGST_AMOUNTCC": IGST_AMOUNT,
-        "HSN_CODE":this.isCCTransaction? this.newLineItem.HSN_CODE:'',
-        "GST_CODE":this.isCCTransaction? this.newLineItem.GST_CODE :'',
+        "HSN_CODE": this.isCCTransaction ? this.newLineItem.HSN_CODE : '',
+        "GST_CODE": this.isCCTransaction ? this.newLineItem.GST_CODE : '',
         "CGST_ACCODE": "0",
         "REC_COMM_AMOUNTFC": COMMISSION_RATE,
         "REC_COMM_AMOUNTCC": COMMISSION_RATE,
@@ -2410,6 +2412,10 @@ export class AddPosComponent implements OnInit {
     this.updateBtn = false;
     if (!this.viewOnly && !this.editOnly) {
       this.salesReturnsItems_forVoc = [];
+      this.salesReturnForm.reset();
+      this.lineItemForm.reset();
+      this.exchangeForm.reset();
+      this.divisionMS = '';
       // this.salesReturnEditCode = '';
       // this.salesReturnEditAmt = '';
     }
@@ -2422,13 +2428,13 @@ export class AddPosComponent implements OnInit {
       this.salesReturnEditAmt = 0;
     } else {
     }
-    this.salesReturnForm.reset();
-    this.lineItemForm.reset();
-    this.exchangeForm.reset();
-    this.divisionMS = '';
+    // this.salesReturnForm.reset();
+    // this.lineItemForm.reset();
+    // this.exchangeForm.reset();
+    // this.divisionMS = '';
     this.sales_returns_total_amt = 0;
 
-    if (!this.viewOnly && !this.editOnly) {
+    if (!this.viewOnly) {
       this.salesReturnForm.controls.fcn_returns_branch.setValue(this.strBranchcode);
       this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
     }
@@ -4247,8 +4253,8 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(items.MKGVALUECC), this.vocDataForm.value.txtCurRate
       ),
-      RATE_TYPE:this.newLineItem.RATE_TYPE,
-      METAL_RATE:this.newLineItem.METAL_RATE,
+      RATE_TYPE: this.newLineItem.RATE_TYPE,
+      METAL_RATE: this.newLineItem.METAL_RATE,
 
       METAL_RATE_GMSFC: items.METAL_RATE_GMSFC,
       METAL_RATE_GMSCC: items.METAL_RATE_GMSCC,
@@ -5933,11 +5939,11 @@ export class AddPosComponent implements OnInit {
     let fcn_li_rate = this.lineItemForm.value.fcn_li_rate;
 
     fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.replace(/,/g, ''));
-    
-    
+
+
     let fcn_ad_metal_rate = this.lineItemForm.value.fcn_ad_metal_rate;
 
-    fcn_ad_metal_rate = (fcn_ad_metal_rate === null || fcn_ad_metal_rate === '') ? 0 : parseFloat(fcn_ad_metal_rate.replace(/,/g, ''));    
+    fcn_ad_metal_rate = (fcn_ad_metal_rate === null || fcn_ad_metal_rate === '') ? 0 : parseFloat(fcn_ad_metal_rate.replace(/,/g, ''));
     let temp_pos_item_data: any = {
       // new values
       // "UNIQUEID": 0,
@@ -5966,16 +5972,16 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount), this.vocDataForm.value.txtCurRate
       ), // metal amount
-      RATE_TYPE:'',
+      RATE_TYPE: '',
       //  data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
-      METAL_RATE: this.newLineItem.METAL_RATE_PERGMS_24KARAT??0,
+      METAL_RATE: this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
 
       // this.comFunc.emptyToZero(
       //   this.lineItemForm.value.fcn_ad_metal_rate
       // ),
 
-      METAL_RATE_GMSFC: this.newLineItem.METAL_RATE_PERGMS_24KARAT??0,
-      METAL_RATE_GMSCC: this.newLineItem.METAL_RATE_PERGMS_24KARAT??0,
+      METAL_RATE_GMSFC: this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
+      METAL_RATE_GMSCC: this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
 
       // "METAL_RATE_GMSFC": 18.1, // jeba
       // "METAL_RATE_GMSCC": 19.1, // jeba
@@ -6011,7 +6017,7 @@ export class AddPosComponent implements OnInit {
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount), this.vocDataForm.value.txtCurRate
       ),
-      NETVALUEFC:this.comFunc.emptyToZero(
+      NETVALUEFC: this.comFunc.emptyToZero(
         this.lineItemForm.value.fcn_li_net_amount
       ),
       NETVALUECC: this.comFunc.emptyToZero(
@@ -6272,12 +6278,12 @@ export class AddPosComponent implements OnInit {
       "GPC_STONEDIFF_AC": this.newLineItem.GPC_STONEDIFF ?? '',
       "GPC_STONEVALUESALES_AC": this.newLineItem.GPC_STONEDIFFVALUE ?? '',
       "GPC_POSSALES_AC": this.newLineItem.GPC_POSSALES_AC ?? '',
-      "GPC_KUNDANVALUESALES_AC":  this.newLineItem.GPC_KUNDANVALUESALES_AC ?? '',
+      "GPC_KUNDANVALUESALES_AC": this.newLineItem.GPC_KUNDANVALUESALES_AC ?? '',
       "GPC_POSSALESSR_AC": this.newLineItem.GPC_POSSALESSR_AC ?? '',
       "GPC_METALAMT_AC": this.newLineItem.GPC_METALAMT_AC ?? '',
       "GPC_PHYSICALSTOCK_AC": this.newLineItem.GPC_PHYSICALSTOCK_AC ?? '',
       "GPC_WASTAGE_AC": this.newLineItem.GPC_WASTAGE_AC ?? '',
-      "GPC_STAMPCHARGE_AC":  this.newLineItem.GPC_STAMPCHARGE_AC ?? '',
+      "GPC_STAMPCHARGE_AC": this.newLineItem.GPC_STAMPCHARGE_AC ?? '',
       "COUNTRY_CODE": '',
       "UNIT_CODE": '0',
       "FLAGESTK": '0',
@@ -6659,7 +6665,7 @@ export class AddPosComponent implements OnInit {
       total_sum = total_sum + parseFloat(item.total_amount);
       tax_sum = tax_sum + parseFloat(item.tax_amount);
       net_sum = net_sum + parseFloat(item.net_amount);
-      total_pcs =  total_pcs +  parseFloat(item.pcs);
+      total_pcs = total_pcs + parseFloat(item.pcs);
       total_weight = total_weight + parseFloat(item.weight);
       total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
       total_making_amt = total_making_amt + parseFloat(item.making_amt);
@@ -7052,7 +7058,7 @@ export class AddPosComponent implements OnInit {
                 this.newLineItem.STOCK_DESCRIPTION = stockInfos.DESCRIPTION;
                 this.newLineItem.STOCK_COST = stockInfoPrice.STOCK_COST;
                 this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
-                 this.newLineItem.IGST_ACCODE_NON_POS = stockInfoTaxes[0]?.IGST_ACCODE;
+                this.newLineItem.IGST_ACCODE_NON_POS = stockInfoTaxes[0]?.IGST_ACCODE;
                 this.newLineItem.IGST_PER = stockInfoTaxes[0]?.IGST_PER;
                 // this.newLineItem.GPC_POSSALES_AC = stockInfos[0]?.GPC_POSSALES_AC;
                 // this.newLineItem.GPC_STONEDIFF_AC = stockInfos[0]?.GPC_STONEDIFF_AC;
@@ -7291,14 +7297,14 @@ export class AddPosComponent implements OnInit {
       this.sales_returns_total_amt = 0;
       this.salesReturnEditCode = '';
       this.salesReturnEditAmt = '';
-      this.salesReturnVocNumber='';
+      this.salesReturnVocNumber = '';
 
       //  this.fcn_returns_voc_no_val = event.target.value;
       console.log(this.salesReturnForm.value.fcn_returns_fin_year);
       console.log(this.salesReturnForm.value.fcn_returns_branch);
       console.log(this.salesReturnForm.value.fcn_returns_voc_type);
       console.log(this.salesReturnForm.value.fcn_returns_voc_no);
-      this.salesReturnVocNumber=this.salesReturnForm.value.fcn_returns_voc_no;
+      this.salesReturnVocNumber = this.salesReturnForm.value.fcn_returns_voc_no;
       let _response;
 
       let fin_year = this.salesReturnForm.value.fcn_returns_fin_year;
@@ -7694,7 +7700,7 @@ export class AddPosComponent implements OnInit {
       data.DT_YEARMONTH = this.baseYear || localStorage.getItem('YEAR');
       data.OT_TRANSFER_TIME = new Date();
       // new fields added - 27-12-2023
-      data.ORIGINALKARAT_RATE =Number(data.POPKARAT_RATE)|| 0;
+      data.ORIGINALKARAT_RATE = Number(data.POPKARAT_RATE) || 0;
 
     });
     console.log('================this.karatRateDetails====================');
@@ -8189,9 +8195,9 @@ export class AddPosComponent implements OnInit {
 
                   this.saveAndContinue(type);
                   let mid;
-                  mid=res.response.retailSales.MID;
-             
-                  if(mid){
+                  mid = res.response.retailSales.MID;
+
+                  if (mid) {
                     this.AccountPosting(mid);
                   }
 
@@ -8237,14 +8243,14 @@ export class AddPosComponent implements OnInit {
 
                 this.saveAndContinue(type);
                 let mid;
-                mid=res.response.retailSales.MID;
+                mid = res.response.retailSales.MID;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
-                if(mid){
+                if (mid) {
                   this.AccountPosting(mid);
                 }
-               
-                console.log(this.content.MID, 'middddddddddd');
+
+                // console.log(this.content.MID, 'middddddddddd');
 
                 setTimeout(() => {
                   // location.reload();
@@ -8296,7 +8302,7 @@ export class AddPosComponent implements OnInit {
     }
   }
 
-  AccountPosting(mid:any) {
+  AccountPosting(mid: any) {
     // if (!this.content) return
     let params = {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
@@ -8415,13 +8421,13 @@ export class AddPosComponent implements OnInit {
     this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
       .subscribe((result: any) => {
         console.log(result);
-        let data = result.response
+        let data = result.dynamicData
         var WindowPrt = window.open('', '_blank', 'width=300,height=600');
         if (WindowPrt === null) {
           console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
           return;
         }
-        let printContent = data[0].HTMLOUT
+        let printContent = data[0][0].HTMLOUT;
         WindowPrt.document.write(printContent);
 
         WindowPrt.document.close();
@@ -9683,7 +9689,7 @@ export class AddPosComponent implements OnInit {
 
 
     let totalAmt;
-    let grossAmount='';
+    let grossAmount = '';
     if (this.divisionMS == 'M') {
       totalAmt = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -9692,7 +9698,7 @@ export class AddPosComponent implements OnInit {
           this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
       );
     } else {
-      grossAmount=this.comFunc.transformDecimalVB(
+      grossAmount = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
       );
@@ -9715,7 +9721,7 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
     // this.lineItemForm.controls.fcn_li_rate.setValue(totalAmt);
 
-    let discountAmt =  this.comFunc.transformDecimalVB(
+    let discountAmt = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       parseFloat(totalAmt) - parseFloat(grossAmt)
       // parseFloat(totalAmt) - parseFloat(grossAmt)
@@ -10697,7 +10703,7 @@ export class AddPosComponent implements OnInit {
       "DTREMARKS": "",
       "GROUPREF": "",
       "NEWMID": 0,
-      
+
       RetailDetails: this.currentLineItems,
     };
     console.log('====================================');
@@ -10725,8 +10731,8 @@ export class AddPosComponent implements OnInit {
       ITEM_CURR_RATE: this.vocDataForm.value.txtCurRate || 1,
       VALUE_DATE: this.vocDataForm.value.vocdate,
       SALESPERSON_CODE: this.vocDataForm.value.sales_person, //need
-      RATE_TYPE:this.newLineItem.RATE_TYPE,
-      METAL_RATE:this.newLineItem.METAL_RATE,
+      RATE_TYPE: this.newLineItem.RATE_TYPE,
+      METAL_RATE: this.newLineItem.METAL_RATE,
       FIXED: 1,
       TOTAL_PCS: this.comFunc.emptyToZero(this.invMetalPurchaseTotalPcs),
       TOTAL_GRWT: this.comFunc.emptyToZero(
@@ -10858,7 +10864,7 @@ export class AddPosComponent implements OnInit {
       POSCUSTIDNO: this.customerDetails.POSCUSTIDNO,
       HVAT_AMOUNT_CC: 0,
       HVAT_AMOUNT_FC: 0,
-      HTOTALAMOUNTWITHVAT_CC:0,
+      HTOTALAMOUNTWITHVAT_CC: 0,
       HTOTALAMOUNTWITHVAT_FC: 0,
       INTERNALUNFIX: false,
       InternalFixedQty: 0,
@@ -12695,4 +12701,26 @@ export class AddPosComponent implements OnInit {
     }
     this.auditTrailComponent?.showDialog(params)
   }
+
+  // public exportInvoiceToPdf(): void {
+  //   let postData = {
+  //     "MID": this.comFunc.emptyToZero(this.content?.MID),
+  //     "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+  //     "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+  //     "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+  //     "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+  //   }
+  //   this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+  //     .subscribe((result: any) => {
+  //       console.log(result);
+  //       let data = result.dynamicData
+
+  //       let printContent =data[0][0].HTMLOUT2;
+
+
+  //       const fileName = 'invoice.pdf';
+  //       this.lineItemService.exportToPdf(printContent, fileName);
+  //     })
+
+  // }
 }
