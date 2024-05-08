@@ -136,6 +136,7 @@ export class ComponentSizeSetComponent implements OnInit {
     this.tableData.forEach((item: any, i: any) => {
       item.SRNO = i + 1;
     });
+    
   }
 
 
@@ -347,6 +348,7 @@ export class ComponentSizeSetComponent implements OnInit {
     // Find the corresponding description for the selected code
     const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
     
+    // this.selectedOptions[data.data.SRNO] = event.value;
     // Update the description in the grid data
     // data.data.COMPONENT_DESCRIPTION = selectedDescription;
     // data.data.COMPSIZE_CODE = selectedCode;
@@ -355,6 +357,13 @@ export class ComponentSizeSetComponent implements OnInit {
 
     this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
     this.tableData[index].COMPSIZE_CODE = selectedCode;
+
+   
+  }
+
+  isOptionSelected(SRNO: number, option: any): boolean {
+    // Check if the option is already selected for another row
+    return Object.values(this.selectedOptions).some((value: any) => value && value.COMPSIZE_CODE === option.COMPSIZE_CODE && value.SRNO !== SRNO);
   }
 
 }

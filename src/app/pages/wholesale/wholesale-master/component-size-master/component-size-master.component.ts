@@ -23,6 +23,9 @@ export class ComponentSizeMasterComponent implements OnInit {
   radius!: number;
   viewMode: boolean = false;
   editableMode: boolean = false;
+  codeEnable: boolean = true;
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -43,6 +46,9 @@ export class ComponentSizeMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.codeEnable = true;
+
     this.componentsizemasterForm = this.formBuilder.group({
       code: ['', [Validators.required]],
       desc: ['', [Validators.required]],
@@ -52,23 +58,53 @@ export class ComponentSizeMasterComponent implements OnInit {
       radius: ['']
     });
     this.subscribeToFormChanges();
+
+    this.setInitialValues();
+    if (this.content.FLAG == 'VIEW') {
+      this.setFormValues()
+      this.viewMode = true;
+    } else if (this.content.FLAG == 'EDIT') {
+      this.editableMode = true;
+      this.codeEnable = false;
+      this.setFormValues()
+    }
   }
 
   private subscribeToFormChanges() {
     this.componentsizemasterForm.valueChanges.subscribe(() => {
-      this.calculateRadius();
+      //this.calculateRadius();
       this.getValues()
     });
 
-    if (this.content.FLAG == 'VIEW') {
-      this.setFormValues()
-      this.viewMode = true;
 
-    } else if (this.content.FLAG == 'EDIT') {
-      this.editableMode = true;
-      this.setFormValues()
-    }
   }
+
+  private setInitialValues() {
+    this.componentsizemasterForm.controls.height.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentsizemasterForm.controls.width.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentsizemasterForm.controls.length.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentsizemasterForm.controls.radius.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+
+  }
+
+  checkCode(): boolean {
+    if (this.componentsizemasterForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('Please enter the Code')
+      return true
+    }
+    return false
+  }
+
+  codeEnabled() {
+    if (this.componentsizemasterForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
+
 
   setFormValues() {
     console.log(this.content);
@@ -129,6 +165,13 @@ export class ComponentSizeMasterComponent implements OnInit {
       this.update()
       return
     }
+
+    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+      this.toastr.error('The height must be less than the half of the width')
+      return;
+    }
+    
+
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
