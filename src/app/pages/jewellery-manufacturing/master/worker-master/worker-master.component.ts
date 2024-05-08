@@ -9,7 +9,6 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
 
-
 @Component({
   selector: 'app-worker-master',
   templateUrl: './worker-master.component.html',
@@ -17,7 +16,6 @@ import { ChangeDetectorRef } from '@angular/core';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
-
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
@@ -36,7 +34,7 @@ export class WorkerMasterComponent implements OnInit {
   codeEnable: boolean = true;
   dele: boolean = false;
   btndisable: boolean = false;
-
+  isDisableSaveBtn: boolean = false;
   filteredData: any[] = []; // Data source for the filtered grid
   searchTerm: string = '';
 
@@ -128,6 +126,7 @@ export class WorkerMasterComponent implements OnInit {
     if (this.content?.FLAG) {
       this.setFormValues();
       this.selectProcessWithSP()
+      this.btndisable = true
       if (this.content?.FLAG == 'VIEW') {
         this.viewMode = true;
         this.isViewMode = true;
@@ -142,7 +141,13 @@ export class WorkerMasterComponent implements OnInit {
       }
     }
   }
-
+  inputValidate(event:any){
+    let form = this.workerMasterForm.value;
+    if(form.WorkerAcCode != '' || form.NameOfSupervisor != '' || form.DefaultProcess  != ''){
+      this.isDisableSaveBtn = true;
+    }
+  }
+ 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('please enter Worker code')
@@ -160,7 +165,11 @@ export class WorkerMasterComponent implements OnInit {
     }
 
   }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.workerMasterForm.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -178,13 +187,16 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
     this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
     this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE)
-    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(this.content.LOSS_ALLOWED, 'METAL'))
     this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
-    this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TRAY_WEIGHT, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
-    this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_CARAT_WT, 'METAL'))
-    this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
-    this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
+    this.workerMasterForm.controls.TargetPcs.setValue(
+      this.commonService.commaSeperation(this.content.TARGET_PCS)
+    )
+    
+    this.setValueWithDecimal('LossAllowed',this.content.LOSS_ALLOWED, 'METAL')
+    this.setValueWithDecimal('TrayWeight',this.content.TRAY_WEIGHT, 'METAL')
+    this.setValueWithDecimal('TargetCaratWt',this.content.TARGET_CARAT_WT, 'METAL')
+    this.setValueWithDecimal('TargetMetalWt',this.content.TARGET_METAL_WT, 'METAL')
+    this.setValueWithDecimal('TargetWeight',this.content.TARGET_WEIGHT, 'METAL')
     this.workerMasterForm.controls.DailyTarget.setValue(this.content.TARGET_BY)
     this.workerMasterForm.controls.Active.setValue(this.content.ACTIVE == 'Y' ? true : false)
   }
@@ -229,34 +241,34 @@ export class WorkerMasterComponent implements OnInit {
     }
     return postData
   }
+  submitValidations(form:any){
+    if (form.WorkerCode == '') {
+      this.toastr.error("Worker Code cannot be empty")
+      return true
+    }
+    else if (form.WorkerDESCRIPTION == '') {
+      this.toastr.error("Description cannot be empty")
+      return true
+    }
+    return false;
+  }
+  reCalculateSrno(){
+    if(this.selectedProcessArr?.length>0){
+      this.selectedProcessArr.forEach((item: any, i: any) => {
+        item.SRNO = i + 1;
+      });
+    }
+  }
   /**USE:  final save API call*/
   formSubmit() {
     this.buttonField = false;
     if (this.content && this.content.FLAG == 'VIEW') return
+    if(this.submitValidations(this.workerMasterForm.value)) return;
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
     }
-
-    if (this.workerMasterForm.value.WorkerCode == '' && this.workerMasterForm.invalid) {
-      this.toastr.error("Worker Code cannot be empty")
-      return
-    }
-    else if (this.workerMasterForm.value.WorkerDESCRIPTION == '' && this.workerMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")
-      return
-    }
-
-    // if(this.workerMasterForm.invalid && this.selectedProcessArr) {
-    //   this.toastr.error('select all required fields & Process')
-    //   return
-    // }
-
-
-    this.selectedProcessArr.forEach((item: any, i: any) => {
-      item.SRNO = i + 1;
-    });
-
+    this.reCalculateSrno()
     let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = this.setPostData()
 
@@ -288,12 +300,6 @@ export class WorkerMasterComponent implements OnInit {
 
   updateWorkerMaster() {
     this.viewModeBtn = false;
-
-    if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
     let API = 'WorkerMaster/UpdateWorkerMaster/' + this.workerMasterForm.value.WorkerCode
     let postData = this.setPostData()
 
@@ -602,6 +608,7 @@ export class WorkerMasterComponent implements OnInit {
     let API = 'WorkerMaster/GetWorkerMasterAccodeLookUp/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
+        this.isDisableSaveBtn = false;
         this.setwithFormControl(result.status, flag)
       }, err => {
         this.workerMasterForm.reset()
@@ -622,6 +629,7 @@ export class WorkerMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/GetProcessMasterDjWithProcessCode/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
+        this.isDisableSaveBtn = false;
         this.setwithFormControl(result.status, code)
       }, err => {
         this.workerMasterForm.reset()

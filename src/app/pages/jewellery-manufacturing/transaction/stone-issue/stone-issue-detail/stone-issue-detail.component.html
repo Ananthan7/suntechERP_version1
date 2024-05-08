@@ -6,8 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-  (changeJobClick)="jobchange()" (continueClick)="continueClick()"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
+  (changeJobClick)="changeJobClicked()" (continueClick)="formSubmit('CONTINUE')"
   [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
   [isViewMore]="false"></modal-header>
 
@@ -137,7 +137,7 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="stockDes"
+              <input type="text" matInput formControlName="stockCodeDes"
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>

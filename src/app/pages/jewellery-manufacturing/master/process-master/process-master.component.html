@@ -91,7 +91,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 85%">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                            maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode"  />
@@ -124,7 +124,7 @@
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
                                         <input type="text" matInput
-                                            class="text-right" maxlength="5"
+                                            class="text-right" maxlength="2"
                                             formControlName="Position"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -156,7 +156,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 80%">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                            maxlength="6" UpperCaseDirective
                                             formControlName="approvalCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode"  />
@@ -173,7 +173,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 70%">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                            maxlength="6" UpperCaseDirective
                                             formControlName="approvalProcess"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode" />
@@ -191,7 +191,7 @@
                                     Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 80%">
-                                        <input type="text" matInput
+                                        <input type="text" matInput UpperCaseDirective
                                             formControlName="recStockCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             [readonly]="viewMode"  />
@@ -348,7 +348,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                            maxlength="6" UpperCaseDirective
                                             formControlName="accountStart"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
@@ -361,7 +361,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                            maxlength="6" UpperCaseDirective
                                             formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
@@ -374,7 +374,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                            maxlength="6" UpperCaseDirective
                                             formControlName="accountEnd"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
