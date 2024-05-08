@@ -65,7 +65,7 @@ export class ProcessMasterComponent implements OnInit {
   disabled = false;
   value: any;
   searchlookup: boolean = false;
- 
+
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
   accountMasterData: MasterSearchModel = {
@@ -234,7 +234,7 @@ export class ProcessMasterComponent implements OnInit {
 
     this.setInitialValues()
     this.getProcessTypeOptions()
-    if(this.content?.FLAG){
+    if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == 'VIEW') {
         this.viewMode = true;
@@ -248,12 +248,98 @@ export class ProcessMasterComponent implements OnInit {
         this.onRecovery();
         this.onAllowGain();
         this.dele = false;
-      } else if (this.content.FLAG == 'DELETE'){
+      } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteProcessMaster()
       }
     }
 
+  }
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.processMasterForm.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
+  private setInitialValues() {
+    this.setValueWithDecimal('labour_charge', 0, 'AMOUNT')
+    this.setValueWithDecimal('trayWeight', 0, 'AMOUNT')
+    this.setValueWithDecimal('loss_standard', 0, 'AMOUNT')
+    this.setValueWithDecimal('loss_min', 0, 'AMOUNT')
+    this.setValueWithDecimal('loss_max', 0, 'AMOUNT')
+    this.setValueWithDecimal('standard_end', 0, 'AMOUNT')
+    this.setValueWithDecimal('min_end', 0, 'AMOUNT')
+    this.processMasterForm.controls.Position.setValue(0)
+  }
+  private setFormValues() {
+    console.log(this.content);
+    if (!this.content) return
+    this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
+    this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
+
+    this.processMasterForm.controls.RepairProcess.setValue(this.onchangeCheckBoxNum(this.content.REPAIR_PROCESS));
+    this.processMasterForm.controls.FinalProcess.setValue(this.onchangeCheckBoxNum(this.content.FINAL_PROCESS));
+    this.processMasterForm.controls.Setting.setValue(this.onchangeCheckBoxNum(this.content.SETTING_PROCESS));
+    this.processMasterForm.controls.LockWeight.setValue(this.onchangeCheckBoxNum(this.content.LOCK_WEIGHT));
+    this.processMasterForm.controls.LabProcess.setValue(this.onchangeCheckBoxNum(this.content.LAB_PROCESS));
+    this.processMasterForm.controls.WaxProcess.setValue(this.onchangeCheckBoxNum(this.content.WAX_PROCESS));
+    this.processMasterForm.controls.recovery.setValue(this.onchangeCheckBoxNum(this.content.RECOV_VAR2));
+    this.processMasterForm.controls.DeductPureWeight.setValue(this.onchangeCheckBoxNum(this.content.DEDUCT_PURE_WT));
+    this.processMasterForm.controls.MergePices.setValue(this.onchangeCheckBoxNum(this.content.MERGE_BLOCK))
+
+
+    this.processMasterForm.controls.loss.setValue(this.viewchangeYorN(this.content.ALLOW_LOSS));
+    this.processMasterForm.controls.loss_on_gross.setValue(this.viewchangeYorN(this.content.LOSS_ON_GROSS));
+    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.viewchangeYorN(this.content.TIMEON_PROCESS));
+    this.processMasterForm.controls.RecoveryProcess.setValue(this.viewchangeYorN(this.content.RECOVERY_PROCESS));
+    this.processMasterForm.controls.Metal.setValue(this.viewchangeYorN(this.content.ALLOW_METAL));
+    this.processMasterForm.controls.Stone.setValue(this.viewchangeYorN(this.content.ALLOW_STONE));
+    this.processMasterForm.controls.Consumable.setValue(this.viewchangeYorN(this.content.ALLOW_CONSUMABLE));
+    this.processMasterForm.controls.ApprovalRequired.setValue(this.viewchangeYorN(this.content.APPROVAL_REQUIRED));
+    this.processMasterForm.controls.NonQuantity.setValue(this.viewchangeYorN(this.content.NON_QUANTITY));
+    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.viewchangeYorN(this.content.DF_REFINERY));
+    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.viewchangeYorN(this.content.AUTO_LOSS));
+    this.processMasterForm.controls.HaveTreeNo.setValue(this.viewchangeYorN(this.content.TREE_NO));
+    this.processMasterForm.controls.allowGain.setValue(this.viewchangeYorN(this.content.ALLOW_GAIN));
+    this.processMasterForm.controls.StoneIncluded.setValue(this.viewchangeYorN(this.content.STONE_INCLUDED));
+    this.processMasterForm.controls.AutoTransfer.setValue(this.onchangeCheckBoxNum(this.content.AUTOTRANSFER));
+
+    this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
+    // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
+    this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
+    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
+    this.processMasterForm.controls.Position.setValue(this.content.POSITION);
+    this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
+    this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
+    // this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
+    // this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
+    // this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
+    // this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
+    // this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
+    // this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
+    this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
+    this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
+    this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
+    // this.processMasterForm.controls.labour_charge.setValue(this.content.LABCHRG_PERHOUR);
+    this.setValueWithDecimal('labour_charge', this.content.LABCHRG_PERHOUR, 'AMOUNT')
+    this.setValueWithDecimal('trayWeight', this.content.TRAY_WT, 'AMOUNT')
+    this.setValueWithDecimal('loss_standard', this.content.STD_LOSS, 'AMOUNT')
+    this.setValueWithDecimal('loss_min', this.content.MIN_LOSS, 'AMOUNT')
+    this.setValueWithDecimal('loss_max', this.content.MAX_LOSS, 'AMOUNT')
+    this.setValueWithDecimal('standard_end', this.content.RECOV_MIN, 'AMOUNT')
+    this.setValueWithDecimal('min_end', this.content.RECOV_VAR1, 'AMOUNT')
+    console.log(this.processMasterForm.value, '.....fired.....');
+
+    // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
+    // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
+    // this.formattedMaxTime.controls.setValue(this.content.STD_TIME);
+    // this.formattedMaxTime.controls.setValue(this.content.MAX_TIME);
+
+    //this.maxTime = this.content.MAX_TIME;
+    this.standTime = this.content.STD_TIME;
+    this.maxTime = this.content.MAX_TIME;
+
+    this.formattedTime = this.content.STD_TIME;
+    this.formattedMaxTime = this.content.MAX_TIME;
   }
 
   showMaxContentAlert(): void {
@@ -389,7 +475,7 @@ export class ProcessMasterComponent implements OnInit {
     //   this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
     // }
 
-    if (Number(recLoss) < Number(minRec)) {
+    if (this.commonService.emptyToZero(recLoss) < this.commonService.emptyToZero(minRec)) {
       console.log("a")
       this.recoveryData = true;
       this.toastr.error('Standard % should be Greater than Minimum %');
@@ -410,126 +496,6 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  private setInitialValues() {
-    this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.processMasterForm.controls.loss_standard.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.processMasterForm.controls.loss_min.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.processMasterForm.controls.loss_max.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.processMasterForm.controls.standard_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.processMasterForm.controls.min_end.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.processMasterForm.controls.Position.setValue(0)
-  }
-  private setFormValues() {
-    console.log(this.content);
-    if (!this.content) return
-    this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
-    this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
-
-    this.processMasterForm.controls.RepairProcess.setValue(this.onchangeCheckBoxNum(this.content.REPAIR_PROCESS));
-    this.processMasterForm.controls.FinalProcess.setValue(this.onchangeCheckBoxNum(this.content.FINAL_PROCESS));
-    this.processMasterForm.controls.Setting.setValue(this.onchangeCheckBoxNum(this.content.SETTING_PROCESS));
-    this.processMasterForm.controls.LockWeight.setValue(this.onchangeCheckBoxNum(this.content.LOCK_WEIGHT));
-    this.processMasterForm.controls.LabProcess.setValue(this.onchangeCheckBoxNum(this.content.LAB_PROCESS));
-    this.processMasterForm.controls.WaxProcess.setValue(this.onchangeCheckBoxNum(this.content.WAX_PROCESS));
-    this.processMasterForm.controls.recovery.setValue(this.onchangeCheckBoxNum(this.content.RECOV_VAR2));
-    this.processMasterForm.controls.DeductPureWeight.setValue(this.onchangeCheckBoxNum(this.content.DEDUCT_PURE_WT));
-    this.processMasterForm.controls.MergePices.setValue(this.onchangeCheckBoxNum(this.content.MERGE_BLOCK))
-
-
-    this.processMasterForm.controls.loss.setValue(this.viewchangeYorN(this.content.ALLOW_LOSS));
-    this.processMasterForm.controls.loss_on_gross.setValue(this.viewchangeYorN(this.content.LOSS_ON_GROSS));
-    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.viewchangeYorN(this.content.TIMEON_PROCESS));
-    this.processMasterForm.controls.RecoveryProcess.setValue(this.viewchangeYorN(this.content.RECOVERY_PROCESS));
-    this.processMasterForm.controls.Metal.setValue(this.viewchangeYorN(this.content.ALLOW_METAL));
-    this.processMasterForm.controls.Stone.setValue(this.viewchangeYorN(this.content.ALLOW_STONE));
-    this.processMasterForm.controls.Consumable.setValue(this.viewchangeYorN(this.content.ALLOW_CONSUMABLE));
-    this.processMasterForm.controls.ApprovalRequired.setValue(this.viewchangeYorN(this.content.APPROVAL_REQUIRED));
-    this.processMasterForm.controls.NonQuantity.setValue(this.viewchangeYorN(this.content.NON_QUANTITY));
-    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.viewchangeYorN(this.content.DF_REFINERY));
-    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.viewchangeYorN(this.content.AUTO_LOSS));
-    this.processMasterForm.controls.HaveTreeNo.setValue(this.viewchangeYorN(this.content.TREE_NO));
-    this.processMasterForm.controls.allowGain.setValue(this.viewchangeYorN(this.content.ALLOW_GAIN));
-    this.processMasterForm.controls.StoneIncluded.setValue(this.viewchangeYorN(this.content.STONE_INCLUDED));
-    this.processMasterForm.controls.AutoTransfer.setValue(this.onchangeCheckBoxNum(this.content.AUTOTRANSFER));
-
-    this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
-    // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
-    this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
-    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
-    this.processMasterForm.controls.Position.setValue(this.content.POSITION);
-    this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
-    this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
-
-    // this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
-    // this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
-    // this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
-    // this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
-    this.processMasterForm.controls.labour_charge.setValue(this.content.LABCHRG_PERHOUR);
-    // this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
-    // this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
-    this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
-    this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
-    this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
-
-    this.processMasterForm.controls.loss_standard.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.STD_LOSS));
-
-    this.processMasterForm.controls.loss_min.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.MIN_LOSS));
-
-    this.processMasterForm.controls.loss_max.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.MAX_LOSS));
-
-    this.processMasterForm.controls.standard_end.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.RECOV_MIN));
-
-    this.processMasterForm.controls.min_end.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.RECOV_VAR1));
-
-    this.processMasterForm.controls.trayWeight.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.TRAY_WT));
-
-    // this.processMasterForm.controls.loss_standard.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.STD_LOSS));
-
-    // this.processMasterForm.controls.loss_standard.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.STD_LOSS));
-
-
-
-    // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
-    // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
-    // this.formattedMaxTime.controls.setValue(this.content.STD_TIME);
-    // this.formattedMaxTime.controls.setValue(this.content.MAX_TIME);
-
-    //this.maxTime = this.content.MAX_TIME;
-    this.standTime = this.content.STD_TIME;
-    this.maxTime = this.content.MAX_TIME;
-
-    this.formattedTime = this.content.STD_TIME;
-
-    this.formattedMaxTime = this.content.MAX_TIME;
-
-
-
-  }
 
   onchangeCheckBox(e: any) {
     console.log(e);
@@ -579,7 +545,7 @@ export class ProcessMasterComponent implements OnInit {
       "REPAIR_PROCESS": this.onchangeCheckBoxNum(form.RepairProcess),
       "FINAL_PROCESS": this.onchangeCheckBoxNum(form.FinalProcess),
       "GAIN_ACCODE": form.accountEnd,
-      "TRAY_WT": form.trayWeight || 0,
+      "TRAY_WT": this.commonService.emptyToZero(form.trayWeight),
       "SETTING_PROCESS": this.onchangeCheckBoxNum(form.Setting),
       "POINTS": 0,
       "LOCK_WEIGHT": this.onchangeCheckBoxNum(form.LockWeight),
@@ -589,7 +555,7 @@ export class ProcessMasterComponent implements OnInit {
       "LAB_PROCESS": this.onchangeCheckBoxNum(form.LabProcess),
       "WAX_PROCESS": this.onchangeCheckBoxNum(form.WaxProcess),
       "STD_LOSS_QTY": 0,
-      "POSITION": form.Position || 0,
+      "POSITION": this.commonService.emptyToZero(form.Position),
       "RECOV_MIN": form.standard_end || 0,
       "RECOV_ACCODE": form.accountMiddle,
       "RECOV_STOCK_CODE": form.recStockCode || "",
@@ -608,7 +574,7 @@ export class ProcessMasterComponent implements OnInit {
       "MAX_LOSS": form.loss_max || 0,
       "LOSS_ON_GROSS": this.onchangeCheckBox(form.loss_on_gross),
       "JOB_NUMBER": "",
-      "LABCHRG_PERHOUR": form.labour_charge || 0,
+      "LABCHRG_PERHOUR": this.commonService.emptyToZero(form.labour_charge),
       "APPLY_SETTING": form.ApplySetting,
       "TIMEON_PROCESS": this.onchangeCheckBox(form.TimeCalculateonProcess),
       "STONE_INCLUDED": this.onchangeCheckBox(form.StoneIncluded),
@@ -673,10 +639,10 @@ export class ProcessMasterComponent implements OnInit {
         this.toastr.error(' Recovery Minimum % Cannot be Zero');
         return true;
       }
-      else if (form.accountMiddle == '') {
-        this.toastr.error('Recovery Account Code Cannot be Empty');
-        return true;
-      }
+      // else if (form.accountMiddle == '') {
+      //   this.toastr.error('Recovery Account Code Cannot be Empty');
+      //   return true;
+      // }
     }
 
     if (form.allowGain == true) {
@@ -725,7 +691,7 @@ export class ProcessMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title:  this.commonService.getMsgByID('MSG2443') || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -754,7 +720,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.submitValidations(this.processMasterForm.value)) return;
     let form = this.processMasterForm.value;
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + form.processCode
-    let postData =  this.setPostData()
+    let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
@@ -942,13 +908,13 @@ export class ProcessMasterComponent implements OnInit {
       this.searchModeLoss = false;
 
       this.processMasterForm.get('accountStart')?.clearValidators();
-      this.processMasterForm.controls.loss_min.setValue(0);
-      this.processMasterForm.controls.loss_max.setValue(0);
+      this.setValueWithDecimal('loss_standard',0, 'AMOUNT')
+      this.setValueWithDecimal('loss_min',0, 'AMOUNT')
+      this.setValueWithDecimal('loss_max',0, 'AMOUNT')
+      this.setValueWithDecimal('standard_end',0, 'AMOUNT')
+      this.setValueWithDecimal('min_end',0, 'AMOUNT')
       this.processMasterForm.controls.accountStart.setValue('');
       this.processMasterForm.controls.accountMiddle.setValue('');
-      this.processMasterForm.controls.loss_standard.setValue(0);
-      this.processMasterForm.controls.standard_end.setValue(0);
-      this.processMasterForm.controls.min_end.setValue(0);
     }
 
 
@@ -978,8 +944,8 @@ export class ProcessMasterComponent implements OnInit {
       this.isRecovReadOnly = true;
       this.searchModeRecov = false;
       this.processMasterForm.get('accountMiddle')?.clearValidators();
-      this.processMasterForm.controls.min_end.setValue(0);
-      this.processMasterForm.controls.standard_end.setValue(0);
+      this.setValueWithDecimal('min_end',0, 'AMOUNT')  
+      this.setValueWithDecimal('standard_end',0, 'AMOUNT')  
       this.processMasterForm.controls.accountMiddle.setValue('');
     }
 

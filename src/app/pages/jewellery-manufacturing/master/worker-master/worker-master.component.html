@@ -8,7 +8,9 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)="deleteWorkerMaster()" [isViewDelete]="!dele"   [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
+        (deleteClick)="deleteWorkerMaster()" [isViewDelete]="!dele"   
+        [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
+        [disableSaveBtn]="isDisableSaveBtn"
         [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
     <!-- content section -->
     <div class="card">
@@ -48,7 +50,8 @@
                                 Worker A/C code :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                [readonly]="viewMode || codeEnable"  maxlength="6"
+                                    [readonly]="viewMode || codeEnable"  maxlength="6"
+                                    (input)="inputValidate($event)" UpperCaseDirective
                                     (focusout)="workerCodeChange($event,'WorkerAcCode')"
                                     formControlName="WorkerAcCode" />
                             </mat-form-field>
@@ -65,6 +68,7 @@
                                 Name of Supervisor :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
+                                    (input)="inputValidate($event)" UpperCaseDirective
                                     (focusout)="workerCodeChange($event,'NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable" 
                                     formControlName="NameOfSupervisor" />
@@ -81,7 +85,8 @@
                                 Default Process :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
-                                [readonly]="viewMode || codeEnable" 
+                                    [readonly]="viewMode || codeEnable" 
+                                    (input)="inputValidate($event)" UpperCaseDirective
                                     (focusout)="processCodeChange($event,'DefaultProcess')"
                                     formControlName="DefaultProcess" />
                             </mat-form-field>
@@ -237,9 +242,10 @@
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO"
                             [selectedRowKeys]="selectedKey"
-                            [allowColumnResizing]="true"
+                            [allowColumnResizing]="true" 
                             (onSelectionChanged)="changedCheckbox($event)"
-                            [showBorders]="true">
+                            [showBorders]="true"
+                            [remoteOperations]="{ filtering: false }">
                             <dxo-filter-row [visible]="true"></dxo-filter-row>
                             <!-- <dxo-header-filter
                                 [visible]="showHeaderFilter"></dxo-header-filter> -->
@@ -264,10 +270,11 @@
                             </dxi-column>
                             <dxi-column dataField="PROCESS_CODE" width="auto"
                                 caption="Process Code"
-                                [allowEditing]="true" alignment="left">
+                                [calculateFilterExpression]="calculateFilterExpression"
+                                 alignment="left">
                             </dxi-column>
                             <dxi-column dataField="DESCRIPTION" width="auto"
-                                caption="Description" [allowEditing]="true"
+                                caption="Description" 
                                 alignment="left">
                             </dxi-column>
                         </dx-data-grid>
