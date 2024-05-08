@@ -147,12 +147,7 @@ export class WorkerMasterComponent implements OnInit {
       this.isDisableSaveBtn = true;
     }
   }
-  calculateFilterExpression(filterValue:any, selectedFilterOperation:any, target:any) {
-    console.log(filterValue);
-    console.log(selectedFilterOperation);
-    console.log(target);
-    
-  }
+ 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('please enter Worker code')

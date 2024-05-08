@@ -242,10 +242,9 @@
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO"
                             [selectedRowKeys]="selectedKey"
-                            [allowColumnResizing]="true" 
+                            [allowColumnResizing]="true"  
                             (onSelectionChanged)="changedCheckbox($event)"
-                            [showBorders]="true"
-                            [remoteOperations]="{ filtering: false }">
+                            [showBorders]="true" >
                             <dxo-filter-row [visible]="true"></dxo-filter-row>
                             <!-- <dxo-header-filter
                                 [visible]="showHeaderFilter"></dxo-header-filter> -->
@@ -270,7 +269,6 @@
                             </dxi-column>
                             <dxi-column dataField="PROCESS_CODE" width="auto"
                                 caption="Process Code"
-                                [calculateFilterExpression]="calculateFilterExpression"
                                  alignment="left">
                             </dxi-column>
                             <dxi-column dataField="DESCRIPTION" width="auto"
