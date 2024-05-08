@@ -437,6 +437,53 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
     return false;
   }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    // let postData = {
+    //   "SPID": "028",
+    //   "parameter": {
+    //     'strBranchCode': this.comService.nullToString(this.branchCode),
+    //     'strJobNumber': this.comService.nullToString(event.target.value),
+    //     'strCurrenctUser': this.comService.nullToString(this.userName)
+    //   }
+    // }
+    let postData = {
+      "SPID": "064",
+      "parameter": {
+        'BRANCHCODE': this.comService.nullToString(this.branchCode),
+        'JOBNO': this.comService.nullToString(event.target.value),
+        'STRSHOWPROCESS': ''
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
+            this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
+            this.metalIssueDetailsForm.controls.jobNumDes.setValue(data[0].JOB_DESCRIPTION)
+            // this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
+            // this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            // this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
+            this.subJobNumberValidate()
+          } else {
+            this.metalIssueDetailsForm.controls.jobNumber.setValue('')
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   subJobNumberValidate(event?: any) {
     let postData = {
       "SPID": "040",
@@ -454,6 +501,7 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           this.tableData = data
+          this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
           this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalIssueDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
@@ -496,46 +544,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  jobNumberValidate(event: any) {
-    if (event.target.value == '') return
-    let postData = {
-      "SPID": "028",
-      "parameter": {
-        'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strJobNumber': this.comService.nullToString(event.target.value),
-        'strCurrenctUser': this.comService.nullToString(this.userName)
-      }
-    }
-
-    this.comService.showSnackBarMsg('MSG81447')
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.jobNumberDetailData = data
-            this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
-            this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
-            this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
-            this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
-            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
-            this.subJobNumberValidate()
-          } else {
-            this.metalIssueDetailsForm.controls.jobNumber.setValue('')
-            this.comService.toastErrorByMsgId('MSG1531')
-            return
-          }
-        } else {
-          this.comService.toastErrorByMsgId('MSG1747')
-        }
-      }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
+  
   stockCodeValidate(event: any) {
     if (event.target.value == '') return
     let postData = {
