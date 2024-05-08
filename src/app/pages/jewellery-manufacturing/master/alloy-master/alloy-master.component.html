@@ -6,8 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()"></modal-header>
+<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" 
+    (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()" [isViewDelete]="!dele" ></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -220,7 +220,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput formControlName="weightAvgCost"
-                                            style="text-align: right" [readonly]="viewMode|| codeEnable"
+                                            style="text-align: right" [readonly]="viewMode|| codeEnable"  (focusout)="setValueWeightAvgCost()"
                                              />
                                     </mat-form-field>
                                 </div>
