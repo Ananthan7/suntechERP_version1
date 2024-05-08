@@ -1485,6 +1485,17 @@
             </div>
           </div>
         </div>
+        <!-- <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled">
+       
+
+          <div class="col-md-12 col-xl-12" (click)="exportInvoiceToPdf()">
+            <div class="touch-big-button">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-window-close"></i> <span> Export to PDF</span>
+              </div>
+            </div>
+          </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -2215,7 +2226,7 @@
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
                   formControlName="fcn_exchange_metal_rate"
-                  [readonly]="viewOnly" />
+                  readonly />
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2225,7 +2236,7 @@
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
                   formControlName="fcn_exchange_making_rate"
-                  [readonly]="viewOnly"
+                  readonly
                   (change)="changeExMakingRate($event)" AmountDecimalInput />
               </mat-form-field>
             </div>
@@ -3142,7 +3153,7 @@
                   <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
                   <mat-form-field>
                     <mat-label>Item Code </mat-label>
-                    <input type="text" matInput
+                    <input type="text" matInput autocomplete="off"
                       formControlName="fcn_li_item_code" #fcn_li_item_code
                       id="fcn_li_item_code" autofocus
                       (change)="getStockDesc($event)" [readonly]="viewOnly" />
