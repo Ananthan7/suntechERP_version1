@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -23,6 +23,9 @@ export class ComponentSizeMasterComponent implements OnInit {
   radius!: number;
   viewMode: boolean = false;
   editableMode: boolean = false;
+  codeEnable: boolean = true;
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -30,19 +33,23 @@ export class ComponentSizeMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
 
   ) { }
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
+  // @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
-  ngAfterViewInit() {
-    // Focus on the first input
-    if (this.codeInput1) {
-      this.codeInput1.nativeElement.focus();
-    }
-  }
+  // ngAfterViewInit() {
+  //   // Focus on the first input
+  //   if (this.codeInput1) {
+  //     this.codeInput1.nativeElement.focus();
+  //   }
+  // }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+    this.codeEnable = true;
+
     this.componentsizemasterForm = this.formBuilder.group({
       code: ['', [Validators.required]],
       desc: ['', [Validators.required]],
@@ -52,23 +59,53 @@ export class ComponentSizeMasterComponent implements OnInit {
       radius: ['']
     });
     this.subscribeToFormChanges();
+
+    this.setInitialValues();
+    if (this.content.FLAG == 'VIEW') {
+      this.setFormValues()
+      this.viewMode = true;
+    } else if (this.content.FLAG == 'EDIT') {
+      this.editableMode = true;
+      this.codeEnable = false;
+      this.setFormValues()
+    }
   }
 
   private subscribeToFormChanges() {
     this.componentsizemasterForm.valueChanges.subscribe(() => {
-      this.calculateRadius();
+      //this.calculateRadius();
       this.getValues()
     });
 
-    if (this.content.FLAG == 'VIEW') {
-      this.setFormValues()
-      this.viewMode = true;
 
-    } else if (this.content.FLAG == 'EDIT') {
-      this.editableMode = true;
-      this.setFormValues()
-    }
   }
+
+  private setInitialValues() {
+    this.componentsizemasterForm.controls.height.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentsizemasterForm.controls.width.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentsizemasterForm.controls.length.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentsizemasterForm.controls.radius.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+
+  }
+
+  checkCode(): boolean {
+    if (this.componentsizemasterForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('Please enter the Code')
+      return true
+    }
+    return false
+  }
+
+  codeEnabled() {
+    if (this.componentsizemasterForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
+
 
   setFormValues() {
     console.log(this.content);
@@ -129,6 +166,13 @@ export class ComponentSizeMasterComponent implements OnInit {
       this.update()
       return
     }
+
+    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+      this.toastr.error('The Height must be Less than the Half of the Width')
+      return;
+    }
+    
+
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return

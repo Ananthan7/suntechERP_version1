@@ -218,6 +218,18 @@ export class PriceschemesMasterComponent implements OnInit {
   update() {
     if (!this.validateForm()) return;
 
+    if (this.priceSchemaMasterForm.value.price4 !== '' && this.priceSchemaMasterForm.value.price3 == '') {
+
+      this.toastr.error('Price 3 cannot be empty');
+      return;
+    }
+
+    if (this.priceSchemaMasterForm.value.price5 !== '' && this.priceSchemaMasterForm.value.price4 == '') {
+
+      this.toastr.error('Price 4 cannot be empty');
+      return;
+    }
+
     let API = 'PriceSchemeMaster/UpdatePriceSchemeMaster/' + this.content.MID;
     let postData = this.createPostData();
 

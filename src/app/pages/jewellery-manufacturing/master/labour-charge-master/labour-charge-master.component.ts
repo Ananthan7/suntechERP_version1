@@ -25,6 +25,7 @@ export class LabourChargeMasterComponent implements OnInit {
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
   stockcodeDisable: boolean = false;
+  brandDisable: boolean = false;
   // methodList: any[] = [];
   // labourTypeList: any[] = [];
   // DialabourTypeList: any[] = [];
@@ -38,6 +39,8 @@ export class LabourChargeMasterComponent implements OnInit {
   salesRatePercentageMetal: any;
   editMode: boolean = false;
   grossWt: boolean = false;
+  codeEnableMetal: boolean = true;
+  codeEnableDiamond: boolean = true;
 
 
   displayDiaCostRate: any;
@@ -149,6 +152,8 @@ export class LabourChargeMasterComponent implements OnInit {
     }
     else (this.content.FLAG == 'EDIT')
     {
+      this.codeEnableDiamond = false;
+      this.codeEnableMetal = false;
       this.editMode = true;
       this.setFormValues();
       this.setInitialValues();
@@ -207,6 +212,40 @@ export class LabourChargeMasterComponent implements OnInit {
 
   // }
 
+  checkCode(): boolean {
+    if (this.metallabourMasterForm.value.metallabour_code == '') {
+      this.commonService.toastErrorByMsgId('Please Enter the Code')
+      return true
+    }
+    return false
+  }
+
+  checkCodeDia(): boolean {
+    if (this.diamondlabourMasterForm.value.labour_code == '') {
+      this.commonService.toastErrorByMsgId('Please Enter the Code')
+      return true
+    }
+    return false
+  }
+
+  codeEnabledMetal(){
+    if (this.metallabourMasterForm.value.metallabour_code == '') {
+      this.codeEnableMetal = true;
+    }
+    else {
+      this.codeEnableMetal = false;
+    }
+  }
+
+  codeEnabledDiamond(){
+    if (this.diamondlabourMasterForm.value.labour_code == '') {
+      this.codeEnableDiamond = true;
+    }
+    else {
+      this.codeEnableDiamond = false;
+    }
+  }
+
 
   diaDivisionCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -230,6 +269,7 @@ export class LabourChargeMasterComponent implements OnInit {
     WHERECONDITION: "division= 'm'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   shapeCodeData: MasterSearchModel = {
@@ -531,6 +571,7 @@ export class LabourChargeMasterComponent implements OnInit {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
+       
         // settingTypeControl;
         // methodControl?.enable();
       } else {
@@ -538,6 +579,8 @@ export class LabourChargeMasterComponent implements OnInit {
         // methodControl?.disable();
         this.viewModeSetting = true;
         this.ViewModemethod = true;
+        this.diamondlabourMasterForm.controls.settingType.setValue('');
+        this.diamondlabourMasterForm.controls.method.setValue('');
       }
       console.log(this.settingTypeList);
     });
@@ -632,38 +675,46 @@ export class LabourChargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
-
+  
   divisionCodeSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.divisions.setValue(e.DIVISION_CODE);
   }
 
 
   categorySelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.category.setValue(e.CODE);
   }
 
   subcategorySelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.subCategory.setValue(e.CODE);
   }
 
   brandSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.brand.setValue(e.CODE);
   }
 
   typeCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.typecode.setValue(e.CODE);
   }
 
   colorDataSelected(data: any) {
+    if (this.checkCode()) return
     this.metallabourMasterForm.controls.color.setValue(data.CODE)
   }
 
   metaldivisionCodeSelected(e: any) {
+    this.metallabourMasterForm.controls.stock_code.setValue('');
+    if (this.checkCode()) return
 
     console.log(e);
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
@@ -671,16 +722,19 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   labouracSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(e.ACCODE);
   }
 
   labourAcSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.labourAc.setValue(e.ACCODE);
   }
 
   sieveSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(e.DESCRIPTION);
@@ -688,6 +742,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
@@ -696,12 +751,14 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   currencyCodeSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.currency.setValue(e.CURRENCY_CODE);
 
   }
 
   metalcurrencyCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.metalcurrency.setValue(e.CURRENCY_CODE);
 
@@ -709,27 +766,32 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   karatCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
   shapeCodeSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.shape.setValue(e.CODE);
   }
 
   processCodeSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.process.setValue(e.Process_Code);
   }
 
   sizeToCodeSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.size_to.setValue(e.CODE);
   }
 
   sizeFromCodeSelected(e: any) {
+    if (this.checkCodeDia()) return
     console.log(e);
     this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
   }
@@ -775,6 +837,13 @@ export class LabourChargeMasterComponent implements OnInit {
           this.toastr.error('Weight From should be lesser than Weight To')
         }
 
+        if(this.metallabourMasterForm.value.size_from > this.metallabourMasterForm.value.size_to)
+          {
+            this.toastr.error('Weight From should be lesser than Weight To')
+          return;
+          }
+
+
 
     // if (this.diamondlabourMasterForm.invalid) {
     //   this.toastr.error('select all required fields')
@@ -803,7 +872,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
-      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
+      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate || 0,
       "LAST_SELLING_RATE":  0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
@@ -814,7 +883,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
       "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
       "SIEVE": this.diamondlabourMasterForm.value.sieve,
-      "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
+      "WASTAGE_PER": this.commonService.emptyToZero(this.metallabourMasterForm.value.wastage),
       "WASTAGE_AMT": 0,
       "TYPE_CODE": this.metallabourMasterForm.value.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category,
@@ -880,7 +949,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
-      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
+      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate || 0,
       "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate || 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
@@ -1008,19 +1077,49 @@ export class LabourChargeMasterComponent implements OnInit {
     if (event.checked === true) {
       this.stockcodeDisable = true;
       this.viewDisable1 = true;
-      // this.metallabourMasterForm.controls['stock_code'].disable();
-      // this.metallabourMasterForm.controls['color'].disable();
-      // this.metallabourMasterForm.controls['metallabourType'].disable();
-      // this.metallabourMasterForm.controls['metalunitList'].disable();
+      this.metallabourMasterForm.controls['stock_code'].disable();
+      this.metallabourMasterForm.controls['stock_code'].setValue('');
+      this.metallabourMasterForm.controls['karat'].disable();
+      this.metallabourMasterForm.controls['karat'].setValue('');
+      this.metallabourMasterForm.controls['color'].disable();
+      this.metallabourMasterForm.controls['color'].setValue('');
+      this.metallabourMasterForm.controls['metallabourType'].disable();
+      this.metallabourMasterForm.controls['metallabourType'].setValue('');
+      this.metallabourMasterForm.controls['metalunitList'].disable();
+      this.metallabourMasterForm.controls['metalunitList'].setValue('');
+      this.metallabourMasterForm.controls['typecode'].disable();
+      this.metallabourMasterForm.controls['typecode'].setValue('');
+      this.metallabourMasterForm.controls['category'].disable();
+      this.metallabourMasterForm.controls['category'].setValue('');
+      this.metallabourMasterForm.controls['subCategory'].disable();
+      this.metallabourMasterForm.controls['subCategory'].setValue('');
     }
     else {
       this.stockcodeDisable = false;
       this.viewDisable1 = false;
-      // this.metallabourMasterForm.controls['stock_code'].enable();
-      // this.metallabourMasterForm.controls['color'].enable();
-      // this.metallabourMasterForm.controls['metallabourType'].enable();
-      // this.metallabourMasterForm.controls['metalunitList'].enable();
+      this.metallabourMasterForm.controls['stock_code'].enable();
+      this.metallabourMasterForm.controls['color'].enable();
+      this.metallabourMasterForm.controls['metallabourType'].enable();
+      this.metallabourMasterForm.controls['metalunitList'].enable();
+      this.metallabourMasterForm.controls['typecode'].enable();
+      this.metallabourMasterForm.controls['karat'].enable();
+      this.metallabourMasterForm.controls['subCategory'].enable();
+      this.metallabourMasterForm.controls['category'].enable();
 
+    }
+  }
+
+  onforongrossOnlyChange(event: any) {
+
+    if (event.checked === true) {
+      this.brandDisable = true;
+      this.metallabourMasterForm.controls['brand'].disable();
+      this.metallabourMasterForm.controls['brand'].setValue('');
+    }
+    else
+    {
+      this.brandDisable = false;
+      this.metallabourMasterForm.controls['brand'].enable();
     }
   }
 
@@ -1147,6 +1246,36 @@ export class LabourChargeMasterComponent implements OnInit {
   
         // Clear the value of Ct Wt To input field
         this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
+      }
+    }
+  }
+  
+
+  onSizeto(event: any, data: string) {
+
+    // Retrieve the values of Ct Wt From and Ct Wt To from the form
+    const Szwtf: number = parseFloat(this.diamondlabourMasterForm.value.size_from);
+    const Szwtt: number = parseFloat(this.diamondlabourMasterForm.value.size_to);
+
+    console.log(Szwtf);
+    console.log(Szwtt);
+
+  
+    // Check if the data parameter is not 'Ctwtfrom'
+    if (data !== 'sizefrom') {
+      // Check if Ct Wt From is greater than Ct Wt To
+      if (Szwtf > Szwtt) {
+        // Display an error message
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        });
+  
+        // Clear the value of Ct Wt To input field
+        this.diamondlabourMasterForm.controls.size_to.setValue('');
       }
     }
   }

@@ -41,7 +41,7 @@ export class StoneIssueComponent implements OnInit {
   selectedKey: number[] = [];
   selectedIndexes: any = [];
   viewMode: boolean = false;
-  dataToDetailScreen:any;
+  dataToDetailScreen: any;
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -119,12 +119,10 @@ export class StoneIssueComponent implements OnInit {
       }
       this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
       this.setInitialValues()
-    } else {
-      this.setvalues()
-      this.setCompanyCurrency()
+      return
     }
-
-
+    this.setvalues()
+    this.setCompanyCurrency()
   }
   setvalues() {
     this.branchCode = this.comService.branchCode;
@@ -140,7 +138,7 @@ export class StoneIssueComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-                
+
           this.stoneissueFrom.controls.currency.setValue(data.CURRENCY_CODE)
           this.stoneissueFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
           this.stoneissueFrom.controls.worker.setValue(data.WORKER)
@@ -170,7 +168,7 @@ export class StoneIssueComponent implements OnInit {
               })
             });
           }
-    
+
 
 
         } else {
@@ -218,24 +216,41 @@ export class StoneIssueComponent implements OnInit {
   }
 
   deleteTableData(): void {
-    console.log(this.selectedKey, 'data')
-    this.selectedKey.forEach((element: any) => {
-      this.stoneIssueData.splice(element.SRNO - 1, 1)
+    if (!this.selectRowIndex) {
+      Swal.fire({
+        title: '',
+        text: 'Please select row to remove from grid!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+          this.stoneIssueData = this.stoneIssueData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+          this.reCalculateSRNO()
+        }
+      }
+    )
+  }
+  reCalculateSRNO() {
+    this.stoneIssueData.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
+      item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
     })
   }
-  onSelectionChanged(event: any) {
-    this.selectedKey = event.selectedRowKeys;
-    console.log(this.selectedKey, 'srno')
-    let indexes: Number[] = [];
-    this.stoneIssueData.reduce((acc, value, index) => {
-      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
-        acc.push(index);
-      }
-      return acc;
-    }, indexes);
-    this.selectedIndexes = indexes;
-  }
-
   setCompanyCurrency() {
     let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
     this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -280,6 +295,9 @@ export class StoneIssueComponent implements OnInit {
   }
 
   onRowClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
+  }
+  onRowDblClickHandler(event: any) {
     this.selectRowIndex = (event.dataIndex)
     let selectedData = event.data
     // let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
@@ -292,49 +310,22 @@ export class StoneIssueComponent implements OnInit {
     if (detailDataToParent.SRNO != 0) {
       this.stoneIssueData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
+      detailDataToParent.SRNO = this.stoneIssueData.length + 1
       this.stoneIssueData.push(detailDataToParent);
       // this.recalculateSRNO()
     }
-    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
-    if(DATA.FLAG == 'CONTINUE'){
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('Details added successfully')
     };
   }
-  closeDetailScreen(){
+  closeDetailScreen() {
     this.modalReference.close()
   }
-  // addRow(): void {
-  //   const newRow = this.formBuilder.group({
-  //     serialNo: this.tableData.length + 1,
-  //     carat: 0,
-  //     amount: 0,
-  //     total: 0
-  //   });
-
-  //   this.tableData.push(newRow);
-  //   this.updateTotal();
-  // }
-
-  // updateTotal(): void {
-  //   let caratTotal = 0;
-  //   let amountTotal = 0;
-  //   let total = 0;
-
-  //   // this.tableData.controls.forEach((control: FormGroup) => {
-  //   //   caratTotal += control.get('carat').value;
-  //   //   amountTotal += control.get('amount').value;
-  //   // });
-
-  //   this.stoneissueFrom.patchValue({
-  //     caratTotal,
-  //     amountTotal
-  //   });
-  // }
-
   removedata() {
     this.tableData.pop();
   }
-  setPostData(){
+  setPostData() {
     return {
       "MID": 0,
       "VOCTYPE": this.stoneissueFrom.value.voctype,
@@ -366,6 +357,10 @@ export class StoneIssueComponent implements OnInit {
 
   }
   submitValidations(form: any) {
+    if (this.stoneIssueData.length == 0) {
+      this.comService.toastErrorByMsgId('details not added')
+      return true
+    }
     if (form.VOCTYPE == '') {
       this.comService.toastErrorByMsgId('VOCTYPE is required')
       return true

@@ -25,6 +25,7 @@ export class AlloyMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+  dele: boolean = false;
  
   numericValue!: number;
   branchCode: any = localStorage.getItem('userbranch');
@@ -87,6 +88,7 @@ export class AlloyMasterComponent implements OnInit {
     silveralloy:[''],
     picture_name:['']
   });
+  mode!: string;
   
   //number validation
   isNumeric(event: any) {
@@ -110,6 +112,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dele = true;
     this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
     console.log(this.userName);
@@ -123,6 +126,7 @@ export class AlloyMasterComponent implements OnInit {
       this.isDisabled = !this.isDisabled;
       this.editMode = true;
       this.editableMode = true;
+      this.dele = false;
       this.setInitialValues()
     } else if (this.content.FLAG == 'VIEW') {
       // this.alloyMastereForm.disable()
@@ -217,6 +221,10 @@ export class AlloyMasterComponent implements OnInit {
         this.urls = reader.result;
       };
     }
+  }
+
+  setValueWeightAvgCost(){
+    this.alloyMastereForm.controls.weightAvgCost.setValue(this.alloyMastereForm.value.weightAvgCostDes)
   }
 
   codeData: MasterSearchModel = {
@@ -592,15 +600,10 @@ export class AlloyMasterComponent implements OnInit {
       return false;
     }
   }
-  viewchangeYorN(e: any) {
-    console.log(e);
-
-    if (e == 'Y') {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  viewchangeYorN(value: boolean): boolean {
+    // Check if the mode is 'add' and the value is true, or if the mode is not 'add'
+    return (this.mode === 'add' && value) || this.mode !== 'add';
+}
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
@@ -669,7 +672,7 @@ export class AlloyMasterComponent implements OnInit {
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: 0,
       STOCK_LCCOST: 0,
-      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1code),
+      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
       PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
       PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
       PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4code),
@@ -725,8 +728,8 @@ export class AlloyMasterComponent implements OnInit {
       MODEL_YEAR: 0,
       OPENED_ON: "2023-11-27T07:30:26.960Z",
       OPENED_BY: "",
-      FIRST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.fristtransaction),
-      LAST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.lasttransaction),
+      FIRST_TRN: "string",
+      LAST_TRN: "string",
       MID: this.content?.MID || 0,
       PRINTED: true,
       PURVOCTYPE_NO: "",
