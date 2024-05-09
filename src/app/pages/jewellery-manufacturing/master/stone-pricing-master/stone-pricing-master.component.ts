@@ -189,18 +189,20 @@ export class StonePricingMasterComponent implements OnInit {
     clarity: ['', [Validators.required]],
     sieve_from: [''],
     currency: ['AED', [Validators.required]],
-    carat_wt: ['', [Validators.required]],
+    carat_wt: [0, [Validators.required]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from: ['', [Validators.required]],
-    wt_to: ['', [Validators.required]],
+    wt_from: [0, [Validators.required]],
+    wt_to: [0, [Validators.required]],
     size_to: [''],
     size_from: [''],
-    issue_rate: ['', [Validators.required]],
-    selling: [''],
-    selling_rate: [''],
-    sieve_desc:[''],
-  })
+    issue_rate: [0, [Validators.required]],
+    selling: [0],
+    selling_rate: [0],
+    sieve_desc:[0],
+    
+  });
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -228,8 +230,7 @@ export class StonePricingMasterComponent implements OnInit {
       this.editPrice = true;
       this.setFormValues();
     }
-
-  }
+  } 
 
   onweighttto(event: any) {
     if (this.stonePrizeMasterForm.value.wt_from > this.stonePrizeMasterForm.value.wt_to) {
@@ -242,7 +243,6 @@ export class StonePricingMasterComponent implements OnInit {
       })
     }
   }
-
 
   onSievetto(event: any) {
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
@@ -393,7 +393,7 @@ export class StonePricingMasterComponent implements OnInit {
     this.displayDeal = e.replace(/\D/g, "").replace(/\B(?=(\d{12})+(?!\d))/g, ",");
   }
 
-
+  
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
