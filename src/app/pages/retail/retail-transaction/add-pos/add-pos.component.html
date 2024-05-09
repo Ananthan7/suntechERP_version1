@@ -1485,17 +1485,17 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled">
+        <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled">
        
 
-          <div class="col-md-12 col-xl-12" (click)="exportInvoiceToPdf()">
+          <div class="col-md-12 col-xl-12" (click)="exportPdf()">
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
                 <i class="fa fa-window-close"></i> <span> Export to PDF</span>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -2110,7 +2110,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Gross Wt</mat-label>
-                <input type="text" [min]="0" [maxLength]="10"
+                <input type="number" [min]="0" [maxLength]="10"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" id="fcn_exchange_gross_wt" matInput
                   formControlName="fcn_exchange_gross_wt"
@@ -2263,7 +2263,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Net Amount</mat-label>
-                <input [min]="0" [maxLength]="14"
+                <input [min]="0" type="number" [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
                   formControlName="fcn_exchange_net_amount" [readonly]="true"
@@ -3292,7 +3292,7 @@
                   <div class="col-md-6">
                     <mat-form-field>
                       <mat-label>Pure Weight</mat-label>
-                      <input class="st_txt_right" type="text" [min]="0"
+                      <input class="st_txt_right" type="number" [min]="0"
                         [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
                         matInput formControlName="fcn_li_pure_wt"

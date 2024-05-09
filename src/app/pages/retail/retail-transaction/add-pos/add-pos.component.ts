@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 // import { round } from 'lodash';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+//@ts-ignore
+import html2pdf from 'html2pdf.js';
 
 import {
   FormBuilder,
@@ -789,7 +791,7 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm.controls['vocdate'].setValue(this.currentDate);
 
     this.lineItemForm = this.formBuilder.group({
-      fcn_li_item_code: [{ value: '', autofocus: true }, Validators.required],
+      fcn_li_item_code: ['',{ autofocus: true }, Validators.required],
       fcn_li_item_desc: ['', Validators.required],
       fcn_li_division: ['', Validators.required],
       fcn_li_location: [''],
@@ -1461,8 +1463,8 @@ export class AddPosComponent implements OnInit {
               values.gross_amt = data.TOTAL_AMOUNTCC;
               this.currentLineItems[index].GROSS_AMT = data.TOTAL_AMOUNTCC;
             } else {
-              values.gross_amt = data.MKGVALUEFC;
-              this.currentLineItems[index].GROSS_AMT = data.MKGVALUEFC;
+              values.gross_amt = data.MKGVALUEFC-data.DISCOUNTVALUECC;
+              this.currentLineItems[index].GROSS_AMT = data.MKGVALUEFC-data.DISCOUNTVALUECC;
             }
             console.log(
               '==============currentLineItems val======================'
@@ -2403,7 +2405,7 @@ export class AddPosComponent implements OnInit {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
   closeAddCustomerModal() {
-    this.resetCustomerData()
+    // this.resetCustomerData()
     this.modalReference.close()
   }
 
@@ -2776,7 +2778,7 @@ export class AddPosComponent implements OnInit {
     );
     this.lineItemForm.controls.fcn_li_gross_amount.setValue(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTAL_AMOUNTCC)
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.TOTAL_AMOUNTFC-value.DISCOUNTVALUECC))
     );
     // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
     this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
@@ -3026,7 +3028,7 @@ export class AddPosComponent implements OnInit {
     );
     this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(
       // value.METAL_RATE
-      this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE')
+      this.comFunc.decimalQuantityFormat(value.METAL_RATE_GMSCC, 'METAL_RATE')
 
     );
     this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
@@ -6682,7 +6684,7 @@ export class AddPosComponent implements OnInit {
     this.prnt_inv_total_metal_amt = total_metal_amt;
     this.prnt_inv_total_stone_amt = total_stone_amt;
     this.prnt_inv_total_dis_amt = total_dis_amt;
-    this.prnt_inv_total_gross_amt = total_gross_amt;
+    this.prnt_inv_total_gross_amt = total_gross_amt-total_dis_amt;
 
     this.prnt_inv_net_total_without_tax = total_sum;
     this.order_items_total_amount = total_sum;
@@ -12701,26 +12703,106 @@ export class AddPosComponent implements OnInit {
     }
     this.auditTrailComponent?.showDialog(params)
   }
+  @ViewChild('content1', { static: true }) el!: ElementRef;
 
-  // public exportInvoiceToPdf(): void {
-  //   let postData = {
-  //     "MID": this.comFunc.emptyToZero(this.content?.MID),
-  //     "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
-  //     "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
-  //     "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
-  //     "YEARMONTH": this.comFunc.nullToString(this.baseYear),
-  //   }
-  //   this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
-  //     .subscribe((result: any) => {
-  //       console.log(result);
-  //       let data = result.dynamicData
-
-  //       let printContent =data[0][0].HTMLOUT2;
+  exportPdf() {
+  //  let htmlContent="<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap\"rel=\"stylesheet\"></head><body> <image src=assets/images/logo-dark.jpg width=\"100\"/>\n</body></html>";
 
 
-  //       const fileName = 'invoice.pdf';
-  //       this.lineItemService.exportToPdf(printContent, fileName);
-  //     })
+  let postData = {
+    "MID": this.comFunc.emptyToZero(this.content?.MID),
+    "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+    "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+    "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+    "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+  }
+  this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData
+   
+      let htmlContent = data[0][0].HTMLOUT2;
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+    //   const style = document.createElement('style');
+    //   style.innerHTML = `
+    //     #tempDiv {
+    //       display: flex;
+    //       justify-content: center;
+    //       align-items: center;
+    //       flex-direction: column;
+    //       margin: 0 auto;
+    //       text-align: center;
+    //       width: 100%;
+    //       height: 100%;
+    //     }
+    //   `;
+  
+    //   // Append the style to tempDiv
+    //   tempDiv.appendChild(style);
 
-  // }
-}
+    //   const options = {
+    //     margin: [0.5, 0.5], // Set equal margins for top/bottom and left/right
+    //     filename: 'POS_Receipt.pdf',
+    //     image: { type: 'jpeg', quality: 0.98 },
+    //     html2canvas: { scale: 2 },
+    //     jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+    //   };
+    //   html2pdf().from(tempDiv).set(options).save();
+    // });
+
+      const options = {
+        margin: 0.5,
+        filename: 'POS_Receipt.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+      };
+  
+      html2pdf().from(tempDiv).set(options).save();
+     
+
+    })
+
+
+    // const element = this.el.nativeElement;
+
+    // // Calculate the content dimensions
+    // const contentWidth = element.scrollWidth;
+    // const contentHeight = element.scrollHeight;
+
+    // // Configure html2pdf options
+    // const options = {
+    //   margin: [10, 10], // top and bottom margins
+    //   filename: 'Product_Group_Journey.pdf',
+    //   image: { type: 'jpeg', quality: 0.98 },
+    //   html2canvas: { scale: 2, useCORS: true },
+    //   jsPDF: { unit: 'px', format: [contentWidth, contentHeight], orientation: 'portrait' }
+    // };
+
+    // html2pdf().from(element).set(options).save();
+  }
+  exportInvoiceToPdf(): void {
+    let postData = {
+      "MID": this.comFunc.emptyToZero(this.content?.MID),
+      "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+      "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+      "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+      "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+    };
+
+    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+      .subscribe((result: any) => {
+        console.log(result);
+        // let data = result.dynamicData;
+        // let printContent = data[0][0].HTMLOUT2;
+
+        // // Update the HTML content with the data received from API
+        // document.getElementById('select123')!.innerHTML = printContent;
+
+        // Generate the PDF after content update
+        this.lineItemService.generatePdf('select123', 'userCard.pdf');
+      });
+  }
+  }
+

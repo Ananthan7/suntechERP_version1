@@ -59,46 +59,43 @@ export class ItemDetailService {
 }
 
 
-public async exportToPdf(htmlContent: string, fileName: string): Promise<void> {
-  const element = document.createElement('div');
-  element.innerHTML = htmlContent;
+generatePdf(elementId: string, filename: string): void {
+  const element = document.getElementById(elementId);
 
-  const images = Array.from(element.getElementsByTagName('img')).map(img => img.src);
-  const base64Images = await this.convertImagesToBase64(images);
-
-  Array.from(element.getElementsByTagName('img')).forEach(img => {
-    img.src = base64Images[img.src];
-  });
+  if (!element) {
+    console.error(`Element with ID ${elementId} not found`);
+    return;
+  }
 
   const options = {
     margin: 1,
-    filename: fileName,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { dpi: 192, letterRendering: true },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.99 },
+    html2canvas: { dpi: 192, letterRendering: true, useCORS: true },
+    jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' }
   };
 
-  html2pdf().from(element).set(options).save();
-}
+  // Ensure images are loaded before generating PDF
+  const images = element.querySelectorAll('img');
+  let imagesLoaded = 0;
 
-private convertImagesToBase64(images: string[]): Promise<{ [key: string]: string }> {
-  return Promise.all(images.map(this.toBase64)).then(base64Strings => {
-    const base64Map: { [key: string]: string } = {};
-    images.forEach((url, index) => {
-      base64Map[url] = base64Strings[index];
-    });
-    return base64Map;
+  const checkImagesLoaded = () => {
+    imagesLoaded++;
+    if (imagesLoaded === images.length) {
+      html2pdf().from(element).set(options).save();
+    }
+  };
+
+  images.forEach((img) => {
+    img.onload = checkImagesLoaded;
+    if (img.complete) {
+      checkImagesLoaded();
+    }
   });
-}
 
-private toBase64(url: string): Promise<string> {
-  return fetch(url)
-    .then(response => response.blob())
-    .then(blob => new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    }));
+  // If there are no images, proceed with PDF generation
+  if (images.length === 0) {
+    html2pdf().from(element).set(options).save();
+  }
 }
 }
