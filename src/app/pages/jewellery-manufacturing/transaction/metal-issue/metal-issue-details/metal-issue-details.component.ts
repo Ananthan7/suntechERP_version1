@@ -80,13 +80,14 @@ export class MetalIssueDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 201,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
   }
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     VOCNO: [''],
@@ -527,7 +528,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-
+          this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           // // this.stockCodeScrapValidate()
@@ -544,7 +545,14 @@ export class MetalIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  
+  setStockCodeCondition() {
+    let form = this.metalIssueDetailsForm.value
+    let val = `@strBranch_Code='${form.BRANCH_CODE}',`
+    val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
+    val += `@strMetalStone='${form.DIVCODE}',@strProcess_Code='${form.processCode}',`
+    val += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
+    this.stockCodeData.WHERECONDITION = val
+  }
   stockCodeValidate(event: any) {
     if (event.target.value == '') return
     let postData = {

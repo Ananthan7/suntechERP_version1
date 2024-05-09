@@ -99,7 +99,7 @@ export class WorkerMasterComponent implements OnInit {
     TargetCaratWt: [''],
     TargetMetalWt: [''],
     TargetWeight: [''],
-    DailyTarget: ['1'],
+    DailyTarget: ['D'],
     MonthlyTarget: [null],
     YearlyTarget: [null],
     Active: [true]
@@ -143,8 +143,10 @@ export class WorkerMasterComponent implements OnInit {
   }
   inputValidate(event:any){
     let form = this.workerMasterForm.value;
-    if(form.WorkerAcCode != '' || form.NameOfSupervisor != '' || form.DefaultProcess  != ''){
+    if(event.target.value != ''){
       this.isDisableSaveBtn = true;
+    }else{
+      this.isDisableSaveBtn = false;
     }
   }
  
@@ -200,8 +202,7 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.DailyTarget.setValue(this.content.TARGET_BY)
     this.workerMasterForm.controls.Active.setValue(this.content.ACTIVE == 'Y' ? true : false)
   }
-
-  setPostData() {
+  setProcessData(){
     this.tableData.forEach((item) => {
       if (item.SELECT1 == true) {
         this.selectedProcessArr.push({
@@ -212,8 +213,11 @@ export class WorkerMasterComponent implements OnInit {
         })
       }
     })
+    return this.selectedProcessArr;
+  }
+  setPostData() {
     let form = this.workerMasterForm.value
-    let postData = {
+    return {
       "MID": this.content?.MID ? this.content.MID : 0,
       "WORKER_CODE": this.commonService.nullToString((form.WorkerCode).toUpperCase()),
       "DESCRIPTION": form.WorkerDESCRIPTION,
@@ -223,23 +227,22 @@ export class WorkerMasterComponent implements OnInit {
       "GROSSAL": 0,
       "EXP": 0,
       "TOTALSAL": 0,
-      "ACCODE": form.WorkerAcCode || "",
+      "ACCODE": this.commonService.nullToString(form.WorkerAcCode),
       "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed),
-      "SECRET_CODE": form.Password || "",
-      "PROCESS_CODE": form.DefaultProcess || "",
+      "SECRET_CODE": this.commonService.nullToString(form.Password),
+      "PROCESS_CODE": this.commonService.nullToString(form.DefaultProcess),
       "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
-      "SUPERVISOR": form.NameOfSupervisor || "",
+      "SUPERVISOR": this.commonService.nullToString(form.NameOfSupervisor),
       "ACTIVE": form.Active,
       "TARGET_WEIGHT": this.commonService.emptyToZero(form.TargetWeight),
-      "TARGET_BY": form.DailyTarget || "",
+      "TARGET_BY": this.commonService.nullToString(form.DailyTarget),
       "FINGER_ID": "",
       "TARGET_PCS": this.commonService.emptyToZero(form.TargetPcs),
       "TARGET_CARAT_WT": this.commonService.emptyToZero(form.TargetCaratWt),
       "TARGET_METAL_WT": this.commonService.emptyToZero(form.TargetMetalWt),
       "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.selectedProcessArr
+      "workerDetails": this.setProcessData()
     }
-    return postData
   }
   submitValidations(form:any){
     if (form.WorkerCode == '') {
@@ -271,7 +274,7 @@ export class WorkerMasterComponent implements OnInit {
     this.reCalculateSrno()
     let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = this.setPostData()
-
+    
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
@@ -612,6 +615,28 @@ export class WorkerMasterComponent implements OnInit {
         this.setwithFormControl(result.status, flag)
       }, err => {
         this.workerMasterForm.reset()
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  validateLookupField(event: any,lookupid: any,coloumn: string,formName: string) {
+    this.accountMasterData.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: lookupid,
+      WHERECOND: `${coloumn}='${event.target.value}'`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if(data.length==0){
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.workerMasterForm.controls[formName].setValue('')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
