@@ -943,19 +943,24 @@ export class SchemeReceiptComponent implements OnInit {
     };
     this.detailArray.push(data)
   }
-  formSubmit() {
+  submitValidations(){
     if (this.orderedItems.length == 0) {
       this.commonService.toastErrorByMsgId("Add new receipt to save");
-      return;
+      return true;
     }
     if (this.isSaved) {
       this.commonService.toastErrorByMsgId("Saved Receipt! please cancel to add new receipt");
-      return;
+      return true;
     }
     if (this.receiptDetailsForm.invalid) {
       this.commonService.toastErrorByMsgId("Select all required fields");
-      return;
+      return true;
     }
+    return false;
+  }
+  /**use: final save */
+  formSubmit() {
+    if(this.submitValidations()) return;
     this.setFormData()
     
     this.commonService.showSnackBarMsg('MSG81447');
@@ -969,7 +974,7 @@ export class SchemeReceiptComponent implements OnInit {
           let respData = result.response;
           this.receiptDetailsForm.controls.VocNo.setValue(respData?.VOCNO);
           Swal.fire({
-            title: this.commonService.getMsgByID('MSG2255') || result.status,
+            title: this.commonService.getMsgByID('MSG2255') || 'Saved Successfully',
             text: '',
             icon: "success",
             showCancelButton: false,
@@ -1071,6 +1076,7 @@ export class SchemeReceiptComponent implements OnInit {
       this.formdata.append(`Model.model.receiptdata.PRINT_COUNT_CNTLCOPY`, item.PRINT_COUNT_CNTLCOPY);
       this.formdata.append(`Model.model.receiptdata.WOOCOMCARDID`, item.WOOCOMCARDID);
       this.formdata.append(`Model.model.receiptdata.POSORDER_REF`, item.POSORDER_REF);
+      this.formdata.append(`Model.model.receiptdata.userName`, this.commonService.EditDetail.USERNAME || '');
       item.Details.forEach((data: any, index: any) => {
         this.formdata.append(`Model.model.receiptdata.Details[${index}].UNIQUEID`, data.UNIQUEID);
         this.formdata.append(`Model.model.receiptdata.Details[${index}].SRNO`, data.SRNO);

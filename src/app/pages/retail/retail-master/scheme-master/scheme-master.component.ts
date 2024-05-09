@@ -374,7 +374,10 @@ export class SchemeMasterComponent implements OnInit {
       "BONUS_RECTYPE": this.comService.nullToString(form.receiptModeTwo),
       "CANCEL_RECTYPE": this.comService.nullToString(form.receiptModeThree),
       "INST_RECTYPE": this.comService.nullToString(form.receiptModeone),
-      "SCHEME_FIXEDAMT": form.SCHEMEFIXEDAMT
+      "SCHEME_FIXEDAMT": form.SCHEMEFIXEDAMT,
+      "userName": this.comService.EditDetail.USERNAME || '',
+      "editReason":  this.comService.EditDetail.REASON || '',
+      "editDesc":  this.comService.EditDetail.DESCRIPTION || ''
     }
   }
   setInitialValues() {
