@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -33,20 +33,21 @@ export class ComponentSizeMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
 
   ) { }
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
+  // @ViewChild('codeInput1') codeInput1!: ElementRef;
 
 
-  ngAfterViewInit() {
-    // Focus on the first input
-    if (this.codeInput1) {
-      this.codeInput1.nativeElement.focus();
-    }
-  }
+  // ngAfterViewInit() {
+  //   // Focus on the first input
+  //   if (this.codeInput1) {
+  //     this.codeInput1.nativeElement.focus();
+  //   }
+  // }
 
   ngOnInit(): void {
-
+    this.renderer.selectRootElement('#code')?.focus();
     this.codeEnable = true;
 
     this.componentsizemasterForm = this.formBuilder.group({
@@ -167,7 +168,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     }
 
     if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-      this.toastr.error('The height must be less than the half of the width')
+      this.toastr.error('The Height must be Less than the Half of the Width')
       return;
     }
     

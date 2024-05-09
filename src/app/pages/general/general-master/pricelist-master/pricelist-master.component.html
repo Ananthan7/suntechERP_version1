@@ -93,8 +93,8 @@
                                                 class="text-right"
                                                 matInput AmountDecimalInput
                                                 formControlName="priceValue"
-                                                [required]="required"
-                                                [max]="5"
+                                                [max]="3"
+                                                CommaSeparatedNumber
                                                 [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
 
@@ -113,9 +113,11 @@
                                         <mat-form-field style="width: 100px;">
                                             <input type="text"
                                                 class="text-right" matInput
+                                                [max]="3"
                                                 AmountDecimalInput
                                                 [readonly]="viewMode || codeEnable"
                                                 formControlName="finalPriceValue"
+                                                CommaSeparatedNumber
                                                 [required]="required" />
                                         </mat-form-field>
                                     </div>

@@ -571,6 +571,7 @@ export class LabourChargeMasterComponent implements OnInit {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
+       
         // settingTypeControl;
         // methodControl?.enable();
       } else {
@@ -578,6 +579,8 @@ export class LabourChargeMasterComponent implements OnInit {
         // methodControl?.disable();
         this.viewModeSetting = true;
         this.ViewModemethod = true;
+        this.diamondlabourMasterForm.controls.settingType.setValue('');
+        this.diamondlabourMasterForm.controls.method.setValue('');
       }
       console.log(this.settingTypeList);
     });
@@ -880,7 +883,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
       "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
       "SIEVE": this.diamondlabourMasterForm.value.sieve,
-      "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
+      "WASTAGE_PER": this.commonService.emptyToZero(this.metallabourMasterForm.value.wastage),
       "WASTAGE_AMT": 0,
       "TYPE_CODE": this.metallabourMasterForm.value.typecode || "",
       "CATEGORY_CODE": this.metallabourMasterForm.value.category,

@@ -87,7 +87,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="method" [disabled]="viewMode || codeEnableDiamond">
+                  <mat-select formControlName="method" [disabled]="viewMode || codeEnableDiamond || viewModeSetting">
                     <mat-option *ngFor="let option of methodList"
                        [value]="option.value">
                       {{ option.name }}
@@ -240,7 +240,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="settingType" [disabled]="viewMode || codeEnableDiamond">
+                  <mat-select formControlName="settingType" [disabled]="viewMode || codeEnableDiamond  || viewModeSetting">
                     <mat-option *ngFor="let option of settingTypeList"
                      [value]="option.value">
                       {{ option.name }}
