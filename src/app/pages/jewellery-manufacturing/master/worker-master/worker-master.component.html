@@ -69,7 +69,7 @@
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6"
                                     (input)="inputValidate($event)" UpperCaseDirective
-                                    (focusout)="workerCodeChange($event,'NameOfSupervisor')"
+                                    (focusout)="validateLookupField($event,19,'WORKER_CODE','NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable" 
                                     formControlName="NameOfSupervisor" />
                             </mat-form-field>
