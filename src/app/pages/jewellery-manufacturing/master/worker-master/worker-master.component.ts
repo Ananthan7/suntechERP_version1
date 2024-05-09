@@ -99,7 +99,7 @@ export class WorkerMasterComponent implements OnInit {
     TargetCaratWt: [''],
     TargetMetalWt: [''],
     TargetWeight: [''],
-    DailyTarget: ['1'],
+    DailyTarget: ['D'],
     MonthlyTarget: [null],
     YearlyTarget: [null],
     Active: [true]
@@ -223,20 +223,20 @@ export class WorkerMasterComponent implements OnInit {
       "GROSSAL": 0,
       "EXP": 0,
       "TOTALSAL": 0,
-      "ACCODE": form.WorkerAcCode || "",
+      "ACCODE": this.commonService.nullToString(form.WorkerAcCode),
       "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed),
-      "SECRET_CODE": form.Password || "",
-      "PROCESS_CODE": form.DefaultProcess || "",
+      "SECRET_CODE": this.commonService.nullToString(form.Password),
+      "PROCESS_CODE": this.commonService.nullToString(form.DefaultProcess),
       "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
-      "SUPERVISOR": form.NameOfSupervisor || "",
+      "SUPERVISOR": this.commonService.nullToString(form.NameOfSupervisor),
       "ACTIVE": form.Active,
       "TARGET_WEIGHT": this.commonService.emptyToZero(form.TargetWeight),
-      "TARGET_BY": form.DailyTarget || "",
+      "TARGET_BY": this.commonService.nullToString(form.DailyTarget),
       "FINGER_ID": "",
       "TARGET_PCS": this.commonService.emptyToZero(form.TargetPcs),
       "TARGET_CARAT_WT": this.commonService.emptyToZero(form.TargetCaratWt),
       "TARGET_METAL_WT": this.commonService.emptyToZero(form.TargetMetalWt),
-      "WORKER_EXPIRY_DATE": "",
+      "WORKER_EXPIRY_DATE": "1900-01-01 0:00:00",
       "workerDetails": this.selectedProcessArr
     }
     return postData
@@ -271,7 +271,9 @@ export class WorkerMasterComponent implements OnInit {
     this.reCalculateSrno()
     let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = this.setPostData()
-
+    console.log(postData,'postData');
+    return
+    
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
