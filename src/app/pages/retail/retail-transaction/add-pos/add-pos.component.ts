@@ -4590,10 +4590,12 @@ export class AddPosComponent implements OnInit {
   }
   checkSelectedVal(stockCode: any, amtval: any, srNo: any) {
 
-    return this.sales_returns_items.find(
+    let item = this.sales_returns_items.find(
       (data: any) => data.sn_no.toString() == srNo.toString()
       // data.stock_code == stockCode && data.total_amount == amtval
     );
+    return item;
+
   }
   changeRetailSalesReturnVal(value: any) {
     // this.salesReturnsItems_forVoc[index].TOTALWITHVATFC = parseFloat(value);
@@ -4742,7 +4744,7 @@ export class AddPosComponent implements OnInit {
         sn_no: itemsLengths,
         stock_code: '',
         mkg_amount: '',
-        total_amount: slsReturn.TOTAL_AMOUNTFC,
+        total_amount: slsReturn.TOTALWITHVATLC,
         pcs: '',
         weight: '',
         description: '',
@@ -4764,7 +4766,7 @@ export class AddPosComponent implements OnInit {
         parseFloat(this.sales_returns_total_amt) +
         parseFloat(this.comFunc.transformDecimalVB(
           this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          parseFloat(slsReturn.TOTALWITHVATFC)
+          parseFloat(slsReturn.TOTALWITHVATLC)
         ));
       console.log('====================================');
       // this.sales_returns_total_amt =
@@ -4815,7 +4817,7 @@ export class AddPosComponent implements OnInit {
         ) {
           this.sales_returns_total_amt =
             parseFloat(this.sales_returns_total_amt) -
-            parseFloat(this.sales_returns_pre_items[i].slsReturn.TOTALWITHVATFC);
+            parseFloat(this.sales_returns_pre_items[i].slsReturn.TOTALWITHVATLC);
           this.sales_returns_pre_items.splice(i, 1);
           this.currentsalesReturnItems.splice(i, 1);
         }
@@ -6684,7 +6686,7 @@ export class AddPosComponent implements OnInit {
     this.prnt_inv_total_metal_amt = total_metal_amt;
     this.prnt_inv_total_stone_amt = total_stone_amt;
     this.prnt_inv_total_dis_amt = total_dis_amt;
-    this.prnt_inv_total_gross_amt = total_gross_amt-total_dis_amt;
+    this.prnt_inv_total_gross_amt = total_sum-total_dis_amt;
 
     this.prnt_inv_net_total_without_tax = total_sum;
     this.order_items_total_amount = total_sum;
@@ -7367,7 +7369,8 @@ export class AddPosComponent implements OnInit {
               console.table(this.sales_returns_pre_items);
               this.sales_returns_total_amt = this.sales_returns_items.reduce(
                 (preVal: any, curVal: any) =>
-                  parseFloat(preVal) + parseFloat(curVal.net_amount),
+                  // parseFloat(preVal) + parseFloat(curVal.net_amount),
+                  parseFloat(preVal) + parseFloat(curVal.slsReturn.TOTALWITHVATFC),
                 0
               );
               this.sales_returns_pre_items = this.sales_returns_items;
