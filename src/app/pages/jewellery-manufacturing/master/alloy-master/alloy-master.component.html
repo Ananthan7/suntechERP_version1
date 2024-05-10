@@ -33,7 +33,8 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%">
                                         <input type="text" matInput formControlName="costCenter"
-                                            [readonly]=" viewMode || codeEnable" />
+                                            [readonly]=" viewMode || codeEnable" 
+                                            (focusout)="validateLookupField($event,15,'COST_CODE','costCenter')"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="costCenterData"
                                         (newRowClick)="costCenterSelected($event)"></master-search>
@@ -43,7 +44,8 @@
                                 <label for="input" class="col-sm-5 col-form-label">Type :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="type" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="type" [readonly]="viewMode" 
+                                        (focusout)="validateLookupField($event,19,'WORKER_CODE','type')"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="typeCodeData"
                                         (newRowClick)="typeCodeSelected($event)"></master-search>
