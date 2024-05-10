@@ -72,7 +72,7 @@ export class ProcessMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 95,
-    SEARCH_FIELD: 'ACCOUNT_HEAD',
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE <> ''",
@@ -127,29 +127,6 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  accountMiddleData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 252,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'RECOVERY ACCOUNT CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  accountEndData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 252,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ALLOW GAIN ACCOUNT CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   maxInputLength: number = 2
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
@@ -371,6 +348,7 @@ export class ProcessMasterComponent implements OnInit {
         if(data.length==0){
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processMasterForm.controls[FORMNAME].setValue('')
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
@@ -385,8 +363,6 @@ export class ProcessMasterComponent implements OnInit {
     }
     return null;
   }
-
-
 
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
@@ -808,6 +784,14 @@ export class ProcessMasterComponent implements OnInit {
     if (this.checkCode()) return
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
   }
+  checkAccodeSelected(event:any,formname: string){
+    this.accodeValidateSP()
+    if (this.isSameAccountCodeSelected(event.target.value)) {
+      this.processMasterForm.controls[formname].setValue('');
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
+    }
+  }
   /** checking for same account code selection */
   private isSameAccountCodeSelected(accountCode: any): boolean {
     return (
@@ -818,22 +802,20 @@ export class ProcessMasterComponent implements OnInit {
     );
   }
 
-  private isSameCodeSelected(Code: any): boolean {
-    return (
-      this.processMasterForm.value.processCode === Code
-    );
-  }
-
   accountStartSelected(e: any) {
+    this.accodeValidateSP()
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
       this.commonService.toastErrorByMsgId('cannot select the same account code');
+      this.processMasterForm.controls.accountStart.setValue('');
       return;
     }
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
 
   accountMiddleSelected(e: any) {
+    this.accodeValidateSP()
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.processMasterForm.controls.accountMiddle.setValue('');
       this.commonService.toastErrorByMsgId('cannot select the same account code');
       return;
     }
@@ -841,13 +823,39 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   accountEndSelected(e: any) {
+    this.accodeValidateSP()
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.processMasterForm.controls.accountEnd.setValue('');
       this.commonService.toastErrorByMsgId('cannot select the same account code');
       return;
     }
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
   }
-
+  accodeValidateSP() {
+    let postData = {
+      "SPID": "067",
+      "parameter": {
+        "ADJUST_ACCODE ": "",
+        "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
+        "LOSS_ACCODE": this.processMasterForm.value.accountStart,
+        "RECOV_ACCODE": this.processMasterForm.value.accountMiddle,
+        "GAIN_ACCODE": this.processMasterForm.value.accountEnd,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          console.log(data,'data');
+          
+        } 
+      }, err => {
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
+  }
   /**USE: delete worker master from row */
   deleteProcessMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return

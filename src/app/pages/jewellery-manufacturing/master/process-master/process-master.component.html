@@ -94,6 +94,7 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
+                                            (change)="checkAccodeSelected($event,'accountEnd')"
                                             (focusout)="validateLookupField($event,accountMasterData,'WIPaccount')"
                                             [readonly]="viewMode"  />
                                     </mat-form-field>
@@ -160,6 +161,7 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="approvalCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
+                                            (focusout)="validateLookupField($event,approvalCodeData,'approvalCode')"
                                             [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search
@@ -177,6 +179,7 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="approvalProcess"
                                             (focus)="showAlertIfCodeIsEmpty()"
+                                            (focusout)="validateLookupField($event,approvalProcessData,'approvalProcess')"
                                             [readonly]="viewMode" />
                                     </mat-form-field>
                                     <master-search
@@ -195,6 +198,7 @@
                                         <input type="text" matInput UpperCaseDirective
                                             formControlName="recStockCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
+                                            (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
                                             [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search
@@ -351,6 +355,8 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountStart"
+                                            (change)="checkAccodeSelected($event,'accountStart')"
+                                            (focusout)="validateLookupField($event,accountStartData,'accountStart')"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                     <master-search
@@ -363,11 +369,13 @@
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
+                                            (change)="checkAccodeSelected($event,'accountMiddle')"
+                                            (focusout)="validateLookupField($event,accountStartData,'accountMiddle')"
                                             formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountMiddleData"
+                                        [MasterSearchData]="accountStartData"
                                         *ngIf="!viewMode && searchModeRecov"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
@@ -377,10 +385,12 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountEnd"
+                                            (change)="checkAccodeSelected($event,'accountEnd')"
+                                            (focusout)="validateLookupField($event,accountStartData,'accountEnd')"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountEndData"
+                                        [MasterSearchData]="accountStartData"
                                         *ngIf="!viewMode && searchModeAllow"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>
