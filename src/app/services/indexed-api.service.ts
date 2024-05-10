@@ -37,6 +37,7 @@ export class IndexedApiService {
         this.getAllCompanyParametersAsObj();
       } else {
         this.comFunc.allCompanyParameters = data;
+        console.log(data);
         // this.comFunc.setCompParaValues();
       }
     });
@@ -308,17 +309,18 @@ export class IndexedApiService {
         this.comFunc.allCompanyParams = resp.response;
         this.setCompParaValues();
       } else {
-        this.comFunc.allCompanyParams = [];
+        this.comFunc.allCompanyParams = {};
       }
     });
   }
   getAllCompanyParametersAsObj() {
      this.suntechApi.getDynamicAPI('CompanyParameters/GetCompanyParameterandParametervalue').subscribe((resp) => {
       if (resp.status == 'Success') {
-         this.inDb.bulkInsert('companyParameter', [resp.response]);
+         this.inDb.bulkInsert('companyParameter', resp.response);
+         console.log(resp.response);
           this.comFunc.allCompanyParameters = resp.response;
       } else {
-        this.comFunc.allCompanyParameters = [];
+        this.comFunc.allCompanyParameters = {};
       }
     });
   }
