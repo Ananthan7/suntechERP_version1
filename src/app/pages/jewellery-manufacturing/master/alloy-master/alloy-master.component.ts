@@ -23,7 +23,7 @@ export class AlloyMasterComponent implements OnInit {
   userName = localStorage.getItem('username');
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
-  urls: string | ArrayBuffer | null | undefined;
+  image: string | ArrayBuffer | null | undefined;
   url: any;
   dele: boolean = false;
  
@@ -83,8 +83,8 @@ export class AlloyMasterComponent implements OnInit {
     vendorRef: [''],
     weightAvgCost: [''],
     weightAvgCostDes: [''],
-    allowpcs:[false],
-    excludeTransferWt:[false],
+    allowpcs:[''],
+    excludeTransferWt:[''],
     silveralloy:[''],
     picture_name:['']
   });
@@ -199,7 +199,8 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.hsncode.setValue(this.content.HSN_CODE)
     this.alloyMastereForm.controls.allowpcs.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
     this.alloyMastereForm.controls.excludeTransferWt.setValue(this.viewchangeYorN(this.content.EXCLUDE_TRANSFER_WT))
-    this.alloyMastereForm.controls.silveralloy.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
+    this.alloyMastereForm.controls.silveralloy.setValue(this.viewchangeYorN(this.content.ALLOW_NEGATIVE))
+
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -211,14 +212,14 @@ export class AlloyMasterComponent implements OnInit {
     );
   }
   onFileChanged(event: any) {
-    this.url = event.target.files[0].name
+    this.image = event.target.files[0].name
     console.log(this.url)
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.urls = reader.result;
+        this.image = reader.result;
       };
     }
   }
@@ -401,7 +402,24 @@ export class AlloyMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
+  }
+  onchangeCheckBox(e: any) {
+    console.log(e);
 
+    if (e == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  viewchangeYorN(e: any) {
+    console.log(e);
+
+    if (e == 'Y') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   priceCodeSelected(e: any) {
@@ -592,18 +610,6 @@ export class AlloyMasterComponent implements OnInit {
     }
     this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
   }
-  onchangeCheckBox(e: any) {
-    console.log(e);
-    if (e == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  viewchangeYorN(value: boolean): boolean {
-    // Check if the mode is 'add' and the value is true, or if the mode is not 'add'
-    return (this.mode === 'add' && value) || this.mode !== 'add';
-}
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
@@ -919,13 +925,13 @@ export class AlloyMasterComponent implements OnInit {
       PACKET_ITEM: true,
       PACKET_WT: 0,
       SALES_TAGLINES: "",
-      ALLOW_ZEROPCS:   true,
+      ALLOW_ZEROPCS:   this.onchangeCheckBox(this.alloyMastereForm.value.allowpcs),
       NOOF_CERT: this.commonService.emptyToZero(this.alloyMastereForm.value.noofcert),
       ADDITIONAL_RATEFC: 0,
       ADDITIONAL_RATELC: 0,
       WBOXWOUTBOX: 0,
-      ALLOW_NEGATIVE: true,
-      EXCLUDE_TRANSFER_WT: true,
+      ALLOW_NEGATIVE: this.onchangeCheckBox(this.alloyMastereForm.value.silveralloy),
+      EXCLUDE_TRANSFER_WT: this.onchangeCheckBox(this.alloyMastereForm.value.allowpcs),
       WT_VAR_PER: 0,
       HALLMARKING: this.commonService.nullToString(this.alloyMastereForm.value.hallmarking),
       WOO_CATEGORY_ID: 0,
