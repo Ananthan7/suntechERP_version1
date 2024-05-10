@@ -528,11 +528,14 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
+          
           this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           // // this.stockCodeScrapValidate()
-          // this.meltingIssuedetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
+          this.metalIssueDetailsForm.controls.location.setValue(
+            this.comService.allbranchMaster.DMFGMLOC
+          )
           // this.meltingIssuedetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
           // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
         } else {
@@ -549,8 +552,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     let form = this.metalIssueDetailsForm.value
     let val = `@strBranch_Code='${form.BRANCH_CODE}',`
     val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
-    val += `@strMetalStone='${form.DIVCODE}',@strProcess_Code='${form.processCode}',`
-    val += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
+    val += `@strMetalStone='',@strProcess_Code='',`
+    val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
     this.stockCodeData.WHERECONDITION = val
   }
   stockCodeValidate(event: any) {
