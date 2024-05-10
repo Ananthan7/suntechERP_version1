@@ -94,7 +94,7 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode"  />
+                                            [readonly]="viewMode" (focusout)="validateLookupField($event,accountMasterData,'WIPaccount')" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMasterData"
@@ -159,7 +159,8 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="approvalCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode"  />
+                                            [readonly]="viewMode" 
+                                            (focusout)="validateLookupField($event,approvalCodeData,'approvalCode')"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="approvalCodeData"
@@ -176,7 +177,8 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="approvalProcess"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode" />
+                                            [readonly]="viewMode" 
+                                            (focusout)="validateLookupField($event,approvalProcessData,'approvalProcess')" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="approvalProcessData"
@@ -194,7 +196,8 @@
                                         <input type="text" matInput UpperCaseDirective
                                             formControlName="recStockCode"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [readonly]="viewMode"  />
+                                            [readonly]="viewMode" 
+                                            (focusout)="validateLookupField($event,StockProcessData,'recStockCode')" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="StockProcessData"
@@ -350,7 +353,8 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountStart"
-                                            [readonly]="islossReadOnly" />
+                                            [readonly]="islossReadOnly" 
+                                            (focusout)="validateLookupField($event,accountStartData,'accountStart')"/>
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountStartData"
@@ -363,7 +367,8 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountMiddle"
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly" 
+                                            (focusout)="validateLookupField($event,accountMiddleData,'accountMiddle')"/>
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMiddleData"
@@ -376,7 +381,8 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountEnd"
-                                            [readonly]="isAlloWGainReadOnly" />
+                                            [readonly]="isAlloWGainReadOnly" 
+                                            (focusout)="validateLookupField($event,accountEndData,'accountEnd')" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountEndData"

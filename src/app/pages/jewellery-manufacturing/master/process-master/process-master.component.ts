@@ -465,7 +465,25 @@ export class ProcessMasterComponent implements OnInit {
     }
     return this.lossData
   }
-
+  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if(data.length==0){
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.processMasterForm.controls[FORMNAME].setValue('')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
   validateRecoveryRange() {
     this.recoveryData = false;
     const recLoss = this.processMasterForm.value.standard_end;
