@@ -619,12 +619,11 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  validateLookupField(event: any,lookupid: any,coloumn: string,formName: string) {
-    this.accountMasterData.SEARCH_VALUE = event.target.value
+  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
-      LOOKUPID: lookupid,
-      WHERECOND: `${coloumn}='${event.target.value}'`
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
@@ -633,7 +632,7 @@ export class WorkerMasterComponent implements OnInit {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if(data.length==0){
           this.commonService.toastErrorByMsgId('MSG1531')
-          this.workerMasterForm.controls[formName].setValue('')
+          this.workerMasterForm.controls[FORMNAME].setValue('')
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
