@@ -54,7 +54,8 @@
                       class="col-sm-3 col-form-label">SKU Prefix * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="prefix" />
+                        <input type="text" matInput formControlName="prefix" 
+                        (focusout)="validateLookupField($event,prefixCodeData,'prefix')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="prefixCodeData"
                         (newRowClick)="prefixCodeSelected($event)"></master-search>
@@ -64,7 +65,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput
-                          formControlName="parentDesign" />
+                          formControlName="parentDesign" (focusout)="validateLookupField($event,parentDesignCodeData,'parentDesign')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="parentDesignCodeData"
                         (newRowClick)="parentDesignCodeSelected($event)"></master-search>
@@ -97,7 +98,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput
-                          formControlName="costcenter" />
+                          formControlName="costcenter" (focusout)="validateLookupField($event,costCenterData,'costcenter')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="costCenterData"
                         (newRowClick)="costCenterSelected($event)"></master-search>
@@ -115,7 +116,7 @@
                       class="col-sm-3 col-form-label">Karat * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="karat" />
+                        <input type="text" matInput formControlName="karat" (focusout)="validateLookupField($event,karatCodeData,'karat')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="karatCodeData"
                         (newRowClick)="karatCodeSelected($event)"></master-search>
@@ -134,7 +135,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput
-                          formControlName="category" />
+                          formControlName="category" (focusout)="validateLookupField($event,categoryCodeData,'category')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="categoryCodeData"
                         (newRowClick)="categoryCodeSelected($event)"></master-search>
@@ -153,7 +154,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput
-                          formControlName="subcategory" />
+                          formControlName="subcategory" (focusout)="validateLookupField($event,subcategoryCodeData,'subcategory')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="subcategoryCodeData"
                         (newRowClick)="subcategoryCodeSelected($event)"></master-search>
@@ -171,7 +172,7 @@
                       class="col-sm-3 col-form-label">Type :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="type" />
+                        <input type="text" matInput formControlName="type" (focusout)="validateLookupField($event,typeCodeData,'type')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="typeCodeData"
                         (newRowClick)="typeCodeSelected($event)"></master-search>
@@ -193,7 +194,7 @@
                       class="col-sm-3 col-form-label">Brand :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="brand" />
+                        <input type="text" matInput formControlName="brand" (focusout)="validateLookupField($event,BrandCodeData,'brand')" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="BrandCodeData"
                         (newRowClick)="brandCodeSelected($event)"></master-search>
@@ -202,7 +203,7 @@
                       class="col-sm-3 col-form-label">Country:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="country" />
+                        <input type="text" matInput formControlName="country"  (focusout)="validateLookupField($event,countryCodeData,'country')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="countryCodeData"
                         (newRowClick)="countryCodeSelected($event)"></master-search>
@@ -213,7 +214,7 @@
                       class="col-sm-3 col-form-label">Style :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="style" />
+                        <input type="text" matInput formControlName="style" (focusout)="validateLookupField($event,StyleCodeData,'style')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="StyleCodeData"
                         (newRowClick)="StyleCodeSelected($event)"></master-search>
@@ -223,7 +224,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput
-                          formControlName="vendCust" />
+                          formControlName="vendCust" (focusout)="validateLookupField($event,vendCustCodeData,'vendCust')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="vendCustCodeData"
                         (newRowClick)="vendCustCodeSelected($event)"></master-search>
@@ -235,7 +236,7 @@
                       class="col-sm-3 col-form-label">Range :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput formControlName="range" />
+                        <input type="text" matInput formControlName="range" (focusout)="validateLookupField($event,RangeCodeData,'range')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="RangeCodeData"
                         (newRowClick)="RangeCodeSelected($event)"></master-search>
@@ -334,7 +335,9 @@
                             <div class="col-md-3">
                               <mat-form-field style="width: 70%;">
                                 <input type="text" matInput
-                                  formControlName="currency" />
+                                  formControlName="currency" 
+                                  (focusout)="validateLookupField($event,currencyMasterData,'currency')"
+                                  />
                               </mat-form-field>
                               <master-search
                                 [MasterSearchData]="currencyMasterData"
@@ -420,7 +423,9 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price1" />
+                                formControlName="price1" 
+                                (focusout)="validateLookupField($event,price1CodeData,'price1')"
+                                />
                             </mat-form-field>
                             <master-search [MasterSearchData]="price1CodeData"
                               (newRowClick)="price1CodeSelected($event)"></master-search>
@@ -433,7 +438,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price2" />
+                                formControlName="price2" (focusout)="validateLookupField($event,price2CodeData,'price2')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price2CodeData"
                               (newRowClick)="price2CodeSelected($event)"></master-search>
@@ -446,7 +451,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price3" />
+                                formControlName="price3" (focusout)="validateLookupField($event,price3CodeData,'price3')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price3CodeData"
                               (newRowClick)="price3CodeSelected($event)"></master-search>
@@ -459,7 +464,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price4" />
+                                formControlName="price4"  (focusout)="validateLookupField($event,price4CodeData,'price4')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price4CodeData"
                               (newRowClick)="price4CodeSelected($event)"></master-search>
@@ -472,7 +477,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price5" />
+                                formControlName="price5" (focusout)="validateLookupField($event,price5CodeData,'price5')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price5CodeData"
                               (newRowClick)="price5CodeSelected($event)"></master-search>
@@ -664,7 +669,9 @@
                   Set :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="sizeset" />
+                    <input type="text" matInput formControlName="sizeset" 
+                    (focusout)="validateLookupField($event,sizesetCodeData,'sizeset')"
+                    />
                   </mat-form-field>
                   <master-search [MasterSearchData]="sizesetCodeData"
                     (newRowClick)="sizesetCodeSelected($event)"></master-search>
@@ -675,7 +682,7 @@
                   :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="size" />
+                    <input type="text" matInput formControlName="size" (focusout)="validateLookupField($event,sizeCodeData,'size')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="sizeCodeData"
                     (newRowClick)="sizeCodeSelected($event)"></master-search>
@@ -1679,7 +1686,9 @@
                   class="col-sm-4 col-form-label">Collection :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="collection" />
+                    <input type="text" matInput formControlName="collection" 
+                    (focusout)="validateLookupField($event,collectionCodeData,'collection')"
+                    />
                   </mat-form-field>
                   <master-search [MasterSearchData]="collectionCodeData"
                     (newRowClick)="collectionCodeSelected($event)"></master-search>
@@ -1691,7 +1700,7 @@
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput
-                      formControlName="subCollection" />
+                      formControlName="subCollection"  (focusout)="validateLookupField($event,subCollectionCodeData,'subCollection')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="subCollectionCodeData"
                     (newRowClick)="subCollectionCodeSelected($event)"></master-search>
@@ -1702,7 +1711,7 @@
                   Type/Lo :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="stoneType" />
+                    <input type="text" matInput formControlName="stoneType" (focusout)="validateLookupField($event,stoneTypeCodeData,'stoneType')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="stoneTypeCodeData"
                     (newRowClick)="stoneTypeCodeSelected($event)"></master-search>
@@ -1713,7 +1722,7 @@
                   class="col-sm-4 col-form-label">Setting :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="setting" />
+                    <input type="text" matInput formControlName="setting" (focusout)="validateLookupField($event,settingCodeData,'setting')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="settingCodeData"
                     (newRowClick)="settingCodeSelected($event)"></master-search>
@@ -1724,7 +1733,7 @@
                   :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="shape" />
+                    <input type="text" matInput formControlName="shape" (focusout)="validateLookupField($event,shapeCodeData,'shape')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="shapeCodeData"
                     (newRowClick)="shapeCodeSelected($event)"></master-search>
@@ -1735,7 +1744,7 @@
                   class="col-sm-4 col-form-label">Inc.Cat :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="incCat" />
+                    <input type="text" matInput formControlName="incCat" (focusout)="validateLookupField($event,incCatCodeData,'incCat')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="incCatCodeData"
                     (newRowClick)="incCatCodeSelected($event)"></master-search>
@@ -1746,7 +1755,7 @@
                   Ref :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="orderRef" />
+                    <input type="text" matInput formControlName="orderRef" (focusout)="validateLookupField($event,orderRefCodeData,'orderRef')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="orderRefCodeData"
                     (newRowClick)="orderRefCodeSelected($event)"></master-search>

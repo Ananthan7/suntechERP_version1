@@ -36,7 +36,8 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="sizeSet" [readonly]="viewMode"  />
+                                    <input type="text" matInput formControlName="sizeSet" [readonly]="viewMode" 
+                                    (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeSetCodeData"
                                 *ngIf="viewMode == false" (newRowClick)="sizeSetCodeSelected($event)">
@@ -45,7 +46,8 @@
                             <label for="input" class="col-sm-2 col-form-label">Type :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="type" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="type" [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,typeCodeData,'type')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="typeCodeData"
                                 *ngIf="viewMode == false" (newRowClick)="typeCodeSelected($event)"></master-search>
@@ -56,7 +58,8 @@
                             <label for="input" class="col-sm-2 col-form-label">Size :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="size" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="size" [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,typeCodeData,'type')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeCodeData"
                                 *ngIf="viewMode == false"  (newRowClick)="sizeCodeSelected($event)">
@@ -66,7 +69,8 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="category" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="category" [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,categoryCodeData,'category')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="categoryCodeData" *ngIf="!viewMode"
                                     (newRowClick)="categoryCodeSelected($event)"></master-search>
@@ -77,7 +81,8 @@
                             <label for="input" class="col-sm-2 col-form-label">Shape :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="shape"  [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="shape"  [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,shapeCodeData,'shape')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="shapeCodeData" *ngIf="!viewMode"
                                     (newRowClick)="shapeCodeSelected($event)">
@@ -87,7 +92,8 @@
                                 Type:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="settingType" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="settingType" [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="settingTypeCodeData" *ngIf="!viewMode"
                                     (newRowClick)="settingTypeCodeSelected($event)">
@@ -153,7 +159,8 @@
                                 :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="processSeq" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="processSeq" [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="processSeqCodeData" *ngIf="!viewMode"
                                     (newRowClick)="processSeqCodeSelected($event)">
@@ -166,7 +173,8 @@
                                 :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="costCenter" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="costCenter" [readonly]="viewMode"
+                                    (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="costCenterCodeData" *ngIf="!viewMode"
                                     (newRowClick)="costCenterCodeSelected($event)">
