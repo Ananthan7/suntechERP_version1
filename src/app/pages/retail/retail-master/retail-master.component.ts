@@ -103,6 +103,9 @@ export class RetailMasterComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
     modalRef.result.then((result) => {
+      this.CommonService.EditDetail.REASON = ''
+      this.CommonService.EditDetail.DESCRIPTION = ''
+      this.CommonService.EditDetail.PASSWORD = ''
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({HEADER_TABLE: this.CommonService.getqueryParamTable()})
       }

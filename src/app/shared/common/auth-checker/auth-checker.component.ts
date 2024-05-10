@@ -72,7 +72,7 @@ export class AuthCheckerComponent implements OnInit {
 
   reasonSelected(e: any) {
     console.log(e);
-    
+
     this.authForm.controls.reason.setValue(e.CODE);
     this.authForm.controls.description.setValue(e.DESCRIPTION);
   }
@@ -103,8 +103,8 @@ export class AuthCheckerComponent implements OnInit {
     );
   }
   // submit function input flag is for validate pswd before submit
-  submitAuth(flag?:any) {
-    if(!this.authForm.value.reason && !flag){
+  submitAuth(flag?: any) {
+    if (!this.authForm.value.reason && !flag) {
       this.CommonService.toastErrorByMsgId('Reason required')
       return
     }
@@ -117,10 +117,10 @@ export class AuthCheckerComponent implements OnInit {
       };
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-          if(!flag){
-            this.CommonService.EditDetail.REASON =  this.authForm.value.reason
-            this.CommonService.EditDetail.DESCRIPTION =  this.authForm.value.description
-            this.CommonService.EditDetail.PASSWORD =  this.authForm.value.password
+          if (!flag) {
+            this.CommonService.EditDetail.REASON = this.authForm.value.reason
+            this.CommonService.EditDetail.DESCRIPTION = this.authForm.value.description
+            this.CommonService.EditDetail.PASSWORD = this.authForm.value.password
             this.modalReferenceUserAuth.close(true);
             this.authSubmit.emit('Success')
             this.authForm.reset();

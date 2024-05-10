@@ -195,6 +195,9 @@ export class RetailTransactionComponent implements OnInit {
     modalRef.componentInstance.content = data;
 
     modalRef.result.then((result) => {
+      this.CommonService.EditDetail.REASON = ''
+      this.CommonService.EditDetail.DESCRIPTION = ''
+      this.CommonService.EditDetail.PASSWORD = ''
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       } else if (result == 'OpenModal') {
@@ -250,7 +253,6 @@ export class RetailTransactionComponent implements OnInit {
 
       this.modalReferenceUserAuth.result.then((result) => {
         if (result) {
-          console.log("Result :", result);
           resolve(true);
         } else {
           resolve(false);
@@ -299,8 +301,8 @@ export class RetailTransactionComponent implements OnInit {
 
   }
 
-  submitAuth(flag?:any) {
-    if(!this.authForm.value.reason && !flag){
+  submitAuth(flag?: any) {
+    if (!this.authForm.value.reason && !flag) {
       this.CommonService.toastErrorByMsgId('Reason required')
       return
     }
@@ -313,10 +315,10 @@ export class RetailTransactionComponent implements OnInit {
       };
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-          if(!flag){
-            this.CommonService.EditDetail.REASON =  this.authForm.value.reason
-            this.CommonService.EditDetail.DESCRIPTION =  this.authForm.value.description
-            this.CommonService.EditDetail.PASSWORD =  this.authForm.value.password
+          if (!flag) {
+            this.CommonService.EditDetail.REASON = this.authForm.value.reason
+            this.CommonService.EditDetail.DESCRIPTION = this.authForm.value.description
+            this.CommonService.EditDetail.PASSWORD = this.authForm.value.password
             this.modalReferenceUserAuth.close(true);
             this.authForm.reset();
           }
