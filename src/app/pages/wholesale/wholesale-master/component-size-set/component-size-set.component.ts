@@ -85,8 +85,16 @@ export class ComponentSizeSetComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
-    this.componentsizesetmasterForm.controls.description.setValue(this.content.COMPONENT_DESCRIPTION)
+    this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE);
+    this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION);
+
+    this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + this.content.COMPSET_CODE)
+    .subscribe((data) => {
+      if (data.status == 'Success') {
+
+        this.tableData = data.response.detail;
+      }
+    });
   }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
@@ -139,8 +147,6 @@ export class ComponentSizeSetComponent implements OnInit {
     
   }
 
-
-
   deleteTableData() {
 
     if (this.selectedIndexes.length > 0) {
@@ -156,7 +162,18 @@ export class ComponentSizeSetComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           // Proceed with deletion if user confirms
-          this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+          //this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+
+          console.log(this.selectedIndexes[0]);
+          this.tableData.forEach((element:any, index:number) =>{
+
+            if(element.SRNO == this.selectedIndexes[0]){
+
+              this.tableData.splice(index,1)
+                 
+            }
+
+          })
           this.resetSrNumber()
         }
 
@@ -180,6 +197,9 @@ export class ComponentSizeSetComponent implements OnInit {
     }
   }
 
+
+  
+
   resetSrNumber() {
     this.tableData.forEach((data, index) => {
       data.SRNO = index + 1
@@ -190,6 +210,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
   formSubmit() {
     console.log(this.componentSizeType);
+    console.log(this.content);
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
