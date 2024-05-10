@@ -94,6 +94,7 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
+                                            (focusout)="validateLookupField($event,accountMasterData,'WIPaccount')"
                                             [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search

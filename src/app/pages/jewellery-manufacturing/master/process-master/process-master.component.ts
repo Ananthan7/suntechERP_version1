@@ -357,7 +357,26 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-
+  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+      .subscribe((result) => {
+        // this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if(data.length==0){
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.processMasterForm.controls[FORMNAME].setValue('')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   minValueValidator(control: FormControl) {
     const value = control.value;
@@ -525,71 +544,6 @@ export class ProcessMasterComponent implements OnInit {
       return false;
     }
   }
-  setPostData() {
-    let form = this.processMasterForm.value
-    return {
-      "MID": this.commonService.emptyToZero(this.content?.MID),
-      "PROCESS_CODE": form.processCode || "",
-      "DESCRIPTION": form.processDesc || "",
-      "STD_TIME": this.commonService.emptyToZero(this.formattedTime),
-      "MAX_TIME": this.commonService.emptyToZero(this.formattedMaxTime),
-      "LOSS_ACCODE": form.accountStart,
-      "WIP_ACCODE": form.WIPaccount,
-      "CURRENCY_CODE": "",
-      "PROCESS_TYPE": form.processType,
-      "UNIT": "",
-      "NO_OF_UNITS": 0,
-      "UNIT_RATE": 0,
-      "LAB_ACCODE": "",
-      "LAST_NO": "",
-      "REPAIR_PROCESS": this.onchangeCheckBoxNum(form.RepairProcess),
-      "FINAL_PROCESS": this.onchangeCheckBoxNum(form.FinalProcess),
-      "GAIN_ACCODE": form.accountEnd,
-      "TRAY_WT": this.commonService.emptyToZero(form.trayWeight),
-      "SETTING_PROCESS": this.onchangeCheckBoxNum(form.Setting),
-      "POINTS": 0,
-      "LOCK_WEIGHT": this.onchangeCheckBoxNum(form.LockWeight),
-      "AUTOTRANSFER": this.onchangeCheckBoxNum(form.AutoTransfer),
-      "MASTER_WEIGHT": 0,
-      "MERGE_BLOCK": this.onchangeCheckBoxNum(form.MergePices),
-      "LAB_PROCESS": this.onchangeCheckBoxNum(form.LabProcess),
-      "WAX_PROCESS": this.onchangeCheckBoxNum(form.WaxProcess),
-      "STD_LOSS_QTY": 0,
-      "POSITION": this.commonService.emptyToZero(form.Position),
-      "RECOV_MIN": form.standard_end || 0,
-      "RECOV_ACCODE": form.accountMiddle,
-      "RECOV_STOCK_CODE": form.recStockCode || "",
-      "RECOV_VAR1": form.min_end || 0,
-      "RECOV_VAR2": this.onchangeCheckBoxNum(form.recovery),
-      "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(form.DeductPureWeight),
-      "APPR_PROCESS": form.approvalProcess || "",
-      "APPR_CODE": form.approvalCode || "",
-      "ALLOW_GAIN": this.onchangeCheckBox(form.allowGain),
-      "STD_GAIN": 0,
-      "MIN_GAIN": 0,
-      "MAX_GAIN": 0,
-      "ALLOW_LOSS": this.onchangeCheckBox(form.loss),
-      "STD_LOSS": form.loss_standard || 0,
-      "MIN_LOSS": form.loss_min || 0,
-      "MAX_LOSS": form.loss_max || 0,
-      "LOSS_ON_GROSS": this.onchangeCheckBox(form.loss_on_gross),
-      "JOB_NUMBER": "",
-      "LABCHRG_PERHOUR": this.commonService.emptyToZero(form.labour_charge),
-      "APPLY_SETTING": form.ApplySetting,
-      "TIMEON_PROCESS": this.onchangeCheckBox(form.TimeCalculateonProcess),
-      "STONE_INCLUDED": this.onchangeCheckBox(form.StoneIncluded),
-      "RECOVERY_PROCESS": this.onchangeCheckBox(form.RecoveryProcess),
-      "ALLOW_METAL": this.onchangeCheckBox(form.Metal),
-      "ALLOW_STONE": this.onchangeCheckBox(form.Stone),
-      "ALLOW_CONSUMABLE": this.onchangeCheckBox(form.Consumable),
-      "APPROVAL_REQUIRED": this.onchangeCheckBox(form.ApprovalRequired),
-      "NON_QUANTITY": this.onchangeCheckBox(form.NonQuantity),
-      "DF_REFINERY": this.onchangeCheckBox(form.RefineryAutoProcess),
-      "AUTO_LOSS": this.onchangeCheckBox(form.ApplyAutoLossToRefinery),
-      "ISACCUPDT": true,
-      "TREE_NO": this.onchangeCheckBox(form.HaveTreeNo),
-    }
-  }
   submitValidations(form: any) {
     if (form.loss == true && this.validateLossRange()) {
       return true;
@@ -675,6 +629,72 @@ export class ProcessMasterComponent implements OnInit {
     }
     return false;
   }
+  setPostData() {
+    let form = this.processMasterForm.value
+    return {
+      "MID": this.commonService.emptyToZero(this.content?.MID),
+      "PROCESS_CODE": form.processCode || "",
+      "DESCRIPTION": form.processDesc || "",
+      "STD_TIME": this.commonService.emptyToZero(this.formattedTime),
+      "MAX_TIME": this.commonService.emptyToZero(this.formattedMaxTime),
+      "LOSS_ACCODE": form.accountStart,
+      "WIP_ACCODE": form.WIPaccount,
+      "CURRENCY_CODE": "",
+      "PROCESS_TYPE": form.processType,
+      "UNIT": "",
+      "NO_OF_UNITS": 0,
+      "UNIT_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAST_NO": "",
+      "REPAIR_PROCESS": this.onchangeCheckBoxNum(form.RepairProcess),
+      "FINAL_PROCESS": this.onchangeCheckBoxNum(form.FinalProcess),
+      "GAIN_ACCODE": form.accountEnd,
+      "TRAY_WT": this.commonService.emptyToZero(form.trayWeight),
+      "SETTING_PROCESS": this.onchangeCheckBoxNum(form.Setting),
+      "POINTS": 0,
+      "LOCK_WEIGHT": this.onchangeCheckBoxNum(form.LockWeight),
+      "AUTOTRANSFER": this.onchangeCheckBoxNum(form.AutoTransfer),
+      "MASTER_WEIGHT": 0,
+      "MERGE_BLOCK": this.onchangeCheckBoxNum(form.MergePices),
+      "LAB_PROCESS": this.onchangeCheckBoxNum(form.LabProcess),
+      "WAX_PROCESS": this.onchangeCheckBoxNum(form.WaxProcess),
+      "STD_LOSS_QTY": 0,
+      "POSITION": this.commonService.emptyToZero(form.Position),
+      "RECOV_MIN": form.standard_end || 0,
+      "RECOV_ACCODE": form.accountMiddle,
+      "RECOV_STOCK_CODE": form.recStockCode || "",
+      "RECOV_VAR1": form.min_end || 0,
+      "RECOV_VAR2": this.onchangeCheckBoxNum(form.recovery),
+      "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(form.DeductPureWeight),
+      "APPR_PROCESS": form.approvalProcess || "",
+      "APPR_CODE": form.approvalCode || "",
+      "ALLOW_GAIN": this.onchangeCheckBox(form.allowGain),
+      "STD_GAIN": 0,
+      "MIN_GAIN": 0,
+      "MAX_GAIN": 0,
+      "ALLOW_LOSS": this.onchangeCheckBox(form.loss),
+      "STD_LOSS": form.loss_standard || 0,
+      "MIN_LOSS": form.loss_min || 0,
+      "MAX_LOSS": form.loss_max || 0,
+      "LOSS_ON_GROSS": this.onchangeCheckBox(form.loss_on_gross),
+      "JOB_NUMBER": "",
+      "LABCHRG_PERHOUR": this.commonService.emptyToZero(form.labour_charge),
+      "APPLY_SETTING": form.ApplySetting,
+      "TIMEON_PROCESS": this.onchangeCheckBox(form.TimeCalculateonProcess),
+      "STONE_INCLUDED": this.onchangeCheckBox(form.StoneIncluded),
+      "RECOVERY_PROCESS": this.onchangeCheckBox(form.RecoveryProcess),
+      "ALLOW_METAL": this.onchangeCheckBox(form.Metal),
+      "ALLOW_STONE": this.onchangeCheckBox(form.Stone),
+      "ALLOW_CONSUMABLE": this.onchangeCheckBox(form.Consumable),
+      "APPROVAL_REQUIRED": this.onchangeCheckBox(form.ApprovalRequired),
+      "NON_QUANTITY": this.onchangeCheckBox(form.NonQuantity),
+      "DF_REFINERY": this.onchangeCheckBox(form.RefineryAutoProcess),
+      "AUTO_LOSS": this.onchangeCheckBox(form.ApplyAutoLossToRefinery),
+      "ISACCUPDT": true,
+      "TREE_NO": this.onchangeCheckBox(form.HaveTreeNo),
+    }
+  }
+
   // final save
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
