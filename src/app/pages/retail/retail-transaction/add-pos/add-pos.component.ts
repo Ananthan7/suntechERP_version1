@@ -2575,7 +2575,7 @@ export class AddPosComponent implements OnInit {
     console.log(event);
     console.log('====================================');
 
-    const itemIndex = this.ordered_items.findIndex(item => item.ID === event.data.ID);
+    const itemIndex = this.ordered_items.findIndex(item => item.sn_no === event.data.sn_no);
     if (itemIndex > -1) {
       this.ordered_items.splice(itemIndex, 1);
     }
@@ -6872,8 +6872,8 @@ export class AddPosComponent implements OnInit {
           console.log(this.newLineItem);
 
           var values: any = {
-            ID: this.order_items_slno_length,
-            sn_no: this.order_items_slno_length,
+            ID: this.ordered_items.length + 1,
+            sn_no: this.ordered_items.length + 1,
             stock_code: this.newLineItem.STOCK_CODE,
             mkg_amount: this.lineItemForm.value.fcn_ad_making_amount || 0,
             // total_amount: temp_resp.PRICE1LC,
