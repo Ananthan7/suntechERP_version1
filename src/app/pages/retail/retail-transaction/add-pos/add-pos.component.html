@@ -682,7 +682,7 @@
             </div>
             <div class="col-md-2 justify-content-center">
               <button type="button" style="font-size: 12px; padding: 0px 9px"
-                (click)="open(more_customer_detail_modal)"
+                (click)="open(more_customer_detail_modal, false, null, false,false,true)"
                 mat-flat-button color="primary" [disabled]="viewOnly">
                 {{
                 this.customerDetails.MOBILE == null || undefined
@@ -724,7 +724,7 @@
             <div class="col-md-2"
               *ngIf="customerDataForm.value.tourVatRefuncYN">
               <mat-form-field>
-                <mat-label>Tourist VAT Refund</mat-label>
+                <mat-label>Tourist VAT Refund Ref #</mat-label>
                 <input type="text" matInput formControlName="tourVatRefundNo" />
               </mat-form-field>
             </div>
@@ -2639,7 +2639,7 @@
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-pos-metal">Customer Details</h4>
     <button type="button" class="close" aria-label="Close"
-      (click)="modal.dismiss('Cross click')">
+     (click)="closeAddCustomerModal()">
       <span aria-hidden="true">×</span>
     </button>
   </div>
@@ -3178,7 +3178,7 @@
                     <!-- BUG_01711 - Should be able to enter location.-->
                   </mat-form-field>
                 </div>
-                <div class="col-md-2" *ngIf="!newLineItem.GIFT_VOUCHER">
+                <div class="col-md-2" *ngIf="isGiftTypeRequired">
                   <mat-form-field>
                     <mat-label>Gift Type</mat-label>
                     <mat-select formControlName="fcn_li_gift_type">

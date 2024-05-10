@@ -92,7 +92,7 @@ export class AddPosComponent implements OnInit {
   maskVocDate: any = new Date();
   amlNameValidation;
   amlNameValidationData = false;
-
+  isGiftTypeRequired:boolean=false;
   value: any;
   barcode!: string;
   isSaved: boolean = false;
@@ -106,6 +106,7 @@ export class AddPosComponent implements OnInit {
 
   viewOnly: boolean = false;
   editOnly: boolean = false;
+  isNewCustomer: boolean = false;
   public isCustProcessing = false;
   isNoDiscountAllowed: boolean = false;
 
@@ -751,6 +752,7 @@ export class AddPosComponent implements OnInit {
     this.baseYear = localStorage.getItem('YEAR');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
+    this.isGiftTypeRequired=this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE?this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE:false;
 
     this.amlNameValidation = this.comFunc.allbranchMaster.AMLNAMEVALIDATION;
 
@@ -2406,11 +2408,14 @@ export class AddPosComponent implements OnInit {
   }
   closeAddCustomerModal() {
     // this.resetCustomerData()
-    this.modalReference.close()
+    // this.modal.dismiss('Cross click')
+    this.modalReference.dismiss();
+    this.isNewCustomer=false;
   }
 
-  open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false) {
+  open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false,isNewCustomer=false) {
     this.lineItemModalForSalesReturn = false;
+    this.isNewCustomer=isNewCustomer;
     this.updateBtn = false;
     if (!this.viewOnly && !this.editOnly) {
       this.salesReturnsItems_forVoc = [];
@@ -2570,14 +2575,24 @@ export class AddPosComponent implements OnInit {
     console.log(event);
     console.log('====================================');
 
-    // this.ordered_items.splice(event.data.ID, 1);
-    // this.currentLineItems.splice(event.data.ID, 1);
-    this.ordered_items = this.ordered_items.filter(
-      (data) => data.SRNO != event.data.sn_no
-    );
-    this.currentLineItems = this.currentLineItems.filter(
-      (data: any) => data.SRNO != event.data.sn_no
-    );
+    const itemIndex = this.ordered_items.findIndex(item => item.ID === event.data.ID);
+    if (itemIndex > -1) {
+      this.ordered_items.splice(itemIndex, 1);
+    }
+
+    // Reassign serial numbers
+    this.ordered_items.forEach((item, index) => {
+      item.sn_no = index + 1;
+    });
+
+    // // this.ordered_items.splice(event.data.ID, 1);
+    // // this.currentLineItems.splice(event.data.ID, 1);
+    // this.ordered_items = this.ordered_items.filter(
+    //   (data) => data.SRNO != event.data.sn_no
+    // );
+    // this.currentLineItems = this.currentLineItems.filter(
+    //   (data: any) => data.SRNO != event.data.sn_no
+    // );
     if (this.comFunc.posKARATRATECHANGE.toString() == '0') {
       this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
     } else {
@@ -2700,7 +2715,7 @@ export class AddPosComponent implements OnInit {
             if (resp.resultStatus.RESULT_TYPE == 'Success') {
               let stockInfos = resp.stockInfo;
               console.log(stockInfos);
-
+              // this.setMetalRate(stockInfos.KARAT_CODE);
               this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
               this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
               this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
@@ -2710,7 +2725,8 @@ export class AddPosComponent implements OnInit {
               this.validatePCS = stockInfos.VALIDATE_PCS;
               this.enablePieces = stockInfos.ENABLE_PCS;
               this.managePcsGrossWt();
-
+              if(stockInfos.DIVISIONMS=='M')
+                this.setMetalRate(stockInfos.KARAT_CODE);
               this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
               this.newLineItem.DIVISION = stockInfos.DIVISION;
               this.divisionCode = stockInfos.DIVISION;
@@ -2816,11 +2832,12 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_ad_stone_amount.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.STONEVALUEFC));
-    this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
 
-      this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE')
+    // this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
 
-    );
+    //   this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE')
+
+    // );
     this.lineItemForm.controls.fcn_ad_metal_amount.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.METALVALUEFC));
@@ -3833,11 +3850,12 @@ export class AddPosComponent implements OnInit {
                 this.openDialog('Warning', 'Customer already existing, Do you want to continue?', true);
               }
           } else {
-            if (value == null) {
+            if (value == null&&!this.isNewCustomer) {
               this.openDialog('Warning', 'Need To Create Customer', true);
               this.dialogBox.afterClosed().subscribe((data: any) => {
                 if (data == 'OK') {
-                  this.open(this.more_customer_detail_modal, false, null, true);
+                  this.open(this.more_customer_detail_modal, false, null, true,true);
+                  this.isNewCustomer=false;
                 }
               });
             } else {
@@ -4744,7 +4762,7 @@ export class AddPosComponent implements OnInit {
         sn_no: itemsLengths,
         stock_code: '',
         mkg_amount: '',
-        total_amount: slsReturn.TOTALWITHVATLC,
+        total_amount: slsReturn.TOTAL_AMOUNTFC,
         pcs: '',
         weight: '',
         description: '',
@@ -4766,7 +4784,7 @@ export class AddPosComponent implements OnInit {
         parseFloat(this.sales_returns_total_amt) +
         parseFloat(this.comFunc.transformDecimalVB(
           this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          parseFloat(slsReturn.TOTALWITHVATLC)
+          parseFloat(slsReturn.TOTALWITHVATFC)
         ));
       console.log('====================================');
       // this.sales_returns_total_amt =
@@ -4817,7 +4835,7 @@ export class AddPosComponent implements OnInit {
         ) {
           this.sales_returns_total_amt =
             parseFloat(this.sales_returns_total_amt) -
-            parseFloat(this.sales_returns_pre_items[i].slsReturn.TOTALWITHVATLC);
+            parseFloat(this.sales_returns_pre_items[i].slsReturn.TOTALWITHVATFC);
           this.sales_returns_pre_items.splice(i, 1);
           this.currentsalesReturnItems.splice(i, 1);
         }
@@ -7369,8 +7387,8 @@ export class AddPosComponent implements OnInit {
               console.table(this.sales_returns_pre_items);
               this.sales_returns_total_amt = this.sales_returns_items.reduce(
                 (preVal: any, curVal: any) =>
-                  // parseFloat(preVal) + parseFloat(curVal.net_amount),
-                  parseFloat(preVal) + parseFloat(curVal.slsReturn.TOTALWITHVATFC),
+             parseFloat(preVal) + parseFloat(curVal.net_amount),
+                  // parseFloat(preVal) + parseFloat(curVal.slsReturn.TOTALWITHVATFC),
                 0
               );
               this.sales_returns_pre_items = this.sales_returns_items;

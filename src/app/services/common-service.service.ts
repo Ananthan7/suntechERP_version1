@@ -276,7 +276,7 @@ export class CommonServiceService {
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
-    let value = this.allCompanyParameters ? this.allCompanyParameters[0][parameter] : ''
+    let value = this.allCompanyParameters ? this.allCompanyParameters[parameter] : ''
     if(value.toString().toUpperCase() == 'TRUE') value = true
     if(value.toString().toUpperCase() == 'FALSE') value = false
     return value
@@ -295,7 +295,7 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
       'THREE': 3,
-      'METAL_RATE': Number(this.allCompanyParameters[0].MRATEDECIMALS),
+      'METAL_RATE': Number(this.allCompanyParameters.MRATEDECIMALS),
     };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
