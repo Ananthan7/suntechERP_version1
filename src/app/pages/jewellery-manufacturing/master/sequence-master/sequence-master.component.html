@@ -55,6 +55,7 @@
                                     [readonly]="viewMode || codeEnable"
                                     placeholder="Prefix Code" maxlength="6"
                                     (change)="PrefixCodeChange($event)"
+                                    (focusout)="validateLookupField($event,sequenceMasterData,'sequencePrefixCode')"
                                     formControlName="sequencePrefixCode"
                                     appNoEmptySpace />
                             </mat-form-field>

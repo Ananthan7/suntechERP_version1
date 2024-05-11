@@ -396,7 +396,26 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
+  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+      .subscribe((result) => {
+        // this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if(data.length==0){
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.sequenceMasterForm.controls[FORMNAME].setValue('')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
   /**USE: delete  master from row */
   deleteSequenceMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return

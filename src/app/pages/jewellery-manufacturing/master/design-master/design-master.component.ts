@@ -45,9 +45,8 @@ export class DesignMasterComponent implements OnInit {
   tableDataStockCode: any[] = [];
   tableDataFinishingRange: any[] = [];
   Disable: boolean = false;
-
-
-
+  editMode: boolean = false;
+  viewMode: boolean = false;
   fieldDisable : boolean = false;
   FieldEnable : boolean = false;
 
@@ -99,6 +98,7 @@ export class DesignMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -272,6 +272,25 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+  }
+  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if(data.length==0){
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.designmasterForm.controls[FORMNAME].setValue('')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
   }
 
   adddata() {
@@ -2580,6 +2599,4 @@ onFileChangedimage(event: any) {
   removedataAttributesFinishingRange(){
 
   }
-
-
 }

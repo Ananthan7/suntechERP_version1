@@ -47,7 +47,8 @@
                     <label for="input" class="col-sm-2 col-form-label">Color * :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 150%; margin-left:-164px; margin-top:-5px;">
-                            <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode || codeEnable" />
+                            <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode || codeEnable" 
+                            (focusout)="validateLookupField($event,colorData,'color')"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"
                             *ngIf="SearchDisable == viewMode">
@@ -63,7 +64,7 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 111%; margin-left:-60px; margin-top:-6px;">
                             <input type="text"  [readonly]="viewMode || codeEnable"  matInput formControlName="karat" 
-                             />
+                            (focusout)="validateLookupField($event,karatcodeData,'karat')" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="karatcodeData" (newRowClick)="karatcodeSelected($event)"
                             *ngIf="SearchDisable == viewMode">
@@ -94,7 +95,8 @@
                     <label for="input" class="col-sm-1 col-form-label">Stock Code :</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 86%; margin-left:-20px; margin-top:-6px;">
-                            <input type="text" matInput formControlName="stockCode" [readonly]="viewMode || codeEnable" />
+                            <input type="text" matInput formControlName="stockCode" [readonly]="viewMode || codeEnable" 
+                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="stockCodeData" (newRowClick)="StockCodeSelected($event)"
                             *ngIf="SearchDisable == viewMode">
