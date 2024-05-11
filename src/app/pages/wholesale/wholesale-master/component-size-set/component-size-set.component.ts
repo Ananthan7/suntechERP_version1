@@ -141,15 +141,15 @@ export class ComponentSizeSetComponent implements OnInit {
     this.selectedIndexes = values;
     console.log("Selected indexes:", this.selectedIndexes);
 
-    this.tableData.forEach((item: any, i: any) => {
-      item.SRNO = i + 1;
-    });
+    // this.tableData.forEach((item: any, i: any) => {
+    //   item.SRNO = i + 1;
+    // });
     
   }
 
   deleteTableData() {
 
-    if (this.selectedIndexes.length > 0) {
+    if (this.selectedIndexes != undefined) {
       // Display confirmation dialog before deleting
       Swal.fire({
         title: 'Are you sure?',
@@ -162,9 +162,9 @@ export class ComponentSizeSetComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           // Proceed with deletion if user confirms
-          //this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+          this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
 
-          console.log(this.selectedIndexes[0]);
+          // console.log(this.selectedIndexes);
           this.tableData.forEach((element:any, index:number) =>{
 
             if(element.SRNO == this.selectedIndexes[0]){
@@ -174,6 +174,7 @@ export class ComponentSizeSetComponent implements OnInit {
             }
 
           })
+          //this.tableData = this.tableData;
           this.resetSrNumber()
         }
 
@@ -184,17 +185,17 @@ export class ComponentSizeSetComponent implements OnInit {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
 
-    for (let i = 0; i < this.tableData.length; i++) {
+    // for (let i = 0; i < this.tableData.length; i++) {
 
 
-      for (let j = 0; j < this.selectedIndexes.length; j++) {
+    //   for (let j = 0; j < this.selectedIndexes.length; j++) {
 
-        if (this.tableData[i].SRNO == this.selectedIndexes[j]) {
+    //     if (this.tableData[i].SRNO == this.selectedIndexes[j]) {
 
-          this.tableData.splice(i, 1);
-        }
-      }
-    }
+    //       this.tableData.splice(i, 1);
+    //     }
+    //   }
+    // }
   }
 
 
