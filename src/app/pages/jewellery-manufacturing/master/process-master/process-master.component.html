@@ -94,7 +94,6 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            (change)="checkAccodeSelected($event,'accountEnd')"
                                             (focusout)="validateLookupField($event,accountMasterData,'WIPaccount')"
                                             [readonly]="viewMode"  />
                                     </mat-form-field>
@@ -355,7 +354,6 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountStart"
-                                            (change)="checkAccodeSelected($event,'accountStart')"
                                             (focusout)="validateLookupField($event,accountStartData,'accountStart')"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
@@ -369,7 +367,6 @@
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
-                                            (change)="checkAccodeSelected($event,'accountMiddle')"
                                             (focusout)="validateLookupField($event,accountStartData,'accountMiddle')"
                                             formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
@@ -385,7 +382,6 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="accountEnd"
-                                            (change)="checkAccodeSelected($event,'accountEnd')"
                                             (focusout)="validateLookupField($event,accountStartData,'accountEnd')"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
