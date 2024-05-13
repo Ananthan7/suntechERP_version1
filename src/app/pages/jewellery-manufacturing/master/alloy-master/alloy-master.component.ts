@@ -27,7 +27,7 @@ export class AlloyMasterComponent implements OnInit {
   url: any;
   dele: boolean = false;
   isDisableSaveBtn: boolean = false;
- 
+
   numericValue!: number;
   branchCode: any = localStorage.getItem('userbranch');
   currencyDt: any;
@@ -49,7 +49,8 @@ export class AlloyMasterComponent implements OnInit {
     createdOn: [new Date(), ''],
     createdBy: [''],
     priceScheme: [''],
-    price1code: [''],
+    pricenumber: [''],
+    PRICE1: [''],
     price1per: ['0'],
     price1Fc: [''],
     price1Lc: [''],
@@ -84,14 +85,14 @@ export class AlloyMasterComponent implements OnInit {
     vendorRef: [''],
     weightAvgCost: [''],
     weightAvgCostDes: [''],
-    allowpcs:[''],
-    excludeTransferWt:[''],
-    silveralloy:[''],
-    picture_name:['']
+    allowpcs: [''],
+    excludeTransferWt: [''],
+    silveralloy: [''],
+    picture_name: ['']
   });
   mode!: string;
- 
-  
+
+
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
@@ -136,7 +137,7 @@ export class AlloyMasterComponent implements OnInit {
       this.editMode = true;
       this.viewMode = true
       this.setInitialValues()
-    }  
+    }
   }
 
   setupFormSubscription(): void {
@@ -193,7 +194,7 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
-    this.alloyMastereForm.controls.price1code.setValue(this.content.PRICE1PER)
+    this.alloyMastereForm.controls.PRICE1.setValue(this.content.PRICE1PER)
     this.alloyMastereForm.controls.price2code.setValue(this.content.PRICE2PER)
     this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
     this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
@@ -226,7 +227,7 @@ export class AlloyMasterComponent implements OnInit {
     }
   }
 
-  setValueWeightAvgCost(){
+  setValueWeightAvgCost() {
     this.alloyMastereForm.controls.weightAvgCost.setValue(this.alloyMastereForm.value.weightAvgCostDes)
   }
 
@@ -423,18 +424,18 @@ export class AlloyMasterComponent implements OnInit {
       return false;
     }
   }
-  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if(data.length==0){
+        if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.alloyMastereForm.controls[FORMNAME].setValue('')
         }
@@ -443,7 +444,47 @@ export class AlloyMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  priceSchemeValidatePriceDetails(e: any) {
+    if (this.checkStockCode()) return
+    this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "066",
+      "parameter": {
+        "PRICE_SCHEME_CODE": this.alloyMastereForm.value.priceScheme,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          console.log(data);
 
+          data.forEach((item: any, i: any) => {
+            //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
+
+            if (item.PRICE_NUMBER == 'PRICE1') {
+              this.alloyMastereForm.controls.PRICE1.setValue(item.PRICE_CODE)
+            }
+            if (item.PRICE_NUMBER == 'PRICE2') {
+              this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
+            }
+            if (item.PRICE_NUMBER == 'PRICE3') {
+              this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
+            }
+            if (item.PRICE_NUMBER == 'PRICE4') {
+              this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
+            }
+            if (item.PRICE_NUMBER == 'PRICE5') {
+              this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
+            }
+          });
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
   priceCodeSelected(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price.setValue(e.PREFIX_CODE);
@@ -496,12 +537,12 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.description.setValue(e.DESCRIPTION)
     this.prefixCodeValidate()
   }
-    prefixCodeValidate() {
-      const code = this.alloyMastereForm.value.code;
-      if (!code) {
-        // Handle case where code is empty
-        return;
-      }
+  prefixCodeValidate() {
+    const code = this.alloyMastereForm.value.code;
+    if (!code) {
+      // Handle case where code is empty
+      return;
+    }
     let API = `PrefixMaster/GetPrefixMasterDetail/${code}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -539,11 +580,11 @@ export class AlloyMasterComponent implements OnInit {
   }
   checkCode() {
     if (this.alloyMastereForm.value.code == '') {
-        this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
-        return true;
+      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
+      return true;
     }
     return false;
-}
+  }
 
   priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
@@ -554,7 +595,7 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          this.alloyMastereForm.controls.price1code.setValue(data.PRICE1)
+          this.alloyMastereForm.controls.PRICE1.setValue(data.PRICE1)
           this.alloyMastereForm.controls.price2code.setValue(data.PRICE2)
           this.alloyMastereForm.controls.price3code.setValue(data.PRICE3)
           this.alloyMastereForm.controls.price4code.setValue(data.PRICE4)
@@ -574,7 +615,7 @@ export class AlloyMasterComponent implements OnInit {
   /** checking for same account code selection */
   private isSamepriceCodeSelected(PRICE_CODE: any): boolean {
     return (
-      this.alloyMastereForm.value.price1code === PRICE_CODE ||
+      this.alloyMastereForm.value.PRICE1 === PRICE_CODE ||
       this.alloyMastereForm.value.price2code === PRICE_CODE ||
       this.alloyMastereForm.value.price3code === PRICE_CODE ||
       this.alloyMastereForm.value.price4code === PRICE_CODE ||
@@ -583,42 +624,42 @@ export class AlloyMasterComponent implements OnInit {
   }
 
 
-  priceCodeone(e:any){
+  priceCodeone(e: any) {
     if (this.checkStockCode()) return
-    if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code) {
+    if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.PRICE1) {
       this.commonService.toastErrorByMsgId('cannot select the same Price code');
       return;
     }
   }
 
-  priceTwoCode(e:any){
+  priceTwoCode(e: any) {
     if (this.checkStockCode()) return
-    if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code) {
+    if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code) {
       this.commonService.toastErrorByMsgId('cannot select the same Price code');
       return;
     }
   }
 
-  priceThreeCode(e:any){
+  priceThreeCode(e: any) {
     if (this.checkStockCode()) return
-    if (this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
-      return;
-    }
-  }
-  
-  
-  priceFourCode(e:any){
-    if (this.checkStockCode()) return
-    if (this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
+    if (this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code) {
       this.commonService.toastErrorByMsgId('cannot select the same Price code');
       return;
     }
   }
 
-  priceFiveCode(e:any){
+
+  priceFourCode(e: any) {
     if (this.checkStockCode()) return
-    if (this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
+    if (this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+  }
+
+  priceFiveCode(e: any) {
+    if (this.checkStockCode()) return
+    if (this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
       this.commonService.toastErrorByMsgId('cannot select the same Price code');
       return;
     }
@@ -630,7 +671,7 @@ export class AlloyMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('cannot select the same Price code');
       return;
     }
-    this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
+    this.alloyMastereForm.controls.PRICE1.setValue(e.PRICE_CODE);
   }
 
   priceTwoCodeSelected(e: any) {
@@ -947,7 +988,7 @@ export class AlloyMasterComponent implements OnInit {
       PACKET_ITEM: true,
       PACKET_WT: 0,
       SALES_TAGLINES: "",
-      ALLOW_ZEROPCS:   this.onchangeCheckBox(this.alloyMastereForm.value.allowpcs),
+      ALLOW_ZEROPCS: this.onchangeCheckBox(this.alloyMastereForm.value.allowpcs),
       NOOF_CERT: this.commonService.emptyToZero(this.alloyMastereForm.value.noofcert),
       ADDITIONAL_RATEFC: 0,
       ADDITIONAL_RATELC: 0,
@@ -1232,5 +1273,5 @@ export class AlloyMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  
+
 }
