@@ -755,7 +755,7 @@
                     <div class="wrapper">
                       <div class="container" style="padding: 0px">
                         <dx-data-grid id="gridContainer"
-                          [dataSource]="ordered_items" keyExpr="sn_no"
+                          [dataSource]="ordered_items" keyExpr="ID"
                           [showBorders]="true"
                           (onRowRemoved)="removeLineItemsGrid($event)"
                           (onEditingStart)="editTable($event)">
@@ -2127,7 +2127,7 @@
                   class="st_txt_right"
                   matInput formControlName="fcn_exchange_stone_wt"
                   (change)="changeExchangeStoneWt($event)"
-                  id="fcn_exchange_stone_wt" [readonly]="viewOnly"
+                  id="fcn_exchange_stone_wt" readonly
                   StoneDecimalInput />
               </mat-form-field>
             </div>
@@ -2137,7 +2137,7 @@
                 <input type="text" [min]="0" [maxLength]="10"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
-                  formControlName="fcn_exchange_net_wt" [readonly]="viewOnly"
+                  formControlName="fcn_exchange_net_wt" readonly
                   id="fcn_exchange_net_wt"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
                   (change)="changeExchangeNettWt($event)" MetalDecimalInput />
@@ -2155,7 +2155,7 @@
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
                   formControlName="fcn_exchange_chargeable_wt"
-                  [readonly]="viewOnly"
+                  readonly
                   id="fcn_exchange_chargeable_wt"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
                   MetalDecimalInput />
@@ -2180,7 +2180,7 @@
                   [maxLength]="14"
                   (change)="this.comFunc.enforceMinMax($event.target)" matInput
                   formControlName="fcn_exchange_pure_weight"
-                  id="fcn_exchange_pure_weight" [readonly]="true"
+                  id="fcn_exchange_pure_weight" readonly
                   MetalDecimalInput />
               </mat-form-field>
             </div>
@@ -2190,7 +2190,7 @@
                 <input type="text" [min]="0" [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
-                  formControlName="fcn_exchange_purity_diff" [readonly]="true"
+                  formControlName="fcn_exchange_purity_diff" readonly
                   MetalDecimalInput />
               </mat-form-field>
             </div>
@@ -2199,7 +2199,7 @@
                 <mat-label>Stone Rate</mat-label>
                 <input [min]="0" [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  class="st_txt_right" matInput
+                  class="st_txt_right" matInput readonly
                   formControlName="fcn_exchange_stone_rate"
                   id="fcn_exchange_stone_rate"
                   (change)="changeExchangeStoneRate($event)"
@@ -2214,7 +2214,7 @@
                   class="st_txt_right" matInput
                   formControlName="fcn_exchange_stone_amount"
                   id="fcn_exchange_stone_amount"
-                  (change)="changeExStoneAmount($event)" [readonly]="true"
+                  (change)="changeExStoneAmount($event)" readonly
                   AmountDecimalInput />
               </mat-form-field>
             </div>
@@ -2246,7 +2246,7 @@
                 <input [min]="0" [maxLength]="14"
                   (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput
-                  formControlName="fcn_exchange_making_amt" [readonly]="true"
+                  formControlName="fcn_exchange_making_amt" readonly
                   AmountDecimalInput />
               </mat-form-field>
             </div>
