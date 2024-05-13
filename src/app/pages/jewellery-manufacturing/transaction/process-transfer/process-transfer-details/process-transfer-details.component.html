@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="processTransferdetailsForm">
@@ -328,7 +328,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             StoneDecimalInput
-                            formControlName="StoneWeighFrom" />
+                            formControlName="StoneWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
