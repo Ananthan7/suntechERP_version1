@@ -194,20 +194,20 @@ export class MasterSearchComponent implements OnInit {
 
   //search Value Change
   searchValueChange(event: any) {
-    if (event.target.value == '') return
+    // if (event.target.value == '') return
     this.currentPage = 1
     let param = this.setPostdata()
     this.isLoading = true;
     this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param).subscribe((result) => {
       this.isLoading = false;
-      if (result.dynamicData[0]) {
+      let data = result.dynamicData[0]
+      if (data && data.length>0) {
         this.dataSource = result.dynamicData[0]
-
         this.dataSourceHead = Object.keys(this.dataSource[0]);
+      } else {
+        this.commonService.toastErrorByMsgId('No data found')
+        this.MasterSearchData.SEARCH_VALUE = ''
       }
-      // else {
-      //   this.toastr.error('Data Not Available')
-      // }
     })
   }
   //number validation
