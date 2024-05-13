@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -11,8 +11,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
-  minEndDate: string = '';
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
+  minEndDate: string = '';
   divisionMS: any = 'ID';
   tableData: any[] = [];
   metalDetailData: any[] = [];
@@ -59,6 +61,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
 
   processTransferdetailsForm: FormGroup = this.formBuilder.group({
+    SRNO: [0],
+    FLAG: [''],
     barCodeNumber: [''],
     jobno: [''],
     jobdes: [''],
@@ -210,7 +214,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.setAllInitialValues() //set all values from parent to child
+    this.setInitialValues() //set all values from parent to child
     this.processTransferdetailsForm.controls['enddate'].disable();
   }
   onStartDateChange() {
@@ -228,10 +232,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
   
 }
 
-  setAllInitialValues() {
-    let dataFromParent = this.content[0].PROCESS_FORMDETAILS
-    if (!dataFromParent) return
+  setInitialValues() {
+    if (!this.content) return
+    let dataFromParent = this.content
+    this.processTransferdetailsForm.controls.SRNO.setValue(this.comService.nullToString(this.content.SRNO))
     this.processTransferdetailsForm.controls.jobno.setValue(dataFromParent.jobno)
+    console.log(this.content,'this.content');
+    // return
     this.processTransferdetailsForm.controls.jobdes.setValue(dataFromParent.jobdes)
     this.processTransferdetailsForm.controls.subjobno.setValue(dataFromParent.subjobno)
     this.processTransferdetailsForm.controls.subJobDescription.setValue(dataFromParent.subJobDescription)
@@ -541,18 +548,21 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.tableData.pop();
   }
   /**USE: SUBMIT detail */
-  formSubmit() {
+  formSubmit(flag:any) {
     let detailDataToParent: any = {
       PROCESS_FORMDETAILS: [],
       METAL_DETAIL_GRID: [],
       JOB_VALIDATE_DATA: []
     }
+    this.processTransferdetailsForm.controls.FLAG.setValue(flag)
     this.calculateGain()
-
+    
     detailDataToParent.PROCESS_FORMDETAILS = this.processTransferdetailsForm.value;
     detailDataToParent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
     detailDataToParent.JOB_VALIDATE_DATA = this.jobNumberDetailData;
-    this.close(detailDataToParent)//USE: passing Detail data to header screen on close
+    // this.close(detailDataToParent)
+    console.log(detailDataToParent, 'child invoked');
+    this.saveDetail.emit(detailDataToParent);
   }
   /**USE: to calculate gain detail */
   private calculateGain() {
@@ -582,7 +592,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    this.closeDetail.emit()
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

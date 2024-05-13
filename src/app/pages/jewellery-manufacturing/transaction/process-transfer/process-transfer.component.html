@@ -93,27 +93,39 @@
                         (addClick)="openProcessTransferDetails()" (deleteClick)="deleteTableData()">
                     </menu-buttons>
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" [columnAutoWidth]="true" [allowColumnResizing]="true" [showBorders]="true"
-                            [showRowLines]="true" (onRowClick)="onRowClickHandler($event)"
-                            [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+                        <dx-data-grid id="gridContainer" [columnAutoWidth]="true" 
+                            [allowColumnResizing]="true" [showBorders]="true"
+                            [showRowLines]="true" 
+                            (onRowClick)="onRowClickHandler($event)"
+                            (onRowDblClick)="onRowDblClickHandler($event)"
+                            [allowColumnReordering]="true" height="200"
+                            [dataSource]="tableData">
+                            <dxo-selection mode="single"></dxo-selection>
                             <dxi-column caption>
-                                <dxi-column alignment="center" caption="SR NO" dataField="SRNO" format="fixedPoint">
+                                <dxi-column alignment="center" caption="SR NO" 
+                                    dataField="SRNO" format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Ref" dataField="subjobno">
+                                <dxi-column alignment="center" caption="Job Ref" 
+                                    dataField="subjobno">
                                 </dxi-column>
-                                <dxi-column alignment="right" caption="Pcs" dataField="MetalPcsFrom">
+                                <dxi-column alignment="right" caption="Pcs" 
+                                    dataField="MetalPcsFrom">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="From">
-                                <dxi-column alignment="center" caption="Process" dataField="processFrom">
+                                <dxi-column alignment="center" caption="Process" 
+                                    dataField="processFrom">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Worker" dataField="workerFrom">
+                                <dxi-column alignment="center" caption="Worker" 
+                                    dataField="workerFrom">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="To">
-                                <dxi-column alignment="center" caption="Process" dataField="processTo">
+                                <dxi-column alignment="center" caption="Process" 
+                                    dataField="processTo">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Worker" dataField="workerTo">
+                                <dxi-column alignment="center" caption="Worker" 
+                                    dataField="workerTo">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Metal">
@@ -132,230 +144,230 @@
                                 <dxi-column alignment="right" caption="Loss" dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Time" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Time" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Return Metal" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Return Metal" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Return Stone" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Return Stone" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Scrap Div" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Scrap Div" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Gain Wt" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Gain Wt" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Gain Pure Wt" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Gain Pure Wt" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Gain AC" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Gain AC" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="UNIQUEID" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="UNIQUEID" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="VOCNO" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="VOCNO" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="VOCDATE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="VOCDATE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="VOCTYPE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="VOCTYPE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="BRANCH_CODE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="BRANCH_CODE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="JOB_NUMBER" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="JOB_NUMBER" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="JOB_DATE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="JOB_DATE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="UNQ_DESIGN_ID" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="UNQ_DESIGN_ID" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="DESIGN_CODE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="DESIGN_CODE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="SEQ_CODE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="SEQ_CODE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="JOB_DESCRIPTION" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="JOB_DESCRIPTION" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="CURRENCY_CODE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="CURRENCY_CODE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="CURRENCY_RATE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="CURRENCY_RATE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_PROCESS_CODE" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_PROCESS_CODE" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_PROCESSNAME" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_PROCESSNAME" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_WORKERNAME" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_WORKERNAME" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_STONE_PCS" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_STONE_PCS" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_METAL_PCS" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_METAL_PCS" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="TO_PROCESSNAME" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="TO_PROCESSNAME" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="TO_WORKERNAME" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="TO_WORKERNAME" dataField="">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="TO_PCS" dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="TO_PCS" dataField="">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="TO_METAL_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TO_STONE_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TO_STONE_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TO_METAL_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="STONE_AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="STONE_AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="METAL_AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="METAL_AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="MAKING_RATEFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="MAKING_RATELC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="MAKING_AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="MAKING_AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TOTAL_AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TOTAL_AMOUNT_LC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="COSTFC_PER_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="COST_FC_PER_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_CODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_UNIT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_RATEFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_RATELC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_ACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LOSS_ACCCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="FRM_WIP_ACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TO_WIP_ACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_DIVCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_STOCK_CODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_DIVCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_STOCK_CODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_PURITY"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_PURE_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_RATEFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_RATELC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_RATEFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_RATELC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="IN_DATE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="OUT_DATE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="METAL_DIVISION"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="LOCTYPE_CODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="PICTURE_PATH"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="AMOUNTLC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="AMOUNTFC"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="JOB_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="PURE_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="GROSS_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_METAL_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_STONE_PCS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_LOC_MET"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="RET_LOC_STN"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="MAIN_WORKER"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="MKG_LABACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="REMARKS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TREE_NO"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="STD_TIME"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="WORKER_ACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="PRODLAB_ACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="DT_BRANCH_CODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="DT_VOCTYPE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="DT_VOUCHER_NO"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="DT_YEARMONTH"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="ISSUE_REF"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="IS_AUTHORISE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="TIME_CONSUMED"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="SCRAP_SUB_STOCK_CODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="SCRAP_PURITY"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="SCRAP_PUDIFF"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="SCRAP_ACCODE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="DESIGN_TYPE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="BALANCE_METAL_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="BALANCE_STONE_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="BALANCE_PURE_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="BALANCE_NET_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="EXCLUDE_TRANSFER_WT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="AUTHORIZE_TIME"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="IS_REJECT"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="REASON"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="REJ_REMARKS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="ATTACHMENT_FILE"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="AUTHORISED_TIME"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                                 <dxi-column alignment="center" caption="REPAIR_PROCESS"
-                                    dataField="Population_Urban"></dxi-column>
+                                    dataField=""></dxi-column>
                             </dxi-column>
                         </dx-data-grid>
                     </div>
@@ -375,3 +387,8 @@
         </form>
     </div>
 </div>
+<ng-template #processTransferDetailScreen>
+    <app-process-transfer-details [content]="dataToDetailScreen"
+    (saveDetail)="setValuesToHeaderGrid($event)"
+    (closeDetail)="closeDetailScreen()"></app-process-transfer-details>
+</ng-template>
