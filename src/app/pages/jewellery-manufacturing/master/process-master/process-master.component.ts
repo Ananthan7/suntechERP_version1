@@ -723,14 +723,6 @@ export class ProcessMasterComponent implements OnInit {
 
     this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
-  ACCODESelected(e: any) {
-    if (this.checkCode()) return
-    if (this.isSameAccountCodeSelected(e.ACCODE)) {
-      this.commonService.toastErrorByMsgId('Cannot select the Same Account Code');
-      return;
-    }
-    this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
-  }
 
   StockProcesSelected(e: any) {
     if (this.checkCode()) return
@@ -738,43 +730,93 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   /** checking for same account code selection */
-  private isSameAccountCodeSelected(accountCode: any): boolean {
-    return (
-      this.processMasterForm.value.accountStart === accountCode ||
-      this.processMasterForm.value.accountMiddle === accountCode ||
-      this.processMasterForm.value.accountEnd === accountCode ||
-      this.processMasterForm.value.WIPaccount === accountCode
-    );
-  }
+  private isSameAccountCodeSelected(accountCode: any, formControlName: string): boolean {
+    console.log(this.processMasterForm.value, 'this.processMasterForm.value');
+    let flag = false;
+    switch (formControlName) {
+      case 'WIPaccount':
+        flag = (
+          this.processMasterForm.value.accountStart === accountCode ||
+          this.processMasterForm.value.accountMiddle === accountCode ||
+          this.processMasterForm.value.accountEnd === accountCode
+        );
+        return flag
+      case 'accountStart':
+        flag = (
+          this.processMasterForm.value.accountMiddle === accountCode ||
+          this.processMasterForm.value.accountEnd === accountCode ||
+          this.processMasterForm.value.WIPaccount === accountCode
+        );
+        return flag
+      case 'accountMiddle':
+        flag = (
+          this.processMasterForm.value.accountStart === accountCode ||
+          this.processMasterForm.value.accountEnd === accountCode ||
+          this.processMasterForm.value.WIPaccount === accountCode
+        );
+        return flag
+      case 'accountEnd':
+        flag = (
+          this.processMasterForm.value.accountStart === accountCode ||
+          this.processMasterForm.value.accountMiddle === accountCode ||
+          this.processMasterForm.value.WIPaccount === accountCode
+        );
+        return flag
+      default:
+        flag = (
+          this.processMasterForm.value.accountStart === accountCode ||
+          this.processMasterForm.value.accountMiddle === accountCode ||
+          this.processMasterForm.value.accountEnd === accountCode ||
+          this.processMasterForm.value.WIPaccount === accountCode
+        );
+        return flag;
+    }
 
+  }
+  WIPaccountSelected(e: any) {
+    if (this.checkCode()) return
+    if (this.isSameAccountCodeSelected(e.ACCODE,'WIPaccount')) {
+      this.commonService.toastErrorByMsgId('Accode already selected');
+      this.processMasterForm.controls.WIPaccount.setValue('');
+      return;
+    }
+    this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
+    this.accodeValidateSP('WIPaccount', e.ACCODE)
+  }
   accountStartSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same account code');
+    if (this.isSameAccountCodeSelected(e.ACCODE,'accountStart')) {
+      this.commonService.toastErrorByMsgId('Accode already selected');
       this.processMasterForm.controls.accountStart.setValue('');
       return;
     }
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
+    this.accodeValidateSP('accountStart', e.ACCODE)
   }
-
   accountMiddleSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+    if (this.isSameAccountCodeSelected(e.ACCODE,'accountMiddle')) {
       this.processMasterForm.controls.accountMiddle.setValue('');
-      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
     this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
+    this.accodeValidateSP('accountMiddle', e.ACCODE)
   }
 
   accountEndSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+    if (this.isSameAccountCodeSelected(e.ACCODE,'accountEnd')) {
       this.processMasterForm.controls.accountEnd.setValue('');
-      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
+    this.accodeValidateSP('accountEnd', e.ACCODE)
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, formControlName: string) {
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '') {
+      this.processMasterForm.controls[formControlName].setValue('');
+      return
+    }
+    if (this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
@@ -789,7 +831,6 @@ export class ProcessMasterComponent implements OnInit {
           this.processMasterForm.controls[formControlName].setValue('')
           return
         }
-        this.checkAccodeSelected(event,formControlName)
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
@@ -797,18 +838,20 @@ export class ProcessMasterComponent implements OnInit {
   }
   /**use: common accode change validation */
   checkAccodeSelected(event: any, formname: string) {
-    console.log('fired accode');
-    
-    this.accodeValidateSP(formname,event.target.value)
-    if (this.isSameAccountCodeSelected(event.target.value)) {
+    if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
-      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return
+    }
+    if (this.isSameAccountCodeSelected(event.target.value, formname)) {
+      this.processMasterForm.controls[formname].setValue('');
+      this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
+    this.accodeValidateSP(formname, event.target.value)
   }
 
   /**use: sp call to validate same to avoid same accode selection */
-  accodeValidateSP(formControlName: string,value: string) {
+  accodeValidateSP(formControlName: string, value: string) {
     if (this.viewMode) return
     let param = {
       LOOKUPID: 20,
@@ -819,8 +862,8 @@ export class ProcessMasterComponent implements OnInit {
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
+        if (data.length > 0) {
+          this.commonService.toastErrorByMsgId('Accode already exists in other process')
           this.processMasterForm.controls[formControlName].setValue('')
           return
         }
