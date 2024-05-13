@@ -1417,6 +1417,10 @@ export class AddPosComponent implements OnInit {
 
         /**start set line item*/
         if (retailSaleData != null && retailSaleData.RetailDetails != null)
+          retailSaleData.RetailDetails.forEach((data:any, index:any) => {
+            data.SRNO = index + 1;  
+          });
+          
           retailSaleData.RetailDetails.map((data: any, index: any) => {
             console.log(
               '===============retailSalesDetails====================='
@@ -1444,7 +1448,7 @@ export class AddPosComponent implements OnInit {
               dis_amt: data.DISCOUNTVALUEFC || 0,
               // gross_amt: (data.GROSS_AMT || 0),
               rate: data.MKG_RATECC || 0,
-              metal_rate: data.METAL_RATE || 0,
+              metal_rate: data.METALVALUECC || 0,
               taxPer: data.VAT_PER || 0,
               metal_amt: data.METALVALUECC,
               // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
@@ -1456,7 +1460,7 @@ export class AddPosComponent implements OnInit {
             // this.newLineItem.STONEWT = data.STONE_WT;
             // this.newLineItem.total_amount = data.MKGVALUEFC;
             // this.newLineItem.divisionMS = data.divisionMS;
-            this.order_items_slno_length = data.SRNO;
+            this.order_items_slno_length = data.ID;
             this.ordered_items.push(values);
             this.currentLineItems.push(data);
             const divisionMS: any = this.comFunc.getDivisionMS(data.DIVISION_CODE);
@@ -2584,6 +2588,7 @@ export class AddPosComponent implements OnInit {
     this.ordered_items.forEach((item, index) => {
       item.sn_no = index + 1;
     });
+    this.currentLineItems = this.currentLineItems.filter((item:any) => item.SRNO !== event.data.ID);
 
     // // this.ordered_items.splice(event.data.ID, 1);
     // // this.currentLineItems.splice(event.data.ID, 1);
@@ -2607,6 +2612,7 @@ export class AddPosComponent implements OnInit {
     this.sumTotalValues();
 
     this.setRetailSalesDataPost();
+    console.log(this.currentLineItems)
   }
   removeSalesReturnGrid(event: any) {
     // this.currentsalesReturnItems.splice(event.data.sn_no, 1);
@@ -3045,7 +3051,9 @@ export class AddPosComponent implements OnInit {
     );
     this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(
       // value.METAL_RATE
-      this.comFunc.decimalQuantityFormat(value.METAL_RATE_GMSCC, 'METAL_RATE')
+      this.editOnly || this.viewOnly?
+      this.comFunc.decimalQuantityFormat(value.METAL_RATE, 'METAL_RATE'):
+      this.comFunc.decimalQuantityFormat(this.exchange_items[this.exchangeItemEditId-1].metalRate, 'METAL_RATE')
 
     );
     this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
@@ -5171,7 +5179,7 @@ export class AddPosComponent implements OnInit {
       // ), // metal amount
       RATE_TYPE: '',
       // data.METAL_RATE_TYPE || '',
-      METAL_RATE: 0,
+      METAL_RATE: data.METAL_RATE,
       //  this.comFunc.emptyToZero(data.METAL_RATE),
       // METAL_RATE: this.comFunc.emptyToZero(data.metalRate),
 
