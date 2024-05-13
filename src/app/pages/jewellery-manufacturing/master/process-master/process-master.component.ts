@@ -811,6 +811,44 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
     this.accodeValidateSP('accountEnd', e.ACCODE)
   }
+ 
+  /**use: common accode change validation */
+  checkAccodeSelected(event: any, formname: string) {
+    if (event.target.value == '') {
+      this.processMasterForm.controls[formname].setValue('');
+      return
+    }
+    if (this.isSameAccountCodeSelected(event.target.value, formname)) {
+      this.processMasterForm.controls[formname].setValue('');
+      this.commonService.toastErrorByMsgId('Accode already selected');
+      return;
+    }
+    this.accodeValidateSP(formname, event.target.value)
+  }
+
+  /**use: sp call to validate same accode to avoid same accode selection */
+  accodeValidateSP(formControlName: string, value: string) {
+    if (this.viewMode) return
+    let param = {
+      LOOKUPID: 20,
+      WHERECOND: `${this.getAccodeField(formControlName)}='${value}'`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result) => {
+        // this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length > 0) {
+          this.commonService.toastErrorByMsgId('Accode already exists in other process')
+          this.processMasterForm.controls[formControlName].setValue('')
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
+  /**use: focusout fn for input valate */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, formControlName: string) {
     if (event.target.value == '') {
       this.processMasterForm.controls[formControlName].setValue('');
@@ -835,64 +873,6 @@ export class ProcessMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
-  }
-  /**use: common accode change validation */
-  checkAccodeSelected(event: any, formname: string) {
-    if (event.target.value == '') {
-      this.processMasterForm.controls[formname].setValue('');
-      return
-    }
-    if (this.isSameAccountCodeSelected(event.target.value, formname)) {
-      this.processMasterForm.controls[formname].setValue('');
-      this.commonService.toastErrorByMsgId('Accode already selected');
-      return;
-    }
-    this.accodeValidateSP(formname, event.target.value)
-  }
-
-  /**use: sp call to validate same to avoid same accode selection */
-  accodeValidateSP(formControlName: string, value: string) {
-    if (this.viewMode) return
-    let param = {
-      LOOKUPID: 20,
-      WHERECOND: `${this.getAccodeField(formControlName)}='${value}'`
-    }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
-      .subscribe((result) => {
-        // this.isDisableSaveBtn = false;
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length > 0) {
-          this.commonService.toastErrorByMsgId('Accode already exists in other process')
-          this.processMasterForm.controls[formControlName].setValue('')
-          return
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
-
-    // let postData = {
-    //   "SPID": "067",
-    //   "parameter": {
-    //     "ADJUST_ACCODE ": "",
-    //     "WIP_ACCODE": this.getAccodeField(formControlName),
-    //     "LOSS_ACCODE": this.getAccodeField(formControlName),
-    //     "RECOV_ACCODE": this.getAccodeField(formControlName),
-    //     "GAIN_ACCODE": this.getAccodeField(formControlName),
-    //   }
-    // }
-    // let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    //   .subscribe((result) => {
-    //     if (result.status == "Success") { //
-    //       let data = result.dynamicData[0]
-    //       console.log(data,'data');
-
-    //     } 
-    //   }, err => {
-    //     this.commonService.toastErrorByMsgId('server error')
-    //   })
-    // this.subscriptions.push(Sub)
   }
   getAccodeField(formControlName: string) {
     let form = this.processMasterForm.value
