@@ -242,7 +242,7 @@
                                     <div class="price_box">
                                         <a>PriceScheme</a>
                                         <master-search *ngIf="!viewMode" [MasterSearchData]="priceSchemeData"
-                                            (newRowClick)="priceSchemeValidate($event)"></master-search>
+                                            (newRowClick)="priceSchemeValidatePriceDetails($event) " ></master-search>
                                         <a>{{ alloyMastereForm.value.priceScheme }}</a>
                                     </div>
                                 </div>
@@ -270,8 +270,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%">
-                                        <input type="text" matInput formControlName="price1code" [readonly]="viewMode"
-                                            (change)="priceCodeone($event)" (focusout)="validateLookupField($event,priceCodeData,'price1code')"/>
+                                        <input type="text" matInput formControlName="PRICE1" [readonly]="viewMode"
+                                            (change)="priceCodeone($event)" (focusout)="validateLookupField($event,priceCodeData,'PRICE1')"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode" [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceOneCodeSelected($event)"></master-search>

@@ -88,7 +88,7 @@
 
                                         <div *dxTemplate="let data of 'usertemp'">
                                             <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a>
-                                            <master-search [MasterSearchData]="user"
+                                            <master-search  [MasterSearchData]="user"
                                                 (newRowClick)="userDataSelected($event,data,'usertemp')" *ngIf="userCodeEnable == false" >
                                             </master-search>
                                         </div>
