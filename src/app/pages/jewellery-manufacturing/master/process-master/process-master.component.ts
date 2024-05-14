@@ -283,7 +283,11 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
     // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
-    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
+    this.processMasterForm.controls.processType.setValue(
+      Number(this.content.PROCESS_TYPE)
+    );
+    console.log(this.processMasterForm.value.processType,'processType');
+    
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
     this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
     this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
