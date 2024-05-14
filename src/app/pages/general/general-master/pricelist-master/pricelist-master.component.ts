@@ -256,22 +256,23 @@ export class PricelistMasterComponent implements OnInit {
     }
   }
   createPostData() {
+    let form = this.priceListMasterForm.value
     return {
-      "PRICE_CODE": this.priceListMasterForm.value.priceCode.toUpperCase(),
-      "DESCRIPTION": this.priceListMasterForm.value.description.toUpperCase(),
-      "PRICE_METHOD": this.priceListMasterForm.value.priceMethod,
-      "PRICE_SIGN": this.priceListMasterForm.value.priceMethod == 1 ? '0' : this.priceListMasterForm.value.priceSign,
-      "PRICE_VALUE": this.priceListMasterForm.value.priceValue,
+      "PRICE_CODE": form.priceCode.toUpperCase(),
+      "DESCRIPTION": form.description.toUpperCase(),
+      "PRICE_METHOD": form.priceMethod,
+      "PRICE_SIGN": form.priceMethod == 1 ? '0' : form.priceSign,
+      "PRICE_VALUE": form.priceValue,
       "MID": this.content ? this.content.MID : 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "DONTCALCULATE": this.priceListMasterForm.value.dontCalculate,
-      "FINALPRICE_SIGN": this.priceListMasterForm.value.finalPriceSign || '',
-      "FINALPRICE_VALUE": this.priceListMasterForm.value.finalPriceValue || 0,
-      "ADDLVALUE": this.priceListMasterForm.value.addlValue || 0,
-      "ADDLVALUE_SIGN": this.priceListMasterForm.value.addlValueSign || '',
-      "PRICE_ROUDOFF": this.priceListMasterForm.value.priceRoundoff,
-      "ROUNDOFF_DIGIT": this.priceListMasterForm.value.roundoff_digit || 0,
-      "PRICE_FORMULA": "",
+      "DONTCALCULATE": form.dontCalculate,
+      "FINALPRICE_SIGN": form.finalPriceSign || '',
+      "FINALPRICE_VALUE": form.finalPriceValue || 0,
+      "ADDLVALUE": form.addlValue || 0,
+      "ADDLVALUE_SIGN": form.addlValueSign || '',
+      "PRICE_ROUDOFF": form.priceRoundoff,
+      "ROUNDOFF_DIGIT": form.roundoff_digit || 0,
+      "PRICE_FORMULA": `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`,
     };
   }
   validateForm() {
