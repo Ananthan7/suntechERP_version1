@@ -147,9 +147,60 @@ export class ComponentSizeSetComponent implements OnInit {
     
   }
 
-  deleteTableData() {
+  // deleteTableData() {
 
-    if (this.selectedIndexes != undefined) {
+  //   if (this.selectedIndexes != undefined) {
+  //     // Display confirmation dialog before deleting
+  //     Swal.fire({
+  //       title: 'Are you sure?',
+  //       text: "You won't be able to revert this!",
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, delete!'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         // Proceed with deletion if user confirms
+  //         this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+
+  //         // console.log(this.selectedIndexes);
+  //         this.tableData.forEach((element:any, index:number) =>{
+
+  //           if(element.SRNO == this.selectedIndexes[0]){
+
+  //             this.tableData.splice(index,1)
+                 
+  //           }
+
+  //         })
+  //         //this.tableData = this.tableData;
+  //         this.resetSrNumber()
+  //       }
+
+  //     });
+
+  //   } else {
+  //     // Display error message if no record is selected
+  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  //   }
+
+  //   // for (let i = 0; i < this.tableData.length; i++) {
+
+
+  //   //   for (let j = 0; j < this.selectedIndexes.length; j++) {
+
+  //   //     if (this.tableData[i].SRNO == this.selectedIndexes[j]) {
+
+  //   //       this.tableData.splice(i, 1);
+  //   //     }
+  //   //   }
+  //   // }
+  // }
+
+
+  deleteTableData() {
+    if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
         title: 'Are you sure?',
@@ -162,49 +213,27 @@ export class ComponentSizeSetComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           // Proceed with deletion if user confirms
-          this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-
-          // console.log(this.selectedIndexes);
-          this.tableData.forEach((element:any, index:number) =>{
-
-            if(element.SRNO == this.selectedIndexes[0]){
-
-              this.tableData.splice(index,1)
-                 
-            }
-
-          })
-          //this.tableData = this.tableData;
-          this.resetSrNumber()
+          this.selectedIndexes.sort((a:any, b:any) => b - a); // Sort indexes in descending order to prevent issues with splice
+          for (const index of this.selectedIndexes) {
+            this.tableData.splice(index, 1); // Remove the item at the specified index
+          }
+          this.resetSrNumber();
         }
-
       });
-
     } else {
       // Display error message if no record is selected
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
-
-    // for (let i = 0; i < this.tableData.length; i++) {
-
-
-    //   for (let j = 0; j < this.selectedIndexes.length; j++) {
-
-    //     if (this.tableData[i].SRNO == this.selectedIndexes[j]) {
-
-    //       this.tableData.splice(i, 1);
-    //     }
-    //   }
-    // }
   }
-
-
+  
+  
   
 
   resetSrNumber() {
     this.tableData.forEach((data, index) => {
       data.SRNO = index + 1
     });
+    
   }
 
 
