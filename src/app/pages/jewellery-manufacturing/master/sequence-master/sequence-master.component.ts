@@ -215,6 +215,8 @@ export class SequenceMasterComponent implements OnInit {
                 obj.SRNO = itemNum
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
+                obj.STD_TIME = Number(item.STD_TIME),
+                obj.MAX_TIME = Number(item.MAX_TIME),
                 obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
                 obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
                 obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
