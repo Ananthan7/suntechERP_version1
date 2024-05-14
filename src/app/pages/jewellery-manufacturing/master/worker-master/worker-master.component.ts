@@ -203,11 +203,13 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.Active.setValue(this.content.ACTIVE == 'Y' ? true : false)
   }
   setProcessData(){
+    let num = 0
     this.tableData.forEach((item) => {
       if (item.SELECT1 == true) {
+        num += 1
         this.selectedProcessArr.push({
           "UNIQUEID": 0,
-          "SRNO": item.SRNO,
+          "SRNO": num,
           "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
           "PROCESS_CODE": item.PROCESS_CODE,
         })

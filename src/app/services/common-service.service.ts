@@ -734,7 +734,7 @@ export class CommonServiceService {
       autoPostingFlag = data.autoPosting;
     });
     // return false; // hardcoded for discussion on 07-05-2024
-   return autoPostingFlag
+   return this.Null2BitValue(autoPostingFlag)
   }
   generateNumber() {
     return Math.floor(1000 + Math.random() * 9000)
