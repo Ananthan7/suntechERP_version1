@@ -92,6 +92,7 @@ export class AddPosComponent implements OnInit {
   maskVocDate: any = new Date();
   amlNameValidation;
   amlNameValidationData = false;
+  isPiecesChanged = false;
   isGiftTypeRequired:boolean=false;
   value: any;
   barcode!: string;
@@ -1436,7 +1437,7 @@ export class AddPosComponent implements OnInit {
               // sn_no: index + 1,
               stock_code: data.STOCK_CODE,
               // mkg_amount: ( || 0),
-              total_amount: data.MKGVALUEFC || 0,
+              total_amount:data.DIVISION_CODE=='D'?(data.MKGVALUEFC-data.DISCOUNTVALUEFC): data.MKGVALUEFC|| 0,
               pcs: data.PCS,
               weight: data.GROSSWT,
               description: data.STOCK_DOCDESC,
@@ -2417,6 +2418,10 @@ export class AddPosComponent implements OnInit {
     this.isNewCustomer=false;
   }
 
+  closeItemModal(){
+    this.modalReference.dismiss();
+    this.isNetAmountChange=false;
+  }
   open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false,isNewCustomer=false) {
     this.lineItemModalForSalesReturn = false;
     this.isNewCustomer=isNewCustomer;
@@ -6712,7 +6717,9 @@ export class AddPosComponent implements OnInit {
     this.prnt_inv_total_metal_amt = total_metal_amt;
     this.prnt_inv_total_stone_amt = total_stone_amt;
     this.prnt_inv_total_dis_amt = total_dis_amt;
-    this.prnt_inv_total_gross_amt = total_sum-total_dis_amt;
+    // this.prnt_inv_total_gross_amt = total_sum-total_dis_amt;
+    this.prnt_inv_total_gross_amt = total_sum + total_metal_amt + total_stone_amt;
+      //  this.prnt_inv_total_gross_amt = net_sum-this.order_items_total_tax;
 
     this.prnt_inv_net_total_without_tax = total_sum;
     this.order_items_total_amount = total_sum;
@@ -6720,6 +6727,7 @@ export class AddPosComponent implements OnInit {
     this.order_items_total_tax = tax_sum;
 
     this.order_items_total_gross_amount = net_sum;
+    // this.prnt_inv_total_gross_amt = net_sum-tax_sum;
     this.order_items_total_discount_amount = '0.00';
 
 
@@ -6890,6 +6898,8 @@ export class AddPosComponent implements OnInit {
             description: this.lineItemForm.value.fcn_li_item_desc,
             tax_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount),
             net_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount),
+
+            // net_amount: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount),
             pure_wt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pure_wt),
             making_amt: this.lineItemForm.value.total_amount || 0,
             // making_amt: this.lineItemForm.value.fcn_ad_making_amount || 0,
@@ -6901,8 +6911,9 @@ export class AddPosComponent implements OnInit {
             rate: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0,
             taxPer: this.lineItemForm.value.fcn_li_tax_percentage || 0,
           };
-
-          values.total_amount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+          values.total_amount =this.newLineItem.DIVISION=='D'?
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount):this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+          // values.total_amount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
           // values.total_amount = this.lineItemForm.value.fcn_li_total_amount;
           this.newLineItem.HSN_CODE = this.newLineItem.HSN_CODE;
           this.newLineItem.GST_CODE = this.newLineItem.GST_CODE;
@@ -6961,6 +6972,7 @@ export class AddPosComponent implements OnInit {
           this.li_tag_val = '';
 
           this.lineItemForm.reset();
+          this.isNetAmountChange=false;
           this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
           this.setRetailSalesDataPost();
 
@@ -8555,6 +8567,7 @@ export class AddPosComponent implements OnInit {
           );
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
+              this.isPiecesChanged=true;
               this.lineItemForm.controls['fcn_li_pcs'].setValue(
                 this.lineItemPcs
               );
@@ -8586,6 +8599,7 @@ export class AddPosComponent implements OnInit {
               this.manageCalculations();
 
             } else {
+              this.isPiecesChanged=true;
               this.checkDivisionForPcs(value)
               this.manageCalculations();
 
@@ -9721,6 +9735,7 @@ export class AddPosComponent implements OnInit {
 
     let totalAmt;
     let grossAmount = '';
+ 
     if (this.divisionMS == 'M') {
       totalAmt = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -9781,7 +9796,15 @@ export class AddPosComponent implements OnInit {
 
 
     }
-
+    let inputAmount = parseFloat(event.target.value?.replace(/,/g, '')||'0');
+    let grossAmtValue = parseFloat(localStorage.getItem('fcn_li_net_amount')?.replace(/,/g, '') || '0');
+    
+    if (inputAmount > grossAmtValue) {
+      this.lineItemForm.controls.fcn_li_total_amount.setValue(this.lineItemForm.value.fcn_li_gross_amount);
+      this.lineItemForm.controls.fcn_li_rate.setValue(this.lineItemForm.value.fcn_li_gross_amount);
+      this.lineItemForm.controls.fcn_li_discount_amount.setValue(this.zeroAmtVal);
+      this.lineItemForm.controls.fcn_li_discount_percentage.setValue(this.zeroAmtVal);
+    }
   }
   async changeNettAmt(event: any) {
 
@@ -9819,7 +9842,6 @@ export class AddPosComponent implements OnInit {
       }
 
       if (this.divisionMS == 'S') {
-
         if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
           this.netAmtFunc(event);
         } else {
@@ -10147,9 +10169,9 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_percentage || this.zeroAmtVal)
     );
-    this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount || this.zeroAmtVal)
-    );
+
+    this.updateDiscountAmount();
+    
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
     );
@@ -10158,6 +10180,27 @@ export class AddPosComponent implements OnInit {
     );
 
   }
+
+  updateDiscountAmount(): void {
+    if (this.isPiecesChanged) {
+      const totalAmountString = this.lineItemForm.value.fcn_li_total_amount.replace(/,/g, '');
+      const discountPercentageString = this.lineItemForm.value.fcn_li_discount_percentage.toString();
+      
+      const totalAmount = parseFloat(totalAmountString);
+      const discountPercentage = parseFloat(discountPercentageString);
+  
+      const discountAmount = (totalAmount * (discountPercentage / 100)).toFixed(2);
+      this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
+        this.comFunc.commaSeperation(discountAmount) || this.zeroAmtVal
+      );
+      this.isPiecesChanged = false;
+    } else {
+      this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
+        this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount) || this.zeroAmtVal
+      );
+    }
+  }
+
   setNettWeight() {
     this.lineItemForm.controls['fcn_li_net_wt'].setValue(
       (
