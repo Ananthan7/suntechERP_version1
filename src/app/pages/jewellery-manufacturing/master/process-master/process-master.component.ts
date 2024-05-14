@@ -645,30 +645,17 @@ export class ProcessMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.processMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+        if (result) {
+          if (result.status === "Success") {
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
-            this.toastr.error('An error occurred during the save process');
+            this.showErrorDialog(result.message || 'Error please try again');
           }
         } else {
-          this.toastr.error('Not saved');
+          this.toastr.error('Not deleted');
         }
       }, err => {
-        this.toastr.error('An error occurred: ' + err);
-        console.error(err);
+        this.toastr.error('network error occurred ');
       });
     this.subscriptions.push(Sub);
   }
@@ -680,26 +667,18 @@ export class ProcessMasterComponent implements OnInit {
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.processMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+        if (result) {
+          if (result.status === "Success") {
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+          } else {
+            this.showErrorDialog(result.message || 'Error please try again');
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Not deleted');
         }
-      }, err => alert(err))
+      }, err => {
+        this.toastr.error('network error occurred ');
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -901,7 +880,28 @@ export class ProcessMasterComponent implements OnInit {
   /**USE: delete worker master from row */
   deleteProcessMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    Swal.fire({
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = 'ProcessMasterDj/DeleteProcessMasterDJ/' + this.content?.PROCESS_CODE;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status === "Success") {
+                this.showSuccessDialog('Deleted Successfully');
+              } else {
+                this.showErrorDialog(result.message || 'Error please try again');
+              }
+            } else {
+              this.toastr.error('Not deleted');
+            }
+          }, err => alert(err));
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -909,54 +909,40 @@ export class ProcessMasterComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'ProcessMasterDj/DeleteProcessMasterDJ/' + this.content?.PROCESS_CODE
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: 'Deleted Successfully',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.processMasterForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.processMasterForm.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
+    });
+  }
+  
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+  
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
     });
   }
 
-
-
-
-
+  afterSave(value:any){
+    if (value) {
+      this.processMasterForm.reset();
+      this.tableData = [];
+      this.close();
+    }
+  }
 
   onlossChange() {
     this.lossDisable = false;
