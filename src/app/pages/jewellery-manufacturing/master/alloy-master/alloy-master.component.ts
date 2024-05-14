@@ -406,6 +406,7 @@ export class AlloyMasterComponent implements OnInit {
       this.codeEnable = false;
     }
   }
+
   onchangeCheckBox(e: any) {
     console.log(e);
 
@@ -741,7 +742,7 @@ export class AlloyMasterComponent implements OnInit {
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: 0,
       STOCK_LCCOST: 0,
-      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
+      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.PRICE1),
       PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
       PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
       PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4code),

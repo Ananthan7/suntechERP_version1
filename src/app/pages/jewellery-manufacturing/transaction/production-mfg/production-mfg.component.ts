@@ -142,7 +142,7 @@ export class ProductionMfgComponent implements OnInit {
   productionFrom: FormGroup = this.formBuilder.group({
     voctype: ["", [Validators.required]],
     vocDate: ["", [Validators.required]],
-    vocno: [""],
+    vocno: ["1"],
     enteredby: [""],
     currency: ["", [Validators.required]],
     currencyrate: ["", [Validators.required]],
