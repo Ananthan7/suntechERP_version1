@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -24,10 +24,10 @@ export class ProcessTransferComponent implements OnInit {
   tableRowCount: number = 0;
   PTFDetailsToSave: any[] = [];
   metalGridDataToSave: any[] = [];
-  labourChargeDetailsToSave: any[] = [];
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
   private subscriptions: Subscription[] = [];
+  modalReference!: NgbModalRef;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -67,7 +67,7 @@ export class ProcessTransferComponent implements OnInit {
   processTransferFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
-    vocno: ['', [Validators.required]],
+    vocno: [''],
     salesman: [''],
     SalesmanName: [''],
     currency: [''],
@@ -108,64 +108,73 @@ export class ProcessTransferComponent implements OnInit {
       this.processTransferFrom.controls.vocdate.setValue(new Date(date))
     }
   }
-  openProcessTransferDetails(data?: any) {
-    if (data) {
-      data[0].HEADERDETAILS = this.processTransferFrom.value;
+
+  dataToDetailScreen: any;
+  @ViewChild('processTransferDetailScreen') public ProcessTransferDetailScreen!: NgbModal;
+  openProcessTransferDetails(dataToChild?: any) {
+    if (dataToChild) {
+      dataToChild.HEADERDETAILS = this.processTransferFrom.value;
     } else {
-      data = [{ HEADERDETAILS: this.processTransferFrom.value }]
+      dataToChild = { HEADERDETAILS: this.processTransferFrom.value }
     }
-    const modalRef: NgbModalRef = this.modalService.open(ProcessTransferDetailsComponent, {
+    console.log(dataToChild, 'openProcessTransferDetails to parent');
+
+    this.dataToDetailScreen = dataToChild
+    this.modalReference = this.modalService.open(this.ProcessTransferDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = data;
-    modalRef.result.then((result) => {
-      if (result) {
-        this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
+    // modalRef.componentInstance.content = data;
+    // modalRef.result.then((result) => {
+    //   if (result) {
+    //     this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
 
 
-        // this.setLabourChargeDetails()
-      }
-    }, (reason) => {
-      // Handle modal dismissal (if needed)
-    });
+    //     // this.setLabourChargeDetails()
+    //   }
+    // }, (reason) => {
+    //   // Handle modal dismissal (if needed)
+    // });
   }
   /**USE: on clicking row Opens new detail adding screen */
+  selectRowIndex: any;
   onRowClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
+    console.log(this.selectRowIndex);
+  }
+  onRowDblClickHandler(event: any) {
     let selectedData = event.data
     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    let allDataSelected = [detailRow[0].DATA]
-    this.openProcessTransferDetails(allDataSelected)
+    console.log(detailRow, 'detailRow');
+
+    this.openProcessTransferDetails(selectedData)
   }
 
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
-    if (PROCESS_FORMDETAILS.SRNO) {
-      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'setValuesToHeaderGrid');
+    let detailDataToParent = DATA.PROCESS_FORMDETAILS
+    if (detailDataToParent.SRNO != 0) {
+      this.tableData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
-      this.tableRowCount += 1
-      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+      detailDataToParent.SRNO = this.tableData.length + 1
+      this.tableData.push(detailDataToParent);
     }
-
-    this.tableData.push(PROCESS_FORMDETAILS)
-
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
     }
-    this.getSequenceDetailData(PROCESS_FORMDETAILS);
+    if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
+    if (detailDataToParent.FLAG == 'CONTINUE') {
+      this.commonService.showSnackBarMsg('Details added grid successfully')
+    };
+    this.getSequenceDetailData(detailDataToParent);
     this.setDataFromDetailScreen();
   }
-  /*USE: Function to swap object in array1 with object from array2 at the specified index */
-  swapObjects(array1: any, array2: any, index: number) {
-    // Check if the index is valid
-    if (index >= 0 && index < array1.length) {
-      array1[index] = array2[0];
-    } else {
-      console.error('Invalid index');
-    }
+  closeDetailScreen() {
+    this.modalReference.close()
   }
+
   salesmanSelected(event: any) {
     this.processTransferFrom.controls.salesman.setValue(event.SALESPERSON_CODE)
     this.processTransferFrom.controls.SalesmanName.setValue(event.DESCRIPTION)
@@ -181,12 +190,16 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
+    console.log(this.commonService.allCompanyParameters);
+
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    console.log(CURRENCY_CODE, 'CURRENCY_CODE');
     this.processTransferFrom.controls.currency.setValue(CURRENCY_CODE);
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
+
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.processTransferFrom.value.currency);
     if (CURRENCY_RATE.length > 0) {
       this.processTransferFrom.controls.currencyrate.setValue(
@@ -207,28 +220,26 @@ export class ProcessTransferComponent implements OnInit {
     let detailScreenData = this.detailData[0].DATA
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS
 
-    this.labourChargeDetailsToSave.push(
-      {
-        "REFMID": 0,
-        "BRANCH_CODE": this.commonService.branchCode,
-        "YEARMONTH": this.commonService.yearSelected,
-        "VOCTYPE": this.processTransferFrom.value.voctype,
-        "VOCNO": 0,
-        "SRNO": 0,
-        "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
-        "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
-        "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
-        "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
-        "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
-        "PCS": 0,
-        "GROSS_WT": 0,
-        "LABOUR_CODE": "",
-        "LAB_RATE": 0,
-        "LAB_ACCODE": "",
-        "LAB_AMTFC": 0,
-        "UNITCODE": ""
-      }
-    )
+    return {
+      "REFMID": 0,
+      "BRANCH_CODE": this.commonService.branchCode,
+      "YEARMONTH": this.commonService.yearSelected,
+      "VOCTYPE": this.processTransferFrom.value.voctype,
+      "VOCNO": 0,
+      "SRNO": 0,
+      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
+      "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
+      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
+      "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
+      "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAB_AMTFC": 0,
+      "UNITCODE": ""
+    }
   }
   /**USE: set details from detail screen */
   setDataFromDetailScreen() {
@@ -237,7 +248,6 @@ export class ProcessTransferComponent implements OnInit {
 
     let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
     let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
-    console.log(METAL_DETAIL_GRID, 'METAL_DETAIL_GRID');
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
     let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processFrom);
 
@@ -320,7 +330,7 @@ export class ProcessTransferComponent implements OnInit {
         "SUB_STOCK_CODE": this.commonService.nullToString(element.SUB_STOCK_CODE),
         "KARAT_CODE": this.commonService.nullToString(element.KARAT_CODE),
         "SIEVE_SET": this.commonService.nullToString(element.SIEVE_SET),
-        "SCRAP_STOCK_CODE": this.checkScrapStockCode(detailScreenData.stockCode,element.STOCK_CODE,element.METALSTONE),
+        "SCRAP_STOCK_CODE": this.checkScrapStockCode(detailScreenData.stockCode, element.STOCK_CODE, element.METALSTONE),
         "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.MAIN_STOCK_CODE),
         "SCRAP_PURITY": this.commonService.emptyToZero(detailScreenData.SCRAP_PURITY),
         "SCRAP_WT": this.commonService.emptyToZero(detailScreenData.scrapQuantity),
@@ -336,7 +346,7 @@ export class ProcessTransferComponent implements OnInit {
         "TO_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_ToStockCode),
         "FROM_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_FromStockCode),
         "FROM_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.SUB_STOCK_CODE),
-        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY*detailScreenData.PURITY),
+        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY * detailScreenData.PURITY),
         "EXCLUDE_TRANSFER_WT": detailScreenData.EXCLUDE_TRANSFER_WT,
         "IRON_WT": this.commonService.emptyToZero(element.IRON_WT),
         "IRON_SCRAP_WT": this.commonService.emptyToZero(detailScreenData.METAL_ToIronScrapWt),
@@ -351,9 +361,9 @@ export class ProcessTransferComponent implements OnInit {
       })
     });
   }
-  checkScrapStockCode(stockCode:any,GridstockCode:any,METALSTONE:any){
+  checkScrapStockCode(stockCode: any, GridstockCode: any, METALSTONE: any) {
     try {
-      if(stockCode == GridstockCode && METALSTONE.toUpperCase() == 'M') return stockCode;
+      if (stockCode == GridstockCode && METALSTONE.toUpperCase() == 'M') return stockCode;
       return ''
     } catch (error) {
       return ''
@@ -411,9 +421,9 @@ export class ProcessTransferComponent implements OnInit {
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processTo);
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
     let amountFC = this.commonService.FCToCC(this.processTransferFrom.value.currency, stoneAmount)
-    
-    console.log(this.commonService.timeToMinutes(detailScreenData.consumed),'time consumed');
-    
+
+    console.log(this.commonService.timeToMinutes(detailScreenData.consumed), 'time consumed');
+
     this.PTFDetailsToSave.push({
       "SRNO": 0,
       "UNIQUEID": 0,
@@ -604,7 +614,7 @@ export class ProcessTransferComponent implements OnInit {
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
       "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
-      "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
+      "JOB_PROCESS_TRN_LABCHRG_DJ": this.setLabourChargeDetails() // labour charge details
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -642,9 +652,39 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
   }
 
+
   deleteTableData(): void {
-    this.tableRowCount = 0;
-    this.tableData = [];
+    if (!this.selectRowIndex) {
+      Swal.fire({
+        title: '',
+        text: 'Please select row to remove from grid!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tableData = this.tableData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
+  }
+  reCalculateSRNO() {
+    this.tableData.forEach((item, index) => item.SRNO = index + 1)
   }
   deleteRecord() {
     if (!this.content.VOCTYPE) {

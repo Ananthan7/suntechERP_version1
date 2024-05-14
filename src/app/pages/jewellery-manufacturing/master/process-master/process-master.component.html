@@ -94,14 +94,14 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            (change)="checkAccodeSelected($event,'accountEnd')"
+                                            (change)="checkAccodeSelected($event,'WIPaccount')"
                                             (focusout)="validateLookupField($event,accountMasterData,'WIPaccount')"
                                             [readonly]="viewMode"  />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="accountMasterData"
                                         *ngIf="viewMode == false"
-                                        (newRowClick)="ACCODESelected($event)">
+                                        (newRowClick)="WIPaccountSelected($event)">
                                     </master-search>
                                 </div>
                                 <label for="input"

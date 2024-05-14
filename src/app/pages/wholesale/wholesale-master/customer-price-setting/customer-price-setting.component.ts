@@ -274,7 +274,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
       "GROUP3": this.customerpricesettingForm.value.group3 || "",
       "IS_ACTIVE": true,
-      "BRANCH_CODE": "",
+      "BRANCH_CODE": this.commonService.branchCode,
       "DEFAULT_CUST": true,
       "DEFAULT_SUPP": true,
       "GROUP4": this.customerpricesettingForm.value.group4 || "",
