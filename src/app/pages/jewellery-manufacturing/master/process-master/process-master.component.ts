@@ -438,6 +438,9 @@ export class ProcessMasterComponent implements OnInit {
       if (result.response) {
         this.processTypeList = result.response;
         this.processTypeList.sort((a: any, b: any) => a.SRNO - b.SRNO)
+        this.processTypeList.forEach((item:any,index:number)=>{
+          item.SRNO = index
+        })
       }
     });
     this.subscriptions.push(Sub)
@@ -547,7 +550,7 @@ export class ProcessMasterComponent implements OnInit {
       this.toastr.error('Description cannot be empty');
       return true;
     }
-    if (!form.processType) {
+    if (form.processType == null) {
       this.toastr.error('Process Type cannot be empty');
       return true;
     }
@@ -559,6 +562,8 @@ export class ProcessMasterComponent implements OnInit {
   }
   setPostData() {
     let form = this.processMasterForm.value
+    let AutopostingFlag = this.commonService.getAutopostingFlag()
+    console.log(form.processType);
     return {
       "MID": this.commonService.emptyToZero(this.content?.MID),
       "PROCESS_CODE": form.processCode || "",
@@ -568,7 +573,7 @@ export class ProcessMasterComponent implements OnInit {
       "LOSS_ACCODE": form.accountStart,
       "WIP_ACCODE": form.WIPaccount,
       "CURRENCY_CODE": "",
-      "PROCESS_TYPE": form.processType,
+      "PROCESS_TYPE": form.processType.toString() || '',
       "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
@@ -595,7 +600,7 @@ export class ProcessMasterComponent implements OnInit {
       "RECOV_VAR2": this.onchangeCheckBoxNum(form.recovery),
       "DEDUCT_PURE_WT": this.onchangeCheckBoxNum(form.DeductPureWeight),
       "APPR_PROCESS": form.approvalProcess || "",
-      "APPR_CODE": form.approvalCode || "",
+      "APPR_CODE": this.commonService.nullToString(form.approvalCode.toUpperCase()),
       "ALLOW_GAIN": this.onchangeCheckBox(form.allowGain),
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
@@ -618,11 +623,11 @@ export class ProcessMasterComponent implements OnInit {
       "NON_QUANTITY": this.onchangeCheckBox(form.NonQuantity),
       "DF_REFINERY": this.onchangeCheckBox(form.RefineryAutoProcess),
       "AUTO_LOSS": this.onchangeCheckBox(form.ApplyAutoLossToRefinery),
-      "ISACCUPDT": true,
+      "ISACCUPDT": AutopostingFlag,
       "TREE_NO": this.onchangeCheckBox(form.HaveTreeNo),
+      "ADJUST_ACCODE": ''
     }
   }
-
   // final save
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return

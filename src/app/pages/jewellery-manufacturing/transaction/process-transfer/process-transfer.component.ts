@@ -96,6 +96,8 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
     this.processTransferFrom.controls.voctype.setValue('PTF')
     //this.commonService.getqueryParamVocType()
+    console.log(this.content,'grid content');
+    
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
