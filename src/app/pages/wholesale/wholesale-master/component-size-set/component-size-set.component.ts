@@ -253,8 +253,8 @@ export class ComponentSizeSetComponent implements OnInit {
     let API = 'ComponentSizeSetMaster/InsertComponentSizeSetMaster'
     let postData = {
       "MID": 0,
-      "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
-      "DESCRIPTION": this.componentsizesetmasterForm.value.description || "",
+      "COMPSET_CODE": this.componentsizesetmasterForm.value.code.toUpperCase() || "",
+      "DESCRIPTION": this.componentsizesetmasterForm.value.description.toUpperCase() || "",
       "detail": this.tableData,
     }
 

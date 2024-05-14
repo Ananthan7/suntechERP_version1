@@ -80,7 +80,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="radius" [value]="radius"   [readonly]="viewMode || codeEnable"  >
+                      <input type="text" matInput class="text-left"  formControlName="radius" ThreeDecimalInput [value]="radius"   [readonly]="viewMode || codeEnable" [max]="6" >
                     </mat-form-field>
                   </div>
                 </div>

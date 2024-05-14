@@ -138,6 +138,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setInitialValues();
     this.grossWt = true;
     this.codeEnable1 = true;
     this.inputDisable = true;
@@ -148,7 +149,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.viewMode = true;
       this.viewDisable = true;
       this.setFormValues();
-      this.setInitialValues();
+     // this.setInitialValues();
     }
     else (this.content.FLAG == 'EDIT')
     {
@@ -156,7 +157,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.codeEnableMetal = false;
       this.editMode = true;
       this.setFormValues();
-      this.setInitialValues();
+    // this.setInitialValues();
     }
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
@@ -670,10 +671,22 @@ export class LabourChargeMasterComponent implements OnInit {
 
   private setInitialValues() {
     console.log(this.commonService.amtFormat)
-    this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.wtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.metallabourMasterForm.controls.wtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.metallabourMasterForm.controls.metalselling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.metalSelling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.wastage.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
+    
+    this.diamondlabourMasterForm.controls.cost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.diamondlabourMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.diamondlabourMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
   
   divisionCodeSelected(e: any) {

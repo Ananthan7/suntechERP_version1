@@ -23,7 +23,7 @@ export class PricelistMasterComponent implements OnInit {
   required: boolean = false;
   dele: boolean = false;
   codeEnable: boolean = true;
-
+  round: boolean = true;
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -87,7 +87,7 @@ export class PricelistMasterComponent implements OnInit {
       roundoff_digit: [''],
     });
 
-
+this.round = true;
     this.initializeForm();
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -101,7 +101,7 @@ export class PricelistMasterComponent implements OnInit {
       this.setFormValues()
 
     }
-
+ 
   }
 
   setFormValues() {
@@ -478,4 +478,22 @@ export class PricelistMasterComponent implements OnInit {
     }
 
   }
+
+  roundoffDis(){
+    if(this.priceListMasterForm.value.priceRoundoff != true){
+      this.round = true;
+      this.priceListMasterForm.controls.roundoff_digit.setValue('');
+    }
+    else
+    {
+      this.round = false;
+    }
+  }
+
+  getMaxValueLength(): number {
+    const selectedOperator = this.priceListMasterForm.get('priceSign')?.value;
+    const requiresMaxLength3 = ['+%', '/%'].includes(selectedOperator);
+    return requiresMaxLength3 ? 3 : 10;
+}
+
 }

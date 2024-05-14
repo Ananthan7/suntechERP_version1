@@ -136,13 +136,46 @@ export class ComponentSizeMasterComponent implements OnInit {
     }
   }
 
+  // getValues() {
+  //   const height = this.componentsizemasterForm.value.height || 0;
+  //   const width = this.componentsizemasterForm.value.width || 0;
+  //   const length = this.componentsizemasterForm.value.length || 0;
+  //   let radius = this.calculateRadius();
+  //   radius = this.setDecimalPoint(radius)
+
+
+  //   const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${radius}#`;
+
+  //   // Update the form control with the calculated result and description
+  //   this.componentsizemasterForm.patchValue({
+  //     radius: radius,
+  //     desc: formattedDesc
+  //   }, { emitEvent: false });
+  // }
+
+
   getValues() {
     const height = this.componentsizemasterForm.value.height || 0;
     const width = this.componentsizemasterForm.value.width || 0;
     const length = this.componentsizemasterForm.value.length || 0;
-    let radius = this.calculateRadius();
-    radius = this.setDecimalPoint(radius)
-    const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${radius}#`;
+
+    // Ensure radius is a number
+    let radius: number = parseFloat(this.calculateRadius()); // Convert to number
+
+    // Check if radius is a valid number, if not, set it to 0
+    if (isNaN(radius)) {
+      radius = 0;
+    }
+
+    else {
+      radius = this.setDecimalPoints(radius);
+    }
+
+    // Format radius to have at least three decimal places
+    const formattedRadius = radius.toFixed(3);
+    
+
+    const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${formattedRadius}#`;
 
     // Update the form control with the calculated result and description
     this.componentsizemasterForm.patchValue({
@@ -151,6 +184,11 @@ export class ComponentSizeMasterComponent implements OnInit {
     }, { emitEvent: false });
   }
 
+
+  setDecimalPoints(value: number): number {
+    // Logic to set decimal point
+    return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
+  }
 
 
   close(data?: any) {
@@ -171,7 +209,7 @@ export class ComponentSizeMasterComponent implements OnInit {
       this.toastr.error('The Height must be Less than the Half of the Width')
       return;
     }
-    
+
 
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
@@ -222,6 +260,11 @@ export class ComponentSizeMasterComponent implements OnInit {
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
+    }
+
+    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+      this.toastr.error('The Height must be Less than the Half of the Width')
+      return;
     }
 
 
