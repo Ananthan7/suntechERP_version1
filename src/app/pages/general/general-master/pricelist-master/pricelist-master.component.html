@@ -110,7 +110,7 @@
                                         <mat-form-field style="width: 100px;">
                                             <input type="text"
                                                 class="text-right" matInput
-                                                [max]="3"
+                                                [max]="10"
                                                 AmountDecimalInput
                                                 [readonly]="viewMode || codeEnable"
                                                 formControlName="finalPriceValue"
@@ -144,7 +144,8 @@
                                             <input type="text"
                                                 class="text-right" matInput
                                                 AmountDecimalInput
-                                                (input)="onInputChange($event,'addlValue', 5)"
+                                                [max]="10"
+                                                CommaSeparatedNumber
                                                 formControlName="addlValue"
                                                 [readonly]="viewMode || codeEnable"
                                                 [required]="required" />

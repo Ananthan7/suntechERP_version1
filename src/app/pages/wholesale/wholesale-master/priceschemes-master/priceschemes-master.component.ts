@@ -76,7 +76,7 @@ export class PriceschemesMasterComponent implements OnInit {
       this.price5SearchEnable = true;
     }
 
-    this.initializeForm();
+ //   this.initializeForm();
     this.setAllInitialValues();
   }
 
@@ -191,7 +191,10 @@ export class PriceschemesMasterComponent implements OnInit {
       return;
     }
 
-    if (this.priceSchemaMasterForm.value.price5 !== '' && this.priceSchemaMasterForm.value.price4 == '') {
+    console.log(this.priceSchemaMasterForm.value.price4);
+    console.log(this.priceSchemaMasterForm.value.price5);
+
+    if (this.priceSchemaMasterForm.value.price5 !== undefined && this.priceSchemaMasterForm.value.price4 == '') {
 
       this.toastr.error('Price 4 cannot be empty');
       return;
@@ -300,22 +303,22 @@ export class PriceschemesMasterComponent implements OnInit {
 
 
 
-  private initializeForm() {
-    try {
-      this.priceSchemaMasterForm = this.formBuilder.group({
-        priceCode: ['', [Validators.required]],
-        priceDescription: ['', [Validators.required]],
-        price1: ['', [Validators.required]],
-        price2: ['', [Validators.required]],
-        price3: [''],
-        price4: [''],
-        price5: ['']
-      })
-    } catch (error) {
-      console.error('Error in initializeForm:', error);
-      this.toastr.error('Error while Initializing the Form');
-    }
-  }
+  // private initializeForm() {
+  //   try {
+  //     this.priceSchemaMasterForm = this.formBuilder.group({
+  //       priceCode: ['', [Validators.required]],
+  //       priceDescription: ['', [Validators.required]],
+  //       price1: ['', [Validators.required]],
+  //       price2: ['', [Validators.required]],
+  //       price3: [''],
+  //       price4: [''],
+  //       price5: ['']
+  //     })
+  //   } catch (error) {
+  //     console.error('Error in initializeForm:', error);
+  //     this.toastr.error('Error while Initializing the Form');
+  //   }
+  // }
 
   createPostData() {
     return {
