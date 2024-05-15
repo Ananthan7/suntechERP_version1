@@ -196,9 +196,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" [readonly]="viewMode || codeEnableDiamond" 
-                    matInput  [max]="13"
+                    matInput  [max]="10"
                     class="text-right"
-                    SixDecimalInput
+                    AmountDecimalInput
                     (keypress)="salesChangesDia('selling_rate')"
                     formControlName="selling_rate" />
                 </mat-form-field>
@@ -408,8 +408,8 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" [readonly]="viewMode|| viewsellingrateMetal || codeEnableMetal"
-                   [max]="13"
-                   SixDecimalInput
+                   [max]="10"
+                    AmountDecimalInput
                     formControlName="metalselling_rate"
                     (keypress)="salesChange('metalselling_rate')"
                     class="text-right" />
