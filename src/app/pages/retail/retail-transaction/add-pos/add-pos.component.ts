@@ -2163,7 +2163,7 @@ export class AddPosComponent implements OnInit {
         IGST_PER = this.advanceReceiptDetails['IGST_PER'];
         HSN_CODE = this.advanceReceiptDetails['HSN_CODE'];
         GST_CODE = this.advanceReceiptDetails['DT_GST_CODE'].toString();
-        IGST_ACCODE = this.advanceReceiptDetails['IGST_ACCODE'];
+        IGST_ACCODE = this.advanceReceiptDetails['IGST_ACCODE'].toString();
         IGST_AMOUNTFC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceVatAmountFC);
         IGST_AMOUNTCC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceVatAmountLC);
         // IGST_AMOUNTCC = baseCtrl.FCToCC(
@@ -2297,7 +2297,7 @@ export class AddPosComponent implements OnInit {
         "CREDITDAYS": "0",
         "VALUE_DATE": new Date().toISOString(),
         "SGST_ACCODE": "0",
-        "IGST_ACCODE": IGST_ACCODE ?? "0",
+        "IGST_ACCODE": IGST_ACCODE.toString() ?? "0",
         "CGST_CTRLACCODE": "0",
         "SGST_CTRLACCODE": "0",
         "IGST_CTRLACCODE": "0",
@@ -4444,7 +4444,7 @@ export class AddPosComponent implements OnInit {
       // "CGST_ACCODE": this.comFunc.emptyToZero(items['CGST_ACCODE']),
       // "SGST_ACCODE": this.comFunc.emptyToZero(items['SGST_ACCODE']),
       "SGST_ACCODE": items['SGST_ACCODE'] || '',
-      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS,
+      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS.toString(),
       // items['IGST_ACCODE'] || '',
       "TOTAL_AMOUNTFC": this.sales_returns_items.reduce((acc: any, curr: any) => acc + parseFloat(curr.mkg_amount), 0) || 0,
       //  items['TOTAL_AMOUNTFC'] || 0,
@@ -6107,7 +6107,7 @@ export class AddPosComponent implements OnInit {
       STKTRN_WASTAGERATE: 0, //need
 
       HSN_CODE: data.HSN_CODE,
-      VATCODE: data.GST_CODE,
+      VATCODE: data.GST_CODE? data.GST_CODE.toString():'',
 
       VAT_PER: this.comFunc.emptyToZero(
         this.lineItemForm.value.fcn_li_tax_percentage
@@ -6225,7 +6225,7 @@ export class AddPosComponent implements OnInit {
       ),
       CGST_ACCODE: '',
       SGST_ACCODE: '',
-      IGST_ACCODE: this.newLineItem.IGST_ACCODE,
+      IGST_ACCODE:this.newLineItem.IGST_ACCODE? this.newLineItem.IGST_ACCODE.toString():"",
       TOTAL_AMOUNTFC: this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) +
@@ -6516,7 +6516,7 @@ export class AddPosComponent implements OnInit {
       DTSALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
       StkTrn_LandingCost: data.STOCK_COST, //need
       HSNCODE: data.HSN_CODE,
-      VATCODE: data.GST_CODE,
+      VATCODE: data.GST_CODE?data.GST_CODE.toString():'',
       VAT_PER: this.comFunc.emptyToZero(
         this.lineItemForm.value.fcn_li_tax_percentage
       ),
@@ -11477,7 +11477,7 @@ export class AddPosComponent implements OnInit {
       'REFBY_CUSTCODE': '0',
       'PRINT_COUNT_ACCOPY': 0,
       'PRINT_COUNT_CNTLCOPY': 0,
-      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS,
+      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS.toString(),
 
       // new fields added 28-12-2023
       "AGENT_COMMISSION": false,
@@ -12486,7 +12486,7 @@ export class AddPosComponent implements OnInit {
         "UnitPrice": data.TOTALWITHVATFC, //doubt - c -total amount with vat
         "NetAmount": data.TOTALWITHVATFC, //  total amount with vat
         "VatRate": data.VAT_PER, //doubt -c
-        "VatCode": data.VATCODE,
+        "VatCode": data.VATCODE?data.GST_CODE.toString():'',
         "VatAmount": data.VAT_AMOUNTFC,
         "MerchandiseGroup": this.comFunc.allbranchMaster.PLANETMERCHANTGROUP, //doubt - branchmaster merchandise
         "TaxRefundEligible": true, //doubt -c
