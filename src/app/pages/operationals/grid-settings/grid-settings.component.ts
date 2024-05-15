@@ -58,6 +58,7 @@ export class GridSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridSettingsForm.controls.branchCode.setValue(this.commonService.branchCode)
+    this.getGridList()
   }
 
   vocTypeSelected(event:any){
