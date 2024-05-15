@@ -52,7 +52,7 @@
                                 <input type="text" matInput
                                     [readonly]="viewMode || codeEnable"  maxlength="6"
                                     (input)="inputValidate($event)" UpperCaseDirective
-                                    (focusout)="workerCodeChange($event,'WorkerAcCode')"
+                                    (focusout)="validateLookupField($event,accountMasterData,'WorkerAcCode')"
                                     formControlName="WorkerAcCode" />
                             </mat-form-field>
                             <master-search

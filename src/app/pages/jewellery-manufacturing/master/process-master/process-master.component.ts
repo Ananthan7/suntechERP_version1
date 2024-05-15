@@ -67,6 +67,8 @@ export class ProcessMasterComponent implements OnInit {
   searchlookup: boolean = false;
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
+  @ViewChild('approvalProcessInput') approvalProcessInput!: ElementRef;
+  @ViewChild('recStockCode') recStockCode!: ElementRef;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -286,8 +288,8 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.processType.setValue(
       Number(this.content.PROCESS_TYPE)
     );
-    console.log(this.processMasterForm.value.processType,'processType');
-    
+    console.log(this.processMasterForm.value.processType, 'processType');
+
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
     this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
     this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
@@ -442,7 +444,7 @@ export class ProcessMasterComponent implements OnInit {
       if (result.response) {
         this.processTypeList = result.response;
         this.processTypeList.sort((a: any, b: any) => a.SRNO - b.SRNO)
-        this.processTypeList.forEach((item:any,index:number)=>{
+        this.processTypeList.forEach((item: any, index: number) => {
           item.SRNO = index
         })
       }
@@ -479,6 +481,7 @@ export class ProcessMasterComponent implements OnInit {
       return false;
     }
   }
+  
   submitValidations(form: any) {
     if (form.loss == true && this.validateLossRange()) {
       return true;
@@ -487,79 +490,81 @@ export class ProcessMasterComponent implements OnInit {
       return true;
     }
     if (form.ApprovalRequired == true && form.approvalProcess == '') {
-      this.toastr.error('Approval Process must be Required');
+      this.processMasterForm.controls.approvalProcess.setValidators(Validators.required)
+      this.approvalProcessInput.nativeElement.focus();
+      this.commonService.toastErrorByMsgId('Approval Process must be Required');
       return true;
     }
 
     if (form.TimeCalculateonProcess == true && this.formattedTime == 0 && this.formattedMaxTime == 0) {
-      this.toastr.error('Standard Time  and  Maximum Time must be Required');
+      this.commonService.toastErrorByMsgId('Standard Time  and  Maximum Time must be Required');
       return true;
     }
 
     if (this.formattedTime > this.formattedMaxTime) {
-      this.toastr.error('Standard Time  should not be Greater than Maximum Time');
+      this.commonService.toastErrorByMsgId('Standard Time  should not be Greater than Maximum Time');
       return true;
     }
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
-        this.toastr.error('Loss Standard % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('Loss Standard % Cannot Be Zero');
         return true;
       }
       else if (this.commonService.emptyToZero(form.loss_min) == 0) {
-        this.toastr.error('Loss Minimum % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('Loss Minimum % Cannot Be Zero');
         return true;
       }
       else if (this.commonService.emptyToZero(form.loss_max) == 0) {
-        this.toastr.error('Loss Maximum % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('Loss Maximum % Cannot Be Zero');
         return true;
       }
       else if (form.accountStart == '') {
-        this.toastr.error('Loss Account Code Cannot Be Empty');
+        this.commonService.toastErrorByMsgId('Loss Account Code Cannot Be Empty');
         return true;
       }
     }
 
     if (form.recovery == true) {
       if (this.commonService.emptyToZero(form.standard_end) == 0) {
-        this.toastr.error('Recovery Standard % Cannot be Zero');
+        this.commonService.toastErrorByMsgId('Recovery Standard % Cannot be Zero');
         return true;
       }
       else if (form.min_end == '') {
-        this.toastr.error(' Recovery Minimum % Cannot be Zero');
+        this.commonService.toastErrorByMsgId(' Recovery Minimum % Cannot be Zero');
         return true;
       }
       // else if (form.accountMiddle == '') {
-      //   this.toastr.error('Recovery Account Code Cannot be Empty');
+      // this.commonService.toastErrorByMsgId('Recovery Account Code Cannot be Empty');
       //   return true;
       // }
     }
 
     if (form.allowGain == true) {
       if (form.accountEnd == '') {
-        this.toastr.error('Gain Account Code Cannot be Empty');
+        this.commonService.toastErrorByMsgId('Gain Account Code Cannot be Empty');
         return true;
       }
     }
 
     if (form.RecoveryProcess == true && form.recovery == false) {
-      this.toastr.error('Recovery & Recov Stock Code Must be Filled');
+      this.commonService.toastErrorByMsgId('Recovery details Must be Filled');
       return true
     }
 
     if (!form.processCode) {
-      this.toastr.error('Process Code cannot be empty');
+      this.commonService.toastErrorByMsgId('Process Code cannot be empty');
       return true;
     }
     if (!form.processDesc) {
-      this.toastr.error('Description cannot be empty');
+      this.commonService.toastErrorByMsgId('Description cannot be empty');
       return true;
     }
     if (form.processType == null) {
-      this.toastr.error('Process Type cannot be empty');
+      this.commonService.toastErrorByMsgId('Process Type cannot be empty');
       return true;
     }
     if (!form.WIPaccount) {
-      this.toastr.error('WIPaccount cannot be empty');
+      this.commonService.toastErrorByMsgId('WIPaccount cannot be empty');
       return true;
     }
     return false;
@@ -652,10 +657,10 @@ export class ProcessMasterComponent implements OnInit {
             this.showErrorDialog(result.message || 'Error please try again');
           }
         } else {
-          this.toastr.error('Not deleted');
+          this.commonService.emptyToZero('Not deleted');
         }
       }, err => {
-        this.toastr.error('network error occurred ');
+        this.commonService.emptyToZero('network error occurred ');
       });
     this.subscriptions.push(Sub);
   }
@@ -763,7 +768,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   WIPaccountSelected(e: any) {
     if (this.checkCode()) return
-    if (this.isSameAccountCodeSelected(e.ACCODE,'WIPaccount')) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'WIPaccount')) {
       this.commonService.toastErrorByMsgId('Accode already selected');
       this.processMasterForm.controls.WIPaccount.setValue('');
       return;
@@ -772,7 +777,7 @@ export class ProcessMasterComponent implements OnInit {
     this.accodeValidateSP('WIPaccount', e.ACCODE)
   }
   accountStartSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE,'accountStart')) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'accountStart')) {
       this.commonService.toastErrorByMsgId('Accode already selected');
       this.processMasterForm.controls.accountStart.setValue('');
       return;
@@ -781,7 +786,7 @@ export class ProcessMasterComponent implements OnInit {
     this.accodeValidateSP('accountStart', e.ACCODE)
   }
   accountMiddleSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE,'accountMiddle')) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'accountMiddle')) {
       this.processMasterForm.controls.accountMiddle.setValue('');
       this.commonService.toastErrorByMsgId('Accode already selected');
       return;
@@ -791,7 +796,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   accountEndSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE,'accountEnd')) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'accountEnd')) {
       this.processMasterForm.controls.accountEnd.setValue('');
       this.commonService.toastErrorByMsgId('Accode already selected');
       return;
@@ -799,7 +804,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
     this.accodeValidateSP('accountEnd', e.ACCODE)
   }
- 
+
   /**use: common accode change validation */
   checkAccodeSelected(event: any, formname: string) {
     if (event.target.value == '') {
@@ -899,7 +904,7 @@ export class ProcessMasterComponent implements OnInit {
       }
     });
   }
-  
+
   showConfirmationDialog(): Promise<any> {
     return Swal.fire({
       title: 'Are you sure?',
@@ -911,7 +916,7 @@ export class ProcessMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     });
   }
-  
+
   showSuccessDialog(message: string): void {
     Swal.fire({
       title: message,
@@ -923,7 +928,7 @@ export class ProcessMasterComponent implements OnInit {
       this.afterSave(result.value)
     });
   }
-  
+
   showErrorDialog(message: string): void {
     Swal.fire({
       title: message,
@@ -936,11 +941,11 @@ export class ProcessMasterComponent implements OnInit {
     });
   }
 
-  afterSave(value:any){
+  afterSave(value: any) {
     if (value) {
       this.processMasterForm.reset();
       this.tableData = [];
-      this.close();
+      this.close('reloadMainGrid');
     }
   }
 
