@@ -116,7 +116,7 @@ export class AddPosComponent implements OnInit {
   lineItemModalForSalesReturn: boolean = false;
   salesReturnRowData: any;
   salesReturnRowDataSRNO: any;
-
+  midForInvoce:any=0;
   queryParams: any;
   fcn_returns_voc_type_val: any;
   fcn_returns_cust_code_val: any;
@@ -2162,7 +2162,7 @@ export class AddPosComponent implements OnInit {
           this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceAmount), this.vocDataForm.value.txtCurRate);
         IGST_PER = this.advanceReceiptDetails['IGST_PER'];
         HSN_CODE = this.advanceReceiptDetails['HSN_CODE'];
-        GST_CODE = this.advanceReceiptDetails['DT_GST_CODE'];
+        GST_CODE = this.advanceReceiptDetails['DT_GST_CODE'].toString();
         IGST_ACCODE = this.advanceReceiptDetails['IGST_ACCODE'];
         IGST_AMOUNTFC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceVatAmountFC);
         IGST_AMOUNTCC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceVatAmountLC);
@@ -2311,7 +2311,7 @@ export class AddPosComponent implements OnInit {
         "IGST_AMOUNTFC": IGST_AMOUNT,
         "IGST_AMOUNTCC": IGST_AMOUNT,
         "HSN_CODE": this.isCCTransaction ? this.newLineItem.HSN_CODE : '',
-        "GST_CODE": this.isCCTransaction ? this.newLineItem.GST_CODE : '',
+        "GST_CODE": this.isCCTransaction ? this.newLineItem.GST_CODE.toString() : '',
         "CGST_ACCODE": "0",
         "REC_COMM_AMOUNTFC": COMMISSION_RATE,
         "REC_COMM_AMOUNTCC": COMMISSION_RATE,
@@ -4455,7 +4455,7 @@ export class AddPosComponent implements OnInit {
       "IGST_CTRLACCODE": items['IGST_CTRLACCODE'] || '',
       "GST_GROUP": 'R',
       // items['GST_GROUP'] || '',
-      "GST_CODE": items['GST_CODE'] || '',
+      "GST_CODE": items['GST_CODE'].toString() || '',
       "HSN_CODE": items['HSN_CODE'] || '',
       "SERVICE_ACCODE": items['SERVICE_ACCODE'] || '',
       "WASTAGEPER": this.comFunc.emptyToZero(items['WASTAGEPER']),
@@ -5184,7 +5184,7 @@ export class AddPosComponent implements OnInit {
       // ), // metal amount
       RATE_TYPE: '',
       // data.METAL_RATE_TYPE || '',
-      METAL_RATE: data.METAL_RATE,
+      METAL_RATE: data.metalRate,
       //  this.comFunc.emptyToZero(data.METAL_RATE),
       // METAL_RATE: this.comFunc.emptyToZero(data.metalRate),
 
@@ -6240,7 +6240,7 @@ export class AddPosComponent implements OnInit {
       SGST_CTRLACCODE: '',
       IGST_CTRLACCODE: '',
       GST_GROUP: this.newLineItem.IGST_PER ? 'R' : '',
-      GST_CODE: data['GST_CODE'],
+      GST_CODE: data['GST_CODE'].toString(),
       SERVICE_ACCODE: '',
       WASTAGEPER: '0.00',
       WASTAGEQTY: '0.000',
@@ -6803,13 +6803,30 @@ export class AddPosComponent implements OnInit {
             ((parseFloat(this.order_items_total_gross_amount) * IgstVatPer) / (100.0 + IgstVatPer))));
           dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
 
-          if ((dblRounddiff - dblVatTot) < 0.05) {
+          if (this.vocDataForm.value.txtCurrency && ((dblRounddiff - dblVatTot) < 0.05)) {
             this.vatRoundOffAmt = this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblRounddiff - dblVatTot), this.vocDataForm.value.txtCurRate));
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.CCToFC(
+                    this.vocDataForm.value.txtCurrency,
+                    (dblRounddiff - dblVatTot),
+                    this.vocDataForm.value.txtCurRate
+                )
+            );
             dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
-            this.order_items_total_tax = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, (this.comFunc.emptyToZero(this.order_items_total_tax) + this.comFunc.emptyToZero(dblVatAmtRd)));
+            this.order_items_total_tax = this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                (this.comFunc.emptyToZero(this.order_items_total_tax) + this.comFunc.emptyToZero(dblVatAmtRd))
+            );
+        }
+        
 
-          }
+          // if ((dblRounddiff - dblVatTot) < 0.05) {
+          //   this.vatRoundOffAmt = this.comFunc.transformDecimalVB(
+          //     this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.CCToFC(this.vocDataForm.value.txtCurrency, (dblRounddiff - dblVatTot), this.vocDataForm.value.txtCurRate));
+          //   dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
+          //   this.order_items_total_tax = this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, (this.comFunc.emptyToZero(this.order_items_total_tax) + this.comFunc.emptyToZero(dblVatAmtRd)));
+
+          // }
         }
       }
     }
@@ -7646,17 +7663,27 @@ export class AddPosComponent implements OnInit {
     if (this.validatePCS == true || this.enablePieces == true) {
       if (!this.viewOnly)
         this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
-      this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
 
       this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
         Validators.required,
         Validators.min(1),
       ]);
-      if (this.divisionMS == 'M') {
-        if (this.newLineItem.PCS_TO_GMS?.toString() == '0')
-          this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
-        else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+
+   const validDivisionCodes = ['M', 'D', 'W'];  
+      const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
+  
+      if (filteredValidationCodes.length > 0){
+        this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       }
+      else{
+        this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+      }
+
+      // if (this.divisionMS == 'M') {
+      //   if (this.newLineItem.PCS_TO_GMS?.toString() == '0')
+      //     this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
+      //   else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+      // }
     } else {
       this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
@@ -8285,12 +8312,13 @@ export class AddPosComponent implements OnInit {
                 // this.AccountPosting();
 
                 this.saveAndContinue(type);
-                let mid;
-                mid = res.response.retailSales.MID;
+                // let mid;
+                // mid = res.response.retailSales.MID;
+                this.midForInvoce=res.response.retailSales.MID;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
-                if (mid) {
-                  this.AccountPosting(mid);
+                if (this.midForInvoce) {
+                  this.AccountPosting(this.midForInvoce);
                 }
 
                 // console.log(this.content.MID, 'middddddddddd');
@@ -8455,7 +8483,7 @@ export class AddPosComponent implements OnInit {
       return
     }
     let postData = {
-      "MID": this.comFunc.emptyToZero(this.content?.MID),
+      "MID":this.content?this.comFunc.emptyToZero(this.content?.MID):this.midForInvoce,
       "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
       "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -8629,7 +8657,7 @@ export class AddPosComponent implements OnInit {
 
 
   checkDivisionForPcs(pcs: any) {
-    const validDivisionCodes = ['M', 'D', 'W'];
+    const validDivisionCodes = ['M', 'D', 'W'];   
     const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
 
     if (filteredValidationCodes.length > 0) {
@@ -11449,6 +11477,7 @@ export class AddPosComponent implements OnInit {
       'REFBY_CUSTCODE': '0',
       'PRINT_COUNT_ACCOPY': 0,
       'PRINT_COUNT_CNTLCOPY': 0,
+      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS,
 
       // new fields added 28-12-2023
       "AGENT_COMMISSION": false,
@@ -12782,7 +12811,7 @@ export class AddPosComponent implements OnInit {
 
 
   let postData = {
-    "MID": this.comFunc.emptyToZero(this.content?.MID),
+    "MID":this.content?.MID!=0? this.comFunc.emptyToZero(this.content?.MID):this.midForInvoce,
     "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
     "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
     "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -12856,7 +12885,7 @@ export class AddPosComponent implements OnInit {
   }
   exportInvoiceToPdf(): void {
     let postData = {
-      "MID": this.comFunc.emptyToZero(this.content?.MID),
+      "MID":this.content?this.comFunc.emptyToZero(this.content?.MID):this.midForInvoce,
       "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
       "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),

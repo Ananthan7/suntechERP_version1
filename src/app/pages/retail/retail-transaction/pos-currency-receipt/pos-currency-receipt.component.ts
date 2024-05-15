@@ -43,8 +43,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   amlNameValidation?: boolean;
   customerData: any;
-
-
+  baseYear: any = localStorage.getItem('YEAR') || '';
+  strBranchcode:any = localStorage.getItem('userbranch');
   vocMaxDate = new Date();
   currentDate = new Date();
   branchCode?: String;
@@ -109,7 +109,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
     vocType: [''],
-    vocNo: ['1'],
+    vocNo: [''],
     vocDate: [''],
     partyCode: [''],
     partyCodeDesc: [''],  // No
@@ -144,7 +144,21 @@ export class PosCurrencyReceiptComponent implements OnInit {
   ) {
 
   }
-
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join('-');
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.posCurrencyReceiptForm.controls.vocNo.setValue(resp.newvocno);
+        }
+      });
+  }
   ngOnInit(): void {
     // this.posCurrencyReceiptForm.controls['vocType'].disable();
     // this.posCurrencyReceiptForm.controls['vocNo'].disable();
@@ -167,8 +181,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     if (this.content?.MID != null)
       this.getArgsData();
-    else
+    else{
       this.changeDueDate(null);
+      this.generateVocNo();
+    }
+      
 
 
     // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
@@ -300,7 +317,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptForm.controls.partyCode.setValue(e.ACCODE);
-    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT_HEAD']);
+    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT HEAD']);
     this.partyCodeChange({ target: { value: e.ACCODE } })
   }
 
