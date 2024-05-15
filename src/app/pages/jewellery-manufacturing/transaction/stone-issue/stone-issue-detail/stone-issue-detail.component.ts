@@ -223,6 +223,7 @@ export class StoneIssueDetailComponent implements OnInit {
     console.log(e);
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
+    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Item);
   }
 
   close(data?: any) {

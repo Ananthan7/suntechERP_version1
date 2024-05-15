@@ -141,15 +141,15 @@ export class WorkerMasterComponent implements OnInit {
       }
     }
   }
-  inputValidate(event:any){
+  inputValidate(event: any) {
     let form = this.workerMasterForm.value;
-    if(event.target.value != ''){
+    if (event.target.value != '') {
       this.isDisableSaveBtn = true;
-    }else{
+    } else {
       this.isDisableSaveBtn = false;
     }
   }
- 
+
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('please enter Worker code')
@@ -193,16 +193,16 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetPcs.setValue(
       this.commonService.commaSeperation(this.content.TARGET_PCS)
     )
-    
-    this.setValueWithDecimal('LossAllowed',this.content.LOSS_ALLOWED, 'METAL')
-    this.setValueWithDecimal('TrayWeight',this.content.TRAY_WEIGHT, 'METAL')
-    this.setValueWithDecimal('TargetCaratWt',this.content.TARGET_CARAT_WT, 'METAL')
-    this.setValueWithDecimal('TargetMetalWt',this.content.TARGET_METAL_WT, 'METAL')
-    this.setValueWithDecimal('TargetWeight',this.content.TARGET_WEIGHT, 'METAL')
+
+    this.setValueWithDecimal('LossAllowed', this.content.LOSS_ALLOWED, 'METAL')
+    this.setValueWithDecimal('TrayWeight', this.content.TRAY_WEIGHT, 'METAL')
+    this.setValueWithDecimal('TargetCaratWt', this.content.TARGET_CARAT_WT, 'METAL')
+    this.setValueWithDecimal('TargetMetalWt', this.content.TARGET_METAL_WT, 'METAL')
+    this.setValueWithDecimal('TargetWeight', this.content.TARGET_WEIGHT, 'METAL')
     this.workerMasterForm.controls.DailyTarget.setValue(this.content.TARGET_BY)
     this.workerMasterForm.controls.Active.setValue(this.content.ACTIVE == 'Y' ? true : false)
   }
-  setProcessData(){
+  setProcessData() {
     let num = 0
     this.tableData.forEach((item) => {
       if (item.SELECT1 == true) {
@@ -246,7 +246,7 @@ export class WorkerMasterComponent implements OnInit {
       "workerDetails": this.setProcessData()
     }
   }
-  submitValidations(form:any){
+  submitValidations(form: any) {
     if (form.WorkerCode == '') {
       this.toastr.error("Worker Code cannot be empty")
       return true
@@ -257,8 +257,8 @@ export class WorkerMasterComponent implements OnInit {
     }
     return false;
   }
-  reCalculateSrno(){
-    if(this.selectedProcessArr?.length>0){
+  reCalculateSrno() {
+    if (this.selectedProcessArr?.length > 0) {
       this.selectedProcessArr.forEach((item: any, i: any) => {
         item.SRNO = i + 1;
       });
@@ -268,37 +268,28 @@ export class WorkerMasterComponent implements OnInit {
   formSubmit() {
     this.buttonField = false;
     if (this.content && this.content.FLAG == 'VIEW') return
-    if(this.submitValidations(this.workerMasterForm.value)) return;
+    if (this.submitValidations(this.workerMasterForm.value)) return;
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
     }
-    this.reCalculateSrno()
     let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = this.setPostData()
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+        if (result) {
           if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.close('reloadMainGrid')
-              }
-            });
-            this.workerMasterForm.reset()
-            this.tableData = []
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+          } else {
+            this.showErrorDialog('Error please try again');
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Not deleted');
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('network error')
+      })
     this.subscriptions.push(Sub)
 
   }
@@ -310,45 +301,59 @@ export class WorkerMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+        if (result) {
           if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.workerMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+          } else {
+            this.showErrorDialog('Error please try again');
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Not deleted');
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('network error')
+      })
     this.subscriptions.push(Sub)
+  }
+  afterSave(value:any){
+    if (value) {
+      this.workerMasterForm.reset()
+      this.tableData = []
+      this.close('reloadMainGrid')
+    }
   }
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
+      this.showDeleteErrorDialog('Please Select data to delete!');
+      return;
     }
-    Swal.fire({
+  
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = 'WorkerMaster/DeleteWorkerMaster/' + this.content.WORKER_CODE;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog(result.message || 'Success');
+              } else {
+                this.showErrorDialog(result.message || 'Error please try again');
+              }
+            } else {
+              this.toastr.error('Not deleted');
+            }
+          }, err => {
+            this.commonService.toastErrorByMsgId('network error')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -356,47 +361,40 @@ export class WorkerMasterComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'WorkerMaster/DeleteWorkerMaster/' + this.content.WORKER_CODE
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.workerMasterForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid') //reloads data in MainGrid
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.workerMasterForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
+    });
+  }
+  
+  showDeleteErrorDialog(message: string): void {
+    Swal.fire({
+      title: '',
+      text: message,
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    });
+  }
+  
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+  
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
     });
   }
 
@@ -621,18 +619,18 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if(data.length==0){
+        if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.workerMasterForm.controls[FORMNAME].setValue('')
         }

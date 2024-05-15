@@ -3121,7 +3121,7 @@
     </h4>
     <button style="border: none" type="button" *ngIf="!updateBtn" class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')">
+      (click)="closeItemModal()">
       <span aria-hidden="true">x</span>
     </button>
   </div>
@@ -3815,7 +3815,7 @@
             Update
           </button>&nbsp; -->
         <button mat-flat-button color="warn"
-          (click)="modal.dismiss('Cross click')">
+          (click)=" closeItemModal()">
           Cancel</button>&nbsp;
         <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
             Next Item</button>&nbsp;
