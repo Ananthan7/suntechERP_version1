@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { retry } from 'rxjs/operators';
 
 
 
@@ -172,7 +173,7 @@ export class MeltingTypeComponent implements OnInit {
       "UNIQUEID": 0,
       "SRNO": this.slNo,
       "MELTYPE_CODE": "Y",
-      "MELTYPE_DESCRIPTION": "",
+      "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
       "KARAT_CODE": this.meltingTypeForm.value.karat,
       "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
       "DIVISION_CODE": 'Y',
@@ -226,19 +227,8 @@ export class MeltingTypeComponent implements OnInit {
 
       if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
         let API = 'MeltingType/InsertMeltingType';
-        let postData = {
-          "MID": 0,
-          "MELTYPE_CODE": this.meltingTypeForm.value.code,
-          "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
-          "KARAT_CODE": this.meltingTypeForm.value.karat,
-          "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
-          "METAL_PER": this.meltingTypeForm.value.metal,
-          "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
-          "CREATED_BY": this.userName,
-          "COLOR": this.meltingTypeForm.value.color,
-          "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-          "MELTING_TYPE_DETAIL": this.tableData,
-        };
+        let postData = this.setPostData()
+         
 
         let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
           (result) => {
@@ -441,11 +431,10 @@ export class MeltingTypeComponent implements OnInit {
       })
 
   }
-  updateMeltingType() {
-    let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.code;
-    let postData =
-    {
-      "MID": this.content.MID,
+  setPostData(){
+    
+   return {
+      "MID": this.content?.MID || 0 ,
       "MELTYPE_CODE": this.meltingTypeForm.value.code,
       "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
       "KARAT_CODE": this.meltingTypeForm.value.karat,
@@ -457,7 +446,11 @@ export class MeltingTypeComponent implements OnInit {
       "STOCK_CODE": this.meltingTypeForm.value.stockCode,
       "MELTING_TYPE_DETAIL": this.tableData,
     }
-
+  }
+  updateMeltingType() {
+    let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.code;
+    let postData = this.setPostData()
+    
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {

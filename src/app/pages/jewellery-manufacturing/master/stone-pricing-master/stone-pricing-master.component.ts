@@ -393,7 +393,34 @@ export class StonePricingMasterComponent implements OnInit {
     this.displayDeal = e.replace(/\D/g, "").replace(/\B(?=(\d{12})+(?!\d))/g, ",");
   }
 
-  
+  setPostData(){
+    return{
+      "MID":  this.content?.MID || 0 ,
+      "SRNO": 0,
+      "CODE": this.stonePrizeMasterForm.value.price_code || "",
+      "DESCRIPTION": this.commonService.nullToString(this.stonePrizeMasterForm.value.description),
+      "SHAPE": this.stonePrizeMasterForm.value.shape || "",
+      "COLOR": this.stonePrizeMasterForm.value.color || "",
+      "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
+      "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
+      "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
+      "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
+      "ISSUE_RATE": this.stonePrizeMasterForm.value.issue_rate || 0,
+      "SELLING_RATE": this.stonePrizeMasterForm.value.selling_rate || 0,
+      "LAST_ISSUE_RATE": 0,
+      "LAST_SELLING_RATE": 0,
+      "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
+      "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
+      "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
+      "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
+      "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
+      "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
+      "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
+      "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
+      "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
+      "LAST_UPDATE": new Date().toISOString()
+    }
+  }
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -414,32 +441,7 @@ export class StonePricingMasterComponent implements OnInit {
     else {
 
       let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
-      let postData = {
-        "MID": 0,
-        "SRNO": 0,
-        "CODE": this.stonePrizeMasterForm.value.price_code || "",
-        "DESCRIPTION": "",
-        "SHAPE": this.stonePrizeMasterForm.value.shape || "",
-        "COLOR": this.stonePrizeMasterForm.value.color || "",
-        "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
-        "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
-        "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
-        "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
-        "ISSUE_RATE": this.stonePrizeMasterForm.value.issue_rate || 0,
-        "SELLING_RATE": this.stonePrizeMasterForm.value.selling_rate || 0,
-        "LAST_ISSUE_RATE": 0,
-        "LAST_SELLING_RATE": 0,
-        "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
-        "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
-        "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
-        "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
-        "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
-        "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
-        "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
-        "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
-        "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
-        "LAST_UPDATE": new Date().toISOString()
-      }
+      let postData = this.setPostData()
 
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
@@ -476,33 +478,9 @@ export class StonePricingMasterComponent implements OnInit {
 
     let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
 
-    let postData = {
+    let postData = this.setPostData()
 
-      "MID": this.content.MID,
-      "SRNO": 0,
-      "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION": "",
-      "SHAPE": this.stonePrizeMasterForm.value.shape || "",
-      "COLOR": this.stonePrizeMasterForm.value.color || "",
-      "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
-      "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
-      "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
-      "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
-      "ISSUE_RATE": this.stonePrizeMasterForm.value.issue_rate || 0,
-      "SELLING_RATE": this.stonePrizeMasterForm.value.selling_rate || 0,
-      "LAST_ISSUE_RATE": 0,
-      "LAST_SELLING_RATE": 0,
-      "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
-      "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
-      "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
-      "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
-      "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
-      "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
-      "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
-      "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
-      "LAST_UPDATE": new Date().toISOString()
-    }
+    
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {

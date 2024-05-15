@@ -279,7 +279,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   debitAmountSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
-    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT_HEAD']);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT HEAD"]);
     this.DebitamountChange({ target: { value: e.ACCODE } });
   }
 
