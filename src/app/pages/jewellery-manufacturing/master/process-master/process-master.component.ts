@@ -128,6 +128,17 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  adjustAccodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   maxInputLength: number = 2
   processMasterForm: FormGroup = this.formBuilder.group({
@@ -183,6 +194,7 @@ export class ProcessMasterComponent implements OnInit {
     min_start: [''],
     min_end: [''],
     max: [''],
+    ADJUST_ACCODE: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -634,7 +646,7 @@ export class ProcessMasterComponent implements OnInit {
       "AUTO_LOSS": this.onchangeCheckBox(form.ApplyAutoLossToRefinery),
       "ISACCUPDT": AutopostingFlag,
       "TREE_NO": this.onchangeCheckBox(form.HaveTreeNo),
-      "ADJUST_ACCODE": ''
+      "ADJUST_ACCODE": this.commonService.nullToString(form.ADJUST_ACCODE)
     }
   }
   // final save
