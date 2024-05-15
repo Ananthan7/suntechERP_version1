@@ -16,21 +16,21 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPriceSettingComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On Unit','Mkg On %','Std Mkg Rate','Mkg Rate Min','Mkg Rate Max','Variance (+/-)','Wastage %','Min Wastage Qty','Markup %','Stamp Charge','Apply on Weight'];
-  columnheaderweightRange:any[] = ['SrNo','Division','Apply on Unit', 'From Weight','To Weight','Making Rate'];
-  columnheaderTransaction : any[] = ['SrNo','Karat','Std Purity','Sales Purity','Purchase Purity'];
+  columnheader: any[] = ['SrNo', 'Group 1', 'Group 2', 'Group 3', 'Group 4', 'Group 5', 'Group 6', 'Apply On Unit', 'Mkg On %', 'Std Mkg Rate', 'Mkg Rate Min', 'Mkg Rate Max', 'Variance (+/-)', 'Wastage %', 'Min Wastage Qty', 'Markup %', 'Stamp Charge', 'Apply on Weight'];
+  columnheaderweightRange: any[] = ['SrNo', 'Division', 'Apply on Unit', 'From Weight', 'To Weight', 'Making Rate'];
+  columnheaderTransaction: any[] = ['SrNo', 'Karat', 'Std Purity', 'Sales Purity', 'Purchase Purity'];
 
   subscriptions: any;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   currentDate = new FormControl(new Date());
 
-  isdisabled:boolean = false;
-  checkboxvalue:boolean = true
+  isdisabled: boolean = false;
+  checkboxvalue: boolean = true
   public isChecked = true;
   userbranch = localStorage.getItem('userbranch');
   disableSelect = false;
-  codeEnable :  boolean = true;
+  codeEnable: boolean = true;
   enableUpdate: boolean = true;
   approveDisable: boolean = true;
   selectedValue: string = 'None';
@@ -54,7 +54,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     { type: 'Inc Cat', value: 'Inc Cat' },
     { type: 'Order Ref', value: 'Order Ref' }
   ];
-  
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -64,19 +64,20 @@ export class CustomerPriceSettingComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
- 
+
   ngOnInit(): void {
-    this.setFormValues()
+    this.setFormValues();
+    this.getGroupDetails();
     if (this.content.FLAG == 'VIEW') {
-    
+
     } else if (this.content.FLAG == 'EDIT') {
       this.codeEnable = false;
       this.enableUpdate = false;
       this.approveDisable = false;
-     this.setFormValues()
+      this.setFormValues()
     }
 
-    this.getGroupDetails()
+
   }
   setFormValues() {
     console.log(this.content);
@@ -100,7 +101,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   selectStock() {
     this.checkboxvalue = !this.checkboxvalue;
   }
-  
+
   checkPriceCode(): boolean {
 
     if (this.customerpricesettingForm.value.pricecode == '') {
@@ -108,34 +109,34 @@ export class CustomerPriceSettingComponent implements OnInit {
       return true
     }
     return false
-}
-  
+  }
+
   customerpricesettingForm: FormGroup = this.formBuilder.group({
-    pricecode:['',[Validators.required]],
-    date:[new Date(),''],
-    description:[''],
-    division:['',[Validators.required]],
-    currency:['',[Validators.required]],
-    approvedby:[''],
-    enteredBy:['',[Validators.required]],
-    stockCode:[''],
-    designCode:[false],
-    group1:['',[Validators.required]],
-    group2:[''],
-    group3:[''],
-    group4:[''],
-    group5:[''],
-    group6:[''],
+    pricecode: ['', [Validators.required]],
+    date: [new Date(), ''],
+    description: [''],
+    division: ['', [Validators.required]],
+    currency: ['', [Validators.required]],
+    approvedby: [''],
+    enteredBy: ['', [Validators.required]],
+    stockCode: [''],
+    designCode: [false],
+    group1: ['', [Validators.required]],
+    group2: [''],
+    group3: [''],
+    group4: [''],
+    group5: [''],
+    group6: [''],
   })
 
-  codeEnabled(){
+  codeEnabled() {
     if (this.customerpricesettingForm.value.pricecode == '') {
-    this.codeEnable = true;
+      this.codeEnable = true;
     }
-    else{
+    else {
       this.codeEnable = false;
     }
-   
+
   }
 
   user: MasterSearchModel = {
@@ -153,7 +154,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   userDataSelected(value: any) {
     console.log(value);
     if (this.checkPriceCode()) return
-       this.customerpricesettingForm.controls.enteredBy.setValue(value.UsersName);
+    this.customerpricesettingForm.controls.enteredBy.setValue(value.UsersName);
   }
 
   divisionCodeData: MasterSearchModel = {
@@ -167,8 +168,8 @@ export class CustomerPriceSettingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(e:any){
-    console.log(e); 
+  divisionCodeSelected(e: any) {
+    console.log(e);
     if (this.checkPriceCode()) return
     this.customerpricesettingForm.controls.division.setValue(e.DIVISION_CODE);
   }
@@ -185,8 +186,8 @@ export class CustomerPriceSettingComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  currencyCodeSelected(e:any){
-    console.log(e); 
+  currencyCodeSelected(e: any) {
+    console.log(e);
     this.customerpricesettingForm.controls.currency.setValue(e.CURRENCY_CODE);
   }
 
@@ -216,15 +217,15 @@ export class CustomerPriceSettingComponent implements OnInit {
   getGroupDetails() {
     let API = 'UspGetPricingDetails'
     let postDataDetails = {
-      "DivisionCode": "G",
-      "StockCodeCheck": "N",
-      "DesignCodeCheck": "N",
-      "FilterGroup1": "CATEGORY",
-      "FilterGroup2": "Sub Category",
-      "FilterGroup3": "",
-      "FilterGroup4": "",
-      "FilterGroup5": "",
-      "FilterGroup6": "",
+      "DivisionCode": this.customerpricesettingForm.value.pricecode ,
+      "StockCodeCheck": this.customerpricesettingForm.value.stockCode,
+      "DesignCodeCheck":  this.customerpricesettingForm.value.designCode,
+      "FilterGroup1": this.customerpricesettingForm.value.group1,
+      "FilterGroup2":  this.customerpricesettingForm.value.group2,
+      "FilterGroup3": this.customerpricesettingForm.value.group3,
+      "FilterGroup4":  this.customerpricesettingForm.value.group4,
+      "FilterGroup5": this.customerpricesettingForm.value.group5,
+      "FilterGroup6":this.customerpricesettingForm.value.group6,
       "FilterValue1": "",
       "FilterValue2": "",
       "FilterValue3": "",
@@ -232,23 +233,23 @@ export class CustomerPriceSettingComponent implements OnInit {
       "FilterValue5": "",
       "FilterValue6": ""
     }
-      let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postDataDetails)
+    let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postDataDetails)
       .subscribe((result) => {
         if (result.response) {
-          console.log();          
+          console.log();
         }
       })
-    }
-  
+  }
 
 
-  formSubmit(){
 
-    if(this.customerpricesettingForm.value.enteredBy == ''){
+  formSubmit() {
+
+    if (this.customerpricesettingForm.value.enteredBy == '') {
       this.toastr.error('Entered By Cannot be empty ')
     }
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -256,18 +257,18 @@ export class CustomerPriceSettingComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'CustomerVendorPricingMaster/InsertCustomerVendorPricingMaster'
     let postData = {
       "MID": 0,
-      "CUSTOMER_CODE":this.customerpricesettingForm.value.pricecode || "",
+      "CUSTOMER_CODE": this.customerpricesettingForm.value.pricecode || "",
       "CUSTOMER_NAME": "",
       "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
       "PRICE_DESCRIPTION": this.customerpricesettingForm.value.description || "",
       "LABOUR_TYPE": "",
       "DIVISION": this.customerpricesettingForm.value.division,
       "CREATED_DATE": this.customerpricesettingForm.value.date || "",
-      "ENTERED_BY":this.customerpricesettingForm.value.enteredby || "",
+      "ENTERED_BY": this.customerpricesettingForm.value.enteredby || "",
       "IS_STOCK_CODE": this.customerpricesettingForm.value.stockCode,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
@@ -362,11 +363,11 @@ export class CustomerPriceSettingComponent implements OnInit {
         }
       ]
     }
-    
+
     let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -387,24 +388,24 @@ export class CustomerPriceSettingComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  update(){
+  update() {
     // if (this.customerpricesettingForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
-  
-    let API = 'CustomerVendorPricingMaster/UpdateCustomerVendorPricingMaster/'+this.content.CUSTOMER_CODE
-    let postData = 
+
+    let API = 'CustomerVendorPricingMaster/UpdateCustomerVendorPricingMaster/' + this.content.CUSTOMER_CODE
+    let postData =
     {
       "MID": 0,
-      "CUSTOMER_CODE":"string",
+      "CUSTOMER_CODE": "string",
       "CUSTOMER_NAME": "string",
       "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
       "PRICE_DESCRIPTION": this.customerpricesettingForm.value.description || "",
       "LABOUR_TYPE": "string",
       "DIVISION": this.customerpricesettingForm.value.division || "",
       "CREATED_DATE": "2023-11-27T09:14:42.615Z",
-      "ENTERED_BY":this.customerpricesettingForm.value.enteredby || "",
+      "ENTERED_BY": this.customerpricesettingForm.value.enteredby || "",
       "IS_STOCK_CODE": true,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
@@ -499,12 +500,12 @@ export class CustomerPriceSettingComponent implements OnInit {
         }
       ]
     }
-    
-  
+
+
     let Sub: Subscription = this.suntechApi.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -594,33 +595,33 @@ export class CustomerPriceSettingComponent implements OnInit {
 
   // onSelectionChange(selectedValue: any, groupName: string) {
   //   const formValue = this.customerpricesettingForm.value;
-  
-    
+
+
   //   for (let groupKey in formValue) {
   //     if (groupKey !== groupName && formValue[groupKey] === selectedValue) {
-       
+
   //       if (selectedValue !== null) {
   //         this.toastr.error('The same value cannot be repeated in different groups.');
-     
+
   //         this.customerpricesettingForm.get(groupName)?.setValue(null);
   //         return; 
   //       }
   //     }
   //   }
   // }
-  
+
   onSelectionChange(selectedValue: any, groupName: string) {
     const formValue = this.customerpricesettingForm.value;
-    
-    for (let groupKey in formValue) {
-        if (groupKey !== groupName && formValue[groupKey] === selectedValue && selectedValue !== 'None') {
-            // Check if the value is repeated in a different group and is not 'None'
-            this.toastr.error('The same value cannot be repeated in different groups.');
-            this.customerpricesettingForm.get(groupName)?.setValue(null);
-            return; 
-        }
-    }
-}
 
-  
+    for (let groupKey in formValue) {
+      if (groupKey !== groupName && formValue[groupKey] === selectedValue && selectedValue !== 'None') {
+        // Check if the value is repeated in a different group and is not 'None'
+        this.toastr.error('The same value cannot be repeated in different groups.');
+        this.customerpricesettingForm.get(groupName)?.setValue(null);
+        return;
+      }
+    }
+  }
+
+
 }

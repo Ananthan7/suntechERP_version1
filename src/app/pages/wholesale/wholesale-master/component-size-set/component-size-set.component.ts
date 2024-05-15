@@ -147,6 +147,8 @@ export class ComponentSizeSetComponent implements OnInit {
     
   }
 
+
+
   // deleteTableData() {
 
   //   if (this.selectedIndexes != undefined) {
@@ -199,42 +201,78 @@ export class ComponentSizeSetComponent implements OnInit {
   // }
 
 
+  // deleteTableData() {
+  //   if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
+  //     // Display confirmation dialog before deleting
+  //     Swal.fire({
+  //       title: 'Are you sure?',
+  //       text: "You won't be able to revert this!",
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, delete!'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         // Proceed with deletion if user confirms
+  //         this.selectedIndexes.sort((a:any, b:any) => b - a); // Sort indexes in descending order to prevent issues with splice
+  //         for (const index of this.selectedIndexes) {
+  //           this.tableData.splice(index, 1); // Remove the item at the specified index
+  //         }
+  //         this.resetSrNumber();
+  //       }
+  //     });
+  //   } else {
+  //     // Display error message if no record is selected
+  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  //   }
+  // }
+
+
+  // resetSrNumber() {
+  //   this.tableData.forEach((data, index) => {
+  //     data.SRNO = index + 1
+  //   });
+    
+  // }
+
   deleteTableData() {
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
-      // Display confirmation dialog before deleting
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Proceed with deletion if user confirms
-          this.selectedIndexes.sort((a:any, b:any) => b - a); // Sort indexes in descending order to prevent issues with splice
-          for (const index of this.selectedIndexes) {
-            this.tableData.splice(index, 1); // Remove the item at the specified index
-          }
-          this.resetSrNumber();
-        }
-      });
+        // Display confirmation dialog before deleting
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Create a copy of the indexes to avoid issues if selectedIndexes changes during the loop
+                const indexesToDelete = [...this.selectedIndexes].sort((a: number, b: number) => b - a);
+                for (const index of indexesToDelete) {
+                    this.tableData.splice(index, 1); // Remove the item at the specified index
+                }
+                // Reset selectedIndexes after deletion
+                this.selectedIndexes = [];
+                // Update serial numbers
+                this.resetSrNumber();
+            }
+        });
     } else {
-      // Display error message if no record is selected
-      this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+        // Display error message if no record is selected
+        this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
-  }
-  
-  
-  
+}
 
-  resetSrNumber() {
+resetSrNumber() {
     this.tableData.forEach((data, index) => {
-      data.SRNO = index + 1
+        data.SRNO = index + 1; // Update SRNO to be 1-based index
     });
-    
-  }
+    // Refresh the data source binding to reflect the changes in the UI
+    this.tableData = [...this.tableData];
+}
 
 
 
