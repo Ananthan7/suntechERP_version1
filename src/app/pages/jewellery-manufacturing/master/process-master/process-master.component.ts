@@ -660,9 +660,10 @@ export class ProcessMasterComponent implements OnInit {
     }
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = this.setPostData()
-
+    this.commonService.showSnackBarMsg('Loading')
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -683,11 +684,13 @@ export class ProcessMasterComponent implements OnInit {
     let form = this.processMasterForm.value;
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + form.processCode
     let postData = this.setPostData()
+    this.commonService.showSnackBarMsg('Loading')
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
-            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+         this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
           }

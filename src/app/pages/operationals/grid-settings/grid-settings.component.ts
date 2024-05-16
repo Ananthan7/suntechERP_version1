@@ -82,8 +82,8 @@ export class GridSettingsComponent implements OnInit {
       "parameter": {
         "FLAG": 'GET',
         "SUBFLAG": 'LIST',
-        "MAIN_VOCTYPE": this.commonService.nullToString(form.mainVocType),
-        "VOCTYPE": this.commonService.nullToString(form.mainVocType),
+        "MAIN_VOCTYPE": 'MFGPTF',
+        "VOCTYPE": '',
         "BRANCH_CODE": this.commonService.nullToString(form.branchCode),
         "CUSTOM_PARAM": '',
       }
@@ -93,8 +93,8 @@ export class GridSettingsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
-          let data = result.dynamicData[0]
-          console.log(data);
+          this.tableData = result.dynamicData[0]
+          
         } else {
          
         }

@@ -64,7 +64,8 @@
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <dx-data-grid #dataGrid id="gridContainer"
-                                keyExpr="ID" [showBorders]="true">
+                                keyExpr="ID" [showBorders]="true"
+                                [dataSource]="tableData">
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <dxo-editing mode="cell">
                                 </dxo-editing>
