@@ -1430,6 +1430,9 @@ export class AddPosComponent implements OnInit {
             console.log('====================================');
 
             this.newLineItem = data;
+            // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.RetailDetails?.[0]?.IGST_ACCODE ?? '';
+            // this.newLineItem.HSN_CODE = retailSaleData?.RetailDetails?.[0]?.HSN_CODE ?? '';
+
 
             const values: any = {
               ID: data.SRNO,
@@ -4444,7 +4447,7 @@ export class AddPosComponent implements OnInit {
       // "CGST_ACCODE": this.comFunc.emptyToZero(items['CGST_ACCODE']),
       // "SGST_ACCODE": this.comFunc.emptyToZero(items['SGST_ACCODE']),
       "SGST_ACCODE": items['SGST_ACCODE'] || '',
-      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS.toString(),
+      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS?.toString() ?? '',
       // items['IGST_ACCODE'] || '',
       "TOTAL_AMOUNTFC": this.sales_returns_items.reduce((acc: any, curr: any) => acc + parseFloat(curr.mkg_amount), 0) || 0,
       //  items['TOTAL_AMOUNTFC'] || 0,
@@ -11524,7 +11527,7 @@ export class AddPosComponent implements OnInit {
       'REFBY_CUSTCODE': '0',
       'PRINT_COUNT_ACCOPY': 0,
       'PRINT_COUNT_CNTLCOPY': 0,
-      "IGST_ACCODE": this.newLineItem.IGST_ACCODE_NON_POS.toString(),
+      "IGST_ACCODE":this.newLineItem.IGST_ACCODE_NON_POS?.toString() ?? '',
 
       // new fields added 28-12-2023
       "AGENT_COMMISSION": false,
