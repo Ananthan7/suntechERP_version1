@@ -5973,7 +5973,7 @@ export class AddPosComponent implements OnInit {
   setPosItemData(sno: any, data: any) {
     let fcn_li_rate = this.lineItemForm.value.fcn_li_rate;
 
-    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.replace(/,/g, ''));
+    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === 0|| fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.replace(/,/g, ''));
 
 
     let fcn_ad_metal_rate = this.lineItemForm.value.fcn_ad_metal_rate;
@@ -8480,39 +8480,83 @@ export class AddPosComponent implements OnInit {
       } else {
         console.error('Error message is not a string:', _validate[1]);
       }
-      return
+      return;
     }
+  
     let postData = {
-      "MID":this.content?this.comFunc.emptyToZero(this.content?.MID):this.midForInvoce,
+      "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
       "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
       "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
       "YEARMONTH": this.comFunc.nullToString(this.baseYear),
-    }
+    };
+  
     this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
       .subscribe((result: any) => {
         console.log(result);
-        let data = result.dynamicData
-        var WindowPrt = window.open('', '_blank', 'width=300,height=600');
-        if (WindowPrt === null) {
-          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-          return;
-        }
+        let data = result.dynamicData;
         let printContent = data[0][0].HTMLOUT;
-        WindowPrt.document.write(printContent);
-
-        WindowPrt.document.close();
-        WindowPrt.focus();
-
-        setTimeout(() => {
-          if (WindowPrt) {
-            WindowPrt.print();
-          } else {
-            console.error('Print window was closed before printing could occur.');
-          }
-        }, 800);
-      })
+        
+        let iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.style.position = 'absolute';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = 'none';
+  
+        let doc = iframe.contentWindow?.document;
+        if (doc) {
+          doc.open();
+          doc.write(`
+            <html>
+              <head>
+                <style>
+                  @media print {
+                    @page {
+                      size: A5;
+                      margin: 10;
+                    }
+                    body {
+                      width: 128mm; /* 148mm */
+                      height: 210mm;
+                      margin: 0;
+                      padding: 0;
+                      box-sizing: border-box;
+                    }
+                  }
+                </style>
+              </head>
+              <body>${printContent}</body>
+            </html>
+          `);
+          doc.close();
+  
+          let printed = false;
+  
+          iframe.onload = () => {
+            if (!printed) {
+              printed = true;
+              iframe.contentWindow?.focus();
+              iframe.contentWindow?.print();
+            }
+          };
+  
+          setTimeout(() => {
+            if (!printed && iframe.contentWindow) {
+              printed = true;
+              iframe.contentWindow.focus();
+              iframe.contentWindow.print();
+              document.body.removeChild(iframe);
+            }
+          }, 1000);
+        }
+      });
   }
+  
+  
+  
+  
+  
 
   printInvoice() {
     let _validate = this.validateBeforePrint();
