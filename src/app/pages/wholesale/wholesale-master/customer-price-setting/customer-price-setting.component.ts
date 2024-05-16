@@ -23,6 +23,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any;
   tableData: any[] = [];
+  postDataDetails: any[] = [];
   currentDate = new FormControl(new Date());
 
   isdisabled: boolean = false;
@@ -67,7 +68,7 @@ export class CustomerPriceSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormValues();
-    this.getGroupDetails();
+    // this.getGroupDetails();
     if (this.content.FLAG == 'VIEW') {
 
     } else if (this.content.FLAG == 'EDIT') {
@@ -119,7 +120,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     currency: ['', [Validators.required]],
     approvedby: [''],
     enteredBy: ['', [Validators.required]],
-    stockCode: [''],
+    stockCode: [false],
     designCode: [false],
     group1: ['', [Validators.required]],
     group2: [''],
@@ -214,31 +215,56 @@ export class CustomerPriceSettingComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  designCodeChange(){
+    if(this.customerpricesettingForm.value.designCode == true){
+      this.getGroupDetails();
+    }
+  }
+
+  viewchangeYorN(e: any) {
+    console.log(e);
+
+    if (e == true) {
+      return 'Y';
+    } else {
+      return 'N';
+    }
+  }
+
   getGroupDetails() {
     let API = 'UspGetPricingDetails'
     let postDataDetails = {
-      "DivisionCode": this.customerpricesettingForm.value.pricecode ,
-      "StockCodeCheck": this.customerpricesettingForm.value.stockCode,
-      "DesignCodeCheck":  this.customerpricesettingForm.value.designCode,
+      "DivisionCode": this.customerpricesettingForm.value.pricecode,
+      "StockCodeCheck": this.viewchangeYorN( this.customerpricesettingForm.value.stockCode),
+      "DesignCodeCheck": this.viewchangeYorN(this.customerpricesettingForm.value.designCode),
       "FilterGroup1": this.customerpricesettingForm.value.group1,
-      "FilterGroup2":  this.customerpricesettingForm.value.group2,
+      "FilterGroup2": this.customerpricesettingForm.value.group2,
       "FilterGroup3": this.customerpricesettingForm.value.group3,
-      "FilterGroup4":  this.customerpricesettingForm.value.group4,
+      "FilterGroup4": this.customerpricesettingForm.value.group4,
       "FilterGroup5": this.customerpricesettingForm.value.group5,
-      "FilterGroup6":this.customerpricesettingForm.value.group6,
-      "FilterValue1": "",
-      "FilterValue2": "",
-      "FilterValue3": "",
-      "FilterValue4": "",
-      "FilterValue5": "",
-      "FilterValue6": ""
+      "FilterGroup6": this.customerpricesettingForm.value.group6,
+      // "FilterValue1": "",
+      // "FilterValue2": "",
+      // "FilterValue3": "",
+      // "FilterValue4": "",
+      // "FilterValue5": "",
+      // "FilterValue6": ""
     }
     let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postDataDetails)
-      .subscribe((result) => {
-        if (result.response) {
-          console.log();
+    .subscribe((result) => {
+      if (result.response) {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          })
         }
-      })
+      } 
+    }, err => alert(err))
+  this.subscriptions.push(Sub)
   }
 
 
@@ -257,50 +283,41 @@ export class CustomerPriceSettingComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = 'CustomerVendorPricingMaster/InsertCustomerVendorPricingMaster'
+    let form = this.customerpricesettingForm.value
+    let API = 'CustomerVendorPriceSettmtl/InsertCustomerVendorPrice'
     let postData = {
       "MID": 0,
-      "CUSTOMER_CODE": this.customerpricesettingForm.value.pricecode || "",
-      "CUSTOMER_NAME": "",
       "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
-      "PRICE_DESCRIPTION": this.customerpricesettingForm.value.description || "",
-      "LABOUR_TYPE": "",
+      "DESCRIPTION": this.customerpricesettingForm.value.description || "",
       "DIVISION": this.customerpricesettingForm.value.division,
       "CREATED_DATE": this.customerpricesettingForm.value.date || "",
       "ENTERED_BY": this.customerpricesettingForm.value.enteredby || "",
-      "IS_STOCK_CODE": this.customerpricesettingForm.value.stockCode,
+      "IS_STOCK_CODE":this.customerpricesettingForm.value.stockCode,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
       "GROUP3": this.customerpricesettingForm.value.group3 || "",
       "IS_ACTIVE": true,
       "BRANCH_CODE": this.commonService.branchCode,
-      "DEFAULT_CUST": true,
-      "DEFAULT_SUPP": true,
       "GROUP4": this.customerpricesettingForm.value.group4 || "",
       "GROUP5": this.customerpricesettingForm.value.group5 || "",
       "GROUP6": this.customerpricesettingForm.value.group6 || "",
-      "MIN_MKGAMT": 0,
-      "IS_PLATE_CHARGE": true,
-      "PLATE_CHARGES": 0,
       "CURRENCY_CODE": this.customerpricesettingForm.value.currency || "",
       "CURRENCY_RATE": 0,
-      "IS_DESIGN_CODE": this.customerpricesettingForm.value.designCode,
-      "customer_vendor_pricing_detail": [
+      "IS_DESIGN_CODE":this.customerpricesettingForm.value.designCode,
+      "customerVendorPriceSettmtlDetail": [
         {
           "SRNO": 0,
           "UNIQUE_ID": 0,
-          "CUSTOMER_CODE": "string",
-          "PRICE_CODE": "string",
-          "DESCRIPTION": "string",
-          "DIVISION_CODE": "s",
-          "SEARCH_CRITERIA": "string",
-          "SEARCH_VALUE": "string",
-          "GROUP1": "string",
-          "GROUP2": "string",
-          "GROUP3": "string",
-          "UNITCODE": "string",
+          "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
+          "DESCRIPTION": this.customerpricesettingForm.value.description || "",
+          "DIVISION_CODE":  this.customerpricesettingForm.value.division,
+          "SEARCH_CRITERIA": "",
+          "SEARCH_VALUE": "",
+          "GROUP1": this.customerpricesettingForm.value.group1 || "",
+          "GROUP2": this.customerpricesettingForm.value.group2 || "",
+          "GROUP3": this.customerpricesettingForm.value.group3 || "",
+          "UNITCODE": "",
           "STD_MKG_RATE": 0,
           "MKG_RATE_MIN": 0,
           "MKG_RATE_MAX": 0,
@@ -310,56 +327,39 @@ export class CustomerPriceSettingComponent implements OnInit {
           "MARKUP_PER": 0,
           "APPLY_ON_WEIGHT": true,
           "IS_STOCK_CODE": true,
-          "BRANCH_CODE": "string",
-          "GROUP4": "string",
-          "GROUP5": "string",
-          "GROUP6": "string",
+          "BRANCH_CODE": "",
+          "GROUP4": this.customerpricesettingForm.value.group4 || "",
+          "GROUP5": this.customerpricesettingForm.value.group5 || "",
+          "GROUP6": this.customerpricesettingForm.value.group6 || "",
           "STAMP_CHARGE": 0,
           "RATI_PER": 0
         }
       ],
-      "customer_vendor_pricing_wtrange_det": [
+      "customerVendorPricePurityDet": [
         {
           "SR_NO": 0,
           "UNIQUEID": 0,
           "UNIQUE_ITEM_ID": 0,
-          "CUSTOMER_CODE": "string",
-          "PRICE_CODE": "string",
-          "DIVISION_CODE": "s",
-          "WT_RANGE_FROM": 0,
-          "WT_RANGE_TO": 0,
-          "STD_MKGRATE": 0,
-          "SRCH_CRITERIA": "string",
-          "SRCH_VALUE": "string",
-          "UNIT_CODE": "string"
-        }
-      ],
-      "customer_vendor_pricing_purity_det": [
-        {
-          "SR_NO": 0,
-          "UNIQUEID": 0,
-          "UNIQUE_ITEM_ID": 0,
-          "PRICE_CODE": "string",
-          "CUSTOMER_CODE": "string",
-          "KARAT_CODE": "str",
+          "PRICE_CODE": "",
+          "KARAT_CODE": "",
           "STD_PURITY": 0,
           "SALE_PURITY": 0,
           "PURC_PURITY": 0
         }
       ],
-      "branchwise_customer_vendor_price": [
+      "customerVendorPriceWtrangeDet": [
         {
-          "HEAD_BRANCH_CODE": "string",
-          "BRANCH_CODE": "string",
-          "CUSTOMER_CODE": "string",
-          "CUSTOMER_NAME": "string",
-          "PRICE_CODE": "string",
-          "PRICE_DESCRIPTION": "string",
-          "ENTERED_BY": "string",
-          "APPROVED_BY": "string",
-          "APPLIED_BY_PER": true,
-          "MAKING_VALUE": 0,
-          "WASTAGE_VALUE": 0
+          "SR_NO": 0,
+          "UNIQUEID": 0,
+          "UNIQUE_ITEM_ID": 0,
+          "PRICE_CODE": "",
+          "DIVISION_CODE": "",
+          "WT_RANGE_FROM": 0,
+          "WT_RANGE_TO": 0,
+          "STD_MKGRATE": 0,
+          "SRCH_CRITERIA": "",
+          "SRCH_VALUE": "",
+          "UNIT_CODE": ""
         }
       ]
     }
@@ -394,50 +394,41 @@ export class CustomerPriceSettingComponent implements OnInit {
     //   return
     // }
 
-    let API = 'CustomerVendorPricingMaster/UpdateCustomerVendorPricingMaster/' + this.content.CUSTOMER_CODE
+    let API = 'CustomerVendorPriceSettmtl/UpdateCustomerVendorPrice/' + this.content.PRICE_CODE
     let postData =
     {
       "MID": 0,
-      "CUSTOMER_CODE": "string",
-      "CUSTOMER_NAME": "string",
       "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
-      "PRICE_DESCRIPTION": this.customerpricesettingForm.value.description || "",
-      "LABOUR_TYPE": "string",
-      "DIVISION": this.customerpricesettingForm.value.division || "",
-      "CREATED_DATE": "2023-11-27T09:14:42.615Z",
+      "DESCRIPTION": this.customerpricesettingForm.value.description || "",
+      "DIVISION": this.customerpricesettingForm.value.division,
+      "CREATED_DATE": this.customerpricesettingForm.value.date || "",
       "ENTERED_BY": this.customerpricesettingForm.value.enteredby || "",
-      "IS_STOCK_CODE": true,
+      "IS_STOCK_CODE": this.customerpricesettingForm.value.stockCode,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
       "GROUP3": this.customerpricesettingForm.value.group3 || "",
-      "IS_ACTIVE": this.customerpricesettingForm.value.stockCode,
-      "BRANCH_CODE": "string",
-      "DEFAULT_CUST": true,
-      "DEFAULT_SUPP": true,
+      "IS_ACTIVE": true,
+      "BRANCH_CODE": this.commonService.branchCode,
       "GROUP4": this.customerpricesettingForm.value.group4 || "",
       "GROUP5": this.customerpricesettingForm.value.group5 || "",
       "GROUP6": this.customerpricesettingForm.value.group6 || "",
-      "MIN_MKGAMT": 0,
-      "IS_PLATE_CHARGE": true,
-      "PLATE_CHARGES": 0,
       "CURRENCY_CODE": this.customerpricesettingForm.value.currency || "",
       "CURRENCY_RATE": 0,
       "IS_DESIGN_CODE": this.customerpricesettingForm.value.designCode,
-      "customer_vendor_pricing_detail": [
+      "customerVendorPriceSettmtlDetail": [
         {
           "SRNO": 0,
           "UNIQUE_ID": 0,
-          "CUSTOMER_CODE": "string",
-          "PRICE_CODE": "string",
-          "DESCRIPTION": "string",
-          "DIVISION_CODE": "string",
-          "SEARCH_CRITERIA": "string",
-          "SEARCH_VALUE": "string",
-          "GROUP1": "string",
-          "GROUP2": "string",
-          "GROUP3": "string",
-          "UNITCODE": "string",
+          "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
+          "DESCRIPTION": this.customerpricesettingForm.value.description || "",
+          "DIVISION_CODE":  this.customerpricesettingForm.value.division,
+          "SEARCH_CRITERIA": "",
+          "SEARCH_VALUE": "",
+          "GROUP1": this.customerpricesettingForm.value.group1 || "",
+          "GROUP2": this.customerpricesettingForm.value.group2 || "",
+          "GROUP3": this.customerpricesettingForm.value.group3 || "",
+          "UNITCODE": "",
           "STD_MKG_RATE": 0,
           "MKG_RATE_MIN": 0,
           "MKG_RATE_MAX": 0,
@@ -447,61 +438,42 @@ export class CustomerPriceSettingComponent implements OnInit {
           "MARKUP_PER": 0,
           "APPLY_ON_WEIGHT": true,
           "IS_STOCK_CODE": true,
-          "BRANCH_CODE": "string",
-          "GROUP4": "string",
-          "GROUP5": "string",
-          "GROUP6": "string",
+          "BRANCH_CODE": "",
+          "GROUP4": this.customerpricesettingForm.value.group4 || "",
+          "GROUP5": this.customerpricesettingForm.value.group5 || "",
+          "GROUP6": this.customerpricesettingForm.value.group6 || "",
           "STAMP_CHARGE": 0,
           "RATI_PER": 0
         }
       ],
-      "customer_vendor_pricing_wtrange_det": [
+      "customerVendorPricePurityDet": [
         {
           "SR_NO": 0,
           "UNIQUEID": 0,
           "UNIQUE_ITEM_ID": 0,
-          "CUSTOMER_CODE": "string",
-          "PRICE_CODE": "string",
-          "DIVISION_CODE": "string",
-          "WT_RANGE_FROM": 0,
-          "WT_RANGE_TO": 0,
-          "STD_MKGRATE": 0,
-          "SRCH_CRITERIA": "string",
-          "SRCH_VALUE": "string",
-          "UNIT_CODE": "string"
-        }
-      ],
-      "customer_vendor_pricing_purity_det": [
-        {
-          "SR_NO": 0,
-          "UNIQUEID": 0,
-          "UNIQUE_ITEM_ID": 0,
-          "PRICE_CODE": "string",
-          "CUSTOMER_CODE": "string",
-          "KARAT_CODE": "string",
+          "PRICE_CODE": "",
+          "KARAT_CODE": "",
           "STD_PURITY": 0,
           "SALE_PURITY": 0,
           "PURC_PURITY": 0
         }
       ],
-      "branchwise_customer_vendor_price": [
+      "customerVendorPriceWtrangeDet": [
         {
-          "HEAD_BRANCH_CODE": "string",
-          "BRANCH_CODE": "string",
-          "CUSTOMER_CODE": "string",
-          "CUSTOMER_NAME": "string",
-          "PRICE_CODE": "string",
-          "PRICE_DESCRIPTION": "string",
-          "ENTERED_BY": "string",
-          "APPROVED_BY": "string",
-          "APPLIED_BY_PER": true,
-          "MAKING_VALUE": 0,
-          "WASTAGE_VALUE": 0
+          "SR_NO": 0,
+          "UNIQUEID": 0,
+          "UNIQUE_ITEM_ID": 0,
+          "PRICE_CODE": "",
+          "DIVISION_CODE": "",
+          "WT_RANGE_FROM": 0,
+          "WT_RANGE_TO": 0,
+          "STD_MKGRATE": 0,
+          "SRCH_CRITERIA": "",
+          "SRCH_VALUE": "",
+          "UNIT_CODE": ""
         }
       ]
     }
-
-
     let Sub: Subscription = this.suntechApi.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
@@ -550,7 +522,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'CustomerVendorPricingMaster/DeleteCustomerVendorPricingMaster/' + this.content.CUSTOMER_CODE
+        let API = 'CustomerVendorPriceSettmtl/DeleteCustomerVendorPrice/' + this.content.PRICE_CODE
         let Sub: Subscription = this.suntechApi.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
