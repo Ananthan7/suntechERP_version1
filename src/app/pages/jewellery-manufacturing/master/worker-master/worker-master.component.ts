@@ -38,22 +38,6 @@ export class WorkerMasterComponent implements OnInit {
   filteredData: any[] = []; // Data source for the filtered grid
   searchTerm: string = '';
 
-
-  // @ViewChild('codeInput')
-  // codeInput!: ElementRef;
-
-  // focusOnWorkerCodeInput() {
-  //   if (this.codeInput && this.workerMasterForm.value.WorkerCode ==='') {
-  //     this.codeInput.nativeElement.focus();
-  //     return;
-  //   }
-  // }
-
-  // ngAfterViewInit(): void {
-  //   this.focusOnWorkerCodeInput();
-  // }
-
-
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -215,9 +199,9 @@ export class WorkerMasterComponent implements OnInit {
         })
       }
     })
-    return this.selectedProcessArr;
   }
   setPostData() {
+    this.setProcessData() //detail grid data to save
     let form = this.workerMasterForm.value
     return {
       "MID": this.content?.MID ? this.content.MID : 0,
@@ -232,7 +216,7 @@ export class WorkerMasterComponent implements OnInit {
       "ACCODE": this.commonService.nullToString(form.WorkerAcCode),
       "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed),
       "SECRET_CODE": this.commonService.nullToString(form.Password),
-      "PROCESS_CODE": this.commonService.nullToString(form.DefaultProcess),
+      "PROCESS_CODE": this.commonService.nullToString(this.selectedProcessArr[0].PROCESS_CODE),
       "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
       "SUPERVISOR": this.commonService.nullToString(form.NameOfSupervisor),
       "ACTIVE": form.Active,
@@ -243,7 +227,7 @@ export class WorkerMasterComponent implements OnInit {
       "TARGET_CARAT_WT": this.commonService.emptyToZero(form.TargetCaratWt),
       "TARGET_METAL_WT": this.commonService.emptyToZero(form.TargetMetalWt),
       "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.setProcessData()
+      "workerDetails": this.selectedProcessArr || [] 
     }
   }
   submitValidations(form: any) {
@@ -398,10 +382,6 @@ export class WorkerMasterComponent implements OnInit {
     });
   }
 
-  printBarcode() {
-
-  }
-
   /**use: checkbox change */
   changedCheckbox(event: any) {
     this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
@@ -528,43 +508,6 @@ export class WorkerMasterComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-
-
-  // /**use: to check worker exists in db */
-  // checkWorkerExists(event: any) {
-  //   if (this.content && this.content.FLAG == 'EDIT') { } else {
-  //     if (event.target.value == '' || this.viewMode == true) return
-  //     let API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value
-  //     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //       .subscribe((result) => {
-  //         if (result.checkifExists) {
-  //           Swal.fire({
-  //             title: '',
-  //             text: result.message || 'Worker Already Exists!',
-  //             icon: 'warning',
-  //             confirmButtonColor: '#336699',
-  //             confirmButtonText: 'Ok'
-  //           }).then((result: any) => {
-  //             if (result.value) {
-
-
-  //             }
-  //           });
-  //           this.focusOnWorkerCodeInput();
-  //           this.workerMasterForm.controls.WorkerCode.setValue('');
-  //           //  this.codeInput.nativeElement.focus();
-
-  //         }
-  //       }, err => {
-  //         this.workerMasterForm.reset()
-  //       })
-
-  //     this.subscriptions.push(Sub)
-  //   }
-  // }
-
-
-
 
   checkWorkerExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -699,7 +642,23 @@ export class WorkerMasterComponent implements OnInit {
       this.filteredData = this.tableData;
     }
   }
-
+  @ViewChild('barcode') barcodeElement!: ElementRef;
+  name: string = 'John Doe'; //
+ 
+  
+  printBarcode() {
+    const inputText = this.workerMasterForm.value.WorkerCode
+    const barcodeElement:any = this.barcodeElement.nativeElement;
+    
+    // Generate a simple barcode representation
+    barcodeElement.innerText = inputText;
+    const printWindow:any = window.open('', '_blank');
+    printWindow.document.write('<html><head><title>Print Barcode</title></head><body>');
+    printWindow.document.write('<img src="data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><text x="0" y="15">' + barcodeElement.innerText + '</text></svg>') + '" />');
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
