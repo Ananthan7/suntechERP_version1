@@ -5978,7 +5978,7 @@ export class AddPosComponent implements OnInit {
 
     let fcn_ad_metal_rate = this.lineItemForm.value.fcn_ad_metal_rate;
 
-    fcn_ad_metal_rate = (fcn_ad_metal_rate === null || fcn_ad_metal_rate === '') ? 0 : parseFloat(fcn_ad_metal_rate.replace(/,/g, ''));
+    fcn_ad_metal_rate = (fcn_ad_metal_rate === null ||fcn_ad_metal_rate === 0|| fcn_ad_metal_rate === '') ? 0 : parseFloat(fcn_ad_metal_rate.replace(/,/g, ''));
     let temp_pos_item_data: any = {
       // new values
       // "UNIQUEID": 0,
@@ -9217,6 +9217,9 @@ export class AddPosComponent implements OnInit {
         this.comFunc.decimalQuantityFormat(
           _exchangeNetWt, 'METAL'
         )
+      );
+      this.exchangeForm.controls['fcn_exchange_pcs'].setValue(
+        "0"
       );
       this.exchangeForm.controls['fcn_exchange_chargeable_wt'].setValue(
         this.comFunc.decimalQuantityFormat(

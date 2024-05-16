@@ -531,6 +531,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   changeAmountLc(event: any) {
+    console.log(event)
 
   }
 

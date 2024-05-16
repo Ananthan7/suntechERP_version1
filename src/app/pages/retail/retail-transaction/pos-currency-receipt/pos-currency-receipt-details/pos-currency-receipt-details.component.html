@@ -93,7 +93,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Amount LC :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="amountCc" />
+                <input type="text" (change)="changeAmountLc($event)" matInput formControlName="amountCc" />
               </mat-form-field>
             </div>
           </div>
