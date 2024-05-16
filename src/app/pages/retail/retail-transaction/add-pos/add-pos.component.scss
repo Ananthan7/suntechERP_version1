@@ -198,3 +198,14 @@ button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media print {
+  @page {
+    size: A5;
+    margin: 0;
+  }
+  body {
+    width: 148mm;
+    height: 210mm;
+  }
+}

@@ -19,7 +19,7 @@ export class GridSettingsComponent implements OnInit {
   isLoading: boolean = false;
   menuModule: string = ''
 
-  columnhead: any[] = ['Field Name','Caption','Width','Format','Alignment','Display Order','Is Visible','Is Mandatory','Show Summary','Sum Type'];
+  columnhead: any[] = [];
   vocTypeMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -82,8 +82,8 @@ export class GridSettingsComponent implements OnInit {
       "parameter": {
         "FLAG": 'GET',
         "SUBFLAG": 'LIST',
-        "MAIN_VOCTYPE": this.commonService.nullToString(form.mainVocType),
-        "VOCTYPE": this.commonService.nullToString(form.mainVocType),
+        "MAIN_VOCTYPE": 'MFGPTF',
+        "VOCTYPE": '',
         "BRANCH_CODE": this.commonService.nullToString(form.branchCode),
         "CUSTOM_PARAM": '',
       }
@@ -94,9 +94,10 @@ export class GridSettingsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
           let data = result.dynamicData[0]
-          console.log(data);
+          this.columnhead = Object.keys(data[0])
+          this.tableData = this.commonService.arrayEmptyObjectToString(data)
         } else {
-         
+         this.commonService.toastErrorByMsgId('not found')
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
