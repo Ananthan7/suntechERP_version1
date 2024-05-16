@@ -19,7 +19,7 @@ export class GridSettingsComponent implements OnInit {
   isLoading: boolean = false;
   menuModule: string = ''
 
-  columnhead: any[] = ['Field Name','Caption','Width','Format','Alignment','Display Order','Is Visible','Is Mandatory','Show Summary','Sum Type'];
+  columnhead: any[] = [];
   vocTypeMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -93,10 +93,11 @@ export class GridSettingsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
-          this.tableData = result.dynamicData[0]
-          
+          let data = result.dynamicData[0]
+          this.columnhead = Object.keys(data[0])
+          this.tableData = this.commonService.arrayEmptyObjectToString(data)
         } else {
-         
+         this.commonService.toastErrorByMsgId('not found')
         }
       }, err => {
         this.commonService.closeSnackBarMsg()

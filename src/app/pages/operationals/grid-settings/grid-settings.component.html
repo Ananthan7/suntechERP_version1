@@ -64,17 +64,18 @@
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <dx-data-grid #dataGrid id="gridContainer"
-                                keyExpr="ID" [showBorders]="true"
+                                height="400" width="100%" [showRowLines]="true" 
+                                [showBorders]="true" [allowColumnResizing]="true" ś
                                 [dataSource]="tableData">
                                 <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell">
+                                <dxo-editing mode="cell" [allowUpdating]="true">
                                 </dxo-editing>
-                                <dxo-selection mode="multiple"></dxo-selection>
+                                <!-- <dxo-selection mode="single"></dxo-selection> -->
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                                 <dxi-column *ngFor="let data of columnhead"
                                     dataField="{{ data }}" caption="{{ data }}"
-                                    [allowEditing]="true" alignment="center"
-                                    backgroundcolor="#000">
+                                    width="auto"  
+                                    [allowEditing]="true" alignment="left">
                                 </dxi-column>
                             </dx-data-grid>
                         </div>
