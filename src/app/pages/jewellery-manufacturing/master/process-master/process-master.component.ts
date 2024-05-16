@@ -295,6 +295,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.AutoTransfer.setValue(this.onchangeCheckBoxNum(this.content.AUTOTRANSFER));
 
     this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
+    this.processMasterForm.controls.ADJUST_ACCODE.setValue(this.content.ADJUST_ACCODE);
     // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
     this.processMasterForm.controls.processType.setValue(
@@ -659,9 +660,10 @@ export class ProcessMasterComponent implements OnInit {
     }
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = this.setPostData()
-
+    this.commonService.showSnackBarMsg('Loading')
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -682,11 +684,13 @@ export class ProcessMasterComponent implements OnInit {
     let form = this.processMasterForm.value;
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + form.processCode
     let postData = this.setPostData()
+    this.commonService.showSnackBarMsg('Loading')
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
-            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+         this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
           }
@@ -732,6 +736,10 @@ export class ProcessMasterComponent implements OnInit {
   StockProcesSelected(e: any) {
     if (this.checkCode()) return
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
+  }
+  adjustAccodeSelected(e: any) {
+    if (this.checkCode()) return
+    this.processMasterForm.controls.ADJUST_ACCODE.setValue(e.ACCODE);
   }
 
   /** checking for same account code selection */
