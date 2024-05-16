@@ -295,6 +295,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.AutoTransfer.setValue(this.onchangeCheckBoxNum(this.content.AUTOTRANSFER));
 
     this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
+    this.processMasterForm.controls.ADJUST_ACCODE.setValue(this.content.ADJUST_ACCODE);
     // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
     this.processMasterForm.controls.processType.setValue(
@@ -732,6 +733,10 @@ export class ProcessMasterComponent implements OnInit {
   StockProcesSelected(e: any) {
     if (this.checkCode()) return
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
+  }
+  adjustAccodeSelected(e: any) {
+    if (this.checkCode()) return
+    this.processMasterForm.controls.ADJUST_ACCODE.setValue(e.ACCODE);
   }
 
   /** checking for same account code selection */
