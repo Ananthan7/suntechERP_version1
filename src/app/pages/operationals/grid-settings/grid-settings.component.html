@@ -18,7 +18,27 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="row align-items-center">
-                        <label for="inputPassword"
+                        <div class="col-md-3">
+                            <ng-select [items]="menuList"
+                                bindLabel="MODULE_NAME" bindValue="MODULE_NAME"
+                                placeholder="Select Module"
+                                (change)="moduleChange($event)">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3">
+                            <ng-select [items]="vocTypeList"
+                                bindLabel="VOCTYPE" bindValue="VOCTYPE"
+                                placeholder="Select voctype"
+                                (change)="VocTypeChange($event)">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3">
+                            <ng-select placeholder="Select MainVoctype" [items]="mainVocTypeList"
+                                bindLabel="MAIN_VOCTYPE" bindValue="MAIN_VOCTYPE"
+                                (change)="mainVocTypeChange($event)">
+                            </ng-select>
+                        </div>
+                        <!-- <label for="inputPassword"
                             class="col-sm-2 col-form-label">Select Voc
                             Type</label>
                         <div class="col-md-2">
@@ -39,16 +59,12 @@
                                 <input type="text" matInput readonly
                                     formControlName="mainVocType" />
                             </mat-form-field>
-                        </div>
+                        </div> -->
                         <div class="col-md-2">
                             <mat-form-field style="width: 70%">
                                 <input type="text" matInput readonly
                                     formControlName="branchCode" />
                             </mat-form-field>
-                            <!-- <master-search
-                                [MasterSearchData]="branchMasterData"
-                                (newRowClick)="vocTypeSelected($event)">
-                            </master-search> -->
                         </div>
                         <div class="col-md-2">
                             <mat-checkbox class="example-margin"
@@ -64,8 +80,9 @@
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <dx-data-grid #dataGrid id="gridContainer"
-                                height="400" width="100%" [showRowLines]="true" 
-                                [showBorders]="true" [allowColumnResizing]="true" ś
+                                height="400" width="100%" [showRowLines]="true"
+                                [showBorders]="true"
+                                [allowColumnResizing]="true" ś
                                 [dataSource]="tableData">
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="true">
@@ -74,7 +91,7 @@
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                                 <dxi-column *ngFor="let data of columnhead"
                                     dataField="{{ data }}" caption="{{ data }}"
-                                    width="auto"  
+                                    width="auto"
                                     [allowEditing]="true" alignment="left">
                                 </dxi-column>
                             </dx-data-grid>

@@ -262,16 +262,16 @@ this.round = true;
       "DESCRIPTION": form.description.toUpperCase(),
       "PRICE_METHOD": form.priceMethod,
       "PRICE_SIGN": form.priceMethod == 1 ? '0' : form.priceSign,
-      "PRICE_VALUE": form.priceValue,
+      "PRICE_VALUE": this.commonService.emptyToZero(form.priceValue),
       "MID": this.content ? this.content.MID : 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "DONTCALCULATE": form.dontCalculate,
       "FINALPRICE_SIGN": form.finalPriceSign || '',
-      "FINALPRICE_VALUE": form.finalPriceValue || 0,
-      "ADDLVALUE": form.addlValue || 0,
+      "FINALPRICE_VALUE": this.commonService.emptyToZero(form.finalPriceValue),
+      "ADDLVALUE": this.commonService.emptyToZero(form.addlValue),
       "ADDLVALUE_SIGN": form.addlValueSign || '',
       "PRICE_ROUDOFF": form.priceRoundoff,
-      "ROUNDOFF_DIGIT": form.roundoff_digit || 0,
+      "ROUNDOFF_DIGIT": this.commonService.emptyToZero(form.roundoff_digit),
       "PRICE_FORMULA": `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`,
     };
   }
@@ -494,7 +494,7 @@ this.round = true;
   getMaxValueLength(): number {
     const selectedOperator = this.priceListMasterForm.get('priceSign')?.value;
     const requiresMaxLength3 = ['+%', '/%'].includes(selectedOperator);
-    return requiresMaxLength3 ? 3 : 10;
+    return requiresMaxLength3 ? 3 : 5;
 }
 
 }
