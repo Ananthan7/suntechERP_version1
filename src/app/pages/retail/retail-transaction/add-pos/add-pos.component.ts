@@ -34,6 +34,7 @@ import { IndexedApiService } from 'src/app/services/indexed-api.service';
 import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 import { AuditTrailModel } from 'src/app/shared/data/audit-trial-model';
 import { ItemDetailService } from 'src/app/services/modal-service.service';
+import { PlanetService } from 'src/app/services/planet-integration.service';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -733,6 +734,7 @@ export class AddPosComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private suntechApi: SuntechAPIService,
+    private planetService:PlanetService,
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
@@ -12614,7 +12616,9 @@ export class AddPosComponent implements OnInit {
           // update trno value to field
           // planeturl - 
           // /PLANETRESPONEFLG = true  
-          this.getPlanetPOSUpdateTag();
+          this.planetService.getPlanetPOSUpdateTag(this.strBranchcode, this.vocType, this.baseYear, this.vocDataForm.value.fcn_voc_no);
+
+          // this.getPlanetPOSUpdateTag();
 
         }
       });
@@ -12644,14 +12648,14 @@ export class AddPosComponent implements OnInit {
       });
   }
 
-  getPlanetPOSUpdateTag() {
-    const API = `POSPlanetFile/GetPlanetPOSUpdateTag/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
-    this.suntechApi.getDynamicAPI(API)
-      .subscribe((res: any) => {
-        if (res.status == "Success") {
-        }
-      });
-  }
+  // getPlanetPOSUpdateTag() {
+  //   const API = `POSPlanetFile/GetPlanetPOSUpdateTag/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+  //   this.suntechApi.getDynamicAPI(API)
+  //     .subscribe((res: any) => {
+  //       if (res.status == "Success") {
+  //       }
+  //     });
+  // }
 
   getSalesReturnVocTypes() {
     //     http://94.200.156.234:85/api/UspGetSubVouchers
