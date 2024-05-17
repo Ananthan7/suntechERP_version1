@@ -40,6 +40,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   selectedValue3: string = 'None';
   selectedValue4: string = 'None';
   selectedValue5: string = 'None';
+  tableDataGroupDetails: any[] = [];
 
   groups = [
     { type: 'None', value: 'None' },
@@ -67,6 +68,28 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'CUSTOMER_VENDOR_PRICE_SETTMTL_DETAIL';
+    let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
+      .subscribe(
+        (result:any) => {
+          if (result.status === 'Success' && result.response) {
+            this.tableDataGroupDetails = result.response.map((item: any, index: number) => {
+              return { ...item, SELECT1: false, SRNO: index + 1 };
+            });
+            console.log(this.tableDataGroupDetails);
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+        },
+        (err:any) => {
+          console.error('Error fetching data:', err);
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      );
+
+
     this.setFormValues();
     // this.getGroupDetails();
     if (this.content.FLAG == 'VIEW') {
