@@ -24,11 +24,12 @@ export class PlanetService {
 
     this.intervalId = setInterval(() => {
       this.suntechApi.getDynamicAPI(API).subscribe((res: any) => {
-        if (res.status === 'Success' && res.data !== null) {
+        if (res.status === 'Success' && res.planetInfo.StatusCode==12) {
+
           this.planetUpdateTagSubject.next(res);
           clearInterval(this.intervalId); 
         }
       });
-    }, 30000); 
+    }, 10000); 
   }
 }
