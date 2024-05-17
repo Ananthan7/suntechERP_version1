@@ -219,23 +219,25 @@ export class CustomerPriceSettingComponent implements OnInit {
 
   designCodeChange() {
 
-    if (this.customerpricesettingForm.value.designCode == true) {
-      this.getGroupDetails();
-    }
+
+    this.getGroupDetails();
+
   }
-
-
-
-
 
   viewchangeYorN(e: any) {
     console.log(e);
 
     if (e == true) {
       return 'Y';
-    } else {
+    }
+    else if (e == '') {
+      return 'N'
+    }
+    else {
       return 'N';
     }
+
+
   }
 
   getGroupDetails() {
