@@ -16,7 +16,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPriceSettingComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader: any[] = ['SrNo', 'Group 1', 'Group 2', 'Group 3', 'Group 4', 'Group 5', 'Group 6', 'Apply On Unit', 'Mkg On %', 'Std Mkg Rate', 'Mkg Rate Min', 'Mkg Rate Max', 'Variance (+/-)', 'Wastage %', 'Min Wastage Qty', 'Markup %', 'Stamp Charge', 'Apply on Weight'];
+  columnheader: any[] = ['SRNO', 'GROUP1', 'GROUP2', 'GROUP3', 'GROUP4', 'GROUP5', 'GROUP6', 'APPLY_ON_WEIGHT', 'MKG_ON_PER', 'STD_MKG_RATE', 'MKG_RATE_MIN', 'MKG_RATE_MAX', 'VARIANCE', 'WASTAGE_PER', 'MIN_WASTAGE_QTY', 'MARKUP_PER', 'STAMP_CHARGE', 'APPLY_ON_WEIGHT'];
   columnheaderweightRange: any[] = ['SrNo', 'Division', 'Apply on Unit', 'From Weight', 'To Weight', 'Making Rate'];
   columnheaderTransaction: any[] = ['SrNo', 'Karat', 'Std Purity', 'Sales Purity', 'Purchase Purity'];
 
@@ -68,27 +68,6 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'CUSTOMER_VENDOR_PRICE_SETTMTL_DETAIL';
-    let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
-      .subscribe(
-        (result:any) => {
-          if (result.status === 'Success' && result.response) {
-            this.tableDataGroupDetails = result.response.map((item: any, index: number) => {
-              return { ...item, SELECT1: false, SRNO: index + 1 };
-            });
-            console.log(this.tableDataGroupDetails);
-          } else {
-            this.commonService.toastErrorByMsgId('MSG1531');
-          }
-        },
-        (err:any) => {
-          console.error('Error fetching data:', err);
-          this.commonService.toastErrorByMsgId('MSG1531');
-        }
-      );
-
 
     this.setFormValues();
     // this.getGroupDetails();
@@ -238,11 +217,16 @@ export class CustomerPriceSettingComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  designCodeChange(){
-    if(this.customerpricesettingForm.value.designCode == true){
+  designCodeChange() {
+
+    if (this.customerpricesettingForm.value.designCode == true) {
       this.getGroupDetails();
     }
   }
+
+
+
+
 
   viewchangeYorN(e: any) {
     console.log(e);
@@ -257,8 +241,8 @@ export class CustomerPriceSettingComponent implements OnInit {
   getGroupDetails() {
     let API = 'UspGetPricingDetails'
     let postDataDetails = {
-      "DivisionCode": this.customerpricesettingForm.value.pricecode,
-      "StockCodeCheck": this.viewchangeYorN( this.customerpricesettingForm.value.stockCode),
+      "DivisionCode": this.customerpricesettingForm.value.division,
+      "StockCodeCheck": this.viewchangeYorN(this.customerpricesettingForm.value.stockCode),
       "DesignCodeCheck": this.viewchangeYorN(this.customerpricesettingForm.value.designCode),
       "FilterGroup1": this.customerpricesettingForm.value.group1,
       "FilterGroup2": this.customerpricesettingForm.value.group2,
@@ -274,20 +258,19 @@ export class CustomerPriceSettingComponent implements OnInit {
       // "FilterValue6": ""
     }
     let Sub: Subscription = this.suntechApi.postDynamicAPI(API, postDataDetails)
-    .subscribe((result) => {
-      if (result.response) {
+      .subscribe((result) => {
+
         if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          })
+
+          this.tableDataGroupDetails = result.dynamicData[0];
+
+          console.log(this.tableDataGroupDetails);
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531');
         }
-      } 
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
 
 
@@ -315,7 +298,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "DIVISION": this.customerpricesettingForm.value.division,
       "CREATED_DATE": this.customerpricesettingForm.value.date || "",
       "ENTERED_BY": this.customerpricesettingForm.value.enteredby || "",
-      "IS_STOCK_CODE":this.customerpricesettingForm.value.stockCode,
+      "IS_STOCK_CODE": this.customerpricesettingForm.value.stockCode,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
@@ -327,14 +310,14 @@ export class CustomerPriceSettingComponent implements OnInit {
       "GROUP6": this.customerpricesettingForm.value.group6 || "",
       "CURRENCY_CODE": this.customerpricesettingForm.value.currency || "",
       "CURRENCY_RATE": 0,
-      "IS_DESIGN_CODE":this.customerpricesettingForm.value.designCode,
+      "IS_DESIGN_CODE": this.customerpricesettingForm.value.designCode,
       "customerVendorPriceSettmtlDetail": [
         {
           "SRNO": 0,
           "UNIQUE_ID": 0,
           "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
           "DESCRIPTION": this.customerpricesettingForm.value.description || "",
-          "DIVISION_CODE":  this.customerpricesettingForm.value.division,
+          "DIVISION_CODE": this.customerpricesettingForm.value.division,
           "SEARCH_CRITERIA": "",
           "SEARCH_VALUE": "",
           "GROUP1": this.customerpricesettingForm.value.group1 || "",
@@ -445,7 +428,7 @@ export class CustomerPriceSettingComponent implements OnInit {
           "UNIQUE_ID": 0,
           "PRICE_CODE": this.customerpricesettingForm.value.pricecode || "",
           "DESCRIPTION": this.customerpricesettingForm.value.description || "",
-          "DIVISION_CODE":  this.customerpricesettingForm.value.division,
+          "DIVISION_CODE": this.customerpricesettingForm.value.division,
           "SEARCH_CRITERIA": "",
           "SEARCH_VALUE": "",
           "GROUP1": this.customerpricesettingForm.value.group1 || "",

@@ -195,7 +195,7 @@
         <div class="col-md-12">
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="Group Details">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableDataGroupDetails">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDataGroupDetails">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>

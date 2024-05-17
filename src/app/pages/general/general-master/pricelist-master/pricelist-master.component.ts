@@ -24,6 +24,7 @@ export class PricelistMasterComponent implements OnInit {
   dele: boolean = false;
   codeEnable: boolean = true;
   round: boolean = true;
+
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -87,7 +88,7 @@ export class PricelistMasterComponent implements OnInit {
       roundoff_digit: [''],
     });
 
-this.round = true;
+    this.round = true;
     this.initializeForm();
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -99,9 +100,9 @@ this.round = true;
       this.dele = false;
       this.codeEnable = false;
       this.setFormValues()
-
+      this.roundoffDis() 
     }
- 
+
   }
 
   setFormValues() {
@@ -164,18 +165,18 @@ this.round = true;
     // else {
 
 
-      if (!this.validateForm()) return;
+    if (!this.validateForm()) return;
 
-      let API = 'PriceMaster/InsertPriceMaster';
-      let postData = this.createPostData();
+    let API = 'PriceMaster/InsertPriceMaster';
+    let postData = this.createPostData();
 
-      this.dataService.postDynamicAPI(API, postData)
-        .subscribe(
-          result => this.handleApiResponse(result),
-          err => alert(err)
-        );
-    }
-  
+    this.dataService.postDynamicAPI(API, postData)
+      .subscribe(
+        result => this.handleApiResponse(result),
+        err => alert(err)
+      );
+  }
+
 
 
   update() {
@@ -480,13 +481,13 @@ this.round = true;
 
   }
 
-  roundoffDis(){
-    if(this.priceListMasterForm.value.priceRoundoff != true){
+  roundoffDis() {
+   
+    if (this.priceListMasterForm.value.priceRoundoff != true) {
       this.round = true;
       this.priceListMasterForm.controls.roundoff_digit.setValue('');
     }
-    else
-    {
+    else {
       this.round = false;
     }
   }
@@ -495,6 +496,6 @@ this.round = true;
     const selectedOperator = this.priceListMasterForm.get('priceSign')?.value;
     const requiresMaxLength3 = ['+%', '/%'].includes(selectedOperator);
     return requiresMaxLength3 ? 3 : 5;
-}
+  }
 
 }
