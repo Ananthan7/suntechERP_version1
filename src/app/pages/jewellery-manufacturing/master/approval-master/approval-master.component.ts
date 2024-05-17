@@ -425,10 +425,10 @@ isNumeric(event: any) {
     return;
   }
    // Continue with the rest of your code for submission
-   else if (this.checkFinalApproval()) {
-    this.toastr.error('final optional should be selected');
-    return;
-  }
+  //  else if (this.checkFinalApproval()) {
+  //   this.toastr.error('final optional should be selected');
+  //   return;
+  // }
 
 
   // if (this.approvalMasterForm.invalid) {

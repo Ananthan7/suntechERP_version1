@@ -109,7 +109,7 @@
                                         <mat-form-field style="width: 100px;">
                                             <input type="text"
                                                 class="text-right" matInput
-                                                [max]="10"
+                                                [max]="5"
                                                 AmountDecimalInput
                                                 [readonly]="viewMode || codeEnable"
                                                 formControlName="finalPriceValue"
@@ -142,7 +142,7 @@
                                             <input type="text"
                                                 class="text-right" matInput
                                                 AmountDecimalInput
-                                                [max]="10"
+                                                [max]="5"
                                                 formControlName="addlValue"
                                                 [readonly]="viewMode || codeEnable"
                                                 [required]="required" />
@@ -166,7 +166,7 @@
                                             <mat-form-field
                                                 style="width: 100%;">
                                                 <input type="text"
-                                                    maxlength="5"
+                                                    maxlength="1"
                                                     matInput
                                                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                                                     formControlName="roundoff_digit"

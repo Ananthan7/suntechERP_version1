@@ -185,7 +185,7 @@ export class PriceschemesMasterComponent implements OnInit {
     }
     if (!this.validateForm()) return;
 
-    if (this.priceSchemaMasterForm.value.price4 !== '' && this.priceSchemaMasterForm.value.price3 == '') {
+    if (this.priceSchemaMasterForm.value.price4 !== undefined && this.priceSchemaMasterForm.value.price3 == '') {
 
       this.toastr.error('Price 3 cannot be empty');
       return;

@@ -225,15 +225,15 @@
                                 <label for="input" class="col-sm-4 col-form-label">Weight Avg Cost :</label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="weightAvgCost"
+                                        <input type="text" matInput formControlName="weightAvgCostFC"
                                             style="text-align: right" [readonly]="viewMode|| codeEnable"
-                                            (focusout)="setValueWeightAvgCost()" />
+                                            (focusout)="setValueweightAvgCost()" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="weightAvgCostDes"
-                                            style="text-align: right" [readonly]="viewMode" AmountDecimalInput />
+                                        <input type="text" matInput formControlName="weightAvgCostLC"
+                                            style="text-align: right" [readonly]="viewMode" AmountDecimalInput (focusout)="calculatePriceFCDetails($event)"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -242,10 +242,10 @@
                                     <div class="price_box">
                                         <a>PriceScheme</a>
                                         <master-search
-                                            *ngIf="!viewMode && alloyMastereForm?.get('weightAvgCost')?.value"
+                                            *ngIf="!viewMode && alloyMastereForm?.get('weightAvgCostFC')?.value"
                                             [MasterSearchData]="priceSchemeData"
                                             (newRowClick)="priceSchemeValidatePriceDetails($event)"></master-search>
-                                        <a *ngIf="alloyMastereForm?.get('weightAvgCost')?.value">{{
+                                        <a *ngIf="alloyMastereForm?.get('weightAvgCostFC')?.value">{{
                                             alloyMastereForm?.value.priceScheme }}</a>
                                     </div>
 
@@ -291,7 +291,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Fc"
-                                            [max]="12" class="text-right" readonly />
+                                            [max]="12" class="text-right" [readonly]="!isEditable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

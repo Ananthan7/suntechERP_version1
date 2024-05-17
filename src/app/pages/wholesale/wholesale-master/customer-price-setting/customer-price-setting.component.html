@@ -118,7 +118,7 @@
                 <mat-checkbox class="example-margin" formControlName="stockCode"  [disabled]="codeEnable" [(ngModel)]="disableSelect" (click)="selectStock()">Stock Code * </mat-checkbox>
               </div>
               <div class="col-2">
-                <mat-checkbox class="example-margin"  formControlName="designCode" [disabled]="codeEnable"  >Design Code * </mat-checkbox>
+                <mat-checkbox class="example-margin"  formControlName="designCode" [disabled]="codeEnable" >Design Code * </mat-checkbox>
               </div>
 
             </div>
@@ -177,7 +177,7 @@
             <div class="row">
               <div class="d-flex offset-7 pl-5">
                 <div class="p-2 bd-highlight">
-                  <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                  <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="designCodeChange()">
                     Apply
                   </button>
                 </div>
@@ -195,7 +195,7 @@
         <div class="col-md-12">
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="Group Details">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableData">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableDataGroupDetails">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>

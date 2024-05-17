@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import * as convert from "xml-js";
 
 @Component({
   selector: 'app-grid-settings',
@@ -15,6 +16,10 @@ export class GridSettingsComponent implements OnInit {
 
   subscriptions: Subscription[] = []
   tableData:any[] = []
+  menuList:any[] = []
+  vocTypeList:any[] = []
+  mainVocTypeList:any[] = []
+  vocdataList:any[] = []
   isViewTable: boolean = false;
   isLoading: boolean = false;
   menuModule: string = ''
@@ -47,6 +52,7 @@ export class GridSettingsComponent implements OnInit {
     mainVocType:[''],
     branchCode:[''],
     copyToAllBranch:[''],
+    MODULE_NAME:[''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -58,18 +64,59 @@ export class GridSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridSettingsForm.controls.branchCode.setValue(this.commonService.branchCode)
-    this.getGridList()
+    this.menuList = this.commonService.getMenuList()
   }
 
   vocTypeSelected(event:any){
-    console.log(event);
-    let vocData = this.commonService.VocTypeMasterData
-    console.log(vocData,this.commonService.VocTypeMasterData);
     this.gridSettingsForm.controls.VocType.setValue(event.VOCTYPE)
   }
   branchCodeSelected(event:any){
     this.gridSettingsForm.controls.branchCode.setValue(event.BRANCH_CODE)
   }
+  moduleChange(event:any){
+    this.getSubmenuList(event)
+  }
+  VocTypeChange(event:any){
+    console.log(event,'VocTypeChange');
+    if(!event){
+      this.mainVocTypeList = this.vocdataList
+      this.gridSettingsForm.controls.VocType.setValue('')
+      return
+    }
+    this.gridSettingsForm.controls.VocType.setValue(event.VOCTYPE)
+    this.mainVocTypeList = this.vocTypeList.filter((item:any)=> item.VOCTYPE == event.VOCTYPE)
+    this.getGridList()
+  }
+  mainVocTypeChange(event:any){
+    console.log(event,'mainVocTypeChange');
+    if(!event){
+      this.vocTypeList = this.vocdataList
+      this.gridSettingsForm.controls.mainVocType.setValue('')
+      return
+    }
+    this.gridSettingsForm.controls.mainVocType.setValue(event.MAIN_VOCTYPE)
+    this.vocTypeList = this.vocTypeList.filter((item:any)=> item.MAIN_VOCTYPE == event.MAIN_VOCTYPE)
+    this.getGridList()
+  }
+  getSubmenuList(event: any) {
+    this.tableData = []
+    this.menuModule = event.MODULE_NAME
+    this.isLoading = true;
+    let API = `WebMenuModuleWise/${this.menuModule}/${this.commonService.userName}/${this.commonService.branchCode}`
+    let Sub = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+      if (response.status == 'Success') {
+        this.isLoading = false;
+        this.isViewTable = true;
+        this.vocdataList = response.response
+        this.vocTypeList = response.response
+        this.mainVocTypeList = response.response
+      }
+    },err=>{
+      this.isLoading = false;
+    })
+    this.subscriptions.push(Sub)
+  }
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -82,8 +129,8 @@ export class GridSettingsComponent implements OnInit {
       "parameter": {
         "FLAG": 'GET',
         "SUBFLAG": 'LIST',
-        "MAIN_VOCTYPE": 'MFGPTF',
-        "VOCTYPE": '',
+        "MAIN_VOCTYPE": this.commonService.nullToString(form.mainVocType),
+        "VOCTYPE": this.commonService.nullToString(form.VocType),
         "BRANCH_CODE": this.commonService.nullToString(form.branchCode),
         "CUSTOM_PARAM": '',
       }
@@ -107,17 +154,23 @@ export class GridSettingsComponent implements OnInit {
 
   //submit
   formSubmit() {
+    let form = this.gridSettingsForm.value;
+    let data = this.tableData
+    const options = { compact: true, ignoreComment: true, spaces: 4 };
+    let xmlData = convert.js2xml({ root: data }, options);
+
     let postData = {
       "SPID": "060",
       "parameter": {
-        "FLAG": 'GET',
+        "FLAG": 'INSERT',
         "SUBFLAG": 'LIST',
-        "MAIN_VOCTYPE": '',
-        "VOCTYPE": '',
-        "BRANCH_CODE": '',
-        "CUSTOM_PARAM": '',
+        "MAIN_VOCTYPE": this.commonService.nullToString(form.mainVocType),
+        "VOCTYPE": this.commonService.nullToString(form.VocType),
+        "BRANCH_CODE": this.commonService.nullToString(form.branchCode),
+        "CUSTOM_PARAM": xmlData||'',
       }
     }
+    
     this.commonService.showSnackBarMsg('Loading')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
