@@ -178,7 +178,7 @@ export class MeltingTypeComponent implements OnInit {
       "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
       "DIVISION_CODE": 'Y',
       "DEF_ALLOY_STOCK": "",
-      "DEF_ALLOY_DESCRIPTION": this.meltingTypeForm.value.description,
+      "DEF_ALLOY_DESCRIPTION": this.commonService.nullToString(this.meltingTypeForm.value.description),
       "ALLOY_PER": "",
     };
     this.tableData.push(data);
