@@ -12865,7 +12865,7 @@ export class AddPosComponent implements OnInit {
 
 
   let postData = {
-    "MID":this.content?.MID!=0? this.comFunc.emptyToZero(this.content?.MID):this.midForInvoce,
+    "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
     "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
     "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
     "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),

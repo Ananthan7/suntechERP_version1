@@ -135,6 +135,31 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.setReceiptData();
 
   }
+
+  getGSTDetails(acCode: any) {
+
+    // this.PartyCodeData.SEARCH_VALUE = event.target.value
+    let vatData = {
+
+      'BranchCode': this.branchCode,
+      'AcCode': acCode,
+      'VocType': this.comService.getqueryParamVocType(),
+      'Date': new Date().toISOString(),
+
+    };
+    let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
+      .subscribe((result) => {
+
+        if (result.status == 'Success') {
+          let data = result.response;
+          console.log('vatData', data.GST_PER);
+          this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(data.GST_PER),
+            'AMOUNT'));
+        }
+      }
+      )
+  }
   setReceiptData() {
     console.log(this.receiptData);
     // let preData =  {
@@ -281,6 +306,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
     this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT HEAD"]);
     this.DebitamountChange({ target: { value: e.ACCODE } });
+    this.getGSTDetails(e.ACCODE);
   }
 
   CurrencySelected(e: any) {
@@ -378,7 +404,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       let postData = {
         "UNIQUEID": this.receiptData?.UNIQUEID || 0,
         "SRNO": this.receiptData?.SRNO || 0,
-        "BRANCH_CODE":  this.branchCode,
+        "BRANCH_CODE": this.branchCode,
         "RECPAY_TYPE": "",
         "MODE": this.posCurrencyReceiptDetailsForm.value.modeOfSelect,
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
@@ -531,7 +557,33 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   changeAmountLc(event: any) {
-    console.log(event)
+
+
+    console.log(event);
+    let amountLc = event.target.value;
+    let vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
+    let vatCc = (amountLc * vatPrc) / 100;
+    let amountWithVat = parseFloat(amountLc) + vatCc;
+    console.log(vatCc);
+    this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(event.target.value),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(event.target.value),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(vatCc),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(amountWithVat),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(amountWithVat),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(amountWithVat),
+      'AMOUNT'));
+
 
   }
 
@@ -549,7 +601,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   /**USE: close modal window */
   close(data?: any) {
     console.log(data);
-    
+
     // this.activeModal.close();
     if (this.receiptData != null && this.receiptData != undefined && data != null) {
       data!.isUpdate = true;
