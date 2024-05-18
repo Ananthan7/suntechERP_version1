@@ -16,10 +16,10 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPriceSettingComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader: any[] = ['SRNO', 'GROUP1', 'GROUP2', 'GROUP3', 'GROUP4', 'GROUP5', 'GROUP6', 'APPLY_ON_WEIGHT', 'MKG_ON_PER', 'STD_MKG_RATE', 'MKG_RATE_MIN', 'MKG_RATE_MAX', 'VARIANCE', 'WASTAGE_PER', 'MIN_WASTAGE_QTY', 'MARKUP_PER', 'STAMP_CHARGE', 'APPLY_ON_WEIGHT'];
+  columnheader: any[] = ['SRNO', 'GROUP1', 'GROUP2', 'GROUP3', 'GROUP4', 'GROUP5', 'GROUP6', 'STD_MKG_RATE', 'MKG_RATE_MIN', 'MKG_RATE_MAX', 'VARIANCE', 'WASTAGE_PER', 'MIN_WASTAGE_QTY', 'MARKUP_PER', 'STAMP_CHARGE', 'APPLY_ON_WEIGHT'];
   columnheaderweightRange: any[] = ['SrNo', 'Division', 'Apply on Unit', 'From Weight', 'To Weight', 'Making Rate'];
   columnheaderTransaction: any[] = ['SrNo', 'Karat', 'Std Purity', 'Sales Purity', 'Purchase Purity'];
-
+ 
   subscriptions: any;
   @Input() content!: any;
   tableData: any[] = [];
@@ -82,6 +82,7 @@ export class CustomerPriceSettingComponent implements OnInit {
 
 
   }
+
   setFormValues() {
     console.log(this.content);
     if (!this.content) return
@@ -140,6 +141,16 @@ export class CustomerPriceSettingComponent implements OnInit {
       this.codeEnable = false;
     }
 
+  }
+
+  isCheckboxChecked(): boolean {
+    // Check if any row's checkbox is checked in the first grid
+    return this.tableDataGroupDetails.some(row => row.APPLY_ON_WEIGHT);
+  }
+
+  
+  compCodetemp(data:any,value: any){
+    this.tableDataGroupDetails[value.data.SRNO - 1].CompCode = data.target.value;
   }
 
   user: MasterSearchModel = {

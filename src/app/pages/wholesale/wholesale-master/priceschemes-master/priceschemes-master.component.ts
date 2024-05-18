@@ -74,6 +74,14 @@ export class PriceschemesMasterComponent implements OnInit {
       this.price2SearchEnable = true;
       this.price4SearchEnable = true;
       this.price5SearchEnable = true;
+
+      this.priceSchemaMasterForm.get('price1')?.enable();
+      this.priceSchemaMasterForm.get('price2')?.enable();
+      this.priceSchemaMasterForm.get('price3')?.enable();
+      this.priceSchemaMasterForm.get('price4')?.enable();
+      this.priceSchemaMasterForm.get('price5')?.enable();
+
+  
     }
 
  //   this.initializeForm();

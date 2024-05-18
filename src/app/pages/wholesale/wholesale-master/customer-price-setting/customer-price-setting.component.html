@@ -193,8 +193,10 @@
           </div>
         </div>
         <div class="col-md-12">
+          
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-            <mat-tab label="Group Details">
+            
+           <mat-tab label="Group Details">
               <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDataGroupDetails">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
@@ -202,12 +204,71 @@
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+                <!-- <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                </dxi-column>
+                </dxi-column> -->
+
+                <dxi-column dataField="SRNO" caption="Srno"> </dxi-column>
+
+                  <dxi-column dataField="GROUP1" caption="GROUP 1"
+                    ></dxi-column>
+
+                    <dxi-column dataField="GROUP2" caption="GROUP 2"
+                   ></dxi-column>
+
+
+                    <dxi-column dataField="GROUP3" caption="GROUP 3"
+                   ></dxi-column>
+
+
+                    <dxi-column dataField="GROUP4" caption="GROUP 4"
+                    ></dxi-column>
+
+
+                    <dxi-column dataField="GROUP5" caption="GROUP 5"
+                    ></dxi-column>
+
+                    <dxi-column dataField="GROUP6" caption="GROUP 6"
+                   ></dxi-column>
+
+                    <dxi-column dataField="STD_MKG_RATE" caption="STD MKG RATE"
+                   ></dxi-column>
+
+                    <dxi-column dataField="MKG_RATE_MIN" caption="MKG RATE MIN"
+                    ></dxi-column>
+
+                    <dxi-column dataField="MKG_RATE_MAX" caption="MKG RATE MAX"
+                    ></dxi-column>
+
+                    <dxi-column dataField="VARIANCE" caption="VARIANCE"
+                    ></dxi-column>
+
+                    <dxi-column dataField="WASTAGE_PER" caption="WASTAGE %"
+                    ></dxi-column>
+
+                    <dxi-column dataField="MIN_WASTAGE_QTY" caption="MIN WASTAGE QTY"
+                    ></dxi-column>
+
+                    <dxi-column dataField="MARKUP_PER" caption="MARKUP %"
+                    ></dxi-column>
+
+                    <dxi-column dataField="STAMP_CHARGE" caption="STAMP CHARGE"
+                   ></dxi-column>
+
+                   <dxi-column dataField="APPLY_ON_WEIGHT" caption="APPLY ON WEIGHT" [dataType]="'boolean'" cellTemplate="compCodetemp"></dxi-column>
+                    
+                   <div *dxTemplate="let datas of 'compCodetemp'">
+                    <input type="checkbox" [checked]="datas.data.APPLY_ON_WEIGHT" (change)="compCodetemp($event, datas)" style="width: 100%;" />
+                  </div>
+                  
+                  
+                  
               </dx-data-grid>
+                
             </mat-tab>
-            <mat-tab label="Weight Range">
+      
+
+            <mat-tab label="Weight Range"  *ngIf="isCheckboxChecked()">
               <div class="row">
                 <div class="col-md-3 d-flex mb-2">
                   <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false">
