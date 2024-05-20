@@ -120,6 +120,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   gainAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].GAIN_ACCODE = event.ACCODE;
+    this.dataSource[data.SRNO - 1].GAIN_AC = event.ACCODE;
   }
   labAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].LAB_ACCODE = event.ACCODE;
@@ -224,8 +225,8 @@ export class SequenceMasterComponent implements OnInit {
                 obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
                 obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
                 obj.POINTS = item.POINTS || 0,
-                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                obj.GAIN_AC = "",
+                obj.GAIN_ACCODE = "",
+                obj.GAIN_AC = this.commonService.nullToString(item.GAIN_AC),
                 obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
@@ -539,10 +540,10 @@ export class SequenceMasterComponent implements OnInit {
           "SEQ_NO": this.commonService.emptyToZero(item.SRNO),
           "PROCESS_CODE": this.commonService.nullToString(item.PROCESS_CODE),
           "PROCESS_DESCRIPTION": this.commonService.nullToString(item.DESCRIPTION),
-          "PROCESS_TYPE": this.commonService.nullToString(item.PROCESS_TYPE),
-          "CURRENCY_CODE": this.commonService.nullToString(item.CURRENCY_CODE),
+          "PROCESS_TYPE": "",
+          "CURRENCY_CODE": "",
           "UNIT_RATE": item.UNIT_RATE || 0,
-          "UNIT": this.commonService.nullToString(item.UNIT),
+          "UNIT": "",
           "NO_OF_UNITS": item.NO_OF_UNITS || 0,
           "STD_TIME": item.STD_TIME,
           "MAX_TIME": item.MAX_TIME,
@@ -553,8 +554,8 @@ export class SequenceMasterComponent implements OnInit {
           "WIP_ACCODE": this.commonService.nullToString(item.WIP_ACCODE),
           "LAB_ACCODE": this.commonService.nullToString(item.LAB_ACCODE),
           "POINTS": item.POINTS || 0,
-          "GAIN_ACCODE": this.commonService.nullToString(item.GAIN_ACCODE),
-          "GAIN_AC": "",
+          "GAIN_ACCODE": "",
+          "GAIN_AC": this.commonService.nullToString(item.GAIN_ACCODE),
           "TRAY_WT": item.TRAY_WT || 0,
           "PACKET_CODE": "",
           "LOSS_ON_GROSS": item.LOSS_ON_GROSS || false,
