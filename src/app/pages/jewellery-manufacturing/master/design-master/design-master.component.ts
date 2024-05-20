@@ -1521,7 +1521,7 @@ onFileChangedimage(event: any) {
       "CHARGE9LC": 0,
       "CHARGE10FC": 0,
       "CHARGE10LC": 0,
-      "ADD_STEEL": true,
+      "ADD_STEEL": 0,
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
@@ -2006,7 +2006,7 @@ onFileChangedimage(event: any) {
       "UDF14_DESC": "",
       "UDF15_DESC": "",
       "REQ_METAL_WT": 0,
-      "REQ_METAL_TYPE": true,
+      "REQ_METAL_TYPE": 0,
       "CHARGE6FC": 0,
       "CHARGE6LC": 0,
       "CHARGE7FC": 0,

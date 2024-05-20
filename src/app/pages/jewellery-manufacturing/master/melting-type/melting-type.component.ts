@@ -567,7 +567,7 @@ export class MeltingTypeComponent implements OnInit {
       console.log(value);
       console.log(data);
       this.tableData[value.data.SRNO - 1].DEF_ALLOY_STOCK = data.STOCK_CODE;
-      this.tableData[value.data.SRNO - 1].MELTYPE_DESCRIPTION = data.STOCK_DESCRIPTION;
+      this.tableData[value.data.SRNO - 1].DEF_ALLOY_DESCRIPTION = data.STOCK_DESCRIPTION;
     }
   }
 
