@@ -33,8 +33,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'Currency', field: 'CURRENCY_CODE' },
     { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
     { title: 'Amount', field: 'AMOUNTCC' },
-    { title: 'VAT_E_', field: '' },
-    { title: 'VAT_E_.', field: '' },
+    { title: 'VAT_E_', field: 'CGST_AMOUNTCC' },
+    { title: 'Total', field: 'NET_TOTAL' },
   ];
 
   viewOnly?: boolean;
@@ -44,13 +44,14 @@ export class PosCurrencyReceiptComponent implements OnInit {
   amlNameValidation?: boolean;
   customerData: any;
   baseYear: any = localStorage.getItem('YEAR') || '';
-  strBranchcode:any = localStorage.getItem('userbranch');
+  strBranchcode: any = localStorage.getItem('userbranch');
   vocMaxDate = new Date();
   currentDate = new Date();
   branchCode?: String;
   yearMonth?: String;
   userName?: String;
 
+  gridAmountDecimalFormat: any;
 
 
   enteredByCode: MasterSearchModel = {
@@ -140,9 +141,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
-    private comService: CommonServiceService,
+    public comService: CommonServiceService,
   ) {
-
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    };
   }
   convertDateToYMD(str: any) {
     var date = new Date(str),
@@ -181,12 +186,12 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     if (this.content?.MID != null)
       this.getArgsData();
-    else{
+    else {
       this.changeDueDate(null);
       this.generateVocNo();
       this.getPartyCode();
     }
-      
+
 
 
     // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
@@ -216,8 +221,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
     // });
   }
-getPartyCode(){
- 
+  getPartyCode() {
+
     const API = `AdvanceReceiptParty/${this.strBranchcode}`;
     this.dataService.getDynamicAPI(API)
       .subscribe((resp) => {
@@ -225,11 +230,11 @@ getPartyCode(){
           console.log('resp', resp.Accode);
           this.posCurrencyReceiptForm.controls.partyCode.setValue(resp.Accode);
           this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(resp.AccountHead);
-          this.partyCodeChange( { target: { value:resp.Accode } });
+          this.partyCodeChange({ target: { value: resp.Accode } });
         }
       });
 
-}
+  }
   updateDueDays(event: any) {
     let value = event.target.value;
     if (value != '') {
@@ -666,33 +671,62 @@ getPartyCode(){
   openAddPosARdetails(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
       size: 'xl',
-      backdrop: true,//'static'
+      backdrop: true,
       keyboard: false,
       windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.receiptData = data;
-
+  
     modalRef.result.then((postData) => {
       if (postData) {
-
         console.log('Data from modal:', postData);
-        if (postData?.isUpdate) {
-
-          const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
-            data.SRNO.toString() == postData.SRNO.toString()
-          );
-
-          console.log(preItemIndex);
-
-          this.posCurrencyDetailsData[preItemIndex] = postData;
-
-        } else {
-          this.posCurrencyDetailsData.push(postData);
-        }
-        this.posCurrencyDetailsData.forEach((data, index) => data.SRNO = index + 1);
+        this.handlePostData(postData);
       }
     });
   }
+  
+  handlePostData(postData: any) {
+    const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
+      data.SRNO.toString() == postData.SRNO.toString()
+    );
+    postData.NET_TOTAL = (parseFloat(postData.AMOUNTCC) + parseFloat(postData.CGST_AMOUNTCC)).toFixed(2);
+
+    if (postData?.isUpdate && preItemIndex !== -1) {
+      this.posCurrencyDetailsData[preItemIndex] = postData;
+    } else {
+      this.posCurrencyDetailsData.push(postData);
+    }
+  
+    console.log('Updated posCurrencyDetailsData', this.posCurrencyDetailsData);
+    this.updateFormValuesAndSRNO();
+  }
+  
+  updateFormValuesAndSRNO() {
+    let sumCGST_AMOUNTCC = 0;
+    let sumAMOUNTCC = 0;
+  
+    this.posCurrencyDetailsData.forEach((data, index) => {
+      data.SRNO = index + 1;
+      sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
+      sumAMOUNTCC += parseFloat(data.AMOUNTCC);
+    });
+  
+    let totalSum = sumCGST_AMOUNTCC + sumAMOUNTCC;
+  
+    this.posCurrencyReceiptForm.controls.totalTax.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(sumCGST_AMOUNTCC),
+      'AMOUNT'
+    ));
+    this.posCurrencyReceiptForm.controls.total.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(totalSum),
+      'AMOUNT'
+    ));
+    this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(totalSum),
+      'AMOUNT'
+    ));
+  }
+  
 
 
   async getFinancialYear() {
@@ -702,7 +736,7 @@ getPartyCode(){
     if (res.status == "Success") {
       this.yearMonth = res.BaseFinancialyear;
       console.log('BaseFinancialyear', res.BaseFinancialyear);
-      
+
     }
   }
 
