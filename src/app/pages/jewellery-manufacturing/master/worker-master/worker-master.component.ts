@@ -216,7 +216,7 @@ export class WorkerMasterComponent implements OnInit {
       "ACCODE": this.commonService.nullToString(form.WorkerAcCode),
       "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed),
       "SECRET_CODE": this.commonService.nullToString(form.Password),
-      "PROCESS_CODE": this.commonService.nullToString(this.selectedProcessArr[0].PROCESS_CODE),
+      "PROCESS_CODE": this.commonService.nullToString(this.selectedProcessArr[0]?.PROCESS_CODE),
       "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
       "SUPERVISOR": this.commonService.nullToString(form.NameOfSupervisor),
       "ACTIVE": form.Active,
