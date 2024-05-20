@@ -261,6 +261,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
   sizeCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
@@ -287,34 +288,6 @@ export class ComponentMasterComponent implements OnInit {
     console.log("Radius:", radius);
 
 
-
-    // const resultheight = height.split('');
-    // resultheight.shift();
-    // resultheight.pop();
-
-    // let heightValue = resultheight.join("");
-    // console.log(heightValue);
-
-    // const resultwidth = width.split('');
-    // resultwidth.shift();
-    // resultwidth.pop();
-
-    // let widthValue = resultwidth.join("");
-    // console.log(widthValue);
-
-    // const resultlength = length.split('');
-    // resultlength.shift();
-    // resultlength.pop();
-
-    // let lengthValue = resultlength.join("");
-    // console.log(lengthValue);
-
-    // const resultradius = radius.split('');
-    // resultradius.shift();
-    // resultradius.pop();
-
-    // let radiusValue = resultradius.join("");
-    // console.log(radiusValue);
 
     const finalHeight = this.commonService.dataSplitPop(height);
     const finalWidth = this.commonService.dataSplitPop(width);
@@ -1219,5 +1192,6 @@ setFormValues() {
   extColor(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
+
 
 }

@@ -353,9 +353,14 @@ isNumeric(event: any) {
   }
 
   checkFinalApproval() {
+   
     let final = []
-    final = this.tableData.filter((item: any) => item.APPR_TYPE == '3')
+    
+    final = this.tableData.filter((item: any) => item.APPR_TYPE == '2')
+    console.log(final);
     return final.length == 0
+
+
   }
  
   formSubmit() {
@@ -424,11 +429,11 @@ isNumeric(event: any) {
     this.toastr.error("Description cannot be empty")
     return;
   }
-   // Continue with the rest of your code for submission
-  //  else if (this.checkFinalApproval()) {
-  //   this.toastr.error('final optional should be selected');
-  //   return;
-  // }
+ //  Continue with the rest of your code for submission
+   else if (this.checkFinalApproval()) {
+    this.toastr.error('Final option should be selected');
+    return;
+  }
 
 
   // if (this.approvalMasterForm.invalid) {

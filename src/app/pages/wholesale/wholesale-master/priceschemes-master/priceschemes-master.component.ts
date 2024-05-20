@@ -64,6 +64,12 @@ export class PriceschemesMasterComponent implements OnInit {
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
+      this.priceSchemaMasterForm.get('price1')?.enable();
+      this.priceSchemaMasterForm.get('price2')?.enable();
+      this.priceSchemaMasterForm.get('price3')?.enable();
+      this.priceSchemaMasterForm.get('price4')?.enable();
+      this.priceSchemaMasterForm.get('price5')?.enable();
+      
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.editMode = true;
