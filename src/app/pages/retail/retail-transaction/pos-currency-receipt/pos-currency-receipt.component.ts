@@ -184,6 +184,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     else{
       this.changeDueDate(null);
       this.generateVocNo();
+      this.getPartyCode();
     }
       
 
@@ -215,7 +216,20 @@ export class PosCurrencyReceiptComponent implements OnInit {
     //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
     // });
   }
+getPartyCode(){
+ 
+    const API = `AdvanceReceiptParty/${this.strBranchcode}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          console.log('resp', resp.Accode);
+          this.posCurrencyReceiptForm.controls.partyCode.setValue(resp.Accode);
+          this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(resp.AccountHead);
+          this.partyCodeChange( { target: { value:resp.Accode } });
+        }
+      });
 
+}
   updateDueDays(event: any) {
     let value = event.target.value;
     if (value != '') {
