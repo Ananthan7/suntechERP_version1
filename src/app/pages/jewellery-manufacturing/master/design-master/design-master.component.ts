@@ -1221,7 +1221,7 @@ onFileChangedimage(event: any) {
     let postData = {
       "DESIGN_CODE": this.designmasterForm.value.code || "",
       "DESIGN_DESCRIPTION":  this.designmasterForm.value.designdesc || "",
-      "CURRENCY_CODE": "",
+      "CURRENCY_CODE":this.designmasterForm.value.currency,
       "CC_RATE": 0,
       "COST_CODE": "",
       "TYPE_CODE": this.designmasterForm.value.type|| "",
