@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-customer-price-setting',
@@ -25,7 +26,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   tableData: any[] = [];
   postDataDetails: any[] = [];
   currentDate = new FormControl(new Date());
-
+  selectedIndexes: any = [];
   isdisabled: boolean = false;
   checkboxvalue: boolean = true
   public isChecked = true;
@@ -64,6 +65,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private suntechApi: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { }
 
@@ -151,6 +153,10 @@ export class CustomerPriceSettingComponent implements OnInit {
   
   compCodetemp(data:any,value: any){
     this.tableDataGroupDetails[value.data.SRNO - 1].CompCode = data.target.value;
+  }
+
+  SRCH_VALUEtemp(data:any,value: any){
+    this.tableData[value.data.SR_NO - 1].mkgCode = data.target.value;
   }
 
   user: MasterSearchModel = {
@@ -614,5 +620,75 @@ export class CustomerPriceSettingComponent implements OnInit {
     }
   }
 
+  addweightdata() {    
+      let srno = length + 1;
+      let data = {
+        "SR_NO": srno,
+        "UNIQUEID": 0,
+        "UNIQUE_ITEM_ID": 0,
+        "PRICE_CODE": "",
+        "DIVISION_CODE": "G",
+        "WT_RANGE_FROM": 0,
+        "WT_RANGE_TO": 0,
+        "STD_MKGRATE": 0,
+        "SRCH_CRITERIA": "",
+        "SRCH_VALUE": "",
+        "UNIT_CODE": "",
+      };
+
+      this.tableData.push(data);
+
+      this.tableData.forEach((item, i) => {
+        item.SR_NO = i + 1;
+        item.isDisabled = true;
+      });
+
+   
+  }
+
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
+
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+  }
+
+
+  removeweightdata() {
+    console.log(this.selectedIndexes);
+
+    if (this.selectedIndexes.length > 0) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Simulate deletion without using an actual API call
+          if (this.tableData.length > 0) {
+            this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
+        }
+      });
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+    }
+  }
 
 }

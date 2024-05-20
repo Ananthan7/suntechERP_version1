@@ -1039,12 +1039,13 @@ export class CommonServiceService {
     return null;
   }
   dataSplitPop(data: any) {
-    const result = data.split('');
-    result.shift();
-    result.pop();
+    // const result = data.split('');
+    // result.shift();
+    // result.pop();
 
-    let heightValue = result.join("");
-    return heightValue;
-
+    // let heightValue = result.join("");
+    // return heightValue;
+    const cleanedData = data.replace(/[^0-9.-]+/g, '');
+    return cleanedData;
   }
 }

@@ -568,6 +568,60 @@ isNumeric(event: any) {
       return;
     }
 
+    let conditionMet = false;
+
+    this.tableData.forEach((item: any, index: number) => {
+      console.log(`Checking item at index ${index}:`, item);
+
+      const orgMessageChecked = item.ORG_MESSAGE;
+      const emailChecked = item.EMAIL;
+      const mobileNo = item.MOBILE_NO;
+      const emailId = item.EMAIL_ID;
+    
+
+      console.log('orgMessageChecked:', orgMessageChecked);
+      console.log('emailChecked:', emailChecked);
+      console.log('mobileNo:', mobileNo);
+      console.log('emailId:', emailId);
+  
+    if (orgMessageChecked != '') {
+      if (!mobileNo.trim()) {
+        console.log("Condition met: mobile number must be filled for Message Checked");
+        this.toastr.error("Mobile number must be filled for Message Checked");
+        conditionMet = true;
+        return; // Prevent further execution for the current item
+      }
+    } 
+    
+    if (emailChecked != '') {
+      if (!emailId.trim()) {
+        console.log("Condition met: emailId must be filled for email Checked");
+        this.toastr.error("Email ID must be filled for email Checked");
+        conditionMet = true;
+        return; // Prevent further execution for the current item
+      }
+    }
+  });
+
+
+  if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
+    this.toastr.error("Code Cannot be empty")
+    return;
+  }
+
+ else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
+    this.toastr.error("Description cannot be empty")
+    return;
+  }
+ //  Continue with the rest of your code for submission
+   else if (this.checkFinalApproval()) {
+    this.toastr.error('Final option should be selected');
+    return;
+  }
+
+  
+    if (!conditionMet) {
+
     const API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE;
     const postData = {
       "APPR_CODE": this.approvalMasterForm.value.code || "",
@@ -600,7 +654,7 @@ isNumeric(event: any) {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
+  }
 
 
 
