@@ -438,8 +438,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
         "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
         "CGST_PER": 0,
-        "CGST_AMOUNTFC": 0,
-        "CGST_AMOUNTCC": 0,
+        "CGST_AMOUNTFC":this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
+        "CGST_AMOUNTCC":this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
         "SGST_PER": 0,
         "SGST_AMOUNTFC": 0,
         "SGST_AMOUNTCC": 0,
@@ -586,6 +586,35 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
 
   }
+
+  changeTotalLc(event: any) {
+    console.log(event.target.value);
+
+    this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(event.target.value),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(event.target.value),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(event.target.value),
+      'AMOUNT'));
+    let sum = (this.posCurrencyReceiptDetailsForm.controls.totalLc.value * 100) / (100 + parseFloat(this.posCurrencyReceiptDetailsForm.controls.vat.value));
+    console.log(sum);
+
+    this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(sum),
+      'AMOUNT'));
+    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(sum),
+      'AMOUNT'));
+    let vatcc = this.posCurrencyReceiptDetailsForm.controls.totalLc.value - sum;
+    this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(vatcc),
+      'AMOUNT'));
+
+  }
+
 
 
   setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {

@@ -247,7 +247,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">VAT % :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="vat" />
+                      <input type="text" readonly matInput formControlName="vat" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -255,7 +255,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">VAT CC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="vatcc" />
+                      <input type="text" readonly matInput formControlName="vatcc" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -265,7 +265,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Total FC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="totalFc" readonly />
+                      <input type="text" (change)="changeTotalLc($event)" matInput formControlName="totalFc"  />
                     </mat-form-field>
                   </div>
                 </div>
@@ -273,7 +273,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Total LC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="totalLc" />
+                      <input type="text" (change)="changeTotalLc($event)" matInput formControlName="totalLc" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -281,7 +281,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Header VAT Amt :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="headerVatAmt" />
+                      <input type="text" matInput readonly formControlName="headerVatAmt" />
                     </mat-form-field>
                   </div>
                 </div>
