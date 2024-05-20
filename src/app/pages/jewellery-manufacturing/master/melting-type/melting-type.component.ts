@@ -173,16 +173,16 @@ export class MeltingTypeComponent implements OnInit {
       "UNIQUEID": 0,
       "SRNO": this.slNo,
       "MELTYPE_CODE": "Y",
-      "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
+      "MELTYPE_DESCRIPTION": this.commonService.nullToString(this.meltingTypeForm.value.description),
       "KARAT_CODE": this.meltingTypeForm.value.karat,
       "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
       "DIVISION_CODE": 'Y',
       "DEF_ALLOY_STOCK": "",
-      "DEF_ALLOY_DESCRIPTION": this.commonService.nullToString(this.meltingTypeForm.value.description),
+      "DEF_ALLOY_DESCRIPTION": "",
       "ALLOY_PER": "",
     };
     this.tableData.push(data);
-    console.log(data);
+    console.log(this.tableData);
   }
   formSubmit() {
 
@@ -361,48 +361,6 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
     this.meltingTypeForm.controls.divCode.setValue(e.DIVISION_CODE);
   }
-
-  // addTableData() {
-  //   if (
-  //     this.meltingTypeForm.value.code !== "" &&
-  //     this.meltingTypeForm.value.description !== "" &&
-  //     this.meltingTypeForm.value.alloy !== "" &&
-  //     this.meltingTypeForm.value.color !== ""
-  //   )
-
-  //   {
-
-
-
-  //     if {
-  //       const length = this.tableData.length;
-  //       this.slNo = length + 1;
-
-  //       const data = {
-  //         UNIQUEID: 0,
-  //         SRNO: this.slNo,
-  //         MELTYPE_CODE: 'Y',
-  //         MELTYPE_DESCRIPTION: "",
-  //         KARAT_CODE: this.meltingTypeForm.value.karat,
-  //         PURITY: this.commonService.transformDecimalVB(
-  //           6,
-  //           this.meltingTypeForm.value.purity
-  //         ),
-  //         DIVISION_CODE: this.meltingTypeForm.value.divCode,
-  //         DEF_ALLOY_STOCK: "",
-  //         DEF_ALLOY_DESCRIPTION: "",
-  //         ALLOY_PER: "",
-  //       };
-
-  //       this.tableData.push(data);
-  //       console.log(data);
-  //     } else {
-  //       this.toastr.error('DEF_ALLOY_STOCK already exists. Cannot add duplicate entry.');
-  //     }
-  //   } else {
-  //     this.toastr.error('Please fill all mandatory fields');
-  //   }
-  // }
 
 
 
@@ -609,7 +567,7 @@ export class MeltingTypeComponent implements OnInit {
       console.log(value);
       console.log(data);
       this.tableData[value.data.SRNO - 1].DEF_ALLOY_STOCK = data.STOCK_CODE;
-      this.tableData[value.data.SRNO - 1].MELTYPE_DESCRIPTION = data.STOCK_DESCRIPTION;
+      this.tableData[value.data.SRNO - 1].DEF_ALLOY_DESCRIPTION = data.STOCK_DESCRIPTION;
     }
   }
 

@@ -398,7 +398,7 @@ export class StonePricingMasterComponent implements OnInit {
       "MID":  this.content?.MID || 0 ,
       "SRNO": 0,
       "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION": this.commonService.nullToString(this.stonePrizeMasterForm.value.description),
+      "DESCRIPTION":this.stonePrizeMasterForm.value.price_code +" "+ this.stonePrizeMasterForm.value.shape + this.stonePrizeMasterForm.value.color,
       "SHAPE": this.stonePrizeMasterForm.value.shape || "",
       "COLOR": this.stonePrizeMasterForm.value.color || "",
       "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
