@@ -158,7 +158,7 @@ export class GridSettingsComponent implements OnInit {
         "BRANCH_CODE": item.BRANCH_CODE,
         "MAIN_VOCTYPE": item.MAIN_VOCTYPE,
         "VOCTYPE": item.VOCTYPE,
-        "FIELD_NAME": item.VOCTYPE,
+        "FIELD_NAME": item.FIELD_NAME,
         "DISPLAY_NAME": item.DISPLAY_NAME,
         "DATA_TYPE": item.DATA_TYPE,
         "WIDTH": this.commonService.emptyToZero(item.WIDTH),
@@ -201,13 +201,15 @@ export class GridSettingsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
-          let data = result.dynamicData[0]
-          console.log(data);
-        } else {
-
+          let data = result?.dynamicData[0]
+          if(data[0]?.ERRRMSG == "SUCCESS"){
+            this.commonService.showSnackBarMsg('data saved successfully')
+          }
+        } else{
+          this.commonService.showSnackBarMsg('data not saved')
         }
-      }, err => {
-        this.commonService.closeSnackBarMsg()
+   }, err => {
+       this.commonService.closeSnackBarMsg()
       })
     this.subscriptions.push(Sub)
   }
