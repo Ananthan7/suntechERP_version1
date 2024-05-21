@@ -18,3 +18,13 @@
           z-index: 1070 !important;
       }
   }
+  .text-button a {
+    text-decoration: none;
+    color: blue;
+    cursor: pointer;
+  }
+  
+  .text-button a:hover {
+    text-decoration: underline;
+  }
+  

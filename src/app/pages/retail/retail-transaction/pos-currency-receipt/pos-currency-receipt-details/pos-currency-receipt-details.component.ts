@@ -15,6 +15,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from "@angular/material/datepicker";
 import * as _moment from 'moment';
+import { IndexedDbService } from "src/app/services/indexed-db.service";
 
 
 @Component({
@@ -32,10 +33,10 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   branchCode?: String;
   paymentModeList: any[] = [];
   dummyDate = '1900-01-01T00:00:00';
-
+  compCurrency: any;
 
   selectedTabIndex = 0;
-
+  isCurrencyUpdate: boolean = false;
 
   debitAmountData: MasterSearchModel = {
     PAGENO: 1,
@@ -79,7 +80,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   posCurrencyReceiptDetailsForm: FormGroup = this.formBuilder.group({
     branch: [""],
-    modeOfSelect: [""],
+    modeOfSelect: ["Cash"],
     modeCODE: [""], // Not Declaration 
     modeDesc: [""],
     debitAmount: [""],
@@ -120,8 +121,19 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
-    private comService: CommonServiceService
-  ) { }
+    private comService: CommonServiceService,
+    private indexedDb: IndexedDbService,
+  ) {
+    this.indexedDb.getAllData('compparams').subscribe((data) => {
+      if (data.length > 0) {
+        console.log('==============compparams======================');
+        console.log(data);
+        console.log('====================================');
+        this.comService.allCompanyParams = data;
+      }
+    })
+    this.compCurrency = this.comService.compCurrency;
+  }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
@@ -133,7 +145,26 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.vatDetails();
 
     this.setReceiptData();
+    this.getAccountHead();
+  }
 
+
+  getAccountHead(e?: any) {
+
+    const API = `GetPOSDefaultAccode/${this.branchCode}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+          console.log('res', res);
+          // console.log('res', res.response.ACCODE); ACCOUNT_HEAD
+          this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(res.response.ACCODE);
+          this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(res.response.ACCOUNT_HEAD);
+
+          this.DebitamountChange({ target: { value: res.response.ACCODE } });
+         
+
+        }
+      });
   }
 
   getGSTDetails(acCode: any) {
@@ -156,6 +187,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
             this.comService.emptyToZero(data.GST_PER),
             'AMOUNT'));
+            this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(data.HSN_SAC_CODE);
         }
       }
       )
@@ -344,9 +376,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             console.log('data', data);
 
             if (data && data[0].CURRENCY_CODE) {
+              if (data[0].CURRENCY_CODE == this.compCurrency)
+                this.isCurrencyUpdate = true;
+              else
+                this.isCurrencyUpdate = false;
               this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(data[0].CURRENCY_CODE)
               console.log(data[0].CURRENCY_CODE);
-              this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(data[0].CONV_RATE)
+              this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(data[0].CONV_RATE);
+              this.getGSTDetails(data[0].ACCODE)
             }
           }
 
@@ -438,8 +475,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
         "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
         "CGST_PER": 0,
-        "CGST_AMOUNTFC":this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
-        "CGST_AMOUNTCC":this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
+        "CGST_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
+        "CGST_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
         "SGST_PER": 0,
         "SGST_AMOUNTFC": 0,
         "SGST_AMOUNTCC": 0,
