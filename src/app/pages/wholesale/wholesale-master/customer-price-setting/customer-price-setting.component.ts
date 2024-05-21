@@ -49,13 +49,13 @@ export class CustomerPriceSettingComponent implements OnInit {
     { type: 'Sub Category', value: 'Sub Category' },
     { type: 'Brand Code', value: 'Brand Code' },
     { type: 'Type', value: 'Type' },
-    { type: 'Collection', value: 'Collection' },
-    { type: 'Sub-Collection', value: 'Sub-Collection' },
-    { type: 'Stone Type/Look', value: 'Stone Type/Look' },
-    { type: 'Setting', value: 'Setting' },
-    { type: 'Shape', value: 'Shape' },
-    { type: 'Inc Cat', value: 'Inc Cat' },
-    { type: 'Order Ref', value: 'Order Ref' }
+    // { type: 'Collection', value: 'Collection' },
+    // { type: 'Sub-Collection', value: 'Sub-Collection' },
+    // { type: 'Stone Type/Look', value: 'Stone Type/Look' },
+    // { type: 'Setting', value: 'Setting' },
+    // { type: 'Shape', value: 'Shape' },
+    // { type: 'Inc Cat', value: 'Inc Cat' },
+    // { type: 'Order Ref', value: 'Order Ref' }
   ];
 
 
@@ -250,11 +250,19 @@ export class CustomerPriceSettingComponent implements OnInit {
     else if (e == '') {
       return 'N'
     }
+    else if (e == 'None') {
+      return ''
+    }
     else {
       return 'N';
     }
 
 
+  }
+
+
+  replaceNoneWithEmpty(value: string): string {
+    return value === 'None' ? ' ' : value;
   }
 
   getGroupDetails() {
@@ -263,12 +271,12 @@ export class CustomerPriceSettingComponent implements OnInit {
       "DivisionCode": this.customerpricesettingForm.value.division,
       "StockCodeCheck": this.viewchangeYorN(this.customerpricesettingForm.value.stockCode),
       "DesignCodeCheck": this.viewchangeYorN(this.customerpricesettingForm.value.designCode),
-      "FilterGroup1": this.customerpricesettingForm.value.group1,
-      "FilterGroup2": this.customerpricesettingForm.value.group2,
-      "FilterGroup3": this.customerpricesettingForm.value.group3,
-      "FilterGroup4": this.customerpricesettingForm.value.group4,
-      "FilterGroup5": this.customerpricesettingForm.value.group5,
-      "FilterGroup6": this.customerpricesettingForm.value.group6,
+      "FilterGroup1": this.replaceNoneWithEmpty(this.customerpricesettingForm.value.group1),
+      "FilterGroup2":this.replaceNoneWithEmpty( this.customerpricesettingForm.value.group2),
+      "FilterGroup3": this.replaceNoneWithEmpty(this.customerpricesettingForm.value.group3),
+      "FilterGroup4":this.replaceNoneWithEmpty( this.customerpricesettingForm.value.group4),
+      "FilterGroup5": this.replaceNoneWithEmpty(this.customerpricesettingForm.value.group5),
+      "FilterGroup6": this.replaceNoneWithEmpty(this.customerpricesettingForm.value.group6),
       // "FilterValue1": "",
       // "FilterValue2": "",
       // "FilterValue3": "",

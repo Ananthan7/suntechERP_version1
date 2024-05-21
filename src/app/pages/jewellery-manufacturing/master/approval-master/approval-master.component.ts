@@ -322,6 +322,10 @@ isNumeric(event: any) {
           if (this.tableData.length > 0) {
             this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
             this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            this.tableData.forEach((item: any, i: any) => {
+              item.SRNO = i + 1;
+            });
+          
           } else {
             this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
           }
