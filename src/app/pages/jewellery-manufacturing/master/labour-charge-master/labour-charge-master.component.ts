@@ -61,8 +61,8 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
 
-  viewModeSetting :boolean = false;
-  ViewModemethod :boolean = false;
+  viewModeSetting: boolean = false;
+  ViewModemethod: boolean = false;
   codeEnable1: boolean = true;
   codeEnable2: boolean = true;
 
@@ -119,7 +119,7 @@ export class LabourChargeMasterComponent implements OnInit {
     wtTo: [''],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]],
-  }); 
+  });
 
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
@@ -143,13 +143,13 @@ export class LabourChargeMasterComponent implements OnInit {
     this.codeEnable1 = true;
     this.inputDisable = true;
 
-  //  this.renderer.selectRootElement('#code')?.focus();
+    //  this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
       this.setFormValues();
-     // this.setInitialValues();
+      // this.setInitialValues();
     }
     else (this.content.FLAG == 'EDIT')
     {
@@ -157,7 +157,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.codeEnableMetal = false;
       this.editMode = true;
       this.setFormValues();
-    // this.setInitialValues();
+      // this.setInitialValues();
     }
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
@@ -229,7 +229,7 @@ export class LabourChargeMasterComponent implements OnInit {
     return false
   }
 
-  codeEnabledMetal(){
+  codeEnabledMetal() {
     if (this.metallabourMasterForm.value.metallabour_code == '') {
       this.codeEnableMetal = true;
     }
@@ -238,7 +238,7 @@ export class LabourChargeMasterComponent implements OnInit {
     }
   }
 
-  codeEnabledDiamond(){
+  codeEnabledDiamond() {
     if (this.diamondlabourMasterForm.value.labour_code == '') {
       this.codeEnableDiamond = true;
     }
@@ -456,7 +456,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
 
-  
+
   DialabourTypeList = [
     {
       name: 'SETTING',
@@ -564,15 +564,15 @@ export class LabourChargeMasterComponent implements OnInit {
 
   ];
 
-  onlabourtypeChange(){
-    console.log(' Hi' +this.settingTypeList);
+  onlabourtypeChange() {
+    console.log(' Hi' + this.settingTypeList);
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
       const methodControl = this.diamondlabourMasterForm.get('method');
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
-       
+
         // settingTypeControl;
         // methodControl?.enable();
       } else {
@@ -681,14 +681,14 @@ export class LabourChargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.wastage.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
-    
+
     this.diamondlabourMasterForm.controls.cost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.diamondlabourMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.diamondlabourMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
-  
+
   divisionCodeSelected(e: any) {
     if (this.checkCodeDia()) return
     console.log(e);
@@ -826,51 +826,37 @@ export class LabourChargeMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
-  formSubmit() {
-
-    if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid ) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    if (this.content && this.content.FLAG == 'VIEW') return
+  submitValidation(): boolean{
+    if (this.content && this.content.FLAG == 'VIEW') return true
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updatelabourChargeMaster()
-      return
+      return true
+    }
+    if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return true
     }
 
-    if(this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo)
-      {
-        this.toastr.error('Weight From should be lesser than Weight To')
-      }
+  
 
-      if(this.metallabourMasterForm.value.ctWtFrom > this.metallabourMasterForm.value.ctWtTo)
-        {
-          this.toastr.error('Weight From should be lesser than Weight To')
-        }
+    if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
+      this.toastr.error('Weight From should be lesser than Weight To')
+      return true
+    }
 
-        if(this.metallabourMasterForm.value.size_from > this.metallabourMasterForm.value.size_to)
-          {
-            this.toastr.error('Weight From should be lesser than Weight To')
-          return;
-          }
+    if (this.metallabourMasterForm.value.ctWtFrom > this.metallabourMasterForm.value.ctWtTo) {
+      this.toastr.error('carat From should be lesser than Weight To')
+      return true
+    }
 
-
-
-    // if (this.diamondlabourMasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-
-    // if (this.metallabourMasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-
-    let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
-    let postData =
-    {
+    if (this.metallabourMasterForm.value.size_from > this.metallabourMasterForm.value.size_to) {
+      this.toastr.error('size From should be lesser than Weight To')
+      return true
+    }
+    return false;
+  }
+  setPostData(){
+    return {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code,
@@ -886,7 +872,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
       "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate || 0,
-      "LAST_SELLING_RATE":  0,
+      "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
@@ -904,7 +890,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": this.metallabourMasterForm.value.metalselling_rate || "1",
+      "METALSTONE": this.metallabourMasterForm.value.metalDivision || "",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,
@@ -912,11 +898,16 @@ export class LabourChargeMasterComponent implements OnInit {
       "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt || false,
     }
-    console.log(this.metallabourMasterForm.value)
-    console.log(postData)
-    console.log('start')
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
+  }
+  formSubmit() {
+    if(this.submitValidation()) return
+
+    let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
+    let postData = this.setPostData();
+    
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    .subscribe((result: any) => {
       console.log('Server Response:', result);
       if (result.response) {
         if (result.status == "Success") {
@@ -1129,8 +1120,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.metallabourMasterForm.controls['brand'].disable();
       this.metallabourMasterForm.controls['brand'].setValue('');
     }
-    else
-    {
+    else {
       this.brandDisable = false;
       this.metallabourMasterForm.controls['brand'].enable();
     }
@@ -1176,7 +1166,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  
+
   // onweightto(event: any, data: String) {
   //   let wtf = this.metallabourMasterForm.value.wtFrom;
   //   let wtt = this.metallabourMasterForm.value.wtTo;
@@ -1191,7 +1181,7 @@ export class LabourChargeMasterComponent implements OnInit {
   //       })
   //       this.metallabourMasterForm.controls.wtTo.setValue('');
   //     }
-    
+
   //   }
   // }
 
@@ -1199,7 +1189,7 @@ export class LabourChargeMasterComponent implements OnInit {
     // Retrieve the values of Wt From and Wt To from the form
     const wtf: number = parseFloat(this.metallabourMasterForm.value.wtFrom);
     const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
-  
+
     // Check if the data parameter is not 'wtfrom'
     if (data !== 'wtfrom') {
       // Check if Wt From is greater than Wt To
@@ -1212,13 +1202,13 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         });
-  
+
         // Clear the value of Wt To input field
         this.metallabourMasterForm.controls.wtTo.setValue('');
       }
     }
   }
-  
+
 
   //  onCtweighttto(event: any, data: String) {
   //   let Ctwtf = this.diamondlabourMasterForm.value.ctWtFrom;
@@ -1243,7 +1233,7 @@ export class LabourChargeMasterComponent implements OnInit {
     // Retrieve the values of Ct Wt From and Ct Wt To from the form
     const Ctwtf: number = parseFloat(this.diamondlabourMasterForm.value.ctWtFrom);
     const Ctwtt: number = parseFloat(this.diamondlabourMasterForm.value.ctWtTo);
-  
+
     // Check if the data parameter is not 'Ctwtfrom'
     if (data !== 'Ctwtfrom') {
       // Check if Ct Wt From is greater than Ct Wt To
@@ -1256,13 +1246,13 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         });
-  
+
         // Clear the value of Ct Wt To input field
         this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
       }
     }
   }
-  
+
 
   onSizeto(event: any, data: string) {
 
@@ -1273,7 +1263,7 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log(Szwtf);
     console.log(Szwtt);
 
-  
+
     // Check if the data parameter is not 'Ctwtfrom'
     if (data !== 'sizefrom') {
       // Check if Ct Wt From is greater than Ct Wt To
@@ -1286,13 +1276,13 @@ export class LabourChargeMasterComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
         });
-  
+
         // Clear the value of Ct Wt To input field
         this.diamondlabourMasterForm.controls.size_to.setValue('');
       }
     }
   }
-  
+
 
   unitSelected() {
     console.log(' Hi' + this.unitList);
@@ -1362,7 +1352,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.viewselling = false;
       this.viewsellingrate = false;
     }
-    
+
   }
 
 
