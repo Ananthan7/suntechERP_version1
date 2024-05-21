@@ -55,6 +55,7 @@ export class WorkerMasterComponent implements OnInit {
     LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Supervisor',
+    WHERECONDITION: "WORKER_CODE <> ''",
     SEARCH_VALUE: '',
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -213,12 +214,12 @@ export class WorkerMasterComponent implements OnInit {
       "GROSSAL": 0,
       "EXP": 0,
       "TOTALSAL": 0,
-      "ACCODE": this.commonService.nullToString(form.WorkerAcCode),
+      "ACCODE": this.commonService.nullToString(form.WorkerAcCode.toUpperCase()),
       "LOSS_ALLOWED": this.commonService.emptyToZero(form.LossAllowed),
       "SECRET_CODE": this.commonService.nullToString(form.Password),
       "PROCESS_CODE": this.commonService.nullToString(this.selectedProcessArr[0]?.PROCESS_CODE),
       "TRAY_WEIGHT": this.commonService.emptyToZero(form.TrayWeight),
-      "SUPERVISOR": this.commonService.nullToString(form.NameOfSupervisor),
+      "SUPERVISOR": this.commonService.nullToString(form.NameOfSupervisor.toUpperCase()),
       "ACTIVE": form.Active,
       "TARGET_WEIGHT": this.commonService.emptyToZero(form.TargetWeight),
       "TARGET_BY": this.commonService.nullToString(form.DailyTarget),
@@ -564,9 +565,10 @@ export class WorkerMasterComponent implements OnInit {
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true) return
+    let where = LOOKUPDATA.WHERECONDITION ? LOOKUPDATA.WHERECONDITION : ''
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${where}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
