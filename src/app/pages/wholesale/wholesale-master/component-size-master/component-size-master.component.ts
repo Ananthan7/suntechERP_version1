@@ -130,7 +130,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     if (height !== null && width !== null) {
       // Calculate the radius based on the provided formula
       const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)), 3 / 3);
-      return radiusValue.toFixed(2);
+      return radiusValue.toFixed(3);
     } else {
       return '0';
     }
