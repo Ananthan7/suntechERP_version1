@@ -140,6 +140,7 @@ export class ComponentMasterComponent implements OnInit {
     costCenter: [""],
     currencyCode: [""],
     currencyRate: [""],
+   
   });
 
   codeEnabled() {
@@ -505,7 +506,7 @@ setFormValues() {
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
       "DESIGN_DESCRIPTION": this.componentmasterForm.value.codedes || "",
-      "CURRENCY_CODE": "1",
+      "CURRENCY_CODE": "AED",
       "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
       "COST_CODE": this.componentmasterForm.value.costCenter || "",
       "TYPE_CODE": this.componentmasterForm.value.type,
@@ -761,8 +762,8 @@ setFormValues() {
       "HEIGHT": this.componentmasterForm.value.height,
       "RADIUS": this.componentmasterForm.value.radius,
       "LENGTH": this.componentmasterForm.value.length,
-      "COMPSIZE_CODE": "",
-      "COMPSET_CODE": "",
+      "COMPSIZE_CODE": this.componentmasterForm.value.size,
+      "COMPSET_CODE": this.componentmasterForm.value.sizeSet,
       "PROD_VARIANCE": 0,
       "METALCALC_GROSSWT": true,
       "MKGCALC_GROSSWT": true,
@@ -794,7 +795,7 @@ setFormValues() {
       "UDF14_DESC": "",
       "UDF15_DESC": "",
       "REQ_METAL_WT": 0,
-      "REQ_METAL_TYPE": true,
+      "REQ_METAL_TYPE": false,
       "CHARGE6FC": 0,
       "CHARGE6LC": 0,
       "CHARGE7FC": 0,
