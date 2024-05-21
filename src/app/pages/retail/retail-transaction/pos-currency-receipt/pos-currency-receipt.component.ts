@@ -50,9 +50,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   userName?: String;
-
+  companyCurrency?: String;
   gridAmountDecimalFormat: any;
-
+  isCurrencyUpdate:boolean=false;
 
   enteredByCode: MasterSearchModel = {
     PAGENO: 1,
@@ -148,6 +148,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       precision: this.comService.allbranchMaster?.BAMTDECIMALS,
       currency: this.comService.compCurrency
     };
+
+    this.companyCurrency = this.comService.compCurrency;
   }
   convertDateToYMD(str: any) {
     var date = new Date(str),
@@ -362,6 +364,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
             console.log('data', data);
 
             if (data && data[0].CURRENCY_CODE) {
+             if(this.companyCurrency==data[0].CURRENCY_CODE)
+              this.isCurrencyUpdate=true;
+            else
+              this.isCurrencyUpdate=false;
 
               this.posCurrencyReceiptForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
               this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
@@ -665,9 +671,12 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   onRowDoubleClicked(e: any) {
+    e.cancel = true;
     this.openAddPosARdetails(e.data);
   }
-
+  removeLineItemsGrid(e: any) {
+   
+  }
   openAddPosARdetails(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
       size: 'xl',
@@ -676,7 +685,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.receiptData = data;
-  
+
     modalRef.result.then((postData) => {
       if (postData) {
         console.log('Data from modal:', postData);
@@ -684,7 +693,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       }
     });
   }
-  
+
   handlePostData(postData: any) {
     const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
       data.SRNO.toString() == postData.SRNO.toString()
@@ -696,23 +705,23 @@ export class PosCurrencyReceiptComponent implements OnInit {
     } else {
       this.posCurrencyDetailsData.push(postData);
     }
-  
+
     console.log('Updated posCurrencyDetailsData', this.posCurrencyDetailsData);
     this.updateFormValuesAndSRNO();
   }
-  
+
   updateFormValuesAndSRNO() {
     let sumCGST_AMOUNTCC = 0;
     let sumAMOUNTCC = 0;
-  
+
     this.posCurrencyDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
       sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.AMOUNTCC);
     });
-  
+
     let totalSum = sumCGST_AMOUNTCC + sumAMOUNTCC;
-  
+
     this.posCurrencyReceiptForm.controls.totalTax.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(sumCGST_AMOUNTCC),
       'AMOUNT'
@@ -726,7 +735,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       'AMOUNT'
     ));
   }
-  
+
 
 
   async getFinancialYear() {

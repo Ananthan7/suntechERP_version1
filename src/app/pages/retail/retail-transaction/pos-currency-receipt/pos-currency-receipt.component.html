@@ -66,14 +66,14 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Party currency :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 70%">
-                  <input type="text" [readonly]="viewOnly" matInput formControlName="partyCurrency" readonly />
+                  <input type="text" [readonly]="viewOnly||isCurrencyUpdate" matInput formControlName="partyCurrency" readonly />
                 </mat-form-field>
                 <!-- <master-search [MasterSearchData]="partyCurrencyCodeData" readonly
                                 (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
-                  <input type="number" [readonly]="viewOnly" matInput formControlName="partyCurrencyRate" readonly />
+                  <input type="number" [readonly]="viewOnly||isCurrencyUpdate" matInput formControlName="partyCurrencyRate" readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -211,17 +211,25 @@
             </div>
             <div class="row mb-2">
               <div class="col-md-12">
+                
                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [dataSource]="posCurrencyDetailsData"
+                [showBorders]="true" (onSelectionChanged)="onSelectionChanged($event)"(onRowRemoved)="removeLineItemsGrid($event)"
+                (onEditingStart)="onRowDoubleClicked($event)">
+                <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [dataSource]="posCurrencyDetailsData"
                   [showBorders]="true" (onSelectionChanged)="onSelectionChanged($event)"
-                  (onRowDblClick)="onRowDoubleClicked($event)">
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="false">
-                  </dxo-editing>
-                  <dxo-selection mode="multiple"></dxo-selection>
+                  (onRowDblClick)="onRowDoubleClicked($event)"> -->
+                  <!-- <dxo-paging [enabled]="false"></dxo-paging> -->
+                  <dxo-editing [allowUpdating]="true"
+                  [allowDeleting]="!viewOnly">
+                  <dxo-texts alignment="right"
+                    [editRow]="viewOnly ? 'View' : 'Edit'"
+                    deleteRow="Remove">
+                  </dxo-texts>
+                </dxo-editing>
+                
+                  <dxo-selection mode="single"></dxo-selection>
 
-                  <!-- <dxi-column type="buttons" caption="Edit" [fixed]="true" fixedPosition="left">
-                    <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
-                </dxi-column> -->
+                
 
                   <dxi-column *ngFor="let data of columnsList" dataField="{{ data.field }}" caption="{{ data.title }}"
                     [allowEditing]="true" alignment="center" backgroundcolor="#000">
