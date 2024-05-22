@@ -863,6 +863,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   /**use: focusout fn for input valate */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, formControlName: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formControlName].setValue('');
       return

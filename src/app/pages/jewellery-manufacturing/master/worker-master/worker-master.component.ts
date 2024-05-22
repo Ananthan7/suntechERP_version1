@@ -127,7 +127,6 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
   inputValidate(event: any) {
-    let form = this.workerMasterForm.value;
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
     } else {
@@ -562,8 +561,9 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let where = LOOKUPDATA.WHERECONDITION ? LOOKUPDATA.WHERECONDITION : ''
     let param = {

@@ -400,6 +400,7 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
