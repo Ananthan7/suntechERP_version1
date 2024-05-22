@@ -13,6 +13,7 @@ import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-cu
 import { DxDataGridComponent } from 'devextreme-angular';
 import { startOfDay } from '@fullcalendar/angular';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
+import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { IndexedDbService } from 'src/app/services/indexed-db.service';
 })
 export class PosCurrencyReceiptComponent implements OnInit {
   // @ViewChild(DxDataGridComponent, { static: false }) dataGrid?: DxDataGridComponent;
+  @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
 
   @Input() content!: any; //use: To get clicked row details from master grid
   // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
@@ -343,6 +345,17 @@ export class PosCurrencyReceiptComponent implements OnInit {
     console.log(e);
     this.posCurrencyReceiptForm.controls.enteredby.setValue(e.SALESPERSON_CODE);
     this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
+  }
+
+  auditTrailClick() {
+    let params = {
+      BRANCH_CODE: this.branchCode,
+      VOCTYPE: this.posCurrencyReceiptForm.value.vocType,
+      VOCNO: this.posCurrencyReceiptForm.value.vocNo.toString() || '',
+      MID: this.content?.MID.toString() || '',
+      YEARMONTH: this.yearMonth,
+    }
+    this.auditTrailComponent?.showDialog(params)
   }
 
   // PartyCodeChange(event: any) {
