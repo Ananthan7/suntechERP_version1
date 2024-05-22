@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+
 @Component({
   selector: 'app-component-master',
   templateUrl: './component-master.component.html',
@@ -249,6 +250,7 @@ export class ComponentMasterComponent implements OnInit {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
+    this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
   }
 
   sizeCodeData: MasterSearchModel = {
@@ -478,6 +480,7 @@ deleteTableData() {
 
 
 setFormValues() {
+  console.log(this.content,'data')
   if (!this.content) return
 
   this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
@@ -580,7 +583,7 @@ setFormValues() {
       "FIRST_TRN": "",
       "LAST_TRN": "",
       "MID": 0,
-      "PRINTED": true,
+      "PRINTED": false,
       "PURVOCTYPE_NO": "",
       "PURPARTY": "",
       "PURDATE": "2023-11-27T06:54:03.761Z",
@@ -651,7 +654,7 @@ setFormValues() {
       "MAX_TIME": 0,
       "MODEL_MAKER": "",
       "SKETCH_NAME": "",
-      "PROD_INSTRUCTION": "",
+      "PROD_INSTRUCTION": this.commonService.nullToString(this.componentmasterForm.value.PROD_INSTRUCTION),
       "LABOUR_FCCOST": 0,
       "MATERIAL_FCCOST": 0,
       "GROSS_WT": 0,
@@ -746,7 +749,7 @@ setFormValues() {
       "PRINT_COUNT": 0,
       "EXPIRY_DATE": "2023-11-27T06:54:03.761Z",
       "PROCESS_TYPE": "",
-      "DYE_STRIP": true,
+      "DYE_STRIP": false,
       "CASTING_REQ": 0,
       "WAXING_REQ": 0,
       "PCS": 0,
@@ -757,16 +760,16 @@ setFormValues() {
       "INNERWT": 0,
       "NON_CASTING": 0,
       "CC_MAKING": "",
-      "STONE_INCLUDED": true,
-      "CAD_REQUIRED": true,
+      "STONE_INCLUDED": false,
+      "CAD_REQUIRED": false,
       "HEIGHT": this.componentmasterForm.value.height,
       "RADIUS": this.componentmasterForm.value.radius,
       "LENGTH": this.componentmasterForm.value.length,
       "COMPSIZE_CODE": this.componentmasterForm.value.size,
       "COMPSET_CODE": this.componentmasterForm.value.sizeSet,
       "PROD_VARIANCE": 0,
-      "METALCALC_GROSSWT": true,
-      "MKGCALC_GROSSWT": true,
+      "METALCALC_GROSSWT": false,
+      "MKGCALC_GROSSWT": false,
       "PURITY": 0,
       "DESIGN_DESC": "",
       "COST_CENTER_DESC": "",
@@ -806,7 +809,7 @@ setFormValues() {
       "CHARGE9LC": 0,
       "CHARGE10FC": 0,
       "CHARGE10LC": 0,
-      "ADD_STEEL": true,
+      "ADD_STEEL": false,
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
