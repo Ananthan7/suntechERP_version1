@@ -163,7 +163,7 @@ export class MetalPrefixMasterComponent implements OnInit {
       "TYPE_CODE": " ",
       "COUNTRY_CODE": " ",
       "MID": 0,
-      "DIVISION": "s",
+      "DIVISION": "M",
       "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
       "PM_BRANCHCODE": "",
       "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix ,
