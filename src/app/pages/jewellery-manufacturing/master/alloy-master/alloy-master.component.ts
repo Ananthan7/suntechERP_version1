@@ -120,7 +120,7 @@ export class AlloyMasterComponent implements OnInit {
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
-    if (this.content.FLAG) {
+    if (this.content?.FLAG) {
       this.setInitialValues()
       if (this.content.FLAG == 'EDIT') {
         this.isDisabled = !this.isDisabled;

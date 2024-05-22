@@ -21,11 +21,23 @@ export class PricelistMasterComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   required: boolean = false;
-  dele: boolean = false;
   codeEnable: boolean = true;
   round: boolean = true;
 
-  priceListMasterForm!: FormGroup;
+  priceListMasterForm: FormGroup  = this.formBuilder.group({
+    priceCode: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    priceMethod: [0, [Validators.required]],
+    priceSign: ['+'],
+    priceValue: ['', [Validators.required]],
+    finalPriceSign: ['*'],
+    finalPriceValue: [''],
+    addlValueSign: ['*'],
+    addlValue: [''],
+    priceRoundoff: [false],
+    dontCalculate: [false],
+    roundoff_digit: [''],
+  });
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -69,40 +81,25 @@ export class PricelistMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.content)
-    this.dele = true;
     this.renderer.selectRootElement('#priceCode')?.focus();
-
-    this.priceListMasterForm = this.formBuilder.group({
-      priceCode: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      priceMethod: [0, [Validators.required]],
-      priceSign: ['+'],
-      priceValue: ['', [Validators.required]],
-      finalPriceSign: ['+'],
-      finalPriceValue: [''],
-      addlValueSign: ['+'],
-      addlValue: [''],
-      priceRoundoff: [false],
-      dontCalculate: [false],
-      roundoff_digit: [''],
-    });
 
     this.round = true;
     this.initializeForm();
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      // this.setAllInitialValues();
-      this.setFormValues()
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        // this.setAllInitialValues();
+        this.setFormValues()
+      } else if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+        this.codeEnable = false;
+        this.setFormValues()
+        this.roundoffDis()
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
     }
-    if (this.content.FLAG == 'EDIT') {
-      this.editMode = true;
-      this.dele = false;
-      this.codeEnable = false;
-      this.setFormValues()
-      this.roundoffDis() 
-    }
-
   }
 
   setFormValues() {
@@ -211,12 +208,15 @@ export class PricelistMasterComponent implements OnInit {
   }
 
   private initializeForm() {
-
-    this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.priceListMasterForm.controls.finalPriceValue.setValue(
+      this.commonService.decimalQuantityFormat(1, 'AMOUNT'
+    ))
+    this.priceListMasterForm.controls.addlValue.setValue(
+      this.commonService.decimalQuantityFormat(1, 'AMOUNT')
+    )
+    this.priceListMasterForm.controls.priceValue.setValue(
+      this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.priceListMasterForm.controls.roundoff_digit.setValue(0)
-
   }
   setAllInitialValues() {
     if (!this.content) return
@@ -482,7 +482,7 @@ export class PricelistMasterComponent implements OnInit {
   }
 
   roundoffDis() {
-   
+
     if (this.priceListMasterForm.value.priceRoundoff != true) {
       this.round = true;
       this.priceListMasterForm.controls.roundoff_digit.setValue('');
