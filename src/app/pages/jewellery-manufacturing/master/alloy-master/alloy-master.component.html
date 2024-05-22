@@ -6,9 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteMeltingType()"
-    [isViewDelete]="!dele"></modal-header>
+<modal-header [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteAlloyMaster()"
+    ></modal-header>
 <!-- content section -->
 <div class="row">
     <div>

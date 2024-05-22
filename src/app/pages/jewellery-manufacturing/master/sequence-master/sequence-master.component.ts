@@ -27,7 +27,6 @@ export class SequenceMasterComponent implements OnInit {
   viewMode: boolean = false;
   codeEnable: boolean = true;
   editMode: boolean = false;
-  dele: boolean = false;
   checkCondtion: boolean = false;
   checkTimeCondtion: boolean = false;
 
@@ -73,13 +72,11 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
-    this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'EDIT') {
         this.editMode = true
-        this.dele = false;
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
       } else if (this.content.FLAG == 'DELETE') {

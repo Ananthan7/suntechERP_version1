@@ -25,7 +25,6 @@ export class AlloyMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   image: string | ArrayBuffer | null | undefined;
   url: any;
-  dele: boolean = false;
   isDisableSaveBtn: boolean = false;
 
   numericValue!: number;
@@ -116,29 +115,28 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dele = true;
     this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
-    console.log(this.userName);
-
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
-    // console.log(this.content.FLAG);
-
-    if (this.content.FLAG == 'EDIT') {
-      this.isDisabled = !this.isDisabled;
-      this.editMode = true;
-      this.editableMode = true;
-      this.dele = false;
+    if (this.content.FLAG) {
       this.setInitialValues()
-    } else if (this.content.FLAG == 'VIEW') {
-      // this.alloyMastereForm.disable()
-      this.isDisabled = true;
-      this.editMode = true;
-      this.viewMode = true
-      this.setInitialValues()
+      if (this.content.FLAG == 'EDIT') {
+        this.isDisabled = !this.isDisabled;
+        this.editMode = true;
+        this.editableMode = true;
+      } else if (this.content.FLAG == 'VIEW') {
+        // this.alloyMastereForm.disable()
+        this.isDisabled = true;
+        this.editMode = true;
+        this.viewMode = true
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteAlloyMaster()
+      }
     }
+
   }
 
   setupFormSubscription(): void {
@@ -431,7 +429,7 @@ export class AlloyMasterComponent implements OnInit {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
@@ -801,7 +799,7 @@ export class AlloyMasterComponent implements OnInit {
       GW: 0,
       MODEL_NO: "",
       MODEL_YEAR: 0,
-      OPENED_ON:this.commonService.formatDateTime(this.currentDate),
+      OPENED_ON: this.commonService.formatDateTime(this.currentDate),
       OPENED_BY: "",
       FIRST_TRN: "",
       LAST_TRN: "",
@@ -1219,7 +1217,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   /**USE: delete Melting Type From Row */
-  deleteMeltingType() {
+  deleteAlloyMaster() {
     if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
     Swal.fire({
       title: 'Are you sure?',
@@ -1279,15 +1277,15 @@ export class AlloyMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  calculatePriceFCDetails(event: any){
+  calculatePriceFCDetails(event: any) {
     console.log("Input changed: ", event.target.value);
     var currencyRate = event.target.value;
     var weightAvgCostFC = this.alloyMastereForm.value.weightAvgCostFC;
-    this.alloyMastereForm.controls.price1Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price2Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price3Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price4Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price5Fc.setValue(currencyRate * weightAvgCostFC); 
-  } 
-  
+    this.alloyMastereForm.controls.price1Fc.setValue(currencyRate * weightAvgCostFC);
+    this.alloyMastereForm.controls.price2Fc.setValue(currencyRate * weightAvgCostFC);
+    this.alloyMastereForm.controls.price3Fc.setValue(currencyRate * weightAvgCostFC);
+    this.alloyMastereForm.controls.price4Fc.setValue(currencyRate * weightAvgCostFC);
+    this.alloyMastereForm.controls.price5Fc.setValue(currencyRate * weightAvgCostFC);
+  }
+
 }

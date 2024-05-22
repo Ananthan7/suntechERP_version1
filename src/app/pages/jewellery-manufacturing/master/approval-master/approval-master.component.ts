@@ -98,6 +98,9 @@ export class ApprovalMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
       this.editableMode = true;
+    } else if (this.content.FLAG == 'DELETE') {
+      this.viewMode = true;
+      this.deleteRecord()
     }
     console.log(this.content);
   }

@@ -8,7 +8,7 @@
   </div>
   <!-- modal header component -->
   <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteMeltingType()" [isViewDelete]="!viewMode"
+    (deleteClick)="deleteMeltingType()" [isViewDelete]="editMode"
     [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
     [isViewMore]="!viewMode"></modal-header>
   <!-- content section -->

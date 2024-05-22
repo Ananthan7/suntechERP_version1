@@ -32,7 +32,6 @@ export class WorkerMasterComponent implements OnInit {
   readonlyMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = true;
-  dele: boolean = false;
   btndisable: boolean = false;
   isDisableSaveBtn: boolean = false;
   filteredData: any[] = []; // Data source for the filtered grid
@@ -106,7 +105,6 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -119,7 +117,6 @@ export class WorkerMasterComponent implements OnInit {
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
-        this.dele = false;
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteWorkerMaster()
