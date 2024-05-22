@@ -30,6 +30,7 @@ export class ComponentSizeSetComponent implements OnInit {
   componentSizeType: any[] = [];
   componentSizeDesc: any[] = [];
   selectedOption: any; 
+  editableMode: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -61,6 +62,15 @@ export class ComponentSizeSetComponent implements OnInit {
       this.setFormValues()
     }
     this.getComponentSizeTypeOptions();
+
+    if (this.content.FLAG == 'VIEW') {
+
+      this.setFormValues();
+      // this.processMasterForm();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.setFormValues();
+      this.editableMode = true;
+    }
   }
 
   getComponentSizeTypeOptions() {
