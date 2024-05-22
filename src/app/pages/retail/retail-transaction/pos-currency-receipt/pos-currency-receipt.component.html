@@ -179,9 +179,12 @@
 
               <div class="col-sm-3 d-flex">
 
-                <menu-buttons *ngIf="!viewOnly" [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openAddPosARdetails()" (deleteClick)="deleteDetailRecord()">
+                <menu-buttons *ngIf="!viewOnly" [viewAddBtn]="true" [viewDeleteBtn]="false" [viewImportBtn]="false"
+                  (addClick)="openAddPosARdetails()">
                 </menu-buttons>
+                <!-- <menu-buttons *ngIf="!viewOnly" [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                (addClick)="openAddPosARdetails()" (deleteClick)="deleteDetailRecord()">
+              </menu-buttons> -->
                 <!-- <div class="p-2 bd-highlight">
                   <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openAddPosARdetails()">
                     Add
@@ -226,8 +229,8 @@
                     deleteRow="Remove">
                   </dxo-texts>
                 </dxo-editing>
-                
-                  <dxo-selection mode="single"></dxo-selection>
+                <dxo-selection mode="single"></dxo-selection>
+                  <!-- <dxo-selection mode="multiple"></dxo-selection> -->
 
                 
 
