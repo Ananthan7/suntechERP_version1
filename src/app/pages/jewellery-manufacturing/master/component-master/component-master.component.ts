@@ -1105,8 +1105,8 @@ setFormValues() {
   }
 
   validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
-    if (event.target.value == '' || this.viewMode == true) return
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`

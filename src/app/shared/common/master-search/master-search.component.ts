@@ -90,7 +90,7 @@ export class MasterSearchComponent implements OnInit {
     }
     if(!this.MasterSearchData) return
     let param = {
-      "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
+      "PAGENO": this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
       "ORDER_TYPE": this.MasterSearchData.SEARCH_VALUE ? 1 : 0,
