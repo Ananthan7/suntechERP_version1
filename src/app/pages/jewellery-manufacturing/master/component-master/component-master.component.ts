@@ -1106,9 +1106,10 @@ setFormValues() {
 
   validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true) return
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
