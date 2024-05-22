@@ -142,29 +142,24 @@ export class LabourChargeMasterComponent implements OnInit {
     this.grossWt = true;
     this.codeEnable1 = true;
     this.inputDisable = true;
-
-    //  this.renderer.selectRootElement('#code')?.focus();
-
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.viewDisable = true;
+    if (this.content.FLAG) {
       this.setFormValues();
-      // this.setInitialValues();
-    }
-    else (this.content.FLAG == 'EDIT')
-    {
-      this.codeEnableDiamond = false;
-      this.codeEnableMetal = false;
-      this.editMode = true;
-      this.setFormValues();
-      // this.setInitialValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.viewDisable = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.codeEnableDiamond = false;
+        this.codeEnableMetal = false;
+        this.editMode = true;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteMeltingType()
+      }
     }
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
     this.metallabourMasterForm.controls['metallabourType'].enable();
-
     this.getcurrencyOptions()
-
   }
 
 
@@ -826,7 +821,7 @@ export class LabourChargeMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  submitValidation(): boolean{
+  submitValidation(): boolean {
     if (this.content && this.content.FLAG == 'VIEW') return true
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updatelabourChargeMaster()
@@ -837,7 +832,7 @@ export class LabourChargeMasterComponent implements OnInit {
       return true
     }
 
-  
+
 
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
@@ -855,131 +850,90 @@ export class LabourChargeMasterComponent implements OnInit {
     }
     return false;
   }
-  setPostData(){
+  setPostData() {
+    let diamondForm = this.diamondlabourMasterForm.value
+    let metalForm = this.metallabourMasterForm.value
     return {
-      "MID": 0,
+      "MID": this.content?.MID || 0,
       "SRNO": 0,
-      "CODE": this.diamondlabourMasterForm.value.labour_code,
-      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "",
-      "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
-      "METHOD": this.diamondlabourMasterForm.value.method || "",
-      "DIVISION": this.diamondlabourMasterForm.value.divisions,
-      "SHAPE": this.diamondlabourMasterForm.value.shape,
-      "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
-      "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
-      "CURRENCYCODE": this.diamondlabourMasterForm.value.currency || "",
-      "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
-      "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
-      "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
-      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate || 0,
+      "CODE": this.commonService.nullToString(diamondForm.labour_code),
+      "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description),
+      "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
+      "METHOD": this.commonService.nullToString(diamondForm.method),
+      "DIVISION": this.commonService.nullToString(diamondForm.divisions),
+      "SHAPE": this.commonService.nullToString(diamondForm.shape),
+      "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
+      "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
+      "CURRENCYCODE": this.commonService.nullToString(diamondForm.currency),
+      "UNITCODE": this.commonService.nullToString(diamondForm.unitList),
+      "COST_RATE": this.commonService.emptyToZero(diamondForm.cost_rate),
+      "SELLING_RATE": this.commonService.emptyToZero(diamondForm.selling_rate),
+      "LAST_COST_RATE": this.commonService.emptyToZero(metalForm.metalcost_rate),
       "LAST_SELLING_RATE": 0,
-      "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
+      "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
-      "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
-      "SELLING_PER": this.diamondlabourMasterForm.value.selling || 0,
+      "DIVISION_CODE": metalForm.metalDivision,
+      "CURRENCY_CODE": this.commonService.nullToString(metalForm.currency),
+      "SELLING_PER": this.commonService.emptyToZero(diamondForm.selling),
       "ACCESSORIES": 0,
-      "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
-      "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
-      "SIEVE": this.diamondlabourMasterForm.value.sieve,
-      "WASTAGE_PER": this.commonService.emptyToZero(this.metallabourMasterForm.value.wastage),
+      "CARATWT_FROM": this.commonService.emptyToZero(diamondForm.ctWtFrom),
+      "CARATWT_TO": this.commonService.emptyToZero(diamondForm.ctWtTo),
+      "SIEVE": diamondForm.sieve,
+      "WASTAGE_PER": this.commonService.emptyToZero(metalForm.wastage),
       "WASTAGE_AMT": 0,
-      "TYPE_CODE": this.metallabourMasterForm.value.typecode || "",
-      "CATEGORY_CODE": this.metallabourMasterForm.value.category,
-      "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
-      "BRAND_CODE": this.metallabourMasterForm.value.brand,
-      "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
-      "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": this.metallabourMasterForm.value.metalDivision || "",
-      "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
-      "PURITY": this.metallabourMasterForm.value.purity,
-      "COLOR": this.metallabourMasterForm.value.color,
-      "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly || false,
-      "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
-      "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt || false,
+      "TYPE_CODE": this.commonService.nullToString(metalForm.typecode),
+      "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
+      "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
+      "BRAND_CODE": this.commonService.nullToString(metalForm.brand),
+      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.process),
+      "KARAT_CODE": this.commonService.nullToString(metalForm.karat),
+      "METALSTONE": this.commonService.nullToString(metalForm.metalDivision),
+      "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
+      "PURITY": this.commonService.emptyToZero(this.metallabourMasterForm.value.purity),
+      "COLOR": this.commonService.nullToString(metalForm.color),
+      "FOR_DESIGN": metalForm.forDesignOnly || false,
+      "SIEVEFROM_DESC": diamondForm.sieve_desc,
+      "ON_GROSSWT": metalForm.onGrossWt || false,
     }
-
   }
   formSubmit() {
-    if(this.submitValidation()) return
+    if (this.submitValidation()) return
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData = this.setPostData();
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result: any) => {
-      console.log('Server Response:', result);
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result?.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.diamondlabourMasterForm.reset()
-              this.metallabourMasterForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+      .subscribe((result: any) => {
+        console.log('Server Response:', result);
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result?.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.diamondlabourMasterForm.reset()
+                this.metallabourMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
         }
-      } else {
-        this.toastr.error('Not saved')
       }
-    }
-      , err => alert('save ' + err)
-    )
+        , err => alert('save ' + err)
+      )
     this.subscriptions.push(Sub)
   }
 
   updatelabourChargeMaster() {
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
-    let postData =
-    {
-      "MID": 0,
-      "SRNO": 0,
-      "CODE": this.diamondlabourMasterForm.value.labour_code,
-      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "",
-      "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
-      "METHOD": this.diamondlabourMasterForm.value.method || "",
-      "DIVISION": this.diamondlabourMasterForm.value.divisions,
-      "SHAPE": this.diamondlabourMasterForm.value.shape,
-      "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
-      "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
-      "CURRENCYCODE": this.diamondlabourMasterForm.value.currency || "",
-      "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
-      "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
-      "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || 0,
-      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate || 0,
-      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate || 0,
-      "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
-      "CRACCODE": "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
-      "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
-      "SELLING_PER": this.diamondlabourMasterForm.value.selling || 0,
-      "ACCESSORIES": 0,
-      "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
-      "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
-      "SIEVE": this.diamondlabourMasterForm.value.sieve,
-      "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
-      "WASTAGE_AMT": 0,
-      "TYPE_CODE": this.metallabourMasterForm.value.typecode || "",
-      "CATEGORY_CODE": this.metallabourMasterForm.value.category,
-      "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
-      "BRAND_CODE": this.metallabourMasterForm.value.brand,
-      "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
-      "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": this.metallabourMasterForm.value.metalselling || 0,
-      "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
-      "PURITY": this.metallabourMasterForm.value.purity,
-      "COLOR": this.metallabourMasterForm.value.color,
-      "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly || false,
-      "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
-      "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt || false,
-    }
+    let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {

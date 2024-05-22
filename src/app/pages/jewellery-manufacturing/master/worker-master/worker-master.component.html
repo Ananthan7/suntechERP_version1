@@ -8,9 +8,8 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)="deleteWorkerMaster()" [isViewDelete]="!dele"
-        [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
-        [disableSaveBtn]="isDisableSaveBtn"
+        (deleteClick)="deleteWorkerMaster()" [isViewDelete]="editMode"
+        [isViewSave]="!viewMode" [disableSaveBtn]="isDisableSaveBtn"
         [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
     <!-- content section -->
     <div class="card">
@@ -184,7 +183,7 @@
                                 <input type="text" matInput
                                     [readonly]="viewMode  || codeEnable"
                                     class="text-right"
-                                    MetalDecimalInput [max]="13"
+                                    MetalDecimalInput [max]="14"
                                     formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>

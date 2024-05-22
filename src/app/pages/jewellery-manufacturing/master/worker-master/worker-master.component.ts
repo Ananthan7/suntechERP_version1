@@ -32,7 +32,6 @@ export class WorkerMasterComponent implements OnInit {
   readonlyMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = true;
-  dele: boolean = false;
   btndisable: boolean = false;
   isDisableSaveBtn: boolean = false;
   filteredData: any[] = []; // Data source for the filtered grid
@@ -106,7 +105,6 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -119,7 +117,6 @@ export class WorkerMasterComponent implements OnInit {
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
-        this.dele = false;
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteWorkerMaster()
@@ -127,7 +124,6 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
   inputValidate(event: any) {
-    let form = this.workerMasterForm.value;
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
     } else {
@@ -449,33 +445,6 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**select process API call */
-  // selectProcessMasterList() {
-  //   this.btndisable = true;
-  //   if (this.content && this.content.FLAG == 'EDIT') return
-  //   if (this.workerMasterForm.value.WorkerCode == '') {
-  //     this.commonService.toastErrorByMsgId('Worker Code Required');
-  //     return
-  //   }
-
-  //   this.commonService.toastSuccessByMsgId('MSG81447');
-  //   let API = 'ProcessMasterDj/GetProcessMasterDJList'
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       if (result.response) {
-  //         let data = result.response;
-  //         data.forEach((item: any, i: any) => {
-  //           item.SELECT1 = false
-  //           item.SRNO = i + 1;
-  //         });
-  //         this.tableData = data
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('MSG1531')
-  //     })
-  //   this.subscriptions.push(Sub)
-
-  // }
-
   selectProcessMasterList() {
     this.btndisable = true;
     if (this.content && this.content.FLAG == 'EDIT') return;
@@ -562,22 +531,26 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
-    let where = LOOKUPDATA.WHERECONDITION ? LOOKUPDATA.WHERECONDITION : ''
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${where}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
+    this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.workerMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

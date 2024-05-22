@@ -274,10 +274,11 @@ export class DesignMasterComponent implements OnInit {
     });
   }
   validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
@@ -286,6 +287,8 @@ export class DesignMasterComponent implements OnInit {
         if(data.length==0){
           this.commonService.toastErrorByMsgId('MSG1531')
           this.designmasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

@@ -6,7 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
-    [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewDelete]="!dele"
+    [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewDelete]="editMode"
     (saveClick)="formSubmit()" (cancelClick)="close()"
     (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
@@ -142,8 +142,7 @@
                                             <input type="text"
                                                 class="text-right" matInput
                                                 AmountDecimalInput
-                                                [max]="5"
-                                                formControlName="addlValue"
+                                                [max]="5" formControlName="addlValue"
                                                 [readonly]="viewMode || codeEnable"
                                                 [required]="required" />
                                         </mat-form-field>
