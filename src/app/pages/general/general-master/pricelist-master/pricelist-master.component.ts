@@ -258,6 +258,12 @@ export class PricelistMasterComponent implements OnInit {
   }
   createPostData() {
     let form = this.priceListMasterForm.value
+    let priceFormula = ''
+    if(form.priceMethod == 0){
+      priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`
+    } else if(form.priceMethod == 1){
+      priceFormula = form.priceValue
+    }
     return {
       "PRICE_CODE": form.priceCode.toUpperCase(),
       "DESCRIPTION": form.description.toUpperCase(),
@@ -273,7 +279,7 @@ export class PricelistMasterComponent implements OnInit {
       "ADDLVALUE_SIGN": form.addlValueSign || '',
       "PRICE_ROUDOFF": form.priceRoundoff,
       "ROUNDOFF_DIGIT": this.commonService.emptyToZero(form.roundoff_digit),
-      "PRICE_FORMULA": `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`,
+      "PRICE_FORMULA": this.commonService.nullToString(priceFormula),
     };
   }
   validateForm() {

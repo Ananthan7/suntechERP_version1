@@ -352,6 +352,8 @@ export class ApprovalMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.approvalMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

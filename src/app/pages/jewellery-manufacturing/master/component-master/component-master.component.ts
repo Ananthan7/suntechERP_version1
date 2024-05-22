@@ -1117,11 +1117,12 @@ setFormValues() {
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
       .subscribe((result) => {
-        
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if(data.length==0){
           this.commonService.toastErrorByMsgId('MSG1531')
           this.componentmasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

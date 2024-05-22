@@ -287,6 +287,8 @@ export class DesignMasterComponent implements OnInit {
         if(data.length==0){
           this.commonService.toastErrorByMsgId('MSG1531')
           this.designmasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

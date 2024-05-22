@@ -445,33 +445,6 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**select process API call */
-  // selectProcessMasterList() {
-  //   this.btndisable = true;
-  //   if (this.content && this.content.FLAG == 'EDIT') return
-  //   if (this.workerMasterForm.value.WorkerCode == '') {
-  //     this.commonService.toastErrorByMsgId('Worker Code Required');
-  //     return
-  //   }
-
-  //   this.commonService.toastSuccessByMsgId('MSG81447');
-  //   let API = 'ProcessMasterDj/GetProcessMasterDJList'
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       if (result.response) {
-  //         let data = result.response;
-  //         data.forEach((item: any, i: any) => {
-  //           item.SELECT1 = false
-  //           item.SRNO = i + 1;
-  //         });
-  //         this.tableData = data
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('MSG1531')
-  //     })
-  //   this.subscriptions.push(Sub)
-
-  // }
-
   selectProcessMasterList() {
     this.btndisable = true;
     if (this.content && this.content.FLAG == 'EDIT') return;
@@ -566,14 +539,18 @@ export class WorkerMasterComponent implements OnInit {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
+    this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.workerMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

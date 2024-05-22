@@ -881,6 +881,7 @@ export class ProcessMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processMasterForm.controls[formControlName].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
       }, err => {
