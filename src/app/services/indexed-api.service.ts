@@ -279,7 +279,7 @@ export class IndexedApiService {
 
   getBranchCurrencyMaster() {
     this.suntechApi
-      .getDynamicAPI(`BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${localStorage.getItem('userbranch')}`)
+      .getDynamicAPI(`BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${this.comFunc.branchCode}`)
       // this.suntechApi.getBranchCurrencyMaster(branch)
       .subscribe((data) => {
         // this.comFunc.allBranchCurrency = data.response;
