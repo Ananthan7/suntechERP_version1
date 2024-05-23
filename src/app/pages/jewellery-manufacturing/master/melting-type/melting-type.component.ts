@@ -292,13 +292,14 @@ export class MeltingTypeComponent implements OnInit {
   colorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 35,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR SET'",
+    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   colorDataSelected(data: any) {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -31,6 +31,7 @@ export class StonePricingMasterComponent implements OnInit {
   displayDeal: string = '';
   userbranch = localStorage.getItem('userbranch');
   sieveSet: any;
+  editMode: boolean = false;
 
 
 
@@ -210,6 +211,7 @@ export class StonePricingMasterComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) {
     this.branchCode = this.commonService.branchCode;
   }
@@ -468,7 +470,43 @@ export class StonePricingMasterComponent implements OnInit {
       this.subscriptions.push(Sub)
     }
   }
+  checkCodeExists(event: any) {
+    const priceCode = event.target.value;
 
+    if (priceCode === '') return;
+    if (this.editMode || this.viewMode) return;
+
+    const API = 'StonePriceMasterDJ/GetStonePriceMasterDJ/' + priceCode;
+    const sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              // Focus on the input after the alert is closed
+              setTimeout(() => {
+                this.renderer.selectRootElement('#price_code').focus();
+              }, 500);
+            }
+          });
+
+          // Reset the form control value
+          this.stonePrizeMasterForm.controls.price_code.setValue('');
+        }
+      },
+      (err) => {
+        console.error('Error checking code:', err);
+        this.stonePrizeMasterForm.controls.price_code.setValue('');
+      }
+    );
+
+    this.subscriptions.push(sub);
+  }
   update() {
     console.log(this.stonePrizeMasterForm.value);
     if (this.stonePrizeMasterForm.invalid) {
