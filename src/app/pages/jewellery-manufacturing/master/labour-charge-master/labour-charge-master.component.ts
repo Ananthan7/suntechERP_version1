@@ -142,6 +142,8 @@ export class LabourChargeMasterComponent implements OnInit {
     this.grossWt = true;
     this.codeEnable1 = true;
     this.inputDisable = true;
+    console.log(this.content,'this.content');
+    
     if (this.content.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -171,42 +173,6 @@ export class LabourChargeMasterComponent implements OnInit {
     private commonService: CommonServiceService,
     private renderer: Renderer2,
   ) { }
-
-  // salesChangesDia(data: any) {
-  //   console.log(data);
-
-  //   if (data == 'selling') {
-  //     this.viewsellingrate = true;
-  //     this.viewselling = false;
-  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
-  //   } else if (data == 'selling_rate') {
-  //     this.viewselling = true;
-  //     this.viewsellingrate = false;
-  //     this.diamondlabourMasterForm.controls.selling.setValue('');
-  //   } else {
-  //     this.viewselling = false;
-  //     this.viewsellingrate = false;
-  //   }
-
-  // }
-
-
-  // salesChangesMetal(data: any) {
-  //   console.log(data);
-  //   if (data == 'metalSelling') {
-  //     this.viewsellingrateMetal = true;
-  //     this.viewsellingMetal = false;
-  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
-  //   } else if (data == 'metalselling_rate') {
-  //     this.viewsellingMetal = true;
-  //     this.viewsellingrateMetal = false;
-  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
-  //   } else {
-  //     this.viewsellingMetal = false;
-  //     this.viewsellingrateMetal = false;
-  //   }
-
-  // }
 
   checkCode(): boolean {
     if (this.metallabourMasterForm.value.metallabour_code == '') {
@@ -657,10 +623,10 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.LAST_COST_RATE));
 
-    this.metallabourMasterForm.controls.metalselling.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.METALSTONE));
+    // this.metallabourMasterForm.controls.metalselling.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.METALSTONE));
 
   }
 
@@ -962,20 +928,8 @@ export class LabourChargeMasterComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
+    debugger
     if (this.content && this.content.FLAG == 'VIEW') return
-    // if (!this.content.WORKER_CODE) {
-    //   Swal.fire({
-    //     title: '',
-    //     text: 'Please Select data to delete!',
-    //     icon: 'error',
-    //     confirmButtonColor: '#336699',
-    //     confirmButtonText: 'Ok'
-    //   }).then((result: any) => {
-    //     if (result.value) {
-    //     }
-    //   });
-    //   return
-    // }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

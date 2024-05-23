@@ -62,7 +62,7 @@ export class ComponentMasterComponent implements OnInit {
       
     }
 
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    let CURRENCY_CODE = this.commonService.compCurrency
     this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
     let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
@@ -204,10 +204,9 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE = '1'",
+    WHERECONDITION: "DIVISION='S' AND COMP_PREFIX='1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   
   codeCodeSelected(e: any) {
@@ -509,7 +508,7 @@ setFormValues() {
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
       "DESIGN_DESCRIPTION": this.componentmasterForm.value.codedes || "",
-      "CURRENCY_CODE": "AED",
+      "CURRENCY_CODE": this.componentmasterForm.controls.currencyCode,
       "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
       "COST_CODE": this.componentmasterForm.value.costCenter || "",
       "TYPE_CODE": this.componentmasterForm.value.type,
@@ -821,7 +820,7 @@ setFormValues() {
           "GROSS_WT": 0,
           "PCS": 0,
           "RATE_TYPE": "",
-          "CURRENCY_CODE": "AED",
+          "CURRENCY_CODE": this.componentmasterForm.controls.currencyCode,
           "RATE": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,

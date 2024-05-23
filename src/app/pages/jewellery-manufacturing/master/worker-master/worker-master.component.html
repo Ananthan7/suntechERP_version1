@@ -40,11 +40,7 @@
                                 <input type="text" matInput
                                     placeholder="DESCRIPTION" UpperCaseDirective
                                     formControlName="WorkerDESCRIPTION"
-                                    appNoEmptySpace
-                                    #WorkerDESCRIPTION
-                                    [readonly]="viewMode || codeEnable"
-                                    oninput="this.value = this.value.toUpperCase()"
-                                    (input)="WorkerDESCRIPTION.value = WorkerDESCRIPTION.value.toUpperCase()" />
+                                    [readonly]="viewMode || codeEnable"  />
                             </mat-form-field>
                         </div>
                     </div>
