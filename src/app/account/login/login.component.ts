@@ -182,22 +182,21 @@ export class LoginComponent implements OnInit {
   /**use: to check username */
   checkUserName(event: any) {
     if (this.user_name != '') {
+      this.comService.formControlSetReadOnly('username', false);
       this.snackBarRef = this.snackBar.open('Validating Username ...');
       let API = 'UserDetailNetMaster/' + this.user_name
       let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-
           this.comService.formControlSetReadOnly('password', false);
           this.renderer.selectRootElement('#password')?.focus();
 
           this.userDetails = resp.response
-          // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
-          // localStorage.setItem('userLang', resp['response']['USER_LANGUAGE']);
           this.validateState = 1;
         } else {
+          this.dataForm.controls.username.setValue('')
+          this.user_name=''
           this.comService.formControlSetReadOnly('password', true);
           this.renderer.selectRootElement('#username')?.focus();
-
         }
         this.snackBar.dismiss();
       });
@@ -219,17 +218,13 @@ export class LoginComponent implements OnInit {
         let API = 'ValidatePassword?strusername=' + this.user_name + '&strPassword=' + password
         let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
           if (resp.status == 'Success') {
-
-            this.renderer.selectRootElement('#branch')?.focus();
-
             this.snackBar.open('loading...');
             let API2 = 'UseBranchNetMaster/' + this.user_name + ''
             let sub2: Subscription = this.dataService.getDynamicAPI(API2).subscribe((resp) => {
               if (resp.status == 'Success') {
                 this.snackBar.dismiss();
-
                 this.comService.formControlSetReadOnly('branch', false);
-
+                this.renderer.selectRootElement('#branch')?.focus();
                 this.all_branch = resp.response;
                 var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
 
@@ -250,9 +245,7 @@ export class LoginComponent implements OnInit {
             this.validateState = 2;
             this.snackBar.dismiss();
           } else {
-            
             this.snackBar.dismiss();
-            
             this.snackBar.open(
               'Invalid User Credentials! Check Username & Password.',
               'OK',
@@ -260,11 +253,10 @@ export class LoginComponent implements OnInit {
                 duration: 5000,
               }
               );
-
               this.validateState = 1;
+              this.dataForm.controls.password.setValue('')
               this.renderer.selectRootElement('#password')?.focus();
-
-            this.filteredOptions = undefined;
+              this.filteredOptions = undefined;
           }
         });
         //to unsubscribe
