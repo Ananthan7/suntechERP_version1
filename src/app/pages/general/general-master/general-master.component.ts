@@ -27,6 +27,7 @@ export class GeneralMasterComponent implements OnInit {
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
   private componentDbList: any = {}
+  dataToEdit: any;
 
   //subscription variable
   subscriptions$!: Subscription;
@@ -50,14 +51,20 @@ export class GeneralMasterComponent implements OnInit {
   }
 
   viewRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'VIEW'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'VIEW'
+    this.openModalView(this.dataToEdit)
   }
   editRowDetails(e: any) {
-    let str = e.row.data;
-    str.FLAG = 'EDIT'
-    this.openModalView(str)
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'EDIT'
+    this.openModalView(this.dataToEdit)
+  }
+  deleteBtnClicked(e: any) {
+    this.dataToEdit = e.row.data;
+    this.dataToEdit.FLAG = 'DELETE'
+    this.openModalView(this.dataToEdit)
+    // this.authCheckerComponent?.openAuthModal();
   }
   //  open Jobcard in modal
   openModalView(data?: any) {
