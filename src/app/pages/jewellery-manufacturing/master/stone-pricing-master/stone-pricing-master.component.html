@@ -30,6 +30,7 @@
                                                 #codeInput matInput
                                                 maxlength="15"
                                                 formControlName="price_code"
+                                                (focusout)="checkCodeExists($event)"
                                                 oninput="this.value = this.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
