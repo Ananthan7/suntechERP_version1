@@ -24,7 +24,6 @@ export class PriceschemesMasterComponent implements OnInit {
   codeEnable: boolean = true;
   viewMode: boolean = false;
   editMode: boolean = false;
-  dele: boolean = false;
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -48,7 +47,6 @@ export class PriceschemesMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
 
     this.priceSchemaMasterForm = this.formBuilder.group({
@@ -61,37 +59,34 @@ export class PriceschemesMasterComponent implements OnInit {
       price5: [{ value: '', disabled: true }],
     })
 
-
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.priceSchemaMasterForm.get('price1')?.enable();
-      this.priceSchemaMasterForm.get('price2')?.enable();
-      this.priceSchemaMasterForm.get('price3')?.enable();
-      this.priceSchemaMasterForm.get('price4')?.enable();
-      this.priceSchemaMasterForm.get('price5')?.enable();
-      
-    } else if (this.content.FLAG == 'EDIT') {
-      this.viewMode = false;
-      this.editMode = true;
-      this.codeEnable = false;
-      this.dele = false;
-
-      this.price3SearchEnable = true;
-      this.price2SearchEnable = true;
-      this.price4SearchEnable = true;
-      this.price5SearchEnable = true;
-
-      this.priceSchemaMasterForm.get('price1')?.enable();
-      this.priceSchemaMasterForm.get('price2')?.enable();
-      this.priceSchemaMasterForm.get('price3')?.enable();
-      this.priceSchemaMasterForm.get('price4')?.enable();
-      this.priceSchemaMasterForm.get('price5')?.enable();
-
+    if(this.content?.FLAG){
+      this.setAllInitialValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.priceSchemaMasterForm.get('price1')?.enable();
+        this.priceSchemaMasterForm.get('price2')?.enable();
+        this.priceSchemaMasterForm.get('price3')?.enable();
+        this.priceSchemaMasterForm.get('price4')?.enable();
+        this.priceSchemaMasterForm.get('price5')?.enable();
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+        this.codeEnable = false;
+        this.price3SearchEnable = true;
+        this.price2SearchEnable = true;
+        this.price4SearchEnable = true;
+        this.price5SearchEnable = true;
   
+        this.priceSchemaMasterForm.get('price1')?.enable();
+        this.priceSchemaMasterForm.get('price2')?.enable();
+        this.priceSchemaMasterForm.get('price3')?.enable();
+        this.priceSchemaMasterForm.get('price4')?.enable();
+        this.priceSchemaMasterForm.get('price5')?.enable();
+      }else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
     }
-
- //   this.initializeForm();
-    this.setAllInitialValues();
   }
 
 

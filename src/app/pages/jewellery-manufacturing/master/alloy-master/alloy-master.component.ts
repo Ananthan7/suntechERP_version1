@@ -510,7 +510,9 @@ export class AlloyMasterComponent implements OnInit {
   }
   getAvgCost(cost:any,percentage: any){
     let percentageValue:number = ((this.commonService.emptyToZero(cost)*this.commonService.emptyToZero(percentage))/100)
-    return this.commonService.setCommaSerperatedNumber(percentageValue+cost,'AMOUNT')
+    let val = this.commonService.setCommaSerperatedNumber(percentageValue+this.commonService.emptyToZero(cost),'AMOUNT')
+    console.log(cost,'*',percentage,'=',val);
+    return val
   }
   priceCodeSelected(e: any) {
     if (this.checkStockCode()) return

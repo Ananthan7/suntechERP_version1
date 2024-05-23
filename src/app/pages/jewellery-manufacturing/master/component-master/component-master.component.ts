@@ -34,44 +34,21 @@ export class ComponentMasterComponent implements OnInit {
   viewDisable: boolean = false;
 
   images: any[] = [];
-  constructor(
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private snackBar: MatSnackBar,
-    private commonService: CommonServiceService,
-  ) { }
+  private subscriptions: Subscription[] = [];
 
-  ngOnInit(): void {
-
-   // this.images = ['assets/images/transparentImg.png'];
-
-    if (this.content.FLAG == 'VIEW') {
-
-      this.setFormValues();
-      this.viewMode = true;
-      this.viewDisable = true;
-    } else (this.content.FLAG == 'EDIT')
-    {
-   
-      this.setFormValues();
-      this.editableMode = true;
-      this.editMode = true;
-      
-    }
-
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
-    let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
-    this.componentmasterForm.controls.currencyRate.setValue(currrate);
-    
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Type',
+    SEARCH_VALUE: '',
+    //WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
+    // WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
-
- 
-
-
   divisionCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -83,45 +60,116 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(value: any, data: any, controlName: string) {
-    console.log('Data ', data);
-    console.log('values ', value);
-
-    this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-
-    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
-
-  }
-
-
-  stockCodeData: MasterSearchModel = {
+  categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category type',
     SEARCH_VALUE: '',
-     //WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
-    // WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "types = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
-
-  stockCodeDataSelected(value: any, data: any, controlName: string) {
-    console.log(data);
-    console.log(value);
-
-    this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
-  //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
-
-
-
-
-
-
-  private subscriptions: Subscription[] = [];
+  codeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION='S' AND COMP_PREFIX='1'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'SETTING TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  sizeSetCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 90,
+    SEARCH_FIELD: 'COMPSET_CODE',
+    SEARCH_HEADING: 'Size set',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COMPSET_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COMPSIZE_CODE <>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Shape',
+    SEARCH_VALUE: '',
+    WHERECONDITION: " TYPES='SHAPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  settingTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Setting Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'SETTING MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  processSeqCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 93,
+    SEARCH_FIELD: 'SEQ_CODE',
+    SEARCH_HEADING: 'Sequence ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SEQ_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  costCenterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   componentmasterForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
@@ -141,8 +189,47 @@ export class ComponentMasterComponent implements OnInit {
     costCenter: [""],
     currencyCode: [""],
     currencyRate: [""],
-   
   });
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private snackBar: MatSnackBar,
+    private commonService: CommonServiceService,
+  ) { }
+
+  ngOnInit(): void {
+    if (this.content?.FLAG) {
+      this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.viewDisable = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.editableMode = true;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteComponentMaster()
+      }
+    }
+    let CURRENCY_CODE = this.commonService.compCurrency
+    this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
+    let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
+    this.componentmasterForm.controls.currencyRate.setValue(currrate);
+
+  }
+
+  divisionCodeSelected(value: any, data: any, controlName: string) {
+    this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
+  }
+
+  stockCodeDataSelected(value: any, data: any, controlName: string) {
+    this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+    //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  }
 
   codeEnabled() {
     if (this.componentmasterForm.value.code == '') {
@@ -151,7 +238,6 @@ export class ComponentMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
-
   }
 
   checkCode(): boolean {
@@ -162,54 +248,16 @@ export class ComponentMasterComponent implements OnInit {
     return false
   }
 
-  categoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   categoryCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
-
-  
-  karatCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 17,
-    SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  karatCodeSelected(value: any, data: any, controlName: string){
+  karatCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
     //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
-
-  codeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: 'PREFIX_CODE',
-    SEARCH_HEADING: 'Prefix master',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE = '1'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  
   codeCodeSelected(e: any) {
     console.log(e);
     const prefixCode = e.PREFIX_CODE.toUpperCase();
@@ -217,35 +265,12 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.code.setValue(prefixCode);
     this.componentmasterForm.controls.codedes.setValue(des);
   }
-
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SETTING TYPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   typeCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
 
-  sizeSetCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 90,
-    SEARCH_FIELD: 'COMPSET_CODE',
-    SEARCH_HEADING: 'Size set',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSET_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   sizeSetCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
@@ -253,18 +278,6 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
   }
 
-  sizeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
-    SEARCH_HEADING: 'Size',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSIZE_CODE <>''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  
   sizeCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
@@ -317,68 +330,26 @@ export class ComponentMasterComponent implements OnInit {
 
   // }
 
-  shapeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Shape',
-    SEARCH_VALUE: '',
-    WHERECONDITION: " TYPES='SHAPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
   shapeCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.shape.setValue(e.CODE);
   }
 
-  settingTypeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Setting Type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SETTING MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   settingTypeCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.settingType.setValue(e.CODE);
   }
 
-  processSeqCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 93,
-    SEARCH_FIELD: 'SEQ_CODE',
-    SEARCH_HEADING: 'Sequence ',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "SEQ_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
   processSeqCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.processSeq.setValue(e.SEQ_CODE);
   }
 
-  costCenterCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
   costCenterCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
@@ -392,7 +363,7 @@ export class ComponentMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
- 
+
 
   addTableData() {
     let length = this.tableData.length;
@@ -419,7 +390,7 @@ export class ComponentMasterComponent implements OnInit {
       "EXT_CLARITY": "",
       "SIEVE_FROM": "",
       "SIEVE_TO": "",
-    
+
     };
     this.tableData.push(data);
     this.tableData.filter((data, i) => data.SRNO = i + 1)
@@ -443,73 +414,73 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
-//   deleteTableData() {
-//     console.log(this.selectedIndexes);
-//     if (this.selectedIndexes.length > 0) {
-//         this.selectedIndexes.sort((a:number, b:number) => b - a);
+  //   deleteTableData() {
+  //     console.log(this.selectedIndexes);
+  //     if (this.selectedIndexes.length > 0) {
+  //         this.selectedIndexes.sort((a:number, b:number) => b - a);
 
-//         this.selectedIndexes.forEach((indexToRemove:number) => {
-//             this.tableData.splice(indexToRemove, 2);
-//         });
-//         this.selectedIndexes = [];
-//     } else {
-//         this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-//     }
-// }
+  //         this.selectedIndexes.forEach((indexToRemove:number) => {
+  //             this.tableData.splice(indexToRemove, 2);
+  //         });
+  //         this.selectedIndexes = [];
+  //     } else {
+  //         this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  //     }
+  // }
 
-deleteTableData() {
-  console.log('Selected indexes:', this.selectedIndexes);
-  if (this.selectedIndexes.length > 0) {
+  deleteTableData() {
+    console.log('Selected indexes:', this.selectedIndexes);
+    if (this.selectedIndexes.length > 0) {
       this.selectedIndexes.sort((a: number, b: number) => b - a);
 
       console.log('Before deletion - tableData:', this.tableData);
 
       this.selectedIndexes.forEach((indexToRemove: number) => {
-          console.log('Deleting index:', indexToRemove);
-          this.tableData.splice(indexToRemove,2);
+        console.log('Deleting index:', indexToRemove);
+        this.tableData.splice(indexToRemove, 2);
       });
 
       console.log('After deletion - tableData:', this.tableData);
 
       this.selectedIndexes = [];
-  } else {
+    } else {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+    }
   }
-}
 
 
 
-setFormValues() {
-  console.log(this.content,'data')
-  if (!this.content) return
+  setFormValues() {
+    console.log(this.content, 'data')
+    if (!this.content) return
 
-  this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
-  this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
-  this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
-  this.componentmasterForm.controls.size.setValue(this.content.SIZE)
- // this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE)
-  this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
-  this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
-  this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
-  this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
-  this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
-  this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
-  this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
-  this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
-  this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
-  this.componentmasterForm.controls.processSeq.setValue(this.content.SEQ_CODE)
-  this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
-  this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
-  this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
+    this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
+    this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
+    this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
+    this.componentmasterForm.controls.size.setValue(this.content.SIZE)
+    // this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE)
+    this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
+    this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
+    this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
+    this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
+    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+    this.componentmasterForm.controls.processSeq.setValue(this.content.SEQ_CODE)
+    this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
+    this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
+    this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
 
-}
+  }
 
   setPostData() {
 
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
       "DESIGN_DESCRIPTION": this.componentmasterForm.value.codedes || "",
-      "CURRENCY_CODE": "AED",
+      "CURRENCY_CODE": this.componentmasterForm.controls.currencyCode,
       "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
       "COST_CODE": this.componentmasterForm.value.costCenter || "",
       "TYPE_CODE": this.componentmasterForm.value.type,
@@ -552,9 +523,9 @@ setFormValues() {
       "SHORT_ID": "",
       "COLOR": "",
       "CLARITY": "",
-      "SIZE": this.componentmasterForm.value.size ,
+      "SIZE": "",
       "SIEVE": "",
-      "SHAPE": this.componentmasterForm.value.shape ,
+      "SHAPE": this.componentmasterForm.value.shape,
       "GRADE": "",
       "FLUOR": "",
       "FINISH": "",
@@ -614,8 +585,8 @@ setFormValues() {
       "WATCH_MOVEMENT": "",
       "WATCH_STATUS": "",
       "ITEM_IMAGE": '',
-      "DESIGN_HOLD": true,
-      "DESIGN_EXCLUSSIVE": true,
+      "DESIGN_HOLD": false,
+      "DESIGN_EXCLUSSIVE": false,
       "JEWELLERY_SIZE": 0,
       "SIZE_UNIT": "",
       "METAL_MAX_WT": 0,
@@ -654,7 +625,7 @@ setFormValues() {
       "MAX_TIME": 0,
       "MODEL_MAKER": "",
       "SKETCH_NAME": "",
-      "PROD_INSTRUCTION": this.commonService.nullToString(this.componentmasterForm.value.PROD_INSTRUCTION),
+      "PROD_INSTRUCTION":this.componentmasterForm.value.remarks,
       "LABOUR_FCCOST": 0,
       "MATERIAL_FCCOST": 0,
       "GROSS_WT": 0,
@@ -727,7 +698,7 @@ setFormValues() {
       "STYLEMASTER": "",
       "PARENT_DSNG_CODE": "",
       "FAULT_DETAILS": "",
-      "DESIGN_TYPE": "",
+      "DESIGN_TYPE": this.componentmasterForm.value.settingType,
       "JEWELLERY_UNIT": "",
       "UDF1": "",
       "UDF2": "",
@@ -821,7 +792,7 @@ setFormValues() {
           "GROSS_WT": 0,
           "PCS": 0,
           "RATE_TYPE": "",
-          "CURRENCY_CODE": "AED",
+          "CURRENCY_CODE": this.componentmasterForm.controls.currencyCode,
           "RATE": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,
@@ -835,7 +806,7 @@ setFormValues() {
           "DESIGN_CODE": "",
           "KARAT": "",
           "PRICEID": "",
-          "SIZE_FROM":  this.componentmasterForm.value.sizeSet,
+          "SIZE_FROM": this.componentmasterForm.value.sizeSet,
           "SIZE_TO": "",
           "RATEFC": 0,
           "PART_CODE": "",
@@ -855,10 +826,10 @@ setFormValues() {
           "STONE_TYPE": "",
           "EXT_COLOR": "",
           "EXT_CLARITY": "",
-          "D_REMARKS":  this.componentmasterForm.value.remarks,
+          "D_REMARKS": this.componentmasterForm.value.remarks,
           "POINTER_WT": 0,
           "SIEVE_FROM": "",
-          "SIEVE_TO":"" ,
+          "SIEVE_TO": "",
           "PURITY": 0,
           "OTHER_ATTR": ""
         }
@@ -1040,22 +1011,38 @@ setFormValues() {
 
   }
 
-  deleteRecord() {
+  deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.MID) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
+    if (!this.content.DESIGN_CODE) {
+      this.showDeleteErrorDialog('Please Select data to delete!');
+      return;
     }
-    Swal.fire({
+
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = 'DesignMaster/DeleteDesignMaster/' + this.content.DESIGN_CODE
+        this.commonService.showSnackBarMsg('MSG81447');
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog('Deleted Successfully');
+              } else {
+                this.showErrorDialog(result.message || 'Error please try again');
+              }
+            } else {
+              this.toastr.error('Not deleted');
+            }
+          }, err => {
+            this.commonService.toastErrorByMsgId('network error')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -1063,62 +1050,62 @@ setFormValues() {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'DesignMaster/DeleteDesignMaster/' + this.content.DESIGN_CODE
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.componentmasterForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.componentmasterForm.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
     });
   }
 
-  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+  showDeleteErrorDialog(message: string): void {
+    Swal.fire({
+      title: '',
+      text: message,
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    });
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+  afterSave(value: any) {
+    if (value) {
+      this.componentmasterForm.reset()
+      this.tableData = []
+      this.close('reloadMainGrid')
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if(data.length==0){
+        if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.componentmasterForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
@@ -1128,12 +1115,12 @@ setFormValues() {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
-  }  
+  }
 
 
   onFileChangedimage(event: any) {
 
-      this.images = [];
+    this.images = [];
 
     if (event.target.files && event.target.files.length > 0) {
 

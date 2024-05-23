@@ -14,8 +14,6 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./component-size-master.component.scss']
 })
 export class ComponentSizeMasterComponent implements OnInit {
-
-  componentsizemasterForm!: FormGroup;
   // subscriptions: any;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -24,8 +22,14 @@ export class ComponentSizeMasterComponent implements OnInit {
   viewMode: boolean = false;
   editableMode: boolean = false;
   codeEnable: boolean = true;
-
-
+  componentsizemasterForm: FormGroup = this.formBuilder.group({
+    code: ['', [Validators.required]],
+    desc: ['', [Validators.required]],
+    height: ['', [Validators.required]],
+    width: ['', [Validators.required]],
+    length: [''],
+    radius: ['']
+  });
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -36,38 +40,26 @@ export class ComponentSizeMasterComponent implements OnInit {
     private renderer: Renderer2,
 
   ) { }
-  // @ViewChild('codeInput1') codeInput1!: ElementRef;
-
-
-  // ngAfterViewInit() {
-  //   // Focus on the first input
-  //   if (this.codeInput1) {
-  //     this.codeInput1.nativeElement.focus();
-  //   }
-  // }
 
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
     this.codeEnable = true;
 
-    this.componentsizemasterForm = this.formBuilder.group({
-      code: ['', [Validators.required]],
-      desc: ['', [Validators.required]],
-      height: ['', [Validators.required]],
-      width: ['', [Validators.required]],
-      length: [''],
-      radius: ['']
-    });
+ 
     this.subscribeToFormChanges();
 
     this.setInitialValues();
-    if (this.content.FLAG == 'VIEW') {
+    if(this.content?.FLAG){
       this.setFormValues()
-      this.viewMode = true;
-    } else if (this.content.FLAG == 'EDIT') {
-      this.editableMode = true;
-      this.codeEnable = false;
-      this.setFormValues()
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.editableMode = true;
+        this.codeEnable = false;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
     }
   }
 
@@ -175,7 +167,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     const formattedRadius = radius.toFixed(3);
     
 
-    const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${formattedRadius}#`;
+    const formattedDesc = `H ${Number(height)}#, W ${Number(width)}#, L ${Number(length)}#, R ${Number(formattedRadius)}#`;
 
     // Update the form control with the calculated result and description
     this.componentsizemasterForm.patchValue({

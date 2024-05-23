@@ -38,7 +38,7 @@ export class MeltingTypeComponent implements OnInit {
   filteredStockCodes: any[] | undefined;
   codeEnable: boolean = true;
   rowData: any;
-  dele: boolean = false;
+  editMode: boolean = false;
   karatval: any;
   purityval: any;
 
@@ -60,17 +60,21 @@ export class MeltingTypeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
- this.dele = true;
+    
     this.viewModeField = true;
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.editCode = true;
+    if(this.content?.FLAG){
       this.setFormValues();
-    } else if (this.content.FLAG == 'EDIT') {
-      this.editCode = true;
-      this.viewMode = false;
-      this.dele = false;
-      this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.editCode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.editCode = true;
+        this.viewMode = false;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteMeltingType()
+      }
     }
   }
 
@@ -292,13 +296,14 @@ export class MeltingTypeComponent implements OnInit {
   colorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 35,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR SET'",
+    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   colorDataSelected(data: any) {
@@ -440,7 +445,7 @@ export class MeltingTypeComponent implements OnInit {
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.meltingTypeForm.value.code) {
+    if (!this.content?.MELTYPE_CODE) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -463,7 +468,7 @@ export class MeltingTypeComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'MeltingType/DeleteMeltingType/' + this.meltingTypeForm.value.code;
+        let API = 'MeltingType/DeleteMeltingType/' + this.content?.MELTYPE_CODE;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

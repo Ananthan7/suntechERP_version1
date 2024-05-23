@@ -466,11 +466,11 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.jobNumberDetailData = data
             this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalIssueDetailsForm.controls.jobNumDes.setValue(data[0].JOB_DESCRIPTION)
-            // this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            // this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
-            // this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
-            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
             this.subJobNumberValidate()
+            this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
+            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')
             this.comService.toastErrorByMsgId('MSG1531')

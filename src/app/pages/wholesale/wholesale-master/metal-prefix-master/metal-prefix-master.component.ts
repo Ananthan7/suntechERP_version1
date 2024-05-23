@@ -168,7 +168,7 @@ export class MetalPrefixMasterComponent implements OnInit {
       "PM_BRANCHCODE": "",
       "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix ,
       "SETREF_PREFIX": this.metalprefixForm.value.setrefprefix,
-      "BRANCH_CODE": this.metalprefixForm.value.branch || "",
+      "BRANCH_CODE": this.commonService.branchCode,
       "BOIL_PREFIX": true,
       "SCHEME_PREFIX": this.metalprefixForm.value.schemeprefix,
       "UDF1": this.metalprefixForm.value.userdefined_1 || "",

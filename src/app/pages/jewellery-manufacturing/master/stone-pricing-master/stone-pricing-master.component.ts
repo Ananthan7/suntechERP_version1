@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -31,6 +31,7 @@ export class StonePricingMasterComponent implements OnInit {
   displayDeal: string = '';
   userbranch = localStorage.getItem('userbranch');
   sieveSet: any;
+  editMode: boolean = false;
 
 
 
@@ -199,10 +200,10 @@ export class StonePricingMasterComponent implements OnInit {
     issue_rate: [0, [Validators.required]],
     selling: [0],
     selling_rate: [0],
-    sieve_desc:[0],
-    
+    sieve_desc: [0],
+
   });
-  
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -210,27 +211,28 @@ export class StonePricingMasterComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) {
     this.branchCode = this.commonService.branchCode;
   }
 
   ngOnInit(): void {
-
-
-    this.viewMode = true;
-    console.log(this.content.FLAG);
-    if (this.content.FLAG == 'VIEW') {
-      this.viewFormValues();
-      this.editPrice = true;
-      this.viewModeAll = true;
-      this.viewDisable = true;
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW') {
+        this.viewFormValues();
+        this.editPrice = true;
+        this.viewModeAll = true;
+        this.viewDisable = true;
+        this.viewMode = true;
+      }
+      else if(this.content.FLAG == 'EDIT')
+      {
+        this.editPrice = true;
+        this.editMode = true;
+        this.setFormValues();
+      }
     }
-    else (this.content.FLAG == 'EDIT')
-    {
-      this.editPrice = true;
-      this.setFormValues();
-    }
-  } 
+  }
 
   onweighttto(event: any) {
     if (this.stonePrizeMasterForm.value.wt_from > this.stonePrizeMasterForm.value.wt_to) {
@@ -393,12 +395,12 @@ export class StonePricingMasterComponent implements OnInit {
     this.displayDeal = e.replace(/\D/g, "").replace(/\B(?=(\d{12})+(?!\d))/g, ",");
   }
 
-  setPostData(){
-    return{
-      "MID":  this.content?.MID || 0 ,
+  setPostData() {
+    return {
+      "MID": this.content?.MID || 0,
       "SRNO": 0,
       "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION":this.stonePrizeMasterForm.value.price_code +" "+ this.stonePrizeMasterForm.value.shape + this.stonePrizeMasterForm.value.color,
+      "DESCRIPTION": this.stonePrizeMasterForm.value.price_code + " " + this.stonePrizeMasterForm.value.shape + this.stonePrizeMasterForm.value.color,
       "SHAPE": this.stonePrizeMasterForm.value.shape || "",
       "COLOR": this.stonePrizeMasterForm.value.color || "",
       "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
@@ -468,7 +470,30 @@ export class StonePricingMasterComponent implements OnInit {
       this.subscriptions.push(Sub)
     }
   }
+  checkCodeExists(event: any) {
+    let priceCode = event.target.value;
 
+    if (priceCode === '') return;
+    if (this.editMode || this.viewMode) return;
+
+    let API = `StonePriceMasterDJ/GetStonePriceMasterDJWithCode?CODE=${priceCode}`
+    let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status == 'Success') {
+          this.commonService.toastErrorByMsgId('Code already exists')
+          // Reset the form control value
+          this.stonePrizeMasterForm.controls.price_code.setValue('');
+        }
+      
+      },
+      (err) => {
+        console.error('Error checking code:', err);
+        this.stonePrizeMasterForm.controls.price_code.setValue('');
+      }
+    );
+
+    this.subscriptions.push(sub);
+  }
   update() {
     console.log(this.stonePrizeMasterForm.value);
     if (this.stonePrizeMasterForm.invalid) {
@@ -480,7 +505,7 @@ export class StonePricingMasterComponent implements OnInit {
 
     let postData = this.setPostData()
 
-    
+
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -590,18 +615,18 @@ export class StonePricingMasterComponent implements OnInit {
 
   sieve_setDataSelected(data: any) {
     console.log(data);
-    
+
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
-    
+
     // Construct the API URL with the selected sieve_set value
     let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + encodeURIComponent(this.stonePrizeMasterForm.value.sieve_set);
 
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         console.log(result.response);
-        
-        const responseData = result.response[0]; 
-        
+
+        const responseData = result.response[0];
+
         this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
         this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
         this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
@@ -611,7 +636,7 @@ export class StonePricingMasterComponent implements OnInit {
         this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
       }
     });
-    
+
     this.subscriptions.push(Sub);
   }
 
@@ -629,9 +654,9 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_to.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
-   
+
   }
-  
+
 
   colorDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.color.setValue(data.CODE)

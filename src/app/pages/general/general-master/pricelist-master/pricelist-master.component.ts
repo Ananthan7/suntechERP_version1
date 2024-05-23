@@ -85,15 +85,15 @@ export class PricelistMasterComponent implements OnInit {
 
     this.round = true;
     this.initializeForm();
+    console.log(this.content,'this.content');
+    
     if (this.content?.FLAG) {
+      this.setFormValues()
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
-        // this.setAllInitialValues();
-        this.setFormValues()
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.codeEnable = false;
-        this.setFormValues()
         this.roundoffDis()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
