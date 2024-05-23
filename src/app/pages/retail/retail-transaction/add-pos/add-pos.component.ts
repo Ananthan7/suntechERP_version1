@@ -1447,7 +1447,7 @@ export class AddPosComponent implements OnInit {
               weight: data.GROSSWT,
               description: data.STOCK_DOCDESC,
               tax_amount: data.VAT_AMOUNTFC,
-              net_amount: data.TOTAL_AMOUNTCC,
+              net_amount: data.TOTALWITHVATFC,
               // net_amount: data.NETVALUEFC,
               pure_wt: data.PUREWT,
               making_amt: data.MKGVALUEFC || 0,
