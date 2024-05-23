@@ -165,14 +165,14 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="pcrSelectionData"  [showBorders]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>
                     <dxo-selection mode="multiple"></dxo-selection>
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data.field }}" caption="{{ data.title }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                     </dxi-column>
                 </dx-data-grid>

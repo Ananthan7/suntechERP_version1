@@ -295,8 +295,7 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
       'THREE': 3,
-      'METAL_RATE': Number(this.allCompanyParameters.MRATEDECIMALS),
-    };
+      'METAL_RATE': Number(this.allCompanyParameters?.MRATEDECIMALS) || 0    };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string) {

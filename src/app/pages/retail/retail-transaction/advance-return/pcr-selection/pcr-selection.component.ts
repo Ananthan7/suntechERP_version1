@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
@@ -11,6 +10,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 export class PcrSelectionComponent implements OnInit {
   strBranchcode: any = '';
   @Input() customerCode: any;
+  @Output() selectionConfirmed = new EventEmitter<any[]>();
 
   columnsList: any[] = [
     { title: 'Voc No.', field: 'VOCNO' },
@@ -19,6 +19,7 @@ export class PcrSelectionComponent implements OnInit {
     { title: 'Balance Amount', field: 'BALANCE_FC' },
   ];
   pcrSelectionData: any[] = [];
+  selectedRows: any[] = [];
 
   constructor(private activeModal: NgbActiveModal,
     private suntechApi: SuntechAPIService) {
@@ -26,29 +27,32 @@ export class PcrSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPcrSelectionData()
+    this.getPcrSelectionData();
   }
 
   getPcrSelectionData() {
     const postData = {
       "BranchCode": this.strBranchcode,
-      // "CustomerCode": "JH225778" // need to change dynamically
-      "CustomerCode":this.customerCode
+      "CustomerCode": this.customerCode
     }
     this.suntechApi.postDynamicAPI('AdvanceReceipt/GetPOSPCRSelection/', postData).subscribe((result) => {
       console.log(result);
-
-
       if (result.status == 'Success') {
         this.pcrSelectionData = result.dynamicData[0];
-        // this.tableData = result.response;
-        // console.log(this.tableData);
       }
     });
   }
 
+  confirmSelection() {
+    this.selectionConfirmed.emit(this.selectedRows);
+    this.close();
+  }
+
+  onSelectionChanged(event: any) {
+    this.selectedRows = event.selectedRowsData;
+  }
+
   close(data?: any) {
-    //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 }

@@ -3,3 +3,7 @@
     padding: 3px 20px !important;
     border-radius: 5px !important;
   }
+  .scrollable-content {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
