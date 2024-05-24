@@ -32,7 +32,7 @@ export class StonePricingMasterComponent implements OnInit {
   userbranch = localStorage.getItem('userbranch');
   sieveSet: any;
   editMode: boolean = false;
-
+  isDisableSaveBtn: boolean = false;
 
 
   viewselling: boolean = false;
@@ -225,12 +225,19 @@ export class StonePricingMasterComponent implements OnInit {
         this.viewDisable = true;
         this.viewMode = true;
       }
-      else if(this.content.FLAG == 'EDIT')
-      {
+      else if (this.content.FLAG == 'EDIT') {
         this.editPrice = true;
         this.editMode = true;
         this.setFormValues();
       }
+    }
+  }
+
+  inputValidate(event: any) {
+    if (event.target.value != '') {
+      this.isDisableSaveBtn = true;
+    } else {
+      this.isDisableSaveBtn = false;
     }
   }
 
@@ -440,6 +447,11 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
 
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to ) {
+      this.toastr.error('Sieve From Should not be Greater than Sieve To');
+      return;
+    }
+
     else {
 
       let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
@@ -484,7 +496,7 @@ export class StonePricingMasterComponent implements OnInit {
           // Reset the form control value
           this.stonePrizeMasterForm.controls.price_code.setValue('');
         }
-      
+
       },
       (err) => {
         console.error('Error checking code:', err);
@@ -499,6 +511,11 @@ export class StonePricingMasterComponent implements OnInit {
     if (this.stonePrizeMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
+    }
+
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to ) {
+      this.toastr.error('Sieve From Should not be Greater than Sieve To');
+      return;
     }
 
     let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
@@ -624,14 +641,20 @@ export class StonePricingMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         console.log(result.response);
-
+        // Assign values to variables
+        // let sieve_form, sieve_to;
+       
         const responseData = result.response[0];
+        const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
+        const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
 
         this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
         this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
         this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
-        this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
-        this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
+        this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
+        this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
+        // this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
+        // this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
         this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC);
         this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
       }
@@ -646,12 +669,16 @@ export class StonePricingMasterComponent implements OnInit {
 
   sievefromDataSelected(data: any) {
     console.log(data);
-    this.stonePrizeMasterForm.controls.sieve_form.setValue(data.CODE);
+    const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
+   
+    this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   sievetoDataSelected(data: any) {
     console.log(data);
-    this.stonePrizeMasterForm.controls.sieve_to.setValue(data.CODE);
+    const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
+   
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
 
@@ -688,5 +715,31 @@ export class StonePricingMasterComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
   }
 }

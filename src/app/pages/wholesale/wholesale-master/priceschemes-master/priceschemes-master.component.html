@@ -50,7 +50,9 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price1"  appNoEmptySpace [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
+                                                formControlName="price1"   (input)="inputValidate($event)"
+                                                UpperCaseDirective
+                                                (focusout)="validateLookupField($event,priceCodeData,'price1')" appNoEmptySpace [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -63,7 +65,9 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price3" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"/>
+                                                formControlName="price3"  (input)="inputValidate($event)"
+                                                UpperCaseDirective
+                                                (focusout)="validateLookupField($event,priceCodeData,'price3')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -76,7 +80,9 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price5" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
+                                                formControlName="price5"   (input)="inputValidate($event)"
+                                                UpperCaseDirective
+                                                (focusout)="validateLookupField($event,priceCodeData,'price5')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -90,7 +96,9 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price2" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"/>
+                                                formControlName="price2"   (input)="inputValidate($event)"
+                                                UpperCaseDirective
+                                                (focusout)="validateLookupField($event,priceCodeData,'price2')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -103,7 +111,9 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price4" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"/>
+                                                formControlName="price4"   (input)="inputValidate($event)"
+                                                UpperCaseDirective
+                                                (focusout)="validateLookupField($event,priceCodeData,'price4')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"

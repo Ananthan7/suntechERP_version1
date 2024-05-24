@@ -7,7 +7,7 @@
 <!-- modal header component -->
 <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" 
     [isViewDelete]="!dele" [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
-[isViewMore]="!viewMode" ></modal-header>
+[isViewMore]="!viewMode" [disableSaveBtn]="isDisableSaveBtn" ></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="customerpricemasterForm">
@@ -21,7 +21,7 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 80%;">
                       <input type="text" matInput formControlName="customercode" id="customercode"
-                        [readonly]="editableMode || viewMode" />
+                        [readonly]="editableMode || viewMode"   (input)="inputValidate($event)"  (focusout)="validateLookupField($event,customerCodeData,'customercode')"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="customerCodeData"
                       (newRowClick)="customerCodeScpSelected($event)" *ngIf="viewMode == false"></master-search>

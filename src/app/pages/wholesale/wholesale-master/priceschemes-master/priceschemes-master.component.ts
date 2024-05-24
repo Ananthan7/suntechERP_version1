@@ -20,10 +20,11 @@ export class PriceschemesMasterComponent implements OnInit {
   price2SearchEnable: boolean = false;
   price4SearchEnable: boolean = false;
   price5SearchEnable: boolean = false;
-
+  private subscriptions: Subscription[] = [];
   codeEnable: boolean = true;
   viewMode: boolean = false;
   editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -89,7 +90,13 @@ export class PriceschemesMasterComponent implements OnInit {
     }
   }
 
-
+  inputValidate(event: any) {
+    if (event.target.value != '') {
+      this.isDisableSaveBtn = true;
+    } else {
+      this.isDisableSaveBtn = false;
+    }
+  }
 
   enableNextField(currentField: string, nextField: string) {
 
@@ -461,4 +468,31 @@ export class PriceschemesMasterComponent implements OnInit {
     }
 
   }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 }
