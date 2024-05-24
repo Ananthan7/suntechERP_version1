@@ -21,7 +21,7 @@ export class ComponentSizeSetComponent implements OnInit {
   columnheader: any[] = ['SN', 'Code', 'Description'];
   allMode: string;
   checkBoxesMode: string;
-
+  viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
@@ -64,7 +64,7 @@ export class ComponentSizeSetComponent implements OnInit {
     this.getComponentSizeTypeOptions();
 
     if (this.content.FLAG == 'VIEW') {
-
+      this.viewMode = true;
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
