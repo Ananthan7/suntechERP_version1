@@ -16,7 +16,7 @@
                 <h6>{{branchCode}} - {{companyName}}</h6>
             </div>
         </div>
-        <div class="row">
+        <div class="row justify-content-between">
             <div class="col-md-4">
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type</label>
@@ -55,7 +55,7 @@
 
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="row mb-1">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Customer</label>
                     <div class="col-md-3">
@@ -98,12 +98,15 @@
                             <input type="number" matInput formControlName="orderAmount" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Adv Received</label>
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Adv.Received</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput formControlName="advReceived" />
                         </mat-form-field>
                     </div>
+                </div>
+                <div class="row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Journal Ref:</label>
                 </div>
             </div>
         </div>
@@ -114,10 +117,10 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-1">
-            <div class="col-md-5">
+        <div class="row mb-1 justify-content-between">
+            <div class="col-md-4">
                 <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Mode of Refund</label>
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Mode of Refund</label>
                     <div class="col-md-6">
                         <mat-form-field>
                             <mat-select formControlName="modeOfRefundSelect" (selectionChange)="changeitem()">

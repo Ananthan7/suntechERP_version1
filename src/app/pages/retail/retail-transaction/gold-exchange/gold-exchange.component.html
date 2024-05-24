@@ -9,7 +9,7 @@
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="goldExchangeForm">
-        <div class="row">
+        <div class="row border rounded justify-content-between">
             <label for="inputPassword" class="col-sm-12 col-form-label">Invoice Details</label>
             <div class="col-md-3">
                 <div class="row">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="vocDate" [max]="vocDate" formControlName="vocDate"
                                 placeholder="DD/MM/YYYY" DateValidation />
@@ -38,7 +38,7 @@
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Code</label>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="partyCode" />
                         </mat-form-field>
@@ -85,28 +85,28 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Item Curr</label>
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Item Curr</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="itemCurr" readonly />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input type="number" class="text-end" matInput formControlName="itemCurrCode" readonly />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Credit Days</label>
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Credit Days</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input type="number" class="text-end"  matInput formControlName="creditDaysCode" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="creditDays" [max]="creditDays" formControlName="creditDays"
                                 placeholder="DD/MM/YYYY" DateValidation />
@@ -116,8 +116,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Sales Man</label>
-                    <div class="col-md-9">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Sales Man</label>
+                    <div class="col-md-6">
                         <mat-form-field style="width: 80%;">
                             <input type="text" matInput formControlName="salesMan" />
                         </mat-form-field>
@@ -125,14 +125,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Sup Inv No</label>
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Sup Inv No</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="supInvNo" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="supInvDate" [max]="supInvDate" formControlName="supInvDate"
                                 placeholder="DD/MM/YYYY" DateValidation />
@@ -142,24 +142,24 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Cust. Name</label>
-                    <div class="col-md-9">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Cust. Name</label>
+                    <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="custName" />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Email</label>
-                    <div class="col-md-9">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Email</label>
+                    <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="email" />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Cust. ID</label>
-                    <div class="col-md-9">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Cust. ID</label>
+                    <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="custId" />
                         </mat-form-field>
@@ -197,14 +197,15 @@
          
             </div>
         </div>
-        <div class="row mt-2">
+        <div class="row mt-2 border rounded justify-content-between">
             <label for="inputPassword" class="col-sm-12 col-form-label">Line Items</label>
-            <div class="col-md-3 d-flex mb-2">
+            <div class="col-md-12 mb-2">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
                 (addClick)="opengoldposdirectdetail()"  >
                 </menu-buttons>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 ">
+               <div class="pb-2">
                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
@@ -216,13 +217,14 @@
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                     </dxi-column>
                 </dx-data-grid>
+               </div>
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col-md-8">
-                <div class="row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Narration</label>
-                    <div class="col-md-8">
+        <div class="row mt-2 justify-content-between">
+            <div class="col-md-7">
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Narration</label>
+                    <div class="col-md-10">
                         <mat-form-field style="width: 100%;">
                             <textarea matInput rows="5" formControlName="narration"></textarea>
                         </mat-form-field>

@@ -105,9 +105,6 @@ export class GoldExchangeDetailsComponent implements OnInit {
     metalAmount: [""],
     netRate: [""],
     netAmount: [""],
-    jawaharaSelect: [""],
-    reSaleCycleSelect: [""],
-    cashExchangeSelect: [""],
     remarks: [""],
   });
 
