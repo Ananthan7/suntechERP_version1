@@ -332,9 +332,8 @@
                                                 class="text-right"
                                                 AmountDecimalInput
                                                 CommaSeparatedNumber [max]="3"
-                                                formControlName="selling"
-                                                
-                                              
+                                                formControlName="selling"  
+                                                (keypress)="salesChange1('selling')" 
                                                />
                                         </mat-form-field>
                                     </div>

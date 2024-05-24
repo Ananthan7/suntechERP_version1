@@ -394,6 +394,23 @@ export class StonePricingMasterComponent implements OnInit {
     }
 
   }
+  salesChange1(data: any) {
+    console.log(data);
+
+    if (data == 'selling_rate') {
+      this.viewselling = true;
+      this.viewsellingrate = false;
+      this.stonePrizeMasterForm.controls.selling.setValue('');
+    } else if (data == 'selling') {
+      this.viewsellingrate = true;
+      this.viewselling = false;
+      this.stonePrizeMasterForm.controls.selling_rate.setValue('');
+    } else {
+      this.viewsellingrate = false;
+      this.viewselling = false;
+    }
+
+  }
 
 
 

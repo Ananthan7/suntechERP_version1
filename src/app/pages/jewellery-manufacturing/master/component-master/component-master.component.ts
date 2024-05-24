@@ -228,6 +228,8 @@ export class ComponentMasterComponent implements OnInit {
 
   stockCodeDataSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+    this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
+    this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.DIVISION_CODE;
     //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
