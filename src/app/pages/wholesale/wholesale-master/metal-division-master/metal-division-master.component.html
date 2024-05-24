@@ -16,7 +16,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="code" maxlength="6" oninput="this.value = this.value.toUpperCase()" />
+                            <input type="text" matInput formControlName="code" [maxlength]="1" oninput="this.value = this.value.toUpperCase()" id="code"  (focusout)="checkCodeExists($event)"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-5">
@@ -29,7 +29,10 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Cost Center :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="costcenter" />
+                            <input type="text" matInput formControlName="costcenter" 
+                            (input)="inputValidate($event)"
+                            UpperCaseDirective
+                            (focusout)="validateLookupField($event,costCenterData,'costcenter')"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="costCenterData"
                           (newRowClick)="costCenterSelected($event)">
@@ -38,7 +41,10 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center (making) :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="costcentermaking" />
+                            <input type="text" matInput formControlName="costcentermaking" 
+                            (input)="inputValidate($event)"
+                            UpperCaseDirective
+                            (focusout)="validateLookupField($event,costData,'costcentermaking')"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="costData"
                           (newRowClick)="costSelected($event)">
@@ -49,7 +55,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Abbreviation :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="Abbreviation" oninput="this.value = this.value.toUpperCase()" />
+                            <input type="text" matInput formControlName="Abbreviation" [maxlength]="4" oninput="this.value = this.value.toUpperCase()" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
@@ -63,7 +69,10 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Auto Fix Stock Code :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="stockcode" />
+                            <input type="text" matInput formControlName="stockcode" 
+                            (input)="inputValidate($event)"
+                            UpperCaseDirective
+                            (focusout)="validateLookupField($event,stockCodeData,'stockcode')"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="stockCodeData"
                           (newRowClick)="stockCodeSelected($event)">

@@ -27,7 +27,7 @@
                                     [readonly]="editCode" matInput
                                     formControlName="code"
                                     oninput="this.value = this.value.toUpperCase()"
-                                    (keyup)="codeEnabled()" />
+                                    (keyup)="codeEnabled()" appNoEmptySpace/>
                             </mat-form-field>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                         <input type="text" maxlength="85" matInput
                             [readonly]="viewMode || codeEnable"
                             formControlName="description"
-                            oninput="this.value = this.value.toUpperCase()" />
+                            oninput="this.value = this.value.toUpperCase()" appNoEmptySpace/>
                     </mat-form-field>
                 </div>
 
@@ -57,7 +57,7 @@
                             [readonly]="viewModeField || codeEnable"
                             step="0.001" min="0"
                             formControlName="metal" (input)="onInput($event)"
-                            style="text-align: right;" />
+                            style="text-align: right;" appNoEmptySpace/>
                     </mat-form-field>
                 </div>
 
@@ -68,8 +68,10 @@
                         style="width: 150%; margin-left:-164px; margin-top:-5px;">
                         <input type="text" matInput maxlength="6"
                             formControlName="color"
-                            [readonly]="viewMode || codeEnable"
-                            (focusout)="validateLookupField($event,colorData,'color')" />
+                            [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
+                            UpperCaseDirective
+                            (focusout)="validateLookupField($event,colorData,'color')" appNoEmptySpace
+                            />
                     </mat-form-field>
                     <master-search [MasterSearchData]="colorData"
                         (newRowClick)="colorDataSelected($event)"
@@ -86,8 +88,9 @@
                     <mat-form-field
                         style="width: 111%; margin-left:-60px; margin-top:-6px;">
                         <input type="text" [readonly]="viewMode || codeEnable"
-                            matInput formControlName="karat"
-                            (focusout)="validateLookupField($event,karatcodeData,'karat')" />
+                            matInput formControlName="karat"      (input)="inputValidate($event)"
+                            UpperCaseDirective
+                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="karatcodeData"
                         (newRowClick)="karatcodeSelected($event)"
@@ -103,7 +106,7 @@
                         <input type="number" matInput
                             [readonly]="viewModeField || codeEnable"
                             formControlName="purity"
-                            style="text-align: right;" />
+                            style="text-align: right;" appNoEmptySpace/>
                     </mat-form-field>
 
                 </div>
@@ -117,7 +120,7 @@
                             [readonly]="viewModeField || codeEnable"
                             formControlName="alloy"
                             (input)="onInput($event)"
-                            style="text-align: right;" />
+                            style="text-align: right;" appNoEmptySpace/>
                     </mat-form-field>
 
                 </div>
@@ -128,8 +131,9 @@
                     <mat-form-field
                         style="width: 86%; margin-left:-20px; margin-top:-6px;">
                         <input type="text" matInput formControlName="stockCode"
-                            [readonly]="viewMode || codeEnable"
-                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" />
+                            [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
+                            UpperCaseDirective
+                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="stockCodeData"
                         (newRowClick)="StockCodeSelected($event)"
