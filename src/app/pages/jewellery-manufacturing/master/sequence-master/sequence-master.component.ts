@@ -489,9 +489,7 @@ export class SequenceMasterComponent implements OnInit {
       item.isChecked = event.target.checked
     })
   }
-
-  /**use: checkbox change */
-  changedCheckbox(value: any) {
+  codeValidate(){
     if (this.sequenceMasterForm.value.sequenceCode == "") {
       Swal.fire({
         title: '',
@@ -506,26 +504,39 @@ export class SequenceMasterComponent implements OnInit {
           })
         }
       });
-      return
+      return true
     }
+    return false
+  }
+  /**use: checkbox change order*/
+  changedCheckbox(dataSelected: any) {
+    if(this.codeValidate()) return;
     this.processSearch = ''
     this.dataSource = this.tableData;
+    console.log(dataSelected);
+    
     this.dataSource.forEach((item: any, index: number) => {
-      if (value.MID == item.MID) {
-        item.isChecked = value.isChecked
+      if (dataSelected.MID == item.MID) {
+        item.isChecked = dataSelected.isChecked
         item.orderId = index + 1
+        if(item.orderId == this.dataSource.length){
+          item.orderId = index
+        }
       }
     })
-    if (value.isChecked == false) {
-      const index = this.selectedSequence.indexOf(value);
+    
+    if (dataSelected.isChecked == false) {
+      const index = this.selectedSequence.indexOf(dataSelected);
       this.selectedSequence.splice(index, 1); // Remove the item from its current position
       this.dataSource.forEach((item: any, index: number) => {
-        if (value.MID == item.MID) {
-          item.orderId = this.dataSource.length
+        if (dataSelected.MID == item.MID) {
+          item.orderId = this.dataSource.length - 1
         }
       })
     }
+    
     this.dataSource.sort((a, b) => a.orderId - b.orderId);
+    console.log(this.dataSource,'dataSource');
     this.reCalculateSRNO()
   }
   /**USE: set Selected Sequence data */

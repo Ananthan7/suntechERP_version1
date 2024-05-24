@@ -136,6 +136,36 @@ export class MasterGridComponent implements OnInit {
     if(this.vocType == 'MASSCH') return '';
     return this.branchCode
   }
+  setCustomParamFilters(){
+    if(this.mainVocType=='MASDPX'){
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        // "BRANCH_CODE": this.validateBranchCode(),
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "DIVISION": 'M'
+      }
+    }
+    if(this.mainVocType=='MSDPM'){
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        // "BRANCH_CODE": this.validateBranchCode(),
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "DIVISION": 'S'
+      }
+    }
+    return {
+      "YEARMONTH": this.CommonService.yearSelected,
+      "BRANCH_CODE": this.validateBranchCode(),
+      "VOCTYPE": this.CommonService.nullToString(this.vocType),
+    }
+  }
+  setCustomParamTransactions(){
+    return {
+      "VOCTYPE": this.CommonService.nullToString(this.vocType),
+      "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+      "FILTERVAL": this.CommonService.nullToString(this.tableName),
+    }
+  }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     this.resetGridAction()
@@ -159,30 +189,19 @@ export class MasterGridComponent implements OnInit {
       });
     }
 
-    // if (this.vocType == 'GEN') {
-    //   this.getSchemeMaturedAPI()
-    //   return
-    // }
     let params = {
       "PAGENO": this.pageIndex,
       "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
       "TABLE_NAME": this.tableName || '',
       "CUSTOM_PARAM": {
-        "FILTER": {
-          "YEARMONTH": this.CommonService.yearSelected,
-          "BRANCH_CODE": this.validateBranchCode(),
-          "VOCTYPE": this.CommonService.nullToString(this.vocType),
-        },
-        "TRANSACTION": {
-          "VOCTYPE": this.CommonService.nullToString(this.vocType),
-          "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          "FILTERVAL": this.CommonService.nullToString(this.tableName),
-        },
+        "FILTER": this.setCustomParamFilters(),
+        "TRANSACTION": this.setCustomParamTransactions(),
         "SEARCH": {
           "SEARCH_VALUE": this.CommonService.nullToString(this.SEARCH_VALUE)
         }
       }
     }
+    
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
