@@ -132,40 +132,7 @@ export class MasterGridComponent implements OnInit {
     this.SEARCH_VALUE = ''
     this.getMasterGridData(1)
   }
-  validateBranchCode(){
-    if(this.vocType == 'MASSCH') return '';
-    return this.branchCode
-  }
-  setCustomParamFilters(){
-    if(this.mainVocType=='MASDPX'){
-      return {
-        "YEARMONTH": this.CommonService.yearSelected,
-        // "BRANCH_CODE": this.validateBranchCode(),
-        "VOCTYPE": this.CommonService.nullToString(this.vocType),
-        "DIVISION": 'M'
-      }
-    }
-    if(this.mainVocType=='MSDPM'){
-      return {
-        "YEARMONTH": this.CommonService.yearSelected,
-        // "BRANCH_CODE": this.validateBranchCode(),
-        "VOCTYPE": this.CommonService.nullToString(this.vocType),
-        "DIVISION": 'S'
-      }
-    }
-    return {
-      "YEARMONTH": this.CommonService.yearSelected,
-      "BRANCH_CODE": this.validateBranchCode(),
-      "VOCTYPE": this.CommonService.nullToString(this.vocType),
-    }
-  }
-  setCustomParamTransactions(){
-    return {
-      "VOCTYPE": this.CommonService.nullToString(this.vocType),
-      "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-      "FILTERVAL": this.CommonService.nullToString(this.tableName),
-    }
-  }
+
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     this.resetGridAction()
@@ -264,6 +231,40 @@ export class MasterGridComponent implements OnInit {
         });
       });
     this.subscriptions$.push(sub)
+  }
+  validateBranchCode(){
+    if(this.vocType == 'MASSCH') return '';
+    return this.branchCode
+  }
+  setCustomParamFilters(){
+    if(this.mainVocType=='MASDPX'){
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        // "BRANCH_CODE": this.validateBranchCode(),
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "DIVISION": 'M'
+      }
+    }
+    if(this.mainVocType=='MSDPM'){
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        // "BRANCH_CODE": this.validateBranchCode(),
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "DIVISION": 'S'
+      }
+    }
+    return {
+      "YEARMONTH": this.CommonService.yearSelected,
+      "BRANCH_CODE": this.validateBranchCode(),
+      "VOCTYPE": this.CommonService.nullToString(this.vocType),
+    }
+  }
+  setCustomParamTransactions(){
+    return {
+      "VOCTYPE": this.CommonService.nullToString(this.vocType),
+      "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+      "FILTERVAL": this.CommonService.nullToString(this.tableName),
+    }
   }
   getGridVisibleSettings() {
     let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
