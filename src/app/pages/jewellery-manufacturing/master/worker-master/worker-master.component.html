@@ -25,7 +25,6 @@
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
                                     [readonly]="viewMode || editMode" #code
-                                    appNoEmptySpace
                                     oninput="this.value = this.value.toUpperCase()"
                                     (focusout)="checkWorkerExists($event)"
                                     (keyup)="codeEnabled()" />

@@ -12,9 +12,9 @@
     [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
     [isViewMore]="!viewMode"></modal-header>
   <!-- content section -->
-  <div class="row">
-    <!-- <div class="container-fluid pt-3"> -->
-    <mat-tab-group [selectedIndex]="this.divisionMS == 'ID'? 1 : 0">
+  <div class="card m-2 row">
+    <!-- <mat-tab-group [selectedIndex]="this.divisionMS == 'ID'? 1 : 0"> -->
+    <mat-tab-group>
       <mat-tab label="Diamond Labour Master">
         <div class="container-fluid">
           <!-- <div class="card metal-sales-card">
@@ -26,7 +26,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6"
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    [readonly]="viewMode || codeEnableDiamond"
                     formControlName="divisions" appNoEmptySpace />
                 </mat-form-field>
                 <master-search [MasterSearchData]="diaDivisionCodeData"
@@ -41,7 +41,8 @@
                 <mat-form-field>
                   <input type="text" matInput #codeInput2 id="codeInput2"
                     maxlength="15" [readonly]="editMode || viewMode"
-                    formControlName="labour_code" (keyup)="codeEnabledDiamond()"
+                    formControlName="labour_code"
+                    (focusout)="diamondLabourCodeValidate()"
                     oninput="this.value = this.value.toUpperCase()"
                     appNoEmptySpace />
                 </mat-form-field>
@@ -109,7 +110,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    (focusout)="validateLookupField($event,currencyCodeData,'currency')"
+                    [readonly]="viewMode || codeEnableDiamond"
                     formControlName="currency" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="currencyCodeData"
@@ -123,7 +125,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    (focusout)="validateLookupField($event,shapeCodeData,'shape')"
+                    [readonly]="viewMode || codeEnableDiamond"
                     maxlength="6" formControlName="shape" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="shapeCodeData"
@@ -136,7 +139,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    (focusout)="validateLookupField($event,processCodeData,'process')"
+                    [readonly]="viewMode || codeEnableDiamond"
                     maxlength="6" formControlName="process" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"
@@ -152,7 +156,8 @@
                   <input type="text" matInput
                     [readonly]="viewMode ||codeEnableDiamond"
                     maxlength="6" formControlName="size_from"
-                    (change)="onSizeto($event,'sizeto')" />
+                    (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')"
+                    (change)="sizeFromToValidate('size_from')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sizeFromCodeData"
                   (newRowClick)="sizeFromCodeSelected($event)"
@@ -163,7 +168,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    [readonly]="viewMode || codeEnableDiamond"
+                    (focusout)="validateLookupField($event,labouracCodeData,'labour_ac')"
                     maxlength="6" formControlName="labour_ac" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="labouracCodeData"
@@ -179,11 +185,12 @@
                   <input type="text" matInput
                     [readonly]="viewMode || codeEnableDiamond"
                     maxlength="6" formControlName="size_to"
-                    (change)="onSizeto($event,'sizeto')" />
+                    (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
+                    (change)="sizeFromToValidate('size_to')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sizeToCodeData"
                   (newRowClick)="sizeToCodeSelected($event)"
-                  *ngIf=" viewDisable == false"></master-search>
+                  *ngIf="!viewDisable"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Cost Rate *
                 :</label>
@@ -203,7 +210,8 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    [readonly]="viewMode || codeEnableDiamond"
+                    (focusout)="validateLookupField($event,sieveCodeData,'sieve')"
                     maxlength="6" formControlName="sieve" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sieveCodeData"
@@ -229,7 +237,7 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableDiamond"
+                    [readonly]="viewMode || codeEnableDiamond"
                     formControlName="sieve_desc" />
                 </mat-form-field>
               </div>
@@ -309,25 +317,27 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable"
+                    [readonly]="viewMode"
                     maxlength="6" formControlName="metalDivision"
+                    (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
                     appNoEmptySpace>
                 </mat-form-field>
                 <master-search [MasterSearchData]="metalDivisionCodeData"
                   (newRowClick)="metaldivisionCodeSelected($event)"
-                  *ngIf=" viewDisable == false"></master-search>
+                  *ngIf="viewDisable == false"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Stock Code
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode  || stockcodeDisable || inputDisable"
+                    [readonly]="viewMode  || stockcodeDisable"
+                    (focusout)="validateLookupField($event,stockCodeData,'stock_code')"
                     formControlName="stock_code" appNoEmptySpace />
                 </mat-form-field>
                 <master-search [MasterSearchData]="stockCodeData"
                   (newRowClick)="stockCodeSelected($event)"
-                  *ngIf=" viewDisable || stockcodeDisable == false"></master-search>
+                  *ngIf=" viewDisable || !stockcodeDisable"></master-search>
               </div>
             </div>
             <div class="row mb-2">
@@ -373,7 +383,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
                     maxlength="6" formControlName="metalcurrency" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="currencyCodeData"
@@ -387,7 +397,8 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
+                    (focusout)="validateLookupField($event,karatCodeData,'karat')"
                     maxlength="6" formControlName="karat" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="karatCodeData"
@@ -399,7 +410,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text"
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
                     formControlName="labourAc" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="labouracCodeData"
@@ -412,7 +423,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode  || stockcodeDisable || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode  || stockcodeDisable || codeEnableMetal"
                     maxlength="6" formControlName="color" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData"
@@ -436,7 +447,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
                     maxlength="6" formControlName="typecode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="typeCodeData"
@@ -463,7 +474,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
                     maxlength="6" formControlName="category" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="categoryCodeData"
@@ -489,7 +500,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
                     maxlength="6" formControlName="subCategory" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="subcategoryCodeData"
@@ -512,7 +523,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput
-                    [readonly]="viewMode || inputDisable || codeEnableMetal"
+                    [readonly]="viewMode || codeEnableMetal"
                     maxlength="6" formControlName="brand" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="brandCodeData"
