@@ -40,6 +40,8 @@ export class SuntechAPIService {
   postDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
+        console.log(config.baseUrl,'config.baseUrl');
+        
         const apiUrl = config.baseUrl;
         return this.http.post(apiUrl+ apiName, data);
       })

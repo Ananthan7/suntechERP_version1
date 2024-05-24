@@ -123,6 +123,9 @@ export class WorkerMasterComponent implements OnInit {
       }
     }
   }
+  changeTextUpperCase(event: any) {
+    event.target.value = event.target.value.toString().toUpperCase();
+  }
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;

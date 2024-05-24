@@ -167,7 +167,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     const formattedRadius = radius.toFixed(3);
     
 
-    const formattedDesc = `H ${Number(height)}#, W ${Number(width)}#, L ${Number(length)}#, R ${Number(formattedRadius)}#`;
+    const formattedDesc = `H${Number(height)}#,W${Number(width)}#,L${Number(length)}#,R${Number(formattedRadius)}#`;
 
     // Update the form control with the calculated result and description
     this.componentsizemasterForm.patchValue({

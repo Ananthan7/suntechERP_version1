@@ -154,7 +154,6 @@ export class AlloyMasterComponent implements OnInit {
     WHERECONDITION: "PRICE_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
 
   HSNCodeData: MasterSearchModel = {
@@ -467,8 +466,8 @@ export class AlloyMasterComponent implements OnInit {
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        if (result.status == "Success") { //
-          let data = result.dynamicData[1]
+        if (result.status == "Success") {
+          let data = result.dynamicData[0]
           data.forEach((item: any, i: any) => {
             //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
             if (item.PRICE_NUMBER == 'PRICE1') {
@@ -767,11 +766,11 @@ export class AlloyMasterComponent implements OnInit {
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostFC),
       STOCK_LCCOST: this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC),
-      PRICE1PER: this.alloyMastereForm.value.PRICE1,
-      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
-      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
-      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4code),
-      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5code),
+      PRICE1PER: this.alloyMastereForm.value.price1per,
+      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
+      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
+      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
+      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
       PRICE1FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1Fc),
       PRICE1LC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1Lc),
       PRICE2FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price2Fc),
