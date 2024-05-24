@@ -25,7 +25,6 @@ export class AlloyMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   image: string | ArrayBuffer | null | undefined;
   url: any;
-  dele: boolean = false;
   isDisableSaveBtn: boolean = false;
 
   numericValue!: number;
@@ -35,7 +34,166 @@ export class AlloyMasterComponent implements OnInit {
   editMode: boolean = false;
   codeEnable: boolean = true;
   isEditable: boolean = false;
+  // master search data starts
+  codeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'prefix_code',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION='S'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  costCenterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPE = 'CONSUMABLE ITEMS' ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 31,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  BrandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'BRAND MASTER' AND DIV_Y=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  colorData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  vendorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Vendor',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  masterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Master Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
+
+  priceSchemeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 177,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Scheme',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  HSNCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'HSN',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  priceCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  // master search data ends
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
     code: ['', [Validators.required]],
@@ -116,29 +274,28 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dele = true;
     this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
-    console.log(this.userName);
-
     this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
-    // console.log(this.content.FLAG);
-
-    if (this.content.FLAG == 'EDIT') {
-      this.isDisabled = !this.isDisabled;
-      this.editMode = true;
-      this.editableMode = true;
-      this.dele = false;
+    if (this.content?.FLAG) {
       this.setInitialValues()
-    } else if (this.content.FLAG == 'VIEW') {
-      // this.alloyMastereForm.disable()
-      this.isDisabled = true;
-      this.editMode = true;
-      this.viewMode = true
-      this.setInitialValues()
+      if (this.content.FLAG == 'EDIT') {
+        this.isDisabled = !this.isDisabled;
+        this.editMode = true;
+        this.editableMode = true;
+      } else if (this.content.FLAG == 'VIEW') {
+        // this.alloyMastereForm.disable()
+        this.isDisabled = true;
+        this.editMode = true;
+        this.viewMode = true
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteAlloyMaster()
+      }
     }
+
   }
 
   setupFormSubscription(): void {
@@ -227,178 +384,22 @@ export class AlloyMasterComponent implements OnInit {
       };
     }
   }
-
-  setValueweightAvgCost() {
-    this.alloyMastereForm.controls.weightAvgCostFC.setValue(this.alloyMastereForm.value.weightAvgCostLC)
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.alloyMastereForm.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
   }
-
-  codeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: 'prefix_code',
-    SEARCH_HEADING: 'Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION='S'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-
+  calculateWeightAvgCostFC(event:any) {
+    let form = this.alloyMastereForm.value;
+    let weightAvgCostLC = this.commonService.FCToCC(form.currency,event.target.value);
+    this.setValueWithDecimal('weightAvgCostFC',weightAvgCostLC,'AMOUNT')  
   }
-
-  costCenterData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'CONSUMABLE ITEMS' ",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+  calculateWeightAvgCostLC(event: any) {
+    let form = this.alloyMastereForm.value;
+    let weightAvgCostFC = this.commonService.CCToFC(form.currency,event.target.value);
+    this.setValueWithDecimal('weightAvgCostFC',weightAvgCostFC,'AMOUNT')
   }
-
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 62,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'TYPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  categoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  subcategoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 31,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Subcategory Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-
-  BrandCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 32,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'BRAND MASTER' AND DIV_Y=1",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  colorData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-
-  vendorCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Vendor',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-
-  }
-
-
-
-  masterCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Master Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-
-  priceSchemeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 177,
-    SEARCH_FIELD: 'PRICE_CODE',
-    SEARCH_HEADING: 'Price Scheme',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "PRICE_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  HSNCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'HSN',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-  currencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'Currency type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-
-  priceCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 82,
-    SEARCH_FIELD: 'PRICE_CODE',
-    SEARCH_HEADING: 'Price Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "PRICE_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
+ 
   codeEnabled() {
     if (this.alloyMastereForm.value.code == '') {
       this.codeEnable = true;
@@ -409,8 +410,6 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   onchangeCheckBox(e: any) {
-    console.log(e);
-
     if (e == true) {
       return true;
     } else {
@@ -418,20 +417,21 @@ export class AlloyMasterComponent implements OnInit {
     }
   }
   viewchangeYorN(e: any) {
-    console.log(e);
-
     if (e == 'Y') {
       return true;
     } else {
       return false;
     }
   }
+  /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
+    this.commonService.toastInfoByMsgId('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
@@ -440,15 +440,25 @@ export class AlloyMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.alloyMastereForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
+        this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
-  priceSchemeValidatePriceDetails(e: any) {
+  /**use: for checking form validations */
+  alloyMasterFormChecks(FORMNAME: string){
+    if(FORMNAME == 'code'){ //for validating code
+      this.prefixCodeValidate()
+    }
+  }
+  priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let form = this.alloyMastereForm.value
     let postData = {
       "SPID": "066",
       "parameter": {
@@ -458,30 +468,38 @@ export class AlloyMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") { //
-          let data = result.dynamicData[0]
-          console.log(data);
-
+          let data = result.dynamicData[1]
           data.forEach((item: any, i: any) => {
             //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
             if (item.PRICE_NUMBER == 'PRICE1') {
               this.alloyMastereForm.controls.price1per.setValue(item.PRICE_PER)
               this.alloyMastereForm.controls.PRICE1.setValue(item.PRICE_CODE)
+              this.alloyMastereForm.controls.price1Fc.setValue(this.getAvgCost(form.weightAvgCostFC,item.PRICE_PER));
+              this.alloyMastereForm.controls.price1Lc.setValue(this.getAvgCost(form.weightAvgCostLC,item.PRICE_PER));
             }
             if (item.PRICE_NUMBER == 'PRICE2') {
               this.alloyMastereForm.controls.price2per.setValue(item.PRICE_PER)
               this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
+              this.alloyMastereForm.controls.price2Fc.setValue(this.getAvgCost(form.weightAvgCostFC,item.PRICE_PER));
+              this.alloyMastereForm.controls.price2Lc.setValue(this.getAvgCost(form.weightAvgCostLC,item.PRICE_PER));
             }
             if (item.PRICE_NUMBER == 'PRICE3') {
               this.alloyMastereForm.controls.price3per.setValue(item.PRICE_PER)
               this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
+              this.alloyMastereForm.controls.price3Fc.setValue(this.getAvgCost(form.weightAvgCostFC,item.PRICE_PER));
+              this.alloyMastereForm.controls.price3Lc.setValue(this.getAvgCost(form.weightAvgCostLC,item.PRICE_PER));
             }
             if (item.PRICE_NUMBER == 'PRICE4') {
               this.alloyMastereForm.controls.price4per.setValue(item.PRICE_PER)
               this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
+              this.alloyMastereForm.controls.price4Fc.setValue(this.getAvgCost(form.weightAvgCostFC,item.PRICE_PER));
+              this.alloyMastereForm.controls.price4Lc.setValue(this.getAvgCost(form.weightAvgCostLC,item.PRICE_PER));
             }
             if (item.PRICE_NUMBER == 'PRICE5') {
               this.alloyMastereForm.controls.price5per.setValue(item.PRICE_PER)
               this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
+              this.alloyMastereForm.controls.price5Fc.setValue(this.getAvgCost(form.weightAvgCostFC,item.PRICE_PER));
+              this.alloyMastereForm.controls.price5Lc.setValue(this.getAvgCost(form.weightAvgCostLC,item.PRICE_PER));
             }
           });
         }
@@ -489,6 +507,12 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('Server Error')
       })
     this.subscriptions.push(Sub)
+  }
+  getAvgCost(cost:any,percentage: any){
+    let percentageValue:number = ((this.commonService.emptyToZero(cost)*this.commonService.emptyToZero(percentage))/100)
+    let val = this.commonService.setCommaSerperatedNumber(percentageValue+this.commonService.emptyToZero(cost),'AMOUNT')
+    console.log(cost,'*',percentage,'=',val);
+    return val
   }
   priceCodeSelected(e: any) {
     if (this.checkStockCode()) return
@@ -544,10 +568,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   prefixCodeValidate() {
     const code = this.alloyMastereForm.value.code;
-    if (!code) {
-      // Handle case where code is empty
-      return;
-    }
+    if (!code) return;
     let API = `PrefixMaster/GetPrefixMasterDetail/${code}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -591,27 +612,27 @@ export class AlloyMasterComponent implements OnInit {
     return false;
   }
 
-  priceSchemeValidate(e: any) {
-    if (this.checkStockCode()) return
-    this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
-    let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.alloyMastereForm.value.priceScheme
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        if (result.response) {
-          let data = result.response;
-          this.alloyMastereForm.controls.PRICE1.setValue(data.PRICE1)
-          this.alloyMastereForm.controls.price2code.setValue(data.PRICE2)
-          this.alloyMastereForm.controls.price3code.setValue(data.PRICE3)
-          this.alloyMastereForm.controls.price4code.setValue(data.PRICE4)
-          this.alloyMastereForm.controls.price5code.setValue(data.PRICE5)
-        }
-      }, err => {
-        this.commonService.closeSnackBarMsg()
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
+  // priceSchemeValidate(e: any) {
+  //   if (this.checkStockCode()) return
+  //   this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
+  //   let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.alloyMastereForm.value.priceScheme
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg()
+  //       if (result.response) {
+  //         let data = result.response;
+  //         this.alloyMastereForm.controls.PRICE1.setValue(data.PRICE1)
+  //         this.alloyMastereForm.controls.price2code.setValue(data.PRICE2)
+  //         this.alloyMastereForm.controls.price3code.setValue(data.PRICE3)
+  //         this.alloyMastereForm.controls.price4code.setValue(data.PRICE4)
+  //         this.alloyMastereForm.controls.price5code.setValue(data.PRICE5)
+  //       }
+  //     }, err => {
+  //       this.commonService.closeSnackBarMsg()
+  //       this.commonService.toastErrorByMsgId('MSG1531')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
   costCenterSelected(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
@@ -800,12 +821,12 @@ export class AlloyMasterComponent implements OnInit {
       GW: 0,
       MODEL_NO: "",
       MODEL_YEAR: 0,
-      OPENED_ON:this.commonService.formatDateTime(this.currentDate),
+      OPENED_ON: this.commonService.formatDateTime(this.currentDate),
       OPENED_BY: "",
-      FIRST_TRN: "",
-      LAST_TRN: "",
+      FIRST_TRN: this.commonService.formatDateTime(this.alloyMastereForm.value.fristtransaction),
+      LAST_TRN: this.commonService.formatDateTime(this.alloyMastereForm.value.lasttransaction),
       MID: this.content?.MID || 0,
-      PRINTED: true,
+      PRINTED: false,
       PURVOCTYPE_NO: "",
       PURPARTY: "",
       PURDATE: "2023-11-27T07:30:26.960Z",
@@ -862,11 +883,11 @@ export class AlloyMasterComponent implements OnInit {
       EMERALD: 0,
       SAPHIRE: 0,
       WATCH_SERIALNO: "",
-      CERT_PRINTED: true,
-      NOQTYCHANGE: true,
+      CERT_PRINTED: false,
+      NOQTYCHANGE: false,
       STYLE: this.commonService.nullToString(this.alloyMastereForm.value.style),
       CUSTOMERSKU: "",
-      INITIAL_BRPURVOCTYPE_NO: 'null',
+      INITIAL_BRPURVOCTYPE_NO: "",
       STOCK_DESCRIPTION_OTHERS: this.commonService.nullToString(this.alloyMastereForm.value.otherdesc),
       TIME_CODE: this.commonService.nullToString(this.alloyMastereForm.value.time),
       RANGE_CODE: this.commonService.nullToString(this.alloyMastereForm.value.range),
@@ -892,8 +913,8 @@ export class AlloyMasterComponent implements OnInit {
       UDF13: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_13),
       UDF14: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_14),
       UDF15: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_15),
-      PROMOTIONALITEM: true,
-      EXCLUDEGSTVAT: true,
+      PROMOTIONALITEM: false,
+      EXCLUDEGSTVAT: false,
       RRR_CARAT: 0,
       RRR_PERCENT: 0,
       NACRE: "",
@@ -941,34 +962,34 @@ export class AlloyMasterComponent implements OnInit {
       LAST_EDT_ON: this.commonService.formatDateTime(this.currentDate),
       UNITCODE: "",
       UNITWT: 0,
-      CHKUNIT: true,
+      CHKUNIT: false,
       CHKCOMPONENTSUMMARY: "",
       CHKCOMPONENTDETAIL: "",
       CMBNATURE: "",
       CMBTYPE: "",
       RFID_TAG: "",
       SKUDESCRIPTION: "",
-      ON_OFF: true,
+      ON_OFF: false,
       NOTFORSALES: 0,
-      TRANSFERED_WEB: true,
-      CALCULATE_COSTING: true,
+      TRANSFERED_WEB: false,
+      CALCULATE_COSTING: false,
       QUALITY_CODE: "",
       PARENTSTOCK_CODE: "",
       PARTNER_CODE: "",
       KPNUMBER: "",
       HSN_CODE: this.commonService.nullToString(this.alloyMastereForm.value.HSNcode),
-      ITEM_ONHOLD: true,
+      ITEM_ONHOLD: false,
       POS_CUST_CODE: this.commonService.nullToString(this.alloyMastereForm.value.POScus),
-      CONSIGNMENT: true,
+      CONSIGNMENT: false,
       POSGROSSWT: this.commonService.emptyToZero(this.alloyMastereForm.value.grossWt),
       HANDLING_CHARGEFC: 0,
       HANDLING_CHARGELC: 0,
       ORG_COSTFC: 0,
       ORG_COSTLC: 0,
-      VATONMARGIN: true,
+      VATONMARGIN: false,
       SALESPERSON_CODE: "",
       ORDSALESPERSON_CODE: "",
-      BATCH_STOCK: true,
+      BATCH_STOCK: false,
       BATCH_PREFIX: "",
       SIEVE_SET: "",
       MODEL_CODE: this.commonService.nullToString(this.alloyMastereForm.value.modelcode),
@@ -977,12 +998,12 @@ export class AlloyMasterComponent implements OnInit {
       PLAT_CHARGESLC: 0,
       CERT_CHARGESLC: 0,
       CERT_CHARGESFC: 0,
-      UNFIX_DIAMOND_ITEM: true,
-      ALLOW_WITHOUT_RATE: true,
+      UNFIX_DIAMOND_ITEM: false,
+      ALLOW_WITHOUT_RATE: false,
       RRR_STOCK_REF: "",
       MARKETCOSTFC: this.commonService.emptyToZero(this.alloyMastereForm.value.marketcost),
       MARKETCOSTLC: 0,
-      RRR_PRICE_UPDATED: true,
+      RRR_PRICE_UPDATED: false,
       RRR_PRICE_UPDDATE: "2023-11-27T07:30:26.960Z",
       SALESCODE: 0,
       RRR_PUR_CARAT: 0,
@@ -990,7 +1011,7 @@ export class AlloyMasterComponent implements OnInit {
       RRR_SAL_PERCENT: 0,
       RRR_OTHER_PERCENT: 0,
       SET_PICTURE_NAME: "",
-      PACKET_ITEM: true,
+      PACKET_ITEM: false,
       PACKET_WT: 0,
       SALES_TAGLINES: "",
       ALLOW_ZEROPCS: this.onchangeCheckBox(this.alloyMastereForm.value.allowpcs),
@@ -1067,7 +1088,7 @@ export class AlloyMasterComponent implements OnInit {
       CHARGE9LC: 0,
       CHARGE10FC: 0,
       CHARGE10LC: 0,
-      MANUFACTURE_ITEM: true,
+      MANUFACTURE_ITEM: false,
       diamondStockDetails: [
         {
           UNIQUEID: 0,
@@ -1218,7 +1239,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   /**USE: delete Melting Type From Row */
-  deleteMeltingType() {
+  deleteAlloyMaster() {
     if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
     Swal.fire({
       title: 'Are you sure?',
@@ -1278,15 +1299,5 @@ export class AlloyMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  calculatePriceFCDetails(event: any){
-    console.log("Input changed: ", event.target.value);
-    var currencyRate = event.target.value;
-    var weightAvgCostFC = this.alloyMastereForm.value.weightAvgCostFC;
-    this.alloyMastereForm.controls.price1Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price2Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price3Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price4Fc.setValue(currencyRate * weightAvgCostFC); 
-    this.alloyMastereForm.controls.price5Fc.setValue(currencyRate * weightAvgCostFC); 
-  } 
-  
+
 }

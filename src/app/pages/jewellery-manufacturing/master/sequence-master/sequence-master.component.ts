@@ -27,7 +27,6 @@ export class SequenceMasterComponent implements OnInit {
   viewMode: boolean = false;
   codeEnable: boolean = true;
   editMode: boolean = false;
-  dele: boolean = false;
   checkCondtion: boolean = false;
   checkTimeCondtion: boolean = false;
 
@@ -73,13 +72,11 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
-    this.dele = true;
     this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'EDIT') {
         this.editMode = true
-        this.dele = false;
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
       } else if (this.content.FLAG == 'DELETE') {
@@ -400,10 +397,11 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
@@ -413,6 +411,8 @@ export class SequenceMasterComponent implements OnInit {
         if(data.length==0){
           this.commonService.toastErrorByMsgId('MSG1531')
           this.sequenceMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

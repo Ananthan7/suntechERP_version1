@@ -10,7 +10,7 @@
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
         (deleteClick)="deleteSequenceMaster()"
-        [isViewDelete]="!dele" [isViewDelete]="!viewMode"
+        [isViewDelete]="editMode" 
         [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
         [isViewMore]="!viewMode"></modal-header>
     <!-- content section -->

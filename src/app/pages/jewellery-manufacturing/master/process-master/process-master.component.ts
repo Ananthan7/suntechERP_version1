@@ -863,6 +863,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   /**use: focusout fn for input valate */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, formControlName: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formControlName].setValue('');
       return
@@ -870,7 +871,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' AND ${LOOKUPDATA.WHERECONDITION}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
@@ -880,6 +881,7 @@ export class ProcessMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processMasterForm.controls[formControlName].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
       }, err => {

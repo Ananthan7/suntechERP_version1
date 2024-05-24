@@ -21,30 +21,32 @@ import { ToastrService } from "ngx-toastr";
 export class AdvanceReturnComponent implements OnInit {
   @Input() content!: any;
   branchCode?: String;
-
+  pcrSelectionData: any[] = [];
   vocMaxDate = new Date();
   currentDate = new Date();
-  columnhead: any[] = [
-    "SRNO",
-    "Branch",
-    "ACCODE",
-    "Type",
-    "Cheque No",
-    "Cheque Date",
-    "Bank",
-    "Currency",
-    "Amount FC",
-    "Amount LC",
-    "Balance",
-    "VAT %",
-    "VAT Amount",
-    "Total Amount",
-    "COMM_TAX AMOUNT CC",
-    "COMM_TAX PER",
-    "COMM_AMOUNT CC",
-    "COMM_PER  ",
+  columnhead:any[] = [
+    { title: 'Sr #', field: 'SRNO' },
+    { title: 'Branch', field: 'BRANCH_CODE' },
+    { title: 'ACCODE', field: 'ACCODE' },
+    { title: 'Type', field: 'RECPAY_TYPE' },
+    { title: 'Cheque No', field: 'HDACCOUNT_HEAD' },
+    { title: 'Cheque Date', field: 'CURRENCY_CODE' },
+    { title: 'Bank', field: 'BANKCODE' },
+    { title: 'Currency', field: 'AMOUNTCC' },
+    { title: 'Amount FC', field: 'AMOUNTFC' },
+    { title: 'Amount LC', field: 'AMOUNTCC' },
+    { title: 'Balance', field: 'SRNO' },
+    { title: 'VAT %', field: 'BRANCH_CODE' },
+    { title: 'VAT Amount', field: 'MODE' },
+    { title: 'Total Amount', field: 'TOTAL_AMOUNTCC' },
+    { title: 'COMM_TAX AMOUNT CC', field: 'COMM_TAXAMOUNTCC' },
+    { title: 'COMM_TAX PER', field: 'COMM_TAXPER' },
+    { title: 'COMM_AMOUNT CC', field: 'COMM_TAXAMOUNTCC' },
+    { title: 'COMM_PER', field: 'COMM_PER' },
+ 
   ];
-  pcrSelectionData: any[] = [];
+  
+ 
 
   enteredByCode: MasterSearchModel = {
     PAGENO: 1,
@@ -142,17 +144,20 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
   openaddposdetails() {
-    const modalRef: NgbModalRef = this.modalService.open(
-      PcrSelectionComponent,
-      {
-        size: "lg",
-        backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
-      }
-    );
+    const modalRef: NgbModalRef = this.modalService.open(PcrSelectionComponent, {
+      size: "lg",
+      backdrop: true,
+      keyboard: false,
+      windowClass: "modal-full-width",
+    });
     modalRef.componentInstance.customerCode = this.advanceReturnForm.value.customerCode;
-    
+
+    modalRef.componentInstance.selectionConfirmed.subscribe((selectedRows: any[]) => {
+      this.pcrSelectionData.push(...selectedRows);
+
+      this.pcrSelectionData.forEach((data, index) => (data.SRNO = index + 1));
+    });
+
     modalRef.result.then((postData) => {
       if (postData) {
         console.log("Data from modal:", postData);
@@ -161,7 +166,9 @@ export class AdvanceReturnComponent implements OnInit {
         this.pcrSelectionData.forEach((data, index) => (data.SRNO = index + 1));
       }
     });
+    console.log("this.pcrSelectionData", this.pcrSelectionData);
   }
+  
 
   enteredBySelected(e: any) {
     console.log(e);

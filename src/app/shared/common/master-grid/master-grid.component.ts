@@ -176,7 +176,7 @@ export class MasterGridComponent implements OnInit {
         "TRANSACTION": {
           "VOCTYPE": this.CommonService.nullToString(this.vocType),
           "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          "FILTERVAL": this.CommonService.nullToString(this.vocType),
+          "FILTERVAL": this.CommonService.nullToString(this.tableName),
         },
         "SEARCH": {
           "SEARCH_VALUE": this.CommonService.nullToString(this.SEARCH_VALUE)

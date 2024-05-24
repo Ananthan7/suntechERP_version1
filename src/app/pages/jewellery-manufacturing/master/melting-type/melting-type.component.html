@@ -6,156 +6,202 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="!viewMode"  [isViewDelete]="!dele" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
+<modal-header [isViewDelete]="editMode" 
+    [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
-        <form [formGroup]="meltingTypeForm">
-            <div class="container-fluid pt-3">
+    <form [formGroup]="meltingTypeForm">
+        <div class="container-fluid pt-3">
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Code * :</label>
-                            <div class="col-sm-4">
-                                <mat-form-field style="width: 100%; margin-left:-54px; margin-top:-5px;">
-                                    <input type="text" #codeInput maxlength="15" [readonly]="editCode" matInput
-                                        formControlName="code" oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
-                                </mat-form-field>
-                            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row mb-2">
+                        <label for="input" class="col-sm-3 col-form-label">Code
+                            * :</label>
+                        <div class="col-sm-4">
+                            <mat-form-field
+                                style="width: 100%; margin-left:-54px; margin-top:-5px;">
+                                <input type="text" #codeInput maxlength="15"
+                                    [readonly]="editCode" matInput
+                                    formControlName="code"
+                                    oninput="this.value = this.value.toUpperCase()"
+                                    (keyup)="codeEnabled()" />
+                            </mat-form-field>
                         </div>
-
                     </div>
+
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label for="input" class="col-md-2 col-form-label">Description *
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 140%; margin-left:-121px; margin-top:-5px;">
+                        <input type="text" maxlength="85" matInput
+                            [readonly]="viewMode || codeEnable"
+                            formControlName="description"
+                            oninput="this.value = this.value.toUpperCase()" />
+                    </mat-form-field>
                 </div>
 
-                <div class="row mb-2">
-                    <label for="input" class="col-md-2 col-form-label">Description * :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 140%; margin-left:-121px; margin-top:-5px;">
-                            <input type="text" maxlength="85" matInput [readonly]="viewMode || codeEnable"
-                                formControlName="description" oninput="this.value = this.value.toUpperCase()" />
-                        </mat-form-field>
-                    </div>
-
-                    <label for="input" class="col-sm-2 col-form-label" >Metal % :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 150%; margin-left:-159px; margin-top:-5px;">
-                            <input type="number" matInput [readonly]="viewModeField || codeEnable" step="0.001" min="0"
-                                formControlName="metal" (input)="onInput($event)" style="text-align: right;" />
-                        </mat-form-field>
-                    </div>
-
-                    <label for="input" class="col-sm-2 col-form-label">Color * :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 150%; margin-left:-164px; margin-top:-5px;">
-                            <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode || codeEnable" 
-                            (focusout)="validateLookupField($event,colorData,'color')"/>
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"
-                            *ngIf="SearchDisable == viewMode">
-                        </master-search>
-                    </div>
+                <label for="input" class="col-sm-2 col-form-label">Metal %
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 150%; margin-left:-159px; margin-top:-5px;">
+                        <input type="number" matInput
+                            [readonly]="viewModeField || codeEnable"
+                            step="0.001" min="0"
+                            formControlName="metal" (input)="onInput($event)"
+                            style="text-align: right;" />
+                    </mat-form-field>
                 </div>
 
+                <label for="input" class="col-sm-2 col-form-label">Color *
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 150%; margin-left:-164px; margin-top:-5px;">
+                        <input type="text" matInput maxlength="6"
+                            formControlName="color"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="validateLookupField($event,colorData,'color')" />
+                    </mat-form-field>
+                    <master-search [MasterSearchData]="colorData"
+                        (newRowClick)="colorDataSelected($event)"
+                        *ngIf="SearchDisable == viewMode">
+                    </master-search>
+                </div>
+            </div>
 
-                
-                <div class="row mb-2">
+            <div class="row mb-2">
 
-                    <label for="input" class="col-sm-1 col-form-label">Karat :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 111%; margin-left:-60px; margin-top:-6px;">
-                            <input type="text"  [readonly]="viewMode || codeEnable"  matInput formControlName="karat" 
+                <label for="input" class="col-sm-1 col-form-label">Karat
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 111%; margin-left:-60px; margin-top:-6px;">
+                        <input type="text" [readonly]="viewMode || codeEnable"
+                            matInput formControlName="karat"
                             (focusout)="validateLookupField($event,karatcodeData,'karat')" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="karatcodeData" (newRowClick)="karatcodeSelected($event)"
-                            *ngIf="SearchDisable == viewMode">
-                        </master-search>
-                    </div>
+                    </mat-form-field>
+                    <master-search [MasterSearchData]="karatcodeData"
+                        (newRowClick)="karatcodeSelected($event)"
+                        *ngIf="SearchDisable == viewMode">
+                    </master-search>
+                </div>
 
-                    <label for="input" class="col-sm-1 col-form-label">Purity :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 120%; margin-left:-60px; margin-top:-6px;">
-                            <input type="number" matInput [readonly]="viewModeField || codeEnable" formControlName="purity"
-                                style="text-align: right;" />
-                        </mat-form-field>
+                <label for="input" class="col-sm-1 col-form-label">Purity
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 120%; margin-left:-60px; margin-top:-6px;">
+                        <input type="number" matInput
+                            [readonly]="viewModeField || codeEnable"
+                            formControlName="purity"
+                            style="text-align: right;" />
+                    </mat-form-field>
 
+                </div>
 
-                        </div>
-                    
+                <label for="input" class="col-sm-1 col-form-label">Alloy %
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 123%; margin-left:-46px; margin-top:-6px;">
+                        <input type="number" matInput
+                            [readonly]="viewModeField || codeEnable"
+                            formControlName="alloy"
+                            (input)="onInput($event)"
+                            style="text-align: right;" />
+                    </mat-form-field>
 
+                </div>
 
-                    <label for="input" class="col-sm-1 col-form-label">Alloy % :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 123%; margin-left:-46px; margin-top:-6px;">
-                            <input type="number" matInput [readonly]="viewModeField || codeEnable" formControlName="alloy"
-                                (input)="onInput($event)" style="text-align: right;" />
-                        </mat-form-field>
-
-                    </div>
-
-                    <label for="input" class="col-sm-1 col-form-label">Stock Code :</label>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 86%; margin-left:-20px; margin-top:-6px;">
-                            <input type="text" matInput formControlName="stockCode" [readonly]="viewMode || codeEnable" 
-                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')"/>
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="stockCodeData" (newRowClick)="StockCodeSelected($event)"
-                            *ngIf="SearchDisable == viewMode">
-                        </master-search>
-                    </div>
+                <label for="input" class="col-sm-1 col-form-label">Stock Code
+                    :</label>
+                <div class="col-sm-2">
+                    <mat-form-field
+                        style="width: 86%; margin-left:-20px; margin-top:-6px;">
+                        <input type="text" matInput formControlName="stockCode"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" />
+                    </mat-form-field>
+                    <master-search [MasterSearchData]="stockCodeData"
+                        (newRowClick)="StockCodeSelected($event)"
+                        *ngIf="SearchDisable == viewMode">
+                    </master-search>
                 </div>
             </div>
+        </div>
 
+        <div class="col-md-12">
+            <div class="check_radio_btn">
+                <h6>Alloy Details</h6>
+                <div class="col-md-12">
 
-            <div class="col-md-12">
-                <div class="check_radio_btn">
-                    <h6>Alloy Details</h6>
-                    <div class="col-md-12">
-
-                        <menu-buttons [viewAddBtn]="true"  [viewDeleteBtn]="true " [viewImportBtn]="false"  [viewAddBtn]="!viewMode"
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true "
+                        [viewImportBtn]="false" [viewAddBtn]="!viewMode"
                         [viewDeleteBtn]="!viewMode"
-                            (addClick)="addTableData()" (deleteClick)="deleteTableData()">
-                        </menu-buttons>
+                        (addClick)="addTableData()"
+                        (deleteClick)="deleteTableData()">
+                    </menu-buttons>
 
-                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3" keyExpr="SRNO"
-                            (onSelectionChanged)="onSelectionChanged($event)">
-                            <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Division" cellTemplate="division">
-                            </dxi-column>
-                            <dxi-column dataField="DEF_ALLOY_STOCK" caption="Default Alloy" cellTemplate="defaultAlloy">
-                            </dxi-column>
-                            <dxi-column dataField="DEF_ALLOY_DESCRIPTION" caption="Description"> </dxi-column>
-                            <dxi-column dataField="ALLOY_PER" caption="Alloy %" cellTemplate="alloyper">
-                            </dxi-column>
+                    <dx-data-grid id="gridContainer" [dataSource]="tableData"
+                        [showBorders]="true"
+                        [showColumnLines]="true" [showRowLines]="true"
+                        [allowColumnResizing]="true" class="mt-3" keyExpr="SRNO"
+                        (onSelectionChanged)="onSelectionChanged($event)">
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxi-column dataField="SRNO" caption="SR No"
+                            class="tab"> </dxi-column>
+                        <dxi-column dataField="DIVISION_CODE" caption="Division"
+                            cellTemplate="division">
+                        </dxi-column>
+                        <dxi-column dataField="DEF_ALLOY_STOCK"
+                            caption="Default Alloy" cellTemplate="defaultAlloy">
+                        </dxi-column>
+                        <dxi-column dataField="DEF_ALLOY_DESCRIPTION"
+                            caption="Description"> </dxi-column>
+                        <dxi-column dataField="ALLOY_PER" caption="Alloy %"
+                            cellTemplate="alloyper">
+                        </dxi-column>
 
-                            <div *dxTemplate="let data of 'division'">
-                                <input type="text"  [value]="data.value"
-                                    [disabled]="data.value == ''" style="width: 100%;" required readonly
-                                    oninput="this.value = this.value.toUpperCase()"/>
-                            </div>
+                        <div *dxTemplate="let data of 'division'">
+                            <input type="text" [value]="data.value"
+                                [disabled]="data.value == ''"
+                                style="width: 100%;" required readonly
+                                oninput="this.value = this.value.toUpperCase()" />
+                        </div>
 
-                            <div *dxTemplate="let data of 'defaultAlloy'">
-                                <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                <master-search [MasterSearchData]="defaultAlloy" *ngIf="!viewMode"
-                                    (newRowClick)="defaultAlloySelected($event,data,'defaultAlloy')"
-                                    style="width: 60%;">
-                                </master-search>
-                            </div>
+                        <div *dxTemplate="let data of 'defaultAlloy'">
+                            <a href="javascript:void(0)" class="mx-1"
+                                [innerHTML]="data.value"></a>
+                            <master-search [MasterSearchData]="defaultAlloy"
+                                *ngIf="!viewMode"
+                                (newRowClick)="defaultAlloySelected($event,data,'defaultAlloy')"
+                                style="width: 60%;">
+                            </master-search>
+                        </div>
 
-                            <div *dxTemplate="let data of 'alloyper'">
-                                <input type="text" style="text-align: right;" AmountDecimalInput
-                                    (change)="alloyPer($event,data)" [value]="data.value" required
-                                    [readonly]="viewMode" /><span>%</span>
-                            </div>
+                        <div *dxTemplate="let data of 'alloyper'">
+                            <input type="text" style="text-align: right;"
+                                AmountDecimalInput
+                                (change)="alloyPer($event,data)"
+                                [value]="data.value" required
+                                [readonly]="viewMode" /><span>%</span>
+                        </div>
 
-                        </dx-data-grid>
-                    </div>
+                    </dx-data-grid>
                 </div>
-
-
             </div>
 
-        </form>
+        </div>
+
+    </form>
 
 </div>

@@ -28,6 +28,8 @@ import { IndexedDbService } from "src/app/services/indexed-db.service";
 export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   @Input() receiptData!: any;
+  @Input() queryParams!: any;
+  viewOnly: boolean = false;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   branchCode?: String;
@@ -37,7 +39,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   selectedTabIndex = 0;
   isCurrencyUpdate: boolean = false;
-
+  hsnCodeList: any[] = [];
   debitAmountData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -103,7 +105,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     chequeDepositBank: [""],
     remarks: [""],
     vatNo: [""],
-    hsnCode: [""],
+    hsnCode: ["GEN"],
     invoiceNo: [""],
     invoiceDate: [new Date()],
     vat: [""],
@@ -136,6 +138,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.getQueryParams(this.queryParams);
+    this.generateHsnCodeList(this.queryParams);
     this.branchCode = this.comService.branchCode;
     this.paymentModeList = this.comService.getComboFilterByID('Payment Mode');
     console.log('paymentModeList :', this.paymentModeList);
@@ -145,9 +150,44 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.vatDetails();
 
     this.setReceiptData();
+
     this.getAccountHead();
   }
 
+  generateHsnCodeList(queryParams: any) {
+    this.hsnCodeList = [];
+
+    // Check if the queryParams object contains hsnCode
+    if (queryParams && queryParams.hsnCode) {
+      // Split the hsnCode string by comma
+      const codes = queryParams.hsnCode.split(',');
+
+      // Iterate through each code and push to hsnCodeList
+      codes.forEach((code: any) => {
+        this.hsnCodeList.push({ code: code.trim(), value: code.trim() });
+      });
+    }
+
+    console.log('hsnCodeList', this.hsnCodeList);
+  }
+
+  getQueryParams(gstDetails?: any) {
+    this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(gstDetails.hsnCode);
+    this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(gstDetails.hsnCode);
+    this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(gstDetails.currecyCode);
+    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(gstDetails.currencyConvRate);
+
+    this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(gstDetails.vatPercentage),
+      'AMOUNT'));
+
+    this.viewOnly = gstDetails.isViewOnly;
+    if (gstDetails.currecyCode == this.compCurrency)
+      this.isCurrencyUpdate = true;
+    else
+      this.isCurrencyUpdate = false;
+
+  }
 
   getAccountHead(e?: any) {
 
@@ -160,38 +200,38 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(res.response.ACCODE);
           this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(res.response.ACCOUNT_HEAD);
 
-          this.DebitamountChange({ target: { value: res.response.ACCODE } });
-         
+          // this.DebitamountChange({ target: { value: res.response.ACCODE } });
+
 
         }
       });
   }
 
-  getGSTDetails(acCode: any) {
+  // getGSTDetails(acCode: any) {
 
-    // this.PartyCodeData.SEARCH_VALUE = event.target.value
-    let vatData = {
+  //   // this.PartyCodeData.SEARCH_VALUE = event.target.value
+  //   let vatData = {
 
-      'BranchCode': this.branchCode,
-      'AcCode': acCode,
-      'VocType': this.comService.getqueryParamVocType(),
-      'Date': new Date().toISOString(),
+  //     'BranchCode': this.branchCode,
+  //     'AcCode': acCode,
+  //     'VocType': this.comService.getqueryParamVocType(),
+  //     'Date': new Date().toISOString(),
 
-    };
-    let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
-      .subscribe((result) => {
+  //   };
+  //   let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
+  //     .subscribe((result) => {
 
-        if (result.status == 'Success') {
-          let data = result.response;
-          console.log('vatData', data.GST_PER);
-          this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
-            this.comService.emptyToZero(data.GST_PER),
-            'AMOUNT'));
-            this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(data.HSN_SAC_CODE);
-        }
-      }
-      )
-  }
+  //       if (result.status == 'Success') {
+  //         let data = result.response;
+  //         console.log('vatData', data.GST_PER);
+  //         this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
+  //           this.comService.emptyToZero(data.GST_PER),
+  //           'AMOUNT'));
+  //           this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(data.HSN_SAC_CODE);
+  //       }
+  //     }
+  //     )
+  // }
   setReceiptData() {
     console.log(this.receiptData);
     // let preData =  {
@@ -276,7 +316,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     //     "AMLTRANSACTION_TYPE": ""
     // }
 
-    if (this.receiptData != null && this.receiptData != undefined) {
+    if (this.receiptData != null && this.receiptData != undefined && Object.keys(this.receiptData).length > 0) {
       this.posCurrencyReceiptDetailsForm.controls.modeOfSelect.setValue(this.receiptData.MODE);
       this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(this.receiptData.ACCODE);
 
@@ -293,10 +333,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
       // this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTFC);
       this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTCC);
+      this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.receiptData.TOTAL_AMOUNTCC);
+      this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.receiptData.TOTAL_AMOUNTCC);
 
       this.posCurrencyReceiptDetailsForm.controls.invoiceNo.setValue(this.receiptData.INVOICE_NUMBER);
       this.posCurrencyReceiptDetailsForm.controls.invoiceDate.setValue(this.receiptData.INVOICE_DATE);
       this.posCurrencyReceiptDetailsForm.controls.vatNo.setValue(this.receiptData.VAT_EXPENSE_CODE);
+      this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.receiptData.CGST_AMOUNTCC);
 
 
 
@@ -338,7 +381,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
     this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT HEAD"]);
     this.DebitamountChange({ target: { value: e.ACCODE } });
-    this.getGSTDetails(e.ACCODE);
+    // this.getGSTDetails(e.ACCODE);
   }
 
   CurrencySelected(e: any) {
@@ -380,10 +423,10 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
                 this.isCurrencyUpdate = true;
               else
                 this.isCurrencyUpdate = false;
-              this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(data[0].CURRENCY_CODE)
-              console.log(data[0].CURRENCY_CODE);
-              this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(data[0].CONV_RATE);
-              this.getGSTDetails(data[0].ACCODE)
+              // this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(data[0].CURRENCY_CODE)
+              // console.log(data[0].CURRENCY_CODE);
+              // this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(data[0].CONV_RATE);
+              // this.getGSTDetails(data[0].ACCODE)
             }
           }
 

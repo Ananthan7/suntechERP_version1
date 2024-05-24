@@ -30,6 +30,7 @@
                                                 #codeInput matInput
                                                 maxlength="15"
                                                 formControlName="price_code"
+                                                (focusout)="checkCodeExists($event)"
                                                 oninput="this.value = this.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
@@ -182,7 +183,7 @@
                             </div>
                             <div class="col-6 pt-5">
                                 <br>
-                                <div class="row mb-1 head2">
+                                <div class="row mb-1 head2" style="margin-top: -46px;">
                                     <label for="inputPassword"
                                         class="col-sm-4 col-form-label">Currency
                                         * :</label>

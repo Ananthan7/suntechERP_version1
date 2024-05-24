@@ -12,6 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { startOfDay } from '@fullcalendar/angular';
+import { IndexedDbService } from 'src/app/services/indexed-db.service';
+import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 
 
 @Component({
@@ -21,6 +23,7 @@ import { startOfDay } from '@fullcalendar/angular';
 })
 export class PosCurrencyReceiptComponent implements OnInit {
   // @ViewChild(DxDataGridComponent, { static: false }) dataGrid?: DxDataGridComponent;
+  @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
 
   @Input() content!: any; //use: To get clicked row details from master grid
   // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
@@ -52,8 +55,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
   userName?: String;
   companyCurrency?: String;
   gridAmountDecimalFormat: any;
-  isCurrencyUpdate:boolean=false;
+  isCurrencyUpdate: boolean = false;
+  vatPercentage: string = '';
+  hsnCode: string = '';
+  currencyCode: any;
+  currencyConvRate: any;
 
+  isCustomerRequired = false;
   enteredByCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -142,6 +150,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     public comService: CommonServiceService,
+    private indexedDb: IndexedDbService,
   ) {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
@@ -150,23 +159,15 @@ export class PosCurrencyReceiptComponent implements OnInit {
     };
 
     this.companyCurrency = this.comService.compCurrency;
+
+    console.log(this.isCustomerRequired)
   }
-  convertDateToYMD(str: any) {
-    var date = new Date(str),
-      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
-      day = ('0' + date.getDate()).slice(-2);
-    return [date.getFullYear(), mnth, day].join('-');
-  }
-  generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
-    this.dataService.getDynamicAPI(API)
-      .subscribe((resp) => {
-        if (resp.status == "Success") {
-          this.posCurrencyReceiptForm.controls.vocNo.setValue(resp.newvocno);
-        }
-      });
-  }
-  ngOnInit(): void {
+
+
+
+  async ngOnInit(): Promise<void> {
+    await this.loadCompanyParams();
+    console.log(this.isCustomerRequired)
     // this.posCurrencyReceiptForm.controls['vocType'].disable();
     // this.posCurrencyReceiptForm.controls['vocNo'].disable();
 
@@ -184,45 +185,56 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
 
     this.getFinancialYear();
-
+    this.getPartyCode();
 
     if (this.content?.MID != null)
       this.getArgsData();
     else {
       this.changeDueDate(null);
       this.generateVocNo();
-      this.getPartyCode();
+
     }
 
-
-
-    // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
-    //   alert(newValue);
-    //   const parsedDate = this.parseDateString(newValue);
-    //   this.posCurrencyReceiptForm.get('dueDays')?.setValue(parsedDate);
-    // });
-
-    // this.posCurrencyReceiptForm.get('dueDays')?.valueChanges.subscribe((newDate: Date) => {
-    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(this.formatDate(newDate));
-
-    //   const currentDate = startOfDay(new Date());
-    //   const difference = this.calculateDateDifference(newDate, currentDate);
-    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
-    // });
-
-    // Subscribe to changes in dueDaysdesc
-    // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
-    //   this.updateDueDays(newValue);
-    // });
-
-    // Subscribe to changes in dueDays
-    // this.posCurrencyReceiptForm.get('dueDays')?.valueChanges.subscribe((newDate: Date) => {
-    //   // Calculate and update the difference in days
-    //   const currentDate = new Date();
-    //   const difference = this.calculateDateDifference(newDate, currentDate);
-    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
-    // });
   }
+
+
+  private loadCompanyParams(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.indexedDb.getAllData('compparams').subscribe((data) => {
+        if (data.length > 0) {
+          console.log('==============compparams======================');
+          console.log(data);
+          console.log('====================================');
+          this.comService.allCompanyParams = data;
+          this.comService.allCompanyParams.forEach((param: any) => {
+            if (param.PARAMETER === 'PCRPOSCUSTCOMPULSORY') {
+              this.isCustomerRequired = param.PARAM_VALUE === '1';
+            }
+          });
+        }
+        resolve();
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join('-');
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.posCurrencyReceiptForm.controls.vocNo.setValue(resp.newvocno);
+        }
+      });
+  }
+
   getPartyCode() {
 
     const API = `AdvanceReceiptParty/${this.strBranchcode}`;
@@ -231,6 +243,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
         if (resp.status == "Success") {
           console.log('resp', resp.Accode);
           this.posCurrencyReceiptForm.controls.partyCode.setValue(resp.Accode);
+          this.getGSTDetails(resp.Accode);
           this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(resp.AccountHead);
           this.partyCodeChange({ target: { value: resp.Accode } });
         }
@@ -292,6 +305,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
           const data = result.response;
 
           this.posCurrencyDetailsData = data.currencyReceiptDetails;
+          this.posCurrencyDetailsData.forEach((data, index) => { data.NET_TOTAL = (parseFloat(data.AMOUNTCC) + parseFloat(data.CGST_AMOUNTCC)).toFixed(2); });
+          console.log('this.posCurrencyDetailsData', this.posCurrencyDetailsData);
+          this.updateFormValuesAndSRNO();
 
           // set form values
           this.posCurrencyReceiptForm.controls.vocType.setValue(data.VOCTYPE);
@@ -331,6 +347,17 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
   }
 
+  auditTrailClick() {
+    let params = {
+      BRANCH_CODE: this.branchCode,
+      VOCTYPE: this.posCurrencyReceiptForm.value.vocType,
+      VOCNO: this.posCurrencyReceiptForm.value.vocNo.toString() || '',
+      MID: this.content?.MID.toString() || '',
+      YEARMONTH: this.yearMonth,
+    }
+    this.auditTrailComponent?.showDialog(params)
+  }
+
   // PartyCodeChange(event: any) {
   //   this.PartyCodeData.SEARCH_VALUE = event.target.value
   // }
@@ -338,6 +365,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptForm.controls.partyCode.setValue(e.ACCODE);
+    this.getGSTDetails(e.ACCODE);
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT HEAD']);
     this.partyCodeChange({ target: { value: e.ACCODE } })
   }
@@ -364,14 +392,16 @@ export class PosCurrencyReceiptComponent implements OnInit {
             console.log('data', data);
 
             if (data && data[0].CURRENCY_CODE) {
-             if(this.companyCurrency==data[0].CURRENCY_CODE)
-              this.isCurrencyUpdate=true;
-            else
-              this.isCurrencyUpdate=false;
+              if (this.companyCurrency == data[0].CURRENCY_CODE)
+                this.isCurrencyUpdate = true;
+              else
+                this.isCurrencyUpdate = false;
 
               this.posCurrencyReceiptForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
               this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
               this.posCurrencyReceiptForm.controls.partyCurr.setValue(data[0].CURRENCY_CODE)
+              this.currencyCode = data[0].CURRENCY_CODE;
+              this.currencyConvRate = data[0].CONV_RATE;
 
               // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
               // this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
@@ -420,11 +450,25 @@ export class PosCurrencyReceiptComponent implements OnInit {
     // this.selec
     if (this.selectedIndexes.length > 0) {
       this.posCurrencyDetailsData = this.posCurrencyDetailsData.filter((data, index) => !this.selectedIndexes.includes(index));
+      this.updateFormValuesAndSRNO();
     } else {
       this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
     }
   }
 
+  validateForm() {
+    if (this.posCurrencyReceiptForm.invalid) {
+      this.toastr.error('Select all required fields');
+      return false;
+    }
+
+    if (this.isCustomerRequired && !this.posCurrencyReceiptForm.controls.customerCode.value) {
+      this.toastr.error('Please fill customer details');
+      return false;
+    }
+
+    return true;
+  }
   formSubmit() {
 
     // if (this.content && this.content.FLAG == 'EDIT') {
@@ -432,9 +476,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     // return
     // }
 
-    if (this.posCurrencyReceiptForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
+    if (!this.validateForm()) {
+      return;
     }
 
 
@@ -462,8 +505,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "SUPINVDATE": this.posCurrencyReceiptForm.value.vocDate,
       "HHACCOUNT_HEAD": "",
       "SALESPERSON_CODE": this.posCurrencyReceiptForm.value.enteredby,
-      "BALANCE_FC": 0,
-      "BALANCE_CC": 0,
+      "BALANCE_FC":this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      "BALANCE_CC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "AUTHORIZEDPOSTING": true,
       "AUTOGENREF": "",
       "AUTOGENMID": 0,
@@ -473,7 +516,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "POSCUSTOMERCODE": this.posCurrencyReceiptForm.value.customerCode || "",
       "D2DTRANSFER": "",
       "DRAFT_FLAG": "0",
-      "POSSCHEMEID": "0",
+      "POSSCHEMEID": "",
       "FLAG_EDIT_ALLOW": "",
       "PARTY_ADDRESS": this.posCurrencyReceiptForm.value.partyAddress,
       "AUTOPOSTING": true,
@@ -492,7 +535,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "GST_TOTALFC": 0,
       "GST_TOTALCC": 0,
       "DOC_REF": "",
-      "REC_STATUS": "0",
+      "REC_STATUS": "",
       "CUSTOMER_NAME": this.posCurrencyReceiptForm.value.customerName || "",
       "CUSTOMER_MOBILE": this.posCurrencyReceiptForm.value.mobile || "",
       "CUSTOMER_EMAIL": this.posCurrencyReceiptForm.value.email || "",
@@ -640,6 +683,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   // customer master add, view
   openCustMaster() {
+    this.posCurrencyReceiptForm.controls.partyCode.value;
     const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterComponent, {
       size: 'lg',
       backdrop: true,
@@ -675,7 +719,19 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.openAddPosARdetails(e.data);
   }
   removeLineItemsGrid(e: any) {
-   
+    console.log(e.data)
+    const values: any = []
+    values.push(e.data.SRNO);
+    let indexes: Number[] = [];
+    this.posCurrencyDetailsData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    this.updateFormValuesAndSRNO();
+
   }
   openAddPosARdetails(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
@@ -684,7 +740,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.receiptData = data;
+    modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.queryParams = { vatPercentage: this.vatPercentage, hsnCode: this.hsnCode, currecyCode: this.currencyCode, currencyConvRate: this.currencyConvRate, isViewOnly: this.viewOnly };
+
+    // modalRef.componentInstance.receiptData = data;
 
     modalRef.result.then((postData) => {
       if (postData) {
@@ -693,6 +752,31 @@ export class PosCurrencyReceiptComponent implements OnInit {
       }
     });
   }
+
+  getGSTDetails(acCode: any) {
+
+    // this.PartyCodeData.SEARCH_VALUE = event.target.value
+    let vatData = {
+
+      'BranchCode': this.branchCode,
+      'AcCode': acCode,
+      'VocType': this.comService.getqueryParamVocType(),
+      'Date': new Date().toISOString(),
+
+    };
+    let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
+      .subscribe((result) => {
+
+        if (result.status == 'Success') {
+          let data = result.response;
+          console.log('vatData', data.GST_PER);
+          this.vatPercentage = data.GST_PER;
+          this.hsnCode = data.HSN_SAC_CODE;
+        }
+      }
+      )
+  }
+
 
   handlePostData(postData: any) {
     const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
