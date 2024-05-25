@@ -4,7 +4,7 @@
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
-<!-- modal header component --><modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+<!-- modal header component --><modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()"
   (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
   <div class="col-md-12">
@@ -73,7 +73,7 @@
             </dxi-column>
 
              <div *dxTemplate="let data of 'codetemp'">
-              <mat-form-field style="width: 100%; margin-left: 7px;"> <!-- Adjusted width -->
+              <mat-form-field style="width: 100%; margin-left: 7px;"> 
                 <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]" (selectionChange)="onCodeSelect($event, data)" *ngIf="componentSizeType && componentSizeType.length > 0">
                   <mat-option *ngFor="let option of componentSizeType" [value]="option" [disabled]="isOptionSelected(data.data.SRNO, option) || viewMode">
                     {{ option.COMPSIZE_CODE }}
@@ -81,6 +81,8 @@
                 </mat-select>
               </mat-form-field>
             </div>
+
+
 
             <div *dxTemplate="let data of 'descriptiontemp'">
               <input type="text" readonly style="width: 100%;" [value]="data.value" [disabled]="viewMode"/>

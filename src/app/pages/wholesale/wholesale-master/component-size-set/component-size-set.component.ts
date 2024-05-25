@@ -29,7 +29,7 @@ export class ComponentSizeSetComponent implements OnInit {
   indexes: any[] = [];
   componentSizeType: any[] = [];
   componentSizeDesc: any[] = [];
-  selectedOption: any; 
+  selectedOption: any;
   editableMode: boolean = false;
 
   constructor(
@@ -56,10 +56,11 @@ export class ComponentSizeSetComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-
+   
     console.log(this.content);
     if (this.content) {
       this.setFormValues()
+
     }
     this.getComponentSizeTypeOptions();
 
@@ -70,6 +71,7 @@ export class ComponentSizeSetComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
       this.editableMode = true;
+      this.getComponentSizeTypeOptions();
     }
   }
 
@@ -93,19 +95,48 @@ export class ComponentSizeSetComponent implements OnInit {
   }
 
 
+
   setFormValues() {
+
     if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE);
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION);
 
     this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + this.content.COMPSET_CODE)
-    .subscribe((data) => {
-      if (data.status == 'Success') {
+      .subscribe((data) => {
+        if (data.status == 'Success') {
 
-        this.tableData = data.response.detail;
-      }
-    });
+          this.tableData = data.response.detail;
+          console.log(data.response.detail);
+          this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE === item.COMPSIZE_CODE) || null);
+   
+        }
+      });
   }
+
+  // setFormValues() {
+  //   if (!this.content) return;
+
+  //   this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE);
+  //   this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION);
+
+  //   this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + this.content.COMPSET_CODE)
+  //     .subscribe((data) => {
+  //       if (data.status === 'Success') {
+  //         this.tableData = data.response.detail;
+  //         console.log(data.response.detail);
+          
+  //         // Initialize selectedOptions based on the fetched data
+  //         this.selectedOptions = this.tableData.map(item => ({
+  //           SRNO: item.SRNO,
+  //           COMPSIZE_CODE: item.COMPSIZE_CODE,
+  //           DESCRIPTION: item.COMPONENT_DESCRIPTION
+  //         }));
+  //       }
+  //     });
+  // }
+
+
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
@@ -154,7 +185,7 @@ export class ComponentSizeSetComponent implements OnInit {
     // this.tableData.forEach((item: any, i: any) => {
     //   item.SRNO = i + 1;
     // });
-    
+
   }
 
 
@@ -182,7 +213,7 @@ export class ComponentSizeSetComponent implements OnInit {
   //           if(element.SRNO == this.selectedIndexes[0]){
 
   //             this.tableData.splice(index,1)
-                 
+
   //           }
 
   //         })
@@ -243,46 +274,46 @@ export class ComponentSizeSetComponent implements OnInit {
   //   this.tableData.forEach((data, index) => {
   //     data.SRNO = index + 1
   //   });
-    
+
   // }
 
   deleteTableData() {
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
-        // Display confirmation dialog before deleting
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Create a copy of the indexes to avoid issues if selectedIndexes changes during the loop
-                const indexesToDelete = [...this.selectedIndexes].sort((a: number, b: number) => b - a);
-                for (const index of indexesToDelete) {
-                    this.tableData.splice(index, 1); // Remove the item at the specified index
-                }
-                // Reset selectedIndexes after deletion
-                this.selectedIndexes = [];
-                // Update serial numbers
-                this.resetSrNumber();
-            }
-        });
+      // Display confirmation dialog before deleting
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Create a copy of the indexes to avoid issues if selectedIndexes changes during the loop
+          const indexesToDelete = [...this.selectedIndexes].sort((a: number, b: number) => b - a);
+          for (const index of indexesToDelete) {
+            this.tableData.splice(index, 1); // Remove the item at the specified index
+          }
+          // Reset selectedIndexes after deletion
+          this.selectedIndexes = [];
+          // Update serial numbers
+          this.resetSrNumber();
+        }
+      });
     } else {
-        // Display error message if no record is selected
-        this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+      // Display error message if no record is selected
+      this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
-}
+  }
 
-resetSrNumber() {
+  resetSrNumber() {
     this.tableData.forEach((data, index) => {
-        data.SRNO = index + 1; // Update SRNO to be 1-based index
+      data.SRNO = index + 1; // Update SRNO to be 1-based index
     });
     // Refresh the data source binding to reflect the changes in the UI
     this.tableData = [...this.tableData];
-}
+  }
 
 
 
@@ -306,30 +337,30 @@ resetSrNumber() {
       "detail": this.tableData,
     }
 
-      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.componentsizesetmasterForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.componentsizesetmasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
           }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
 
 
   update() {
@@ -441,12 +472,12 @@ resetSrNumber() {
 
   onCodeSelect(event: MatSelectChange, data: any) {
     console.log(data);
-    
+
     let index = data.data.SRNO - 1;
     const selectedCode = event.value.COMPSIZE_CODE;
     // Find the corresponding description for the selected code
     const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
-    
+
     // this.selectedOptions[data.data.SRNO] = event.value;
     // Update the description in the grid data
     // data.data.COMPONENT_DESCRIPTION = selectedDescription;
@@ -457,7 +488,7 @@ resetSrNumber() {
     this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
     this.tableData[index].COMPSIZE_CODE = selectedCode;
 
-   
+
   }
 
   isOptionSelected(SRNO: number, option: any): boolean {
