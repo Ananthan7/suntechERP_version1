@@ -166,6 +166,8 @@ export class PointOfSalesOrderComponent implements OnInit {
     amt_total:['0.00'],
     disc_total:['0.00'],
     net_total:['0.00'],
+    gst:[''],
+    stateCode:[''],
   })
 
   constructor(

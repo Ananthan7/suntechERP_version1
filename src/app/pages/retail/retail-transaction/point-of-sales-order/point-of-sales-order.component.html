@@ -9,9 +9,10 @@
 <!-- content section -->
 <div class="container-fluid pt-3">
   <form [formGroup]="posofSalesOrderForm">
-    <div class="row">
+    <div class="row border mb-3">
+      <label for="inputPassword" class="col-sm-12 col-form-label">Invoice Details</label>
       <div class="col-md-3">
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type</label>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
@@ -24,7 +25,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
           <div class="col-md-8">
             <mat-form-field style="width: 100%;">
@@ -35,7 +36,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Salesman</label>
           <div class="col-md-8">
             <mat-form-field style="width: 70%;">
@@ -45,7 +46,7 @@
               (newRowClick)="salesMancodeSelected($event)"></master-search>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Currency</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
@@ -61,7 +62,7 @@
           </div>
 
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Credit A/C</label>
           <div class="col-md-8">
             <mat-form-field style="width: 70%;">
@@ -72,7 +73,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-3 col-form-label">Moblie No</label>
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
@@ -91,7 +92,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code</label>
           <div class="col-md-4">
             <mat-form-field style="width: 70%;">
@@ -114,7 +115,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-3 col-form-label">Email</label>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
@@ -128,25 +129,22 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
-          <label for="inputPassword" class="col-sm-2 col-form-label">ID Proof</label>
-          <div class="col-md-3">
+        <div class="row">
+          <label for="inputPassword" class="col-sm-3 col-form-label">ID Proof</label>
+          <div class="col-md-5">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="idProof" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label">Type</label>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <mat-form-field style="width: 70%;">
               <input type="text" matInput formControlName="type" />
             </mat-form-field>
             <master-search [MasterSearchData]="typeData" (newRowClick)="typeCodeSelected($event)"></master-search>
           </div>
-          <div class="col-md-2 py-3">
-            <mat-checkbox formControlName="checkboxFormControl">Components Wise Invoice</mat-checkbox>
-          </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-2 col-form-label">Nationality</label>
           <div class="col-md-2">
             <mat-form-field style="width: 70%;">
@@ -170,6 +168,22 @@
             <master-search [MasterSearchData]="StateData" (newRowClick)="statecodeSelected($event)"></master-search>
           </div>
         </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">State Code</label>
+          <div class="col-md-2">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="stateCode" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="nationalityData"
+              (newRowClick)="nationalityCodeSelected($event)"></master-search>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">GST</label>
+          <div class="col-md-4">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="gst" />
+            </mat-form-field>
+          </div>
+        </div>
       </div>
       <div class="col-md-3">
         <div class="p-2">
@@ -189,10 +203,13 @@
           </dxi-column>
         </dx-data-grid>
       </div>
+     
+    </div>
+    <div class="row border mb-2">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-7">
-            <div class="row mb-1 ">
+            <div class="row">
               <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%;">
@@ -211,7 +228,7 @@
             </div>
           </div>
           <div class="col-md-5">
-            <div class="row mb-1 align-items-center">
+            <div class="row align-items-center">
               <div class="col-md-4">
                 <mat-checkbox class="example-margin" formControlName="fixMetalRate">Fix Metal
                   Rate</mat-checkbox>
@@ -304,7 +321,7 @@
         </dx-data-grid>
       </mat-tab>
     </mat-tab-group>
-    <div class="row mt-3">
+    <div class="row mt-3 align-items-center">
       <div class="col-md-4">
         <label for="inputPassword" class="text-center col-form-label table_header">Receipts</label>
         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
@@ -325,7 +342,7 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Invoice Total</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -333,7 +350,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Returns</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -341,7 +358,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Exchanges</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -351,7 +368,7 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Advance Received</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -359,7 +376,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Round Off Amount</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -367,7 +384,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Net Total</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -375,7 +392,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Receipt Total</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
@@ -383,7 +400,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1 ">
+        <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Refund / Due</label>
           <div class="col-md-7">
             <mat-form-field style="width: 100%;">
