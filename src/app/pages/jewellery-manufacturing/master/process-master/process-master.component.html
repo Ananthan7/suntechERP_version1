@@ -280,11 +280,11 @@
                                 </label> -->
                             </div>
                             <div class="form-check">
-                                <mat-checkbox formControlName="recovery" tabindex="16"
+                                <mat-checkbox formControlName="recovery"
                                     class="example-margin"
                                     (change)="onRecovery()"
                                     [disabled]="viewMode || codeEnable || lossDisable"
-                                    (focus)="showAlertIfCodeIsEmpty()">
+                                    (focus)="showAlertIfCodeIsEmpty()" tabindex="16">
                                     Recovery * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="recovery">
                                 <label class="form-check-label">
@@ -325,9 +325,9 @@
                                             style="text-align: right;"
                                             [readonly]="viewMode"
                                             formControlName="standard_end"
-                                            [max]="3" tabindex="17"
+                                            [max]="3"
                                             AmountDecimalInput
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly"  tabindex="17"/>
                                     </mat-form-field>
                                 </div>
                             </div>

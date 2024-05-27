@@ -844,7 +844,8 @@ export class ProcessMasterComponent implements OnInit {
     if (this.viewMode) return
     let param = {
       LOOKUPID: 20,
-      WHERECOND: `${this.getAccodeField(formControlName)}='${value}'`
+      WHERECOND: `LOSS_ACCODE=${value} OR RECOV_ACCODE=${value} OR GAIN_ACCODE=${value} OR WIP_ACCODE=${value}`
+      // WHERECOND: this.getAccodeField(formControlName,value)
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
@@ -856,6 +857,7 @@ export class ProcessMasterComponent implements OnInit {
           this.processMasterForm.controls[formControlName].setValue('')
           return
         }
+
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
@@ -889,19 +891,19 @@ export class ProcessMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  getAccodeField(formControlName: string) {
+  getAccodeField(formControlName: string,value:string) {
     let form = this.processMasterForm.value
     switch (formControlName) {
       case 'LOSS_ACCODE':
-        return 'LOSS_ACCODE'
+        return true
       case 'RECOV_ACCODE':
-        return 'RECOV_ACCODE'
+        return true
       case 'GAIN_ACCODE':
-        return 'GAIN_ACCODE'
+        return true
       case 'WIPaccount':
-        return 'WIP_ACCODE'
+        return true
       default:
-        return ''
+        return false
     }
   }
   /**USE: delete worker master from row */
