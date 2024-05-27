@@ -81,9 +81,8 @@
                                 </div>
                                 <label for="input"
                                     class="col-sm-1  col-form-label">Standard
-                                    Time <span class="required"
+                                    Time<span class="required"
                                         *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
-                                    :
                                 </label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="yourContent"
@@ -113,14 +112,16 @@
                                             tabindex="4"/>
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountMasterData"
+                                        [MasterSearchData]="ACCODEData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="WIPaccountSelected($event)">
                                     </master-search>
                                 </div>
                                 <label for="input"
                                     class="col-sm-1 col-form-label">Maximum
-                                    Time :</label>
+                                    Time<span class="required"
+                                    *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
+                                </label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="maxContent"
                                         [durationToSplit]="maxTime"
@@ -280,11 +281,11 @@
                                 </label> -->
                             </div>
                             <div class="form-check">
-                                <mat-checkbox formControlName="recovery" tabindex="16"
+                                <mat-checkbox formControlName="recovery"
                                     class="example-margin"
                                     (change)="onRecovery()"
                                     [disabled]="viewMode || codeEnable || lossDisable"
-                                    (focus)="showAlertIfCodeIsEmpty()">
+                                    (focus)="showAlertIfCodeIsEmpty()" tabindex="16">
                                     Recovery * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="recovery">
                                 <label class="form-check-label">
@@ -293,7 +294,7 @@
                             </div>
                             <div class="form-check">
                                 <mat-checkbox formControlName="allowGain"
-                                    class="example-margin"
+                                    class="example-margin" tabindex="20"
                                     (change)="onAllowGain()"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                     [disabled]="viewMode || codeEnable">
@@ -325,9 +326,9 @@
                                             style="text-align: right;"
                                             [readonly]="viewMode"
                                             formControlName="standard_end"
-                                            [max]="3" tabindex="17"
+                                            [max]="3"
                                             AmountDecimalInput
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly"  tabindex="17"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -351,7 +352,7 @@
                                         <input type="text" matInput
                                             style="text-align: right;"
                                             formControlName="min_end" [max]="3"
-                                            AmountDecimalInput
+                                            AmountDecimalInput tabindex="18"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                 </div>
@@ -400,7 +401,7 @@
                                             (change)="checkAccodeSelected($event,'RECOV_ACCODE')"
                                             (focusout)="validateLookupField($event,ACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly" tabindex="19"/>
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="ACCODEData"
@@ -415,7 +416,7 @@
                                             formControlName="GAIN_ACCODE"
                                             (change)="checkAccodeSelected($event,'GAIN_ACCODE')"
                                             (focusout)="validateLookupField($event,ACCODEData,'GAIN_ACCODE')"
-                                            [readonly]="isAlloWGainReadOnly" />
+                                            [readonly]="isAlloWGainReadOnly" tabindex="21"/>
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="ACCODEData"

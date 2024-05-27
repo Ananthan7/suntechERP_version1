@@ -373,6 +373,7 @@
                                     <mat-form-field style="width: 70%">
                                         <input type="text" matInput
                                             formControlName="PRICE1"
+                                            UpperCaseDirective
                                             [readonly]="viewMode"
                                             (change)="priceCodeone($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'PRICE1')" />

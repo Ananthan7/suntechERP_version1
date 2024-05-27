@@ -30,7 +30,8 @@
                                     [readonly]="viewMode || editMode"
                                     appNoEmptySpace
                                     (focusout)="checkCodeExists($event)"
-                                    (keyup)="codeEnabled()" id="code" />
+                                    (keyup)="codeEnabled()" id="code" 
+                                    autocomplete="off"/>
                             </mat-form-field>
                             <mat-form-field
                                 style="width: 40%; margin-left: 7px;">

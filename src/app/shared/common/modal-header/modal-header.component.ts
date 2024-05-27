@@ -33,10 +33,10 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isloading: boolean = false;
 
   @Input() isViewMore: boolean = true;
-  @Input() isViewPrint: boolean = true;
-  @Input() isViewAttachment: boolean = true;
-  @Input() isViewCopy: boolean = true;
-  @Input() isViewLog: boolean = true;
+  @Input() isViewPrint: boolean = false;
+  @Input() isViewAttachment: boolean = false;
+  @Input() isViewCopy: boolean = false;
+  @Input() isViewLog: boolean = false;
   
   @Input() disableSaveBtn: boolean = false;
   @Input() disableDeleteBtn: boolean = false;

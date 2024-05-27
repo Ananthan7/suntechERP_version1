@@ -22,24 +22,10 @@ export class CustomerPriceMasterComponent implements OnInit {
   editMode: boolean = false;
   checkBoxesMode: string;
   divisionMS: any = 'ID';
-  columnheader: any[] = ['PRICE_CODE', 'SIEVE', 'SIEVE_TO', 'SIEVE_SET', 'SHAPE', 'COLOR', 
-  'CLARITY', 'SIZE_FROM', 'SIZE_TO', , 'WEIGHT_FROM', 'WEIGHT_TO', 'CARAT_WT', 
-  'CURRANCY', 'ISSUE_RATE', 'SELLING_RATE', 'SELLING_PER'];
-  // columnheader: any[] = [
-  // { title: '', field: 'SELECT1',cellTemplate: 'limitTemplate' },
-  // { title: 'SIEVE', field: 'SIEVE',cellTemplate: '' },
-  // { title: 'DIVISION_CODE', field: 'DIVISION_CODE' },
-  // { title: 'SHAPE', field: 'SHAPE',cellTemplate: '' },
-  // { title: 'DIVISION', field: 'DIVISION',cellTemplate: '' },
-  // { title: 'METHOD', field: 'METHOD',cellTemplate: '' },
-  // { title: 'UNITCODE', field: 'UNITCODE',cellTemplate: '' },
-  // { title: 'CARATWT_FROM', field: 'CARATWT_FROM',cellTemplate: '' },
-  // { title: 'CARATWT_TO', field: 'CARATWT_TO',cellTemplate: '' },
-  // { title: 'CURRENCY_CODE', field: 'CURRENCYCODE',cellTemplate: '' },
-  // { title: 'CRACCODE', field: 'CRACCODE',cellTemplate: '' },
-  // { title: 'COST_RATE', field: 'COST_RATE',cellTemplate: '' },
-  // { title: 'SELLING_RATE', field: 'SELLING_RATE',cellTemplate: '' },
-  // ];
+  columnheader: any[] = ['PRICE_CODE', 'SIEVE', 'SIEVE_TO', 'SIEVE_SET', 'SHAPE', 'COLOR',
+    'CLARITY', 'SIZE_FROM', 'SIZE_TO', , 'WEIGHT_FROM', 'WEIGHT_TO', 'CARAT_WT',
+    'CURRANCY', 'ISSUE_RATE', 'SELLING_RATE', 'SELLING_PER'];
+
   columnheader1: any[] = [{ title: 'LABOUR_CODE', field: 'CODE' },
   { title: 'DIVISION_CODE', field: 'DIVISION_CODE' },
   { title: 'SHAPE', field: 'SHAPE' },
@@ -60,8 +46,6 @@ export class CustomerPriceMasterComponent implements OnInit {
   tableDatalabour: any[] = [];
   tableDatastone: any[] = [];
   currentDate: any = this.commonService.currentDate;
-  branchCode?: String;
-  yearMonth?: String;
   value: any;
   rateInput: any;
   text = "Deduct";
@@ -82,7 +66,24 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  customerpricemasterForm: FormGroup = this.formBuilder.group({
+    customercode: ['', [Validators.required]],
+    desc: [''],
+    pricecode: ['', [Validators.required]],
+    labourtype: [''],
+    addonrate: [''],
+    margin: [''],
+    markup: [''],
+    metal_loss: [''],
+    date: [new Date(), ''],
+    text: [''],
+    changePrice: [''],
+    CURRENCY_CODE: [''],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
+    MAIN_VOCTYPE: [''],
+    CURRENCY_RATE: [0],
+  });
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -99,26 +100,39 @@ export class CustomerPriceMasterComponent implements OnInit {
   ngOnInit(): void {
     this.dele = true;
     this.renderer.selectRootElement('#customercode')?.focus();
-  //  this.renderer.selectRootElement('#customercode')?.focus();
-   
-    if (this.content.FLAG == 'VIEW') {
-      this.viewFormValues();
-      this.viewMode = true
-      this.editMode = true;
-    } else if (this.content.FLAG == 'EDIT'){
-      this.editableMode = true;
-      this.editMode = true;
-      this.dele = false;
+    this.setInitialValues()
+    if (this.content?.FLAG) {
       this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true
+        this.editMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.editableMode = true;
+        this.editMode = true;
+        this.dele = false;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
     }
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-    this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
+    
     this.getStonePriceData()
     this.getLabourChargeMasterList()
-
   }
-
+  setInitialValues(){
+    this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
+    this.customerpricemasterForm.controls.MAIN_VOCTYPE.setValue(this.commonService.getqueryParamMainVocType())
+    this.customerpricemasterForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.customerpricemasterForm.controls.YEARMONTH.setValue(this.commonService.yearSelected)
+    this.setCompanyCurrency()
+  }
+  setCompanyCurrency() {
+    this.customerpricemasterForm.controls.CURRENCY_CODE.setValue(this.commonService.compCurrency)
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.commonService.compCurrency);
+    this.customerpricemasterForm.controls.CURRENCY_RATE.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
+  }
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -170,26 +184,6 @@ export class CustomerPriceMasterComponent implements OnInit {
       this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
     }
   }
-
-
-
-  customerpricemasterForm: FormGroup = this.formBuilder.group({
-    customercode: ['', [Validators.required]],
-    desc: [''],
-    pricecode: ['', [Validators.required]],
-    labourtype: ['', [Validators.required]],
-    addonrate: [''],
-    margin: [''],
-    markup: [''],
-    metal_loss: [''],
-    date: [new Date(), ''],
-    text: [''],
-    changePrice: [''],
-
-  });
-
-
-
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -281,7 +275,6 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   setFormValues() {
-
     if (!this.content) return
     this.customerpricemasterForm.controls.customercode.setValue(this.content.CUSTOMER_CODE)
     this.customerpricemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
@@ -293,35 +286,23 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.customerpricemasterForm.controls.text.setValue(this.content.CUSTOMER_NAME)
     this.customerpricemasterForm.controls.date.setValue(this.content.VALID_FROM)
     this.customerpricemasterForm.controls.addonrate.setValue(this.content.ADD_ON_RATE)
+    this.customerpricemasterForm.controls.CURRENCY_CODE.setValue(this.content.CURRENCY_CODE)
+    this.customerpricemasterForm.controls.MAIN_VOCTYPE.setValue(this.content.MAIN_VOCTYPE)
+    this.customerpricemasterForm.controls.CURRENCY_RATE.setValue(
+      this.commonService.decimalQuantityFormat(this.content.CURRENCY_RATE, 'RATE')
+    );
   }
-
-  viewFormValues() {
-
-    if (!this.content) return
-    this.customerpricemasterForm.controls.customercode.setValue(this.content.CUSTOMER_CODE)
-    this.customerpricemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
-    this.customerpricemasterForm.controls.metal_loss.setValue(this.content.GOLD_LOSS_PER)
-    this.customerpricemasterForm.controls.pricecode.setValue(this.content.PRICECODE)
-    this.customerpricemasterForm.controls.margin.setValue(this.content.MARGIN_PER)
-    this.customerpricemasterForm.controls.labourtype.setValue(this.content.LAB_TYPE)
-    this.customerpricemasterForm.controls.markup.setValue(this.content.MARKUP_PER)
-    this.customerpricemasterForm.controls.text.setValue(this.content.CUSTOMER_NAME)
-    this.customerpricemasterForm.controls.date.setValue(this.content.VALID_FROM)
-    this.customerpricemasterForm.controls.addonrate.setValue(this.content.ADD_ON_RATE)
-
-  }
-  
-   /**use: checkbox change */
-   changedCheckbox(event: any) {
+  /**use: checkbox change */
+  changedCheckbox(event: any) {
     this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
   }
   setCustomerPriceDetails() {
     console.log(this.tableDatastone, 'tableDatastone')
 
 
-    let selectedPriceDetailData = this.tableDatastone.filter((item:any)=> item.SELECT1 == true)
+    let selectedPriceDetailData = this.tableDatastone.filter((item: any) => item.SELECT1 == true)
     console.log(selectedPriceDetailData, 'selectedPriceDetailData')
-    let data:any[] = []
+    let data: any[] = []
     selectedPriceDetailData.forEach(element => {
       data.push({
         "REFMID": element.MID,
@@ -360,28 +341,27 @@ export class CustomerPriceMasterComponent implements OnInit {
         "SRNO": 0
       })
     });
-   return data
+    return data
   }
-  setPostData() {
+  setPostData(form:any) {
     return {
       "MID": 0,
-      "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode,
-      "DESCRIPTION": this.customerpricemasterForm.value.customercode +" "+this.customerpricemasterForm.value.pricecode,
-      "GOLD_LOSS_PER": this.customerpricemasterForm.value.metal_loss || 0,
-      "UPDATE_ON": "2023-11-28T05:47:14.177Z",
-      "PRICECODE": this.customerpricemasterForm.value.pricecode,
-      "MARGIN_PER": this.customerpricemasterForm.value.margin || 0,
-      "LAB_TYPE": this.customerpricemasterForm.value.labourtype,
-      "MARKUP_PER": this.customerpricemasterForm.value.markup || 0,
-      "CUSTOMER_NAME": this.customerpricemasterForm.value.desc,
+      "CUSTOMER_CODE": form.customercode,
+      "DESCRIPTION": form.customercode + " " + form.pricecode,
+      "GOLD_LOSS_PER": this.commonService.emptyToZero(form.metal_loss),
+      "UPDATE_ON": this.commonService.formatDateTime(this.currentDate),
+      "PRICECODE": form.pricecode,
+      "MARGIN_PER": this.commonService.emptyToZero(form.margin),
+      "LAB_TYPE": this.commonService.nullToString(form.labourtype),
+      "MARKUP_PER": this.commonService.emptyToZero(form.markup),
+      "CUSTOMER_NAME": form.desc,
       "PRINT_COUNT": 0,
-      "VALID_FROM": this.customerpricemasterForm.value.date,
-      "ADD_ON_RATE": this.customerpricemasterForm.value.addonrate || 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "MAIN_VOCTYPE": "",
+      "VALID_FROM": form.date,
+      "ADD_ON_RATE": this.commonService.emptyToZero(form.addonrate),
+      "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY_CODE),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.CURRENCY_RATE),
+      "MAIN_VOCTYPE": this.commonService.nullToString(form.MAIN_VOCTYPE),
       "CUSTOMER_PRICE_DET": this.setCustomerPriceDetails(),
-
       "CUSTOMER_LABCHRG_DET": [
         {
           "REFMID": 0,
@@ -423,27 +403,35 @@ export class CustomerPriceMasterComponent implements OnInit {
       ]
     }
   }
+  submitValidation(){
+    let form = this.customerpricemasterForm.value
+    console.log(form.labourType);
+    
+    if (this.commonService.nullToString(form.pricecode) == '') {
+      this.toastr.error('pricecode required')
+      return true
+    }
+    if (this.commonService.nullToString(form.customercode) == '') {
+      this.toastr.error('customercode required')
+      return true
+    }
+    // if (this.commonService.nullToString(form.labourType) == '') {
+    //   this.toastr.error('labourType required')
+    //   return true
+    // }
+    return false
+  }
 
   formSubmit() {
-
-    // if (this.customerpricemasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-
+    if (this.submitValidation()) return;
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    // if (this.customerpricemasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-
 
     let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
-    let postData = this.setPostData()
+    let postData = this.setPostData(this.customerpricemasterForm.value)
     console.log(postData, 'postDatapostData');
 
 
@@ -472,15 +460,11 @@ export class CustomerPriceMasterComponent implements OnInit {
     // this.subscriptions.push(Sub)
   }
 
-  update() {
-    if (this.customerpricemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+  update() {// need change in API for updating this API not working 
+    if (this.submitValidation())return
 
     let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/' + this.content.PRICECODE
-    let postData = this.setPostData()
-
+    let postData = this.setPostData(this.customerpricemasterForm.value)
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -579,7 +563,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
