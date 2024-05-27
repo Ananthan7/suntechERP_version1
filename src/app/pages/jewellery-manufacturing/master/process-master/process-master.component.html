@@ -293,7 +293,7 @@
                             </div>
                             <div class="form-check">
                                 <mat-checkbox formControlName="allowGain"
-                                    class="example-margin"
+                                    class="example-margin" tabindex="20"
                                     (change)="onAllowGain()"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                     [disabled]="viewMode || codeEnable">
@@ -351,7 +351,7 @@
                                         <input type="text" matInput
                                             style="text-align: right;"
                                             formControlName="min_end" [max]="3"
-                                            AmountDecimalInput
+                                            AmountDecimalInput tabindex="18"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                 </div>
@@ -400,7 +400,7 @@
                                             (change)="checkAccodeSelected($event,'RECOV_ACCODE')"
                                             (focusout)="validateLookupField($event,ACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly" tabindex="19"/>
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="ACCODEData"
@@ -415,7 +415,7 @@
                                             formControlName="GAIN_ACCODE"
                                             (change)="checkAccodeSelected($event,'GAIN_ACCODE')"
                                             (focusout)="validateLookupField($event,ACCODEData,'GAIN_ACCODE')"
-                                            [readonly]="isAlloWGainReadOnly" />
+                                            [readonly]="isAlloWGainReadOnly" tabindex="21"/>
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="ACCODEData"
