@@ -474,25 +474,25 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
     this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
-
+    this.componentmasterForm.controls.remarks.setValue(this.content.PROD_INSTRUCTION)
   }
 
   setPostData() {
-
+    let form = this.componentmasterForm.value
     let postData = {
-      "DESIGN_CODE": this.componentmasterForm.value.code || "",
-      "DESIGN_DESCRIPTION": this.componentmasterForm.value.codedes || "",
-      "CURRENCY_CODE": this.componentmasterForm.controls.currencyCode,
-      "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
-      "COST_CODE": this.componentmasterForm.value.costCenter || "",
-      "TYPE_CODE": this.componentmasterForm.value.type,
-      "CATEGORY_CODE": this.componentmasterForm.value.category || "",
+      "DESIGN_CODE": form.code || "",
+      "DESIGN_DESCRIPTION": form.codedes || "",
+      "CURRENCY_CODE": form.currencyCode,
+      "CC_RATE": this.commonService.emptyToZero(form.currencyRate),
+      "COST_CODE": form.costCenter || "",
+      "TYPE_CODE": form.type,
+      "CATEGORY_CODE": form.category || "",
       "SUBCATEGORY_CODE": "",
       "BRAND_CODE": "",
       "COUNTRY_CODE": "",
       "SUPPLIER_CODE": "",
       "SUPPLIER_REF": "",
-      "SET_REF": this.componentmasterForm.value.settingType,
+      "SET_REF": form.settingType,
       "PICTURE_NAME": "",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
@@ -527,7 +527,7 @@ export class ComponentMasterComponent implements OnInit {
       "CLARITY": "",
       "SIZE": "",
       "SIEVE": "",
-      "SHAPE": this.componentmasterForm.value.shape,
+      "SHAPE": form.shape,
       "GRADE": "",
       "FLUOR": "",
       "FINISH": "",
@@ -555,7 +555,7 @@ export class ComponentMasterComponent implements OnInit {
       "OPENED_BY": "",
       "FIRST_TRN": "",
       "LAST_TRN": "",
-      "MID": 0,
+      "MID": this.content?.MID || 0,
       "PRINTED": false,
       "PURVOCTYPE_NO": "",
       "PURPARTY": "",
@@ -604,7 +604,7 @@ export class ComponentMasterComponent implements OnInit {
       "PENDING_JOB_PCS": 0,
       "PENDING_JOBS": 0,
       "LAST_COST": 0,
-      "SEQ_CODE": this.componentmasterForm.value.processSeq,
+      "SEQ_CODE": form.processSeq,
       "SEQ_DESCRIPTION": "",
       "EDITED_ON": "2023-11-27T06:54:03.761Z",
       "EDITED_BY": "",
@@ -627,7 +627,7 @@ export class ComponentMasterComponent implements OnInit {
       "MAX_TIME": 0,
       "MODEL_MAKER": "",
       "SKETCH_NAME": "",
-      "PROD_INSTRUCTION":this.componentmasterForm.value.remarks,
+      "PROD_INSTRUCTION":form.remarks,
       "LABOUR_FCCOST": 0,
       "MATERIAL_FCCOST": 0,
       "GROSS_WT": 0,
@@ -693,14 +693,14 @@ export class ComponentMasterComponent implements OnInit {
       "METAL_VALUECC": 0,
       "PAIR_REF": "",
       "SURFACEPROPERTY": "",
-      "WIDTH": this.componentmasterForm.value.width,
+      "WIDTH": this.commonService.emptyToZero(form.width),
       "THICKNESS": 0,
       "ENGRAVING_TEXT": "",
       "ENGRAVING_FONT": "",
       "STYLEMASTER": "",
       "PARENT_DSNG_CODE": "",
       "FAULT_DETAILS": "",
-      "DESIGN_TYPE": this.componentmasterForm.value.settingType,
+      "DESIGN_TYPE": form.settingType,
       "JEWELLERY_UNIT": "",
       "UDF1": "",
       "UDF2": "",
@@ -735,11 +735,11 @@ export class ComponentMasterComponent implements OnInit {
       "CC_MAKING": "",
       "STONE_INCLUDED": false,
       "CAD_REQUIRED": false,
-      "HEIGHT": this.componentmasterForm.value.height,
-      "RADIUS": this.componentmasterForm.value.radius,
-      "LENGTH": this.componentmasterForm.value.length,
-      "COMPSIZE_CODE": this.componentmasterForm.value.size,
-      "COMPSET_CODE": this.componentmasterForm.value.sizeSet,
+      "HEIGHT": form.height,
+      "RADIUS": form.radius,
+      "LENGTH": form.length,
+      "COMPSIZE_CODE": form.size,
+      "COMPSET_CODE": form.sizeSet,
       "PROD_VARIANCE": 0,
       "METALCALC_GROSSWT": false,
       "MKGCALC_GROSSWT": false,
@@ -794,7 +794,7 @@ export class ComponentMasterComponent implements OnInit {
           "GROSS_WT": 0,
           "PCS": 0,
           "RATE_TYPE": "",
-          "CURRENCY_CODE": this.componentmasterForm.controls.currencyCode,
+          "CURRENCY_CODE": form.currencyCode,
           "RATE": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,
@@ -808,7 +808,7 @@ export class ComponentMasterComponent implements OnInit {
           "DESIGN_CODE": "",
           "KARAT": "",
           "PRICEID": "",
-          "SIZE_FROM": this.componentmasterForm.value.sizeSet,
+          "SIZE_FROM": form.sizeSet,
           "SIZE_TO": "",
           "RATEFC": 0,
           "PART_CODE": "",
@@ -828,7 +828,7 @@ export class ComponentMasterComponent implements OnInit {
           "STONE_TYPE": "",
           "EXT_COLOR": "",
           "EXT_CLARITY": "",
-          "D_REMARKS": this.componentmasterForm.value.remarks,
+          "D_REMARKS": form.remarks,
           "POINTER_WT": 0,
           "SIEVE_FROM": "",
           "SIEVE_TO": "",
@@ -939,20 +939,20 @@ export class ComponentMasterComponent implements OnInit {
     return postData
   }
   formSubmit() {
-
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.componentmasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    console.log('firedsssss');
 
-    let API = 'DesignMaster/InsertDesignMaster'
     let postData = this.setPostData()
-
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    console.log('firedsssss');
+    
+    let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
