@@ -122,7 +122,7 @@ export class ProcessMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 252,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'LOSS ACCOUNT CODE',
+    SEARCH_HEADING: 'ACCOUNT MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,
@@ -844,7 +844,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.viewMode) return
     let param = {
       LOOKUPID: 20,
-      WHERECOND: `LOSS_ACCODE=${value} OR RECOV_ACCODE=${value} OR GAIN_ACCODE=${value} OR WIP_ACCODE=${value}`
+      WHERECOND: `LOSS_ACCODE='${value}' OR RECOV_ACCODE='${value}' OR GAIN_ACCODE='${value}' OR WIP_ACCODE='${value}'`
       // WHERECOND: this.getAccodeField(formControlName,value)
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`

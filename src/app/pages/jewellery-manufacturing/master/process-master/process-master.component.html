@@ -81,9 +81,8 @@
                                 </div>
                                 <label for="input"
                                     class="col-sm-1  col-form-label">Standard
-                                    Time <span class="required"
+                                    Time<span class="required"
                                         *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
-                                    :
                                 </label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="yourContent"
@@ -113,14 +112,16 @@
                                             tabindex="4"/>
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountMasterData"
+                                        [MasterSearchData]="ACCODEData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="WIPaccountSelected($event)">
                                     </master-search>
                                 </div>
                                 <label for="input"
                                     class="col-sm-1 col-form-label">Maximum
-                                    Time :</label>
+                                    Time<span class="required"
+                                    *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
+                                </label>
                                 <div class="col-sm-6">
                                     <app-duration-picker [content]="maxContent"
                                         [durationToSplit]="maxTime"

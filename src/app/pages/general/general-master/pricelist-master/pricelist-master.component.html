@@ -181,6 +181,7 @@
                                         <section class="example-section">
                                             <mat-checkbox
                                                 formControlName="dontCalculate"
+                                                *ngIf="this.priceListMasterForm.value.priceMethod != 1"
                                                 class="example-margin"
                                                 [disabled]="viewMode || codeEnable">Dont
                                                 Calculate On Cost
