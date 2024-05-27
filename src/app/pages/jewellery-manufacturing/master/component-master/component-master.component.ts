@@ -475,13 +475,12 @@ export class ComponentMasterComponent implements OnInit {
 
 
   setFormValues() {
-    console.log(this.content, 'data')
     if (!this.content) return
 
     this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
     this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
-    this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
-    this.componentmasterForm.controls.size.setValue(this.content.SIZE)
+    this.componentmasterForm.controls.sizeSet.setValue(this.content.COMPSET_CODE)
+    this.componentmasterForm.controls.size.setValue(this.content.COMPSIZE_CODE)
     // this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE)
     this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
     this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
