@@ -20,7 +20,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   forDesignOnlyTrue: boolean = true;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
-  stockcodeDisable: boolean = false;
+  stockcodeDisable: boolean = true;
   brandDisable: boolean = false;
 
   currencyList: any[] = [];
@@ -382,23 +382,23 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     metallabour_description: ['', [Validators.required]],
     metallabourType: ['', [Validators.required]],
     metalcurrency: ['', [Validators.required]],
-    karat: ['', [Validators.required]],
-    labourAc: ['', [Validators.required]],
+    karat: [''],
+    labourAc: [''],
     color: [''],
-    metalcost_rate: ['', [Validators.required]],
+    metalcost_rate: [''],
     typecode: [''],
     metalselling_rate: [''],
-    category: ['', [Validators.required]],
+    category: [''],
     metalSelling: [''],
     subCategory: [''],
-    wastage: ['', [Validators.required]],
+    wastage: [''],
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
     wtFrom: [''],
     wtTo: [''],
-    onGrossWt: [false, [Validators.required]],
-    forDesignOnly: [false, [Validators.required]],
+    onGrossWt: [false],
+    forDesignOnly: [false],
   });
 
   stockCodeData: MasterSearchModel = {
@@ -463,7 +463,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
   checkCode(): boolean {
     if (this.metallabourMasterForm.value.metallabour_code == '') {
-      this.commonService.toastErrorByMsgId('Please Enter the Code')
+      this.commonService.toastErrorByMsgId('Labour code is required')
       return true
     }
     return false
@@ -611,10 +611,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
 
-  divisionCodeSelected(e: any) {
-    this.diamondlabourMasterForm.controls.divisions.setValue(e.DIVISION_CODE);
-  }
-
+ 
 
   categorySelected(e: any) {
     if (this.checkCode()) return
@@ -642,6 +639,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   metaldivisionCodeSelected(e: any) {
+    this.stockcodeDisable = false
     this.metallabourMasterForm.controls.stock_code.setValue('');
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
@@ -665,7 +663,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
-    if (this.checkCode()) return
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
@@ -806,13 +803,14 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.updatelabourChargeMaster()
       return true
     }
-    if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
+    if (this.metallabourMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return true
     }
-
-
-
+    if (this.commonService.nullToString(this.metallabourMasterForm.value.metallabour_code) == '') {
+      this.toastr.error('Labour code is required')
+      return true
+    }
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
       return true
@@ -835,11 +833,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     return {
       "MID": this.content?.MID || 0,
       "SRNO": 0,
-      "CODE": this.commonService.nullToString(diamondForm.labour_code),
-      "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description),
-      "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
+      "CODE": this.commonService.nullToString(metalForm.metallabour_code),
+      "DESCRIPTION": this.commonService.nullToString(metalForm.metallabour_description),
+      "LABTYPE": this.commonService.nullToString(metalForm.metallabourType),
       "METHOD": this.commonService.nullToString(diamondForm.method),
-      "DIVISION": this.commonService.nullToString(diamondForm.divisions),
+      "DIVISION": "M",
       "SHAPE": this.commonService.nullToString(diamondForm.shape),
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
@@ -851,7 +849,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": "",
-      "DIVISION_CODE": metalForm.metalDivision,
+      "DIVISION_CODE": this.commonService.nullToString(metalForm.divisions),
       "CURRENCY_CODE": this.commonService.nullToString(metalForm.currency),
       "SELLING_PER": this.commonService.emptyToZero(diamondForm.selling),
       "ACCESSORIES": 0,
@@ -1244,19 +1242,5 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
 
   }
-
-
-  // onCtweighttto(event: any) {
-  //   if (this.diamondlabourMasterForm.value.ctWtFrom < this.diamondlabourMasterForm.value.ctWtTo) {
-  //     Swal.fire({
-  //       title: event.message || 'Ct Weight From should be lesser than Weight To',
-  //       text: '',
-  //       icon: 'error',
-  //       confirmButtonColor: '#336699',
-  //       confirmButtonText: 'Ok'
-  //     })
-  //   }
-  // }
-
 
 }

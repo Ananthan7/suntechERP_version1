@@ -518,7 +518,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
     this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
     this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
-    this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION);
+    this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION_CODE);
     this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
     this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
     this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
@@ -841,7 +841,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description),
       "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
       "METHOD": this.commonService.nullToString(diamondForm.method),
-      "DIVISION": this.commonService.nullToString(diamondForm.divisions),
+      "DIVISION": "S",
       "SHAPE": this.commonService.nullToString(diamondForm.shape),
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
@@ -853,7 +853,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": "",
-      "DIVISION_CODE": metalForm.metalDivision,
+      "DIVISION_CODE":  this.commonService.nullToString(diamondForm.divisions),
       "CURRENCY_CODE": this.commonService.nullToString(metalForm.currency),
       "SELLING_PER": this.commonService.emptyToZero(diamondForm.selling),
       "ACCESSORIES": 0,
