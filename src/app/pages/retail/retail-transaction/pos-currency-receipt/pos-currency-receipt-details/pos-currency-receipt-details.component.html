@@ -119,15 +119,15 @@
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Valid:</label>
             <div class="col-md-3">
-              <!-- need to work for mm/yy -->
               <mat-form-field style="width: 100%" dateFormat2>
                 <input [readonly]="viewOnly" matInput [matDatepicker]="creditCardDate" name="creditCardDate" placeholder="MM/YYYY"
-                  formControlName="creditCardDate" />
+                  formControlName="creditCardDate" [matDatepickerFilter]="dateFilter" />
                 <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
-                <mat-datepicker #creditCardDate startView="multi-year"
-                  (monthSelected)="setMonthAndYear($event, creditCardDate)"></mat-datepicker>
+                <mat-datepicker #creditCardDate startView="multi-year" (monthSelected)="setMonthAndYear($event, creditCardDate)">
+                </mat-datepicker>
               </mat-form-field>
             </div>
+            
           </div>
 
           <!-- TT -->
