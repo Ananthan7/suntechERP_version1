@@ -36,7 +36,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   paymentModeList: any[] = [];
   dummyDate = '1900-01-01T00:00:00';
   compCurrency: any;
-
+  typeCodeArray: any[] = [];
   selectedTabIndex = 0;
   isCurrencyUpdate: boolean = false;
   hsnCodeList: any[] = [];
@@ -141,6 +141,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     this.getQueryParams(this.queryParams);
     this.generateHsnCodeList(this.queryParams);
+    this.getCreditCardMaster()
     this.branchCode = this.comService.branchCode;
     this.paymentModeList = this.comService.getComboFilterByID('Payment Mode');
     console.log('paymentModeList :', this.paymentModeList);
@@ -388,6 +389,19 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     console.log(e);
   }
 
+  getCreditCardMaster() {
+    let Sub: Subscription = this.dataService.getDynamicAPI('CreditCardMaster/GetCreditCardMaster')
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.typeCodeArray = data.filter((value: any) => value.MODE == 1)
+        } else {
+          this.comService.toastErrorByMsgId('Currency rate not Found')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
   receiptModeSelected(e: any) {
     console.log(e);
 
@@ -455,6 +469,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     }
   }
 
+  
 
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
@@ -697,12 +712,17 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
 
 
-  setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
-    const ctrlValue = normalizedMonthAndYear;
-    ctrlValue.month(normalizedMonthAndYear.month());
-    ctrlValue.year(normalizedMonthAndYear.year());
-    this.posCurrencyReceiptDetailsForm.controls.creditCardDate.setValue(ctrlValue);
+  setMonthAndYear(normalizedMonthAndYear: { month: number, year: number }, datepicker: any) {
+    const ctrlValue = this.posCurrencyReceiptDetailsForm.get('creditCardDate')!.value;
+    ctrlValue.month(normalizedMonthAndYear.month);
+    ctrlValue.year(normalizedMonthAndYear.year);
+    this.posCurrencyReceiptDetailsForm.get('creditCardDate')!.setValue(ctrlValue);
     datepicker.close();
+  }
+
+  dateFilter = (date: Date | null): boolean => {
+    const today = new Date();
+    return date ? date >= today : true;
   }
 
 

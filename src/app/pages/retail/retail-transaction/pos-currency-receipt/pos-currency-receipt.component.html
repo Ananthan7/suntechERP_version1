@@ -10,7 +10,7 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header (saveClick)="formSubmit()"  (auditTrailClick)="auditTrailClick()" (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()"
+  <modal-header (saveClick)="formSubmit()" [isViewDelete]="!viewOnly" (auditTrailClick)="auditTrailClick()" (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()"
     [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
     <audit-trail></audit-trail>
 </div>
@@ -98,7 +98,7 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%">
                   <input matInput type="number" [readonly]="viewOnly" class="text-right" [min]="0"
-                    (keyup)="this.comService.enforceMinMax($event.target)" matInput formControlName="dueDaysdesc"
+                  [max]="365"  (keyup)="this.comService.enforceMinMax($event.target)" matInput formControlName="dueDaysdesc"
                     (change)="updateDueDays($event)" />
                 </mat-form-field>
               </div>

@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="advanceReturnForm" class="p-1">
@@ -41,7 +41,22 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row mb-1 ">
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Party Code</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 80%;">
+                        <input type="text" [readonly]="viewOnly" matInput formControlName="partyCode" (change)="partyCodeChange($event)" />
+                      </mat-form-field>
+                      <master-search *ngIf="!viewOnly" [MasterSearchData]="partyCodeData"
+                        (newRowClick)="partyCodeSelected($event)"></master-search>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field style="width: 100%">
+                        <input type="text" [readonly]="viewOnly" matInput formControlName="advanceFromCustomers" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                <!-- <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Code</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
@@ -50,20 +65,22 @@
                         <master-search [MasterSearchData]="partyCodeData"
                         (newRowClick)="partyCodeSelected($event)"></master-search>
                     </div>
-                </div>
+                </div> -->
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Currency</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="partyCurrency" readonly/>
                         </mat-form-field>
+                        <master-search [MasterSearchData]="partyCurrencyCodeData"
+                        (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="partyCurrencyRate" readonly/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="partyCurrencyCodeData"
-                        (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
+                        <!-- <master-search [MasterSearchData]="partyCurrencyCodeData"
+                        (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
                     </div>
                 </div>
                 <div class="row mb-1 ">
@@ -125,20 +142,28 @@
                             <input type="text" matInput formControlName="customerName"/>
                         </mat-form-field>
                     </div>
-                    <div class="col-md-10 offset-md-2">
+                    <!-- <div class="col-md-10 offset-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput  formControlName="advanceFromCustomers"/>
                         </mat-form-field>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="row mb-1 align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Party Address</label>
-                    <div class="col-md-10">
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Party Address :</label>
+                    <div class="col-md-9">
+                      <mat-form-field style="width: 100%">
+                        <input type="text" [readonly]="viewOnly" matInput formControlName="partyAddress" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                <!-- <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Party Address :</label>
+                    <div class="col-md-9">
                         <mat-form-field style="width: 100%;">
-                            <textarea matInput rows="3" formControlName="partyAddress"></textarea>
+                            <textarea matInput  formControlName="partyAddress"></textarea>
                         </mat-form-field>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="row justify-content-between mt-3">
@@ -154,12 +179,12 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Amount</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="partyAmount"/>
+                            <input type="text" matInput formControlName="partyCurrency" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="partyAmountRate"/>
+                            <input type="number" matInput formControlName="partyAmount"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -173,8 +198,22 @@
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                     <dxi-column *ngFor="let data of columnhead" dataField="{{ data.field }}" caption="{{ data.title }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        [allowEditing]="true" width="auto" alignment="center" backgroundcolor="#000">
                     </dxi-column>
+
+                    <dxo-summary>
+                        <dxi-total-item column="Sr #">
+                        </dxi-total-item>
+                        <dxi-total-item column="AMOUNTCC" summaryType="sum" displayFormat="{0}" type="fixedPoint"
+                          precision="2" [valueFormat]="gridAmountDecimalFormat">
+                        </dxi-total-item>
+                        <dxi-total-item column="CGST_AMOUNTCC" summaryType="sum" displayFormat="{0}" type="fixedPoint"
+                          precision="2" [valueFormat]="gridAmountDecimalFormat">
+                        </dxi-total-item>
+                        <dxi-total-item column="TOTAL_AMOUNTCC" summaryType="sum" displayFormat="{0}" type="fixedPoint"
+                          precision="2" [valueFormat]="gridAmountDecimalFormat">
+                        </dxi-total-item>
+                      </dxo-summary>
                 </dx-data-grid>
             </div>
             <div class="col-md-6">

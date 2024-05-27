@@ -471,10 +471,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
   formSubmit() {
 
-    // if (this.content && this.content.FLAG == 'EDIT') {
-    // this.update()
-    // return
-    // }
 
     if (!this.validateForm()) {
       return;
