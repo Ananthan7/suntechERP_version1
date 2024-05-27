@@ -117,7 +117,7 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  accountStartData: MasterSearchModel = {
+  ACCODEData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 252,
@@ -155,9 +155,9 @@ export class ProcessMasterComponent implements OnInit {
     approvalProcess: [''],
     recStockCode: [''],
     labour_charge: [''],
-    accountStart: [''],
-    accountMiddle: [''],
-    accountEnd: [''],
+    LOSS_ACCODE: [''],
+    RECOV_ACCODE: [''],
+    GAIN_ACCODE: [''],
     loss: [false],
     recovery: [false],
     allowGain: [false],
@@ -312,9 +312,9 @@ export class ProcessMasterComponent implements OnInit {
     // this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
     // this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
     // this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
-    this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
-    this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
-    this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
+    this.processMasterForm.controls.RECOV_ACCODE.setValue(this.content.RECOV_ACCODE);
+    this.processMasterForm.controls.LOSS_ACCODE.setValue(this.content.LOSS_ACCODE);
+    this.processMasterForm.controls.GAIN_ACCODE.setValue(this.content.GAIN_ACCODE);
     // this.processMasterForm.controls.labour_charge.setValue(this.content.LABCHRG_PERHOUR);
     this.setValueWithDecimal('labour_charge', this.content.LABCHRG_PERHOUR, 'AMOUNT')
     this.setValueWithDecimal('trayWeight', this.content.TRAY_WT, 'AMOUNT')
@@ -531,7 +531,7 @@ export class ProcessMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('Loss Maximum % Cannot Be Zero');
         return true;
       }
-      else if (form.accountStart == '') {
+      else if (form.LOSS_ACCODE == '') {
         this.commonService.toastErrorByMsgId('Loss Account Code Cannot Be Empty');
         return true;
       }
@@ -546,14 +546,14 @@ export class ProcessMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId(' Recovery Minimum % Cannot be Zero');
         return true;
       }
-      // else if (form.accountMiddle == '') {
+      // else if (form.RECOV_ACCODE == '') {
       // this.commonService.toastErrorByMsgId('Recovery Account Code Cannot be Empty');
       //   return true;
       // }
     }
 
     if (form.allowGain == true) {
-      if (form.accountEnd == '') {
+      if (form.GAIN_ACCODE == '') {
         this.commonService.toastErrorByMsgId('Gain Account Code Cannot be Empty');
         return true;
       }
@@ -592,7 +592,7 @@ export class ProcessMasterComponent implements OnInit {
       "DESCRIPTION": form.processDesc || "",
       "STD_TIME": this.commonService.emptyToZero(this.formattedTime),
       "MAX_TIME": this.commonService.emptyToZero(this.formattedMaxTime),
-      "LOSS_ACCODE": form.accountStart,
+      "LOSS_ACCODE": form.LOSS_ACCODE,
       "WIP_ACCODE": form.WIPaccount,
       "CURRENCY_CODE": "",
       "PROCESS_TYPE": form.processType.toString() || '',
@@ -603,7 +603,7 @@ export class ProcessMasterComponent implements OnInit {
       "LAST_NO": "",
       "REPAIR_PROCESS": this.onchangeCheckBoxNum(form.RepairProcess),
       "FINAL_PROCESS": this.onchangeCheckBoxNum(form.FinalProcess),
-      "GAIN_ACCODE": form.accountEnd,
+      "GAIN_ACCODE": form.GAIN_ACCODE,
       "TRAY_WT": this.commonService.emptyToZero(form.trayWeight),
       "SETTING_PROCESS": this.onchangeCheckBoxNum(form.Setting),
       "POINTS": 0,
@@ -616,7 +616,7 @@ export class ProcessMasterComponent implements OnInit {
       "STD_LOSS_QTY": 0,
       "POSITION": this.commonService.emptyToZero(form.Position),
       "RECOV_MIN": form.standard_end || 0,
-      "RECOV_ACCODE": form.accountMiddle,
+      "RECOV_ACCODE": form.RECOV_ACCODE,
       "RECOV_STOCK_CODE": form.recStockCode || "",
       "RECOV_VAR1": form.min_end || 0,
       "RECOV_VAR2": this.onchangeCheckBoxNum(form.recovery),
@@ -749,37 +749,37 @@ export class ProcessMasterComponent implements OnInit {
     switch (formControlName) {
       case 'WIPaccount':
         flag = (
-          this.processMasterForm.value.accountStart === accountCode ||
-          this.processMasterForm.value.accountMiddle === accountCode ||
-          this.processMasterForm.value.accountEnd === accountCode
+          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
+          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
+          this.processMasterForm.value.GAIN_ACCODE === accountCode
         );
         return flag
-      case 'accountStart':
+      case 'LOSS_ACCODE':
         flag = (
-          this.processMasterForm.value.accountMiddle === accountCode ||
-          this.processMasterForm.value.accountEnd === accountCode ||
+          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
+          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
           this.processMasterForm.value.WIPaccount === accountCode
         );
         return flag
-      case 'accountMiddle':
+      case 'RECOV_ACCODE':
         flag = (
-          this.processMasterForm.value.accountStart === accountCode ||
-          this.processMasterForm.value.accountEnd === accountCode ||
+          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
+          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
           this.processMasterForm.value.WIPaccount === accountCode
         );
         return flag
-      case 'accountEnd':
+      case 'GAIN_ACCODE':
         flag = (
-          this.processMasterForm.value.accountStart === accountCode ||
-          this.processMasterForm.value.accountMiddle === accountCode ||
+          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
+          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
           this.processMasterForm.value.WIPaccount === accountCode
         );
         return flag
       default:
         flag = (
-          this.processMasterForm.value.accountStart === accountCode ||
-          this.processMasterForm.value.accountMiddle === accountCode ||
-          this.processMasterForm.value.accountEnd === accountCode ||
+          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
+          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
+          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
           this.processMasterForm.value.WIPaccount === accountCode
         );
         return flag;
@@ -796,33 +796,33 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
     this.accodeValidateSP('WIPaccount', e.ACCODE)
   }
-  accountStartSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE, 'accountStart')) {
+  LOSS_ACCODESelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'LOSS_ACCODE')) {
       this.commonService.toastErrorByMsgId('Accode already selected');
-      this.processMasterForm.controls.accountStart.setValue('');
+      this.processMasterForm.controls.LOSS_ACCODE.setValue('');
       return;
     }
-    this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
-    this.accodeValidateSP('accountStart', e.ACCODE)
+    this.processMasterForm.controls.LOSS_ACCODE.setValue(e.ACCODE);
+    this.accodeValidateSP('LOSS_ACCODE', e.ACCODE)
   }
-  accountMiddleSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE, 'accountMiddle')) {
-      this.processMasterForm.controls.accountMiddle.setValue('');
+  RECOV_ACCODESelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'RECOV_ACCODE')) {
+      this.processMasterForm.controls.RECOV_ACCODE.setValue('');
       this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
-    this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
-    this.accodeValidateSP('accountMiddle', e.ACCODE)
+    this.processMasterForm.controls.RECOV_ACCODE.setValue(e.ACCODE);
+    this.accodeValidateSP('RECOV_ACCODE', e.ACCODE)
   }
 
-  accountEndSelected(e: any) {
-    if (this.isSameAccountCodeSelected(e.ACCODE, 'accountEnd')) {
-      this.processMasterForm.controls.accountEnd.setValue('');
+  GAIN_ACCODESelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE, 'GAIN_ACCODE')) {
+      this.processMasterForm.controls.GAIN_ACCODE.setValue('');
       this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
-    this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
-    this.accodeValidateSP('accountEnd', e.ACCODE)
+    this.processMasterForm.controls.GAIN_ACCODE.setValue(e.ACCODE);
+    this.accodeValidateSP('GAIN_ACCODE', e.ACCODE)
   }
 
   /**use: common accode change validation */
@@ -892,11 +892,11 @@ export class ProcessMasterComponent implements OnInit {
   getAccodeField(formControlName: string) {
     let form = this.processMasterForm.value
     switch (formControlName) {
-      case 'accountStart':
+      case 'LOSS_ACCODE':
         return 'LOSS_ACCODE'
-      case 'accountMiddle':
+      case 'RECOV_ACCODE':
         return 'RECOV_ACCODE'
-      case 'accountEnd':
+      case 'GAIN_ACCODE':
         return 'GAIN_ACCODE'
       case 'WIPaccount':
         return 'WIP_ACCODE'
@@ -973,14 +973,14 @@ export class ProcessMasterComponent implements OnInit {
 
   onlossChange() {
     this.lossDisable = false;
-    // if(this.processMasterForm.value.accountStart == ''){
+    // if(this.processMasterForm.value.LOSS_ACCODE == ''){
     //   this.toastr.error('Account Code Cannot be Empty');
     // }
     if (this.processMasterForm.value.loss == true) {
-      this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
-      // this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
-      // this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
-      // this.processMasterForm.get('accountStart')?.setValidators(Validators.required);
+      this.processMasterForm.get('LOSS_ACCODE')?.setValidators(Validators.required);
+      // this.processMasterForm.get('RECOV_ACCODE')?.setValidators(Validators.required);
+      // this.processMasterForm.get('GAIN_ACCODE')?.setValidators(Validators.required);
+      // this.processMasterForm.get('LOSS_ACCODE')?.setValidators(Validators.required);
       this.islossReadOnly = false;
       this.searchModeLoss = true;
     } else {
@@ -990,14 +990,14 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.controls.recovery.setValue('')
       this.searchModeLoss = false;
 
-      this.processMasterForm.get('accountStart')?.clearValidators();
+      this.processMasterForm.get('LOSS_ACCODE')?.clearValidators();
       this.setValueWithDecimal('loss_standard', 0, 'AMOUNT')
       this.setValueWithDecimal('loss_min', 0, 'AMOUNT')
       this.setValueWithDecimal('loss_max', 0, 'AMOUNT')
       this.setValueWithDecimal('standard_end', 0, 'AMOUNT')
       this.setValueWithDecimal('min_end', 0, 'AMOUNT')
-      this.processMasterForm.controls.accountStart.setValue('');
-      this.processMasterForm.controls.accountMiddle.setValue('');
+      this.processMasterForm.controls.LOSS_ACCODE.setValue('');
+      this.processMasterForm.controls.RECOV_ACCODE.setValue('');
     }
 
 
@@ -1005,7 +1005,7 @@ export class ProcessMasterComponent implements OnInit {
     //  this.processMasterForm.controls.min_end.setValue(0);
 
     // Update the validation status after setting or clearing validators
-    //  this.processMasterForm.get('accountStart')?.updateValueAndValidity();
+    //  this.processMasterForm.get('LOSS_ACCODE')?.updateValueAndValidity();
 
   }
 
@@ -1013,23 +1013,23 @@ export class ProcessMasterComponent implements OnInit {
 
   onRecovery() {
 
-    // if(this.processMasterForm.value.accountMiddle == ''){
+    // if(this.processMasterForm.value.RECOV_ACCODE == ''){
     //   this.toastr.error('Account Code Cannot be Empty');
     // }
 
 
     if (this.processMasterForm.value.recovery == true) {
-      this.processMasterForm.get('accountMiddle')?.setValidators(Validators.required);
+      this.processMasterForm.get('RECOV_ACCODE')?.setValidators(Validators.required);
       this.isRecovReadOnly = false;
       this.searchModeRecov = true;
     }
     else {
       this.isRecovReadOnly = true;
       this.searchModeRecov = false;
-      this.processMasterForm.get('accountMiddle')?.clearValidators();
+      this.processMasterForm.get('RECOV_ACCODE')?.clearValidators();
       this.setValueWithDecimal('min_end', 0, 'AMOUNT')
       this.setValueWithDecimal('standard_end', 0, 'AMOUNT')
-      this.processMasterForm.controls.accountMiddle.setValue('');
+      this.processMasterForm.controls.RECOV_ACCODE.setValue('');
     }
 
 
@@ -1043,20 +1043,20 @@ export class ProcessMasterComponent implements OnInit {
 
   onAllowGain() {
 
-    // if(this.processMasterForm.value.accountEnd == ''){
+    // if(this.processMasterForm.value.GAIN_ACCODE == ''){
     //   this.toastr.error('Account Code Cannot be Empty');
     // }
 
     if (this.processMasterForm.value.allowGain == true) {
-      this.processMasterForm.get('accountEnd')?.setValidators(Validators.required);
+      this.processMasterForm.get('GAIN_ACCODE')?.setValidators(Validators.required);
       this.isAlloWGainReadOnly = false;
       this.searchModeAllow = true;
     }
     else {
       this.isAlloWGainReadOnly = true;
       this.searchModeAllow = false;
-      this.processMasterForm.get('accountEnd')?.clearValidators();
-      this.processMasterForm.controls.accountEnd.setValue('');
+      this.processMasterForm.get('GAIN_ACCODE')?.clearValidators();
+      this.processMasterForm.controls.GAIN_ACCODE.setValue('');
     }
 
 
