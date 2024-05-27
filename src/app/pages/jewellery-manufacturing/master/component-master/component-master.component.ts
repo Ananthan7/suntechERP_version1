@@ -249,6 +249,27 @@ export class ComponentMasterComponent implements OnInit {
     }
     return false
   }
+  prefixCodeValidate() {
+    const code = this.componentmasterForm.value.code;
+    if (!code) return;
+    let API = `PrefixMaster/GetPrefixMasterDetail/${code}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response) {
+          let data = result.response;
+          this.componentmasterForm.controls.code.setValue(data.PREFIX_CODE + data.LAST_NO)
+        } else {
+          // this.alloyMastereForm.controls.code.setValue('')
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        // this.alloyMastereForm.controls.code.setValue('')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   categoryCodeSelected(e: any) {
     if (this.checkCode()) return
@@ -266,6 +287,7 @@ export class ComponentMasterComponent implements OnInit {
     const des = e.DESCRIPTION.toUpperCase();
     this.componentmasterForm.controls.code.setValue(prefixCode);
     this.componentmasterForm.controls.codedes.setValue(des);
+    this.prefixCodeValidate()
   }
   typeCodeSelected(e: any) {
     if (this.checkCode()) return
