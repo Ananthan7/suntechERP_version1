@@ -238,7 +238,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   setPostData() {
     let form = this.componentsizemasterForm.value
     return {
-      "MID": this.content ? this.content.MID : 0,
+      "MID": this.content?.MID || 0,
       "COMPSIZE_CODE": this.commonService.nullToString(form.code),
       "DESCRIPTION": this.commonService.nullToString(form.desc),
       "RADIUS": this.commonService.nullToString(form.radius),

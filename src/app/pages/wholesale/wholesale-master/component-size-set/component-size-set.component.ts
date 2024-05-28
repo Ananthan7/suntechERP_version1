@@ -371,7 +371,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
     let API = 'ComponentSizeSetMaster/UpdateComponentSizeSetMaster/' + this.content.COMPSET_CODE
     let postData = {
-      "MID": 0,
+      "MID": this.content?.MID || 0,
       "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
       "DESCRIPTION": this.componentsizesetmasterForm.value.description || "",
       "detail": this.tableData
