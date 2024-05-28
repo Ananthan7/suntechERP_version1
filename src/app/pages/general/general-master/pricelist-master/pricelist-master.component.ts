@@ -279,6 +279,8 @@ export class PricelistMasterComponent implements OnInit {
   }
   createPostData() {
     let form = this.priceListMasterForm.value
+    console.log(form,'form');
+    
     let priceFormula = ''
     if(form.priceMethod == 0){
       priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`

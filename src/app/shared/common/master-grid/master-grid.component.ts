@@ -10,7 +10,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
   styleUrls: ['./master-grid.component.scss']
 })
 export class MasterGridComponent implements OnInit {
- 
+
   @Input() MasterGridData!: any;
   @Output() editRowClick = new EventEmitter<any>();
   @Output() viewRowClick = new EventEmitter<any>();
@@ -52,8 +52,8 @@ export class MasterGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.vocType =  this.CommonService.getqueryParamVocType();
-    this.mainVocType =  this.CommonService.getqueryParamMainVocType();
+    this.vocType = this.CommonService.getqueryParamVocType();
+    this.mainVocType = this.CommonService.getqueryParamMainVocType();
     this.tableName = this.CommonService.getqueryParamTable()
     // this.getGridVisibleSettings();
     this.getMasterGridData()
@@ -123,12 +123,12 @@ export class MasterGridComponent implements OnInit {
       }
     });
   }
-  resetGridAction(){
+  resetGridAction() {
     this.isDisableDelete = false;
     this.isDisableEdit = false;
     this.isDisableView = false;
   }
-  refreshClicked(){
+  refreshClicked() {
     this.SEARCH_VALUE = ''
     this.getMasterGridData(1)
   }
@@ -168,15 +168,15 @@ export class MasterGridComponent implements OnInit {
         }
       }
     }
-    
+
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
         if (resp.dynamicData && resp.dynamicData[0].length > 0) {
           // if (data == 1) {
-            // this.orderedItems = []
-            // this.SEARCH_VALUE = ''
+          // this.orderedItems = []
+          // this.SEARCH_VALUE = ''
           // }
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
@@ -187,8 +187,8 @@ export class MasterGridComponent implements OnInit {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
           } else {
             this.orderedItems = resp.dynamicData[0];
-            
-            
+
+
             if (this.orderedItems.length == 10) {
               this.nextPage()
             }
@@ -198,6 +198,7 @@ export class MasterGridComponent implements OnInit {
             .map((key) => {
               return { FIELD_NAME: key };
             });
+          this.orderedItemsHead = this.orderedItemsHead.filter((item: any) => item.FIELD_NAME != 'FLAG' && item.FIELD_NAME != 'COUNT')
 
           // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
           //   if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
@@ -232,12 +233,12 @@ export class MasterGridComponent implements OnInit {
       });
     this.subscriptions$.push(sub)
   }
-  validateBranchCode(){
-    if(this.vocType == 'MASSCH') return '';
+  validateBranchCode() {
+    if (this.vocType == 'MASSCH') return '';
     return this.branchCode
   }
-  setCustomParamFilters(){
-    if(this.mainVocType=='MASDPX'){
+  setCustomParamFilters() {
+    if (this.mainVocType == 'MASDPX') {
       return {
         "YEARMONTH": this.CommonService.yearSelected,
         // "BRANCH_CODE": this.validateBranchCode(),
@@ -245,7 +246,7 @@ export class MasterGridComponent implements OnInit {
         "DIVISION": 'M'
       }
     }
-    if(this.mainVocType=='MSDPM'){
+    if (this.mainVocType == 'MSDPM') {
       return {
         "YEARMONTH": this.CommonService.yearSelected,
         // "BRANCH_CODE": this.validateBranchCode(),
@@ -259,7 +260,7 @@ export class MasterGridComponent implements OnInit {
       "VOCTYPE": this.CommonService.nullToString(this.vocType),
     }
   }
-  setCustomParamTransactions(){
+  setCustomParamTransactions() {
     return {
       "VOCTYPE": this.CommonService.nullToString(this.vocType),
       "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
