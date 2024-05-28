@@ -107,12 +107,12 @@
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (change)="checkAccodeSelected($event,'WIPaccount')"
-                                            (focusout)="validateLookupField($event,accountMasterData,'WIPaccount')"
+                                            (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
                                             [readonly]="viewMode" 
                                             tabindex="4"/>
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="ACCODEData"
+                                        [MasterSearchData]="WipACCODEData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="WIPaccountSelected($event)">
                                     </master-search>
@@ -385,11 +385,11 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="LOSS_ACCODE"
                                             (change)="checkAccodeSelected($event,'LOSS_ACCODE')"
-                                            (focusout)="validateLookupField($event,ACCODEData,'LOSS_ACCODE')"
+                                            (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
                                             [readonly]="islossReadOnly" tabindex="15"/>
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="ACCODEData"
+                                        [MasterSearchData]="LossACCODEData"
                                         *ngIf="!viewMode && searchModeLoss"
                                         (newRowClick)="LOSS_ACCODESelected($event)">
                                     </master-search>
@@ -399,12 +399,12 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             (change)="checkAccodeSelected($event,'RECOV_ACCODE')"
-                                            (focusout)="validateLookupField($event,ACCODEData,'RECOV_ACCODE')"
+                                            (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
                                             [readonly]="isRecovReadOnly" tabindex="19"/>
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="ACCODEData"
+                                        [MasterSearchData]="RecovACCODEData"
                                         *ngIf="!viewMode && searchModeRecov"
                                         (newRowClick)="RECOV_ACCODESelected($event)">
                                     </master-search>
@@ -415,11 +415,11 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="GAIN_ACCODE"
                                             (change)="checkAccodeSelected($event,'GAIN_ACCODE')"
-                                            (focusout)="validateLookupField($event,ACCODEData,'GAIN_ACCODE')"
+                                            (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
                                             [readonly]="isAlloWGainReadOnly" tabindex="21"/>
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="ACCODEData"
+                                        [MasterSearchData]="WipACCODEData"
                                         *ngIf="!viewMode && searchModeAllow"
                                         (newRowClick)="GAIN_ACCODESelected($event)">
                                     </master-search>

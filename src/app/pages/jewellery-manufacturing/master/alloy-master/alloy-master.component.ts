@@ -539,9 +539,7 @@ export class AlloyMasterComponent implements OnInit {
   percentageCalculate(strpriceLC:any) {
     let weightAvgCostLC = this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC)
     let avgPercentage = ((parseInt(strpriceLC)-weightAvgCostLC)/weightAvgCostLC)*100
-    console.log(avgPercentage,'avgPercentage');
-    
-    return avgPercentage
+    return avgPercentage.toFixed(1)
   }
   /** price calculation */
   TagPrice_Calculation(item: any) {
@@ -1278,8 +1276,7 @@ export class AlloyMasterComponent implements OnInit {
       return
     }
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
-    let postData
-    postData = this.setPostData()
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -1320,8 +1317,7 @@ export class AlloyMasterComponent implements OnInit {
 
   updateMeltingType() {
     let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.content.STOCK_CODE;
-    let postdata
-    postdata = this.setPostData()
+    let postdata = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
         if (result.status == "Success") {
