@@ -40,7 +40,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'Total', field: 'NET_TOTAL' },
   ];
 
-  viewOnly?: boolean;
+  viewOnly: boolean=false;
   midForInvoce:any=0;
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -352,7 +352,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       BRANCH_CODE: this.branchCode,
       VOCTYPE: this.posCurrencyReceiptForm.value.vocType,
       VOCNO: this.posCurrencyReceiptForm.value.vocNo.toString() || '',
-      MID: this.content?.MID.toString() || '',
+      MID: this.content?this.comService.emptyToZero(this.content?.MID):this.midForInvoce,
       YEARMONTH: this.yearMonth,
     }
     this.auditTrailComponent?.showDialog(params)
