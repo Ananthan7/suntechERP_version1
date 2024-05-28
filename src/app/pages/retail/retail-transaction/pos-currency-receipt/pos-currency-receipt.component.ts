@@ -659,6 +659,32 @@ export class PosCurrencyReceiptComponent implements OnInit {
     });
   }
 
+  AccountPosting() {
+    if (!this.content) return
+    let params = {
+      BRANCH_CODE:  this.comService.nullToString(this.strBranchcode),
+      VOCTYPE:  this.comService.getqueryParamVocType(),
+      VOCNO: this.posCurrencyReceiptForm.value.vocNo,
+      YEARMONTH: this.comService.nullToString(this.baseYear),
+      MID: this.content?this.comService.emptyToZero(this.content?.MID):this.midForInvoce,
+      ACCUPDATEYN: 'Y',
+      USERNAME: this.comService.userName,
+      MAINVOCTYPE: this.comService.getqueryParamMainVocType(),
+      HEADER_TABLE: this.comService.getqueryParamTable(),
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting', params)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.comService.toastSuccessByMsgId(result.message || 'Posting Done')
+        } else {
+          this.comService.toastErrorByMsgId(result.message)
+        }
+      },
+        (err) => this.comService.toastErrorByMsgId("Server Error")
+      );
+    this.subscriptions.push(Sub);
+  }
+
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
     let indexes: Number[] = [];

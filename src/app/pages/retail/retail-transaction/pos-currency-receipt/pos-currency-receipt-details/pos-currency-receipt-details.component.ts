@@ -431,7 +431,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue(e.Description);
 
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(matchedEntry.ACCODE);
-    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(matchedEntry.DESCRIPTION);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(matchedEntry.ACCOUNT_HEAD);
 
     this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${matchedEntry.ACCODE}'`;
 
