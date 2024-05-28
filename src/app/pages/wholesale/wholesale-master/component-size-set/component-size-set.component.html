@@ -18,8 +18,8 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" formControlName="code" matInput #code [readonly]="editableMode|| viewMode"
-                        (input)="code.value = code.value.toUpperCase()" maxlength="6" />
+                      <input type="text" formControlName="code" matInput #code  id="code" (focusout)="checkCodeExists($event)" [readonly]="editableMode|| viewMode"
+                        (input)="code.value = code.value.toUpperCase()" maxlength="6" appNoEmptySpace/>
                     </mat-form-field>
 
                   </div>
@@ -34,7 +34,7 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%;">
                       <input type="text" formControlName="description" matInput #description   [readonly]="viewMode"
-                        (input)="description.value = description.value.toUpperCase()" maxlength="100" />
+                        (input)="description.value = description.value.toUpperCase()" maxlength="100" appNoEmptySpace/>
                     </mat-form-field>
                   </div>
                 </div>

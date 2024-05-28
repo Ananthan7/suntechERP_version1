@@ -117,12 +117,34 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  ACCODEData: MasterSearchModel = {
+  LossACCODEData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 252,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ACCOUNT MASTER',
+    SEARCH_HEADING: 'Loss A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  RecovACCODEData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 252,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Recovery A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  WipACCODEData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 252,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'WipCode Search',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,

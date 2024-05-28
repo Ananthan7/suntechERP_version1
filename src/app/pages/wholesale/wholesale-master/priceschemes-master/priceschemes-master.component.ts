@@ -316,25 +316,26 @@ export class PriceschemesMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531');
     }
   }
-
-
-
-  // private initializeForm() {
-  //   try {
-  //     this.priceSchemaMasterForm = this.formBuilder.group({
-  //       priceCode: ['', [Validators.required]],
-  //       priceDescription: ['', [Validators.required]],
-  //       price1: ['', [Validators.required]],
-  //       price2: ['', [Validators.required]],
-  //       price3: [''],
-  //       price4: [''],
-  //       price5: ['']
-  //     })
-  //   } catch (error) {
-  //     console.error('Error in initializeForm:', error);
-  //     this.toastr.error('Error while Initializing the Form');
-  //   }
-  // }
+  priceCodeValidate(event:any) {
+    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') return
+    try {
+      let API = `PriceSchemeMaster/GetPriceSchemeMasterList/${event.target.value}`
+      let Sub: Subscription = this.dataService.getDynamicAPI(API)
+        .subscribe((result) => {
+          if (result.status == "Success") {
+            this.priceSchemaMasterForm.controls.priceCode.setValue('')
+            // this.priceSchemaMasterForm.controls.priceDescription.setValue((data.PRICE_DESCRIPTION).toUpperCase())
+          }
+        }, err => {
+          console.error('Error in setAllInitialValues:', err);
+          this.commonService.toastErrorByMsgId('MSG1531')
+        })
+    }
+    catch (error) {
+      console.error('Error in setAllInitialValues:', error);
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
 
   createPostData() {
     return {
