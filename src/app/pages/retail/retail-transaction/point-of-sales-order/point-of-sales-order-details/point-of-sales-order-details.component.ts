@@ -60,7 +60,9 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
     StoneRate:[''],
     customerSampleStock:[false],
     holdforSalesTill:[false],
-    net_amount:['']
+    net_amount:[''],
+    remarks:[''],
+    lollayStock:[''],
   });
 
   constructor(

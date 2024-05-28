@@ -9,7 +9,7 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-       ></modal-header>
+    (deleteClick)="deleteStonepriceMaster()" [isViewDelete]="!viewMode"></modal-header>
     <!-- content section -->
     <div class="row">
         <div class="p-4 ">
