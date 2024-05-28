@@ -22,6 +22,7 @@ export class PosCustomerMasterComponent implements OnInit {
   @Input() public customerData: any;
   @Input() amlNameValidation?: boolean;
   @Input() vocDetails?: any;
+  @Input() public queryParams: any;
 
 
   //variables
@@ -153,6 +154,9 @@ export class PosCustomerMasterComponent implements OnInit {
     this.getIdMaster();
     if (this.customerData != null && this.customerData.MOBILE != '')
       this.changeMobileNumber(this.customerData.MOBILE)
+
+    if (this.queryParams != null && this.queryParams.isViewOnly != '')
+      this.viewOnly = this.queryParams.isViewOnly;
   }
 
 
@@ -1020,7 +1024,7 @@ export class PosCustomerMasterComponent implements OnInit {
             this.closeModal();
           }
         });
-
+        this.closeModal();
 
       } else {
         this.isCustProcessing = false;

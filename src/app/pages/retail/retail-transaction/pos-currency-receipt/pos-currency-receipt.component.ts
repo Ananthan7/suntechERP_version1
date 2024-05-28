@@ -41,7 +41,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   ];
 
   viewOnly?: boolean;
-
+  midForInvoce:any=0;
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
   amlNameValidation?: boolean;
@@ -575,6 +575,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
+            this.midForInvoce=result.response.MID
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -694,6 +695,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       VOCNO: this.posCurrencyReceiptForm.value.vocNo,
       YEARMONTH: this.yearMonth,
     };
+    modalRef.componentInstance.queryParams = {isViewOnly: this.viewOnly };
+
 
     modalRef.result.then(
       (result) => {
@@ -729,6 +732,51 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.updateFormValuesAndSRNO();
 
   }
+
+
+  printReceiptDetailsWeb() {
+    // let _validate = this.validateBeforePrint();
+    // if (_validate[0] === false) {
+    //   if (typeof _validate[1] === 'string') {
+    //     this.snackBar.open(_validate[1], 'OK');
+    //   } else {
+    //     console.error('Error message is not a string:', _validate[1]);
+    //   }
+    //   return
+    // }
+    let postData = {
+      "MID":this.content?this.comService.emptyToZero(this.content?.MID):this.midForInvoce,
+      "BRANCH_CODE": this.comService.nullToString(this.strBranchcode),
+      "VOCNO": this.comService.emptyToZero(this.posCurrencyReceiptForm.value.vocNo,),
+      "VOCTYPE": this.comService.nullToString(this.comService.getqueryParamVocType(),),
+      "YEARMONTH": this.comService.nullToString(this.baseYear),
+    }
+    this.dataService.postDynamicAPI('GetAdvanceReceiptDetailsWeb ', postData)
+      .subscribe((result: any) => {
+        console.log(result);
+        let data = result.dynamicData
+        var WindowPrt = window.open(' ', ' ', 'width=' + '1024px' + ', height=' + '800px');
+        if (WindowPrt === null) {
+          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+          return;
+        }
+        let printContent = data[0][0].HTMLOUT;
+        WindowPrt.document.write(printContent);
+
+        WindowPrt.document.close();
+        WindowPrt.focus();
+
+        setTimeout(() => {
+          if (WindowPrt) {
+            WindowPrt.print();
+          } else {
+            console.error('Print window was closed before printing could occur.');
+          }
+        }, 800);
+      })
+  }
+
+
   openAddPosARdetails(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
       size: 'xl',

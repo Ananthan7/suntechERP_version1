@@ -16,6 +16,7 @@ import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from "@angular/material/datepicker";
 import * as _moment from 'moment';
 import { IndexedDbService } from "src/app/services/indexed-db.service";
+import * as moment from 'moment';
 
 
 @Component({
@@ -30,7 +31,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() receiptData!: any;
   @Input() queryParams!: any;
   viewOnly: boolean = false;
+  hideMasterSearch: boolean = false;
+  isCreditcardMode: boolean = false;
   tableData: any[] = [];
+  today = _moment();
+
   private subscriptions: Subscription[] = [];
   branchCode?: String;
   paymentModeList: any[] = [];
@@ -395,6 +400,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   CurrencySelected(e: any) {
     console.log(e);
+    this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(e.Currency)
+    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(e['Conv Rate']);
   }
 
   getCreditCardMaster() {
@@ -435,14 +442,27 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   onModeChange(event: any) {
     console.log(event);
-
+    this.hideMasterSearch = false;
+    this.isCreditcardMode = false;
     switch (event.value) {
       case "Cash":
         this.getAccountHead();
         this.debitAmountData.WHERECONDITION = "ACCODE<> ''AND IS_CASH_ACCOUNT=1 AND ACCOUNT_MODE='G'";
         break;
       case "Others":
+      case "TT":
         this.debitAmountData.WHERECONDITION = "ACCODE<> ''";
+        this.resetOnModeChange();
+        break;
+
+      case "Credit Card":
+        this.hideMasterSearch = true;
+        this.isCreditcardMode = true;
+        this.resetOnModeChange();
+        break;
+
+      case "Cheque":
+        this.debitAmountData.WHERECONDITION = `ACCODE<> ''AND ACCOUNT_MODE='B' AND DEFA_BRANCH='${this.comService.branchCode}'`;
         this.resetOnModeChange();
         break;
 
@@ -482,6 +502,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
             let data = result.dynamicData[0]
             console.log('data', data);
+            this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${event.target.value}'`;
 
             if (data && data[0].CURRENCY_CODE) {
               if (data[0].CURRENCY_CODE == this.compCurrency)
@@ -551,8 +572,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "UNIQUEID": this.receiptData?.UNIQUEID || 0,
         "SRNO": this.receiptData?.SRNO || 0,
         "BRANCH_CODE": this.branchCode,
-        "RECPAY_TYPE": "",
-        "MODE": this.posCurrencyReceiptDetailsForm.value.modeOfSelect,
+        "RECPAY_TYPE": this.posCurrencyReceiptDetailsForm.value.modeOfSelect,
+        "MODE": this.isCreditcardMode ? "1" : "",
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
         "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
         "CURRENCY_RATE": this.posCurrencyReceiptDetailsForm.value.currencyRate,
@@ -761,15 +782,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   }
 
-
-
-  setMonthAndYear(normalizedMonthAndYear: { month: number, year: number }, datepicker: any) {
-    const ctrlValue = this.posCurrencyReceiptDetailsForm.get('creditCardDate')!.value;
-    ctrlValue.month(normalizedMonthAndYear.month);
-    ctrlValue.year(normalizedMonthAndYear.year);
-    this.posCurrencyReceiptDetailsForm.get('creditCardDate')!.setValue(ctrlValue);
+  setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
+    const ctrlValue = normalizedMonthAndYear;
+    ctrlValue.month(normalizedMonthAndYear.month());
+    ctrlValue.year(normalizedMonthAndYear.year());
+    this.posCurrencyReceiptDetailsForm.controls.creditCardDate.setValue(ctrlValue);
     datepicker.close();
   }
+
 
   dateFilter = (date: Date | null): boolean => {
     const today = new Date();
