@@ -201,6 +201,7 @@ export class MfgGridComponent implements OnInit {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
           } else {
             this.orderedItems = resp.dynamicData[0];
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems,'FLAG')
             
             
             if (this.orderedItems.length == 10) {

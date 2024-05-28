@@ -258,7 +258,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          this.componentmasterForm.controls.code.setValue(data.PREFIX_CODE + data.LAST_NO)
+          this.componentmasterForm.controls.code.setValue(data.PREFIX_CODE + + (parseInt(data.LAST_NO)+1))
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')

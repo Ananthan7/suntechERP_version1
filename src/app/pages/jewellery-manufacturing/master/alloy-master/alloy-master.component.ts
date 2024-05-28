@@ -276,7 +276,6 @@ export class AlloyMasterComponent implements OnInit {
   ngOnInit(): void {
     this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
-    this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
     if (this.content?.FLAG) {
@@ -294,6 +293,8 @@ export class AlloyMasterComponent implements OnInit {
         this.viewMode = true;
         this.deleteAlloyMaster()
       }
+    }else{
+      this.renderer.selectRootElement('#code')?.focus();
     }
     this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
       this.isCurrencySelected = !!value;
@@ -680,13 +681,13 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
+          // this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
           this.alloyMastereForm.controls.type.setValue(data.TYPE_CODE)
           this.alloyMastereForm.controls.category.setValue(data.CATEGORY_CODE)
           this.alloyMastereForm.controls.subCategory.setValue(data.SUBCATEGORY_CODE)
           this.alloyMastereForm.controls.brand.setValue(data.BRAND_CODE)
           this.alloyMastereForm.controls.description.setValue(data.DESCRIPTION)
-          this.alloyMastereForm.controls.code.setValue(data.PREFIX_CODE + data.LAST_NO)
+          this.alloyMastereForm.controls.code.setValue(data.PREFIX_CODE + (parseInt(data.LAST_NO)+1))
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -908,7 +909,7 @@ export class AlloyMasterComponent implements OnInit {
       FINISH: "",
       CERT_BY: this.commonService.nullToString(this.alloyMastereForm.value.certificateby),
       CERT_NO: this.commonService.nullToString(this.alloyMastereForm.value.certificateno),
-      CERT_DATE: this.commonService.formatDateTime(this.currentDate),
+      CERT_DATE: "",
       GRIDLE: "",
       CULET: "",
       TWIDTH: 0,
@@ -934,12 +935,12 @@ export class AlloyMasterComponent implements OnInit {
       PRINTED: false,
       PURVOCTYPE_NO: "",
       PURPARTY: "",
-      PURDATE: "2023-11-27T07:30:26.960Z",
+      PURDATE: "",
       PURAMOUNT: 0,
       PURBRLOC: "",
       SALVOCTYPE_NO: "",
       SALPARTY: this.commonService.nullToString(this.alloyMastereForm.value.salesman),
-      SALDATE: "2024-05-15T13:10:06.667Z",
+      SALDATE: "",
       SALAMOUNT: 0,
       SALBRLOC: "",
       METAL_TOTALGROSSWT: 0,
