@@ -98,35 +98,91 @@ export class PriceschemesMasterComponent implements OnInit {
     }
   }
 
-  enableNextField(currentField: string, nextField: string) {
+  // enableNextField(currentField: string, nextField: string) {
 
-    const currentControl = this.priceSchemaMasterForm.get(currentField);
-    const nextControl = this.priceSchemaMasterForm.get(nextField);
+  //   const currentControl = this.priceSchemaMasterForm.get(currentField);
+  //   const nextControl = this.priceSchemaMasterForm.get(nextField);
 
-    if (currentControl && nextControl) {
+  //   if (currentControl && nextControl) {
 
-      if (currentControl.value && currentControl.value !== nextControl.value) {
-        nextControl.enable();
-      } else {
-        nextControl.disable();
-        // If the current field is cleared, also clear and disable the next fields
-        this.priceSchemaMasterForm.get(nextField)?.setValue('');
-        this.disableNextFields(nextField);
+  //     if (currentControl.value && currentControl.value !== nextControl.value) {
+  //       nextControl.enable();
+  //     } else {
+  //       nextControl.disable();
+  //       // If the current field is cleared, also clear and disable the next fields
+  //       this.priceSchemaMasterForm.get(nextField)?.setValue('');
+  //       this.disableNextFields(nextField);
 
+  //     }
+  //   }
+  // }
+
+  // // Helper method to disable and clear next fields
+  // private disableNextFields(currentField: string) {
+  //   const nextFields = ['price2', 'price3', 'price4', 'price5'];
+  //   const startIndex = nextFields.indexOf(currentField);
+  //   for (let i = startIndex + 1; i < nextFields.length; i++) {
+  //     const nextField = nextFields[i];
+  //     this.priceSchemaMasterForm.get(nextField)?.disable();
+  //     this.priceSchemaMasterForm.get(nextField)?.setValue('');
+  //   }
+  // }
+
+    // Method to handle enabling next field and showing lookup
+    enableNextField(currentField: string, nextField: string) {
+      const currentControl = this.priceSchemaMasterForm.get(currentField);
+      const nextControl = this.priceSchemaMasterForm.get(nextField);
+  
+      if (currentControl && nextControl) {
+        if (currentControl.value && currentControl.value !== nextControl.value) {
+          nextControl.enable();
+  
+          // Enable corresponding lookup
+          this.setLookupVisibility(nextField, true);
+        } else {
+          nextControl.disable();
+          nextControl.setValue('');
+          // Disable corresponding lookup
+          this.setLookupVisibility(nextField, false);
+  
+          // Clear and disable subsequent fields
+          this.disableNextFields(nextField);
+        }
       }
     }
-  }
-
-  // Helper method to disable and clear next fields
-  private disableNextFields(currentField: string) {
-    const nextFields = ['price2', 'price3', 'price4', 'price5'];
-    const startIndex = nextFields.indexOf(currentField);
-    for (let i = startIndex + 1; i < nextFields.length; i++) {
-      const nextField = nextFields[i];
-      this.priceSchemaMasterForm.get(nextField)?.disable();
-      this.priceSchemaMasterForm.get(nextField)?.setValue('');
+  
+    // Method to set lookup visibility
+    private setLookupVisibility(field: string, visibility: boolean) {
+      switch (field) {
+        case 'price2':
+          this.price2SearchEnable = visibility;
+          break;
+        case 'price3':
+          this.price3SearchEnable = visibility;
+          break;
+        case 'price4':
+          this.price4SearchEnable = visibility;
+          break;
+        case 'price5':
+          this.price5SearchEnable = visibility;
+          break;
+      }
     }
-  }
+  
+    // Method to disable all subsequent fields
+    private disableNextFields(currentField: string) {
+      const fields = ['price1', 'price2', 'price3', 'price4', 'price5'];
+      const currentIndex = fields.indexOf(currentField);
+  
+      for (let i = currentIndex + 1; i < fields.length; i++) {
+        const control = this.priceSchemaMasterForm.get(fields[i]);
+        if (control) {
+          control.disable();
+          control.setValue('');
+          this.setLookupVisibility(fields[i], false);
+        }
+      }
+    }
 
 
   /** checking for same account code selection */
@@ -167,6 +223,7 @@ export class PriceschemesMasterComponent implements OnInit {
       if (nextFieldName !== '') {
         this.enableNextField(controlName, nextFieldName);
       }
+    
 
     } catch (error) {
       console.error('Error in Price Code Selected:', error);
@@ -483,6 +540,7 @@ export class PriceschemesMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+      
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.priceSchemaMasterForm.controls[FORMNAME].setValue('')

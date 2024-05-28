@@ -67,7 +67,7 @@
                                             <input type="text" matInput
                                                 formControlName="price3"  (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,priceCodeData,'price3')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"/>
+                                                (focusout)="validateLookupField($event,priceCodeData,'price3')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false" (input)="enableNextField('price3', 'price4')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -98,7 +98,7 @@
                                             <input type="text" matInput
                                                 formControlName="price2"   (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,priceCodeData,'price2')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"/>
+                                                (focusout)="validateLookupField($event,priceCodeData,'price2')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"  (input)="enableNextField('price2', 'price3')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -113,7 +113,7 @@
                                             <input type="text" matInput
                                                 formControlName="price4"   (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,priceCodeData,'price4')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"/>
+                                                (focusout)="validateLookupField($event,priceCodeData,'price4')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false" (input)="enableNextField('price4', 'price5')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
