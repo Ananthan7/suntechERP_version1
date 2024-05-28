@@ -28,6 +28,7 @@
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()"
                                                 placeholder="Code"
                                                 [readonly]="viewMode || editMode"
+                                                (focusout)="priceCodeValidate($event)"
                                                 maxlength="20" (keyup)="codeEnabled()"
                                                 autocomplete="off"/>
                                         </mat-form-field>
