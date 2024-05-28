@@ -47,22 +47,26 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'CASH accounts',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "ACCODE<> ''AND IS_CASH_ACCOUNT=1 AND ACCOUNT_MODE='G'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
   }
+
+
 
   modeOfData: MasterSearchModel = {
     PAGENO: 1,
-    RECORDS: 10,
+    RECORDS: 100,
     LOOKUPID: 25,
     SEARCH_FIELD: 'Credit_Code',
     // SEARCH_HEADING: 'Mode Of',
     SEARCH_HEADING: 'Credit Card lookup',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Credit_Code<> ''",
+    WHERECONDITION: "MODE = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
 
@@ -70,12 +74,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 9,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'Currency',
     SEARCH_HEADING: 'Currency Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: '',
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strPartyCode=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
+
   }
   // `CMBRANCH_CODE = '${this.comService.branchCode}'`
 
@@ -200,6 +206,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           // console.log('res', res.response.ACCODE); ACCOUNT_HEAD
           this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(res.response.ACCODE);
           this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(res.response.ACCOUNT_HEAD);
+          this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${res.response.ACCODE}'`;
+
 
           // this.DebitamountChange({ target: { value: res.response.ACCODE } });
 
@@ -405,11 +413,54 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   receiptModeSelected(e: any) {
     console.log(e);
 
+    const matchedEntry = this.typeCodeArray.find(entry => entry.CREDIT_CODE === e.Credit_Code);
+
+    // Log the matched entry
+    // console.log(matchedEntry.CREDIT_CODE matchedEntry.CREDIT_CODE); debitAmount debitAmount
+
+
+
     this.posCurrencyReceiptDetailsForm.controls.modeCODE.setValue(e.Credit_Code);
     this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue(e.Description);
 
+    this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(matchedEntry.ACCODE);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(matchedEntry.DESCRIPTION);
+
+    this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${matchedEntry.ACCODE}'`;
+
+
+
   }
 
+
+  onModeChange(event: any) {
+    console.log(event);
+
+    switch (event.value) {
+      case "Cash":
+        this.getAccountHead();
+        this.debitAmountData.WHERECONDITION = "ACCODE<> ''AND IS_CASH_ACCOUNT=1 AND ACCOUNT_MODE='G'";
+        break;
+      case "Others":
+        this.debitAmountData.WHERECONDITION = "ACCODE<> ''";
+        this.resetOnModeChange();
+        break;
+
+      default:
+        this.resetOnModeChange();
+        break;
+    }
+  }
+
+
+  resetOnModeChange() {
+    this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.modeCODE.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue('');
+  }
   //party Code Change
   DebitamountChange(event: any) {
     if (event.target.value == '') return
@@ -469,7 +520,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     }
   }
 
-  
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
