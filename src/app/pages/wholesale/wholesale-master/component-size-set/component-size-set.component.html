@@ -18,7 +18,7 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" formControlName="code" matInput #code [readonly]="editableMode|| viewMode"
+                      <input type="text" formControlName="code" matInput #code  id="code" (focusout)="checkCodeExists($event)" [readonly]="editableMode|| viewMode"
                         (input)="code.value = code.value.toUpperCase()" maxlength="6" />
                     </mat-form-field>
 

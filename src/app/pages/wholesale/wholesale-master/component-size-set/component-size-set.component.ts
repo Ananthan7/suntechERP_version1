@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -41,6 +41,7 @@ export class ComponentSizeSetComponent implements OnInit {
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
     private cdRef: ChangeDetectorRef,
+    private renderer: Renderer2,
   ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
@@ -496,4 +497,40 @@ export class ComponentSizeSetComponent implements OnInit {
     return Object.values(this.selectedOptions).some((value: any) => value && value.COMPSIZE_CODE === option.COMPSIZE_CODE && value.SRNO !== SRNO);
   }
 
+
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+    const API = 'ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Approval Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            // Clear the input value
+            this.componentsizesetmasterForm.controls.code.setValue('');
+
+            setTimeout(() => {
+              this.renderer.selectRootElement('#code').focus();
+            }, 500);
+
+          });
+        }
+      }, err => {
+        this.componentsizesetmasterForm.reset();
+      });
+
+    this.subscriptions.push(sub);
+  }
 }
