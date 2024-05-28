@@ -8,7 +8,7 @@
 <modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
     [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewDelete]="editMode"
     (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteRecord()"></modal-header>
+    (deleteClick)="deleteCheckingPricList()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceListMasterForm">

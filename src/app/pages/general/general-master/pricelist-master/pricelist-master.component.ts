@@ -188,14 +188,35 @@ export class PricelistMasterComponent implements OnInit {
         err => alert(err)
       );
   }
-
+  deleteCheckingPricList(){
+    if (!this.content.MID) {
+      this.showInitialDeleteConfirmation();
+      return;
+    }
+    let priceCondition = `PRICE1='${this.content.PRICE_CODE}' OR PRICE2='${this.content.PRICE_CODE}'`
+    priceCondition +=  `OR PRICE3='${this.content.PRICE_CODE}' OR PRICE4='${this.content.PRICE_CODE}'`
+    priceCondition +=  `OR PRICE5='${this.content.PRICE_CODE}'`
+    let param = {
+      LOOKUPID: 177,
+      WHERECOND: priceCondition || ''
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data.length == 0) {
+         this.deleteRecord()
+        }else{
+          this.commonService.toastErrorByMsgId('Price already in use')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
   deleteRecord() {
     try {
-      if (!this.content.MID) {
-        this.showInitialDeleteConfirmation();
-        return;
-      }
-
       this.confirmDeletion().then((result) => {
         if (result.isConfirmed) {
           let API = 'PriceMaster/DeletePriceMaster/' + this.priceListMasterForm.value.priceCode;
@@ -258,6 +279,8 @@ export class PricelistMasterComponent implements OnInit {
   }
   createPostData() {
     let form = this.priceListMasterForm.value
+    console.log(form,'form');
+    
     let priceFormula = ''
     if(form.priceMethod == 0){
       priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`

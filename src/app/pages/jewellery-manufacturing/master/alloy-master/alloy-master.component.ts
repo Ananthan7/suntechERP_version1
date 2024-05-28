@@ -276,7 +276,6 @@ export class AlloyMasterComponent implements OnInit {
   ngOnInit(): void {
     this.setupFormSubscription();
     this.alloyMastereForm.controls.createdBy.setValue(this.userName);
-    this.renderer.selectRootElement('#code')?.focus();
     this.setCompanyCurrency()
 
     if (this.content?.FLAG) {
@@ -294,6 +293,8 @@ export class AlloyMasterComponent implements OnInit {
         this.viewMode = true;
         this.deleteAlloyMaster()
       }
+    }else{
+      this.renderer.selectRootElement('#code')?.focus();
     }
     this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
       this.isCurrencySelected = !!value;
@@ -463,10 +464,26 @@ export class AlloyMasterComponent implements OnInit {
       this.prefixCodeValidate()
     }
   }
+  resetAllPriceDetails(){
+      this.alloyMastereForm.controls.PRICE1.setValue('')
+      this.alloyMastereForm.controls.price1Lc.setValue('')
+      this.alloyMastereForm.controls.price1per.setValue('')
+      this.alloyMastereForm.controls.price2code.setValue('')
+      this.alloyMastereForm.controls.price2Lc.setValue('')
+      this.alloyMastereForm.controls.price2per.setValue('')
+      this.alloyMastereForm.controls.price3code.setValue('')
+      this.alloyMastereForm.controls.price3Lc.setValue('')
+      this.alloyMastereForm.controls.price3per.setValue('')
+      this.alloyMastereForm.controls.price4code.setValue('')
+      this.alloyMastereForm.controls.price4Lc.setValue('')
+      this.alloyMastereForm.controls.price4per.setValue('')
+      this.alloyMastereForm.controls.price5code.setValue('')
+      this.alloyMastereForm.controls.price5Lc.setValue('')
+      this.alloyMastereForm.controls.price5per.setValue('')
+  }
   priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
-    let form = this.alloyMastereForm.value
     let postData = {
       "SPID": "066",
       "parameter": {
@@ -477,51 +494,132 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           let data = result.dynamicData[0]
-          data.forEach((item: any, i: any) => {
-            //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
-            if (item.PRICE_NUMBER == 'PRICE1') {
-              this.alloyMastereForm.controls.price1per.setValue(item.PRICE_PER)
-              this.alloyMastereForm.controls.PRICE1.setValue(item.PRICE_CODE)
-              this.alloyMastereForm.controls.price1Fc.setValue(this.getAvgCost(form.weightAvgCostFC, item.PRICE_PER));
-              this.alloyMastereForm.controls.price1Lc.setValue(this.getAvgCost(form.weightAvgCostLC, item.PRICE_PER));
-            }
-            if (item.PRICE_NUMBER == 'PRICE2') {
-              this.alloyMastereForm.controls.price2per.setValue(item.PRICE_PER)
-              this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
-              this.alloyMastereForm.controls.price2Fc.setValue(this.getAvgCost(form.weightAvgCostFC, item.PRICE_PER));
-              this.alloyMastereForm.controls.price2Lc.setValue(this.getAvgCost(form.weightAvgCostLC, item.PRICE_PER));
-            }
-            if (item.PRICE_NUMBER == 'PRICE3') {
-              this.alloyMastereForm.controls.price3per.setValue(item.PRICE_PER)
-              this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
-              this.alloyMastereForm.controls.price3Fc.setValue(this.getAvgCost(form.weightAvgCostFC, item.PRICE_PER));
-              this.alloyMastereForm.controls.price3Lc.setValue(this.getAvgCost(form.weightAvgCostLC, item.PRICE_PER));
-            }
-            if (item.PRICE_NUMBER == 'PRICE4') {
-              this.alloyMastereForm.controls.price4per.setValue(item.PRICE_PER)
-              this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
-              this.alloyMastereForm.controls.price4Fc.setValue(this.getAvgCost(form.weightAvgCostFC, item.PRICE_PER));
-              this.alloyMastereForm.controls.price4Lc.setValue(this.getAvgCost(form.weightAvgCostLC, item.PRICE_PER));
-            }
-            if (item.PRICE_NUMBER == 'PRICE5') {
-              this.alloyMastereForm.controls.price5per.setValue(item.PRICE_PER)
-              this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
-              this.alloyMastereForm.controls.price5Fc.setValue(this.getAvgCost(form.weightAvgCostFC, item.PRICE_PER));
-              this.alloyMastereForm.controls.price5Lc.setValue(this.getAvgCost(form.weightAvgCostLC, item.PRICE_PER));
-            }
-          });
+          if (data?.length > 0) {
+            this.fillPriceSchemeDetails(data)
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
         }
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')
       })
     this.subscriptions.push(Sub)
   }
-  getAvgCost(cost: any, percentage: any) {
-    let percentageValue: number = ((this.commonService.emptyToZero(cost) * this.commonService.emptyToZero(percentage)) / 100)
-    let val = this.commonService.setCommaSerperatedNumber(percentageValue + this.commonService.emptyToZero(cost), 'AMOUNT')
-    console.log(cost, '*', percentage, '=', val);
-    return val
+  fillPriceSchemeDetails(data: any) {
+    this.resetAllPriceDetails()
+    data.forEach((item: any, i: any) => {
+      //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
+      if (item.PRICE_NUMBER == 'PRICE1') {
+        this.alloyMastereForm.controls.PRICE1.setValue(item.PRICE_CODE)
+        this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price1Lc))
+      }
+      if (item.PRICE_NUMBER == 'PRICE2') {
+        this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
+        this.alloyMastereForm.controls.price2Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price2per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price2Lc))
+      }
+      if (item.PRICE_NUMBER == 'PRICE3') {
+        this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
+        this.alloyMastereForm.controls.price3Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price3per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price3Lc))
+      }
+      if (item.PRICE_NUMBER == 'PRICE4') {
+        this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
+        this.alloyMastereForm.controls.price4Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price4per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price4Lc))
+      }
+      if (item.PRICE_NUMBER == 'PRICE5') {
+        this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
+        this.alloyMastereForm.controls.price5Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price5per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price5Lc))
+      }
+    });
   }
+  percentageCalculate(strpriceLC:any) {
+    let weightAvgCostLC = this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC)
+    let avgPercentage = ((parseInt(strpriceLC)-weightAvgCostLC)/weightAvgCostLC)*100
+    return avgPercentage.toFixed(1)
+  }
+  /** price calculation */
+  TagPrice_Calculation(item: any) {
+    let form = this.alloyMastereForm.value
+    let strpriceLC: any = this.commonService.emptyToZero(form.weightAvgCostLC)
+    let weightAvgCostLC = this.commonService.emptyToZero(form.weightAvgCostLC)
+    let ADDLVALUE = this.commonService.emptyToZero(item.ADDLVALUE)
+    if (item.ADDLVALUE_SIGN != "") {
+      switch (item.ADDLVALUE_SIGN) {
+        case "+":
+          strpriceLC = (weightAvgCostLC + ADDLVALUE);
+          break;
+        case "-":
+          strpriceLC = (weightAvgCostLC - ADDLVALUE);
+          break;
+        case "*":
+          strpriceLC = (weightAvgCostLC * ADDLVALUE);
+          break;
+        case "/":
+          strpriceLC = (weightAvgCostLC / ADDLVALUE);
+          break;
+        default:
+          strpriceLC = (weightAvgCostLC);
+          break;
+      }
+    }
+    let PriceMethod = this.commonService.emptyToZero(item.PRICE_METHOD);
+    let PRICE_VALUE = this.commonService.emptyToZero(item.PRICE_VALUE);
+
+    switch (PriceMethod) {
+      case 1://FIXED
+        strpriceLC = item.PRICE_VALUE;
+        if (item.PRICE_ROUDOFF) strpriceLC = strpriceLC.toFixed(item.ROUNDOFF_DIGIT);
+        return strpriceLC;
+      case 0://COST
+        switch (item.PRICE_SIGN) {
+          case "+":
+            strpriceLC = (strpriceLC + PRICE_VALUE);
+            break;
+          case "-":
+            strpriceLC = (strpriceLC - PRICE_VALUE);
+            break;
+          case "*":
+            strpriceLC = (strpriceLC * PRICE_VALUE);
+            break;
+          case "/":
+            strpriceLC = (strpriceLC / PRICE_VALUE);
+            break;
+          case "+%":
+            strpriceLC = (strpriceLC + ((strpriceLC * PRICE_VALUE) / 100));
+            break;
+          case "/%"://Added By Manish for Diamant requirement JIRA SUN-389
+            strpriceLC = ((strpriceLC * 100) / PRICE_VALUE);
+            break;
+        }
+        strpriceLC = this.commonService.emptyToZero(strpriceLC)
+        switch (item.FINALPRICE_SIGN) {
+          case "+":
+            strpriceLC = (this.commonService.emptyToZero(strpriceLC) + item.FINALPRICE_VALUE);
+            if (item.PRICE_ROUDOFF) strpriceLC = this.commonService.emptyToZero(strpriceLC).toFixed(item.ROUNDOFF_DIGIT);
+            break;
+          case "-":
+            strpriceLC = (this.commonService.emptyToZero(strpriceLC) - item.FINALPRICE_VALUE);
+            if (item.PRICE_ROUDOFF) strpriceLC = this.commonService.emptyToZero(strpriceLC).toFixed(item.ROUNDOFF_DIGIT);
+            break;
+          case "*":
+            strpriceLC = (this.commonService.emptyToZero(strpriceLC) * item.FINALPRICE_VALUE);
+            if (item.PRICE_ROUDOFF) strpriceLC = this.commonService.emptyToZero(strpriceLC).toFixed(item.ROUNDOFF_DIGIT);
+            break;
+          case "/":
+            strpriceLC = (this.commonService.emptyToZero(strpriceLC) / item.FINALPRICE_VALUE);
+            if (item.PRICE_ROUDOFF) strpriceLC = this.commonService.emptyToZero(strpriceLC).toFixed(item.ROUNDOFF_DIGIT);
+            break;
+        }
+        return this.commonService.decimalQuantityFormat(strpriceLC, 'AMOUNT')
+    }
+    return this.commonService.decimalQuantityFormat(strpriceLC, 'AMOUNT')
+  }
+
   priceCodeSelected(e: any) {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price.setValue(e.PREFIX_CODE);
@@ -583,13 +681,13 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
+          // this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
           this.alloyMastereForm.controls.type.setValue(data.TYPE_CODE)
           this.alloyMastereForm.controls.category.setValue(data.CATEGORY_CODE)
           this.alloyMastereForm.controls.subCategory.setValue(data.SUBCATEGORY_CODE)
           this.alloyMastereForm.controls.brand.setValue(data.BRAND_CODE)
           this.alloyMastereForm.controls.description.setValue(data.DESCRIPTION)
-          this.alloyMastereForm.controls.code.setValue(data.PREFIX_CODE + data.LAST_NO)
+          this.alloyMastereForm.controls.code.setValue(data.PREFIX_CODE + (parseInt(data.LAST_NO)+1))
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -811,7 +909,7 @@ export class AlloyMasterComponent implements OnInit {
       FINISH: "",
       CERT_BY: this.commonService.nullToString(this.alloyMastereForm.value.certificateby),
       CERT_NO: this.commonService.nullToString(this.alloyMastereForm.value.certificateno),
-      CERT_DATE: this.commonService.formatDateTime(this.currentDate),
+      CERT_DATE: "",
       GRIDLE: "",
       CULET: "",
       TWIDTH: 0,
@@ -837,12 +935,12 @@ export class AlloyMasterComponent implements OnInit {
       PRINTED: false,
       PURVOCTYPE_NO: "",
       PURPARTY: "",
-      PURDATE: "2023-11-27T07:30:26.960Z",
+      PURDATE: "",
       PURAMOUNT: 0,
       PURBRLOC: "",
       SALVOCTYPE_NO: "",
       SALPARTY: this.commonService.nullToString(this.alloyMastereForm.value.salesman),
-      SALDATE: "2024-05-15T13:10:06.667Z",
+      SALDATE: "",
       SALAMOUNT: 0,
       SALBRLOC: "",
       METAL_TOTALGROSSWT: 0,
@@ -1179,8 +1277,7 @@ export class AlloyMasterComponent implements OnInit {
       return
     }
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
-    let postData
-    postData = this.setPostData()
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -1221,8 +1318,7 @@ export class AlloyMasterComponent implements OnInit {
 
   updateMeltingType() {
     let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.content.STOCK_CODE;
-    let postdata
-    postdata = this.setPostData()
+    let postdata = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
         if (result.status == "Success") {

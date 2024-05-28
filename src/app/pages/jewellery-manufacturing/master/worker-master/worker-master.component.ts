@@ -206,7 +206,7 @@ export class WorkerMasterComponent implements OnInit {
     return {
       "MID": this.content?.MID ? this.content.MID : 0,
       "WORKER_CODE": this.commonService.nullToString((form.WorkerCode).toUpperCase()),
-      "DESCRIPTION": form.WorkerDESCRIPTION,
+      "DESCRIPTION": form.WorkerDESCRIPTION.toUpperCase(),
       "DEPARTMENT_CODE": "",
       "NETSAL": 0,
       "PERKS": 0,

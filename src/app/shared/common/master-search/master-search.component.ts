@@ -58,6 +58,7 @@ export class MasterSearchComponent implements OnInit {
         if (result.response) {
           this.dataSourceHead = this.MasterSearchData.SEARCH_FIELD?.split(',').map(item => item.trim()) || []
           this.dataSource = result.response
+          this.dataSourceAlteration()//for adding changes in grid values
         } else {
           this.dataSourceHead = []
           this.dataSource = []
@@ -138,7 +139,7 @@ export class MasterSearchComponent implements OnInit {
       if (result.dynamicData[0]) {
         this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.dataSource = this.dataSource.concat(result.dynamicData[0]);
-
+        this.dataSourceAlteration()
         this.currentPage++;
       }
       // else {
@@ -147,7 +148,14 @@ export class MasterSearchComponent implements OnInit {
     })
 
   }
-
+  dataSourceAlteration(){
+    if(this.MasterSearchData.LOOKUPID == 8){
+      this.dataSource.forEach((item:any)=>{
+        item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE,'RATE')
+      })
+    }
+    //continue adding with conditions
+  }
   showOverlayPanel(event?: Event) {
     if (this.MasterSearchData?.LOAD_ONCLICK) {
       this.loadData();
