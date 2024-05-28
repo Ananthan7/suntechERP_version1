@@ -103,10 +103,11 @@ export class MasterSearchComponent implements OnInit {
     this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
       this.isLoading = false;
       if (result.dynamicData && result.dynamicData[0].length > 0) {
-        this.dataSource = result.dynamicData[0]
-        let dataCount = result.dynamicData[1]
-        this.totalItems = dataCount.COUNT
+        this.dataSource = result.dynamicData[0];
         if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
+        let dataCount = result.dynamicData[1];
+        if(dataCount[0]) this.totalItems = dataCount[0].COUNT
+        // if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
       }
       // else {

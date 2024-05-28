@@ -31,8 +31,8 @@
 
 
               <mat-form-field style="width: 100%;">
-                <input *ngIf="viewOnly" readonly matInput formControlName="modeOfSelect" />
-                <mat-select *ngIf="!viewOnly" formControlName="modeOfSelect">
+                <input *ngIf="viewOnly" readonly matInput formControlName="modeOfSelect"  />
+                <mat-select *ngIf="!viewOnly" formControlName="modeOfSelect" (selectionChange)="onModeChange($event)">
                   <mat-option *ngFor="let data of paymentModeList" [value]="data.ENGLISH">{{
                     data.ENGLISH }}</mat-option>
 
