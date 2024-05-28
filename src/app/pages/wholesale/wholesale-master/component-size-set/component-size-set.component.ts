@@ -510,10 +510,10 @@ export class ComponentSizeSetComponent implements OnInit {
     const API = 'ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + event.target.value;
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        if (result.checkifExists) {
+        if (result.status == 'Success') {
           Swal.fire({
             title: '',
-            text: result.message || 'Approval Already Exists!',
+            text:'Code Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
@@ -533,4 +533,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
     this.subscriptions.push(sub);
   }
+
+ 
+  
 }
