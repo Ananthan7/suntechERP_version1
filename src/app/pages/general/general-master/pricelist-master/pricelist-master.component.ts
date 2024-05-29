@@ -224,7 +224,7 @@ export class PricelistMasterComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.error('Error in deleteRecord:', error);
+      this.commonService.toastInfoByMsgId('Error occured! pls try again');;
     }
   }
 
@@ -356,6 +356,7 @@ export class PricelistMasterComponent implements OnInit {
   }
 
   handleDeletion(API: any) {
+    this.commonService.toastInfoByMsgId('MSG81447');
     this.dataService.deleteDynamicAPI(API).subscribe((result) => {
       if (result && result.status == "Success") {
         this.handleSuccessResponse(result);
@@ -367,7 +368,7 @@ export class PricelistMasterComponent implements OnInit {
 
   handleSuccessResponse(result: any) {
     Swal.fire({
-      title: result.message || 'Success',
+      title: this.content.PRICE_CODE +' Deleted Successfully',
       text: '',
       icon: 'success',
       confirmButtonColor: '#336699',
