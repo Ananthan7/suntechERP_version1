@@ -369,7 +369,7 @@ export class LabourChargeMasterComponent implements OnInit {
     settingType: [''],
     labourType: ['', [Validators.required]],
     unitList: [''],
-    method: ['', [Validators.required]],
+    method: [''],
     currency: ['', [Validators.required]],
     accessories: [''],
     BRANCH_CODE: [''],
