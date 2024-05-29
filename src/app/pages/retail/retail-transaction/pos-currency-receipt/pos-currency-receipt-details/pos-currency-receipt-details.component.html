@@ -52,40 +52,41 @@
               </mat-form-field>
             </div>
           </div>
+
+
           <div class="row my-1">
-            <label for="inputPassword" class="col-sm-3 col-form-label">Debit Account :</label>
-            <div class="col-md-3">
+            <label class="col-sm-3 col-form-label">
+              Debit Account:</label>
+            <span class="col-md-3">
               <mat-form-field style="width: 70%">
                 <input [readonly]="viewOnly ||hideMasterSearch" type="text" matInput formControlName="debitAmount"
-                  (change)="DebitamountChange($event)" />
+                (change)="DebitamountChange($event)" />
               </mat-form-field>
-              <master-search *ngIf="!viewOnly&&!hideMasterSearch" [MasterSearchData]="debitAmountData"
-                (newRowClick)="debitAmountSelected($event)"></master-search>
-            </div>
+
+              <master-search [MasterSearchData]="debitAmountData" (newRowClick)="debitAmountSelected($event)">
+              </master-search>
+            </span>
             <div class="col-md-6">
               <mat-form-field style="width: 100%">
                 <input [readonly]="viewOnly||hideMasterSearch" type="text" matInput formControlName="debitAmountDesc" />
               </mat-form-field>
-              <!-- <mat-form-field style="width: 100%">
-                <input matInput [matDatepicker]="cashDebitAmountDate" name="debitAmountDate"
-                  placeholder="DD/MM/YYYY" DateValidation formControlName="debitAmountDate" />
-                <mat-datepicker-toggle matSuffix [for]="cashDebitAmountDate"></mat-datepicker-toggle>
-                <mat-datepicker #cashDebitAmountDate></mat-datepicker>
-              </mat-form-field> -->
+            
             </div>
           </div>
+      
           <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Currency :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 70%">
                 <input type="text" [readonly]="isCurrencyUpdate||viewOnly" matInput formControlName="currencyCode" />
               </mat-form-field>
-              <master-search *ngIf="!isCurrencyUpdate|| !viewOnly" [MasterSearchData]="currencyData"
-                (newRowClick)="CurrencySelected($event)"></master-search>
+              <master-search *ngIf="!isCurrencyUpdate|| !viewOnly&&!hideCurrecnySearch"
+                [MasterSearchData]="currencyData" (newRowClick)="CurrencySelected($event)"></master-search>
             </div>
             <div class="col-md-6">
               <mat-form-field style="width: 100%">
-                <input type="text" [readonly]="isCurrencyUpdate||viewOnly" matInput formControlName="currencyRate" />
+                <input type="text" class="st_txt_right" [readonly]="isCurrencyUpdate||viewOnly" matInput
+                  formControlName="currencyRate" />
               </mat-form-field>
             </div>
           </div>
@@ -93,14 +94,14 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Amount FC :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input type="text" [readonly]="isCurrencyUpdate||viewOnly" matInput formControlName="amountFc"
-                  readonly />
+                <input type="text" class="st_txt_right" [readonly]="isCurrencyUpdate||viewOnly" matInput
+                  formControlName="amountFc" readonly />
               </mat-form-field>
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Amount LC :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input type="text" [readonly]="viewOnly" (change)="changeAmountLc($event)" matInput
+                <input type="text" class="st_txt_right" [readonly]="viewOnly" (change)="changeAmountLc($event)" matInput
                   formControlName="amountCc" />
               </mat-form-field>
             </div>
@@ -111,7 +112,8 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Number:</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input type="text" [readonly]="viewOnly" matInput formControlName="creditCardNumber" />
+                <input type="text" [readonly]="viewOnly" AmountDecimalInput [maxLength]="16" matInput
+                  formControlName="creditCardNumber" />
               </mat-form-field>
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Holder Name:</label>
@@ -130,9 +132,9 @@
                 <mat-datepicker #creditCardDate startView="multi-year"
                   (monthSelected)="setMonthAndYear($event, creditCardDate)"></mat-datepicker>
               </mat-form-field>
-              
-          </div>
-          
+
+            </div>
+
             <!-- <div class="col-md-3">
               <mat-form-field style="width: 100%" dateFormat2>
                 <input [readonly]="viewOnly" matInput [matDatepicker]="creditCardDate" name="creditCardDate"
@@ -194,11 +196,12 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Date:</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input [readonly]="viewOnly" matInput [matDatepicker]="chequeDate" name="chequeDate"
-                  placeholder="DD/MM/YYYY" DateValidation formControlName="chequeDate" />
+                <input [readonly]="viewOnly" (dateChange)="onDateChange($event)" matInput [matDatepicker]="chequeDate"
+                  name="chequeDate" placeholder="DD/MM/YYYY" DateValidation formControlName="chequeDate" />
                 <mat-datepicker-toggle matSuffix [for]="chequeDate"></mat-datepicker-toggle>
                 <mat-datepicker #chequeDate></mat-datepicker>
               </mat-form-field>
+
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Drawn Bank:</label>
             <div class="col-md-3">
@@ -275,15 +278,15 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">VAT % :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" readonly matInput formControlName="vat" />
+                      <input type="text" readonly class="st_txt_right" matInput formControlName="vat" />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row mb-1">
-                  <label for="inputPassword" class="col-sm-6 col-form-label">VAT CC :</label>
+                  <label for="inputPassword" class="st_txt_right" class="col-sm-6 col-form-label">VAT FC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" readonly matInput formControlName="vatcc" />
+                      <input type="text" class="st_txt_right" readonly matInput formControlName="vatcc" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -293,8 +296,8 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Total FC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" [readonly]="isCurrencyUpdate||viewOnly" (change)="changeTotalLc($event)"
-                        matInput formControlName="totalFc" />
+                      <input type="text" class="st_txt_right" [readonly]="isCurrencyUpdate||viewOnly"
+                        (change)="changeTotalLc($event)" matInput formControlName="totalFc" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -302,8 +305,8 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Total LC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" [readonly]="viewOnly" (change)="changeTotalLc($event)" matInput
-                        formControlName="totalLc" />
+                      <input type="text" class="st_txt_right" [readonly]="viewOnly" (change)="changeTotalLc($event)"
+                        matInput formControlName="totalLc" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -311,7 +314,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Header VAT Amt :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput readonly formControlName="headerVatAmt" />
+                      <input type="text" class="st_txt_right" matInput readonly formControlName="headerVatAmt" />
                     </mat-form-field>
                   </div>
                 </div>
