@@ -6,10 +6,10 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="editMode" [isViewSave]="!viewMode"
+<modal-header [isViewSave]="!viewMode"
     [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
     (cancelClick)="close()" (saveClick)="formSubmit()"
-    (deleteClick)="deleteAlloyMaster()"></modal-header>
+    (deleteClick)="deleteAlloyMaster()" [isViewDelete]="editMode"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>

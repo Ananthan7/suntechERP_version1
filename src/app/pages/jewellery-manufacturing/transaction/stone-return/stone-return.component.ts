@@ -246,7 +246,7 @@ export class StoneReturnComponent implements OnInit {
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
     voctype: [''],
-    vocno: [1],
+    VOCNO: [''],
     vocdate: [''],
     basecurrency: [''],
     basecurrencyrate: [''],
@@ -347,7 +347,7 @@ export class StoneReturnComponent implements OnInit {
       "MID": 0,
       "VOCTYPE": this.stonereturnFrom.value.voctype || "",
       "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.stonereturnFrom.value.vocno || "",
+      "VOCNO": this.stonereturnFrom.value.VOCNO || "",
       "VOCDATE": this.stonereturnFrom.value.vocdate || "",
       "YEARMONTH": this.yearMonth,
       "DOCTIME": "2023-10-19T06:15:23.037Z",
@@ -467,7 +467,7 @@ export class StoneReturnComponent implements OnInit {
     console.log(this.content);
 
     this.stonereturnFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.stonereturnFrom.controls.vocno.setValue(this.content.VOCNO)
+    this.stonereturnFrom.controls.VOCNO.setValue(this.content.VOCNO)
     this.stonereturnFrom.controls.vocdate.setValue(this.content.VOCDATE)
     this.stonereturnFrom.controls.basecurrency.setValue(this.content.BASE_CURRENCY)
     this.stonereturnFrom.controls.basecurrencyrate.setValue(this.content.BASE_CURR_RATE)
@@ -486,12 +486,12 @@ export class StoneReturnComponent implements OnInit {
       return
     }
 
-    let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${this.branchCode}/${this.stonereturnFrom.value.voctype}/${this.stonereturnFrom.value.vocno}/${this.commonService.yearSelected}`
+    let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${this.branchCode}/${this.stonereturnFrom.value.voctype}/${this.stonereturnFrom.value.VOCNO}/${this.commonService.yearSelected}`
     let postData = {
       "MID": 0,
       "VOCTYPE": this.stonereturnFrom.value.voctype || "",
       "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.stonereturnFrom.value.vocno || "",
+      "VOCNO": this.stonereturnFrom.value.VOCNO || "",
       "VOCDATE": "2023-10-19T06:15:23.037Z" || "",
       "YEARMONTH": this.yearMonth,
       "DOCTIME": "2023-10-19T06:15:23.037Z",
@@ -629,7 +629,7 @@ export class StoneReturnComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturnFrom.value.branchCode + this.stonereturnFrom.value.voctype + this.stonereturnFrom.value.vocno + this.stonereturnFrom.value.yearMonth
+        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturnFrom.value.branchCode + this.stonereturnFrom.value.voctype + this.stonereturnFrom.value.VOCNO + this.stonereturnFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

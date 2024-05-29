@@ -491,7 +491,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "parameter": {
         'strUNQ_JOB_ID': this.metalIssueDetailsForm.value.subJobNo,
         'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strCurrenctUser': ''
+        'strCurrenctUser': this.comService.nullToString(this.comService.userName),
       }
     }
 

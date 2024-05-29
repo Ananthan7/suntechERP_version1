@@ -1332,60 +1332,6 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**USE: delete Melting Type From Row */
-  deleteAlloyMaster() {
-    if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'DiamondStockMaster/DeleteDiamondStockMaster/' + this.alloyMastereForm.value.code;
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.alloyMastereForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.alloyMastereForm.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
-    });
-  }
   afterSave(value:any){
     if (value) {
       this.alloyMastereForm.reset()
@@ -1394,9 +1340,9 @@ export class AlloyMasterComponent implements OnInit {
     }
   }
   /**USE: delete worker master from row */
-  deleteWorkerMaster() {
+  deleteAlloyMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.STOCK_CODE) {
+    if (!this.content?.STOCK_CODE) {
       this.showDeleteErrorDialog('Please Select data to delete!');
       return;
     }
@@ -1408,7 +1354,7 @@ export class AlloyMasterComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog(this.content.STOCK_CODE +' Deleted successfully');
+                this.showSuccessDialog(this.content?.STOCK_CODE +' Deleted successfully');
               } else {
                 this.showErrorDialog(result.message || 'Error please try again');
               }

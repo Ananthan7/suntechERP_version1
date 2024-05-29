@@ -21,7 +21,8 @@
           <div class="col-md-2">
             <mat-form-field style="width: 80%;">
               <input type="text" matInput formControlName="jobNumber"
-                [readonly]="viewMode" />
+                [readonly]="viewMode" 
+                (focusout)="jobNumberValidate($event)"/>
             </mat-form-field>
             <master-search [MasterSearchData]="jobNumberCodeData"
               (newRowClick)="jobNumberCodeSelected($event)"
@@ -55,7 +56,7 @@
             Code: </label>
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="designcode"
+              <input type="text" matInput formControlName="DESIGN_CODE"
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
@@ -63,7 +64,7 @@
           </label>
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="partcode"
+              <input type="text" matInput formControlName="PART_CODE"
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
@@ -161,7 +162,7 @@
             : </label>
           <div class="col-md-5">
             <mat-form-field style="width: 90%;">
-              <input type="text" matInput formControlName="location"
+              <input type="text" matInput formControlName="LOCTYPE_CODE"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="locationCodeData"
@@ -231,7 +232,7 @@
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="sieveset" readonly
+              <input type="text" matInput formControlName="SIEVE_SET" readonly
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
@@ -256,7 +257,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="sieveDesc" readonly
+              <input type="text" matInput formControlName="SIEVE_DESC" readonly
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
@@ -323,8 +324,9 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+        <dx-data-grid #dataGrid id="gridContainer"
           [showBorders]="true" [allowColumnReordering]="true"
+          [dataSource]="tableData"
           [allowColumnResizing]="true" [columnAutoWidth]="true">
           <dxo-paging [enabled]="false"></dxo-paging>
           <dxo-editing mode="cell" [allowUpdating]="true">
