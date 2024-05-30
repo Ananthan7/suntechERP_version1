@@ -29,6 +29,7 @@ export class AlloyMasterComponent implements OnInit {
   url: any;
   isDisableSaveBtn: boolean = false;
   isCurrencySelected: boolean = false;
+  isWeightAvgCost: boolean = false;
 
   numericValue!: number;
   branchCode: any = localStorage.getItem('userbranch');
@@ -213,7 +214,7 @@ export class AlloyMasterComponent implements OnInit {
     pricenumber: [''],
     PRICE1: [''],
     price1per: ['0'],
-    price1Fc: [{ value: '', disabled: true }],
+    price1Fc: [''],
     price1Lc: [''],
     price2code: [''],
     price2per: ['0'],
@@ -304,6 +305,14 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.get('price1Fc')?.enable();
       } else {
         this.alloyMastereForm.get('price1Fc')?.disable();
+      }
+    });
+    this.alloyMastereForm.get('weightAvgCostLC')?.valueChanges.subscribe(value => {
+      this.isWeightAvgCost = !!value;
+      if (this.isWeightAvgCost) {
+        this.alloyMastereForm.get('PRICE1')?.enable();
+      } else {
+        this.alloyMastereForm.get('PRICE1')?.disable();
       }
     });
   }
@@ -740,6 +749,7 @@ export class AlloyMasterComponent implements OnInit {
     }
     return false;
   }
+
 
   // priceSchemeValidate(e: any) {
   //   if (this.checkStockCode()) return
