@@ -208,7 +208,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">Party Amount :</label>
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%">
-                      <input type="text" [readonly]="viewOnly" matInput formControlName="partyCurr" readonly />
+                      <input type="text" class="st_txt_right" [readonly]="viewOnly" matInput formControlName="partyCurr" readonly />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -248,7 +248,7 @@
                   <dxo-summary>
                     <dxi-total-item column="Sr #">
                     </dxi-total-item>
-                    <dxi-total-item column="AMOUNTCC" summaryType="sum" displayFormat="{0}" type="fixedPoint"
+                    <dxi-total-item column="AMOUNTFC" summaryType="sum" displayFormat="{0}" type="fixedPoint"
                       precision="2" [valueFormat]="gridAmountDecimalFormat">
                     </dxi-total-item>
                     <dxi-total-item column="CGST_AMOUNTCC" summaryType="sum" displayFormat="{0}" type="fixedPoint"
@@ -277,7 +277,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">Total Tax :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input [readonly]="viewOnly" type="number" matInput formControlName formControlName="totalTax" />
+                      <input [readonly]="viewOnly" class="st_txt_right" type="number" matInput formControlName formControlName="totalTax" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -285,7 +285,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">Total :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input [readonly]="viewOnly" type="number" matInput formControlName="total" />
+                      <input [readonly]="viewOnly" class="st_txt_right" type="number" matInput formControlName="total" />
                     </mat-form-field>
                   </div>
                 </div>

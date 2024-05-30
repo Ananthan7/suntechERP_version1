@@ -339,7 +339,7 @@ export class MetalIssueComponent implements OnInit {
       "SMAN": this.comService.nullToString(this.metalIssueForm.value.SALESPERSON_CODE),
       "REMARKS": this.metalIssueForm.value.REMARKS || "",
       "NAVSEQNO": 0,
-      "FIX_UNFIX": true,
+      "FIX_UNFIX": false,
       "AUTOPOSTING": true,
       "POSTDATE": this.comService.formatDateTime(form.vocdate),
       "SYSTEM_DATE": this.comService.formatDateTime(form.vocdate),

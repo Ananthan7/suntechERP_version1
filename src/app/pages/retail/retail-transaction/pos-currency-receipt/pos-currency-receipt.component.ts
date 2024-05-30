@@ -35,13 +35,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'Account Head', field: 'HDACCOUNT_HEAD' },
     { title: 'Currency', field: 'CURRENCY_CODE' },
     { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
-    { title: 'Amount', field: 'AMOUNTCC' },
-    { title: 'VAT_E_', field: 'CGST_AMOUNTCC' },
+    { title: 'Amount', field: 'AMOUNTFC' },
+    { title: 'VAT_E_', field: 'CGST_AMOUNTFC' },
     { title: 'Total', field: 'NET_TOTAL' },
   ];
 
-  viewOnly: boolean=false;
-  midForInvoce:any=0;
+  viewOnly: boolean = false;
+  midForInvoce: any = 0;
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
   amlNameValidation?: boolean;
@@ -352,7 +352,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       BRANCH_CODE: this.branchCode,
       VOCTYPE: this.posCurrencyReceiptForm.value.vocType,
       VOCNO: this.posCurrencyReceiptForm.value.vocNo.toString() || '',
-      MID: this.content?this.comService.emptyToZero(this.content?.MID):this.midForInvoce,
+      MID: this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
       YEARMONTH: this.yearMonth,
     }
     this.auditTrailComponent?.showDialog(params)
@@ -501,7 +501,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "SUPINVDATE": this.posCurrencyReceiptForm.value.vocDate,
       "HHACCOUNT_HEAD": "",
       "SALESPERSON_CODE": this.posCurrencyReceiptForm.value.enteredby,
-      "BALANCE_FC":this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      "BALANCE_FC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "BALANCE_CC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "AUTHORIZEDPOSTING": true,
       "AUTOGENREF": "",
@@ -575,7 +575,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-            this.midForInvoce=result.response.MID
+            this.midForInvoce = result.response.MID
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -662,11 +662,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
   AccountPosting() {
     if (!this.content) return
     let params = {
-      BRANCH_CODE:  this.comService.nullToString(this.strBranchcode),
-      VOCTYPE:  this.comService.getqueryParamVocType(),
+      BRANCH_CODE: this.comService.nullToString(this.strBranchcode),
+      VOCTYPE: this.comService.getqueryParamVocType(),
       VOCNO: this.posCurrencyReceiptForm.value.vocNo,
       YEARMONTH: this.comService.nullToString(this.baseYear),
-      MID: this.content?this.comService.emptyToZero(this.content?.MID):this.midForInvoce,
+      MID: this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
       ACCUPDATEYN: 'Y',
       USERNAME: this.comService.userName,
       MAINVOCTYPE: this.comService.getqueryParamMainVocType(),
@@ -721,7 +721,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       VOCNO: this.posCurrencyReceiptForm.value.vocNo,
       YEARMONTH: this.yearMonth,
     };
-    modalRef.componentInstance.queryParams = {isViewOnly: this.viewOnly };
+    modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
 
 
     modalRef.result.then(
@@ -761,32 +761,46 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   printReceiptDetailsWeb() {
-    // let _validate = this.validateBeforePrint();
-    // if (_validate[0] === false) {
-    //   if (typeof _validate[1] === 'string') {
-    //     this.snackBar.open(_validate[1], 'OK');
-    //   } else {
-    //     console.error('Error message is not a string:', _validate[1]);
-    //   }
-    //   return
-    // }
     let postData = {
-      "MID":this.content?this.comService.emptyToZero(this.content?.MID):this.midForInvoce,
+      "MID": this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
       "BRANCH_CODE": this.comService.nullToString(this.strBranchcode),
-      "VOCNO": this.comService.emptyToZero(this.posCurrencyReceiptForm.value.vocNo,),
-      "VOCTYPE": this.comService.nullToString(this.comService.getqueryParamVocType(),),
+      "VOCNO": this.comService.emptyToZero(this.posCurrencyReceiptForm.value.vocNo),
+      "VOCTYPE": this.comService.nullToString(this.comService.getqueryParamVocType()),
       "YEARMONTH": this.comService.nullToString(this.baseYear),
     }
-    this.dataService.postDynamicAPI('GetAdvanceReceiptDetailsWeb ', postData)
+    this.dataService.postDynamicAPI('GetAdvanceReceiptDetailsWeb', postData)
       .subscribe((result: any) => {
         console.log(result);
-        let data = result.dynamicData
-        var WindowPrt = window.open(' ', ' ', 'width=' + '1024px' + ', height=' + '800px');
+        let data = result.dynamicData;
+        var WindowPrt = window.open(' ', ' ', 'width=1024px, height=800px');
         if (WindowPrt === null) {
           console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
           return;
         }
-        let printContent = data[0][0].HTMLOUT;
+        let printContent = `
+                <html>
+                <head>
+                    <style>
+                        @media print {
+                            @page {
+                                size: A4 portrait;
+                                margin: 1cm;
+                            }
+                            body {
+                                margin: 1cm;
+                                box-sizing: border-box;
+                            }
+                            * {
+                                box-sizing: border-box;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${data[0][0].HTMLOUT}
+                </body>
+                </html>
+            `;
         WindowPrt.document.write(printContent);
 
         WindowPrt.document.close();
@@ -795,12 +809,15 @@ export class PosCurrencyReceiptComponent implements OnInit {
         setTimeout(() => {
           if (WindowPrt) {
             WindowPrt.print();
+            WindowPrt.close();
           } else {
             console.error('Print window was closed before printing could occur.');
           }
         }, 800);
-      })
+      });
   }
+
+
 
 
   openAddPosARdetails(data: any = null) {
@@ -852,7 +869,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
       data.SRNO.toString() == postData.SRNO.toString()
     );
-    postData.NET_TOTAL = (parseFloat(postData.AMOUNTCC) + parseFloat(postData.CGST_AMOUNTCC)).toFixed(2);
+    postData.NET_TOTAL = (parseFloat(postData.AMOUNTFC) + parseFloat(postData.CGST_AMOUNTFC)).toFixed(2);
 
     if (postData?.isUpdate && preItemIndex !== -1) {
       this.posCurrencyDetailsData[preItemIndex] = postData;
@@ -871,7 +888,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
       sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
-      sumAMOUNTCC += parseFloat(data.AMOUNTCC);
+      sumAMOUNTCC += parseFloat(data.TOTAL_AMOUNTCC);
     });
 
     let totalSum = sumCGST_AMOUNTCC + sumAMOUNTCC;
@@ -881,11 +898,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       'AMOUNT'
     ));
     this.posCurrencyReceiptForm.controls.total.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(totalSum),
+      this.comService.emptyToZero(sumAMOUNTCC),
       'AMOUNT'
     ));
     this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(totalSum),
+      this.comService.emptyToZero(sumAMOUNTCC),
       'AMOUNT'
     ));
   }

@@ -13,7 +13,7 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepicker } from "@angular/material/datepicker";
+import { MatDatepicker, MatDatepickerInputEvent } from "@angular/material/datepicker";
 import * as _moment from 'moment';
 import { IndexedDbService } from "src/app/services/indexed-db.service";
 import * as moment from 'moment';
@@ -32,6 +32,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() queryParams!: any;
   viewOnly: boolean = false;
   hideMasterSearch: boolean = false;
+  hideCurrecnySearch: boolean = false;
+
   isCreditcardMode: boolean = false;
   tableData: any[] = [];
   today = _moment();
@@ -43,8 +45,10 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   compCurrency: any;
   typeCodeArray: any[] = [];
   selectedTabIndex = 0;
+  vatAmountCC = 0;
   isCurrencyUpdate: boolean = false;
   hsnCodeList: any[] = [];
+
   debitAmountData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -103,7 +107,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     currencyRate: [""],
     amountFc: [""],
     amountCc: [""],
-    creditCardNumber: [""],
+    creditCardNumber: ['', [Validators.required, Validators.maxLength(16)]],
     creditCardName: [""],
     creditCardDate: [new Date()],
     ttNumber: [""],
@@ -187,7 +191,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(gstDetails.hsnCode);
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(gstDetails.hsnCode);
     this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(gstDetails.currecyCode);
-    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(gstDetails.currencyConvRate);
+    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.comService.decimalQuantityFormat(gstDetails.currencyConvRate, 'RATE'));
+
+
 
     this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(gstDetails.vatPercentage),
@@ -331,11 +337,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     // }
 
     if (this.receiptData != null && this.receiptData != undefined && Object.keys(this.receiptData).length > 0) {
-      this.posCurrencyReceiptDetailsForm.controls.modeOfSelect.setValue(this.receiptData.MODE);
+      this.posCurrencyReceiptDetailsForm.controls.modeOfSelect.setValue(this.receiptData.RECPAY_TYPE);
       this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(this.receiptData.ACCODE);
 
       this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(this.receiptData.CURRENCY_CODE);
-      this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.receiptData.CURRENCY_RATE);
+
+      this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.comService.decimalQuantityFormat(this.receiptData.CURRENCY_RATE, 'RATE'));
+
       this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.receiptData.AMOUNTFC);
       this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.receiptData.AMOUNTCC);
       this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(this.receiptData.REMARKS);
@@ -347,14 +355,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
       // this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTFC);
       this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTCC);
-      this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.receiptData.TOTAL_AMOUNTCC);
+      this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.receiptData.TOTAL_AMOUNTFC);
       this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.receiptData.TOTAL_AMOUNTCC);
 
       this.posCurrencyReceiptDetailsForm.controls.invoiceNo.setValue(this.receiptData.INVOICE_NUMBER);
       this.posCurrencyReceiptDetailsForm.controls.invoiceDate.setValue(this.receiptData.INVOICE_DATE);
       this.posCurrencyReceiptDetailsForm.controls.vatNo.setValue(this.receiptData.VAT_EXPENSE_CODE);
-      this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.receiptData.CGST_AMOUNTCC);
-
+      this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.receiptData.CGST_AMOUNTFC);
+      this.vatAmountCC = this.receiptData.CGST_AMOUNTCC
 
 
     }
@@ -392,16 +400,27 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   debitAmountSelected(e: any) {
     console.log(e);
+    this.resetVatFields();
+    this.hideCurrecnySearch = false;
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
     this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT HEAD"]);
+
+    if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Cheque") {
+      localStorage.setItem('CH_ACCODE', e.ACCODE);
+      localStorage.setItem('CH_ACHEAD', e["ACCOUNT HEAD"]);
+    }
+
     this.DebitamountChange({ target: { value: e.ACCODE } });
     // this.getGSTDetails(e.ACCODE);
   }
 
   CurrencySelected(e: any) {
     console.log(e);
+    this.resetVatFields();
     this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(e.Currency)
-    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(e['Conv Rate']);
+
+    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.comService.decimalQuantityFormat(e['Conv Rate'], 'RATE'));
+
   }
 
   getCreditCardMaster() {
@@ -419,7 +438,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   receiptModeSelected(e: any) {
     console.log(e);
-
+    this.hideCurrecnySearch = false;
+    this.resetVatFields();
     const matchedEntry = this.typeCodeArray.find(entry => entry.CREDIT_CODE === e.Credit_Code);
 
     // Log the matched entry
@@ -433,6 +453,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(matchedEntry.ACCODE);
     this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(matchedEntry.ACCOUNT_HEAD);
 
+
     this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${matchedEntry.ACCODE}'`;
 
 
@@ -443,11 +464,15 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   onModeChange(event: any) {
     console.log(event);
     this.hideMasterSearch = false;
+    this.hideCurrecnySearch = true;
     this.isCreditcardMode = false;
+    this.resetVatFields();
+  
     switch (event.value) {
       case "Cash":
         this.getAccountHead();
         this.debitAmountData.WHERECONDITION = "ACCODE<> ''AND IS_CASH_ACCOUNT=1 AND ACCOUNT_MODE='G'";
+        this.hideCurrecnySearch = false;
         break;
       case "Others":
       case "TT":
@@ -459,6 +484,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         this.hideMasterSearch = true;
         this.isCreditcardMode = true;
         this.resetOnModeChange();
+     
         break;
 
       case "Cheque":
@@ -480,6 +506,47 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue('');
     this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue('');
     this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(this.queryParams.currecyCode);
+
+    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.comService.decimalQuantityFormat(this.queryParams.currencyConvRate, 'RATE'));
+
+  }
+
+  onDateChange(event: MatDatepickerInputEvent<Date>) {
+    this.checkPdcValidation(event.value);
+  }
+
+
+  checkPdcValidation(date: any) {
+
+    if (!this.posCurrencyReceiptDetailsForm.value.debitAmount) {
+      this.snackBar.open('Please select debit account', 'OK', { duration: 2000 });
+
+    }
+    else {
+      const API = `AccountMaster/GetPDCAccount?strAccode=${this.posCurrencyReceiptDetailsForm.value.debitAmount}`;
+      this.dataService.getDynamicAPI(API)
+        .subscribe((resp) => {
+          if (resp.status == "Success") {
+            const pdcDays = resp.response.PDC_DAYS;
+            const currentDate = new Date();
+            const maxAllowedDate = new Date(currentDate);
+            maxAllowedDate.setDate(currentDate.getDate() + pdcDays);
+
+            if (date > maxAllowedDate) {
+              this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(resp.response.PDC_RCPTAC);
+              this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(resp.response.ACCOUNT_HEAD);
+              console.log(date, maxAllowedDate)
+            } else {
+              this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(localStorage.getItem('CH_ACCODE'));
+              this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(localStorage.getItem('CH_ACHEAD'));
+
+            }
+          }
+        });
+    }
+
+
   }
   //party Code Change
   DebitamountChange(event: any) {
@@ -577,7 +644,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
         "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
         "CURRENCY_RATE": this.posCurrencyReceiptDetailsForm.value.currencyRate,
-        "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountCc, // functionalities not started so assigned like this
+        "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
         "HEADER_AMOUNT": 0,
@@ -601,12 +668,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "DT_VOCTYPE": "",
         "DT_VOCNO": 0,
         "DT_YEARMONTH": "",
-        "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
+        "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
         // "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
         "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
         "CGST_PER": 0,
         "CGST_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
-        "CGST_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
+        "CGST_AMOUNTCC": this.vatAmountCC || 0,
         "SGST_PER": 0,
         "SGST_AMOUNTFC": 0,
         "SGST_AMOUNTCC": 0,
@@ -728,27 +795,41 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     console.log(event);
     let amountLc = event.target.value;
+    let amountFc = this.comService.CCToFC(this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      this.comService.emptyToZero(event.target.value));
     let vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
-    let vatCc = (amountLc * vatPrc) / 100;
-    let amountWithVat = parseFloat(amountLc) + vatCc;
+    let vatCc = (amountFc * vatPrc) / 100;
+    this.vatAmountCC = (amountLc * vatPrc) / 100;
+    let amountWithVat = amountFc + vatCc;
+    let amountWithVatLC = this.vatAmountCC + parseFloat(amountLc);
     console.log(vatCc);
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(event.target.value),
       'AMOUNT'));
-    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(event.target.value),
-      'AMOUNT'));
+
+    //   this.comService.CCToFC(
+    //     this.comService.compCurrency,
+    //     this.comService.emptyToZero(this.order_items_total_amount)
+    // )
+    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      this.comService.emptyToZero(event.target.value),), 'AMOUNT'
+    ));
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(vatCc),
       'AMOUNT'));
+
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(amountWithVat),
-      'AMOUNT'));
+      this.comService.emptyToZero(amountWithVat), 'AMOUNT'
+    ));
+
+    // this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
+    //   this.comService.emptyToZero(amountWithVat),
+    //   'AMOUNT'));
     this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(amountWithVat),
+      this.comService.emptyToZero(amountWithVatLC),
       'AMOUNT'));
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(amountWithVat),
+      this.comService.emptyToZero(amountWithVatLC),
       'AMOUNT'));
 
 
@@ -763,23 +844,53 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(event.target.value),
       'AMOUNT'));
-    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(event.target.value),
-      'AMOUNT'));
+
+    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      this.comService.emptyToZero(event.target.value),), 'AMOUNT'
+    ));
+
+    // this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
+    //   this.comService.emptyToZero(event.target.value),
+    //   'AMOUNT'));
     let sum = (this.posCurrencyReceiptDetailsForm.controls.totalLc.value * 100) / (100 + parseFloat(this.posCurrencyReceiptDetailsForm.controls.vat.value));
     console.log(sum);
 
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(sum),
       'AMOUNT'));
-    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
-      this.comService.emptyToZero(sum),
-      'AMOUNT'));
-    let vatcc = this.posCurrencyReceiptDetailsForm.controls.totalLc.value - sum;
+
+    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      this.comService.emptyToZero(sum),), 'AMOUNT'
+    ));
+
+    // this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
+    //   this.comService.emptyToZero(sum),
+    //   'AMOUNT'));
+    let vatcc = this.posCurrencyReceiptDetailsForm.controls.totalFc.value - sum;
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(vatcc),
       'AMOUNT'));
 
+  }
+
+  resetVatFields() {
+    this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue('');
+
+    this.posCurrencyReceiptDetailsForm.controls.creditCardNumber.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.creditCardName.setValue('');
+
+    this.posCurrencyReceiptDetailsForm.controls.ttNumber.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.ttDrawnBank.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.ttDepositBank.setValue('');
+
+    this.posCurrencyReceiptDetailsForm.controls.chequeNumber.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.chequeDrawnBank.setValue('');
+    this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue('');
   }
 
   setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {

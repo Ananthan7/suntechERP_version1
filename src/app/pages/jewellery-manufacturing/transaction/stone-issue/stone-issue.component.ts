@@ -28,10 +28,8 @@ export class StoneIssueComponent implements OnInit {
   @Input() content!: any;
   tableData: any[] = [];
   stoneIssueData: any[] = [];
-  userName = localStorage.getItem('username');
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
-  yearMonth?: String;
   private subscriptions: Subscription[] = [];
   currentDate = new FormControl(new Date());
   vocMaxDate = new Date();
@@ -41,6 +39,7 @@ export class StoneIssueComponent implements OnInit {
   selectedKey: number[] = [];
   selectedIndexes: any = [];
   viewMode: boolean = false;
+  editMode: boolean = false;
   dataToDetailScreen: any;
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -78,9 +77,11 @@ export class StoneIssueComponent implements OnInit {
   }
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
-    voctype: ['', [Validators.required]],
-    vocno: ['1', [Validators.required]],
-    vocDate: [],
+    VOCTYPE: ['', [Validators.required]],
+    VOCNO: ['', [Validators.required]],
+    VOCDATE: [],
+    YEARMONTH: [],
+    BRANCH_CODE: [],
     enteredBy: [''],
     currency: [''],
     currencyrate: [''],
@@ -90,6 +91,7 @@ export class StoneIssueComponent implements OnInit {
     caratTotal: [''],
     amountTotal: [''],
     total: [''],
+    FLAG: [''],
   });
   constructor(
     private activeModal: NgbActiveModal,
@@ -110,15 +112,19 @@ export class StoneIssueComponent implements OnInit {
 
     //this.content provide the data and flag from main grid to the form
     if (this.content?.FLAG) {
+      this.setInitialValues()
+      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
+
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
       }
       // this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
+        this.editMode = true
+      }
+      if (this.content.FLAG == 'DELETE') {
         this.deleteRecord()
       }
-      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
-      this.setInitialValues()
       return
     }
     this.setvalues()
@@ -126,9 +132,11 @@ export class StoneIssueComponent implements OnInit {
   }
   setvalues() {
     this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
-    this.stoneissueFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.stoneissueFrom.controls.vocDate.setValue(this.comService.currentDate)
+    this.stoneissueFrom.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
+    this.stoneissueFrom.controls.VOCDATE.setValue(this.comService.currentDate)
+    this.stoneissueFrom.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+    this.stoneissueFrom.controls.YEARMONTH.setValue(this.comService.yearSelected)
+
   }
   setInitialValues() {
     console.log(this.content)
@@ -139,35 +147,43 @@ export class StoneIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
 
+          this.stoneissueFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
+          this.stoneissueFrom.controls.VOCNO.setValue(data.VOCNO)
+          this.stoneissueFrom.controls.VOCDATE.setValue(data.VOCDATE)
+          this.stoneissueFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
+          this.stoneissueFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.stoneissueFrom.controls.currency.setValue(data.CURRENCY_CODE)
-          this.stoneissueFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
+          this.stoneissueFrom.controls.currencyrate.setValue(
+            this.comService.decimalQuantityFormat(data.CURRENCY_RATE, 'RATE')
+          )
           this.stoneissueFrom.controls.worker.setValue(data.WORKER)
           this.stoneissueFrom.controls.workername.setValue(data.WORKER_NAME)
           this.stoneissueFrom.controls.enteredBy.setValue(data.SMAN)
           this.stoneissueFrom.controls.narration.setValue(data.REMARKS)
           this.stoneissueFrom.controls.caratTotal.setValue(data.REMARKS)
 
+          this.stoneIssueData = data.Details
           let detailData = data.Details
-          if (detailData.length > 0) {
-            detailData.forEach((element: any) => {
-              element.FLAG = this.content ? this.content.FLAG : null
-              this.stoneIssueData.push({
-                SRNO: element.SRNO,
-                JOB_NUMBER: element.JOB_NUMBER,
-                UNQ_JOB_ID: element.UNQ_JOB_ID,
-                DESIGN_CODE: element.DESIGN_CODE,
-                STOCK_CODE: element.STOCK_CODE,
-                DIVCODE: element.DIVCODE,
-                STOCK_DESCRIPTION: element.STOCK_DESCRIPTION,
-                Carat: element.JOB_DESCRIPTION,
-                Rate: element.RATEFC,
-                PROCESS_CODE: element.PROCESS_CODE,
-                AMOUNTLC: element.AMOUNTFC,
-                WORKER_CODE: element.WORKER_CODE,
-                SIEVE_SET: element.SIEVE_SET,
-              })
-            });
-          }
+          // if (detailData.length > 0) {
+          //   detailData.forEach((element: any) => {
+          //     element.FLAG = this.content ? this.content.FLAG : null
+          //     this.stoneIssueData.push({
+          //       SRNO: element.SRNO,
+          //       JOB_NUMBER: element.JOB_NUMBER,
+          //       UNQ_JOB_ID: element.UNQ_JOB_ID,
+          //       DESIGN_CODE: element.DESIGN_CODE,
+          //       STOCK_CODE: element.STOCK_CODE,
+          //       DIVCODE: element.DIVCODE,
+          //       STOCK_DESCRIPTION: element.STOCK_DESCRIPTION,
+          //       Carat: element.JOB_DESCRIPTION,
+          //       Rate: element.RATEFC,
+          //       PROCESS_CODE: element.PROCESS_CODE,
+          //       AMOUNTLC: element.AMOUNTFC,
+          //       WORKER_CODE: element.WORKER_CODE,
+          //       SIEVE_SET: element.SIEVE_SET,
+          //     })
+          //   });
+          // }
 
 
 
@@ -238,11 +254,11 @@ export class StoneIssueComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
-        if (result.isConfirmed) {
-          this.stoneIssueData = this.stoneIssueData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-          this.reCalculateSRNO()
-        }
+      if (result.isConfirmed) {
+        this.stoneIssueData = this.stoneIssueData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
       }
+    }
     )
   }
   reCalculateSRNO() {
@@ -328,12 +344,12 @@ export class StoneIssueComponent implements OnInit {
   setPostData() {
     return {
       "MID": 0,
-      "VOCTYPE": this.stoneissueFrom.value.voctype,
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.stoneissueFrom.value.vocno,
-      "VOCDATE": this.stoneissueFrom.value.vocDate,
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2023-10-19T06:55:16.030Z",
+      "VOCTYPE": this.stoneissueFrom.value.VOCTYPE,
+      "BRANCH_CODE": this.stoneissueFrom.value.BRANCH_CODE,
+      "VOCNO": this.stoneissueFrom.value.VOCNO,
+      "VOCDATE": this.stoneissueFrom.value.VOCDATE,
+      "YEARMONTH": this.stoneissueFrom.value.YEARMONTH,
+      "DOCTIME": (this.stoneissueFrom.value.VOCDATE),
       "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
       "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || 0,
       "TOTAL_PCS": 0,
@@ -348,7 +364,7 @@ export class StoneIssueComponent implements OnInit {
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "SYSTEM_DATE": "2023-10-19T06:55:16.030Z",
+      "SYSTEM_DATE": (this.stoneissueFrom.value.VOCDATE),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
@@ -385,24 +401,10 @@ export class StoneIssueComponent implements OnInit {
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stoneissueFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result.status == "Success") {
+          this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
         } else {
-          this.toastr.error('Not saved')
+          this.showErrorDialog(result.message || 'Error please try again');
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -411,9 +413,9 @@ export class StoneIssueComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     console.log(this.content);
-    this.stoneissueFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.stoneissueFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.stoneissueFrom.controls.vocDate.setValue(this.content.VOCDATE)
+    this.stoneissueFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE)
+    this.stoneissueFrom.controls.VOCNO.setValue(this.content.VOCNO)
+    this.stoneissueFrom.controls.VOCDATE.setValue(this.content.VOCDATE)
     this.stoneissueFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.stoneissueFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
     this.stoneissueFrom.controls.worker.setValue(this.content.WORKER_CODE)
@@ -423,25 +425,16 @@ export class StoneIssueComponent implements OnInit {
 
 
   update() {
-    let API = `JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/${this.branchCode}/${this.stoneissueFrom.value.voctype}/${this.stoneissueFrom.value.vocno}/${this.commonService.yearSelected}`
+    let FRM = this.stoneissueFrom.value
+    let API = `JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/${FRM.BRANCH_CODE}/${FRM.VOCTYPE}/${FRM.VOCNO}/${FRM.YEARMONTH}`
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stoneissueFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+            this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
+          } else {
+            this.showErrorDialog(result.message || 'Error please try again');
           }
         } else {
           this.toastr.error('Not saved')
@@ -450,21 +443,46 @@ export class StoneIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
+  afterSave(value: any) {
+    if (value) {
+      this.stoneissueFrom.reset()
+      this.tableData = []
+      this.close('reloadMainGrid')
     }
-    Swal.fire({
+  }
+  /**USE: delete worker master from row */
+  deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.VOCTYPE) {
+      this.showDeleteErrorDialog('Please Select data to delete!');
+      return;
+    }
+
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let FRM = this.stoneissueFrom.value;
+        let API = `JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/${FRM.BRANCH_CODE}/${FRM.VOCTYPE}/${FRM.VOCNO}/${FRM.YEARMONTH}`
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog(this.content?.VOCNO + ' Deleted successfully');
+              } else {
+                this.showErrorDialog(result.message || 'Error please try again');
+              }
+            } else {
+              this.toastr.error('Not deleted');
+            }
+          }, err => {
+            this.commonService.toastErrorByMsgId('network error')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -472,50 +490,42 @@ export class StoneIssueComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/' + this.stoneissueFrom.value.branchCode + this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.yearMonth
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.stoneissueFrom.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.stoneissueFrom.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
     });
   }
 
+  showDeleteErrorDialog(message: string): void {
+    Swal.fire({
+      title: '',
+      text: message,
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    });
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      // this.afterSave(result.value)
+    });
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

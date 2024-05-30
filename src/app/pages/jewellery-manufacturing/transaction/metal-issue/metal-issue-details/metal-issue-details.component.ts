@@ -107,7 +107,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     pictureName: [''],
     DESIGN_CODE: [''],
     PART_CODE: [''],
-    unqDesignId: [''],
+    UNQ_DESIGN_ID: [''],
     uniqueId: [''],
     treeNumber: [''],
     jobPurity: [''],
@@ -311,9 +311,9 @@ export class MetalIssueDetailsComponent implements OnInit {
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
       "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
-      "JOB_NUMBER": form.jobNumber,
+      "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.nullToString(form.JOB_DATE),
-      "JOB_SO_NUMBER": this.comService.emptyToZero(form.subJobNo),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.jobNumber),
       "UNQ_JOB_ID": this.comService.nullToString(form.subJobNo),
       "JOB_DESCRIPTION": this.comService.nullToString(form.jobNumDes),
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
@@ -321,14 +321,14 @@ export class MetalIssueDetailsComponent implements OnInit {
       "DIVCODE": this.comService.nullToString(form.DIVCODE),
       "STOCK_CODE": this.comService.nullToString(form.stockCode),
       "STOCK_DESCRIPTION": this.comService.nullToString(form.stockCodeDes),
-      "SUB_STOCK_CODE": this.comService.nullToString(form.subStockCode),
+      "SUB_STOCK_CODE": this.comService.nullToString(form.stockCode),
       "KARAT_CODE": this.comService.nullToString(form.KARAT_CODE),
       "JOB_PCS": form.JOB_PCS,
       "PCS": form.pcs,
       "GROSS_WT": form.GROSS_WT,
       "PURITY": form.PURITY,
       "PURE_WT": this.comService.emptyToZero(form.PURE_WT),
-      "RATE_TYPE": this.comService.compCurrency,
+      "RATE_TYPE": '',
       "METAL_RATE": 0,
       "CURRENCY_CODE": this.comService.compCurrency,
       "CURRENCY_RATE": this.comService.emptyToZero(currRate),
@@ -348,7 +348,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "PROCESS_NAME": this.comService.nullToString(form.processCodeDesc),
       "WORKER_CODE": this.comService.nullToString(form.workerCode),
       "WORKER_NAME": this.comService.nullToString(form.workerCodeDes),
-      "UNQ_DESIGN_ID": this.comService.nullToString(form.unqDesignId),
+      "UNQ_DESIGN_ID": this.comService.nullToString(form.UNQ_DESIGN_ID),
       "WIP_ACCODE": "",
       "UNIQUEID": this.comService.emptyToZero(form.uniqueId),
       "LOCTYPE_CODE": this.comService.nullToString(form.location),
@@ -356,7 +356,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "AMOUNTLC": this.comService.emptyToZero(form.amountLc),
       "PICTURE_NAME": this.comService.nullToString(form.pictureName),
       "PART_CODE": this.comService.nullToString(form.PART_CODE),
-      "MASTER_METAL": form.masterMetal,
+      "MASTER_METAL": false || form.masterMetal,
       "STONE_WT": this.comService.emptyToZero(form.STONE_WT),
       "NET_WT": this.comService.emptyToZero(form.NET_WT),
       "DT_BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
@@ -470,7 +470,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            this.setValueWithDecimal('jobPurity',data[0].STD_PURITY, 'PURITY')
+            this.setValueWithDecimal('jobPurity',data[0].JOB_PURITY, 'PURITY')
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')
             this.comService.toastErrorByMsgId('MSG1531')
@@ -491,7 +491,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "parameter": {
         'strUNQ_JOB_ID': this.metalIssueDetailsForm.value.subJobNo,
         'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strCurrenctUser': ''
+        'strCurrenctUser': this.comService.nullToString(this.comService.userName),
       }
     }
 
@@ -511,7 +511,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.toStockCode.setValue(data[0].STOCK_CODE);
           this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(data[0].STOCK_DESCRIPTION);
           this.metalIssueDetailsForm.controls.toDIVCODE.setValue(data[0].DIVCODE);
-          this.metalIssueDetailsForm.controls.masterMetal.setValue(true);
+          this.metalIssueDetailsForm.controls.masterMetal.setValue(false);
           this.comService.formControlSetReadOnly('toDIVCODE',true)
           this.comService.formControlSetReadOnly('toStockCode',true)
           this.comService.formControlSetReadOnly('toStockCodeDes',true)
@@ -520,9 +520,10 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
           this.metalIssueDetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
           this.metalIssueDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
+          this.metalIssueDetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
 
           this.metalIssueDetailsForm.controls.pcs.setValue(data[0].PCS)
-          this.setValueWithDecimal('PURE_WT', data[0].PURE_WT, 'THREE')
+          this.setValueWithDecimal('PURE_WT', data[0].PURE_WT.toFixed(3), 'THREE')
           this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')
           this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
@@ -536,7 +537,6 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.location.setValue(
             this.comService.allbranchMaster.DMFGMLOC
           )
-          // this.meltingIssuedetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
           // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
         } else {
           this.metalIssueDetailsForm.controls.subJobNo.setValue('')

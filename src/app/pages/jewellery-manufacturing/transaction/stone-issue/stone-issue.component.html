@@ -6,7 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  (deleteClick)="deleteRecord()" [isViewDelete]="editMode"></modal-header>
 <div class="container-fluid pt-3">
   <div class="row">
     <div class="col-md-12">
@@ -23,13 +24,13 @@
                     class="col-sm-3 col-form-label">Voucher * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="voctype"
+                      <input type="text" matInput formControlName="VOCTYPE"
                         readonly [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 70%">
-                      <input type="text" matInput formControlName="vocno"
+                      <input type="text" matInput formControlName="VOCNO"
                         style="text-align: right;" readonly
                         [readonly]="viewMode" />
                     </mat-form-field>
@@ -61,7 +62,7 @@
                     <mat-form-field style="width: 100%">
                       <input matInput [matDatepicker]="vocDate"
                         [max]="vocMaxDate" name="vocDate"
-                        formControlName="vocDate" placeholder="DD/MM/YYYY"
+                        formControlName="VOCDATE" placeholder="DD/MM/YYYY"
                         DateValidation [readonly]="viewMode" />
                       <mat-datepicker-toggle matSuffix
                         [for]="vocDate"></mat-datepicker-toggle>

@@ -459,8 +459,8 @@ export class MetalReturnDetailsComponent implements OnInit {
       "SPID": "040",
       "parameter": {
         'strUNQ_JOB_ID': this.metalReturnDetailsForm.value.subJobNo,
-        'strBranchCode': this.comService.nullToString(this.metalReturnDetailsForm.value.BRANCH_CODE),
-        'strCurrenctUser': ''
+        'strBranchCode': this.comService.nullToString(this.comService.branchCode),
+        'strCurrenctUser': this.comService.nullToString(this.comService.userName),
       }
     }
 

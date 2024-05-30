@@ -16,13 +16,15 @@ import Swal from 'sweetalert2';
 })
 export class AlloyMasterComponent implements OnInit {
   @Input() content!: any;
+  private subscriptions: Subscription[] = [];
+
   viewMode: boolean = false;
   isDisabled: boolean = false;
   tableData: any[] = [];
+  priceSchemeDetails: any[] = []
+
   isChecked: boolean = false;
-  userName = localStorage.getItem('username');
   currentDate = new Date();
-  private subscriptions: Subscription[] = [];
   image: string | ArrayBuffer | null | undefined;
   url: any;
   isDisableSaveBtn: boolean = false;
@@ -275,7 +277,7 @@ export class AlloyMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupFormSubscription();
-    this.alloyMastereForm.controls.createdBy.setValue(this.userName);
+    this.alloyMastereForm.controls.createdBy.setValue(this.commonService.userName);
     this.setCompanyCurrency()
 
     if (this.content?.FLAG) {
@@ -407,6 +409,9 @@ export class AlloyMasterComponent implements OnInit {
     let form = this.alloyMastereForm.value;
     let weightAvgCostFC = this.commonService.CCToFC(form.currency, event.target.value);
     this.setValueWithDecimal('weightAvgCostFC', weightAvgCostFC, 'AMOUNT')
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   codeEnabled() {
@@ -493,9 +498,9 @@ export class AlloyMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          let data = result.dynamicData[0]
-          if (data?.length > 0) {
-            this.fillPriceSchemeDetails(data)
+          this.priceSchemeDetails = result.dynamicData[0] || []
+          if (this.priceSchemeDetails?.length > 0) {
+            this.fillPriceSchemeDetails()
           } else {
             this.commonService.toastErrorByMsgId('price sheme not found')
           }
@@ -506,33 +511,49 @@ export class AlloyMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  fillPriceSchemeDetails(data: any) {
+  fillPriceSchemeDetails() {
     this.resetAllPriceDetails()
-    data.forEach((item: any, i: any) => {
+    let form = this.alloyMastereForm.value;
+    this.priceSchemeDetails.forEach((item: any, i: any) => {
       //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
       if (item.PRICE_NUMBER == 'PRICE1') {
         this.alloyMastereForm.controls.PRICE1.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price1Fc.setValue(
+          this.commonService.CCToFC(form.price1Lc,form.currencyRate)
+        );
         this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price1Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE2') {
         this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price2Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price2Fc.setValue(
+          this.commonService.CCToFC(form.price2Lc,form.currencyRate)
+        );
         this.alloyMastereForm.controls.price2per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price2Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE3') {
         this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price3Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price3Fc.setValue(
+          this.commonService.CCToFC(form.price3Lc,form.currencyRate)
+        );
         this.alloyMastereForm.controls.price3per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price3Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE4') {
         this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price4Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price4Fc.setValue(
+          this.commonService.CCToFC(form.price4Lc,form.currencyRate)
+        );
         this.alloyMastereForm.controls.price4per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price4Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE5') {
         this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price5Lc.setValue(this.TagPrice_Calculation(item));
+        this.alloyMastereForm.controls.price5Fc.setValue(
+          this.commonService.CCToFC(form.price4Lc,form.currencyRate)
+        );
         this.alloyMastereForm.controls.price5per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price5Lc))
       }
     });
@@ -630,7 +651,9 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls['currency'].setValue(e.CURRENCY_CODE);
     this.alloyMastereForm.controls['currencyRate'].setValue(e.CONV_RATE);
-
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
 
@@ -1282,30 +1305,9 @@ export class AlloyMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          Swal.fire({
-            title: this.commonService.getMsgByID('MSG2239') || 'Saved Successfully',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.alloyMastereForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
-          Swal.fire({
-            title: this.commonService.getMsgByID('MSG2239') || 'Code Already Exists',
-            text: '',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-            }
-          });
+          this.showErrorDialog('Code Already Exists')
         }
         else {
           this.toastr.error('Not saved')
@@ -1322,19 +1324,7 @@ export class AlloyMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
         if (result.status == "Success") {
-          Swal.fire({
-            title: this.commonService.getMsgByID('MSG2186') || 'Updated Successfully',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.alloyMastereForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else {
           this.toastr.error('Not saved')
         }
@@ -1342,10 +1332,45 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**USE: delete Melting Type From Row */
+  afterSave(value:any){
+    if (value) {
+      this.alloyMastereForm.reset()
+      this.tableData = []
+      this.close('reloadMainGrid')
+    }
+  }
+  /**USE: delete worker master from row */
   deleteAlloyMaster() {
-    if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
-    Swal.fire({
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.STOCK_CODE) {
+      this.showDeleteErrorDialog('Please Select data to delete!');
+      return;
+    }
+  
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = 'DiamondStockMaster/DeleteDiamondStockMaster/' + this.alloyMastereForm.value.code;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog(this.content?.STOCK_CODE +' Deleted successfully');
+              } else {
+                this.showErrorDialog(result.message || 'Error please try again');
+              }
+            } else {
+              this.toastr.error('Not deleted');
+            }
+          }, err => {
+            this.commonService.toastErrorByMsgId('network error')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -1353,50 +1378,42 @@ export class AlloyMasterComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'DiamondStockMaster/DeleteDiamondStockMaster/' + this.alloyMastereForm.value.code;
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.alloyMastereForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.alloyMastereForm.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
     });
   }
-
+  
+  showDeleteErrorDialog(message: string): void {
+    Swal.fire({
+      title: '',
+      text: message,
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    });
+  }
+  
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+  
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      // this.afterSave(result.value)
+    });
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
