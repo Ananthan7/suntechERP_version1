@@ -38,6 +38,7 @@ export class AlloyMasterComponent implements OnInit {
   editMode: boolean = false;
   codeEnable: boolean = true;
   isEditable: boolean = false;
+  prefixMasterDetail: any;
   // master search data starts
   codeData: MasterSearchModel = {
     PAGENO: 1,
@@ -712,14 +713,15 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
-          let data = result.response;
+          this.prefixMasterDetail = result.response;
           // this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
-          this.alloyMastereForm.controls.type.setValue(data.TYPE_CODE)
-          this.alloyMastereForm.controls.category.setValue(data.CATEGORY_CODE)
-          this.alloyMastereForm.controls.subCategory.setValue(data.SUBCATEGORY_CODE)
-          this.alloyMastereForm.controls.brand.setValue(data.BRAND_CODE)
-          this.alloyMastereForm.controls.description.setValue(data.DESCRIPTION)
-          this.alloyMastereForm.controls.code.setValue(data.PREFIX_CODE + (parseInt(data.LAST_NO)+1))
+          this.alloyMastereForm.controls.type.setValue(this.prefixMasterDetail.TYPE_CODE)
+          this.alloyMastereForm.controls.category.setValue(this.prefixMasterDetail.CATEGORY_CODE)
+          this.alloyMastereForm.controls.subCategory.setValue(this.prefixMasterDetail.SUBCATEGORY_CODE)
+          this.alloyMastereForm.controls.brand.setValue(this.prefixMasterDetail.BRAND_CODE)
+          this.alloyMastereForm.controls.description.setValue(this.prefixMasterDetail.DESCRIPTION)
+          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO,1)
+          this.alloyMastereForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -731,6 +733,35 @@ export class AlloyMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+   incrementAndPadNumber(input:any, incrementBy:any) {
+    // Convert the input to an integer and increment it
+    let incrementedValue = parseInt(input, 10) + incrementBy;
+  
+    // Convert the incremented value back to a string and pad with leading zeros
+    let paddedValue = incrementedValue.toString().padStart(input.length, '0');
+  
+    return paddedValue;
+  }
+  updatePrefixMaster() {
+    if (!this.prefixMasterDetail) {
+    }
+    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.prefixMasterDetail.PREFIX_CODE
+    let postData =this.prefixMasterDetail
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+         this.commonService.toastSuccessByText('Last number updated')
+        
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  
   checkStockCode(): boolean {
     // if(this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT'){
     //   return true;
@@ -1315,6 +1346,7 @@ export class AlloyMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.status == "Success") {
+          this.updatePrefixMaster()
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
           this.showErrorDialog('Code Already Exists')

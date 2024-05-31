@@ -34,7 +34,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 201,
     SEARCH_FIELD: 'process_code',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
@@ -47,7 +47,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
+    LOOKUPID: 201,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
@@ -89,11 +89,12 @@ export class MetalReturnDetailsComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true
   }
+       
 
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
@@ -142,6 +143,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     KARAT_CODE: [''],
     DIVCODE: [''],
     METAL_STONE: [''],
+    UNQ_JOB_ID: [''],
     FLAG: [null]
   });
 
@@ -207,11 +209,13 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
   setStockCodeCondition() {
     let form = this.metalReturnDetailsForm.value
-    let val = `@strBranch_Code='${form.BRANCH_CODE}',`
-    val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
-    val += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.processCode}',`
-    val += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
-    this.stockCodeData.WHERECONDITION = val
+    let where = `@strBranch_Code='${form.BRANCH_CODE}',`
+    where += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
+    where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.processCode}',`
+    where += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
+    this.stockCodeData.WHERECONDITION = where
+    this.ProcessCodeData.WHERECONDITION = where
+    this.WorkerCodeData.WHERECONDITION = where
   }
   stoneValidate() {
     if (this.calculateNetWt()) {
@@ -247,7 +251,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
   }
   jobnoCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
@@ -532,7 +535,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-
+            this.setStockCodeCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -547,6 +550,7 @@ export class MetalReturnDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+ 
   stockCodeValidate(event: any) {
     if (event.target.value == '') return
     let postData = {

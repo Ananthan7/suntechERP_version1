@@ -299,7 +299,6 @@ export class StoneIssueComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    console.log(data, 'data')
     // modalRef.componentInstance.content = data
     // modalRef.result.then((postData) => {
     //   if (postData) {

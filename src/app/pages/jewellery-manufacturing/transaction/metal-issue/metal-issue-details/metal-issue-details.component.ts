@@ -74,9 +74,10 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "@strProcess NVARCHAR(100),@blnActive INT",
+    WHERECONDITION: "@strProcess='',@blnActive=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
   }
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -234,6 +235,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   processCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.processCode.setValue(e.Process_Code);
     this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.Description);
+    this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
   }
 
 
@@ -472,6 +474,9 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
+            if(data[0].KARAT_CODE != ''){
+            this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION+`AND KARAT_CODE='${data[0].KARAT_CODE}'` 
+            }
             this.setValueWithDecimal('jobPurity',data[0].JOB_PURITY, 'PURITY')
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')
@@ -530,7 +535,10 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-          
+          let purityFlag = this.comService.getCompanyParamValue('ALLOWPURITYCHANGEINMETALISSUE')
+          if(!purityFlag){
+            this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION+`AND PURITY='${data[0].PURITY}'` 
+          }
           this.FillMtlRequiredDetail()
           this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(

@@ -246,9 +246,7 @@ export class StoneIssueDetailComponent implements OnInit {
       return 0;
     }
   }
-  removedata() {
-    this.tableData.pop();
-  }
+
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
       this.comService.toastErrorByMsgId('Job number is required')
@@ -274,9 +272,9 @@ export class StoneIssueDetailComponent implements OnInit {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
+      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
-      "JOB_DATE": this.comService.formatDateTime(form.VOCDATE),
+      "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobnumber),
       "UNQ_JOB_ID": this.comService.nullToString(form.subjobnumber),
       "JOB_DESCRIPTION": this.comService.nullToString(form.subjobDes),
@@ -316,7 +314,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
-      "SIEVE_SET": '' || form.SIEVE_SET,
+      "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
       "SUB_STOCK_CODE": "0",
       "D_REMARKS": '' || this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
