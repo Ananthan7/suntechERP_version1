@@ -774,29 +774,79 @@ export class LabourChargeMasterComponent implements OnInit {
       });
     this.subscriptions.push(Sub)
   }
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
+
+  validateLookupField(event: any, LOOKUPDATA: any, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+  
+    if (event.target.value === '' || this.viewMode) return;
+  
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+  
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`;
     this.commonService.showSnackBarMsg('MSG81447');
+  
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
-          this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+        if (data.length === 0) {
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+          LOOKUPDATA.SEARCH_VALUE = '';
+          if (FORMNAME === 'sieve') {
+            this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+          }
+          return;
+        }
+  
+        const matchedItem = data.find((item: any) => item.CODE === inputValue);
+        if (matchedItem) {
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+          if (FORMNAME === 'sieve') {
+            this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+          if (FORMNAME === 'sieve') {
+            this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+          }
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
+        this.commonService.toastErrorByMsgId('network issue found');
+      });
+  
+    this.subscriptions.push(Sub);
   }
+  
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -872,9 +922,9 @@ export class LabourChargeMasterComponent implements OnInit {
       "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
       "PURITY": this.commonService.emptyToZero(this.metallabourMasterForm.value.purity),
       "COLOR": this.commonService.nullToString(metalForm.color),
-      "FOR_DESIGN": metalForm.forDesignOnly || false,
+      "FOR_DESIGN": true,
       "SIEVEFROM_DESC": diamondForm.sieve_desc,
-      "ON_GROSSWT": metalForm.onGrossWt || false,
+      "ON_GROSSWT": true,
     }
   }
   formSubmit() {
