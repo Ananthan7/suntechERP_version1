@@ -63,7 +63,7 @@
                 (change)="DebitamountChange($event)" />
               </mat-form-field>
 
-              <master-search [MasterSearchData]="debitAmountData" (newRowClick)="debitAmountSelected($event)">
+              <master-search *ngIf="hideDebitLookup" [MasterSearchData]="debitAmountData" (newRowClick)="debitAmountSelected($event)">
               </master-search>
             </span>
             <div class="col-md-6">
