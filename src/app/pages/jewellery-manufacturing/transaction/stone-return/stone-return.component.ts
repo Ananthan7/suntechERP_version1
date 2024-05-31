@@ -23,7 +23,7 @@ export class StoneReturnComponent implements OnInit {
   stoneReturnData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
-  currentDate = new FormControl(new Date());
+  currentDate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   tableRowCount: number = 0;
   detailData: any[] = [];
@@ -71,8 +71,6 @@ export class StoneReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   stonereturnFrom: FormGroup = this.formBuilder.group({
     VOCTYPE: [''],
     VOCNO: [''],
@@ -224,8 +222,7 @@ export class StoneReturnComponent implements OnInit {
   onRowClickHandler(event: any) {
     this.selectRowIndex = (event.dataIndex)
     let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
-    this.openStoneReturnDetails(detailRow)
+    this.openStoneReturnDetails(selectedData)
   }
 
   setValuesToHeaderGrid(DATA: any) {
@@ -334,7 +331,7 @@ export class StoneReturnComponent implements OnInit {
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.commonService.emptyToZero(form.VOCNO),
-      "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
+      "VOCDATE": this.commonService.formatDateTime(new Date(form.VOCDATE)),
       "YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
       "DOCTIME": "",
       "CURRENCY_CODE": this.commonService.nullToString(form.currency),
@@ -350,8 +347,8 @@ export class StoneReturnComponent implements OnInit {
       "BASE_CURR_RATE": this.commonService.nullToString(form.basecurrencyrate),
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": this.commonService.formatDateTime(form.VOCDATE),
-      "SYSTEM_DATE": this.commonService.formatDateTime(form.VOCDATE),
+      "POSTDATE": this.commonService.formatDateTime(this.currentDate),
+      "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,

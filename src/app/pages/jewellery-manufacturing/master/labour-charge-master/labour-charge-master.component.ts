@@ -906,7 +906,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "DIVISION_CODE":  this.commonService.nullToString(diamondForm.divisions),
       "CURRENCY_CODE": this.commonService.nullToString(metalForm.currency),
       "SELLING_PER": this.commonService.emptyToZero(diamondForm.selling),
-      "ACCESSORIES": 0,
+      "ACCESSORIES": diamondForm.accessories ? 1 : 0,
       "CARATWT_FROM": this.commonService.emptyToZero(diamondForm.ctWtFrom),
       "CARATWT_TO": this.commonService.emptyToZero(diamondForm.ctWtTo),
       "SIEVE": diamondForm.sieve,

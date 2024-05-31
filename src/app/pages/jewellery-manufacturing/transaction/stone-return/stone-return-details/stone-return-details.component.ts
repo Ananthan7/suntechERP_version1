@@ -118,25 +118,25 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.CURRENCY_RATE.setValue(this.content.CURRENCY_RATE || this.content.HEADERDETAILS.currencyrate)
     this.stonereturndetailsFrom.controls.SMAN.setValue(this.content.SMAN || this.content.HEADERDETAILS.enterdBy)
 
-    this.stonereturndetailsFrom.controls.jobNumber.setValue(this.content[0].JOB_NUMBER)
-    this.stonereturndetailsFrom.controls.jobDesc.setValue(this.content[0].JOB_DESCRIPTION)
-    this.stonereturndetailsFrom.controls.subjobno.setValue(this.content[0].UNQ_JOB_ID)
-    this.stonereturndetailsFrom.controls.subjobDesc.setValue(this.content[0].JOB_DESCRIPTION)
-    this.stonereturndetailsFrom.controls.designcode.setValue(this.content[0].DESIGN_CODE)
-    this.stonereturndetailsFrom.controls.salesorderno.setValue(this.content[0].PROCESS_NAME)
-    this.stonereturndetailsFrom.controls.process.setValue(this.content[0].PROCESS_CODE)
-    this.stonereturndetailsFrom.controls.processname.setValue(this.content[0].PROCESS_NAME)
-    this.stonereturndetailsFrom.controls.worker.setValue(this.content[0].WORKER_CODE)
-    this.stonereturndetailsFrom.controls.workername.setValue(this.content[0].WORKER_NAME)
-    this.stonereturndetailsFrom.controls.stock.setValue(this.content[0].STOCK_CODE)
-    this.stonereturndetailsFrom.controls.stockdes.setValue(this.content[0].STOCK_DESCRIPTION)
-    this.stonereturndetailsFrom.controls.sieveset.setValue(this.content[0].SIEVE_SET)
+    this.stonereturndetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
+    this.stonereturndetailsFrom.controls.jobDesc.setValue(this.content.JOB_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.subjobno.setValue(this.content.UNQ_JOB_ID)
+    this.stonereturndetailsFrom.controls.subjobDesc.setValue(this.content.JOB_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
+    this.stonereturndetailsFrom.controls.salesorderno.setValue(this.content.PROCESS_NAME)
+    this.stonereturndetailsFrom.controls.process.setValue(this.content.PROCESS_CODE)
+    this.stonereturndetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
+    this.stonereturndetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
+    this.stonereturndetailsFrom.controls.workername.setValue(this.content.WORKER_NAME)
+    this.stonereturndetailsFrom.controls.stock.setValue(this.content.STOCK_CODE)
+    this.stonereturndetailsFrom.controls.stockdes.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
     this.stonereturndetailsFrom.controls.broken.setValue(this.content.JOB_SO_NUMBER)
-    this.stonereturndetailsFrom.controls.pieces.setValue(this.content[0].PCS)
-    this.stonereturndetailsFrom.controls.size.setValue(this.content[0].SIZE)
-    this.stonereturndetailsFrom.controls.sieve.setValue(this.content[0].SIEVE)
-    this.stonereturndetailsFrom.controls.color.setValue(this.content[0].COLOR)
-    this.stonereturndetailsFrom.controls.clarity.setValue(this.content[0].CLARITY)
+    this.stonereturndetailsFrom.controls.pieces.setValue(this.content.PCS)
+    this.stonereturndetailsFrom.controls.size.setValue(this.content.SIZE)
+    this.stonereturndetailsFrom.controls.sieve.setValue(this.content.SIEVE)
+    this.stonereturndetailsFrom.controls.color.setValue(this.content.COLOR)
+    this.stonereturndetailsFrom.controls.clarity.setValue(this.content.CLARITY)
    
   };
 
@@ -155,12 +155,12 @@ export class StoneReturnDetailsComponent implements OnInit {
 
   setPostData(form:any){
     return {
-      "SRNO": this.content[0]?.SRNO || 0,
+      "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
+      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
-      "JOB_DATE": this.comService.formatDateTime(form.VOCDATE),
+      "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobno),
       "UNQ_JOB_ID": this.comService.nullToString(form.jobNumber),
       "JOB_DESCRIPTION": form.jobDesc,
