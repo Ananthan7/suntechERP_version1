@@ -161,7 +161,6 @@ export class StoneReturnDetailsComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-console.log()
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = {
       "SRNO": 0,

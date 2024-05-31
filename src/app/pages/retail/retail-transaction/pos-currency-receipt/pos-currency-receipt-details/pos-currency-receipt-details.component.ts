@@ -31,7 +31,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() receiptData!: any;
   @Input() queryParams!: any;
   viewOnly: boolean = false;
-  hideMasterSearch: boolean = false;
+  hideMasterSearch: boolean = true;
+  hideDebitLookup: boolean = true;
   hideCurrecnySearch: boolean = false;
 
   isCreditcardMode: boolean = false;
@@ -107,7 +108,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     currencyRate: [""],
     amountFc: [""],
     amountCc: [""],
-    creditCardNumber: ['', [Validators.required, Validators.maxLength(16)]],
+    creditCardNumber: [''],
     creditCardName: [""],
     creditCardDate: [new Date()],
     ttNumber: [""],
@@ -403,11 +404,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.resetVatFields();
     this.hideCurrecnySearch = false;
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
-    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT HEAD"]);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT_HEAD"]);
 
     if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Cheque") {
       localStorage.setItem('CH_ACCODE', e.ACCODE);
-      localStorage.setItem('CH_ACHEAD', e["ACCOUNT HEAD"]);
+      localStorage.setItem('CH_ACHEAD', e["ACCOUNT_HEAD"]);
     }
 
     this.DebitamountChange({ target: { value: e.ACCODE } });
@@ -439,6 +440,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   receiptModeSelected(e: any) {
     console.log(e);
     this.hideCurrecnySearch = false;
+    this.hideDebitLookup=false;
     this.resetVatFields();
     const matchedEntry = this.typeCodeArray.find(entry => entry.CREDIT_CODE === e.Credit_Code);
 
@@ -466,6 +468,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.hideMasterSearch = false;
     this.hideCurrecnySearch = true;
     this.isCreditcardMode = false;
+    this.hideDebitLookup=true;
     this.resetVatFields();
   
     switch (event.value) {
@@ -483,6 +486,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       case "Credit Card":
         this.hideMasterSearch = true;
         this.isCreditcardMode = true;
+        this.hideDebitLookup=false;
         this.resetOnModeChange();
      
         break;

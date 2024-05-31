@@ -341,30 +341,30 @@ export class StoneIssueComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  setPostData() {
+  setPostData(form:any) {
     return {
       "MID": 0,
-      "VOCTYPE": this.stoneissueFrom.value.VOCTYPE,
-      "BRANCH_CODE": this.stoneissueFrom.value.BRANCH_CODE,
-      "VOCNO": this.stoneissueFrom.value.VOCNO,
-      "VOCDATE": this.stoneissueFrom.value.VOCDATE,
-      "YEARMONTH": this.stoneissueFrom.value.YEARMONTH,
-      "DOCTIME": (this.stoneissueFrom.value.VOCDATE),
-      "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
-      "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || 0,
+      "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
+      "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
+      "VOCNO": this.comService.emptyToZero(form.VOCNO),
+      "VOCDATE": (form.VOCDATE),
+      "YEARMONTH": this.comService.nullToString(form.YEARMONTH),
+      "DOCTIME": (form.VOCDATE),
+      "CURRENCY_CODE": this.comService.nullToString(form.currency),
+      "CURRENCY_RATE": form.currencyrate || 0,
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "SMAN": this.comService.nullToString(this.stoneissueFrom.value.SMAN),
-      "REMARKS": this.stoneissueFrom.value.narration || "",
+      "SMAN": this.comService.nullToString(form.SMAN),
+      "REMARKS": this.comService.nullToString(form.narration),
       "NAVSEQNO": 0,
       "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "SYSTEM_DATE": (this.stoneissueFrom.value.VOCDATE),
+      "SYSTEM_DATE": (form.VOCDATE),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
@@ -398,7 +398,7 @@ export class StoneIssueComponent implements OnInit {
     }
 
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
-    let postData = this.setPostData()
+    let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.status == "Success") {
@@ -427,7 +427,7 @@ export class StoneIssueComponent implements OnInit {
   update() {
     let FRM = this.stoneissueFrom.value
     let API = `JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/${FRM.BRANCH_CODE}/${FRM.VOCTYPE}/${FRM.VOCNO}/${FRM.YEARMONTH}`
-    let postData = this.setPostData()
+    let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
