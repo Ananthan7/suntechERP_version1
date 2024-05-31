@@ -32,6 +32,7 @@ export class ComponentMasterComponent implements OnInit {
   editMode: boolean = false;
   editableMode: boolean = false;
   viewDisable: boolean = false;
+  prefixMasterDetail: any;
 
   images: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -257,8 +258,9 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
-          let data = result.response;
-          this.componentmasterForm.controls.code.setValue(data.PREFIX_CODE + + (parseInt(data.LAST_NO)+1))
+          this.prefixMasterDetail = result.response;
+          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO,1)
+          this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -268,6 +270,34 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
+    this.subscriptions.push(Sub)
+  }
+  incrementAndPadNumber(input:any, incrementBy:any) {
+    // Convert the input to an integer and increment it
+    let incrementedValue = parseInt(input, 10) + incrementBy;
+  
+    // Convert the incremented value back to a string and pad with leading zeros
+    let paddedValue = incrementedValue.toString().padStart(input.length, '0');
+  
+    return paddedValue;
+  }
+  updatePrefixMaster() {
+    if (!this.prefixMasterDetail) {
+    }
+    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.prefixMasterDetail.PREFIX_CODE
+    let postData =this.prefixMasterDetail
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+         this.commonService.toastSuccessByText('Last number updated')
+        
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
     this.subscriptions.push(Sub)
   }
 
@@ -436,21 +466,6 @@ export class ComponentMasterComponent implements OnInit {
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
   }
-
-
-  //   deleteTableData() {
-  //     console.log(this.selectedIndexes);
-  //     if (this.selectedIndexes.length > 0) {
-  //         this.selectedIndexes.sort((a:number, b:number) => b - a);
-
-  //         this.selectedIndexes.forEach((indexToRemove:number) => {
-  //             this.tableData.splice(indexToRemove, 2);
-  //         });
-  //         this.selectedIndexes = [];
-  //     } else {
-  //         this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-  //     }
-  // }
 
   deleteTableData() {
     console.log('Selected indexes:', this.selectedIndexes);
@@ -975,23 +990,13 @@ export class ComponentMasterComponent implements OnInit {
     
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentmasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
+        if (result.status == "Success") {
+          this.updatePrefixMaster()
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
+        } else if (result.status == "Failed") {
+          this.showErrorDialog('Code Already Exists')
+        }
+        else {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
