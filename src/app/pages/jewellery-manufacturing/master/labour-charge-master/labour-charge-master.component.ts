@@ -431,7 +431,6 @@ export class LabourChargeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.grossWt = true;
     this.codeEnable1 = true;
-    console.log(this.content, 'this.content');
     this.setInitialValues();
     if (this.content.FLAG) {
       this.setFormValues();
@@ -489,25 +488,17 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   onlabourtypeChange() {
-    console.log(' Hi' + this.settingTypeList);
+    this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
-      const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
-      const methodControl = this.diamondlabourMasterForm.get('method');
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
 
-        // settingTypeControl;
-        // methodControl?.enable();
       } else {
-        // settingTypeControl?.disable();
-        // methodControl?.disable();
+        
         this.viewModeSetting = true;
         this.ViewModemethod = true;
-        this.diamondlabourMasterForm.controls.settingType.setValue('');
-        this.diamondlabourMasterForm.controls.method.setValue('');
       }
-      console.log(this.settingTypeList);
     });
   }
 
@@ -594,6 +585,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   private setInitialValues() {
+    this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
     // this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     // this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
@@ -731,8 +723,6 @@ export class LabourChargeMasterComponent implements OnInit {
     size_from = parseFloat(size_from.replace(/[+-]/g, ''));
     size_to = parseFloat(size_to.replace(/[+-]/g, ''));
 
-    console.log(size_from);
-    console.log(size_to);
     // if (data !== 'sizefrom') {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
@@ -935,7 +925,6 @@ export class LabourChargeMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result: any) => {
-        console.log('Server Response:', result);
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -1050,7 +1039,6 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   onforDesignOnlyChange(event: any) {
-    console.log(event);
     if (event.checked === true) {
       this.stockcodeDisable = true;
       this.viewDisable1 = true;
@@ -1100,42 +1088,34 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   DiaCostRatekeyupvalue(e: any) {
-    console.log(e);
     this.displayDiaCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   DiaSellingRatekeyupvalue(e: any) {
-    console.log(e)
     this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   DiaCtWtFromkeyupvalue(e: any) {
-    console.log(e);
     this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   // DiaCtWtTokeyupvalue(e: any) {
-  //   console.log(e);
   //   this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   // }
 
   MetalCostRatekeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   MetalSellingRatekeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   MetalWtFromkeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   MetalWtTokeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
@@ -1227,7 +1207,6 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   unitSelected() {
-    console.log(' Hi' + this.unitList);
     this.metallabourMasterForm.get('metalunitList')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.metallabourMasterForm.get('metalunitList');
       const methodControl = this.metallabourMasterForm.get('onGrossWt');
@@ -1238,7 +1217,6 @@ export class LabourChargeMasterComponent implements OnInit {
         this.grossWt = true;
         this.metallabourMasterForm.controls.onGrossWt.setValue(false);
       }
-      console.log(this.unitList);
     });
   }
 
@@ -1262,8 +1240,6 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   salesChange(data: any) {
-    console.log(data);
-
     if (data == 'metalSelling') {
       this.viewsellingrateMetal = true;
       this.viewsellingMetal = false;
@@ -1280,8 +1256,6 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   salesChangesDia(data: any) {
-    console.log(data);
-
     if (data == 'selling') {
       this.viewsellingrate = true;
       this.viewselling = false;
