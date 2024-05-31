@@ -246,9 +246,7 @@ export class StoneIssueDetailComponent implements OnInit {
       return 0;
     }
   }
-  removedata() {
-    this.tableData.pop();
-  }
+
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
       this.comService.toastErrorByMsgId('Job number is required')
@@ -316,7 +314,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
-      "SIEVE_SET": '' || form.SIEVE_SET,
+      "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
       "SUB_STOCK_CODE": "0",
       "D_REMARKS": '' || this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),

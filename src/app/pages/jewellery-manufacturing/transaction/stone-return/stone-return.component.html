@@ -21,7 +21,7 @@
               <label for="input" class="col-sm-3 col-form-label">Voucher * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                  <input type="text" matInput formControlName="VOCTYPE" [readonly]="viewMode" />
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
@@ -34,7 +34,7 @@
               <label for="input" class="col-sm-3 col-form-label">Voucher Date :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input matInput [matDatepicker]="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY"
+                  <input matInput [matDatepicker]="vocdate" formControlName="VOCDATE" placeholder="DD/MM/YYYY"
                     DateValidation [readonly]="viewMode"/>
                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
@@ -127,7 +127,7 @@
             <div class="col-md-12">
               <div class="d-flex justify-content-start text-start">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openaddstonereturndetails()" (deleteClick)="deleteTableData()">
+                  (addClick)="openStoneReturnDetails()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
@@ -180,3 +180,8 @@
     </form>
   </div>
 </div>
+<ng-template #stoneReturnDetailScreen>
+  <app-stone-return-details [content]="dataToDetailScreen"
+    (saveDetail)="setValuesToHeaderGrid($event)"
+    (closeDetail)="closeDetailScreen()"></app-stone-return-details>
+</ng-template>

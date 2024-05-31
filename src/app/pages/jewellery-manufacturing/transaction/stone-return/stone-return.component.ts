@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -15,7 +15,7 @@ import { StoneReturnDetailsComponent } from './stone-return-details/stone-return
   styleUrls: ['./stone-return.component.scss']
 })
 export class StoneReturnComponent implements OnInit {
-
+  @ViewChild('stoneReturnDetailScreen') public stoneReturnDetailComponent!: NgbModal;
 
   columnhead: any[] = ['SRNO', 'VOCNO', 'VOCTYPE', 'VOCDATE', 'JOB_NO', 'JOB_DATE', 'JOB_SO', 'UNQ_JOB', 'JOB_DE', 'BRANCH'];
   @Input() content!: any;
@@ -23,15 +23,16 @@ export class StoneReturnComponent implements OnInit {
   stoneReturnData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
-  yearMonth?: String;
   currentDate = new FormControl(new Date());
-  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   tableRowCount: number = 0;
   detailData: any[] = [];
   selectRowIndex: any;
   selectedKey: number[] = [];
   selectedIndexes: any = [];
   viewMode: boolean = false;
+  dataToDetailScreen: any;
+  modalReference!: NgbModalRef;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -72,36 +73,63 @@ export class StoneReturnComponent implements OnInit {
   }
 
 
+  stonereturnFrom: FormGroup = this.formBuilder.group({
+    VOCTYPE: [''],
+    VOCNO: [''],
+    VOCDATE: [''],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
+    basecurrency: [''],
+    basecurrencyrate: [''],
+    currency: ['', [Validators.required]],
+    currencyrate: ['', [Validators.required]],
+    worker: [''],
+    workername: [''],
+    remark: [''],
+    enterdBy: [''],
+    enteredByName: [''],
+    process: [''],
+    jobDesc: [''],
+    FLAG: [null]
+  });
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private comService: CommonServiceService,
     private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
-    this.userName = this.comService.userName;
-    this.setCompanyCurrency()
-    this.basesetCompanyCurrency()
-    this.setAllInitialValues()
-    this.setvalues()
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    }
+    this.branchCode = this.commonService.branchCode;
+    this.userName = this.commonService.userName;
+  
     if (this.content?.FLAG) {
-      this.stonereturnFrom.controls.FLAG.setValue(this.content.FLAG)
+      this.setAllInitialValues()
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
+      if (this.content?.FLAG) {
+        this.stonereturnFrom.controls.FLAG.setValue(this.content.FLAG)
+      }
+    }else{
+      this.setFormValues()
     }
   }
+  setFormValues() {
+    if (this.content?.FLAG) return
+    this.stonereturnFrom.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
+    this.stonereturnFrom.controls.VOCDATE.setValue(this.commonService.currentDate)
+    this.stonereturnFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
+    this.stonereturnFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
 
+    this.setCompanyCurrency()
+    this.basesetCompanyCurrency()
+  }
 
   setAllInitialValues() {
-    console.log(this.content)
-    if (!this.content) return
+    if (!this.content?.MID) return
     let API = `JobStoneReturnMasterDJ/GetJobStoneReturnMasterDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -125,7 +153,7 @@ export class StoneReturnComponent implements OnInit {
               })
             });
           } else {
-            this.comService.toastErrorByMsgId('Detail data not found')
+            this.commonService.toastErrorByMsgId('Detail data not found')
           }
           this.stonereturnFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
           this.stonereturnFrom.controls.basecurrencyrate.setValue(data.BASE_CURR_RATE)
@@ -137,6 +165,11 @@ export class StoneReturnComponent implements OnInit {
           this.stonereturnFrom.controls.enteredByName.setValue(data.REMARKS)
           this.stonereturnFrom.controls.enteredByName.setValue(data.REMARKS)
 
+          this.stonereturnFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
+          this.stonereturnFrom.controls.VOCNO.setValue(data.VOCNO)
+          this.stonereturnFrom.controls.VOCDATE.setValue(data.VOCDATE)
+          this.stonereturnFrom.controls.remark.setValue(data.REMARKS)
+          this.stonereturnFrom.controls.enterdBy.setValue(data.SMAN)
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -173,27 +206,18 @@ export class StoneReturnComponent implements OnInit {
     this.stonereturnFrom.controls.basecurrencyrate.setValue(e.CONV_RATE);
   }
 
-  openaddstonereturndetails(data?: any) {
-    console.log(data,'data to child')
-    // if (data) {
-    //   data[0] = this.stonereturnFrom.value;
-    // } else {
-    //   data = [{ HEADERDETAILS: this.stonereturnFrom.value }]
-    // }
-    const modalRef: NgbModalRef = this.modalService.open(StoneReturnDetailsComponent, {
+  openStoneReturnDetails(data?: any) {
+    if (data) {
+      data.HEADERDETAILS = this.stonereturnFrom.value;
+    } else {
+      data = { HEADERDETAILS: this.stonereturnFrom.value }
+    }
+    this.dataToDetailScreen = data;
+    this.modalReference = this.modalService.open(this.stoneReturnDetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
-    });
-    console.log(data, 'data')
-    modalRef.componentInstance.content = data
-    modalRef.result.then((postData) => {
-      if (postData) {
-        console.log('Data from child:', postData);
-        this.stoneReturnData.push(postData);
-        this.setValuesToHeaderGrid(postData);
-      }
     });
   }
 
@@ -201,30 +225,27 @@ export class StoneReturnComponent implements OnInit {
     this.selectRowIndex = (event.dataIndex)
     let selectedData = event.data
     let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
-    this.openaddstonereturndetails(detailRow)
-  }
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    if (detailDataToParent.SRNO) {
-      this.swapObjects(this.stoneReturnData, [detailDataToParent], (detailDataToParent.SRNO - 1))
-    } else {
-      this.tableRowCount += 1
-      detailDataToParent.SRNO = this.tableRowCount
-      // this.tableRowCount += 1
-      // this.content.SRNO = this.tableRowCount
-    }
-    if (detailDataToParent) {
-      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
-    }
-  }
-  swapObjects(array1: any, array2: any, index: number) {
-    // Check if the index is valid
-    if (index >= 0 && index < array1.length) {
-      array1[index] = array2[0];
-    } else {
-      console.error('Invalid index');
-    }
+    this.openStoneReturnDetails(detailRow)
   }
 
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
+    if (detailDataToParent.SRNO != 0) {
+      this.stoneReturnData[detailDataToParent.SRNO - 1] = detailDataToParent
+    } else {
+      detailDataToParent.SRNO = this.stoneReturnData.length + 1
+      this.stoneReturnData.push(detailDataToParent);
+      // this.recalculateSRNO()
+    }
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE') {
+      this.commonService.showSnackBarMsg('Details added successfully')
+    };
+  }
+  closeDetailScreen() {
+    this.modalReference.close()
+  }
   deleteTableData(): void {
     console.log(this.selectedKey, 'data')
     this.selectedKey.forEach((element: any) => {
@@ -244,30 +265,6 @@ export class StoneReturnComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
-  stonereturnFrom: FormGroup = this.formBuilder.group({
-    voctype: [''],
-    VOCNO: [''],
-    vocdate: [''],
-    basecurrency: [''],
-    basecurrencyrate: [''],
-    currency: ['', [Validators.required]],
-    currencyrate: ['', [Validators.required]],
-    worker: [''],
-    workername: [''],
-    remark: [''],
-    enterdBy: [''],
-    enteredByName: [''],
-    process: [''],
-    jobDesc: [''],
-    FLAG: [null]
-  });
-
-  setvalues() {
-    console.log('ss')
-    this.stonereturnFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.stonereturnFrom.controls.vocdate.setValue(this.comService.currentDate)
-
-  }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
     if (event.target?.value) {
@@ -331,34 +328,34 @@ export class StoneReturnComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  setPostData(form:any){
-    return{
-      "MID": 0,
-      "VOCTYPE": this.comService.nullToString(form.voctype),
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.comService.nullToString(form.VOCNO),
-      "VOCDATE": this.comService.nullToString(form.vocdate),
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": this.comService.nullToString(form.vocdate),
-      "CURRENCY_CODE": this.comService.nullToString(form.currency),
-      "CURRENCY_RATE": this.comService.nullToString(form.currencyrate),
+  setPostData(form: any) {
+    return {
+      "MID": this.content?.MID || 0,
+      "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
+      "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
+      "VOCNO": this.commonService.emptyToZero(form.VOCNO),
+      "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
+      "YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
+      "DOCTIME": "",
+      "CURRENCY_CODE": this.commonService.nullToString(form.currency),
+      "CURRENCY_RATE": this.commonService.nullToString(form.currencyrate),
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "SMAN": '',
-      "REMARKS": this.comService.nullToString(form.remark),
+      "SMAN": this.commonService.nullToString(form.enterdBy),
+      "REMARKS": this.commonService.nullToString(form.remark),
       "NAVSEQNO": 0,
-      "BASE_CURRENCY": this.comService.nullToString(form.basecurrency),
-      "BASE_CURR_RATE": this.comService.nullToString(form.basecurrencyrate),
+      "BASE_CURRENCY": this.commonService.nullToString(form.basecurrency),
+      "BASE_CURR_RATE": this.commonService.nullToString(form.basecurrencyrate),
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": this.comService.nullToString(form.vocdate),
-      "SYSTEM_DATE": this.comService.nullToString(form.vocdate),
+      "POSTDATE": this.commonService.formatDateTime(form.VOCDATE),
+      "SYSTEM_DATE": this.commonService.formatDateTime(form.VOCDATE),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": this.comService.userName,
+      "HTUSERNAME": this.commonService.userName,
       "Details": this.stoneReturnData,
     }
   }
@@ -400,22 +397,6 @@ export class StoneReturnComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if (!this.content) return
-    console.log(this.content);
-
-    this.stonereturnFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.stonereturnFrom.controls.VOCNO.setValue(this.content.VOCNO)
-    this.stonereturnFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.stonereturnFrom.controls.basecurrency.setValue(this.content.BASE_CURRENCY)
-    this.stonereturnFrom.controls.basecurrencyrate.setValue(this.content.BASE_CURR_RATE)
-    this.stonereturnFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.stonereturnFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
-    this.stonereturnFrom.controls.remark.setValue(this.content.REMARKS)
-
-
-
-  }
 
 
   update() {
@@ -423,8 +404,8 @@ export class StoneReturnComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${this.branchCode}/${this.stonereturnFrom.value.voctype}/${this.stonereturnFrom.value.VOCNO}/${this.commonService.yearSelected}`
+    let FG = this.stonereturnFrom.value
+    let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${FG.BRANCH_CODE}/${FG.VOCTYPE}/${FG.VOCNO}/${FG.YEARMONTH}`
     let postData = this.setPostData(this.stonereturnFrom.value)
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -476,7 +457,7 @@ export class StoneReturnComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturnFrom.value.branchCode + this.stonereturnFrom.value.voctype + this.stonereturnFrom.value.VOCNO + this.stonereturnFrom.value.yearMonth
+        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturnFrom.value.branchCode + this.stonereturnFrom.value.VOCTYPE + this.stonereturnFrom.value.VOCNO + this.stonereturnFrom.value.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

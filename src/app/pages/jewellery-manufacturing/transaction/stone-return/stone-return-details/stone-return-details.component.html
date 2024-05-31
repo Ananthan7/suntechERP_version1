@@ -6,8 +6,10 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
-
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
+  (changeJobClick)="changeJobClicked()" (continueClick)="formSubmit('CONTINUE')"
+  [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
+  [isViewMore]="false"></modal-header>
 <div class="container-fluid pt-3">
   <form [formGroup]="stonereturndetailsFrom">
     <div class="row">
@@ -18,51 +20,62 @@
           <div class="col-sm-8">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="jobno" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="jobNumber"
+                  [readonly]="viewMode" 
+                  (focusout)="jobNumberValidate($event)"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="subjobno" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="subjobno"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
         </div>
         <div class="row">
-          <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No * :</label>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No
+            * :</label>
           <div class="col-sm-8">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="subjobno" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="subjobno"
+                  [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>
               &nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="subjobDesc" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="subjobDesc"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
         </div>
         <div class="row mb-1">
-          <label for="inputPassword" class="col-sm-2 col-form-label">Design Code :
+          <label for="inputPassword" class="col-sm-2 col-form-label">Design Code
+            :
           </label>
           <div class="col-md-3">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="designcode" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="designcode"
+                  [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>
             </div>
           </div>
-          <label for="inputPassword" class="col-sm-2 col-form-label">Salesorder No :
+          <label for="inputPassword" class="col-sm-2 col-form-label">Salesorder
+            No :
           </label>
           <div class="col-md-3">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="salesorderno" [readonly]="viewMode" class="text-right" NumberOnly
-                />
+                <input type="text" matInput formControlName="salesorderno"
+                  [readonly]="viewMode" class="text-right" NumberOnly />
               </mat-form-field>
             </div>
           </div>
@@ -71,25 +84,29 @@
       <div class="col-md-4 text-center">
         <div class="upload-btn-wrapper">
           <button class="btn btnnew border-dark"></button>
-          <input type="file" name="uploadproduct" class="uploadproduct" [readonly]="viewMode"/>
+          <input type="file" name="uploadproduct" class="uploadproduct"
+            [readonly]="viewMode" />
         </div>
       </div>
     </div>
 
-
     <div class="row">
       <div class="col-md-8">
         <div class="row">
-          <label for="inputPassword" class="col-sm-3 col-form-label">Process * :</label>
+          <label for="inputPassword" class="col-sm-3 col-form-label">Process *
+            :</label>
           <div class="col-sm-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="process" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="process"
+                  [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>&nbsp;
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="processname" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="processname"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -100,12 +117,15 @@
           <div class="col-sm-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="worker"
+                  [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>&nbsp;
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="workername" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="workername"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -116,25 +136,31 @@
           <div class="col-sm-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="stock" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="stockCode"
+                  [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>&nbsp;
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="stock" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="stockCodeDes"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
         </div>
         <div class="row">
-          <label for="inputPassword" class="col-sm-3 col-form-label">Batch ID :</label>
+          <label for="inputPassword" class="col-sm-3 col-form-label">Batch ID
+            :</label>
           <div class="col-sm-5">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="batchid" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="batchid"
+                  [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>
             </div>
           </div>
         </div>
@@ -146,12 +172,14 @@
             <div class="col-sm-1"></div>
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="broken" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="broken"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="broken" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="broken"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -168,11 +196,13 @@
 
       <div class="col-md-4">
         <div class="row">
-          <label for="inputPassword" class="col-sm-4 col-form-label">Location * :</label>
+          <label for="inputPassword" class="col-sm-4 col-form-label">Location *
+            :</label>
           <div class="col-md-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="location" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="location"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -188,10 +218,12 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pieces" [readonly]="viewMode" class="text-right" NumberOnly/>
+                <input type="text" matInput formControlName="pieces"
+                  [readonly]="viewMode" class="text-right" NumberOnly />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
-                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>
             </div>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label">Size :
@@ -199,16 +231,18 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="size" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="size"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
-          <label for="inputPassword" class="col-sm-2 col-form-label">Sieve  :
+          <label for="inputPassword" class="col-sm-2 col-form-label">Sieve :
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="sieve" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="sieve"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -219,7 +253,8 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="carat" [readonly]="viewMode" ThreeDecimalInput class="text-right"/>
+                <input type="text" matInput formControlName="carat"
+                  [readonly]="viewMode" ThreeDecimalInput class="text-right" />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode" ></master-search> -->
@@ -230,7 +265,8 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="color" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="color"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -239,7 +275,8 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="sieveset" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="sieveset"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -250,7 +287,8 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="unitrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
+                <input type="text" matInput formControlName="unitrate"
+                  [readonly]="viewMode" SixDecimalInput class="text-right" />
               </mat-form-field>
             </div>
           </div>
@@ -259,7 +297,8 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="shape" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="shape"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -268,7 +307,8 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="clarity" [readonly]="viewMode"/>
+                <input type="text" matInput formControlName="clarity"
+                  [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
@@ -279,16 +319,19 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="amount" [readonly]="viewMode" AmountDecimalInput class="text-right"/>
+                <input type="text" matInput formControlName="amount"
+                  [readonly]="viewMode" AmountDecimalInput class="text-right" />
               </mat-form-field>
             </div>
           </div>
-          <label for="inputPassword" class="col-sm-2 col-form-label offset-sm-4">Pointer Wt :
+          <label for="inputPassword"
+            class="col-sm-2 col-form-label offset-sm-4">Pointer Wt :
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pointerwt" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
+                <input type="text" matInput formControlName="pointerwt"
+                  [readonly]="viewMode" class="text-right" MetalDecimalInput />
               </mat-form-field>
             </div>
           </div>
