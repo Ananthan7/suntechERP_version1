@@ -316,12 +316,12 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
-      "SIEVE_SET": 'T' || form.SIEVE_SET,
+      "SIEVE_SET": '' || form.SIEVE_SET,
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": 'T' || this.comService.nullToString(form.remarks),
+      "D_REMARKS": '' || this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": "T",
+      "OTHER_ATTR": "",
     }
   }
   /**use: to save data to grid*/

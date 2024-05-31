@@ -58,33 +58,34 @@ export class MetalIssueDetailsComponent implements OnInit {
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 253,
     SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Process Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Process_Code<> ''",
+    WHERECONDITION: `@strType='true',@strWorker='',@strCurrentUser='${this.comService.userName}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
   }
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
+    LOOKUPID: 254,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: "@strProcess NVARCHAR(100),@blnActive INT",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 201,
+    LOOKUPID: 51,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "DIVISION='G' AND SUBCODE=0",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true
@@ -238,10 +239,9 @@ export class MetalIssueDetailsComponent implements OnInit {
 
 
   workerCodeSelected(e: any) {
-    console.log(e);
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
     this.metalIssueDetailsForm.controls.workerCodeDes.setValue(e.WORKER_CODE);
-
+    this.processCodeData.WHERECONDITION = `@strType='true',@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
 
 
@@ -367,7 +367,9 @@ export class MetalIssueDetailsComponent implements OnInit {
       "TO_STOCK_DESCRIPTION": this.comService.nullToString(form.toStockCodeDes),
       "PUDIFF": this.comService.emptyToZero(form.purityDiff),
       "JOB_PURITY": this.comService.emptyToZero(form.jobPurity),
-      "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT
+      "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
+      "TO_DIVCODE": this.comService.nullToString(form.DIVCODE),
+      "TO_PURITY": this.comService.nullToString(form.PURITY)
     }
   }
   submitValidations(form: any) {
@@ -501,7 +503,6 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          this.tableData = data
           this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
           this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
@@ -530,6 +531,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
           
+          this.FillMtlRequiredDetail()
           this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
@@ -593,7 +595,27 @@ export class MetalIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  FillMtlRequiredDetail(){
+    let postData = {
+      "SPID": "056",
+      "parameter": {
+        'strjob_Number': this.metalIssueDetailsForm.value.jobNumber,
+        'strUnq_Job_Id': this.metalIssueDetailsForm.value.subJobNo,
+        'strBranch_Code': this.comService.nullToString(this.branchCode),
+      }
+    }
 
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          this.tableData = result.dynamicData[0]
+        }
+      }
+    )
+    this.subscriptions.push(Sub)
+  }
 
 
 }

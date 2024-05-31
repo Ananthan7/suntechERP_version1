@@ -85,7 +85,6 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
   metalReturnForm: FormGroup = this.formBuilder.group({
-
     VOCTYPE: ['', [Validators.required]],
     VOCNO: [''],
     vocDate: [''],
@@ -97,7 +96,9 @@ export class MetalReturnComponent implements OnInit {
     REMARKS: [''],
     FLAG: [null],
     YEARMONTH: [''],
-    BRANCH_CODE: ['']
+    BRANCH_CODE: [''],
+    CURRENCY_CODE: [''],
+    CURRENCY_RATE: ['']
   });
 
   constructor(
@@ -134,6 +135,9 @@ export class MetalReturnComponent implements OnInit {
     this.metalReturnForm.controls.vocDate.setValue(this.currentDate)
     this.metalReturnForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.metalReturnForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.metalReturnForm.controls.CURRENCY_CODE.setValue(this.commonService.compCurrency)
+    let currRate = this.commonService.getCurrecnyRate(this.commonService.compCurrency)
+    this.metalReturnForm.controls.CURRENCY_RATE.setValue(currRate)
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -275,21 +279,19 @@ export class MetalReturnComponent implements OnInit {
     })
   }
 
-  setPostData() {
-    let form = this.metalReturnForm.value
-    let currRate = this.commonService.getCurrecnyRate(this.commonService.compCurrency)
-    console.log(form);
-
+  setPostData(form:any) {
+    console.log(form,'form');
+    
     return {
       "MID": this.commonService.emptyToZero(this.content?.MID),
       "VOCTYPE": form.VOCTYPE,
       "BRANCH_CODE": form.BRANCH_CODE,
       "VOCNO": this.commonService.emptyToZero(form.VOCNO),
-      "VOCDATE": this.commonService.formatDateTime(new Date(form.vocDate)),
+      "VOCDATE": this.commonService.formatDateTime(form.vocDate),
       "YEARMONTH": form.YEARMONTH,
-      "DOCTIME": this.commonService.formatDateTime(new Date(form.vocDate)),
-      "CURRENCY_CODE": this.commonService.compCurrency,
-      "CURRENCY_RATE": this.commonService.emptyToZero(currRate),
+      "DOCTIME": this.commonService.formatDateTime(form.vocDate),
+      "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY_CODE),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.CURRENCY_RATE),
       "METAL_RATE_TYPE": "",
       "METAL_RATE": 0,
       "TOTAL_AMOUNTFC_METAL": 0,
@@ -307,7 +309,7 @@ export class MetalReturnComponent implements OnInit {
       "FIX_UNFIX": true,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "SYSTEM_DATE": "2023-10-06T11:27:36.260Z",
+      "SYSTEM_DATE": this.commonService.formatDateTime(form.vocDate),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
@@ -326,7 +328,7 @@ export class MetalReturnComponent implements OnInit {
     }
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
-    let postData = this.setPostData()
+    let postData = this.setPostData(this.metalReturnForm.value)
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -360,7 +362,7 @@ export class MetalReturnComponent implements OnInit {
   updateMeltingType() {
     let form = this.metalReturnForm.value
     let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
-    let postData = this.setPostData()
+    let postData = this.setPostData(this.metalReturnForm.value)
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
