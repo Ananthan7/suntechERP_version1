@@ -32,6 +32,7 @@ export class ComponentMasterComponent implements OnInit {
   editMode: boolean = false;
   editableMode: boolean = false;
   viewDisable: boolean = false;
+  prefixMasterDetail: any;
 
   images: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -257,8 +258,9 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
-          let data = result.response;
-          this.componentmasterForm.controls.code.setValue(data.PREFIX_CODE + + (parseInt(data.LAST_NO)+1))
+          this.prefixMasterDetail = result.response;
+          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO,1)
+          this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -268,6 +270,81 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
+    this.subscriptions.push(Sub)
+  }
+  incrementAndPadNumber(input:any, incrementBy:any) {
+    // Convert the input to an integer and increment it
+    let incrementedValue = parseInt(input, 10) + incrementBy;
+  
+    // Convert the incremented value back to a string and pad with leading zeros
+    let paddedValue = incrementedValue.toString().padStart(input.length, '0');
+  
+    return paddedValue;
+  }
+  updatePrefixMaster() {
+    if (!this.prefixMasterDetail) {
+    }
+    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.prefixMasterDetail.PREFIX_CODE
+    let postData =this.prefixMasterDetail
+   
+    // {
+    //   "PREFIX_CODE": this.prefixMasterDetail.PREFIX_CODE,
+    //   "DESCRIPTION": this.prefixMasterDetail.DESCRIPTION,
+    //   "LAST_NO": this.prefixMasterDetail.LAST_NO,
+    //   "CURRENCY_CODE": "",
+    //   "CONV_RATE": 0,
+    //   "COST_CODE": " ",
+    //   "CATEGORY_CODE": " ",
+    //   "SUBCATEGORY_CODE": " ",
+    //   "BRAND_CODE": " ",
+    //   "TYPE_CODE": " ",
+    //   "COUNTRY_CODE": " ",
+    //   "MID": 0,
+    //   "DIVISION": "s",
+    //   "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
+    //   "PM_BRANCHCODE": " ",
+    //   "JOB_PREFIX": this.prefixMasterDetail.JOB_PREFIX,
+    //   "SETREF_PREFIX": this.prefixMasterDetail.SETREF_PREFIX,
+    //   "BRANCH_CODE":this.prefixMasterDetail.BRANCH_CODE,
+    //   "BOIL_PREFIX": this.prefixMasterDetail.BOIL_PREFIX,
+    //   "SCHEME_PREFIX":this.prefixMasterDetail.SCHEME_PREFIX,
+    //   "UDF1":this.prefixMasterDetail.UDF1,
+    //   "UDF2":this.prefixMasterDetail.UDF2,
+    //   "UDF3":this.prefixMasterDetail.UDF3,
+    //   "UDF4":this.prefixMasterDetail.UDF4,
+    //   "UDF5":this.prefixMasterDetail.UDF5,
+    //   "UDF6":this.prefixMasterDetail.UDF6,
+    //   "UDF7":this.prefixMasterDetail.UDF7,
+    //   "UDF8":this.prefixMasterDetail.UDF8,
+    //   "UDF9":this.prefixMasterDetail.UDF9,
+    //   "UDF10":this.prefixMasterDetail.UDF10,
+    //   "UDF11":this.prefixMasterDetail.UDF11,
+    //   "UDF12":this.prefixMasterDetail.UDF12,
+    //   "UDF13":this.prefixMasterDetail.UDF13,
+    //   "UDF14":this.prefixMasterDetail.UDF14,
+    //   "UDF15":this.prefixMasterDetail.UDF15,
+    //   "TAG_WT":this.prefixMasterDetail.TAG_WT,
+    //   "COMP_PREFIX": this.prefixMasterDetail.COMP_PREFIX,
+    //   "DESIGN_PREFIX":this.prefixMasterDetail.DESIGN_PREFIX,
+    //   "REFINE_PREFIX":this.prefixMasterDetail.REFINE_PREFIX,
+    //   "SUBLEDGER_PREFIX": this.prefixMasterDetail.SUBLEDGER_PREFIX,
+    //   "SUFFIX_CODE":this.prefixMasterDetail.SUFFIX_CODE,
+    //   "HSN_CODE":this.prefixMasterDetail.HSN_CODE,
+
+    // }
+
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+         this.commonService.toastSuccessByText('Last number updated')
+        
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
     this.subscriptions.push(Sub)
   }
 
@@ -975,23 +1052,13 @@ export class ComponentMasterComponent implements OnInit {
     
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentmasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
+        if (result.status == "Success") {
+          this.updatePrefixMaster()
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
+        } else if (result.status == "Failed") {
+          this.showErrorDialog('Code Already Exists')
+        }
+        else {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
