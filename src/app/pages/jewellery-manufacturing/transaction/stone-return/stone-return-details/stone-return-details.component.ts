@@ -213,7 +213,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "PICTURE_NAME": "",
       "RET_TO": "",
       "ISMISSING": 0,
-      "SIEVE_SET":  form.sieveset || "",
+      "SIEVE_SET": "0",
       "SUB_STOCK_CODE": ""
     }
   }

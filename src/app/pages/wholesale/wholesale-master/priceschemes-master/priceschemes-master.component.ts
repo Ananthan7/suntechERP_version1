@@ -264,17 +264,13 @@ export class PriceschemesMasterComponent implements OnInit {
       return;
     }
 
-    console.log(this.priceSchemaMasterForm.value.price4);
-    console.log(this.priceSchemaMasterForm.value.price5);
-
     if (this.priceSchemaMasterForm.value.price5 !== undefined && this.priceSchemaMasterForm.value.price4 == '') {
-
       this.toastr.error('Price 4 cannot be empty');
       return;
     }
 
     let API = 'PriceSchemeMaster/InsertPriceSchemeMaster';
-    let postData = this.createPostData();
+    let postData = this.createPostData(this.priceSchemaMasterForm.value);
 
     try {
       this.dataService.postDynamicAPI(API, postData)
@@ -307,7 +303,7 @@ export class PriceschemesMasterComponent implements OnInit {
     }
 
     let API = 'PriceSchemeMaster/UpdatePriceSchemeMaster/' + this.content.MID;
-    let postData = this.createPostData();
+    let postData = this.createPostData(this.priceSchemaMasterForm.value);
 
     try {
       this.dataService.putDynamicAPI(API, postData)
@@ -352,13 +348,13 @@ export class PriceschemesMasterComponent implements OnInit {
           if (result.response) {
             let data = result.response
 
-            this.priceSchemaMasterForm.controls.priceCode.setValue(data.PRICE_CODE)
+            this.priceSchemaMasterForm.controls.priceCode.setValue(data.PRICE_CODE?.toUpperCase())
             this.priceSchemaMasterForm.controls.priceDescription.setValue((data.PRICE_DESCRIPTION).toUpperCase())
-            this.priceSchemaMasterForm.controls.price1.setValue(data.PRICE1)
-            this.priceSchemaMasterForm.controls.price2.setValue(data.PRICE2)
-            this.priceSchemaMasterForm.controls.price3.setValue(data.PRICE3)
-            this.priceSchemaMasterForm.controls.price4.setValue(data.PRICE4)
-            this.priceSchemaMasterForm.controls.price5.setValue(data.PRICE5)
+            this.priceSchemaMasterForm.controls.price1.setValue(data.PRICE1?.toUpperCase())
+            this.priceSchemaMasterForm.controls.price2.setValue(data.PRICE2?.toUpperCase())
+            this.priceSchemaMasterForm.controls.price3.setValue(data.PRICE3?.toUpperCase())
+            this.priceSchemaMasterForm.controls.price4.setValue(data.PRICE4?.toUpperCase())
+            this.priceSchemaMasterForm.controls.price5.setValue(data.PRICE5?.toUpperCase())
 
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
@@ -394,16 +390,16 @@ export class PriceschemesMasterComponent implements OnInit {
     }
   }
 
-  createPostData() {
+  createPostData(form:any) {
     return {
-      "PRICE_CODE": this.priceSchemaMasterForm.value.priceCode.toUpperCase(),
-      "PRICE_DESCRIPTION": this.priceSchemaMasterForm.value.priceDescription.toUpperCase(),
-      "PRICE1": this.priceSchemaMasterForm.value.price1 || "",
-      "PRICE2": this.priceSchemaMasterForm.value.price2 || "",
-      "PRICE3": this.priceSchemaMasterForm.value.price3 || "",
-      "PRICE4": this.priceSchemaMasterForm.value.price4 || "",
-      "PRICE5": this.priceSchemaMasterForm.value.price5 || "",
-      "MID": this.content ? this.content.MID : 0,
+      "PRICE_CODE": this.commonService.nullToString(form.priceCode?.toUpperCase()),
+      "PRICE_DESCRIPTION": this.commonService.nullToString(form.priceDescription?.toUpperCase()),
+      "PRICE1": this.commonService.nullToString(form.price1?.toUpperCase()),
+      "PRICE2": this.commonService.nullToString(form.price2?.toUpperCase()),
+      "PRICE3": this.commonService.nullToString(form.price3?.toUpperCase()),
+      "PRICE4": this.commonService.nullToString(form.price4?.toUpperCase()),
+      "PRICE5": this.commonService.nullToString(form.price5?.toUpperCase()),
+      "MID": this.content ? this.content?.MID : 0,
     };
   }
 
@@ -411,7 +407,7 @@ export class PriceschemesMasterComponent implements OnInit {
     if (result.response) {
       if (result.status == "Success") {
         Swal.fire({
-          title: result.message || 'Success',
+          title: this.commonService.getMsgByID('MSG2443') || 'Success',
           text: '',
           icon: 'success',
           confirmButtonColor: '#336699',
