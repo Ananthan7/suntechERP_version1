@@ -78,7 +78,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     WHERECONDITION: "@strProcess='',@blnActive=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,

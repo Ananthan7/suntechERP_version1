@@ -39,7 +39,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  subJobNoCodeData: MasterSearchModel = {
+  JobNoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 46,
@@ -49,6 +49,56 @@ export class StoneReturnDetailsComponent implements OnInit {
     WHERECONDITION: "job_number<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+  subJobNoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 258,
+    SEARCH_FIELD: 'UNQ_JOB_ID',
+    SEARCH_HEADING: 'Sub Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `BRANCH_CODE='${this.comService.branchCode}' AND ISNULL(PROD_REF,0)=0`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 255,
+    SEARCH_FIELD: 'Process_Code',
+    SEARCH_HEADING: 'Process Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `@strProcessCode='',@strSubJobNumber='',@strCurrentUser='${this.comService.userName}',@strBranchCode='${this.comService.branchCode}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+  }
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 256,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `@strWorkerCode='',@strProcessCode='',@strSubJobNumber='',@strCurrentUser='${this.comService.userName}',@strBranchCode='${this.comService.branchCode}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+  }
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 257,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `@strProcessCode='',@strWorkerCode='',@strSubJobNumber='',@strBranchCode='${this.comService.branchCode}',@strStockCode=''`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   stonereturndetailsFrom: FormGroup = this.formBuilder.group({
     jobNumber: ['',[Validators.required]],
@@ -140,12 +190,63 @@ export class StoneReturnDetailsComponent implements OnInit {
    
   };
 
-  subJobNoCodeSelected(e:any){
-    this.stonereturndetailsFrom.controls.subjobno.setValue(e.job_number);
-    this.stonereturndetailsFrom.controls.subjobDesc.setValue(e.job_description);
+  JobNumberSelected(e:any){
     this.stonereturndetailsFrom.controls.jobNumber.setValue(e.job_number);
     this.stonereturndetailsFrom.controls.jobDesc.setValue(e.job_description);
+    this.subJobNoCodeData.WHERECONDITION += `AND JOB_NUMBER = '${e.job_number} AND ISNULL(PROD_REF,0)=0'`
     this.jobNumberValidate({ target: { value: e.job_number } })
+  }
+  subJobNoCodeSelected(e:any){
+    this.stonereturndetailsFrom.controls.subjobno.setValue(e.UNQ_JOB_ID);
+    this.stonereturndetailsFrom.controls.subjobDesc.setValue(e.DESCRIPTION);
+    this.subJobNoCodeData.WHERECONDITION += `AND UNQ_JOB_ID = '${e.UNQ_JOB_ID}'`
+    this.setProcessCodeWhereCondition()
+    this.setWorkerCodeWhereCondition()
+    this.setStockCodeWhereCondition()
+    
+  }
+  processCodeSelected(e: any) {
+    this.stonereturndetailsFrom.controls.process.setValue(e.Process_Code);
+    this.stonereturndetailsFrom.controls.processname.setValue(e.Description);
+    this.setProcessCodeWhereCondition()
+    this.setStockCodeWhereCondition()
+    this.setWorkerCodeWhereCondition()
+  }
+
+  workerCodeSelected(e: any) {
+    this.stonereturndetailsFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.stonereturndetailsFrom.controls.workername.setValue(e.DESCRIPTION);
+    this.setProcessCodeWhereCondition()
+    this.setStockCodeWhereCondition()
+  }
+
+  stockCodeSelected(e: any) {
+    this.stonereturndetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
+    this.stonereturndetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
+    this.stonereturndetailsFrom.controls.DIVCODE.setValue(e.Item);
+  }
+  setProcessCodeWhereCondition(){
+    let WHERECONDITION = `@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
+    WHERECONDITION+=`@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
+    WHERECONDITION+=`@strCurrentUser='${this.comService.userName}',`
+    WHERECONDITION+=`@strBranchCode='${this.comService.branchCode}'`,
+    this.processCodeData.WHERECONDITION = WHERECONDITION
+  }
+  setWorkerCodeWhereCondition(){
+    let WHERECONDITION = `@strWorkerCode='${this.stonereturndetailsFrom.value.worker}',`
+    WHERECONDITION+=`@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
+    WHERECONDITION+=`@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
+    WHERECONDITION+=`@strCurrentUser='${this.comService.userName}',`
+    WHERECONDITION+=`@strBranchCode='${this.comService.branchCode}'`
+    this.workerCodeData.WHERECONDITION = WHERECONDITION
+  }
+  setStockCodeWhereCondition(){
+    let WHERECONDITION =`@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
+    WHERECONDITION+=`@strWorkerCode='${this.stonereturndetailsFrom.value.worker}',`
+    WHERECONDITION+=`@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
+    WHERECONDITION+=`@strBranchCode='${this.comService.branchCode}'`
+    WHERECONDITION+=`@strStockCode='${this.stonereturndetailsFrom.value.stock}',`
+    this.stockCodeData.WHERECONDITION = WHERECONDITION
   }
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -213,7 +314,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "PICTURE_NAME": "",
       "RET_TO": "",
       "ISMISSING": 0,
-      "SIEVE_SET": "0",
+      "SIEVE_SET": "",
       "SUB_STOCK_CODE": ""
     }
   }
@@ -338,7 +439,8 @@ jobNumberValidate(event: any) {
           this.stonereturndetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
           this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
 
-
+          this.setProcessCodeWhereCondition()
+          this.setWorkerCodeWhereCondition()
           this.subJobNumberValidate()
         } else {
           this.comService.toastErrorByMsgId('MSG1531')
