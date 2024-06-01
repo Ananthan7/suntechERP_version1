@@ -190,7 +190,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Number:</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input [readonly]="viewOnly" type="text" matInput formControlName="chequeNumber" />
+                <input [readonly]="viewOnly" type="text" [maxLength]="10" matInput formControlName="chequeNumber" />
               </mat-form-field>
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Date:</label>
@@ -206,13 +206,13 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Drawn Bank:</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input [readonly]="viewOnly" type="text" matInput formControlName="chequeDrawnBank" />
+                <input [readonly]="viewOnly" type="text" [maxLength]="6" matInput formControlName="chequeDrawnBank" />
               </mat-form-field>
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Deposit Bank:</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input [readonly]="viewOnly" type="text" matInput formControlName="chequeDepositBank" />
+                <input [readonly]="true" type="text"  matInput formControlName="chequeDepositBank" />
               </mat-form-field>
             </div>
           </div>

@@ -833,6 +833,8 @@ export class SalesEstimationComponent implements OnInit {
             fcn_customer_id_number: ['', Validators.required],
             fcn_customer_id_type: ['', Validators.required],
             fcn_customer_exp_date: ['',],
+            tourVatRefuncYN: ['',],
+            tourVatRefundNo: ['',],
         });
 
         this.vocDataForm = this.formBuilder.group({
@@ -1231,14 +1233,21 @@ export class SalesEstimationComponent implements OnInit {
     getRetailEstimationMaster(data: any) {
         this.snackBar.open('Loading...');
         //   this.suntechApi.getRetailEstimationMaster(data)
-        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}`
+        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}/Mid=${data.MID}`
         this.suntechApi.getDynamicAPI(API).subscribe((res) => {
             this.snackBar.dismiss();
-            const posCustomer = res.response.customer;
-            const retailSaleData = res.response.retailSales;
-            const retailSReturnData = res.response.retailsReturn;
-            const metalPurchaseData = res.response.metalPurchase;
+            const posCustomer = res.response.posCustomer;
+            const retailSaleData = res.response.retailEstimation;
+            const retailSReturnData = res.response.retailSReturnData;
+            const metalPurchaseData = res.response.metalPurchaseData;
             this.receiptDetailsList = res.response.retailReceipt;
+
+
+            // const posCustomer = res.response.customer;
+            // const retailSaleData = res.response.retailSales;
+            // const retailSReturnData = res.response.retailsReturn;
+            // const metalPurchaseData = res.response.metalPurchase;
+            // this.receiptDetailsList = res.response.retailReceipt;
             this.sumTotalValues();
             console.log('===============getRetailEstimationMaster=====================');
             console.log(res);
@@ -2687,7 +2696,7 @@ export class SalesEstimationComponent implements OnInit {
         this.newLineItem.STOCK_CODE = value.STOCK_CODE;
         this.newLineItem.DIVISION = value.DIVISION_CODE;
         this.newLineItem.HSN_CODE = value.HSNCODE;
-        this.newLineItem.GST_CODE = value.VATCODE;
+        this.newLineItem.GST_CODE = value.GST_CODE;
         this.newLineItem.MAIN_STOCK_CODE = value.MAINSTOCKCODE;// changed at 16/3/2024
         // this.newLineItem.MAIN_STOCK_CODE = value.MainStockCode;
         console.log('edit af data', value)
@@ -8090,81 +8099,12 @@ export class SalesEstimationComponent implements OnInit {
               "POSKNOWNABOUT": 0
             },
             retailReceipt: this.receiptDetailsList,
-            // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
-            metalPurchase: this.metalPurchaseDataPost,
-            retailsReturn: this.retailSReturnDataPost,
             retailEstimation: this.retailSalesDataPost,
+            // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
+            metalPurchaseData: this.metalPurchaseDataPost,
+            retailSReturnData: this.retailSReturnDataPost,
+            
     
-            "additionalInfo": {
-              "giftInfo": [
-                {
-                  "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type || '',
-                  "GIFT_CODE": this.giftTypeOptions.find((e: any) => e.value == this.lineItemForm.value.fcn_li_gift_type)
-                }
-              ]
-            },
-            "doctranslog": [ // doubt
-              {
-                "MID": 0,
-                "VOCTYPE": this.vocType,
-                "REFMID": this.vocDataForm.value.fcn_voc_no,
-                "USERNAME": this.strUser,
-                "MODE": this.posMode, // ADD,EDIT,DELETE
-                "DATETIME": this.comFunc.cDateFormat(new Date()),
-                "REMARKS": "", // reason
-                "SYSTEMNAME": "",
-                "VOCNO": this.vocDataForm.value.fcn_voc_no || 0,
-                "VOCDATE": this.comFunc.cDateFormat(this.vocDataForm.value.vocdate),
-                "BRANCH_CODE": this.strBranchcode,
-                "MODECHECKED": false,
-                "FROM_BRANCH_CODE": this.strBranchcode,
-                "AUTH_TOTAL_AMT": 0,
-                "AUTH_MAKING_AMT": 0,
-                "AUTH_METAL_AMT": 0,
-                "AUTH_GROSSWT": 0,
-                "AUTH_PUREWT": 0,
-                "TVMODECHECKED": false,
-                "STOCK_CODE": "",
-                "YEARMONTH": this.baseYear,
-                "UNIQUEID": "",
-                "GROUPSUMMARY": "",
-                "PRINTMODECHECKED": false,
-                "PARTY_CODE": "",
-                "TRANS_REMARKS": "",
-                "TOTAL_AMOUNTCC": 0,
-                "AUTHORISED_TIME": this.comFunc.cDateFormat(new Date()),
-                "AUTHORISED_PERSON": "",
-                "EXEVERSIONMONTHYEAR": ""
-              }
-            ]
-            // "transattachment": [
-            //   {
-            //     "VOCNO": 0,
-            //     "VOCTYPE": "string",
-            //     "VOCDATE": "2023-12-22T05:22:31.297Z",
-            //     "REFMID": 0,
-            //     "SRNO": 0,
-            //     "REMARKS": "string",
-            //     "ATTACHMENT_PATH": "string",
-            //     "UNIQUEID": "string",
-            //     "CODE": "string",
-            //     "ATTACH_TYPE": "string",
-            //     "EXPIRE_DATE": "2023-12-22T05:22:31.297Z",
-            //     "BRANCH_CODE": "string",
-            //     "YEARMONTH": "string",
-            //     "DOC_TYPE": "string",
-            //     "SUBLED_CODE": "string",
-            //     "DOC_ACTIVESTATUS": true,
-            //     "DOC_LASTRENEWBY": "string",
-            //     "DOC_NEXTRENEWDATE": "2023-12-22T05:22:31.297Z",
-            //     "DOC_LASTRENEWDATE": "2023-12-22T05:22:31.297Z",
-            //     "DOCUMENT_DATE": "2023-12-22T05:22:31.297Z",
-            //     "DOCUMENT_NO": "string",
-            //     "FROM_KYC": true,
-    
-    
-            //   }
-            // ]
     
           };
           this.isSaved = true;
@@ -8227,7 +8167,7 @@ export class SalesEstimationComponent implements OnInit {
                   if (res.status == 'SUCCESS') {
                     // this.close('reloadMainGrid');
     
-                    this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
+                    this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailEstimation.VOCNO);
     
                     console.log('==================tourVatRefuncYN==================');
                     const traNo = this.customerDataForm.value.tourVatRefundNo || '';
@@ -8495,16 +8435,7 @@ export class SalesEstimationComponent implements OnInit {
       }
 
     addNew() {
-        if (this.router.url.includes('edit-estimation')) this.router.navigateByUrl('/add-estimation');
-        if (this.router.url.includes('view-estimation')) this.router.navigateByUrl('/add-estimation');
-        else location.reload();
-
-        // location.reload();
-        // this.router.navigateByUrl('/add-estimation');
-        // let currentUrl = this.router.url;
-        // this.router.navigateByUrl('/add-estimation', { skipLocationChange: true }).then(() => {
-        //   this.router.navigate([currentUrl]);
-        // });
+        this.modalService.dismissAll('OpenModal');
     }
     backToList() {
         this.router.navigateByUrl('/pos');
@@ -10382,6 +10313,7 @@ export class SalesEstimationComponent implements OnInit {
             new Date(this.vocDataForm.value.vocdate).toISOString()
           ),
           YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+          
           PARTYNAME: this.customerDataForm.value.fcn_customer_name,
           // "PARTYNAME": "Urwashi Jani",
           TEL1: this.customerDetails?.TEL1 || '',
@@ -10630,10 +10562,10 @@ export class SalesEstimationComponent implements OnInit {
           GST_TOTALFC: 0,
           GST_TOTALCC: 0,
           GST_STATE_CODE: '',
-          PANNO: this.customerDetails.PANCARDNO,
+          
           GST_NUMBER: '',
           TRA_ID_TYPE: '',
-          POSCUSTIDNO: this.customerDetails.POSCUSTIDNO,
+        
           POS_CREDITLIMIT_AUTHORIZED_USER: '',
           POS_CREDITLIMIT_AUTHORIZED_REMARK: '',
           TOTALCESS_AMOUNTFC: 0,
@@ -10656,8 +10588,14 @@ export class SalesEstimationComponent implements OnInit {
           "DTREMARKS": "",
           "GROUPREF": "",
           "NEWMID": 0,
+
+          RSCUSTIDNO:'',
+          POS_REFERENCE:'',
+          ESTIMATION_STATUS:'',
+          PANNO: this.customerDetails.PANCARDNO?this.customerDetails.PANCARDNO:'',
+          POSCUSTIDNO: this.customerDetails.POSCUSTIDNO?this.customerDetails.POSCUSTIDNO:'',
     
-          RetailDetails: this.currentLineItems,
+          estimationDetail: this.currentLineItems,
         };
         console.log('====================================');
         console.log(this.retailSalesDataPost);
@@ -10814,7 +10752,6 @@ export class SalesEstimationComponent implements OnInit {
           GENSEQNO: 0, //need
           ShipmentCompany: '',
           Shipmentport: '',
-          POSCUSTIDNO: this.customerDetails.POSCUSTIDNO,
           HVAT_AMOUNT_CC: 0,
           HVAT_AMOUNT_FC: 0,
           HTOTALAMOUNTWITHVAT_CC: 0,
@@ -10923,7 +10860,6 @@ export class SalesEstimationComponent implements OnInit {
           // TOTSTAMP_AMTCC: '0.000',
           // TOTSTAMP_PARTYAMTFC: '0.000',
           // REFPURIMPORT: '',
-          // BOE_EXPIRY_DATE: '01/01/1900 12:00:00 AM',
           // H_BILLOFENTRYREF: '',
           // SUB_LED_ACCODE: '',
           // ACTIVITY_CODE: '',
@@ -11019,7 +10955,6 @@ export class SalesEstimationComponent implements OnInit {
           'TOTSTAMP_AMTCC': '0.000',
           'TOTSTAMP_PARTYAMTFC': '0.000',
           'REFPURIMPORT': '',
-          'BOE_EXPIRY_DATE': this.dummyDate,
           'H_BILLOFENTRYREF': '',
           'SUB_LED_ACCODE': '',
           'ACTIVITY_CODE': '',
@@ -11076,7 +11011,8 @@ export class SalesEstimationComponent implements OnInit {
           "VATAMOUNTFCROUND": 0,
           "VATAMOUNTFCROUNDCC": 0,
           "POSCUSTIDEXP_DATE": this.customerDetails.POSCUSTIDEXP_DATE,
-    
+          POSCUSTIDNO: this.customerDetails.POSCUSTIDNO?this.customerDetails.POSCUSTIDNO:'',
+
           metalPurchaseDetails: this.currentExchangeMetalPurchase,
     
         };
@@ -11310,7 +11246,7 @@ export class SalesEstimationComponent implements OnInit {
           // REFBY_CUSTCODE: '',
           // PRINT_COUNT_ACCOPY: '0',
           // PRINT_COUNT_CNTLCOPY: '0',
-    
+        
           'PRINT_COUNT': 0,
           'GST_TOTALFC': 0,
           'GST_TOTALCC': 0,

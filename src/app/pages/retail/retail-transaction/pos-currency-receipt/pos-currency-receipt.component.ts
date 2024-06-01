@@ -305,8 +305,18 @@ export class PosCurrencyReceiptComponent implements OnInit {
           const data = result.response;
 
           this.posCurrencyDetailsData = data.currencyReceiptDetails;
-          this.posCurrencyDetailsData.forEach((data, index) => { data.NET_TOTAL = (parseFloat(data.AMOUNTCC) + parseFloat(data.CGST_AMOUNTCC)).toFixed(2); });
+          // this.posCurrencyDetailsData.forEach((data, index) => { data.NET_TOTAL = (parseFloat(data.AMOUNTCC) + parseFloat(data.CGST_AMOUNTCC)).toFixed(2); });
           console.log('this.posCurrencyDetailsData', this.posCurrencyDetailsData);
+
+
+          this.posCurrencyDetailsData.forEach(item => {
+            item.NET_TOTAL = (parseFloat(item.AMOUNTCC) + parseFloat(item.CGST_AMOUNTCC)).toFixed(2);
+            item.CURRENCY_RATE = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.CURRENCY_RATE), 'RATE');
+            item.AMOUNTFC = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.AMOUNTFC), 'AMOUNT');
+            item.CGST_AMOUNTFC = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.CGST_AMOUNTFC), 'AMOUNT');
+          });
+
+          
           this.updateFormValuesAndSRNO();
 
           // set form values
@@ -335,8 +345,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
           this.posCurrencyReceiptForm.controls.partyAddress.setValue(data.PARTY_ADDRESS);
 
           this.posCurrencyReceiptForm.controls.partyCurr.setValue(data.PARTY_CURRENCY);
-          this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTFC);
-          // this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTCC);
+
+
+          this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(data.TOTAL_AMOUNTFC),
+            'AMOUNT'
+          ));
+          
         }
       });
   }

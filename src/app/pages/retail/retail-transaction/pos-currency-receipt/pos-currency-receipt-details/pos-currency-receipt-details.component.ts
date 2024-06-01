@@ -90,7 +90,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strPartyCode=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
 
   }
   // `CMBRANCH_CODE = '${this.comService.branchCode}'`
@@ -166,9 +167,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     this.vatDetails();
 
-    this.setReceiptData();
 
-    this.getAccountHead();
+
+    if (this.receiptData && Object.keys(this.receiptData).length > 0)
+
+      this.setReceiptData();
+    else
+      this.getAccountHead();
   }
 
   generateHsnCodeList(queryParams: any) {
@@ -221,7 +226,6 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${res.response.ACCODE}'`;
 
 
-          // this.DebitamountChange({ target: { value: res.response.ACCODE } });
 
 
         }
@@ -255,115 +259,72 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   // }
   setReceiptData() {
     console.log(this.receiptData);
-    // let preData =  {
-    //     "UNIQUEID": 0,
-    //     "SRNO": 1,
-    //     "BRANCH_CODE": "JHRGMA",
-    //     "RECPAY_TYPE": "",
-    //     "MODE": "",
-    //     "ACCODE": "",
-    //     "CURRENCY_CODE": "",
-    //     "CURRENCY_RATE": "",
-    //     "AMOUNTFC": "",
-    //     "AMOUNTCC": "",
-    //     "HEADER_AMOUNT": 0,
-    //     "CHEQUE_NO": "",
-    //     "CHEQUE_DATE": "1900-01-01T00:00:00",
-    //     "CHEQUE_BANK": "",
-    //     "REMARKS": "",
-    //     "BANKCODE": "",
-    //     "PDCYN": "s",
-    //     "HDACCOUNT_HEAD": "",
-    //     "MODEDESC": "",
-    //     "D_POSSCHEMEID": "",
-    //     "D_POSSCHEMEUNITS": 0,
-    //     "CARD_NO": "",
-    //     "CARD_HOLDER": "",
-    //     "CARD_EXPIRY": "2024-02-12T06:54:45.529Z",
-    //     "PCRMID": 0,
-    //     "BASE_CONV_RATE": 0,
-    //     "SUBLEDJER_CODE": "",
-    //     "DT_BRANCH_CODE": "",
-    //     "DT_VOCTYPE": "",
-    //     "DT_VOCNO": 0,
-    //     "DT_YEARMONTH": "",
-    //     "TOTAL_AMOUNTFC": 0,
-    //     "TOTAL_AMOUNTCC": 0,
-    //     "CGST_PER": 0,
-    //     "CGST_AMOUNTFC": 0,
-    //     "CGST_AMOUNTCC": 0,
-    //     "SGST_PER": 0,
-    //     "SGST_AMOUNTFC": 0,
-    //     "SGST_AMOUNTCC": 0,
-    //     "IGST_PER": 0,
-    //     "IGST_AMOUNTFC": 0,
-    //     "IGST_AMOUNTCC": 0,
-    //     "CGST_ACCODE": "",
-    //     "SGST_ACCODE": "",
-    //     "IGST_ACCODE": "",
-    //     "GST_HEADER_AMOUNT": 0,
-    //     "GST_NUMBER": "",
-    //     "INVOICE_NUMBER": "",
-    //     "INVOICE_DATE": "2024-02-12T06:54:45.529Z",
-    //     "DT_GST_STATE_CODE": "",
-    //     "DT_GST_TYPE": "",
-    //     "DT_GST_CODE": "",
-    //     "DT_GST_GROUP": "s",
-    //     "CGST_CTRLACCODE": "",
-    //     "SGST_CTRLACCODE": "",
-    //     "IGST_CTRLACCODE": "",
-    //     "HSN_CODE": "",
-    //     "MIDPCR": 0,
-    //     "INCLUSIVE": true,
-    //     "COMM_PER": 0,
-    //     "COMM_AMOUNTCC": 0,
-    //     "COMM_AMOUNTFC": 0,
-    //     "COMM_TAXPER": 0,
-    //     "COMM_TAXAMOUNTCC": 0,
-    //     "COMM_TAXAMOUNTFC": 0,
-    //     "DT_TDS_CODE": "",
-    //     "TDS_PER": 0,
-    //     "TDS_AMOUNTFC": 0,
-    //     "TDS_AMOUNTCC": 0,
-    //     "PDC_WALLETAC": "",
-    //     "WALLET_YN": "s",
-    //     "SL_CODE": "",
-    //     "SL_DESCRIPTION": "",
-    //     "OT_TRANSFER_TIME": "",
-    //     "VAT_EXPENSE_CODE": "",
-    //     "VAT_EXPENSE_CODE_DESC": "",
-    //     "AMLVALIDID": "",
-    //     "AMLSOURCEOFFUNDS": "",
-    //     "AMLTRANSACTION_TYPE": ""
-    // }
 
     if (this.receiptData != null && this.receiptData != undefined && Object.keys(this.receiptData).length > 0) {
+   
+
+
       this.posCurrencyReceiptDetailsForm.controls.modeOfSelect.setValue(this.receiptData.RECPAY_TYPE);
-      this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(this.receiptData.ACCODE);
 
       this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(this.receiptData.CURRENCY_CODE);
 
       this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.comService.decimalQuantityFormat(this.receiptData.CURRENCY_RATE, 'RATE'));
 
-      this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.receiptData.AMOUNTFC);
-      this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.receiptData.AMOUNTCC);
-      this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(this.receiptData.REMARKS);
       this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(this.receiptData.HDACCOUNT_HEAD);
+      this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(this.receiptData.ACCODE);
+
+      this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.AMOUNTFC),
+        'AMOUNT'));
+
+        this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(this.receiptData.AMOUNTCC),
+          'AMOUNT'));
+
+          this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+            'AMOUNT'));
+
+            this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
+              this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTFC),
+              'AMOUNT'));
+
+              this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.comService.decimalQuantityFormat(
+                this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+                'AMOUNT'));
+
+                this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.comService.decimalQuantityFormat(
+                  this.comService.emptyToZero(this.receiptData.CGST_AMOUNTFC),
+                  'AMOUNT'));
+      
+      this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(this.receiptData.REMARKS);
       this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue(this.receiptData.MODEDESC);
       this.posCurrencyReceiptDetailsForm.controls.creditCardNumber.setValue(this.receiptData.CARD_NO);
       this.posCurrencyReceiptDetailsForm.controls.creditCardName.setValue(this.receiptData.CARD_HOLDER);
       this.posCurrencyReceiptDetailsForm.controls.creditCardDate.setValue(this.receiptData.CARD_EXPIRY);
 
-      // this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTFC);
-      this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTCC);
-      this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.receiptData.TOTAL_AMOUNTFC);
-      this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(this.receiptData.TOTAL_AMOUNTCC);
+      
 
       this.posCurrencyReceiptDetailsForm.controls.invoiceNo.setValue(this.receiptData.INVOICE_NUMBER);
       this.posCurrencyReceiptDetailsForm.controls.invoiceDate.setValue(this.receiptData.INVOICE_DATE);
       this.posCurrencyReceiptDetailsForm.controls.vatNo.setValue(this.receiptData.VAT_EXPENSE_CODE);
-      this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(this.receiptData.CGST_AMOUNTFC);
       this.vatAmountCC = this.receiptData.CGST_AMOUNTCC
+
+
+
+      this.posCurrencyReceiptDetailsForm.controls.chequeDrawnBank.setValue(this.receiptData.CHEQUE_BANK);
+      this.posCurrencyReceiptDetailsForm.controls.chequeNumber.setValue(this.receiptData.CHEQUE_NO);
+      this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(this.receiptData.CHEQUE_DEPOSIT_BANK);
+      this.posCurrencyReceiptDetailsForm.controls.chequeDate.setValue(this.receiptData.CHEQUE_DATE);
+
+
+      this.posCurrencyReceiptDetailsForm.controls.ttNumber.setValue(this.receiptData.CHEQUE_NO);
+      this.posCurrencyReceiptDetailsForm.controls.ttDate.setValue(this.receiptData.CHEQUE_DATE);
+      this.posCurrencyReceiptDetailsForm.controls.ttDrawnBank.setValue(this.receiptData.CHEQUE_BANK);
+      this.posCurrencyReceiptDetailsForm.controls.ttDepositBank.setValue(this.receiptData.CHEQUE_DEPOSIT_BANK);
+
+      this.debitAmountData.WHERECONDITION = `ACCODE='${this.receiptData.ACCODE}'`;
+
 
 
     }
@@ -406,12 +367,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
     this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e["ACCOUNT_HEAD"]);
 
+
     if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Cheque") {
       localStorage.setItem('CH_ACCODE', e.ACCODE);
       localStorage.setItem('CH_ACHEAD', e["ACCOUNT_HEAD"]);
+      this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(e["BANK_CODE"]);
     }
 
-    this.DebitamountChange({ target: { value: e.ACCODE } });
+    this.DebitamountChange({ target: { value: e.ACCODE } }, e.ACCODE);
     // this.getGSTDetails(e.ACCODE);
   }
 
@@ -440,7 +403,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   receiptModeSelected(e: any) {
     console.log(e);
     this.hideCurrecnySearch = false;
-    this.hideDebitLookup=false;
+    this.hideDebitLookup = false;
     this.resetVatFields();
     const matchedEntry = this.typeCodeArray.find(entry => entry.CREDIT_CODE === e.Credit_Code);
 
@@ -468,9 +431,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.hideMasterSearch = false;
     this.hideCurrecnySearch = true;
     this.isCreditcardMode = false;
-    this.hideDebitLookup=true;
+    this.hideDebitLookup = true;
     this.resetVatFields();
-  
+
     switch (event.value) {
       case "Cash":
         this.getAccountHead();
@@ -486,9 +449,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       case "Credit Card":
         this.hideMasterSearch = true;
         this.isCreditcardMode = true;
-        this.hideDebitLookup=false;
+        this.hideDebitLookup = false;
         this.resetOnModeChange();
-     
+
         break;
 
       case "Cheque":
@@ -553,7 +516,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   }
   //party Code Change
-  DebitamountChange(event: any) {
+  DebitamountChange(event: any, accoutCode?: any) {
     if (event.target.value == '') return
     this.snackBar.open('Loading...')
     // this.PartyCodeData.SEARCH_VALUE = event.target.value
@@ -574,6 +537,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             let data = result.dynamicData[0]
             console.log('data', data);
             this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${event.target.value}'`;
+
+            if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Cheque") {
+              const account = data.find((account: any) => account.ACCODE === accoutCode);
+              const bankCode = account.BANK_CODE;
+              this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(bankCode);
+            }
 
             if (data && data[0].CURRENCY_CODE) {
               if (data[0].CURRENCY_CODE == this.compCurrency)
@@ -628,15 +597,17 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     console.log(this.posCurrencyReceiptDetailsForm.value.vocDate);
     const res = this.validateReceipt();
     if (!res) {
-      var CHEQUE_NO, CHEQUE_DATE, CHEQUE_BANK
+      var CHEQUE_NO, CHEQUE_DATE, CHEQUE_BANK, CHEQUE_DEPOSIT_BANK;
       if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'TT') {
         CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.ttNumber;
         CHEQUE_DATE = this.posCurrencyReceiptDetailsForm.value.ttDate;
         CHEQUE_BANK = this.posCurrencyReceiptDetailsForm.value.ttDrawnBank;
+        CHEQUE_DEPOSIT_BANK = this.posCurrencyReceiptDetailsForm.value.ttDepositBank;
       } else if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Cheque') {
         CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.chequeNumber;
         CHEQUE_DATE = this.posCurrencyReceiptDetailsForm.value.chequeDate;
         CHEQUE_BANK = this.posCurrencyReceiptDetailsForm.value.chequeDrawnBank;
+        CHEQUE_DEPOSIT_BANK = this.posCurrencyReceiptDetailsForm.value.chequeDepositBank;
       }
 
       let postData = {
@@ -655,6 +626,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "CHEQUE_NO": CHEQUE_NO || "",
         "CHEQUE_DATE": CHEQUE_DATE || this.dummyDate,
         "CHEQUE_BANK": CHEQUE_BANK || "",
+        "CHEQUE_DEPOSIT_BANK": CHEQUE_DEPOSIT_BANK || "",
         "REMARKS": this.posCurrencyReceiptDetailsForm.value.remarks,
         "BANKCODE": "",
         "PDCYN": "s",
