@@ -71,7 +71,7 @@ export class MasterSearchComponent implements OnInit {
   alphabetClicked(item: any) {
     this.MasterSearchData.SEARCH_VALUE = item;
     this.currentPage = 1
-    this.loadData()
+    this.searchValueChange()
   }
   @HostListener('scroll', ['$event'])
   onScrollTable(event: any) {
@@ -200,10 +200,33 @@ export class MasterSearchComponent implements OnInit {
     this.closeOverlayPanel()
     // this.dropDown.close()
   }
-
+  // searchItems(array:any, searchValue: string) {
+  //   let keyName:any = Object.keys(array[0])
+  //   return array.filter((item:any) =>{
+  //     for (const key in item){
+  //       if(item[key].lowe.includes(searchValue)){
+  //         return true;
+  //       }
+  //     }
+  //   });
+  // }
+  searchItems(array:any, searchValue: any) {
+    // Convert the search value to lowercase for a case-insensitive search
+    const lowerSearchValue = this.commonService.nullToString(searchValue).toLowerCase();
+    
+    return array.filter((item:any) => {
+      // Iterate over all the keys of the object
+      for (const key in item) {
+        // Check if the property value includes the search value
+        if (item[key].toString().toLowerCase().startsWith(lowerSearchValue)) {
+          return true; // If found, return true
+        }
+      }
+      return false; // If not found, return false
+    });
+  }
   //search Value Change
-  searchValueChange(event: any) {
-    // if (event.target.value == '') return
+  searchValueChange(event?: any) {
     this.currentPage = 1
     let param = this.setPostdata()
     this.isLoading = true;
@@ -213,6 +236,11 @@ export class MasterSearchComponent implements OnInit {
       if (data && data.length>0) {
         this.dataSource = result.dynamicData[0]
         this.dataSourceHead = Object.keys(this.dataSource[0]);
+        if(this.MasterSearchData.FRONTENDFILTER && this.MasterSearchData.SEARCH_VALUE != ''){
+          this.dataSource = this.searchItems(this.dataSource, this.MasterSearchData.SEARCH_VALUE)
+          this.dataSourceHead = Object.keys(this.dataSource[0]);
+          return
+        }
       } else {
         this.commonService.toastErrorByMsgId('No data found')
         this.MasterSearchData.SEARCH_VALUE = ''

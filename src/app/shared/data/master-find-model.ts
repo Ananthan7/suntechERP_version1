@@ -11,4 +11,5 @@ export interface MasterSearchModel {
     VIEW_TABLE?: boolean;
     LOAD_ONCLICK?: boolean;
     API_VALUE?: string;
+    FRONTENDFILTER?: boolean;
 }

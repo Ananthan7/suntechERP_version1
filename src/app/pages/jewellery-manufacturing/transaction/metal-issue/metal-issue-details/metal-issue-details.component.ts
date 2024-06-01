@@ -65,7 +65,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     WHERECONDITION: `@strType='true',@strWorker='',@strCurrentUser='${this.comService.userName}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
