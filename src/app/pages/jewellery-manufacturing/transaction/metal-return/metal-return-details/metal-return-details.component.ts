@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -41,9 +40,9 @@ export class MetalReturnDetailsComponent implements OnInit {
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-
-
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -54,9 +53,9 @@ export class MetalReturnDetailsComponent implements OnInit {
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-
-
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -68,8 +67,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -81,7 +78,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -92,10 +88,9 @@ export class MetalReturnDetailsComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-       
-
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber: ['', [Validators.required]],
@@ -148,8 +143,6 @@ export class MetalReturnDetailsComponent implements OnInit {
   });
 
   constructor(
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
@@ -164,7 +157,7 @@ export class MetalReturnDetailsComponent implements OnInit {
       }
     }
     this.setInitialValue()
-    this.setStockCodeCondition()
+    this.setLookup201WhereCondition()
   }
 
   setInitialValue() {
@@ -200,14 +193,13 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.setValueWithDecimal('NET_WT', this.content.NET_WT, 'THREE')
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
-    console.log(this.metalReturnDetailsForm.value, 'this.metalReturnDetailsForm.value');
   };
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.metalReturnDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
   }
-  setStockCodeCondition() {
+  setLookup201WhereCondition() {
     let form = this.metalReturnDetailsForm.value
     let where = `@strBranch_Code='${form.BRANCH_CODE}',`
     where += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
@@ -242,13 +234,13 @@ export class MetalReturnDetailsComponent implements OnInit {
     return false;
   }
   WorkerCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
     this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.DESCRIPTION);
+    this.setLookup201WhereCondition()
   }
   locationCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
+    this.setLookup201WhereCondition()
   }
   jobnoCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
@@ -256,18 +248,20 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   ProcessCodeSelected(e: any) {
-    console.log(e);
     this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.Description);
+    this.setLookup201WhereCondition()
   }
 
   stockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.DESCRIPTION);
+    this.setLookup201WhereCondition()
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.DESCRIPTION);
+    this.setLookup201WhereCondition()
   }
 
   close(data?: any) {
@@ -496,7 +490,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-          this.setStockCodeCondition()
+          this.setLookup201WhereCondition()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -535,7 +529,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            this.setStockCodeCondition()
+            this.setLookup201WhereCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
