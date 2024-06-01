@@ -44,11 +44,11 @@ export class CustomerPriceSettingComponent implements OnInit {
   tableDataGroupDetails: any[] = [];
 
   groups = [
-    { type: 'None', value: 'None' },
-    { type: 'Category', value: 'Category' },
-    { type: 'Sub Category', value: 'Sub Category' },
-    { type: 'Brand Code', value: 'Brand Code' },
-    { type: 'Type', value: 'Type' },
+    { type: 'None', value:'None' },
+    { type: 'Category', value:'Category'},
+    { type: 'Sub Category', value:'Sub Category'},
+    { type: 'Brand Code', value:'Brand Code'},
+    { type: 'Type', value:'Type'},
     // { type: 'Collection', value: 'Collection' },
     // { type: 'Sub-Collection', value: 'Sub-Collection' },
     // { type: 'Stone Type/Look', value: 'Stone Type/Look' },
@@ -57,7 +57,6 @@ export class CustomerPriceSettingComponent implements OnInit {
     // { type: 'Inc Cat', value: 'Inc Cat' },
     // { type: 'Order Ref', value: 'Order Ref' }
   ];
-
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -70,8 +69,8 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    this.setFormValues();
+    if (this.content?.FLAG) {
+      this.setFormValues();
     // this.getGroupDetails();
     if (this.content.FLAG == 'VIEW') {
 
@@ -80,8 +79,9 @@ export class CustomerPriceSettingComponent implements OnInit {
       this.enableUpdate = false;
       this.approveDisable = false;
       this.setFormValues()
+      // this.getGroupDetails();
     }
-
+  }
 
   }
 
@@ -89,14 +89,14 @@ export class CustomerPriceSettingComponent implements OnInit {
     console.log(this.content);
     if (!this.content) return
     this.customerpricesettingForm.controls.pricecode.setValue(this.content.PRICE_CODE)
-    this.customerpricesettingForm.controls.date.setValue(this.content.DEL_DATE)
+    this.customerpricesettingForm.controls.date.setValue(this.content.CREATED_DATE)
     this.customerpricesettingForm.controls.description.setValue(this.content.DESCRIPTION)
-    this.customerpricesettingForm.controls.division.setValue(this.content.DIVISION_CODE)
+    this.customerpricesettingForm.controls.division.setValue(this.content.DIVISION)
     this.customerpricesettingForm.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.customerpricesettingForm.controls.approvedby.setValue(this.content.APPROVED_BY)
     this.customerpricesettingForm.controls.enteredBy.setValue(this.content.ENTERED_BY)
-    this.customerpricesettingForm.controls.stockCode.setValue(this.content.STOCK_CODE)
-    this.customerpricesettingForm.controls.designCode.setValue(this.content.DESIGN_CODE)
+    this.customerpricesettingForm.controls.stockCode.setValue(this.content.IS_STOCK_CODE)
+    this.customerpricesettingForm.controls.designCode.setValue(this.content.IS_DESIGN_CODE)
     this.customerpricesettingForm.controls.group1.setValue(this.content.GROUP1)
     this.customerpricesettingForm.controls.group2.setValue(this.content.GROUP2)
     this.customerpricesettingForm.controls.group3.setValue(this.content.GROUP3)
