@@ -68,30 +68,55 @@ export class StoneIssueDetailComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  // processCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 20,
+  //   SEARCH_FIELD: 'Process_Code',
+  //   SEARCH_HEADING: 'Process Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "Process_Code<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+
+  // workerCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 19,
+  //   SEARCH_FIELD: 'WORKER_CODE',
+  //   SEARCH_HEADING: 'Worker Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "WORKER_CODE<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 253,
     SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Process Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Process_Code<> ''",
+    WHERECONDITION: `@strType='true',@strWorker='',@strCurrentUser='${this.comService.userName}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
+    LOOKUPID: 254,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: "@strProcess='',@blnActive=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -210,15 +235,15 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   processCodeSelected(e: any) {
-    console.log(e);
     this.stoneIssueDetailsFrom.controls.process.setValue(e.Process_Code);
     this.stoneIssueDetailsFrom.controls.processname.setValue(e.Description);
+    this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
   }
 
   workerCodeSelected(e: any) {
-    console.log(e);
     this.stoneIssueDetailsFrom.controls.worker.setValue(e.WORKER_CODE);
     this.stoneIssueDetailsFrom.controls.workername.setValue(e.DESCRIPTION);
+    this.processCodeData.WHERECONDITION = `@strType='true',@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
 
   stockCodeSelected(e: any) {
@@ -277,7 +302,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobnumber),
       "UNQ_JOB_ID": this.comService.nullToString(form.subjobnumber),
-      "JOB_DESCRIPTION": this.comService.nullToString(form.subjobDes),
+      "JOB_DESCRIPTION": this.comService.nullToString(form.jobDes),
       "BRANCH_CODE": this.comService.nullToString(this.comService.branchCode),
       "DESIGN_CODE": this.comService.nullToString(form.DESIGN_CODE),
       "DIVCODE": this.comService.nullToString(form.DIVCODE),
