@@ -127,12 +127,12 @@ export class CustomerPriceSettingComponent implements OnInit {
     enteredBy: ['', [Validators.required]],
     stockCode: [false],
     designCode: [false],
-    group1: ['', [Validators.required]],
-    group2: [''],
-    group3: [''],
-    group4: [''],
-    group5: [''],
-    group6: [''],
+    group1: ['None', [Validators.required]],
+    group2: ['None'],
+    group3: ['None'],
+    group4: ['None'],
+    group5: ['None'],
+    group6: ['None'],
   })
 
   codeEnabled() {
