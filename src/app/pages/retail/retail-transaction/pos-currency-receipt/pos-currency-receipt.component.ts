@@ -58,6 +58,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   isCurrencyUpdate: boolean = false;
   vatPercentage: string = '';
   hsnCode: string = '';
+  igst_accode: string = '';
   currencyCode: any;
   currencyConvRate: any;
 
@@ -316,7 +317,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
             item.CGST_AMOUNTFC = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.CGST_AMOUNTFC), 'AMOUNT');
           });
 
-          
+
           this.updateFormValuesAndSRNO();
 
           // set form values
@@ -351,7 +352,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
             this.comService.emptyToZero(data.TOTAL_AMOUNTFC),
             'AMOUNT'
           ));
-          
+
         }
       });
   }
@@ -484,6 +485,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     return true;
   }
+
   formSubmit() {
 
 
@@ -510,48 +512,48 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "NAVSEQNO": 0,
       "HAWALACOMMCODE": "",
       "HAWALACOMMPER": 0,
-      "FLAG_UPDATED": "0",
-      "FLAG_INPROCESS": "0",
+      "FLAG_UPDATED": "N",
+      "FLAG_INPROCESS": "N",
       "SUPINVNO": "",
       "SUPINVDATE": this.posCurrencyReceiptForm.value.vocDate,
-      "HHACCOUNT_HEAD": "",
+      "HHACCOUNT_HEAD": this.posCurrencyReceiptForm.value.partyCodeDesc || "",
       "SALESPERSON_CODE": this.posCurrencyReceiptForm.value.enteredby,
       "BALANCE_FC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "BALANCE_CC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
-      "AUTHORIZEDPOSTING": true,
+      "AUTHORIZEDPOSTING": false,
       "AUTOGENREF": "",
       "AUTOGENMID": 0,
       "AUTOGENVOCTYPE": "",
       "OUSTATUS": true,
-      "OUSTATUSNEW": 0,
+      "OUSTATUSNEW": 1,
       "POSCUSTOMERCODE": this.posCurrencyReceiptForm.value.customerCode || "",
-      "D2DTRANSFER": "",
+      "D2DTRANSFER": "F",
       "DRAFT_FLAG": "0",
       "POSSCHEMEID": "",
       "FLAG_EDIT_ALLOW": "",
       "PARTY_ADDRESS": this.posCurrencyReceiptForm.value.partyAddress,
       "AUTOPOSTING": true,
       "POSTDATE": this.posCurrencyReceiptForm.value.vocDate,
-      "ADVRETURN": true,
+      "ADVRETURN": false,
       "HTUSERNAME": this.userName,
       "GENSEQNO": 0,
-      "BASE_CURRENCY": "",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
+      "BASE_CURRENCY": this.posCurrencyReceiptForm.value.partyCurrency || "",
+      "BASE_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "",
+      "BASE_CONV_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "",
       "PRINT_COUNT": 0,
       "GST_REGISTERED": true,
       "GST_STATE_CODE": "",
       "GST_NUMBER": "",
       "GST_TYPE": "",
-      "GST_TOTALFC": 0,
-      "GST_TOTALCC": 0,
+      "GST_TOTALFC": this.posCurrencyReceiptForm.value.totalTax || "",
+      "GST_TOTALCC": this.posCurrencyReceiptForm.value.totalTax || "",
       "DOC_REF": "",
       "REC_STATUS": "",
       "CUSTOMER_NAME": this.posCurrencyReceiptForm.value.customerName || "",
       "CUSTOMER_MOBILE": this.posCurrencyReceiptForm.value.mobile || "",
       "CUSTOMER_EMAIL": this.posCurrencyReceiptForm.value.email || "",
       "TDS_CODE": "",
-      "TDS_APPLICABLE": true,
+      "TDS_APPLICABLE": false,
       "TDS_TOTALFC": 0,
       "TDS_TOTALCC": 0,
       "ADRRETURNREF": "",
@@ -559,10 +561,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "SCH_CUSTOMER_ID": this.posCurrencyReceiptForm.value.schemaId || "",
       "REFDOCNO": "",
       "GIFT_CARDNO": "",
-      "FROM_TOUCH": true,
+      "FROM_TOUCH": false,
       "SL_CODE": "",
       "SL_DESCRIPTION": "",
-      "OT_TRANSFER_TIME": "2023-10-10T12:05:50.756Z",
+      "OT_TRANSFER_TIME": "",
       "DUEDAYS": this.posCurrencyReceiptForm.value.dueDaysdesc || "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
@@ -843,7 +845,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.receiptData = { ...data };
-    modalRef.componentInstance.queryParams = { vatPercentage: this.vatPercentage, hsnCode: this.hsnCode, currecyCode: this.currencyCode, currencyConvRate: this.currencyConvRate, isViewOnly: this.viewOnly };
+    modalRef.componentInstance.queryParams = { vatPercentage: this.vatPercentage, hsnCode: this.hsnCode,igstAccode:this.igst_accode ,currecyCode: this.currencyCode, currencyConvRate: this.currencyConvRate, isViewOnly: this.viewOnly };
 
     // modalRef.componentInstance.receiptData = data;
 
@@ -855,25 +857,27 @@ export class PosCurrencyReceiptComponent implements OnInit {
     });
   }
 
+
   getGSTDetails(acCode: any) {
 
     // this.PartyCodeData.SEARCH_VALUE = event.target.value
     let vatData = {
 
-      'BranchCode': this.branchCode,
-      'AcCode': acCode,
-      'VocType': this.comService.getqueryParamVocType(),
-      'Date': new Date().toISOString(),
+      Accode: acCode,
+      strdate: this.comService.formatDate(new Date()),
+      branch_code: this.comService.branchCode,
+      mainvoctype: this.comService.getqueryParamMainVocType()
 
     };
-    let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('TaxDetails', vatData)
       .subscribe((result) => {
 
         if (result.status == 'Success') {
           let data = result.response;
-          console.log('vatData', data.GST_PER);
+          console.log('vatData', data.VAT_PER);
           this.vatPercentage = data.GST_PER;
           this.hsnCode = data.HSN_SAC_CODE;
+          this.igst_accode = data.IGST_ACCODE;
         }
       }
       )

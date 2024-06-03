@@ -36,6 +36,9 @@ export class AdvanceReturnComponent implements OnInit {
   companyCurrency?: String;
   viewOnly?: boolean=false;
   strBranchcode: any = localStorage.getItem('userbranch');
+  baseYear: any = localStorage.getItem('YEAR') || '';
+  midForInvoce: any = 0;
+
   columnhead: any[] = [
     { title: 'Sr #', field: 'SRNO' },
     { title: 'Branch', field: 'BRANCH_CODE' },
@@ -242,6 +245,7 @@ export class AdvanceReturnComponent implements OnInit {
     modalRef.componentInstance.customerCode = this.advanceReturnForm.value.customerCode;
 
     modalRef.componentInstance.selectionConfirmed.subscribe((selectedRows: any[]) => {
+      // this.advanceReturnForm.value.partyCurrency 
       const existingMIDs = new Set(this.pcrSelectionData.map(data => data.MID));
       const newEntries: any = [];
       const duplicateMIDs: any = [];
@@ -250,7 +254,8 @@ export class AdvanceReturnComponent implements OnInit {
         if (existingMIDs.has(row.MID)) {
           duplicateMIDs.push(row.MID);
         } else {
-          newEntries.push(row);
+          newEntries.push({ ...row, CURRENCY_CODE: this.advanceReturnForm.value.partyCurrency });
+          // newEntries.push(row);
         }
       });
 
@@ -489,7 +494,7 @@ export class AdvanceReturnComponent implements OnInit {
       "SL_CODE": "",
       "SL_DESCRIPTION": "",
       "OT_TRANSFER_TIME": "2023-10-10T12:05:50.756Z",
-      "DUEDAYS": this.advanceReturnForm.value.dueDaysdesc || "",
+      // "DUEDAYS": this.advanceReturnForm.value.dueDaysdesc || "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "",
@@ -515,6 +520,7 @@ export class AdvanceReturnComponent implements OnInit {
     let Sub: Subscription = apiResponse
       .subscribe((result) => {
         if (result.response) {
+          this.midForInvoce = result.response.MID
           if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
@@ -536,5 +542,63 @@ export class AdvanceReturnComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+  printReceiptDetailsWeb() {
+    let postData = {
+      "MID": this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
+      "BRANCH_CODE": this.comService.nullToString(this.strBranchcode),
+      "VOCNO": this.comService.emptyToZero(this.advanceReturnForm.value.vocNo),
+      "VOCTYPE": this.comService.nullToString(this.comService.getqueryParamVocType()),
+      "YEARMONTH": this.comService.nullToString(this.baseYear),
+    }
+    this.dataService.postDynamicAPI('GetAdvanceReceiptDetailsWeb', postData)
+      .subscribe((result: any) => {
+        console.log(result);
+        let data = result.dynamicData;
+        var WindowPrt = window.open(' ', ' ', 'width=1024px, height=800px');
+        if (WindowPrt === null) {
+          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+          return;
+        }
+        let printContent = `
+                <html>
+                <head>
+                    <style>
+                        @media print {
+                            @page {
+                                size: A4 portrait;
+                                margin: 1cm;
+                            }
+                            body {
+                                margin: 1cm;
+                                box-sizing: border-box;
+                            }
+                            * {
+                                box-sizing: border-box;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${data[0][0].HTMLOUT}
+                </body>
+                </html>
+            `;
+        WindowPrt.document.write(printContent);
+
+        WindowPrt.document.close();
+        WindowPrt.focus();
+
+        setTimeout(() => {
+          if (WindowPrt) {
+            WindowPrt.print();
+            WindowPrt.close();
+          } else {
+            console.error('Print window was closed before printing could occur.');
+          }
+        }, 800);
+      });
+  }
+
 
 }

@@ -31,6 +31,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() receiptData!: any;
   @Input() queryParams!: any;
   viewOnly: boolean = false;
+  igstAccode: string = '';
   hideMasterSearch: boolean = true;
   hideDebitLookup: boolean = true;
   hideCurrecnySearch: boolean = false;
@@ -194,6 +195,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   getQueryParams(gstDetails?: any) {
+    this.igstAccode=gstDetails.igstAccode;
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(gstDetails.hsnCode);
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(gstDetails.hsnCode);
     this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(gstDetails.currecyCode);
@@ -622,18 +624,18 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
-        "HEADER_AMOUNT": 0,
+        "HEADER_AMOUNT":this.posCurrencyReceiptDetailsForm.value.amountCc,
         "CHEQUE_NO": CHEQUE_NO || "",
         "CHEQUE_DATE": CHEQUE_DATE || this.dummyDate,
         "CHEQUE_BANK": CHEQUE_BANK || "",
         "CHEQUE_DEPOSIT_BANK": CHEQUE_DEPOSIT_BANK || "",
         "REMARKS": this.posCurrencyReceiptDetailsForm.value.remarks,
-        "BANKCODE": "",
-        "PDCYN": "s",
+        "BANKCODE": this.posCurrencyReceiptDetailsForm.value.chequeDepositBank||"",
+        "PDCYN": "Y",
         "HDACCOUNT_HEAD": this.posCurrencyReceiptDetailsForm.value.debitAmountDesc,
         "MODEDESC": this.posCurrencyReceiptDetailsForm.value.modeDesc,
         "D_POSSCHEMEID": "",
-        "D_POSSCHEMEUNITS": 0,
+        "D_POSSCHEMEUNITS": 1,
         "CARD_NO": this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
         "CARD_HOLDER": this.posCurrencyReceiptDetailsForm.value.creditCardName,
         "CARD_EXPIRY": this.posCurrencyReceiptDetailsForm.value.creditCardDate || this.dummyDate,
@@ -648,31 +650,31 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
         "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
         "CGST_PER": 0,
-        "CGST_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
-        "CGST_AMOUNTCC": this.vatAmountCC || 0,
+        "CGST_AMOUNTFC":0,
+        "CGST_AMOUNTCC":  0,
         "SGST_PER": 0,
         "SGST_AMOUNTFC": 0,
         "SGST_AMOUNTCC": 0,
-        "IGST_PER": 0,
-        "IGST_AMOUNTFC": 0,
-        "IGST_AMOUNTCC": 0,
+        "IGST_PER": this.posCurrencyReceiptDetailsForm.value.vat || 0,
+        "IGST_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
+        "IGST_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.vatcc || 0,
         "CGST_ACCODE": "",
         "SGST_ACCODE": "",
-        "IGST_ACCODE": "",
-        "GST_HEADER_AMOUNT": 0,
+        "IGST_ACCODE": this.igstAccode,
+        "GST_HEADER_AMOUNT": this.posCurrencyReceiptDetailsForm.value.headerVatAmt||0,
         "GST_NUMBER": "",
         "INVOICE_NUMBER": this.posCurrencyReceiptDetailsForm.value.invoiceNo,
         "INVOICE_DATE": this.posCurrencyReceiptDetailsForm.value.invoiceDate,
         "DT_GST_STATE_CODE": "",
-        "DT_GST_TYPE": "",
-        "DT_GST_CODE": "",
-        "DT_GST_GROUP": "s",
+        "DT_GST_TYPE": "IGST",
+        "DT_GST_CODE": "VAT",
+        "DT_GST_GROUP": "R",
         "CGST_CTRLACCODE": "",
         "SGST_CTRLACCODE": "",
         "IGST_CTRLACCODE": "",
-        "HSN_CODE": "",
+        "HSN_CODE":this.posCurrencyReceiptDetailsForm.value.hsnCode|| "",
         "MIDPCR": 0,
-        "INCLUSIVE": true,
+        "INCLUSIVE": false,
         "COMM_PER": 0,
         "COMM_AMOUNTCC": 0,
         "COMM_AMOUNTFC": 0,
@@ -684,7 +686,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "TDS_AMOUNTFC": 0,
         "TDS_AMOUNTCC": 0,
         "PDC_WALLETAC": "",
-        "WALLET_YN": "s",
+        "WALLET_YN": "",
         "SL_CODE": "",
         "SL_DESCRIPTION": "",
         "OT_TRANSFER_TIME": "",
