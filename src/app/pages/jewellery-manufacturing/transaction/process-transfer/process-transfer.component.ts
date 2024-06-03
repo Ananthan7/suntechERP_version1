@@ -607,7 +607,7 @@ export class ProcessTransferComponent implements OnInit {
       "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
-      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
+      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData?.METALLAB_TYPE),
       "AUTOPOSTING": false,
       "POSTDATE": "",
       "PRINT_COUNT": 0,

@@ -204,49 +204,6 @@ export class PriceschemesMasterComponent implements OnInit {
   
     return false;
   }
-  // private isSameAccountCodeSelected(accountCode: any,controlName: string): boolean {
-  //   switch (controlName) {
-  //     case 'price1':
-  //       return (
-  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
-  //       );
-  //     case 'price2':
-  //       return (
-  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
-  //       );
-  //     case 'price3':
-  //       return (
-  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
-  //       );
-  //     case 'price4':
-  //       return (
-  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
-  //       );
-  //     case 'price5':
-  //       return (
-  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
-  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() 
-  //       )
-  //     default:
-  //       return false
-  //   }
-    
-  // }
-
 
   priceCodeSelected(e: any, controlName: string) {
     if (this.checkCode()) return
