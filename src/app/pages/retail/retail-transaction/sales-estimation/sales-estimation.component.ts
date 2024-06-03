@@ -831,7 +831,8 @@ export class SalesEstimationComponent implements OnInit {
             fcn_customer_name: ['', Validators.required],
             fcn_customer_code: ['',],
             fcn_customer_id_number: ['', Validators.required],
-            fcn_customer_id_type: ['', Validators.required],
+            fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
+            // fcn_customer_id_type: ['', Validators.required],
             fcn_customer_exp_date: ['',],
             tourVatRefuncYN: ['',],
             tourVatRefundNo: ['',],
@@ -961,7 +962,8 @@ export class SalesEstimationComponent implements OnInit {
             fcn_cust_detail_dob: ['',
               [Validators.required]
             ],
-            fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
+            
+            fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
             fcn_cust_detail_phone: ['', Validators.required],
             fcn_cust_detail_phone2: [''],
             fcn_cust_detail_email: ['', [Validators.email]],
@@ -1136,7 +1138,7 @@ export class SalesEstimationComponent implements OnInit {
                 this.comFunc.customerTypeMaster = data;
                 this.custTypeMaster = this.comFunc.customerTypeMaster;
                 this.custTypeMasterOptions =
-                    this.customerDetailForm.controls.fcn_cust_type.valueChanges.pipe(
+                    this.customerDetailForm.controls.fcn_customer_id_type.valueChanges.pipe(
                         startWith(''),
                         map((value) =>
                             this._filterMasters(this.custTypeMaster, value, 'CODE', 'DESCRIPTION')
@@ -2974,7 +2976,7 @@ export class SalesEstimationComponent implements OnInit {
           // value.METALVALUEFC
         );
         this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(
-          this.comFunc.decimalQuantityFormat(value.PUREWT, 'AMOUNT')
+          this.comFunc.decimalQuantityFormat(value.PUREWT, 'METAL')
           // value.PUREWT
         );
         this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
@@ -3766,7 +3768,7 @@ export class SalesEstimationComponent implements OnInit {
                         this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
                             result.MOBILE
                         );
-                        this.customerDetailForm.controls['fcn_cust_detail_idType'].setValue(
+                        this.customerDetailForm.controls['fcn_customer_id_type'].setValue(
                             result.IDCATEGORY
                             // result.CUST_TYPE
                         );
@@ -3821,9 +3823,9 @@ export class SalesEstimationComponent implements OnInit {
                             // this.datePipe.transform(this.dummyDateCheck(result.DATE_OF_BIRTH), 'dd/M/yyyy')
 
                         );
-                        this.customerDetailForm.controls.fcn_cust_detail_occupation.setValue(
-                            result.OCCUPATION
-                        );
+                        // this.customerDetailForm.controls.fcn_cust_detail_occupation.setValue(
+                        //     result.OCCUPATION
+                        // );
                         this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
                             result.COMPANY
                         );
@@ -3831,12 +3833,12 @@ export class SalesEstimationComponent implements OnInit {
                             result.NATIONALITY
                         );
 
-                        this.customerDetailForm.controls.fcn_cust_type.setValue(
+                        this.customerDetailForm.controls.fcn_customer_id_type.setValue(
                             result.CUST_TYPE
                         );
-                        this.customerDetailForm.controls.fcn_cust_desg.setValue(
-                            result.POSCUSTPREFIX
-                        );
+                        // this.customerDetailForm.controls.fcn_cust_desg.setValue(
+                        //     result.POSCUSTPREFIX
+                        // );
                         this.customerDetailForm.controls.fcn_mob_code.setValue(
                             result.MOBILECODE1
                         );
@@ -3844,9 +3846,13 @@ export class SalesEstimationComponent implements OnInit {
                             result.CODE
                         );
 
-                        this.customerDetailForm.controls.fcn_source_of_fund.setValue(
-                            result.SOURCE
+                        this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
+                          result.DESIGNATION
                         );
+
+                        // this.customerDetailForm.controls.fcn_source_of_fund.setValue(
+                        //     result.SOURCE
+                        // );
 
                         this.customerDetails = result;
 
@@ -6326,6 +6332,7 @@ export class SalesEstimationComponent implements OnInit {
       "DUFIX_DCHARGABLEWEIGHT": 0,
       "GIFT_ITEM": false,
       "HSNCODE": "",
+      
       "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": false,
@@ -6473,6 +6480,7 @@ export class SalesEstimationComponent implements OnInit {
       DTSALESPERSON_CODE: this.vocDataForm.value.sales_person || '', //need
       StkTrn_LandingCost: data.STOCK_COST, //need
       HSNCODE: data.HSN_CODE,
+      HSN_CODE: data.HSN_CODE,
       VATCODE: data.GST_CODE?data.GST_CODE.toString():'',
       VAT_PER: this.comFunc.emptyToZero(
         this.lineItemForm.value.fcn_li_tax_percentage
@@ -8116,7 +8124,7 @@ export class SalesEstimationComponent implements OnInit {
     
     
           if (this.editOnly) {
-            let API = `RetailEstimationNet/strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
+            let API = `RetailEstimationNet/BranchCode=${this.content.BRANCH_CODE}/VocType=${this.content.VOCTYPE}/YearMonth=${this.content.YEARMONTH}/VocNo=${this.content.VOCNO}`
             this.suntechApi.putDynamicAPI(API, postData)
               .subscribe(
                 (res) => {
@@ -8440,41 +8448,124 @@ export class SalesEstimationComponent implements OnInit {
     backToList() {
         this.router.navigateByUrl('/pos');
     }
-    printInvoice() {
-        console.log('printing...');
-        let _validate: any = this.validateBeforePrint();
-        if (_validate[0]) {
-            const printContent: any = document.getElementById('print_invoice');
-            var WindowPrt: any = window.open(
-                '',
-                '_blank',
-                `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 1.5}`
+
+
+
+    // printInvoice() {
+
+
+    //   console.log('printing...');
+    //   let _validate = this.validateBeforePrint();
+    //   if (_validate[0]) {
+        
+    //     const printContent:any = document.getElementById('print_invoice_est');
+    //     const qrCodeElement:any = document.getElementById('qrCodeBig');
+  
+    //     var WindowPrt = window.open(
+    //       '',
+    //       '_blank',
+    //       `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 2.5}`
+    //     );
+       
+  
+    //     WindowPrt?.document.write(
+    //       '<html><head><title>SunTech - Estimation ' +
+    //       new Date().toISOString() +
+    //       '</title></head><style></style><body><div>'
+    //     );
+    //     const linkElement:any = WindowPrt?.document.createElement('link');
+    //     linkElement?.setAttribute('rel', 'stylesheet');
+    //     linkElement?.setAttribute('type', 'text/css');
+    //     linkElement?.setAttribute('href', this.cssFilePath);
+    //     WindowPrt?.document.head.appendChild(linkElement);
+  
+    //     WindowPrt?.document.write(printContent?.innerHTML);
+    //     WindowPrt?.document.write(qrCodeElement?.outerHTML);
+    //     WindowPrt?.document.write('</div></body></html>');
+  
+  
+    //     WindowPrt?.document.close();
+    //     WindowPrt?.focus();
+    //     setTimeout(() => {
+    //       WindowPrt?.print();
+    //     }, 800);
+    //     console.log('printing... end ');
+    //     console.log(printContent?.innerHTML);
+    //   } else {
+        
+    //   }
+    // }
+
+
+
+
+
+
+    printReceiptDetailsWeb() {
+
+
+      console.log('printing...');
+      let _validate = this.validateBeforePrint();
+      if (_validate[0]) {
+        let postData = {
+          "MID":this.content?this.comFunc.emptyToZero(this.content?.MID):this.midForInvoce,
+          "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+          "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+          "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+          "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+        }
+        this.suntechApi.postDynamicAPI('RetailEstimationWeb', postData)
+          .subscribe((result: any) => {
+            console.log(result);
+            let data = result.dynamicData[0][0].HTMLOUT;
+            const printContent:any =data;
+            const qrCodeElement:any = document.getElementById('qrCodeBig');
+      
+            var WindowPrt = window.open(
+              '',
+              '_blank',
+              `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 2.5}`
             );
             /* WindowPrt.document.write(
-              '<html><title>SunTech</title><link rel="stylesheet" href="https://cdn.jsdelivr.defaultNetTotal/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"><style>.anim-rotate {animation: anim-rotate 1s linear infinite;}@keyframes anim-rotate {100% {transform: rotate(360deg);}}.anim-close-card {animation: anim-close-card 1.4s linear;}@keyframes anim-close-card {100% {opacity: 0.3;transform: scale3d(.3, .3, .3);}}.card {box-shadow: $card-shadow;margin-bottom: 30px;transition: all 0.3s ease-in-out;&:hover {box-shadow: 0 0 25px -5px #9e9c9e;}.card-header {border-bottom: $card-header-border;position: relative;+.card-body {padding-top: 0;}h5 {margin-bottom: 0;color: $theme-heading-color;font-size: 14px;font-weight: 700;display: inline-block;margin-right: 10px;line-height: 1.1;position: relative;}.card-header-right {right: 10px;top: 10px;display: inline-block;float: right;padding: 0;position: absolute;@media only screen and (max-width: 575px) {display: none;}.dropdown-menu {margin-top: 0;li {cursor: pointer;a {font-size: 14px;text-transform: capitalize;}}}.btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;color: #888;i {margin-right: 0;}&:after {display: none;}&:focus {box-shadow: none;outline: none;}}// custom toggler .btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;padding: 0;width: 20px;height: 20px;right: 8px;top: 8px;&.mobile-menu span {background-color: #888;height: 2px;border-radius: 5px;&:after, &:before {border-radius: 5px;height: 2px;background-color: #888;}}}.nav-pills {padding: 0;box-shadow: none;background: transparent;}}}.card-footer {padding: 0px !important;background-color: none !important ;border-top: 0px !important}}.card-block, .card-body {padding: 20px 25px;}&.card-load {position: relative;overflow: hidden;.card-loader {position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: flex;align-items: center;background-color: rgba(256, 256, 256,0.7);z-index: 999;i {margin: 0 auto;color: $primary-color;font-size: 24px;align-items: center;display: flex;}}}&.full-card {z-index: 99999;border-radius: 0;}}h4 {margin-bottom: 5px;}.btn-sm, .btn-group-sm>.btn {font-size: 12px;}.view-group {display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;padding-left: 0;margin-bottom: 0;}.thumbnail {height: 180px;margin-bottom: 30px;padding: 0px;-webkit-border-radius: 0px;-moz-border-radius: 0px;border-radius: 0px;}.item.list-group-item {float: none;width: 100%;background-color: #fff;margin-bottom: 30px;-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;padding: 0 1rem;border: 0;}.item.list-group-item .img-event {float: left;width: 30%;}.item.list-group-item .list-group-image {margin-right: 10px;}.item.list-group-item .thumbnail {margin-bottom: 0px;width: 100%;display: inline-block;}.item.list-group-item .caption {float: left;width: 70%;margin: 0;}.item.list-group-item:before, .item.list-group-item:after {display: table;content: " ";}.item.list-group-item:after {clear: both;}.card-title {margin-bottom: 5px;}h4 {font-size: 18px;}.card .card-block, .card .card-body {padding: 10px;}.caption p {margin-bottom: 5px;}.price {font-weight: 500;font-size: 1.25rem;color: #826d22;}.list-group-item .img-fluid {max-width: 75% !important;height: auto;}.list-group-item .img-event {text-align: center;}@media (min-width: 400px) {.list-group-item .table_comp_w {width: 50%;margin-top: -20%;margin-left: 35%;}}:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {padding: .5em 0 .5em 0 !important;}:host ::ng-deep .mat-form-field-wrapper {padding-bottom: 0.34375em;}.prod_weight td, .prod_weight th {padding: 5px 0px;font-size: 12px;}.prod_weight th {background-color: #ededf1;}.prod_weight td {color: #b3852d;}    table, th, td {border: 1px solid black; border-collapse: collapse;  }    th, td {    padding: 5px;    text-align: left;    }</style><body><div>'
+              '<html><title>SunTech</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"><style>.anim-rotate {animation: anim-rotate 1s linear infinite;}@keyframes anim-rotate {100% {transform: rotate(360deg);}}.anim-close-card {animation: anim-close-card 1.4s linear;}@keyframes anim-close-card {100% {opacity: 0.3;transform: scale3d(.3, .3, .3);}}.card {box-shadow: $card-shadow;margin-bottom: 30px;transition: all 0.3s ease-in-out;&:hover {box-shadow: 0 0 25px -5px #9e9c9e;}.card-header {border-bottom: $card-header-border;position: relative;+.card-body {padding-top: 0;}h5 {margin-bottom: 0;color: $theme-heading-color;font-size: 14px;font-weight: 700;display: inline-block;margin-right: 10px;line-height: 1.1;position: relative;}.card-header-right {right: 10px;top: 10px;display: inline-block;float: right;padding: 0;position: absolute;@media only screen and (max-width: 575px) {display: none;}.dropdown-menu {margin-top: 0;li {cursor: pointer;a {font-size: 14px;text-transform: capitalize;}}}.btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;color: #888;i {margin-right: 0;}&:after {display: none;}&:focus {box-shadow: none;outline: none;}}// custom toggler .btn.dropdown-toggle {border: none;background: transparent;box-shadow: none;padding: 0;width: 20px;height: 20px;right: 8px;top: 8px;&.mobile-menu span {background-color: #888;height: 2px;border-radius: 5px;&:after, &:before {border-radius: 5px;height: 2px;background-color: #888;}}}.nav-pills {padding: 0;box-shadow: none;background: transparent;}}}.card-footer {padding: 0px !important;background-color: none !important ;border-top: 0px !important}}.card-block, .card-body {padding: 20px 25px;}&.card-load {position: relative;overflow: hidden;.card-loader {position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: flex;align-items: center;background-color: rgba(256, 256, 256,0.7);z-index: 999;i {margin: 0 auto;color: $primary-color;font-size: 24px;align-items: center;display: flex;}}}&.full-card {z-index: 99999;border-radius: 0;}}h4 {margin-bottom: 5px;}.btn-sm, .btn-group-sm>.btn {font-size: 12px;}.view-group {display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;padding-left: 0;margin-bottom: 0;}.thumbnail {height: 180px;margin-bottom: 30px;padding: 0px;-webkit-border-radius: 0px;-moz-border-radius: 0px;border-radius: 0px;}.item.list-group-item {float: none;width: 100%;background-color: #fff;margin-bottom: 30px;-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;padding: 0 1rem;border: 0;}.item.list-group-item .img-event {float: left;width: 30%;}.item.list-group-item .list-group-image {margin-right: 10px;}.item.list-group-item .thumbnail {margin-bottom: 0px;width: 100%;display: inline-block;}.item.list-group-item .caption {float: left;width: 70%;margin: 0;}.item.list-group-item:before, .item.list-group-item:after {display: table;content: " ";}.item.list-group-item:after {clear: both;}.card-title {margin-bottom: 5px;}h4 {font-size: 18px;}.card .card-block, .card .card-body {padding: 10px;}.caption p {margin-bottom: 5px;}.price {font-weight: 500;font-size: 1.25rem;color: #826d22;}.list-group-item .img-fluid {max-width: 75% !important;height: auto;}.list-group-item .img-event {text-align: center;}@media (min-width: 400px) {.list-group-item .table_comp_w {width: 50%;margin-top: -20%;margin-left: 35%;}}:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {padding: .5em 0 .5em 0 !important;}:host ::ng-deep .mat-form-field-wrapper {padding-bottom: 0.34375em;}.prod_weight td, .prod_weight th {padding: 5px 0px;font-size: 12px;}.prod_weight th {background-color: #ededf1;}.prod_weight td {color: #b3852d;}    table, th, td {border: 1px solid black; border-collapse: collapse;  }    th, td {    padding: 5px;    text-align: left;    }</style><body><div>'
             );*/
-
+      
             // SunTech - POS
-            WindowPrt.document.write(
-                '<html><head><title>SunTech - POS ' +
-                new Date().toISOString() +
-                '</title></head><style> table, th, td { border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style><body><div>'
+            WindowPrt?.document.write(
+              '<html><head><title>SunTech - Estimation ' +
+              new Date().toISOString() +
+              '</title></head><style></style><body><div>'
             );
-            WindowPrt.document.write(printContent.innerHTML);
-            WindowPrt.document.write('</div></body></html>');
-            WindowPrt.document.close();
-            WindowPrt.focus();
+            // .bill_header {font-family: "Courier New";width: 340px;}.bill_header .top_header {vertical-align: top;}.bill_header .top_header td {padding: 2px;}.bill_header .top_header td label {font-weight: 600;font-size: 10px;width: 80px;word-wrap: break-word;}.bill_header h3 {font-size: 22px;font-weight: 400;text-align: center;margin: 10px 0px 5px;}.bill_header .d-flex {display: flex;}.bill_header .d-flex .bill_head {width: 40%;border: 0.5px solid #000;padding: 5px 10px;}.bill_header .d-flex .bill_head h6 {display: flex;justify-content: space-between;font-size: 10px;font-weight: 400;margin: 4px 0px;}.bill_header table {width: 100%;margin-top: 5px;}.bill_header table, .bill_header th, .bill_header td {border: 0.5px solid #000;border-collapse: collapse;text-align: center;font-size: 10px;font-weight: 400;padding: 2px 1px 2px 1px;color: #242424;}.bill_header table .numbers {font-size: 19px;font-weight: 900;}
+            const linkElement:any = WindowPrt?.document.createElement('link');
+            linkElement?.setAttribute('rel', 'stylesheet');
+            linkElement?.setAttribute('type', 'text/css');
+            linkElement?.setAttribute('href', this.cssFilePath);
+            WindowPrt?.document.head.appendChild(linkElement);
+      
+            WindowPrt?.document.write(printContent);
+            // WindowPrt?.document.write(qrCodeElement?.outerHTML);
+            WindowPrt?.document.write('</div></body></html>');
+      
+      
+            WindowPrt?.document.close();
+            WindowPrt?.focus();
             setTimeout(() => {
+              if (WindowPrt) {
                 WindowPrt.print();
+              } else {
+                console.error('Print window was closed before printing could occur.');
+              }
             }, 800);
-            console.log('printing... end ');
-            console.log(printContent.innerHTML);
             //WindowPrt.close();
-        } else {
-            // alert(_validate[1]);
-            this.snackBar.open(_validate[1], 'OK');
-        }
-    }
+          } );
+
+
+          
+
+ 
+    }}
+   
     openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
         this.dialogBox = this.dialog.open(DialogboxComponent, {
             width: '40%',
@@ -9248,7 +9339,7 @@ export class SalesEstimationComponent implements OnInit {
               this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount) /
               // this.exchangeForm.value.fcn_exchange_net_wt
               this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
-              , 'METAL_RATE')
+              , 'METAL')
     
     
           // const value = this.comFunc.transformDecimalVB(
@@ -9412,6 +9503,8 @@ export class SalesEstimationComponent implements OnInit {
     }
 
   }
+
+
 
   changeGrossFunc(totalAmt: any, grossAmt: any) {
 

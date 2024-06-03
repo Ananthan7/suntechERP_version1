@@ -1,3 +1,136 @@
+<div id="print_invoice_est" style="display: none">
+  <div class="bill_header">
+    <h3>ESTIMATION</h3>
+    <table style="width: 100%">
+      <tr class="top_header">
+        <td style="border-bottom-style: hidden; width: 55%">
+          <label style="float: left; text-align: start">Customer Name </label>
+          <label style="float: right; text-align: end">
+            {{ this.customerDataForm.value.fcn_customer_name || "" }}
+          </label>
+        </td>
+        <td style="border-bottom-style: hidden; width: 45%">
+          <label style="float: left; text-align: start; width: 60px"
+            >INVOICE NO
+          </label>
+
+          <label style="float: right; text-align: end">
+            {{ this.vocDataForm.value.fcn_voc_no || "" }}
+          </label>
+        </td>
+      </tr>
+
+      <tr class="top_header" style="border-bottom: hidden">
+        <td>
+          <label style="float: left; text-align: start">ID No/Passport </label>
+          <label style="float: right; text-align: end">
+            {{ this.customerDataForm.value.fcn_customer_id_number || "" }}
+          </label>
+        </td>
+        <td>
+          <label style="float: left; text-align: start; width: 60px"
+            >Bill Date
+          </label>
+          <label style="float: right; text-align: end">
+            {{ this.convertDate(this.vocDataForm.value.vocdate) || "" }}
+          </label>
+        </td>
+      </tr>
+      <tr class="top_header">
+        <td>
+          <label style="float: left; text-align: start">Mobile Number</label>
+          <label style="float: right; text-align: end">
+            {{ this.customerDataForm.value.fcn_customer_mobile || "" }}
+          </label>
+        </td>
+        <td>
+          <label style="float: left; text-align: start">Salesman</label>
+          <label style="float: right; text-align: end; width: 60px">
+            {{ this.vocDataForm.value.sales_person || "" }}
+          </label>
+        </td>
+      </tr>
+    </table>
+    <table *ngFor="let data of ordered_items">
+      <thead>
+        <tr>
+          <th class="text" style="width: 20%">Description</th>
+          <th class="text" style="width: 10%">Pcs</th>
+          <th class="text" class="numbers">{{ data.pcs }}</th>
+          <th class="text" style="width: 18%">Total MKG</th>
+          <th class="numbers">
+            {{ data.making_amt | decimalFormat : this.comFunc.amtDecimals }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text" rowspan="3">{{ data.stock_code }}</td>
+          <!-- <td class="text" rowspan="3">{{ data.description }}</td> -->
+          <td>MKG</td>
+          <td class="numbers">{{ data.rate }}</td>
+          <td class="text">Net amount (exc.VAT)</td>
+          <td class="numbers">
+            {{ data.gross_amt | decimalFormat : this.comFunc.amtDecimals }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text">QTY/ Gms</td>
+          <td class="numbers">
+            {{ data.weight | decimalFormat : this.comFunc.mQtyDecimals }}
+          </td>
+          <td class="text">Tax amount</td>
+          <td class="numbers">
+            {{ data.tax_amount | decimalFormat : this.comFunc.amtDecimals }}
+          </td>
+          <!-- <td class="numbers">{{ this.comFunc.transformDecimalVB(
+              this.comFunc.amtDecimals, data.tax_amount) }}</td> -->
+        </tr>
+        <tr>
+          <td class="text">Total</td>
+          <td colspan="3" class="numbers">
+            {{ data.net_amount | decimalFormat : this.comFunc.amtDecimals }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table>
+      <tbody>
+        <tr>
+          <td class="text" style="width: 20%">Total Before VAT</td>
+          <td class="numbers">
+            {{
+              prnt_inv_total_gross_amt
+                | decimalFormat : this.comFunc.amtDecimals
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text" style="width: 20%">VAT 5%</td>
+          <td class="numbers">
+            {{
+              prnt_inv_total_tax_amount
+                | decimalFormat : this.comFunc.amtDecimals
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text" style="width: 20%">Total With VAT</td>
+          <td class="numbers">
+            {{
+              order_items_total_gross_amount
+                | decimalFormat : this.comFunc.amtDecimals
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
 <div style="display: none" id="print_invoice">
   <table style="border: hidden; width: 100%">
     <tr>
@@ -362,8 +495,7 @@
                 </div> -->
           <div class="col-md-1 d-flex justify-content-center align-items-center">
             <div>
-              <button type="button" color="primary" mat-flat-button
-                (click)="addNew()" >
+              <button type="button" color="primary" mat-flat-button (click)="addNew()">
                 New
               </button>
             </div>
@@ -371,29 +503,24 @@
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>Voucher</mat-label>
-              <input type="text" matInput id="voc_type" formControlName="voc_type"
-                readonly />
+              <input type="text" matInput id="voc_type" formControlName="voc_type" readonly />
             </mat-form-field>
           </div>
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ vocno_lbl }}</mat-label>
-              <input type="text" matInput formControlName="fcn_voc_no"
-                [readonly]="true" class="st_txt_right" />
+              <input type="text" matInput formControlName="fcn_voc_no" [readonly]="true" class="st_txt_right" />
             </mat-form-field>
           </div>
-  
+
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>Currency</mat-label>
-              <input type="text" matInput id="txtCurrency"
-                formControlName="txtCurrency" [readonly]="viewOnly"
+              <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" [readonly]="viewOnly"
                 [matAutocomplete]="currencyList" />
-              <mat-autocomplete #currencyList="matAutocomplete"
-                autoActiveFirstOption
+              <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
                 (optionSelected)="changeCurrency($event)">
-                <mat-option *ngFor="let option of currencyMasterOptions | async"
-                  [value]="option.CURRENCY_CODE">
+                <mat-option *ngFor="let option of currencyMasterOptions | async" [value]="option.CURRENCY_CODE">
                   {{ option.CURRENCY_CODE }}
                 </mat-option>
               </mat-autocomplete>
@@ -402,66 +529,54 @@
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>Cur. Rate</mat-label>
-              <input class="st_txt_right" type="text" matInput id="txtCurRate"
-                formControlName="txtCurRate" [readonly]="
+              <input class="st_txt_right" type="text" matInput id="txtCurRate" formControlName="txtCurRate" [readonly]="
                   viewOnly ||
                   this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
                 " (change)="changeCurRate($event)" />
             </mat-form-field>
           </div>
-  
+
           <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ date_lbl }}</mat-label>
               <!-- [matDatepicker]="vocDate" -->
-              <input matInput type="text" name="vocdate" [matDatepicker]="vocDate"
-                formControlName="vocdate"
-                value="{{ currentDate }}" placeholder="DD/MM/YYYY"
-                [max]="currentDate"
-                [readonly]="viewOnly || this.ordered_items.length > 0"
-                (dateChange)="getFinancialYear()" />
+              <input matInput type="text" name="vocdate" [matDatepicker]="vocDate" formControlName="vocdate"
+                value="{{ currentDate }}" placeholder="DD/MM/YYYY" [max]="currentDate"
+                [readonly]="viewOnly || this.ordered_items.length > 0" (dateChange)="getFinancialYear()" />
               <mat-datepicker-toggle matSuffix [for]="vocDate"
                 [disabled]="viewOnly || this.ordered_items.length > 0"></mat-datepicker-toggle>
               <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-              <mat-error
-                *ngIf="vocDataForm.controls.vocdate.hasError('required')">
+              <mat-error *ngIf="vocDataForm.controls.vocdate.hasError('required')">
                 Voc Date is <strong>required</strong>
               </mat-error>
             </mat-form-field>
           </div>
-  
+
           <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ sales_person_lbl }}</mat-label>
-              <input type="text" matInput formControlName="sales_person"
-                id="sales_person" [matAutocomplete]="salesperson"
-                [readonly]="viewOnly" />
+              <input type="text" matInput formControlName="sales_person" id="sales_person"
+                [matAutocomplete]="salesperson" [readonly]="viewOnly" />
               <!-- <input type="text" matInput formControlName="sales_person"  [matAutocomplete]="auto" [matAutocomplete]="salesperson" (keyup.enter)="chooseFirstOption($event)"> -->
-              <mat-autocomplete #salesperson="matAutocomplete"
-                autoActiveFirstOption
+              <mat-autocomplete #salesperson="matAutocomplete" autoActiveFirstOption
                 (optionSelected)="changeSalesPerson($event.option.value)">
-                <mat-option
-                  *ngFor="let option of salesPersonFilteredOptions | async"
-                  [value]="option.SALESPERSON_CODE">
+                <mat-option *ngFor="let option of salesPersonFilteredOptions | async" [value]="option.SALESPERSON_CODE">
                   {{ option.SALESPERSON_CODE + " - " + option.DESCRIPTION }}
                 </mat-option>
               </mat-autocomplete>
-  
-              <mat-error
-                *ngIf="vocDataForm.controls.sales_person.hasError('required')">
+
+              <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')">
                 Salesman Code cannot be Empty
               </mat-error>
-              <mat-error
-                *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')">
+              <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')">
                 Invalid value
               </mat-error>
             </mat-form-field>
           </div>
-  
+
           <div class="col-md-3" style="background-color: #d6d8da">
             <div class="form-group">
-              <div class="font-weight-bold"
-                style="font-size: 20px; font-weight: 400; color: #0d4f9e">
+              <div class="font-weight-bold" style="font-size: 20px; font-weight: 400; color: #0d4f9e">
                 Net Total
               </div>
               <!-- <div style="font-size: 22px; font-weight: 500">AED {{this.lineItemForm.value.fcn_li_total_amount}}</div> -->
@@ -472,7 +587,7 @@
             </div>
           </div>
         </div>
-  
+
         <!-- <div class="row">
           <div class="col-md-6 row mb-1">
            
@@ -629,53 +744,34 @@
                     <div class="left">
                       <div class="wrapper">
                         <div class="container" style="padding: 0px">
-                          <dx-data-grid id="gridContainer"
-                            [dataSource]="ordered_items" keyExpr="ID"
-                            [showBorders]="true"
-                            (onRowRemoved)="removeLineItemsGrid($event)"
+                          <dx-data-grid id="gridContainer" [dataSource]="ordered_items" keyExpr="ID"
+                            [showBorders]="true" (onRowRemoved)="removeLineItemsGrid($event)"
                             (onEditingStart)="editTable($event)">
-                            <dxo-editing [allowUpdating]="true"
-                              [allowDeleting]="!viewOnly">
-                              <dxo-texts alignment="right"
-                                [editRow]="viewOnly ? 'View' : 'Edit'"
-                                deleteRow="Remove">
+                            <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
+                              <dxo-texts alignment="right" [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
                               </dxo-texts>
                             </dxo-editing>
-  
+
                             <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="sn_no" [width]="80"
-                              caption="SL No." [allowEditing]="false"
+                            <dxi-column dataField="sn_no" [width]="80" caption="SL No." [allowEditing]="false"
                               alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="stock_code" [width]="100"
+                            <dxi-column dataField="stock_code" [width]="100" [allowEditing]="false">
+                            </dxi-column>
+                            <dxi-column dataField="description" [width]="150" [allowEditing]="false" alignment="center">
+                            </dxi-column>
+
+                            <dxi-column dataField="pcs" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
+                            <dxi-column dataField="weight" caption="Weight" [width]="100" [format]="weightDecimalFormat"
                               [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="description" [width]="150"
-                              [allowEditing]="false" alignment="center">
-                            </dxi-column>
-  
-                            <dxi-column dataField="pcs" caption="Pcs"
-                              [width]="100" [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="weight" caption="Weight"
-                              [width]="100" [format]="weightDecimalFormat"
-                              [allowEditing]="false">
-                            </dxi-column>
-                            <dxi-column dataField="metal_amt"
-                              caption="Metal Value" [width]="100"
-                              [allowEditing]="false"
+                            <dxi-column dataField="metal_amt" caption="Metal Value" [width]="100" [allowEditing]="false"
                               [format]="amountDecimalFormat"></dxi-column>
-  
-                            <dxi-column dataField="total_amount"
-                              caption="Mkg amount" alignment="right"
-                              [allowEditing]="false"
-                              [format]="amountDecimalFormat"
-                              [width]="150"></dxi-column>
-                            <dxi-column dataField="net_amount"
-                              caption="Total amount" alignment="right"
-                              format="currency"
-                              [format]="amountDecimalFormat"
-                              [allowEditing]="false" 
-                              [width]="150">
+
+                            <dxi-column dataField="total_amount" caption="Mkg amount" alignment="right"
+                              [allowEditing]="false" [format]="amountDecimalFormat" [width]="150"></dxi-column>
+                            <dxi-column dataField="net_amount" caption="Total amount" alignment="right"
+                              format="currency" [format]="amountDecimalFormat" [allowEditing]="false" [width]="150">
                             </dxi-column>
                             <!-- <dxi-column caption="Actions" [width]="100" [allowEditing]="false">
                             </dxi-column> -->
@@ -690,35 +786,26 @@
                             <dxo-summary>
                               <dxi-total-item column="sn_no">
                               </dxi-total-item>
-                              <dxi-total-item column="stock_code"
-                                summaryType="min" [customizeText]="customizeDate">
+                              <dxi-total-item column="stock_code" summaryType="min" [customizeText]="customizeDate">
                               </dxi-total-item>
-  
-                              <dxi-total-item column="pcs" summaryType="sum"
-                                [customizeText]="customizeQty">
+
+                              <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
-  
-                              <dxi-total-item column="metal_amt"     summaryType="sum" displayFormat="{0}"
-                              precision="2"
-                              [valueFormat]="gridAmountDecimalFormat">
-                            </dxi-total-item>
-  
-                              <dxi-total-item column="weight" summaryType="sum"
-                                caption="Weight"
-                                [valueFormat]="weightDecimalFormat"
-                                displayFormat="{0}">
+
+                              <dxi-total-item column="metal_amt" summaryType="sum" displayFormat="{0}" precision="2"
+                                [valueFormat]="gridAmountDecimalFormat">
+                              </dxi-total-item>
+
+                              <dxi-total-item column="weight" summaryType="sum" caption="Weight"
+                                [valueFormat]="weightDecimalFormat" displayFormat="{0}">
                                 >
                                 <!-- [customizeText]="customizeWeight" -->
                               </dxi-total-item>
-  
-                              <dxi-total-item column="total_amount"
-                                summaryType="sum" displayFormat="{0}"
-                                type="fixedPoint" precision="2"
-                                [valueFormat]="gridAmountDecimalFormat">
+
+                              <dxi-total-item column="total_amount" summaryType="sum" displayFormat="{0}"
+                                type="fixedPoint" precision="2" [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
-                              <dxi-total-item column="net_amount"
-                                summaryType="sum" displayFormat="{0}"
-                                precision="2"
+                              <dxi-total-item column="net_amount" summaryType="sum" displayFormat="{0}" precision="2"
                                 [valueFormat]="gridAmountDecimalFormat">
                               </dxi-total-item>
                               <!-- <dxi-total-item column="total_amount" summaryType="sum" displayFormat="AED {0}"
@@ -727,7 +814,7 @@
                             </dxo-summary>
                           </dx-data-grid>
                         </div>
-  
+
                         <div>
                           <!-- type="submit"
                               [disabled]="this.viewOnly || this.amlNameValidation == true ? (this.customerDataForm.value.fcn_customer_mobile != '') ? false : true : false
@@ -737,8 +824,7 @@
                               " -->
                           <!-- <button type="submit" [disabled]="this.viewOnly" (click)="open(mymodal)" -->
                           <!-- <button type="submit" (click)="open(mymodal)" [disabled]="this.viewOnly " -->
-                          <button class="btn btn-secondary" type="submit"
-                            [disabled]="this.viewOnly"
+                          <button class="btn btn-secondary" type="submit" [disabled]="this.viewOnly"
                             (click)="open(mymodal)" style="
                               border: none;
                               margin: 10px;
@@ -760,44 +846,30 @@
                     <div class="left">
                       <div class="wrapper">
                         <div class="container">
-                          <dx-data-grid id="sales_return_grid"
-                            [dataSource]="sales_returns_items" keyExpr="ID"
+                          <dx-data-grid id="sales_return_grid" [dataSource]="sales_returns_items" keyExpr="ID"
                             (onRowRemoved)="removeSalesReturnGrid($event)"
-                            (onEditingStart)="editTableSalesReturn($event)"
-                            [showBorders]="true" [allowColumnResizing]="true"
-                            [columnAutoWidth]="true">
-                            <dxo-editing [allowUpdating]="true"
-                              [allowDeleting]="!viewOnly">
-                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'"
-                                deleteRow="Remove">
+                            (onEditingStart)="editTableSalesReturn($event)" [showBorders]="true"
+                            [allowColumnResizing]="true" [columnAutoWidth]="true">
+                            <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
+                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
                               </dxo-texts>
                             </dxo-editing>
                             <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="sn_no" [width]="70"
-                              caption="SL No." [allowEditing]="false">
+                            <dxi-column dataField="sn_no" [width]="70" caption="SL No." [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="stock_code" [width]="120"
-                              [allowEditing]="false">
+                            <dxi-column dataField="stock_code" [width]="120" [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="description" [width]="200"
-                              [allowEditing]="false"></dxi-column>
-  
-                            <dxi-column dataField="pcs" caption="Pcs"
-                              [width]="100" [allowEditing]="false"></dxi-column>
-                            <dxi-column dataField="weight" caption="Weight"
-                              [width]="100" [allowEditing]="false"
-                              displayFormat="Wt: {0}"
-                              [format]="weightDecimalFormat">
+                            <dxi-column dataField="description" [width]="200" [allowEditing]="false"></dxi-column>
+
+                            <dxi-column dataField="pcs" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
+                            <dxi-column dataField="weight" caption="Weight" [width]="100" [allowEditing]="false"
+                              displayFormat="Wt: {0}" [format]="weightDecimalFormat">
                             </dxi-column>
-  
-                            <dxi-column dataField="mkg_amount" alignment="right"
-                              format="currency" [width]="150"
-                              [allowEditing]="false"
-                              [format]="amountDecimalFormat"></dxi-column>
-                            <dxi-column dataField="net_amount" alignment="right"
-                              format="currency"
-                              [allowEditing]="false"
-                              [format]="amountDecimalFormat" [width]="150">
+
+                            <dxi-column dataField="mkg_amount" alignment="right" format="currency" [width]="150"
+                              [allowEditing]="false" [format]="amountDecimalFormat"></dxi-column>
+                            <dxi-column dataField="net_amount" alignment="right" format="currency"
+                              [allowEditing]="false" [format]="amountDecimalFormat" [width]="150">
                             </dxi-column>
                             <!-- <dxi-column type="buttons" >
                                                     <dxi-button template="orders">
@@ -808,44 +880,35 @@
                                                     </dxi-button>
                                                 </dxi-column> -->
                             <dxo-summary>
-                              <dxi-total-item column="sn_no" >
+                              <dxi-total-item column="sn_no">
                               </dxi-total-item>
-                              <dxi-total-item column="stock_code"
-                                summaryType="min" [customizeText]="customizeDate">
+                              <dxi-total-item column="stock_code" summaryType="min" [customizeText]="customizeDate">
                               </dxi-total-item>
-  
-                              <dxi-total-item column="pcs" summaryType="sum"
-                                [customizeText]="customizeQty">
+
+                              <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
-  
-                              <dxi-total-item column="weight" summaryType="sum"
-                                caption="Total Wt"
-                                [valueFormat]="weightDecimalFormat"
-                                displayFormat="Wt: {0}">
+
+                              <dxi-total-item column="weight" summaryType="sum" caption="Total Wt"
+                                [valueFormat]="weightDecimalFormat" displayFormat="Wt: {0}">
                                 <!-- [customizeText]="customizeWeight" -->
                               </dxi-total-item>
-  
-                              <dxi-total-item column="mkg_amount"
-                                summaryType="sum"
-                                [valueFormat]="gridAmountDecimalFormat"
-                                displayFormat="AED {0}">
+
+                              <dxi-total-item column="mkg_amount" summaryType="sum"
+                                [valueFormat]="gridAmountDecimalFormat" displayFormat="AED {0}">
                               </dxi-total-item>
-                              <dxi-total-item column="net_amount"
-                                summaryType="sum"
-                                [valueFormat]="gridAmountDecimalFormat"
-                                displayFormat="AED {0}">
+                              <dxi-total-item column="net_amount" summaryType="sum"
+                                [valueFormat]="gridAmountDecimalFormat" displayFormat="AED {0}">
                                 <!-- [valueFormat]="{ currency: 'EUR' }" -->
                               </dxi-total-item>
                             </dxo-summary>
                           </dx-data-grid>
-  
+
                           <div>
                             <button type="submit" [disabled]="
                                 this.ordered_items.length > 0 && !this.viewOnly
                                   ? false
                                   : true
-                              " (click)="open(adjust_sale_return_modal)"
-                              class="btn btn-secondary" style="
+                              " (click)="open(adjust_sale_return_modal)" class="btn btn-secondary" style="
                                 border: none;
                                 margin: 10px;
                                 width: 20px !important;
@@ -867,40 +930,30 @@
                     <div class="left">
                       <div class="wrapper">
                         <div class="container">
-                          <dx-data-grid id="exchange_item_grid"
-                            [dataSource]="exchange_items" keyExpr="ID"
-                            (onRowRemoved)="removeExchangeItemGrid($event)"
-                            [showBorders]="true"
+                          <dx-data-grid id="exchange_item_grid" [dataSource]="exchange_items" keyExpr="ID"
+                            (onRowRemoved)="removeExchangeItemGrid($event)" [showBorders]="true"
                             (onEditingStart)="editTableExchangeItem($event)">
                             <!-- <dxo-editing [allowUpdating]="false" [allowDeleting]="true">
                                 <dxo-texts deleteRow="Remove"> </dxo-texts>
                               </dxo-editing> -->
-                            <dxo-editing [allowUpdating]="true"
-                              [allowDeleting]="!viewOnly">
-                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'"
-                                deleteRow="Remove">
+                            <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
+                              <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
                               </dxo-texts>
                             </dxo-editing>
                             <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="sn_no" [width]="100"
-                              caption="SL No." [allowEditing]="false">
+                            <dxi-column dataField="sn_no" [width]="100" caption="SL No." [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="stock_code" [width]="120"
-                              [allowEditing]="false">
+                            <dxi-column dataField="stock_code" [width]="120" [allowEditing]="false">
                             </dxi-column>
-                            <dxi-column dataField="description" [width]="200"
-                              [allowEditing]="false"></dxi-column>
-  
-                            <dxi-column dataField="pcs" caption="Pcs"
-                              [width]="100" [allowEditing]="false"></dxi-column>
-  
-                            <dxi-column dataField="weight" caption="Weight"
-                              [width]="100" [allowEditing]="false"
+                            <dxi-column dataField="description" [width]="200" [allowEditing]="false"></dxi-column>
+
+                            <dxi-column dataField="pcs" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
+
+                            <dxi-column dataField="weight" caption="Weight" [width]="100" [allowEditing]="false"
                               [format]="weightDecimalFormat">
                             </dxi-column>
-  
-                            <dxi-column dataField="net_amount" alignment="right"
-                              [format]="amountDecimalFormat"
+
+                            <dxi-column dataField="net_amount" alignment="right" [format]="amountDecimalFormat"
                               [allowEditing]="false">
                             </dxi-column>
                             <!-- <dxi-column type="buttons" >
@@ -912,39 +965,32 @@
                                                     </dxi-button>
                                                 </dxi-column> -->
                             <dxo-summary>
-                              <dxi-total-item column="sn_no" >
+                              <dxi-total-item column="sn_no">
                               </dxi-total-item>
-                              <dxi-total-item column="stock_code"
-                                summaryType="min" [customizeText]="customizeDate">
+                              <dxi-total-item column="stock_code" summaryType="min" [customizeText]="customizeDate">
                               </dxi-total-item>
-  
-                              <dxi-total-item column="pcs" summaryType="sum"
-                                [customizeText]="customizeQty">
+
+                              <dxi-total-item column="pcs" summaryType="sum" [customizeText]="customizeQty">
                               </dxi-total-item>
-  
-                              <dxi-total-item column="weight" summaryType="sum"
-                                caption="Total Wt"
-                                [valueFormat]="weightDecimalFormat"
-                                displayFormat="Wt: {0}">
+
+                              <dxi-total-item column="weight" summaryType="sum" caption="Total Wt"
+                                [valueFormat]="weightDecimalFormat" displayFormat="Wt: {0}">
                                 <!-- [customizeText]="customizeWeight" -->
                               </dxi-total-item>
-  
-                              <dxi-total-item column="net_amount"
-                                summaryType="sum"
-                                [valueFormat]="gridAmountDecimalFormat"
-                                displayFormat="AED {0}">
+
+                              <dxi-total-item column="net_amount" summaryType="sum"
+                                [valueFormat]="gridAmountDecimalFormat" displayFormat="AED {0}">
                                 <!-- [valueFormat]="{ currency: 'EUR' }" -->
                               </dxi-total-item>
                             </dxo-summary>
                           </dx-data-grid>
-  
+
                           <div>
                             <button type="submit" [disabled]="
                                 this.ordered_items.length > 0 && !this.viewOnly
                                   ? false
                                   : true
-                              " (click)="open(oldgoldmodal)"
-                              class="btn btn-secondary" style="
+                              " (click)="open(oldgoldmodal)" class="btn btn-secondary" style="
                                 color: white;
                                 border: none;
                                 margin: 10px;
@@ -1188,8 +1234,7 @@
       <div class="card" style="background-color: #ececec !important">
         <div class="card-body">
           <div class="row">
-            <div class="col-xl-12 col-md-6"
-              style="height: 140px; overflow-y: scroll">
+            <div class="col-xl-12 col-md-6" style="height: 140px; overflow-y: scroll">
               <table class="tabletd_gray">
                 <tr>
                   <th style="width: 30%">Karat</th>
@@ -1202,15 +1247,8 @@
                 <tr *ngFor="let krd of karatRateDetails; let id = index">
                   <td>{{ krd.KARAT_CODE }}</td>
                   <td style="text-align: right; padding-right: 3px">
-                    <input type="number" (change)="changeKaratRate($event, id)"
-                      style="text-align: right"
-                      onwheel="this.blur()" [value]="krd.KARAT_RATE"
-                      class="karat_code" [readOnly]="
-                        viewOnly ||
-                        this.comFunc?.posKARATRATECHANGE.toString() == '0'
-                          ? true
-                          : false
-                      " />
+                    <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
+                      onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" readonly />
                     <!-- {{ krd.KARAT_RATE }} -->
                   </td>
                   <td style="text-align: right; padding-right: 3px">
@@ -1219,7 +1257,7 @@
                 </tr>
               </table>
             </div>
-  
+
             <div class="col-xl-12 col-md-6">
               <table class="m-t-10 rhs-table-1">
                 <tr>
@@ -1227,8 +1265,7 @@
                   <td class="td-w-40">Item Total</td>
                   <!-- <td class="td-w-40">Total Amount</td> -->
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      value="{{
+                    <input type="text" class="form-control textboxcorner" id value="{{
                         prnt_inv_total_gross_amt | decimalFormat : 'AMOUNT'
                       }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
                   </td>
@@ -1236,8 +1273,7 @@
                 <tr>
                   <td class="td-w-40">Tax Amount</td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      value="{{
+                    <input type="text" class="form-control textboxcorner" id value="{{
                         this.order_items_total_tax | decimalFormat : 'AMOUNT'
                       }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
                   </td>
@@ -1246,8 +1282,7 @@
                   <!-- <td class="td-w-40">Amount with tax</td> -->
                   <td class="td-w-40">Gross Total</td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      value="{{
+                    <input type="text" class="form-control textboxcorner" id value="{{
                         order_items_total_gross_amount | decimalFormat : 'AMOUNT'
                       }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
                   </td>
@@ -1257,8 +1292,7 @@
                     Sales Return
                   </td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      value="{{
+                    <input type="text" class="form-control textboxcorner" id value="{{
                         invReturnSalesTotalNetTotal | decimalFormat : 'AMOUNT'
                       }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
                   </td>
@@ -1266,69 +1300,55 @@
                 <tr>
                   <td class="td-w-40" style="background: #adacab">Exchange</td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      value="{{
+                    <input type="text" class="form-control textboxcorner" id value="{{
                         order_total_exchange | decimalFormat : 'AMOUNT'
                       }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
                   </td>
                 </tr>
                 <tr>
-                  <td class="td-w-40"
-                    style="background-color: #1a61a9; color: #fff">
+                  <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                     <b>Roundoff Discount</b>
                   </td>
                   <td>
-                    <input type="text" class="form-control textboxcorner"
-                      id="discountInput"
-                      [(ngModel)]="order_items_total_discount_amount"
-                      (focus)="clearField()"
+                    <input type="text" class="form-control textboxcorner" id="discountInput"
+                      [(ngModel)]="order_items_total_discount_amount" (focus)="clearField()"
                       (blur)="order_items_total_discount_amount = formatValue(order_items_total_discount_amount)"
-                      (change)="changeFinalDiscount($event)"
-                      aria-describedby="helpId" [placeholder]="zeroAmtVal"
+                      (change)="changeFinalDiscount($event)" aria-describedby="helpId" [placeholder]="zeroAmtVal"
                       [readonly]="viewOnly||isNoDiscountAllowed">
-  
+
                   </td>
-  
+
                 </tr>
                 <tr>
-                  <td class="td-w-40"
-                    style="background-color: #1a61a9; color: #fff">
+                  <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                     <b>Net Amount</b>
                   </td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      value="{{
+                    <input type="text" class="form-control textboxcorner" id value="{{
                       netTotal | decimalFormat : 'AMOUNT'
                       }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
                   </td>
                 </tr>
-  
+
                 <tr>
-                  <td class="td-w-40"
-                    style="background-color: #1a61a9; color: #fff">
+                  <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                     <b>Receipt Total</b>
                     <!-- <b>Received</b> -->
                   </td>
                   <td>
-                    <input type="text" class="form-control textboxcorner" id
-                      [(ngModel)]="receiptTotalNetAmt"
-                    aria-describedby
-                      [placeholder]="zeroAmtVal" readonly 
-                      AmountDecimalInput
-                      />
+                    <input type="text" class="form-control textboxcorner" id [(ngModel)]="receiptTotalNetAmt"
+                      aria-describedby [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                     <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
                         value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
                   </td>
                 </tr>
-  
+
                 <tr>
-                  <td class="td-w-40"
-                    style="background-color: #1a61a9; color: #fff">
+                  <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                     <b>VAT Round Off</b>
                   </td>
                   <td>
-                    <input type="text" class="form-control textboxcorner"
-                      id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
+                    <input type="text" class="form-control textboxcorner" id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
                       aria-describedby [placeholder]="zeroAmtVal" readonly />
                     <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
                         value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
@@ -1337,45 +1357,27 @@
               </table>
             </div>
           </div>
-  
+
           <div class="row m-t-10 m-b-10">
-            <!-- <div class="col-md-6 col-xl-6" (click)="backToList()" *ngIf="viewOnly">
-              <div class="touch-big-button touch-big-button-black">
-                <div class="touch-big-button-inner">
-                  <i class="fa fa-arrow-circle-left"></i> <span> Back</span>
-                </div>
-              </div>
-            </div> -->
-  
-            <!-- matTooltip="You have already saved"
-            [matTooltipDisabled]="isSaved" -->
-            <div class="col-md-6 col-xl-6"
-              (click)="viewOnly || isSaved ? '' : saveOrder()" *ngIf="!viewOnly">
+
+            <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder()" *ngIf="!viewOnly">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
                   <i class="fa fa-save"></i> <span> Save Bill</span>
                 </div>
               </div>
             </div>
-  
-            <div *ngIf="this.viewOnly||isPrintingEnabled"
+
+            <!-- <div *ngIf="this.viewOnly||isPrintingEnabled"
               class="col-md-6 col-xl-6" (click)="printInvoice()">
-              <!-- *ngIf="!viewOnly" -->
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
                   <i class="fa fa-print"></i> <span> Print Bill</span>
                 </div>
               </div>
             </div>
-            <!-- <div class="col-md-6 col-xl-6 mt-2" (click)="this.viewOnly || this.editOnly ? sendToEmail() : ''">
-              <div class="touch-big-button">
-                <div class="touch-big-button-inner">
-                  <i class="fa fa-print"></i> <span> Send Email</span>
-                </div>
-              </div>
-            </div> -->
-            <div class="col-md-6 col-xl-6 "
-              (click)="viewOnly || isSaved ? '' : saveOrder('continue')"
+            -->
+            <div class="col-md-6 col-xl-6 " (click)="viewOnly || isSaved ? '' : saveOrder('continue')"
               *ngIf="!viewOnly">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
@@ -1384,17 +1386,17 @@
               </div>
             </div>
           </div>
-  
-          <div class="row mt-2" >
+
+          <div class="row mt-2">
             <div class="col-md-6 col-xl-6" *ngIf="this.viewOnly||isPrintingEnabled" (click)="auditTrailClick()">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
-                  <i class="fa fa-book"></i> 
+                  <i class="fa fa-book"></i>
                   <span> Audit Trail</span>
                 </div>
               </div>
             </div>
-  
+
             <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" (click)="cancelBill()">
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
@@ -1404,8 +1406,17 @@
             </div>
           </div>
           <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled">
-         
-  
+
+            <div class="col-md-6 col-xl-6" (click)="printReceiptDetailsWeb()">
+              <!-- *ngIf="!viewOnly" -->
+              <div class="touch-big-button">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-print"></i> <span> Print Bill</span>
+                </div>
+              </div>
+            </div>
+
+
             <!-- <div class="col-md-12 col-xl-12" (click)="exportPdf()">
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
@@ -1453,17 +1464,15 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount LC</mat-label>
-                  <input type="text" class="st_txt_right" matInput
-                  formControlName="cashAmtLC" id="cashAmtLC"
-                  [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
+                  <input type="text" class="st_txt_right" matInput formControlName="cashAmtLC" id="cashAmtLC"
+                    [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount FC</mat-label>
-                  <input type="text" class="st_txt_right" matInput
-                  formControlName="cashAmtFC" id="cashAmtFC"
-                  (focusout)="
+                  <input type="text" class="st_txt_right" matInput formControlName="cashAmtFC" id="cashAmtFC"
+                    (focusout)="
                     changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
                   " [placeholder]="zeroAmtVal" AmountDecimalInput [readonly]="viewOnly" />
                   <mat-error *ngIf="
@@ -1905,13 +1914,10 @@
               <div class="col-md-3">
                 <mat-form-field>
                   <mat-label>Stock Code</mat-label>
-                  <input type="text" matInput
-                  formControlName="fcn_exchange_item_code"
-                  id="fcn_exchange_item_code"
-                  [matAutocomplete]="stockId" [readonly]="viewOnly"
-                  (change)="exchangeStockCode($event)" />
-                  <mat-autocomplete #stockId="matAutocomplete"
-                    (optionSelected)="getStockforExchange()" autoActiveFirstOption>
+                  <input type="text" matInput formControlName="fcn_exchange_item_code" id="fcn_exchange_item_code"
+                    [matAutocomplete]="stockId" [readonly]="viewOnly" (change)="exchangeStockCode($event)" />
+                  <mat-autocomplete #stockId="matAutocomplete" (optionSelected)="getStockforExchange()"
+                    autoActiveFirstOption>
                     <mat-option *ngFor="let option of exStockCodeFilteredOptions | async" [value]="option">
                       {{ option }}
                     </mat-option>
@@ -1948,45 +1954,33 @@
               <mat-form-field>
                 <mat-label>Pcs </mat-label>
                 <!-- oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" -->
-                <input type="number" class="text-right" [min]="0"
-                [maxLength]="8"
-                (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
-                formControlName="fcn_exchange_pcs"
-                [readonly]="viewOnly" />
+                <input type="number" class="text-right" [min]="0" [maxLength]="8"
+                  (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_exchange_pcs"
+                  [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Gross Wt</mat-label>
-                <input type="number" [min]="0" [maxLength]="10"
-                (keyup)="this.comFunc.enforceMinMax($event.target)"
-                class="st_txt_right" id="fcn_exchange_gross_wt" matInput
-                formControlName="fcn_exchange_gross_wt"
-                (focusout)="getExchangeNwtWt($event)" [readonly]="viewOnly"
-                MetalDecimalInput />
+                <input type="number" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" id="fcn_exchange_gross_wt" matInput formControlName="fcn_exchange_gross_wt"
+                  (focusout)="getExchangeNwtWt($event)" [readonly]="viewOnly" MetalDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Stone Wt</mat-label>
-                <input type="text" [min]="0" [maxLength]="10"
-                  (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
-                  class="st_txt_right"
-                  matInput formControlName="fcn_exchange_stone_wt"
-                  (change)="changeExchangeStoneWt($event)"
-                  id="fcn_exchange_stone_wt" readonly
-                  StoneDecimalInput />
+                <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)" class="st_txt_right"
+                  matInput formControlName="fcn_exchange_stone_wt" (change)="changeExchangeStoneWt($event)"
+                  id="fcn_exchange_stone_wt" readonly StoneDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Net Wt </mat-label>
-                <input type="text" [min]="0" [maxLength]="10"
-                  (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  class="st_txt_right" matInput
-                  formControlName="fcn_exchange_net_wt" readonly
-                  id="fcn_exchange_net_wt"
+                <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" matInput formControlName="fcn_exchange_net_wt" readonly id="fcn_exchange_net_wt"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
                   (change)="changeExchangeNettWt($event)" MetalDecimalInput />
               </mat-form-field>
@@ -1999,93 +1993,66 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Chargable Wt </mat-label>
-                <input type="text" [min]="0" [maxLength]="14"
-                (keyup)="this.comFunc.enforceMinMax($event.target)"
-                class="st_txt_right" matInput
-                formControlName="fcn_exchange_chargeable_wt"
-                readonly
-                id="fcn_exchange_chargeable_wt"
-                [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
-                MetalDecimalInput />
+                <input type="text" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" matInput formControlName="fcn_exchange_chargeable_wt" readonly
+                  id="fcn_exchange_chargeable_wt"
+                  [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)" MetalDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Purity </mat-label>
-                <input type="number"
-                  [min]="this._exchangeItemchange?.PURITY_FROM || 0"
-                  [max]="this._exchangeItemchange?.PURITY_TO" [step]="0.01"
-                  [maxLength]="14"
-                  (change)="changeExPurity($event)" class="st_txt_right"
-                  matInput formControlName="fcn_exchange_purity"
+                <input type="number" [min]="this._exchangeItemchange?.PURITY_FROM || 0"
+                  [max]="this._exchangeItemchange?.PURITY_TO" [step]="0.01" [maxLength]="14"
+                  (change)="changeExPurity($event)" class="st_txt_right" matInput formControlName="fcn_exchange_purity"
                   [readonly]="viewOnly" id="fcn_exchange_purity" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Pure Weight</mat-label>
-                <input class="st_txt_right" type="text" [min]="0"
-                  [maxLength]="14"
+                <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                   (change)="this.comFunc.enforceMinMax($event.target)" matInput
-                  formControlName="fcn_exchange_pure_weight"
-                  id="fcn_exchange_pure_weight" readonly
-                  MetalDecimalInput />
+                  formControlName="fcn_exchange_pure_weight" id="fcn_exchange_pure_weight" readonly MetalDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Purity Difference</mat-label>
-                <input type="text" [min]="0" [maxLength]="14"
-                  (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  class="st_txt_right" matInput
-                  formControlName="fcn_exchange_purity_diff" readonly
-                  MetalDecimalInput />
+                <input type="text" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" matInput formControlName="fcn_exchange_purity_diff" readonly MetalDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Stone Rate</mat-label>
-                <input [min]="0" [maxLength]="14"
-                (keyup)="this.comFunc.enforceMinMax($event.target)"
-                class="st_txt_right" matInput readonly
-                formControlName="fcn_exchange_stone_rate"
-                id="fcn_exchange_stone_rate"
-                (change)="changeExchangeStoneRate($event)"
-                AmountDecimalInput />
+                <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" matInput readonly formControlName="fcn_exchange_stone_rate"
+                  id="fcn_exchange_stone_rate" (change)="changeExchangeStoneRate($event)" AmountDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Stone Amount</mat-label>
-                <input [min]="0" [maxLength]="14"
-                  (keyup)="this.comFunc.enforceMinMax($event.target)" [min]="0"
-                  class="st_txt_right" matInput
-                  formControlName="fcn_exchange_stone_amount"
-                  id="fcn_exchange_stone_amount"
-                  (change)="changeExStoneAmount($event)" readonly
-                  AmountDecimalInput />
+                <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" [min]="0"
+                  class="st_txt_right" matInput formControlName="fcn_exchange_stone_amount"
+                  id="fcn_exchange_stone_amount" (change)="changeExStoneAmount($event)" readonly AmountDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Metal Rate </mat-label>
-                <input type="text" [min]="0" [maxLength]="14"
-                  (change)="metalRateChange()"
-                  (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  class="st_txt_right" matInput
-                  formControlName="fcn_exchange_metal_rate"
-                  readonly />
+                <input type="text" [min]="0" [maxLength]="14" (change)="metalRateChange()"
+                  (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
+                  formControlName="fcn_exchange_metal_rate" readonly />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Making Rate </mat-label>
-                <input [min]="0" [maxLength]="14"
-                (keyup)="this.comFunc.enforceMinMax($event.target)"
-                class="st_txt_right" matInput
-                formControlName="fcn_exchange_making_rate"
-                readonly
-                (change)="changeExMakingRate($event)" AmountDecimalInput />
+                <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" matInput formControlName="fcn_exchange_making_rate" readonly
+                  (change)="changeExMakingRate($event)" AmountDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2098,21 +2065,17 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Metal Amount</mat-label>
-                <input type="text" AmountDecimalInput [max]="14"
-                  class="st_txt_right" matInput
-                  formControlName="fcn_exchange_metal_amount"
-                  (change)="changeExchangeMetalAmt($event)"
+                <input type="text" AmountDecimalInput [max]="14" class="st_txt_right" matInput
+                  formControlName="fcn_exchange_metal_amount" (change)="changeExchangeMetalAmt($event)"
                   [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Net Amount</mat-label>
-                <input [min]="0" type="number" [maxLength]="14"
-                (keyup)="this.comFunc.enforceMinMax($event.target)"
-                class="st_txt_right" matInput
-                formControlName="fcn_exchange_net_amount" [readonly]="true"
-                (change)="changeExNetAmt($event)" AmountDecimalInput />
+                <input [min]="0" type="number" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                  class="st_txt_right" matInput formControlName="fcn_exchange_net_amount" [readonly]="true"
+                  (change)="changeExNetAmt($event)" AmountDecimalInput />
               </mat-form-field>
             </div>
           </div>
@@ -2139,20 +2102,24 @@
                   </div>
               </div>-->
     </div>
+
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
-        <button class="btn btn-primary btn-m-r-10" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly">
+        <button mat-flat-button color="accent" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly">
           CONTINUE
         </button>
-        <button class="btn btn-primary btn-m-r-10" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly">
+        &nbsp;
+        <button mat-flat-button color="primary" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly">
           SAVE
         </button>
-        <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">
+        &nbsp;
+        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
           CANCEL
         </button>
         &nbsp;
       </div>
     </div>
+    
   </div>
 </ng-template>
 
@@ -2192,9 +2159,8 @@
                 </mat-form-field> -->
               <mat-form-field class="example-full-width">
                 <mat-label>Branch</mat-label>
-                <input type="text" matInput formControlName="fcn_returns_branch"
-                [matAutocomplete]="branch"
-                (focusout)="changeBranch($event)" [readonly]="viewOnly" />
+                <input type="text" matInput formControlName="fcn_returns_branch" [matAutocomplete]="branch"
+                  (focusout)="changeBranch($event)" [readonly]="viewOnly" />
                 <mat-autocomplete #branch="matAutocomplete" autoActiveFirstOption>
                   <mat-option *ngFor="
                       let option of filteredSalesReturnBranchOptions | async
@@ -2294,31 +2260,28 @@
               <th>Select</th>
             </tr>
 
-            <tr
-            *ngFor="let slsReturn of salesReturnsItems_forVoc; let id = index"
-            (dblclick)="changeRetailSalesReturnVal(slsReturn)"
-            class="sales-return-row">
-            <td style="text-align: center">{{ slsReturn.DIVISION_CODE }}</td>
-            <td>{{ slsReturn.STOCK_CODE }}</td>
-            <td>{{ slsReturn.STOCK_DOCDESC }}</td>
-            <td style="text-align: center">
-              {{ slsReturn.GROSSWT | decimalFormat : "METAL" }}
-            </td>
-            <td style="text-align: right">
-              {{ slsReturn.TOTALWITHVATLC | decimalFormat : "AMOUNT" }}
-            </td>
-            <td style="text-align: center">
-              <input [disabled]="viewOnly" type="checkbox"
-                value="{{ slsReturn.STOCK_CODE }}" [readonly]="viewOnly"
-                [checked]="
+            <tr *ngFor="let slsReturn of salesReturnsItems_forVoc; let id = index"
+              (dblclick)="changeRetailSalesReturnVal(slsReturn)" class="sales-return-row">
+              <td style="text-align: center">{{ slsReturn.DIVISION_CODE }}</td>
+              <td>{{ slsReturn.STOCK_CODE }}</td>
+              <td>{{ slsReturn.STOCK_DOCDESC }}</td>
+              <td style="text-align: center">
+                {{ slsReturn.GROSSWT | decimalFormat : "METAL" }}
+              </td>
+              <td style="text-align: right">
+                {{ slsReturn.TOTALWITHVATLC | decimalFormat : "AMOUNT" }}
+              </td>
+              <td style="text-align: center">
+                <input [disabled]="viewOnly" type="checkbox" value="{{ slsReturn.STOCK_CODE }}" [readonly]="viewOnly"
+                  [checked]="
                   checkSelectedVal(
                     slsReturn.STOCK_CODE,
                     slsReturn.TOTALWITHVATLC,
                     slsReturn.SRNO
                   )
                 " (change)="addSalesReturnOnSelect($event, slsReturn, id)" />
-            </td>
-          </tr>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -2327,17 +2290,18 @@
           Total : {{ sales_returns_total_amt | decimalFormat : "AMOUNT" }}
         </div>
       </div>
-      <div class="col-md-12" style="padding-bottom: 20px">
-        <div style="text-align: right; padding: 10px">
-          <button class="btn btn-primary btn-m-r-10" (click)="addItemtoSalesReturn()" [disabled]="viewOnly">
-            SAVE
-          </button>
-          <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">
-            CANCEL
-          </button>
-          &nbsp;
-        </div>
+
+      <div style="text-align: right; padding: 10px">
+        <button mat-flat-button color="primary" class="btn-m-r-10" (click)="addItemtoSalesReturn()"
+          [disabled]="viewOnly">
+          SAVE
+        </button>
+        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
+          CANCEL
+        </button>
+        &nbsp;
       </div>
+     
     </div>
   </div>
 </ng-template>
@@ -2375,11 +2339,9 @@
                     <mat-label>Code</mat-label>
                     <input type="text" matInput
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                      formControlName="fcn_mob_code" id="fcn_mob_code"
-                      [matAutocomplete]="fcn_mob_code"
+                      formControlName="fcn_mob_code" id="fcn_mob_code" [matAutocomplete]="fcn_mob_code"
                       [readonly]="viewOnly" />
-                    <mat-autocomplete #fcn_mob_code="matAutocomplete"
-                      autoActiveFirstOption>
+                    <mat-autocomplete #fcn_mob_code="matAutocomplete" autoActiveFirstOption>
                       <mat-option *ngFor="
                           let option of mobileCountryMasterOptions | async
                         " [value]="option.MOBILECOUNTRYCODE">
@@ -2399,11 +2361,9 @@
                 <div class="col-md-8">
                   <mat-form-field>
                     <mat-label>Mobile 1</mat-label>
-                    <input type="text" #mobile1
-                      (change)="onCustomerNameFocus(mobile1.value)"
+                    <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                      matInput formControlName="fcn_cust_detail_phone"
-                      id="fcn_cust_detail_phone" [readonly]="viewOnly"
+                      matInput formControlName="fcn_cust_detail_phone" id="fcn_cust_detail_phone" [readonly]="viewOnly"
                       maxlength="20" />
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_cust_detail_phone.hasError(
@@ -2419,11 +2379,8 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Name</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_customer_detail_name"
-                  id="fcn_customer_detail_name"
-                  (change)="nameChange($event)" [readonly]="viewOnly"
-                  appNoEmptySpace />
+                <input type="text" matInput formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
+                  (change)="nameChange($event)" [readonly]="viewOnly" appNoEmptySpace />
                 <!-- <input type="text" matInput [pattern]="noWhiteSpacePattern" formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
                     (change)="nameChange($event)" [readonly]="viewOnly" /> -->
                 <mat-error *ngIf="
@@ -2445,8 +2402,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>First Name</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_customer_detail_fname" [readonly]="true"
+                <input type="text" matInput formControlName="fcn_customer_detail_fname" [readonly]="true"
                   appNoEmptySpace />
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_customer_detail_fname.hasError(
@@ -2460,9 +2416,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Middle Name</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_customer_detail_mname"
-                  [readonly]="true" />
+                <input type="text" matInput formControlName="fcn_customer_detail_mname" [readonly]="true" />
               </mat-form-field>
             </div>
           </div>
@@ -2471,9 +2425,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Last Name</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_customer_detail_lname"
-                  [readonly]="true" />
+                <input type="text" matInput formControlName="fcn_customer_detail_lname" [readonly]="true" />
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_customer_detail_lname.hasError(
                       'required'
@@ -2495,16 +2447,13 @@
                 <mat-label>Mobile 2</mat-label>
                 <input type="text"
                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                  matInput formControlName="fcn_cust_detail_phone2"
-                  [readonly]="viewOnly" />
+                  matInput formControlName="fcn_cust_detail_phone2" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Email Address</mat-label>
-                <input type="email" matInput
-                  formControlName="fcn_cust_detail_email"
-                  [readonly]="viewOnly" />
+                <input type="email" matInput formControlName="fcn_cust_detail_email" [readonly]="viewOnly" />
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_cust_detail_email.hasError(
                       'email'
@@ -2517,10 +2466,8 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Gender</mat-label>
-                <mat-select formControlName="fcn_cust_detail_gender"
-                  [disabled]="viewOnly">
-                  <mat-option *ngFor="let data of genderList"
-                    [value]="data.ENGLISH">{{ data.ENGLISH }}</mat-option>
+                <mat-select formControlName="fcn_cust_detail_gender" [disabled]="viewOnly">
+                  <mat-option *ngFor="let data of genderList" [value]="data.ENGLISH">{{ data.ENGLISH }}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_cust_detail_gender.hasError(
@@ -2537,10 +2484,8 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Marital Status</mat-label>
-                <mat-select formControlName="fcn_cust_detail_marital_status"
-                  [disabled]="viewOnly">
-                  <mat-option *ngFor="let data of maritalStatusList"
-                    [value]="data.ENGLISH">{{ data.ENGLISH
+                <mat-select formControlName="fcn_cust_detail_marital_status" [disabled]="viewOnly">
+                  <mat-option *ngFor="let data of maritalStatusList" [value]="data.ENGLISH">{{ data.ENGLISH
                     }}</mat-option>
                   <mat-option value="Unknown">Unknown</mat-option>
                 </mat-select>
@@ -2549,12 +2494,9 @@
             <div class="col-md-3">
               <mat-form-field dateFormat3>
                 <mat-label>Date Of Birth</mat-label>
-                <input matInput [matDatepicker]="dob" [max]="vocMaxDate"
-                  name="fcn_cust_detail_dob"
-                  formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY"
-                  [readonly]="viewOnly" />
-                <mat-datepicker-toggle matSuffix
-                  [for]="dob"></mat-datepicker-toggle>
+                <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
+                  formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+                <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
 
                 <mat-error *ngIf="
@@ -2569,15 +2511,10 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Nationality</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_nationality"
-                  id="fcn_cust_detail_nationality"
-                  [matAutocomplete]="nationality" [readonly]="viewOnly" />
-                <mat-autocomplete #nationality="matAutocomplete"
-                  autoActiveFirstOption>
-                  <mat-option
-                    *ngFor="let option of nationalityMasterOptions | async"
-                    [value]="option.CODE">
+                <input type="text" matInput formControlName="fcn_cust_detail_nationality"
+                  id="fcn_cust_detail_nationality" [matAutocomplete]="nationality" [readonly]="viewOnly" />
+                <mat-autocomplete #nationality="matAutocomplete" autoActiveFirstOption>
+                  <mat-option *ngFor="let option of nationalityMasterOptions | async" [value]="option.CODE">
                     {{ option.CODE + " - " + option.DESCRIPTION }}
                   </mat-option>
                 </mat-autocomplete>
@@ -2600,16 +2537,11 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Country</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_country"
-                  id="fcn_cust_detail_country"
+                <input type="text" matInput formControlName="fcn_cust_detail_country" id="fcn_cust_detail_country"
                   [matAutocomplete]="country" [readonly]="viewOnly" />
-                <mat-autocomplete #country="matAutocomplete"
-                  autoActiveFirstOption
+                <mat-autocomplete #country="matAutocomplete" autoActiveFirstOption
                   (optionSelected)="changeCountry($event.option.value)">
-                  <mat-option
-                    *ngFor="let option of countryMasterOptions | async"
-                    [value]="option.CODE">
+                  <mat-option *ngFor="let option of countryMasterOptions | async" [value]="option.CODE">
                     {{ option.CODE + " - " + option.DESCRIPTION }}
                   </mat-option>
                 </mat-autocomplete>
@@ -2632,14 +2564,11 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>State</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_state"
-                  id="fcn_cust_detail_state"
+                <input type="text" matInput formControlName="fcn_cust_detail_state" id="fcn_cust_detail_state"
                   [matAutocomplete]="state" [readonly]="viewOnly" />
                 <mat-autocomplete #state="matAutocomplete" autoActiveFirstOption
                   (optionSelected)="changeState($event.option.value)">
-                  <mat-option *ngFor="let option of stateMasterOptions | async"
-                    [value]="option.CODE">
+                  <mat-option *ngFor="let option of stateMasterOptions | async" [value]="option.CODE">
                     {{ option.CODE }}
                   </mat-option>
                 </mat-autocomplete>
@@ -2656,13 +2585,10 @@
               <mat-form-field>
                 <mat-label>City</mat-label>
                 <!-- <input type="text" matInput formControlName="fcn_cust_detail_city" [readonly]="viewOnly" /> -->
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_city"
-                  id="fcn_cust_detail_city"
+                <input type="text" matInput formControlName="fcn_cust_detail_city" id="fcn_cust_detail_city"
                   [matAutocomplete]="city" [readonly]="viewOnly" />
                 <mat-autocomplete #city="matAutocomplete" autoActiveFirstOption>
-                  <mat-option *ngFor="let option of cityMasterOptions | async"
-                    [value]="option.CODE">
+                  <mat-option *ngFor="let option of cityMasterOptions | async" [value]="option.CODE">
                     {{ option.CODE }}
                   </mat-option>
                 </mat-autocomplete>
@@ -2678,9 +2604,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Address</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_address"
-                  [readonly]="viewOnly"
+                <input type="text" matInput formControlName="fcn_cust_detail_address" [readonly]="viewOnly"
                   appNoEmptySpace />
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_cust_detail_address.hasError(
@@ -2694,16 +2618,11 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>ID Type </mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_idType"
-                  [matAutocomplete]="custIdType"
+                <input type="text" matInput formControlName="fcn_cust_detail_idType" [matAutocomplete]="custIdType"
                   [readonly]="viewOnly" />
-                <mat-autocomplete #custIdType="matAutocomplete"
-                  (optionSelected)="changeIdtype($event.option.value)"
+                <mat-autocomplete #custIdType="matAutocomplete" (optionSelected)="changeIdtype($event.option.value)"
                   autoActiveFirstOption>
-                  <mat-option
-                    *ngFor="let option of idTypeFilteredOptions | async"
-                    [value]="option">
+                  <mat-option *ngFor="let option of idTypeFilteredOptions | async" [value]="option">
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
@@ -2726,8 +2645,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>ID Number</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
+                <input type="text" matInput formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
                   appNoEmptySpace />
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_cust_detail_idcard.hasError(
@@ -2769,9 +2687,7 @@
               <mat-form-field>
                 <!-- <mat-label>Occupation</mat-label> -->
                 <mat-label>Designation</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_designation"
-                  [readonly]="viewOnly"
+                <input type="text" matInput formControlName="fcn_cust_detail_designation" [readonly]="viewOnly"
                   appNoEmptySpace />
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_cust_detail_designation.hasError(
@@ -2785,22 +2701,17 @@
             <div class="col-md-2">
               <mat-form-field>
                 <mat-label>Employer</mat-label>
-                <input type="text" matInput
-                  formControlName="fcn_cust_detail_company"
-                  [readonly]="viewOnly" />
+                <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Expiry Date</mat-label>
-                <input matInput [matDatepicker]="expDateCust"
-                  name="fcn_customer_exp_date"
-                  formControlName="fcn_customer_exp_date"
-                  placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" />
-                <mat-datepicker-toggle matSuffix
-                  [for]="expDateCust"></mat-datepicker-toggle>
-                <mat-datepicker [startAt]="currentDate"
-                  #expDateCust></mat-datepicker>
+                <input matInput [matDatepicker]="expDateCust" name="fcn_customer_exp_date"
+                  formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
+                  [readonly]="viewOnly" />
+                <mat-datepicker-toggle matSuffix [for]="expDateCust"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="currentDate" #expDateCust></mat-datepicker>
 
                 <mat-error *ngIf="
                     customerDetailForm.controls.fcn_customer_exp_date.hasError(
@@ -2835,253 +2746,196 @@
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-dia-metal">
       Item Details
-        </h4>
-        <button style="border: none" type="button" *ngIf="!updateBtn" class="close"
-        aria-label="Close"
-        (click)="closeItemModal()">
-        <span aria-hidden="true">x</span>
-      </button>
+    </h4>
+    <button style="border: none" type="button" *ngIf="!updateBtn" class="close" aria-label="Close"
+      (click)="closeItemModal()">
+      <span aria-hidden="true">x</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="lineItemForm">
 
-<!-- <mat-tab-group> -->
-        <!-- <mat-tab label="ITEM DETAILS"> -->
-          <div class="row" style="padding-top: 15px">
-            <div class="errormsg col-md-12" id="modelerrmsg">
-              <!-- {{ pos_div_modelerrmsg }} -->
-            </div>
-            <span>
-              <div class="col-md-12">
-                <div class="bg-gray-card">
-                  <div class="form-group row">
-                    <div class="col-md-2">
-                      <!-- <mat-form-field style="width: 100%; display:inline-block !important;"> -->
-                      <mat-form-field>
-                        <mat-label>Division </mat-label>
-                        <input type="text" matInput
-                        formControlName="fcn_li_division" id="fcn_li_division"
-                        readonly />
-                      </mat-form-field>
-                      <!-- <master-search [MasterSearchData]="divisionCodeData"
+      <!-- <mat-tab-group> -->
+      <!-- <mat-tab label="ITEM DETAILS"> -->
+      <div class="row" style="padding-top: 15px">
+        <div class="errormsg col-md-12" id="modelerrmsg">
+          <!-- {{ pos_div_modelerrmsg }} -->
+        </div>
+        <span>
+          <div class="col-md-12">
+            <div class="bg-gray-card">
+              <div class="form-group row">
+                <div class="col-md-2">
+                  <!-- <mat-form-field style="width: 100%; display:inline-block !important;"> -->
+                  <mat-form-field>
+                    <mat-label>Division </mat-label>
+                    <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" readonly />
+                  </mat-form-field>
+                  <!-- <master-search [MasterSearchData]="divisionCodeData"
                         (newRowClick)="divisionCodeSelected($event)">>
                         </master-search> -->
-                    </div>
-                    <div class="col-md-2">
-                      <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
-                      <mat-form-field>
-                        <mat-label>Item Code </mat-label>
-                        <input type="text" matInput autocomplete="off"
-                      formControlName="fcn_li_item_code" #fcn_li_item_code
-                      id="fcn_li_item_code" autofocus
-                      (change)="getStockDesc($event)" [readonly]="viewOnly" />
-                      </mat-form-field>
-                      <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)"></master-search> -->
-                    </div>
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>Item Description </mat-label>
-                        <input type="text" matInput
-                        formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
-                        [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-2">
-                      <mat-form-field>
-                        <mat-label>Location </mat-label>
-                        <input type="text" matInput
-
-                        formControlName="fcn_li_location" id="fcn_li_location"
-                        [readonly]="viewOnly" />
-                      </mat-form-field>
-                    </div>
-                 
-                  </div>
                 </div>
-              </div>
+                <div class="col-md-2">
+                  <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
+                  <mat-form-field>
+                    <mat-label>Item Code </mat-label>
+                    <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code" #fcn_li_item_code
+                      id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
+                  </mat-form-field>
+                  <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)"></master-search> -->
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>Item Description </mat-label>
+                    <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
+                      [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field>
+                    <mat-label>Location </mat-label>
+                    <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
+                      [readonly]="viewOnly" />
+                  </mat-form-field>
+                </div>
 
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <div class="col-md-3">
-                        <mat-form-field aria-readonly="true">
-                          <mat-label>PCs</mat-label>
-                          <input class="st_txt_right" type="number" [min]="0"
-                        autocomplete="off" [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput id="fcn_li_pcs"
-                        formControlName="fcn_li_pcs"
-                        (change)="changePCS($event)" [readonly]="viewOnly"
-                        NumberOnly />
-                          <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group row">
+                  <div class="col-md-3">
+                    <mat-form-field aria-readonly="true">
+                      <mat-label>PCs</mat-label>
+                      <input class="st_txt_right" type="number" [min]="0" autocomplete="off" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
+                        formControlName="fcn_li_pcs" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
+                      <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                               (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                               value="{{li_pcs_val}}"> -->
-                          <mat-error
-                            *ngIf="
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_pcs.hasError(
                                 'required'
                               )
-                            "
-                          >
-                            PCS is <strong>required</strong>
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
+                            ">
+                        PCS is <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_pcs.hasError('min')
-                            "
-                          >
-                            {{ "PCS should Not Be Zero" }}
-                            <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-3">
-                        <mat-form-field>
-                          <mat-label>{{
-                            newDictionary?.lblGrossWeight || "Gross Wt"
-                          }}</mat-label>
-                          <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
-                          <input class="st_txt_right" [maxLength]="14" type="text"
-                        [min]="0"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput formControlName="fcn_li_gross_wt"
+                            ">
+                        {{ "PCS should Not Be Zero" }}
+                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>{{
+                        newDictionary?.lblGrossWeight || "Gross Wt"
+                        }}</mat-label>
+                      <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
+                      <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
                         id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()" (change)="changeGrossWt($event)"
                         [readonly]="viewOnly" MetalDecimalInput />
-                          <mat-error
-                            *ngIf="
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_gross_wt.hasError(
                                 'required'
                               )
-                            "
-                          >
-                            Gross Weight is <strong>required</strong>
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
+                            ">
+                        Gross Weight is <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_gross_wt.hasError(
                                 'min'
                               )
-                            "
-                          >
-                            {{ this.comFunc.getMsgByID("MSG1306") }}
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div
-                        class="col-md-3"
-                        *ngIf="this.divisionMS == 'S' ? false : true"
-                      >
-                        <mat-form-field>
-                          <mat-label>{{
-                            newDictionary?.lblStoneWeight || "Stone Wt"
-                          }}</mat-label>
-                          <input class="st_txt_right" type="text" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          matInput formControlName="fcn_li_stone_wt"
-                          id="fcn_li_stone_wt" (change)="changeStoneWt($event)"
-                          [readonly]="!isStoneIncluded"
-                          MetalDecimalInput />
-                        </mat-form-field>
-                      </div>
-                      <div
-                        class="col-md-3"
-                        *ngIf="this.divisionMS == 'S' ? false : true"
-                      >
-                        <mat-form-field>
-                          <mat-label>Net Wt </mat-label>
-                          <input type="text" class="st_txt_right" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          max="{{ this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) }}"
-                          matInput
-                          formControlName="fcn_li_net_wt" id="fcn_li_net_wt"
-                          (focusout)="changeNettWt($event)" readonly
-                          MetalDecimalInput />
-                        </mat-form-field>
-                      </div>
-                    </div>
-
-                    <div class="form-group row" *ngIf="this.divisionMS == 'M'">
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Purity </mat-label>
-                          <input type="number" [min]="0" [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          class="st_txt_right" matInput
-                          formControlName="fcn_li_purity" id="fcn_li_purity"
-                          readonly />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Pure Weight</mat-label>
-                          <input class="st_txt_right" type="number" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          matInput formControlName="fcn_li_pure_wt"
-                          id="fcn_li_pure_wt" readonly />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div
-                      class="form-group row"
-                      *ngIf="this.divisionMS == 'S' ? false : true"
-                    >
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Metal Rate</mat-label>
-                          <input class="st_txt_right" type="text" [min]="0"
-                        [maxLength]="14"
+                            ">
+                        {{ this.comFunc.getMsgByID("MSG1306") }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="this.divisionMS == 'S' ? false : true">
+                    <mat-form-field>
+                      <mat-label>{{
+                        newDictionary?.lblStoneWeight || "Stone Wt"
+                        }}</mat-label>
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_stone_wt"
+                        id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="!isStoneIncluded"
+                        MetalDecimalInput />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="this.divisionMS == 'S' ? false : true">
+                    <mat-form-field>
+                      <mat-label>Net Wt </mat-label>
+                      <input type="text" class="st_txt_right" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput formControlName="fcn_ad_metal_rate"
+                        max="{{ this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) }}" matInput
+                        formControlName="fcn_li_net_wt" id="fcn_li_net_wt" (focusout)="changeNettWt($event)" readonly
+                        MetalDecimalInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="form-group row" *ngIf="this.divisionMS == 'M'">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Purity </mat-label>
+                      <input type="number" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
+                        formControlName="fcn_li_purity" id="fcn_li_purity" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Pure Weight</mat-label>
+                      <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_pure_wt"
+                        id="fcn_li_pure_wt" readonly />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Metal Rate</mat-label>
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_metal_rate"
                         id="fcn_ad_metal_rate" readonly />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Metal Amount</mat-label>
-                          <input class="st_txt_right" type="text" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          matInput
-                          formControlName="fcn_ad_metal_amount"
-                          id="fcn_ad_metal_amount" AmountDecimalInput readonly />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div
-                      class="form-group row"
-                      *ngIf="this.divisionMS == 'S' ? false : true"
-                    >
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Stone Rate</mat-label>
-                          <input class="st_txt_right" type="text" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          matInput formControlName="fcn_ad_stone_rate"
-                          id="fcn_ad_stone_rate"
-                          (change)="changeStoneRate($event)"
-                          value="{{ li_stone_rate_val }}"
-                          [readonly]="!isStoneIncluded" AmountDecimalInput />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Stone Amount</mat-label>
-                          <input class="st_txt_right" type="text" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          id="fcn_ad_stone_amount" matInput
-                          formControlName="fcn_ad_stone_amount"
-                          value="{{ li_stone_amount_val }}"
-                          (change)="changeStoneAmt($event)"
-                          [readonly]="!isStoneIncluded" />
-                        </mat-form-field>
-                      </div>
-                      <!-- <div class="col-md-4">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Metal Amount</mat-label>
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_ad_metal_amount" id="fcn_ad_metal_amount" AmountDecimalInput readonly />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Stone Rate</mat-label>
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_stone_rate"
+                        id="fcn_ad_stone_rate" (change)="changeStoneRate($event)" value="{{ li_stone_rate_val }}"
+                        [readonly]="!isStoneIncluded" AmountDecimalInput />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Stone Amount</mat-label>
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_ad_stone_amount" matInput
+                        formControlName="fcn_ad_stone_amount" value="{{ li_stone_amount_val }}"
+                        (change)="changeStoneAmt($event)" [readonly]="!isStoneIncluded" />
+                    </mat-form-field>
+                  </div>
+                  <!-- <div class="col-md-4">
                         <mat-form-field>
                           <mat-label>Rate Type</mat-label>
                           <input
@@ -3093,294 +2947,245 @@
                           />
                         </mat-form-field>
                       </div> -->
-                    </div>
+                </div>
 
-                    <div class="form-group row">
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>{{
-                            divisionMS == "M" ? "Making Rate" : "Rate"
-                          }}</mat-label>
-                          <input class="st_txt_right" type="text" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          matInput id="fcn_li_rate"
-                          formControlName="fcn_li_rate"
-                          (change)="changeRate($event)" readonly="{{ viewOnly }}"
-                          (focus)="setValToLocalStorage($event, 'fcn_li_rate')"
-                          AmountDecimalInput />
-                          <!-- readonly="{{
+                <div class="form-group row">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>{{
+                        divisionMS == "M" ? "Making Rate" : "Rate"
+                        }}</mat-label>
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_rate"
+                        formControlName="fcn_li_rate" (change)="changeRate($event)" readonly="{{ viewOnly }}"
+                        (focus)="setValToLocalStorage($event, 'fcn_li_rate')" AmountDecimalInput />
+                      <!-- readonly="{{
                               viewOnly || divisionMS == 'S' ? true : false
                             }}" -->
-                          <mat-error
-                            *ngIf="
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_rate.hasError(
                                 'required'
                               )
-                            "
-                          >
-                            {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
-                            is <strong>required</strong>
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
+                            ">
+                        {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
+                        is <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_rate.hasError('min')
-                            "
-                          >
-                            <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                            {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
-                            should Not Be Zero
-                          </mat-error>
-                          <!-- formControlName="fcn_li_rate" value="{{li_rate_val}}" (keyup)="changeRate()" (mouseup)="changeRate()" > -->
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>
-                            {{
-                              divisionMS == "M" ? "Making Amount" : "Amount"
-                            }}</mat-label
-                          >
-                          <!-- : "Total Amount" -->
-                          <input class="st_txt_right" type="text" [min]="0"
-                          [maxLength]="14"
-                          (keyup)="this.comFunc.enforceMinMax($event.target)"
-                          id="fcn_li_total_amount" matInput
-                          formControlName="fcn_li_total_amount"
-                          (change)="changeTotalAmt($event)"
-                          id="fcn_li_total_amount"
-                          readonly="{{ viewOnly }}" AmountDecimalInput />
-                          <!-- readonly="{{
+                            ">
+                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                        {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
+                        should Not Be Zero
+                      </mat-error>
+                      <!-- formControlName="fcn_li_rate" value="{{li_rate_val}}" (keyup)="changeRate()" (mouseup)="changeRate()" > -->
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>
+                        {{
+                        divisionMS == "M" ? "Making Amount" : "Amount"
+                        }}</mat-label>
+                      <!-- : "Total Amount" -->
+                      <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_li_total_amount" matInput
+                        formControlName="fcn_li_total_amount" (change)="changeTotalAmt($event)" id="fcn_li_total_amount"
+                        readonly="{{ viewOnly }}" AmountDecimalInput />
+                      <!-- readonly="{{
                               viewOnly || divisionMS == 'S' ? true : false
                             }}" -->
-                          <mat-error
-                            *ngIf="
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_total_amount.hasError(
                                 'required'
                               )
-                            "
-                          >
-                            {{ divisionMS == "M" ? "Making Amount" : "Amount" }}
-                            <!-- : "Total Amount" -->
-                            is
-                            <strong>required</strong>
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
+                            ">
+                        {{ divisionMS == "M" ? "Making Amount" : "Amount" }}
+                        <!-- : "Total Amount" -->
+                        is
+                        <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="
                               lineItemForm.controls.fcn_li_total_amount.hasError(
                                 'min'
                               )
-                            "
-                          >
-                            <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                            {{
-                              divisionMS == "M"
-                                ? "Making Amount"
-                                : "Total Amount"
-                            }}
-                            should Not Be Zero
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div
-                      class="form-group row"
-                      *ngIf="this.divisionMS == 'M' ? false : true"
-                    >
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Discount %</mat-label>
-                          <input class="st_txt_right" [min]="0" [max]="100"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput
-                        formControlName="fcn_li_discount_percentage"
-                        (change)="changeDisPer($event)"
+                            ">
+                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                        {{
+                        divisionMS == "M"
+                        ? "Making Amount"
+                        : "Total Amount"
+                        }}
+                        should Not Be Zero
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-group row" *ngIf="this.divisionMS == 'M' ? false : true">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Discount %</mat-label>
+                      <input class="st_txt_right" [min]="0" [max]="100"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_discount_percentage" (change)="changeDisPer($event)"
                         id="fcn_li_discount_percentage" (focus)="
                           setValToLocalStorage(
                             $event,
                             'fcn_li_discount_percentage'
                           )
                         " [readonly]="viewOnly" AmountDecimalInput />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-6">
-                        <mat-form-field>
-                          <mat-label>Discount Amount</mat-label>
-                          <input class="st_txt_right" [min]="0" [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput
-                        formControlName="fcn_li_discount_amount"
-                        id="fcn_li_discount_amount"
-                        (change)="changeDisAmount($event)" [readonly]="viewOnly"
-                        (focus)="
-                          setValToLocalStorage($event, 'fcn_li_discount_amount')
-                        " AmountDecimalInput />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <!--- Division, Item Code, Item Desc, Location, PCs, (Gross Wt, Stone Wt, Net Wt), Making Rate - Making Amount,
-                                    Stone Rate - Stone Amount, Metal Rate - Metal Amount, Rate - Total Amount, Disc Rate - Disc Amount,Gross Amount, Tax % - Tax Amount, Net Amount ) -->
+                    </mat-form-field>
                   </div>
                   <div class="col-md-6">
-                    <div class="form-group">
-                      <div style="height: 150px; text-align: center"
-                        class="productImage">
-                        <image-slider [imageArray]="imageURL"></image-slider>
-                        <!-- <img class="card-img-top" [src]="this.curr_line_item_images"
+                    <mat-form-field>
+                      <mat-label>Discount Amount</mat-label>
+                      <input class="st_txt_right" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_discount_amount" id="fcn_li_discount_amount"
+                        (change)="changeDisAmount($event)" [readonly]="viewOnly" (focus)="
+                          setValToLocalStorage($event, 'fcn_li_discount_amount')
+                        " AmountDecimalInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!--- Division, Item Code, Item Desc, Location, PCs, (Gross Wt, Stone Wt, Net Wt), Making Rate - Making Amount,
+                                    Stone Rate - Stone Amount, Metal Rate - Metal Amount, Rate - Total Amount, Disc Rate - Disc Amount,Gross Amount, Tax % - Tax Amount, Net Amount ) -->
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div style="height: 150px; text-align: center" class="productImage">
+                    <image-slider [imageArray]="imageURL"></image-slider>
+                    <!-- <img class="card-img-top" [src]="this.curr_line_item_images"
                           alt="Product image" loading="lazy"
                           style="
                             border: 1px solid #ccc;
                             height: 150px;
                             width: 150px;
                           " /> -->
-                      </div>
-                    </div>
-                
-
-                    <!-- <div class="form-group row" style="padding-top: 162px"> -->
+                  </div>
                 </div>
-                <div class="row mt-1">
-                  <div class="col-md-12 form-group row">
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>
-                          Total Amount
-                          <!-- {{
+
+
+                <!-- <div class="form-group row" style="padding-top: 162px"> -->
+              </div>
+              <div class="row mt-1">
+                <div class="col-md-12 form-group row">
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>
+                        Total Amount
+                        <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
                           }} -->
-                        </mat-label>
-                        <!-- <mat-label>Gross Amount</mat-label> -->
+                      </mat-label>
+                      <!-- <mat-label>Gross Amount</mat-label> -->
 
-                        <input class="st_txt_right" [min]="0" [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput
-                        formControlName="fcn_li_gross_amount"
-                        id="fcn_li_gross_amount" [readonly]="true"
+                      <input class="st_txt_right" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_gross_amount" id="fcn_li_gross_amount" [readonly]="true"
                         (change)="changeGrossAmt($event)" (focus)="
                           setValToLocalStorage($event, 'fcn_li_gross_amount')
                         " AmountDecimalInput />
-                  
-                        <mat-error
-                          *ngIf="
+
+                      <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_gross_amount.hasError(
                               'required'
                             )
-                          "
-                        >
-                          Total Amount
-                          <!-- {{
+                          ">
+                        Total Amount
+                        <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
                           }} -->
-                          is <strong>required</strong>
-                        </mat-error>
-                        <mat-error
-                          *ngIf="
+                        is <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_gross_amount.hasError(
                               'min'
                             )
-                          "
-                        >
-                          <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                          Total Amount
-                          <!-- {{
+                          ">
+                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                        Total Amount
+                        <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
                           }} -->
-                          should Not Be Zero
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3" *ngIf="taxType == 1">
-                      <mat-form-field>
-                        <mat-label>Tax %</mat-label>
-                        <input class="st_txt_right" type="number" [min]="0"
-                        [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput
-                        formControlName="fcn_li_tax_percentage"
-                        id="fcn_li_tax_percentage" readonly />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3" *ngIf="taxType == 2">
-                      <mat-form-field>
-                        <mat-label>CGST %</mat-label>
-                        <input class="st_txt_right" type="number" [min]="0"
-                        [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput
-                        formControlName="fcn_li_cgst_percentage"
-                        id="fcn_li_cgst_percentage" readonly />
-                      </mat-form-field>
-                    </div>
-                    <!-- <div class="form-group row" style="padding-top: 98px"> -->
-                    <div class="col-md-3" *ngIf="taxType == 1">
-                      <mat-form-field>
-                        <mat-label>Tax Amount</mat-label>
-                        <input class="st_txt_right" [min]="0" [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput formControlName="fcn_li_tax_amount"
+                        should Not Be Zero
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="taxType == 1">
+                    <mat-form-field>
+                      <mat-label>Tax %</mat-label>
+                      <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_tax_percentage" id="fcn_li_tax_percentage" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="taxType == 2">
+                    <mat-form-field>
+                      <mat-label>CGST %</mat-label>
+                      <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_cgst_percentage" id="fcn_li_cgst_percentage" readonly />
+                    </mat-form-field>
+                  </div>
+                  <!-- <div class="form-group row" style="padding-top: 98px"> -->
+                  <div class="col-md-3" *ngIf="taxType == 1">
+                    <mat-form-field>
+                      <mat-label>Tax Amount</mat-label>
+                      <input class="st_txt_right" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_tax_amount"
                         id="fcn_li_tax_amount" AmountDecimalInput readonly />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3" *ngIf="taxType == 2">
-                      <mat-form-field>
-                        <mat-label>CGST Amount</mat-label>
-                        <input class="st_txt_right" type="number" [min]="0"
-                        [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)"
-                        matInput
-                        formControlName="fcn_li_cgst_amount"
-                        id="fcn_li_cgst_amount" readonly />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <!-- <mat-label>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="taxType == 2">
+                    <mat-form-field>
+                      <mat-label>CGST Amount</mat-label>
+                      <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_cgst_amount" id="fcn_li_cgst_amount" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <!-- <mat-label>
                           {{
                           divisionMS == "M" ? "Net Amount" : "Total+Tax"
                         }}
                       </mat-label> -->
-                        <mat-label>Net Amount</mat-label>
-                        <input class="st_txt_right" (focus)="
+                      <mat-label>Net Amount</mat-label>
+                      <input class="st_txt_right" (focus)="
                         setValToLocalStorage($event, 'fcn_li_net_amount')
-                      " [min]="0" [maxLength]="14"
-                      (keyup)="this.comFunc.enforceMinMax($event.target)"
-                      matInput
-                      formControlName="fcn_li_net_amount"
-                      id="fcn_li_net_amount" (change)="changeNettAmt($event)"
-                      [readonly]="viewOnly" AmountDecimalInput />
-                        <mat-error
-                          *ngIf="
+                      " [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
+                        formControlName="fcn_li_net_amount" id="fcn_li_net_amount" (change)="changeNettAmt($event)"
+                        [readonly]="viewOnly" AmountDecimalInput />
+                      <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_net_amount.hasError(
                               'required'
                             )
-                          "
-                        >
-                          Net Amount
-                          <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
-                          is <strong>required</strong>
-                        </mat-error>
-                        <mat-error
-                          *ngIf="
+                          ">
+                        Net Amount
+                        <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
+                        is <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_net_amount.hasError(
                               'min'
                             )
-                          "
-                        >
-                          <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                          Net Amount
-                          <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
-                          should Not Be Zero
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <!-- </div> -->
+                          ">
+                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                        Net Amount
+                        <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
+                        should Not Be Zero
+                      </mat-error>
+                    </mat-form-field>
                   </div>
+                  <!-- </div> -->
                 </div>
               </div>
-              </div>
-            </span>
-            <!-- </form> -->
+            </div>
           </div>
+        </span>
+        <!-- </form> -->
+      </div>
 
     </form>
 

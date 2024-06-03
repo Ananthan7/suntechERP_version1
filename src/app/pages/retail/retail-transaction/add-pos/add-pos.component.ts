@@ -3071,7 +3071,7 @@ export class AddPosComponent implements OnInit {
       // value.METALVALUEFC
     );
     this.exchangeForm.controls.fcn_exchange_pure_weight.setValue(
-      this.comFunc.decimalQuantityFormat(value.PUREWT, 'AMOUNT')
+      this.comFunc.decimalQuantityFormat(value.PUREWT, 'METAL')
       // value.PUREWT
     );
     this.exchangeForm.controls.fcn_exchange_stone_rate.setValue(
