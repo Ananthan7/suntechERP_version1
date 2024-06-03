@@ -567,7 +567,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   setStockCodeCondition() {
     let form = this.metalIssueDetailsForm.value
-    let val = `@strBranch_Code='${form.BRANCH_CODE}',`
+    let val = `@strBranch_Code='${this.comService.branchCode}',`
     val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
     val += `@strMetalStone='',@strProcess_Code='',`
     val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
