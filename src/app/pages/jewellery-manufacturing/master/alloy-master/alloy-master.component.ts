@@ -378,6 +378,18 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
     this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
     this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
+    this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
+    this.alloyMastereForm.controls.price2Fc.setValue(this.content.PRICE2FC)
+    this.alloyMastereForm.controls.price3Fc.setValue(this.content.PRICE3FC)
+    this.alloyMastereForm.controls.price4Fc.setValue(this.content.PRICE4FC)
+    this.alloyMastereForm.controls.price5Fc.setValue(this.content.PRICE5FC)
+    this.alloyMastereForm.controls.price1Lc.setValue(this.content.PRICE1LC)
+    this.alloyMastereForm.controls.price2Lc.setValue(this.content.PRICE2LC)
+    this.alloyMastereForm.controls.price3Lc.setValue(this.content.PRICE3LC)
+    this.alloyMastereForm.controls.price4Lc.setValue(this.content.PRICE4LC)
+    this.alloyMastereForm.controls.price5Lc.setValue(this.content.PRICE5LC)
+    this.alloyMastereForm.controls.weightAvgCostFC.setValue(this.content.STOCK_FCCOST)
+    this.alloyMastereForm.controls.weightAvgCostLC.setValue(this.content.STOCK_LCCOST)
     this.alloyMastereForm.controls.hsncode.setValue(this.content.HSN_CODE)
     this.alloyMastereForm.controls.allowpcs.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
     this.alloyMastereForm.controls.excludeTransferWt.setValue(this.viewchangeYorN(this.content.EXCLUDE_TRANSFER_WT))
@@ -992,7 +1004,7 @@ export class AlloyMasterComponent implements OnInit {
       MODEL_NO: "",
       MODEL_YEAR: 0,
       OPENED_ON: this.commonService.formatDateTime(this.currentDate),
-      OPENED_BY: this.commonService.userName,
+      OPENED_BY: this.commonService.nullToString(this.alloyMastereForm.value.createdBy),
       FIRST_TRN: this.commonService.formatDateTime(this.alloyMastereForm.value.fristtransaction),
       LAST_TRN: this.commonService.formatDateTime(this.alloyMastereForm.value.lasttransaction),
       MID: this.content?.MID || 0,

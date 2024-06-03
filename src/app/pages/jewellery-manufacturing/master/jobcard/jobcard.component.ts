@@ -587,8 +587,8 @@ export class JobcardComponent implements OnInit {
 
   ordertypeCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.orderType.setValue(e.DESCRIPTION);
-    this.jobCardFrom.controls.jobno.setValue(e.CODE);
+    this.jobCardFrom.controls.orderType.setValue(e.CODE);
+    this.jobCardFrom.controls.jobno.setValue(e.DESCRIPTION);
   }
 
   subcatCodeSelected(e: any) {
