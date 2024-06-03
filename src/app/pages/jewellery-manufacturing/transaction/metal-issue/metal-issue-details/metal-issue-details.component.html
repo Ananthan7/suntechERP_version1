@@ -240,12 +240,12 @@
                                                 formControlName="stockCode"
                                                 placeholder="stockcode"
                                                 (focusout)="stockCodeValidate($event)"
-                                                [readonly]="viewMode" />
+                                                [readonly]="viewMode || masterMetalChecked" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="stockCodeData"
                                             (newRowClick)="stockCodeSelected($event)"
-                                            *ngIf="!viewMode"></master-search>
+                                            *ngIf="!masterMetalChecked"></master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
@@ -452,6 +452,7 @@
                                             <input class="form-check-input"
                                                 type="checkbox"
                                                 [readonly]="viewMode"
+                                                (change)="masterMetalChange($event)"
                                                 formControlName="masterMetal">
                                             <label class="form-check-label"
                                                 for="DesighCode">

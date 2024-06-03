@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./priceschemes-master.component.scss']
 })
 export class PriceschemesMasterComponent implements OnInit {
-  priceSchemaMasterForm!: FormGroup;
   @Input() content!: any;
   price3SearchEnable: boolean = false;
   price2SearchEnable: boolean = false;
@@ -37,6 +36,16 @@ export class PriceschemesMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  priceSchemaMasterForm: FormGroup  = this.formBuilder.group({
+    priceCode: ['', [Validators.required]],
+    priceDescription: ['', [Validators.required]],
+    price1: ['', [Validators.required]],
+    price2: [{ value: '', disabled: true }, Validators.required],
+    price3: [{ value: '', disabled: true }],
+    price4: [{ value: '', disabled: true }],
+    price5: [{ value: '', disabled: true }],
+  })
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -49,16 +58,6 @@ export class PriceschemesMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
-
-    this.priceSchemaMasterForm = this.formBuilder.group({
-      priceCode: ['', [Validators.required]],
-      priceDescription: ['', [Validators.required]],
-      price1: ['', [Validators.required]],
-      price2: [{ value: '', disabled: true }, Validators.required],
-      price3: [{ value: '', disabled: true }],
-      price4: [{ value: '', disabled: true }],
-      price5: [{ value: '', disabled: true }],
-    })
 
     if(this.content?.FLAG){
       this.setAllInitialValues();
@@ -186,15 +185,67 @@ export class PriceschemesMasterComponent implements OnInit {
 
 
   /** checking for same account code selection */
-  private isSameAccountCodeSelected(accountCode: any): boolean {
-    return (
-      this.priceSchemaMasterForm.value.price1 === accountCode ||
-      this.priceSchemaMasterForm.value.price2 === accountCode ||
-      this.priceSchemaMasterForm.value.price3 === accountCode ||
-      this.priceSchemaMasterForm.value.price4 === accountCode ||
-      this.priceSchemaMasterForm.value.price5 === accountCode
-    );
+  private isSameAccountCodeSelected(accountCode: any, controlName: string): boolean {
+    // Get all the price control names
+    const priceControls = ['price1', 'price2', 'price3', 'price4', 'price5'];
+  
+    // Get the form values
+    const formValues = this.priceSchemaMasterForm.value;
+  
+    // Convert the accountCode to upper case for case-insensitive comparison
+    const upperAccountCode = this.commonService.nullToString(accountCode).toUpperCase();
+  
+    // Iterate through the price controls and check for matching account codes
+    for (const control of priceControls) {
+      if (control !== controlName && this.commonService.nullToString(formValues[control]).toUpperCase() === upperAccountCode) {
+        return true;
+      }
+    }
+  
+    return false;
   }
+  // private isSameAccountCodeSelected(accountCode: any,controlName: string): boolean {
+  //   switch (controlName) {
+  //     case 'price1':
+  //       return (
+  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
+  //       );
+  //     case 'price2':
+  //       return (
+  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
+  //       );
+  //     case 'price3':
+  //       return (
+  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
+  //       );
+  //     case 'price4':
+  //       return (
+  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price5.toUpperCase() === accountCode.toUpperCase()
+  //       );
+  //     case 'price5':
+  //       return (
+  //         this.priceSchemaMasterForm.value.price1.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price2.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price3.toUpperCase() === accountCode.toUpperCase() ||
+  //         this.priceSchemaMasterForm.value.price4.toUpperCase() === accountCode.toUpperCase() 
+  //       )
+  //     default:
+  //       return false
+  //   }
+    
+  // }
 
 
   priceCodeSelected(e: any, controlName: string) {
@@ -212,8 +263,9 @@ export class PriceschemesMasterComponent implements OnInit {
       this.price5SearchEnable = true;
     }
 
-    if (this.isSameAccountCodeSelected(e.PRICE_CODE)) {
+    if (this.isSameAccountCodeSelected(e.PRICE_CODE,controlName)) {
       this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
+      this.priceSchemaMasterForm.controls[controlName].setValue('')
       return;
     }
 
@@ -377,15 +429,13 @@ export class PriceschemesMasterComponent implements OnInit {
         .subscribe((result) => {
           if (result.status == "Success") {
             this.priceSchemaMasterForm.controls.priceCode.setValue('')
-            // this.priceSchemaMasterForm.controls.priceDescription.setValue((data.PRICE_DESCRIPTION).toUpperCase())
+            this.renderer.selectRootElement('#code')?.focus();
           }
         }, err => {
-          console.error('Error in setAllInitialValues:', err);
           this.commonService.toastErrorByMsgId('MSG1531')
         })
     }
     catch (error) {
-      console.error('Error in setAllInitialValues:', error);
       this.commonService.toastErrorByMsgId('MSG1531');
     }
   }
@@ -526,6 +576,13 @@ export class PriceschemesMasterComponent implements OnInit {
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
+    console.log(this.priceSchemaMasterForm.value);
+    
+    if (this.isSameAccountCodeSelected(event.target.value,FORMNAME)) {
+      this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
+      this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
+      return;
+    }
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`

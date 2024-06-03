@@ -33,6 +33,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   image: string | ArrayBuffer | null | undefined;
   isViewContinue!: boolean;
   viewMode: boolean = false;
+  masterMetalChecked: boolean = false;
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -151,12 +152,13 @@ export class MetalIssueDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.setNewFormValue()
     if (this.content && this.content.FLAG) {
+      this.setInitialValues()
       this.metalIssueDetailsForm.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.masterMetalChecked = true;
       }
     }
-    this.setInitialValues()
   }
   setNewFormValue(){
     this.branchCode = this.comService.branchCode;
@@ -412,9 +414,12 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.resetStockDetails()
     }
   }
-  // formSubmit() {
-  //   this.closed(postData);
-  // }
+  masterMetalChange(event: any){
+    console.log(event);
+    console.log(event.target.checked);
+    this.masterMetalChecked = event.target.checked
+    
+  }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.metalIssueDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)

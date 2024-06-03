@@ -23,8 +23,9 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
-                                                formControlName="priceCode" id="code" #priceCode
+                                                formControlName="priceCode" id="code"
                                                 appNoEmptySpace
+                                                #priceCode
                                                 (input)="priceCode.value = priceCode.value.toUpperCase()"
                                                 placeholder="Code"
                                                 [readonly]="viewMode || editMode"
@@ -51,7 +52,8 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price1"   (input)="inputValidate($event)"
+                                                formControlName="price1"   
+                                                (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,priceCodeData,'price1')" appNoEmptySpace [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
                                         </mat-form-field>
