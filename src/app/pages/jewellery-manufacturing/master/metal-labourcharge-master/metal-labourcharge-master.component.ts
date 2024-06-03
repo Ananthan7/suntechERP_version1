@@ -511,6 +511,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
+
     this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
     this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
     this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
@@ -564,8 +565,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
     this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
     this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
-    this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
-    this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
+    this.metallabourMasterForm.controls.forDesignOnly.setValue(this.viewchangeYorN(this.content.FOR_DESIGN));
+    this.metallabourMasterForm.controls.onGrossWt.setValue(this.viewchangeYorN(this.content.ON_GROSSWT));
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
 
@@ -589,6 +590,16 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
     //     this.content.METALSTONE));
 
+  }
+
+  viewchangeYorN(e: any) {
+    console.log(e);
+
+    if (e == 'Y') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   private setInitialValues() {
@@ -640,6 +651,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   metaldivisionCodeSelected(e: any) {
     this.stockcodeDisable = false
+
     this.metallabourMasterForm.controls.stock_code.setValue('');
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
