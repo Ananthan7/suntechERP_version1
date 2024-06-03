@@ -432,6 +432,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.grossWt = true;
     this.codeEnable1 = true;
     this.setInitialValues();
+    console.log(this.content)
     if (this.content.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -517,6 +518,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
     this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
+    this.diamondlabourMasterForm.controls.unitList.setValue(this.content.UNITCODE);
 
     this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
       this.commonService.transformDecimalVB(
