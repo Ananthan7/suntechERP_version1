@@ -16,11 +16,13 @@ import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-is
   styleUrls: ['./melting-issue.component.scss']
 })
 export class MeltingIssueComponent implements OnInit {
-
+  @ViewChild('meltingissueDetailScreen') public meltingissueDetailScreen!: NgbModal;
+  dataToDetailScreen: any;
+  modalReference!: NgbModalRef;
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure', 'Job Pcs']
   columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
-  db1: any[] = ['Sr#','Division','Stock Code', 'Description','Alloy','Alloy Qty','Rate','Amount']
+  db1: any[] = ['Sr#', 'Division', 'Stock Code', 'Description', 'Alloy', 'Alloy Qty', 'Rate', 'Amount']
   @Input() content!: any;
   tableData: any[] = [];
   sequenceDetails: any[] = []
@@ -124,7 +126,7 @@ export class MeltingIssueComponent implements OnInit {
     processdes: [''],
     worker: [''],
     workerdes: [''],
-    subjobno: ['',[Validators.required]],
+    subjobno: ['', [Validators.required]],
     color: [''],
     time: [''],  // Not in table
     remarks: [''],
@@ -134,7 +136,7 @@ export class MeltingIssueComponent implements OnInit {
     balance: [''],
     TotalgrossWt: [''],
     TotalpureWt: [''],
-    subJobDescription: ['',[Validators.required]],
+    subJobDescription: ['', [Validators.required]],
     process: [''],
     currency: [''],
     currencyrate: [''],
@@ -143,7 +145,7 @@ export class MeltingIssueComponent implements OnInit {
   });
   router: any;
   onClose: any;
-  modalRef: NgbModalRef| null = null
+  modalRef: NgbModalRef | null = null
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -162,9 +164,9 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.setCompanyCurrency()
     this.setAllInitialValues()
-  
+
   }
-  
+
   setAllInitialValues() {
     console.log(this.content)
     if (!this.content) return
@@ -173,23 +175,13 @@ export class MeltingIssueComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          data.Details.forEach((element:any) => {
-            this.tableData.push({
-              jobno: element.JOB_NUMBER,
-              stockcode: element.STOCK_CODE,
-              process: element.PROCESS_CODE,
-              worker: element.WORKER_CODE,
-              pcs: element.PCS,
-              grossweight: element.GROSS_WT,
-              purity: element.PURITY,
-              pureweight: element.PUREWT,
-              SRNO: element.SRNO,
-              Rate: element.RATE,
-              Amount: element.Amount,
-            
+          this.meltingISsueDetailsData = data.Details
+          // data.Details.forEach((element: any) => {
+          // //   this.tableData.push({
+          // //     // 
 
-            })
-          });
+          // //   })
+          //  });
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
           this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
           this.meltingIssueFrom.controls.vocdate.setValue(data.VOCDATE)
@@ -206,8 +198,8 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.stockcode.setValue(data.Details[0].STOCK_CODE)
           this.meltingIssueFrom.controls.purity.setValue(data.Details[0].PURITY)
           this.meltingIssueFrom.controls.SRNO.setValue(data.Details[0].SRNO)
-          
-       
+
+
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -216,7 +208,7 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-  
+
 
     // this.meltingIssueFrom.controls.jobno.setValue(dataFromParent.jobno)
     // this.meltingIssueFrom.controls.jobdes.setValue(dataFromParent.jobdes)
@@ -237,9 +229,9 @@ export class MeltingIssueComponent implements OnInit {
     // this.meltingIssueFrom.controls.TOTAL_IRONWT.setValue(dataFromParent.TOTAL_IRONWT)
     // this.meltingIssueFrom.controls.pcs.setValue(dataFromParent.pcs)
     // this.meltingIssueFrom.controls.subjobno.setValue(dataFromParent.subjobno)
-    
+
   }
-  
+
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
@@ -264,11 +256,11 @@ export class MeltingIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  deleteTableData(): void {
-    this.tableRowCount = 0;
-    console.log(this.selectRowIndex)
-    this.tableData.splice(this.selectRowIndex, 1)
-  }
+  // deleteTableData(): void {
+  //   this.tableRowCount = 0;
+  //   console.log(this.selectRowIndex)
+  //   this.tableData.splice(this.selectRowIndex, 1)
+  // }
 
   jobnoCodeSelected(e: any) {
     console.log(e);
@@ -297,110 +289,129 @@ export class MeltingIssueComponent implements OnInit {
   @ViewChild('mymodal') public mymodal!: NgbModal;
 
   open(modalname?: any) {
-      
-      const modalRef: NgbModalRef = this.modalService.open(modalname, {
-        size: 'lg',
-        backdrop: 'static',
-        keyboard: false,
-        windowClass: 'modal-full-width'
-      });
-  
-      modalRef.result.then((result) => {
-       
-      }, (reason) => {
-       
-      });
+
+    const modalRef: NgbModalRef = this.modalService.open(modalname, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      windowClass: 'modal-full-width'
+    });
+
+    modalRef.result.then((result) => {
+
+    }, (reason) => {
+
+    });
+  }
+  openModal(item: any) {
+    // Open the modal and store the reference
+    this.modalRef = this.modalService.open('mymodal', { size: 'sm' });
+    // Pass item data to the modal if needed
+    // this.modalRef.componentInstance.itemData = item;
+  }
+
+  closeModal() {
+    // Check if the modal reference exists before trying to close
+    if (this.modalRef) {
+      // Close the modal using the reference
+      this.modalRef.close();
     }
-    openModal(item: any) {
-      // Open the modal and store the reference
-      this.modalRef = this.modalService.open('mymodal', { size: 'sm' });
-      // Pass item data to the modal if needed
-      // this.modalRef.componentInstance.itemData = item;
-    }
-  
-    closeModal() {
-      // Check if the modal reference exists before trying to close
-      if (this.modalRef) {
-        // Close the modal using the reference
-        this.modalRef.close();
-      }
-    }
-      close1(data: any = null) {
-        this.modalService.dismissAll(data);
-      }
-    
-  
-    
-  
-  
-  
-  
-  openaddMeltingIssueDetails(data?: any) {
-    console.log(data)
-    if (data) {
-      data[0] = this.meltingIssueFrom.value;
+  }
+  close1(data: any = null) {
+    this.modalService.dismissAll(data);
+  }
+
+  openaddMeltingIssueDetails(dataToChild?: any) {
+    if (dataToChild) {
+      dataToChild.FLAG = this.content?.FLAG || ''
+      dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
     } else {
-      data = [{ HEADERDETAILS: this.meltingIssueFrom.value }]
+      dataToChild = { HEADERDETAILS: this.meltingIssueFrom.value }
     }
-    const modalRef: NgbModalRef = this.modalService.open(MeltingIssueDetailsComponent, {
+    this.dataToDetailScreen = dataToChild //input variable to pass data to child
+    this.modalReference = this.modalService.open(this.meltingissueDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+  }
+  // onRowClickHandler(event: any) {
 
-    modalRef.result.then((postData) => {
-      console.log(postData);
-      if (postData) {
-        console.log('Data from modal:', postData);
-        this.meltingISsueDetailsData.push(postData.POSTDATA[0]);
-        console.log(this.meltingISsueDetailsData);
-        this.setValuesToHeaderGrid(postData);
+  //   this.selectRowIndex = (event.dataIndex)
+  //   let selectedData = event.data
+  //   let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+  //   this.openaddMeltingIssueDetails(selectedData)
+  //   console.log(selectedData)
+  //   console.log("fired.")
+  //   console.log(this.selectRowIndex, event);
 
-      }
-    });
+  // }
+
+
+
+  // setValuesToHeaderGrid(detailDataToParent: any) {
+  //   let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
+  //   if (PROCESS_FORMDETAILS.SRNO) {
+  //     this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+  //   } else {
+  //     this.tableRowCount += 1
+  //     PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+  //   }
+
+  //   this.tableData.push(PROCESS_FORMDETAILS)
+
+  //   if (detailDataToParent) {
+  //     this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+  //   }
+  //   //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
+
+  // }
+  // swapObjects(array1: any, array2: any, index: number) {
+  //   // Check if the index is valid
+  //   if (index >= 0 && index < array1.length) {
+  //     array1[index] = array2[0];
+  //   } else {
+  //     console.error('Invalid index');
+  //   }
+  // }
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
+    if (detailDataToParent.SRNO != 0) {
+      this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+    } else {
+      console.log(detailDataToParent,'passing')
+      this.meltingISsueDetailsData.push(detailDataToParent);
+      this.recalculateSRNO()
+    }
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE') {
+      this.commonService.showSnackBarMsg('Details added successfully')
+    };
+  }
+  closeDetailScreen() {
+    this.modalReference.close()
   }
   onRowClickHandler(event: any) {
-
-    this.selectRowIndex = (event.dataIndex)
+    this.selectRowIndex = event.data.SRNO
+  }
+  onRowDoubleClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
     let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
     this.openaddMeltingIssueDetails(selectedData)
-    console.log(selectedData)
-    console.log("fired.")
-    console.log(this.selectRowIndex, event);
-
-  }
-   
-   
-  
-  setValuesToHeaderGrid(detailDataToParent: any) {
-    let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
-    if (PROCESS_FORMDETAILS.SRNO) {
-      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
-    } else {
-      this.tableRowCount += 1
-      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
-    }
-
-    this.tableData.push(PROCESS_FORMDETAILS)
-
-    if (detailDataToParent) {
-      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
-    }
-    //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
-
-  }
-  swapObjects(array1: any, array2: any, index: number) {
-    // Check if the index is valid
-    if (index >= 0 && index < array1.length) {
-      array1[index] = array2[0];
-    } else {
-      console.error('Invalid index');
-    }
   }
 
-
+  deleteTableData(): void {
+    this.meltingISsueDetailsData = this.meltingISsueDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
+    this.recalculateSRNO()
+  }
+  recalculateSRNO(): void {
+    this.meltingISsueDetailsData.forEach((element: any, index: any) => {
+      element.SRNO = index + 1
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+    })
+  }
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -472,7 +483,7 @@ export class MeltingIssueComponent implements OnInit {
       "ATTACHMENT_FILE": "",
       "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
       "Details": this.meltingISsueDetailsData
-      
+
 
     }
 
@@ -528,126 +539,126 @@ export class MeltingIssueComponent implements OnInit {
 
     let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${this.branchCode}/${this.meltingIssueFrom.value.voctype}/${this.meltingIssueFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
-        "MID": 0,
-        "BRANCH_CODE": this.branchCode,
-        "VOCTYPE": this.meltingIssueFrom.value.voctype,
-        "VOCNO": this.meltingIssueFrom.value.VOCNO,
-        "VOCDATE": this.meltingIssueFrom.value.vocdate,
-        "YEARMONTH":  this.yearMonth,
-        "NAVSEQNO": 0,
-        "WORKER_CODE": this.meltingIssueFrom.value.worker,
-        "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
-        "SALESPERSON_CODE": "string",
-        "SALESPERSON_NAME": "string",
-        "DOCTIME": "2024-01-15T21:36:42.913Z",
-        "TOTAL_GROSSWT": 0,
-        "TOTAL_PUREWT": 0,
-        "TOTAL_STONEWT": 0,
-        "TOTAL_NETWT": 0,
-        "TOTAL_WAXWT": 0,
-        "TOTAL_IRONWT": 0,
-        "TOTAL_MKGVALUEFC": 0,
-        "TOTAL_MKGVALUECC": 0,
-        "TOTAL_PCS": 0,
-        "TOTAL_ISSUED_QTY": 0,
-        "TOTAL_REQUIRED_QTY": 0,
-        "TOTAL_ALLOCATED_QTY": 0,
-        "CURRENCY_CODE": "stri",
-        "CURRENCY_RATE": 0,
-        "TRAY_WEIGHT": 0,
-        "REMARKS": "string",
-        "AUTOPOSTING": true,
-        "POSTDATE": "string",
-        "BASE_CURRENCY": "stri",
-        "BASE_CURR_RATE": 0,
-        "BASE_CONV_RATE": 0,
-        "PROCESS_CODE": this.meltingIssueFrom.value.processcode,
-        "PROCESS_DESC": this.meltingIssueFrom.value.processdes,
-        "PRINT_COUNT": 0,
-        "MELTING_TYPE": "string",
-        "COLOR": "string",
-        "RET_STOCK_CODE": "string",
-        "RET_GROSS_WT": 0,
-        "RET_PURITY": 0,
-        "RET_PURE_WT": 0,
-        "RET_LOCATION_CODE": "string",
-        "SCP_STOCK_CODE": "string",
-        "SCP_GROSS_WT": 0,
-        "SCP_PURITY": 0,
-        "SCP_PURE_WT": 0,
-        "SCP_LOCATION_CODE": "string",
-        "LOSS_QTY": 0,
-        "LOSS_PURE_WT": 0,
-        "IS_AUTHORISE": true,
-        "IS_REJECT": true,
-        "REASON": "string",
-        "REJ_REMARKS": "string",
-        "ATTACHMENT_FILE": "string",
-        "SYSTEM_DATE": "2024-01-15T21:36:42.913Z",
-        "Details": [
-          {
-            "UNIQUEID": 0,
-            "SRNO": 0,
-            "DT_BRANCH_CODE": "string",
-            "DT_VOCTYPE": "stri",
-            "DT_VOCNO": 0,
-            "DT_VOCDATE": "2024-01-15T21:36:42.913Z",
-            "DT_YEARMONTH": "string",
-            "JOB_NUMBER": "string",
-            "JOB_DESCRIPTION": "string",
-            "PROCESS_CODE": "string",
-            "PROCESS_DESC": "string",
-            "WORKER_CODE": "string",
-            "WORKER_DESC": "string",
-            "STOCK_CODE": "string",
-            "STOCK_DESCRIPTION": "string",
-            "DIVCODE": "s",
-            "KARAT_CODE": "stri",
-            "PCS": 0,
-            "GROSS_WT": 0,
-            "STONE_WT": 0,
-            "PURITY": 0,
-            "PUREWT": 0,
-            "PUDIFF": 0,
-            "IRON_WT": 0,
-            "NET_WT": 0,
-            "TOTAL_WEIGHT": 0,
-            "IRON_PER": 0,
-            "STONEDIFF": 0,
-            "WAX_WT": 0,
-            "TREE_NO": "string",
-            "WIP_ACCODE": "string",
-            "CURRENCY_CODE": "stri",
-            "CURRENCY_RATE": 0,
-            "MKG_RATEFC": 0,
-            "MKG_RATECC": 0,
-            "MKGVALUEFC": 0,
-            "MKGVALUECC": 0,
-            "DLOC_CODE": "string",
-            "REMARKS": "string",
-            "LOCTYPE_CODE": "string",
-            "TOSTOCKCODE": "string",
-            "LOSSWT": 0,
-            "TODIVISION_CODE": "s",
-            "LOT_NO": "string",
-            "BAR_NO": "string",
-            "TICKET_NO": "string",
-            "SILVER_PURITY": 0,
-            "SILVER_PUREWT": 0,
-            "TOPURITY": 0,
-            "PUR_PER": 0,
-            "MELTING_TYPE": "string",
-            "ISALLOY": "s",
-            "UNQ_JOB_ID": "string",
-            "SUB_STOCK_CODE": "string",
-            "IS_REJECT": true,
-            "REASON": "string",
-            "REJ_REMARKS": "string",
-            "ATTACHMENT_FILE": "string"
-          }
-        ]
-      }
-  
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.meltingIssueFrom.value.voctype,
+      "VOCNO": this.meltingIssueFrom.value.VOCNO,
+      "VOCDATE": this.meltingIssueFrom.value.vocdate,
+      "YEARMONTH": this.yearMonth,
+      "NAVSEQNO": 0,
+      "WORKER_CODE": this.meltingIssueFrom.value.worker,
+      "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
+      "SALESPERSON_CODE": "string",
+      "SALESPERSON_NAME": "string",
+      "DOCTIME": "2024-01-15T21:36:42.913Z",
+      "TOTAL_GROSSWT": 0,
+      "TOTAL_PUREWT": 0,
+      "TOTAL_STONEWT": 0,
+      "TOTAL_NETWT": 0,
+      "TOTAL_WAXWT": 0,
+      "TOTAL_IRONWT": 0,
+      "TOTAL_MKGVALUEFC": 0,
+      "TOTAL_MKGVALUECC": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_ISSUED_QTY": 0,
+      "TOTAL_REQUIRED_QTY": 0,
+      "TOTAL_ALLOCATED_QTY": 0,
+      "CURRENCY_CODE": "stri",
+      "CURRENCY_RATE": 0,
+      "TRAY_WEIGHT": 0,
+      "REMARKS": "string",
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "BASE_CURRENCY": "stri",
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": 0,
+      "PROCESS_CODE": this.meltingIssueFrom.value.processcode,
+      "PROCESS_DESC": this.meltingIssueFrom.value.processdes,
+      "PRINT_COUNT": 0,
+      "MELTING_TYPE": "string",
+      "COLOR": "string",
+      "RET_STOCK_CODE": "string",
+      "RET_GROSS_WT": 0,
+      "RET_PURITY": 0,
+      "RET_PURE_WT": 0,
+      "RET_LOCATION_CODE": "string",
+      "SCP_STOCK_CODE": "string",
+      "SCP_GROSS_WT": 0,
+      "SCP_PURITY": 0,
+      "SCP_PURE_WT": 0,
+      "SCP_LOCATION_CODE": "string",
+      "LOSS_QTY": 0,
+      "LOSS_PURE_WT": 0,
+      "IS_AUTHORISE": true,
+      "IS_REJECT": true,
+      "REASON": "string",
+      "REJ_REMARKS": "string",
+      "ATTACHMENT_FILE": "string",
+      "SYSTEM_DATE": "2024-01-15T21:36:42.913Z",
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "stri",
+          "DT_VOCNO": 0,
+          "DT_VOCDATE": "2024-01-15T21:36:42.913Z",
+          "DT_YEARMONTH": "string",
+          "JOB_NUMBER": "string",
+          "JOB_DESCRIPTION": "string",
+          "PROCESS_CODE": "string",
+          "PROCESS_DESC": "string",
+          "WORKER_CODE": "string",
+          "WORKER_DESC": "string",
+          "STOCK_CODE": "string",
+          "STOCK_DESCRIPTION": "string",
+          "DIVCODE": "s",
+          "KARAT_CODE": "stri",
+          "PCS": 0,
+          "GROSS_WT": 0,
+          "STONE_WT": 0,
+          "PURITY": 0,
+          "PUREWT": 0,
+          "PUDIFF": 0,
+          "IRON_WT": 0,
+          "NET_WT": 0,
+          "TOTAL_WEIGHT": 0,
+          "IRON_PER": 0,
+          "STONEDIFF": 0,
+          "WAX_WT": 0,
+          "TREE_NO": "string",
+          "WIP_ACCODE": "string",
+          "CURRENCY_CODE": "stri",
+          "CURRENCY_RATE": 0,
+          "MKG_RATEFC": 0,
+          "MKG_RATECC": 0,
+          "MKGVALUEFC": 0,
+          "MKGVALUECC": 0,
+          "DLOC_CODE": "string",
+          "REMARKS": "string",
+          "LOCTYPE_CODE": "string",
+          "TOSTOCKCODE": "string",
+          "LOSSWT": 0,
+          "TODIVISION_CODE": "s",
+          "LOT_NO": "string",
+          "BAR_NO": "string",
+          "TICKET_NO": "string",
+          "SILVER_PURITY": 0,
+          "SILVER_PUREWT": 0,
+          "TOPURITY": 0,
+          "PUR_PER": 0,
+          "MELTING_TYPE": "string",
+          "ISALLOY": "s",
+          "UNQ_JOB_ID": "string",
+          "SUB_STOCK_CODE": "string",
+          "IS_REJECT": true,
+          "REASON": "string",
+          "REJ_REMARKS": "string",
+          "ATTACHMENT_FILE": "string"
+        }
+      ]
+    }
+
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {

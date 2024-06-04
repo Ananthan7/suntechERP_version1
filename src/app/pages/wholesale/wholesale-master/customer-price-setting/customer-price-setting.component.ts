@@ -43,7 +43,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   selectedValue4: string = 'None';
   selectedValue5: string = 'None';
   tableDataGroupDetails: any[] = [];
-
+  designCodeEnable: boolean = true;
   groups = [
     { type: 'None', value:'None' },
     { type: 'Category', value:'Category'},
@@ -77,6 +77,7 @@ export class CustomerPriceSettingComponent implements OnInit {
 
     } else if (this.content.FLAG == 'EDIT') {
       this.codeEnable = false;
+
       this.enableUpdate = false;
       this.approveDisable = false;
       this.setFormValues()
@@ -107,7 +108,8 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   selectStock() {
     this.checkboxvalue = !this.checkboxvalue;
-  }
+      this.designCodeEnable = !this.designCodeEnable;
+    }
 
   checkPriceCode(): boolean {
 
