@@ -7,7 +7,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-    (changeJobClick)="changeJobClicked()" (continueClick)="formSubmit('CONTINUE')"
+    (changeJobClick)="changeJobClicked()"
+    (continueClick)="formSubmit('CONTINUE')"
     [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
     [isViewMore]="false"></modal-header>
 <div class="row">
@@ -72,7 +73,8 @@
                                         Code * :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 90%;">
-                                            <input type="text" matInput UpperCaseDirective
+                                            <input type="text" matInput
+                                                UpperCaseDirective
                                                 formControlName="processCode"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
@@ -98,7 +100,7 @@
                                         <mat-form-field style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="workerCode"
-                                                readonly/>
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
@@ -116,7 +118,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="row mb-1">
-                                    <label class="col-sm-12 col-form-label ms-4">
+                                    <label
+                                        class="col-sm-12 col-form-label ms-4">
                                         Design</label>
                                     <div class="col-md-6">
                                         <div class="upload-btn-wrapper">
@@ -159,7 +162,7 @@
                                         <mat-form-field style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="DESIGN_CODE"
-                                                readonly/>
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -217,8 +220,8 @@
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="jobPurity"
-                                               class="text-right"
-                                                readonly/>
+                                                class="text-right"
+                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -227,12 +230,17 @@
                                         class="col-sm-3 col-form-label">
                                         Stock Code * :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
+                                        <mat-form-field style="width: 60%;">
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
                                                 placeholder="divcode"
                                                 readonly />
                                         </mat-form-field>
+                                        <master-search
+                                                [MasterSearchData]="divCodeData"
+                                                (newRowClick)="stockCodeSelected($event)"
+                                                *ngIf="!masterMetalChecked">
+                                            </master-search>
                                     </div>
                                     <div class="col-md-6">
                                         <mat-form-field style="width: 70%;">

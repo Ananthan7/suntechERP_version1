@@ -492,7 +492,11 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].JOB_DESCRIPTION)
             this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
-
+            if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
+              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
+            } else {
+              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
+            }
 
             this.subJobNumberValidate()
           } else {
