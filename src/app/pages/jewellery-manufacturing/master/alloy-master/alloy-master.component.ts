@@ -713,8 +713,10 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   codeSelected(e: any) {
-    this.alloyMastereForm.controls.code.setValue(e.PREFIX_CODE)
-    this.alloyMastereForm.controls.description.setValue(e.DESCRIPTION)
+    const code = e.PREFIX_CODE.toUpperCase();
+    const description = e.DESCRIPTION.toUpperCase();
+    this.alloyMastereForm.controls.code.setValue(code)
+    this.alloyMastereForm.controls.description.setValue(description)
     this.prefixCodeValidate()
   }
   prefixCodeValidate() {
@@ -726,6 +728,8 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           this.prefixMasterDetail = result.response;
+          this.prefixMasterDetail.PREFIX_CODE = this.prefixMasterDetail.PREFIX_CODE.toUpperCase();
+          this.prefixMasterDetail.DESCRIPTION = this.prefixMasterDetail.DESCRIPTION.toUpperCase();
           // this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
           this.alloyMastereForm.controls.type.setValue(this.prefixMasterDetail.TYPE_CODE)
           this.alloyMastereForm.controls.category.setValue(this.prefixMasterDetail.CATEGORY_CODE)
