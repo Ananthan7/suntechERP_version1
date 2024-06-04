@@ -174,7 +174,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (!this.content) return;
     this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalIssueDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
-    this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocdate)
+    this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.HEADERDETAILS.vocdate || this.content.VOCDATE)
     this.metalIssueDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
  
     this.metalIssueDetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)
@@ -316,7 +316,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.nullToString(form.JOB_DATE),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.jobNumber),
