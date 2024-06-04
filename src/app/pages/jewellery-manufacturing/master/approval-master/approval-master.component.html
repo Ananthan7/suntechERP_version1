@@ -25,7 +25,7 @@
                                     <input #codeInput type="text" matInput
                                         id="code" formControlName="code"
                                         maxlength="6"
-                                        oninput="this.value = this.value.toUpperCase()"
+                                        UpperCaseDirective autocomplete="off"
                                         (focusout)="checkCodeExists($event)"
                                         [readonly]="editableMode || viewMode"
                                         [disabled]="viewMode" appNoEmptySpace />
@@ -40,7 +40,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="description"
-                                        oninput="this.value = this.value.toUpperCase()"
+                                        UpperCaseDirective autocomplete="off"
                                         [readonly]="viewMode"
                                         [disabled]="viewMode" appNoEmptySpace />
                                 </mat-form-field>

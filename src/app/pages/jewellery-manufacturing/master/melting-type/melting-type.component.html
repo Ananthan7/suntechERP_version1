@@ -26,8 +26,8 @@
                                 <input type="text" #codeInput maxlength="15"
                                     [readonly]="editCode" matInput
                                     formControlName="code"
-                                    oninput="this.value = this.value.toUpperCase()"
-                                    (keyup)="codeEnabled()" appNoEmptySpace/>
+                                    UpperCaseDirective autocomplete="off"
+                                    (keyup)="codeEnabled()" >
                             </mat-form-field>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                         <input type="text" maxlength="85" matInput
                             [readonly]="viewMode || codeEnable"
                             formControlName="description"
-                            oninput="this.value = this.value.toUpperCase()" appNoEmptySpace/>
+                            UpperCaseDirective autocomplete="off"/>
                     </mat-form-field>
                 </div>
 
@@ -179,7 +179,7 @@
                             <input type="text" [value]="data.value"
                                 [disabled]="data.value == ''"
                                 style="width: 100%;" required readonly
-                                oninput="this.value = this.value.toUpperCase()" />
+                                UpperCaseDirective autocomplete="off"/>
                         </div>
 
                         <div *dxTemplate="let data of 'defaultAlloy'">
