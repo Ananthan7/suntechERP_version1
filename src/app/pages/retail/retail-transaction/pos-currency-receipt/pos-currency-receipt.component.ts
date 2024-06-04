@@ -36,7 +36,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'Currency', field: 'CURRENCY_CODE' },
     { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
     { title: 'Amount', field: 'AMOUNTFC' },
-    { title: 'VAT_E_', field: 'CGST_AMOUNTFC' },
+    { title: 'VAT_E_', field: 'IGST_AMOUNTCC' },
     { title: 'Total', field: 'NET_TOTAL' },
   ];
 
@@ -226,6 +226,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       day = ('0' + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join('-');
   }
+  
   generateVocNo() {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
     this.dataService.getDynamicAPI(API)
@@ -306,15 +307,14 @@ export class PosCurrencyReceiptComponent implements OnInit {
           const data = result.response;
 
           this.posCurrencyDetailsData = data.currencyReceiptDetails;
-          // this.posCurrencyDetailsData.forEach((data, index) => { data.NET_TOTAL = (parseFloat(data.AMOUNTCC) + parseFloat(data.CGST_AMOUNTCC)).toFixed(2); });
           console.log('this.posCurrencyDetailsData', this.posCurrencyDetailsData);
 
 
           this.posCurrencyDetailsData.forEach(item => {
-            item.NET_TOTAL = (parseFloat(item.AMOUNTCC) + parseFloat(item.CGST_AMOUNTCC)).toFixed(2);
+            item.NET_TOTAL = (parseFloat(item.AMOUNTCC) + parseFloat(item.IGST_AMOUNTCC)).toFixed(2);
             item.CURRENCY_RATE = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.CURRENCY_RATE), 'RATE');
             item.AMOUNTFC = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.AMOUNTFC), 'AMOUNT');
-            item.CGST_AMOUNTFC = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.CGST_AMOUNTFC), 'AMOUNT');
+            item.IGST_AMOUNTCC = this.comService.decimalQuantityFormat(this.comService.emptyToZero(item.IGST_AMOUNTCC), 'AMOUNT');
           });
 
 
@@ -875,7 +875,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
         if (result.status == 'Success') {
           let data = result.response;
           console.log('vatData', data.VAT_PER);
-          this.vatPercentage = data.GST_PER;
+          this.vatPercentage = data.VAT_PER;
           this.hsnCode = data.HSN_SAC_CODE;
           this.igst_accode = data.IGST_ACCODE;
         }
@@ -888,7 +888,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
       data.SRNO.toString() == postData.SRNO.toString()
     );
-    postData.NET_TOTAL = (parseFloat(postData.AMOUNTFC) + parseFloat(postData.CGST_AMOUNTFC)).toFixed(2);
+    postData.NET_TOTAL = (parseFloat(postData.AMOUNTFC) + parseFloat(postData.IGST_AMOUNTFC)).toFixed(2);
 
     if (postData?.isUpdate && preItemIndex !== -1) {
       this.posCurrencyDetailsData[preItemIndex] = postData;
@@ -906,7 +906,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     this.posCurrencyDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
-      sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
+      sumCGST_AMOUNTCC += parseFloat(data.IGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.TOTAL_AMOUNTCC);
     });
 

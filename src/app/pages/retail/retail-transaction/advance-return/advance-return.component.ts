@@ -113,7 +113,7 @@ export class AdvanceReturnComponent implements OnInit {
 
   advanceReturnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
-    vocNo: [1],
+    vocNo: [""],
     vocDate: [new Date()],
     partyCode: [""],
     partyCurrency: [""],
@@ -166,7 +166,34 @@ export class AdvanceReturnComponent implements OnInit {
     this.advanceReturnForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
     this.advanceReturnForm.controls.baseCurrency.setValue(this.comService.compCurrency);
     this.advanceReturnForm.controls.baseCurrencyRate.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+    if (this.content?.MID != null)
+      this.getArgsData();
+    else {
+      // this.changeDueDate(null);
+      this.generateVocNo();
 
+    }
+
+  }
+
+  getArgsData() {
+    console.log('this.content', this.content);
+    if (this.content.FLAG == 'VIEW')
+      this.viewOnly = true;
+
+    this.snackBar.open('Loading...');
+    let Sub: Subscription = this.dataService.getDynamicAPI(`AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`)
+      .subscribe((result) => {
+        this.snackBar.dismiss();
+       
+        if (result.status == "Success") {
+          const data = result.response;
+          this.pcrSelectionData=data.currencyReceiptDetails;  
+          this.enteredByCode.WHERECONDITION = `SALESPERSON_CODE='${data.SALESPERSON_CODE}'`;
+
+
+        }
+      });
   }
 
 
@@ -307,8 +334,8 @@ export class AdvanceReturnComponent implements OnInit {
 
   enteredBySelected(e: any) {
     console.log(e);
-    this.advanceReturnForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
-    this.advanceReturnForm.controls.enteredByCode.setValue(e.DESCRIPTION);
+    this.advanceReturnForm.controls.enteredBy.setValue(e.DESCRIPTION);
+    this.advanceReturnForm.controls.enteredByCode.setValue(e.SALESPERSON_CODE);
   }
 
 
@@ -405,6 +432,23 @@ export class AdvanceReturnComponent implements OnInit {
     });
   }
 
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join('-');
+  }
+
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.advanceReturnForm.controls.vocNo.setValue(resp.newvocno);
+        }
+      });
+  }
+
   async getFinancialYear() {
     const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comService.cDateFormat(this.advanceReturnForm.value.vocDate)}`;
     const res = await this.dataService.getDynamicAPI(API).toPromise()
@@ -446,7 +490,7 @@ export class AdvanceReturnComponent implements OnInit {
       "SUPINVNO": "",
       "SUPINVDATE": this.advanceReturnForm.value.vocDate,
       "HHACCOUNT_HEAD": "",
-      "SALESPERSON_CODE": this.advanceReturnForm.value.enteredby,
+      "SALESPERSON_CODE": this.advanceReturnForm.value.enteredByCode,
       "BALANCE_FC":this.advanceReturnForm.value.partyAmount || 0,
       "BALANCE_CC": this.advanceReturnForm.value.partyAmount || 0,
       "AUTHORIZEDPOSTING": true,
