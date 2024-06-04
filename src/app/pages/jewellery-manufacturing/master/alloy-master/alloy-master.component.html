@@ -28,7 +28,7 @@
                                             (focusout)="validateLookupField($event,codeData,'code')"
                                             formControlName="code"
                                             [readonly]="editableMode || viewMode"
-                                            oninput="this.value = this.value.toUpperCase()" />
+                                            UpperCaseDirective autocomplete="off" />
                                     </mat-form-field>
                                     <master-search
                                         *ngIf="!editMode && !viewMode"
@@ -167,7 +167,7 @@
                                         <input type="text" matInput
                                             formControlName="description"
                                             [readonly]="viewMode"
-                                            oninput="this.value = this.value.toUpperCase()" />
+                                            UpperCaseDirective autocomplete="off"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -373,7 +373,7 @@
                                     <mat-form-field style="width: 70%">
                                         <input type="text" matInput
                                             formControlName="PRICE1"
-                                            UpperCaseDirective
+                                            UpperCaseDirective autocomplete="off"
                                             [readonly]="!isWeightAvgCost"
                                             (change)="priceCodeone($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'PRICE1')" />

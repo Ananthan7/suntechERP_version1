@@ -168,6 +168,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
     this.metalReturnDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
     this.metalReturnDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+    this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
     this.metalReturnDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
 
     this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
@@ -182,7 +183,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.pcs.setValue(this.content.PCS)
     this.metalReturnDetailsForm.controls.stockCode.setValue(this.content.STOCK_CODE)
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(this.content.STOCK_DESCRIPTION)
-    this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
     this.metalReturnDetailsForm.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(this.content.KARAT_CODE)
     this.metalReturnDetailsForm.controls.DIVCODE.setValue(this.content.DIVCODE)

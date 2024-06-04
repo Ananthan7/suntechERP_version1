@@ -31,7 +31,7 @@
                                                 maxlength="15"
                                                 formControlName="price_code"
                                                 (focusout)="checkCodeExists($event)"
-                                                oninput="this.value = this.value.toUpperCase()" />
+                                                UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text" matInput
                                                 formControlName="sieve_to_desc"
-                                                oninput="this.value = this.value.toUpperCase()" />
+                                                UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                 </div>

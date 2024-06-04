@@ -28,8 +28,7 @@
                                 [readonly]="viewMode"
                                 maxlength="6" formControlName="metalDivision"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
-                                oninput="this.value = this.value.toUpperCase()" 
-                                appNoEmptySpace>
+                                UpperCaseDirective autocomplete="off">
                         </mat-form-field>
                         <master-search
                             [MasterSearchData]="metalDivisionCodeData"
