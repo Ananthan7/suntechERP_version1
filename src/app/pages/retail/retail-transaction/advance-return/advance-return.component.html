@@ -86,17 +86,18 @@
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Entered By</label>
                     <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="enteredBy"/>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="enteredByCode"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="enteredByCode"
                         (newRowClick)="enteredBySelected($event)"></master-search>
                     </div>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="enteredBy"/>
+                        </mat-form-field>
+                    </div>
+                 
                 </div>
             </div>
             <div class="col-md-8">

@@ -206,7 +206,7 @@
             </div>
             <div class="col-md-12 ">
                <div class="pb-2">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer"  [dataSource]="goldExchangeDetailsData" [showBorders]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>

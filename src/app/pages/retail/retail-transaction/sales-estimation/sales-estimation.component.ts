@@ -8451,50 +8451,51 @@ export class SalesEstimationComponent implements OnInit {
 
 
 
-    // printInvoice() {
+    printReceiptDetailsWeb1() {
+   
 
 
-    //   console.log('printing...');
-    //   let _validate = this.validateBeforePrint();
-    //   if (_validate[0]) {
+      console.log('printing...');
+      let _validate = this.validateBeforePrint();
+      if (_validate[0]) {
         
-    //     const printContent:any = document.getElementById('print_invoice_est');
-    //     const qrCodeElement:any = document.getElementById('qrCodeBig');
+        const printContent:any = document.getElementById('print_invoice_est');
+        const qrCodeElement:any = document.getElementById('qrCodeBig');
   
-    //     var WindowPrt = window.open(
-    //       '',
-    //       '_blank',
-    //       `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 2.5}`
-    //     );
+        var WindowPrt = window.open(
+          '',
+          '_blank',
+          `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 2.5}`
+        );
        
   
-    //     WindowPrt?.document.write(
-    //       '<html><head><title>SunTech - Estimation ' +
-    //       new Date().toISOString() +
-    //       '</title></head><style></style><body><div>'
-    //     );
-    //     const linkElement:any = WindowPrt?.document.createElement('link');
-    //     linkElement?.setAttribute('rel', 'stylesheet');
-    //     linkElement?.setAttribute('type', 'text/css');
-    //     linkElement?.setAttribute('href', this.cssFilePath);
-    //     WindowPrt?.document.head.appendChild(linkElement);
+        WindowPrt?.document.write(
+          '<html><head><title>SunTech - Estimation ' +
+          new Date().toISOString() +
+          '</title></head><style></style><body><div>'
+        );
+        const linkElement:any = WindowPrt?.document.createElement('link');
+        linkElement?.setAttribute('rel', 'stylesheet');
+        linkElement?.setAttribute('type', 'text/css');
+        linkElement?.setAttribute('href', this.cssFilePath);
+        WindowPrt?.document.head.appendChild(linkElement);
   
-    //     WindowPrt?.document.write(printContent?.innerHTML);
-    //     WindowPrt?.document.write(qrCodeElement?.outerHTML);
-    //     WindowPrt?.document.write('</div></body></html>');
+        WindowPrt?.document.write(printContent?.innerHTML);
+        WindowPrt?.document.write(qrCodeElement?.outerHTML);
+        WindowPrt?.document.write('</div></body></html>');
   
   
-    //     WindowPrt?.document.close();
-    //     WindowPrt?.focus();
-    //     setTimeout(() => {
-    //       WindowPrt?.print();
-    //     }, 800);
-    //     console.log('printing... end ');
-    //     console.log(printContent?.innerHTML);
-    //   } else {
+        WindowPrt?.document.close();
+        WindowPrt?.focus();
+        setTimeout(() => {
+          WindowPrt?.print();
+        }, 800);
+        console.log('printing... end ');
+        console.log(printContent?.innerHTML);
+      } else {
         
-    //   }
-    // }
+      }
+    }
 
 
 

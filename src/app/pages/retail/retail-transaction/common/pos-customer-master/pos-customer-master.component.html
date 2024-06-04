@@ -249,7 +249,17 @@
           <div class="col-md-3">
             <mat-form-field class="w-100">
               <mat-label>Date Of Birth</mat-label>
-              <input
+
+              <mat-form-field style="width: 100%" dateFormat2>
+                <input matInput  name="fcn_cust_detail_dob" placeholder="MM/YYYY"
+                  formControlName="fcn_cust_detail_dob"  />
+                <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                <mat-datepicker-toggle
+                matSuffix
+                [for]="dob"
+              ></mat-datepicker-toggle>
+              </mat-form-field>
+              <!-- <input
                 matInput
                 [matDatepicker]="dob"
                 [max]="vocMaxDate"
@@ -261,7 +271,7 @@
               <mat-datepicker-toggle
                 matSuffix
                 [for]="dob"
-              ></mat-datepicker-toggle>
+              ></mat-datepicker-toggle> -->
               <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
 
               <mat-error
