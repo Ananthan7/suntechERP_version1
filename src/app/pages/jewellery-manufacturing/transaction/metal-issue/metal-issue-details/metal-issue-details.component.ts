@@ -547,7 +547,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION+`AND PURITY='${data[0].PURITY}'` 
           }
           this.FillMtlRequiredDetail()
-          this.setStockCodeCondition()
+          // this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           // // this.stockCodeScrapValidate()
@@ -565,14 +565,14 @@ export class MetalIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setStockCodeCondition() {
-    let form = this.metalIssueDetailsForm.value
-    let val = `@strBranch_Code='${this.comService.branchCode}',`
-    val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
-    val += `@strMetalStone='',@strProcess_Code='',`
-    val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
-    this.stockCodeData.WHERECONDITION = val
-  }
+  // setStockCodeCondition() {
+  //   let form = this.metalIssueDetailsForm.value
+  //   let val = `@strBranch_Code='${this.comService.branchCode}',`
+  //   val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
+  //   val += `@strMetalStone='',@strProcess_Code='',`
+  //   val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
+  //   this.stockCodeData.WHERECONDITION = val
+  // }
   stockCodeValidate(event: any) {
     if (event.target.value == '') return
     let postData = {
