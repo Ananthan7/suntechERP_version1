@@ -22,8 +22,8 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput maxlength="6"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond"
-                formControlName="divisions" appNoEmptySpace />
+              <input type="text" matInput maxlength="1"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond"
+                formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace />
             </mat-form-field>
             <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
               *ngIf=" viewDisable == false"></master-search>
@@ -34,9 +34,10 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" [readonly]="editMode || viewMode"
+              <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" id="code" [readonly]="editMode || viewMode"
                 formControlName="labour_code" (focusout)="diamondLabourCodeValidate()"
-                oninput="this.value = this.value.toUpperCase()" appNoEmptySpace />
+                oninput="this.value = this.value.toUpperCase()" appNoEmptySpace 
+                />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
@@ -55,7 +56,7 @@
             <mat-form-field>
               <mat-label>Select</mat-label>
               <mat-select formControlName="labourType" [disabled]="viewMode || codeEnableDiamond">
-                <mat-option *ngFor="let option of labourTypeList" [value]="option.value"
+                <mat-option *ngFor="let option of DialabourTypeList" [value]="option.value"
                   (onSelectionChange)="onlabourtypeChange()">
                   {{ option.name }}
                 </mat-option>
@@ -151,7 +152,7 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput  [readonly]="viewMode || codeEnableDiamond" maxlength="6"
+              <input type="text" matInput  [readonly]="viewMode || codeEnableDiamond" maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
                 (change)="sizeFromToValidate('size_to')" />
             </mat-form-field>
@@ -162,7 +163,7 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput MetalDecimalInput [max]="13"
+              <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput AmountDecimalInput [max]="13"
                 class="text-right" formControlName="cost_rate" />
             </mat-form-field>
           </div>

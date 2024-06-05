@@ -524,7 +524,7 @@ export class ProcessMasterComponent implements OnInit {
     if (form.recovery == true && this.validateRecoveryRange()) {
       return true;
     }
-    if (form.ApprovalRequired == true && form.approvalProcess == '') {
+    if (form.ApprovalRequired == true && this.commonService.nullToString(form.approvalProcess) == '') {
       this.processMasterForm.controls.approvalProcess.setValidators(Validators.required)
       this.approvalProcessInput.nativeElement.focus();
       this.commonService.toastErrorByMsgId('Approval Process must be Required');
@@ -598,7 +598,7 @@ export class ProcessMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Process Type cannot be empty');
       return true;
     }
-    if (!form.WIPaccount) {
+    if (this.commonService.nullToString(form.WIPaccount) == '') {
       this.commonService.toastErrorByMsgId('WIPaccount cannot be empty');
       return true;
     }

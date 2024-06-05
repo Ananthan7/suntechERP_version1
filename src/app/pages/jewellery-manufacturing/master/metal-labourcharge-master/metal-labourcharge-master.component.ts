@@ -33,7 +33,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   grossWt: boolean = false;
   codeEnableMetal: boolean = true;
   codeEnableDiamond: boolean = true;
-
+  isDisableSaveBtn: boolean = false;
 
   displayDiaCostRate: any;
   displayDiaSellingRate: any;
@@ -440,6 +440,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.codeEnableDiamond = false;
         this.codeEnableMetal = false;
         this.editMode = true;
+        this.stockcodeDisable = false;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMeltingType()
@@ -450,6 +451,15 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls['metallabourType'].enable();
     this.getcurrencyOptions()
   }
+
+  inputValidate(event: any) {
+    if (event.target.value != '') {
+      this.isDisableSaveBtn = true;
+    } else {
+      this.isDisableSaveBtn = false;
+    }
+  }
+
   ngAfterViewInit() {
     // Focus on the first input
     if (this.codeInput1) {
@@ -622,7 +632,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
 
- 
+
 
   categorySelected(e: any) {
     if (this.checkCode()) return
@@ -783,13 +793,15 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    // this.stockcodeDisable = event.target.value
+    this.stockcodeDisable = false
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -804,6 +816,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -921,7 +934,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
+    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' +  this.content.CODE;
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {

@@ -231,11 +231,11 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
   submitValidations(form: any) {
-    if (form.WorkerCode == '') {
+    if (this.commonService.nullToString(form.WorkerCode) == '') {
       this.toastr.error("Worker Code cannot be empty")
       return true
     }
-    else if (form.WorkerDESCRIPTION == '') {
+    else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
       this.toastr.error("Description cannot be empty")
       return true
     }

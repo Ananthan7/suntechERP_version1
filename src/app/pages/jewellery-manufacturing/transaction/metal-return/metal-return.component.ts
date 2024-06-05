@@ -42,11 +42,11 @@ export class MetalReturnComponent implements OnInit {
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
+    LOOKUPID: 1,
     SEARCH_FIELD: 'UsersName',
     SEARCH_HEADING: 'User',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "ACTIVE = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,

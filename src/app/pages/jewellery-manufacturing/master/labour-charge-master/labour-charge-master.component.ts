@@ -35,7 +35,7 @@ export class LabourChargeMasterComponent implements OnInit {
   grossWt: boolean = false;
   codeEnableMetal: boolean = true;
   codeEnableDiamond: boolean = true;
-
+  isDisableSaveBtn: boolean = false;
 
   displayDiaCostRate: any;
   displayDiaSellingRate: any;
@@ -361,7 +361,7 @@ export class LabourChargeMasterComponent implements OnInit {
     size_to: [''],
     cost_rate: [0, [Validators.required]],
     sieve: [''],
-    selling_rate: ['', [Validators.required]],
+    selling_rate: [''],
     sieve_desc: [''],
     selling: [''],
     ctWtFrom: [''],
@@ -429,6 +429,7 @@ export class LabourChargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
     this.grossWt = true;
     this.codeEnable1 = true;
     this.setInitialValues();
@@ -452,6 +453,16 @@ export class LabourChargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls['metallabourType'].enable();
     this.getcurrencyOptions()
   }
+
+  
+  inputValidate(event: any) {
+    if (event.target.value != '') {
+      this.isDisableSaveBtn = true;
+    } else {
+      this.isDisableSaveBtn = false;
+    }
+  }
+
   ngAfterViewInit() {
     // Focus on the first input
     if (this.codeInput1) {
@@ -519,6 +530,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
     this.diamondlabourMasterForm.controls.unitList.setValue(this.content.UNITCODE);
+    this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
 
     this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
       this.commonService.transformDecimalVB(
@@ -762,6 +774,7 @@ export class LabourChargeMasterComponent implements OnInit {
         if (result.status == "Success") {
           this.commonService.toastErrorByMsgId('Code Already Exists')
           this.diamondlabourMasterForm.controls.labour_code.setValue('')
+          this.renderer.selectRootElement('#code')?.focus();
         }
       });
     this.subscriptions.push(Sub)
@@ -823,10 +836,15 @@ export class LabourChargeMasterComponent implements OnInit {
           this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
           if (FORMNAME === 'sieve') {
             this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+            
           }
         } else {
           this.commonService.toastErrorByMsgId('MSG1531');
           this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+         
+              this.renderer.selectRootElement(FORMNAME).focus();
+              //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+   
           if (FORMNAME === 'sieve') {
             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
           }
@@ -838,7 +856,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
   
-  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -851,7 +869,12 @@ export class LabourChargeMasterComponent implements OnInit {
       return true
     }
     if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('Select all required fields')
+      return true
+    }
+
+    if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
+      this.toastr.error('Select Either Selling % or Selling Rate');
       return true
     }
 
@@ -881,9 +904,9 @@ export class LabourChargeMasterComponent implements OnInit {
       "SRNO": 0,
       "CODE": this.commonService.nullToString(diamondForm.labour_code),
       "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description),
-      "LABTYPE": this.commonService.nullToString(diamondForm.process),
+      "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
       "METHOD": this.commonService.nullToString(diamondForm.method),
-      "DIVISION":this.commonService.nullToString(diamondForm.labourType),
+      "DIVISION":this.commonService.nullToString(diamondForm.divisions),
       "SHAPE": this.commonService.nullToString(diamondForm.shape),
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
@@ -954,7 +977,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
+    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
