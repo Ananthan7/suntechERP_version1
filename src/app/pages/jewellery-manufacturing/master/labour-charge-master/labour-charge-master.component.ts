@@ -429,6 +429,7 @@ export class LabourChargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
     this.grossWt = true;
     this.codeEnable1 = true;
     this.setInitialValues();
@@ -773,6 +774,7 @@ export class LabourChargeMasterComponent implements OnInit {
         if (result.status == "Success") {
           this.commonService.toastErrorByMsgId('Code Already Exists')
           this.diamondlabourMasterForm.controls.labour_code.setValue('')
+          this.renderer.selectRootElement('#code')?.focus();
         }
       });
     this.subscriptions.push(Sub)
@@ -975,7 +977,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
+    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {

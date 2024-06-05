@@ -28,7 +28,6 @@
                                 [readonly]="viewMode"
                                 maxlength="6" formControlName="metalDivision"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
-                                oninput="this.value = this.value.toUpperCase()" 
                                 (keypress)="this.stockcodeDisable"
                                 appNoEmptySpace
                                 UpperCaseDirective autocomplete="off"/>
