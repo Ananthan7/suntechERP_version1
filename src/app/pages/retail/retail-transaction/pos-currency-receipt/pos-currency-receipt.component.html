@@ -12,7 +12,7 @@
   <!-- modal header component -->
   <modal-header (saveClick)="formSubmit()" [isViewAuditTrail]="viewOnly" [isViewPrint]="viewOnly"  [isViewPost]="viewOnly"
     [isViewDelete]="!viewOnly"  (postClick)="AccountPosting()" (printClick)="printReceiptDetailsWeb()" (auditTrailClick)="auditTrailClick()"
-    (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()" [isViewPost]="true"></modal-header>
+    (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()" ></modal-header>
   <audit-trail></audit-trail>
 </div>
 
@@ -69,9 +69,13 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Party currency :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 70%">
-                  <input type="text" [readonly]="viewOnly||isCurrencyUpdate" matInput formControlName="partyCurrency"
+                  <input type="text" [readonly]="true" matInput formControlName="partyCurrency"
                     readonly />
                 </mat-form-field>
+                <!-- <mat-form-field style="width: 70%">
+                  <input type="text" [readonly]="viewOnly||isCurrencyUpdate" matInput formControlName="partyCurrency"
+                    readonly />
+                </mat-form-field> -->
                 <!-- <master-search [MasterSearchData]="partyCurrencyCodeData" readonly
                                 (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
               </div>

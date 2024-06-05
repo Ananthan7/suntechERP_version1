@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
@@ -16,6 +16,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import Swal from "sweetalert2";
 import { IndexedDbService } from "src/app/services/indexed-db.service";
+import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 
 @Component({
   selector: "app-advance-return",
@@ -24,6 +25,7 @@ import { IndexedDbService } from "src/app/services/indexed-db.service";
 })
 export class AdvanceReturnComponent implements OnInit {
   @Input() content!: any;
+  @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
   branchCode?: String;
   yearMonth?: String;
   pcrSelectionData: any[] = [];
@@ -34,7 +36,8 @@ export class AdvanceReturnComponent implements OnInit {
   isCurrencyUpdate: boolean = false;
   gridAmountDecimalFormat: any;
   companyCurrency?: String;
-  viewOnly?: boolean=false;
+  viewOnly: boolean = false;
+   editOnly: boolean = false;
   strBranchcode: any = localStorage.getItem('userbranch');
   baseYear: any = localStorage.getItem('YEAR') || '';
   midForInvoce: any = 0;
@@ -156,11 +159,11 @@ export class AdvanceReturnComponent implements OnInit {
       currency: this.comService.compCurrency
     };
     this.companyCurrency = this.comService.compCurrency;
-   }
+  }
 
   ngOnInit(): void {
 
-    this.getPartyCode();
+
     this.getFinancialYear();
     this.branchCode = this.comService.branchCode;
     this.advanceReturnForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
@@ -171,8 +174,35 @@ export class AdvanceReturnComponent implements OnInit {
     else {
       // this.changeDueDate(null);
       this.generateVocNo();
-
+      this.getPartyCode();
     }
+
+  }
+
+  findGridCalculations() {
+    let sumCGST_AMOUNTCC = 0;
+    let sumAMOUNTCC = 0;
+
+    this.pcrSelectionData.forEach((data, index) => {
+      data.SRNO = index + 1;
+      sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
+      sumAMOUNTCC += parseFloat(data.AMOUNTCC);
+    });
+
+
+
+    this.advanceReturnForm.controls.totalVat.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(sumCGST_AMOUNTCC),
+      'AMOUNT'
+    ));
+    this.advanceReturnForm.controls.total.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(sumAMOUNTCC),
+      'AMOUNT'
+    ));
+    this.advanceReturnForm.controls.partyAmount.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(sumAMOUNTCC),
+      'AMOUNT'
+    ));
 
   }
 
@@ -180,16 +210,51 @@ export class AdvanceReturnComponent implements OnInit {
     console.log('this.content', this.content);
     if (this.content.FLAG == 'VIEW')
       this.viewOnly = true;
+    if (this.content.FLAG == "EDIT") {
+      this.editOnly = true
+    }
 
     this.snackBar.open('Loading...');
     let Sub: Subscription = this.dataService.getDynamicAPI(`AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`)
       .subscribe((result) => {
         this.snackBar.dismiss();
-       
+
         if (result.status == "Success") {
           const data = result.response;
-          this.pcrSelectionData=data.currencyReceiptDetails;  
-          this.enteredByCode.WHERECONDITION = `SALESPERSON_CODE='${data.SALESPERSON_CODE}'`;
+          this.pcrSelectionData = data.currencyReceiptDetails;
+
+          this.findGridCalculations();
+
+
+
+
+          this.advanceReturnForm.controls.vocType.setValue(data.VOCTYPE);
+          this.advanceReturnForm.controls.vocNo.setValue(data.VOCNO);
+          this.advanceReturnForm.controls.vocDate.setValue(data.VOCDATE);
+          this.advanceReturnForm.controls.partyCode.setValue(data.PARTYCODE);
+          this.advanceReturnForm.controls.advanceFromCustomers.setValue(data.HHACCOUNT_HEAD);
+          this.advanceReturnForm.controls.partyCurrency.setValue(data.PARTY_CURRENCY);
+
+          this.advanceReturnForm.controls.partyCurrencyRate.setValue(data.PARTY_CURR_RATE);
+
+          this.advanceReturnForm.controls.enteredByCode.setValue(data.SALESPERSON_CODE);
+          this.advanceReturnForm.controls.enteredBy.setValue(data.SALESPERSON_NAME);
+
+          // this.advanceReturnForm.controls.enteredBy.setValue(data.POSCUSTOMERCODE);
+          this.advanceReturnForm.controls.partyRefNo.setValue(data.SUPINVNO);
+          this.advanceReturnForm.controls.date.setValue(data.SUPINVDATE);
+          this.advanceReturnForm.controls.baseCurrency.setValue(data.BASE_CURRENCY);
+
+          this.advanceReturnForm.controls.baseCurrencyRate.setValue(data.BASE_CURR_RATE);
+          this.advanceReturnForm.controls.customerCode.setValue(data.POSCUSTOMERCODE);
+
+          this.advanceReturnForm.controls.customerName.setValue(data.CUSTOMER_NAME);
+          this.advanceReturnForm.controls.partyAddress.setValue(data.PARTY_ADDRESS);
+
+          this.advanceReturnForm.controls.partyCurrency.setValue(data.PARTY_CURRENCY);
+
+          this.advanceReturnForm.controls.narration.setValue(data.REMARKS);
+
 
 
         }
@@ -237,14 +302,14 @@ export class AdvanceReturnComponent implements OnInit {
               else
                 this.isCurrencyUpdate = false;
 
-                this.advanceReturnForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
-                this.advanceReturnForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
-                this.advanceReturnForm.controls.partyAddress.setValue(data[0].ADDRESS)
-                this.advanceReturnForm.controls.advanceFromCustomers.setValue(data[0].ACCOUNT_HEAD)
-                
-          
+              this.advanceReturnForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
+              this.advanceReturnForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
+              this.advanceReturnForm.controls.partyAddress.setValue(data[0].ADDRESS)
+              this.advanceReturnForm.controls.advanceFromCustomers.setValue(data[0].ACCOUNT_HEAD)
 
- 
+
+
+
             }
           }
 
@@ -328,7 +393,7 @@ export class AdvanceReturnComponent implements OnInit {
       this.updateFormValuesAndSRNO();
     });
     console.log("this.pcrSelectionData", this.pcrSelectionData);
-   
+
   }
 
 
@@ -351,6 +416,7 @@ export class AdvanceReturnComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.advanceReturnForm.controls.partyCode.setValue(e.ACCODE);
+    this.advanceReturnForm.controls.advanceFromCustomers.setValue(e.ACCOUNT_HEAD);
     this.partyCodeChange({ target: { value: e.ACCODE } })
   }
 
@@ -457,7 +523,8 @@ export class AdvanceReturnComponent implements OnInit {
       this.yearMonth = res.BaseFinancialyear;
       console.log('BaseFinancialyear', res.BaseFinancialyear);
 
-    }}
+    }
+  }
 
   formSubmit() {
 
@@ -487,11 +554,12 @@ export class AdvanceReturnComponent implements OnInit {
       "HAWALACOMMPER": 0,
       "FLAG_UPDATED": "0",
       "FLAG_INPROCESS": "0",
-      "SUPINVNO": "",
-      "SUPINVDATE": this.advanceReturnForm.value.vocDate,
-      "HHACCOUNT_HEAD": "",
+      "SUPINVNO":this.advanceReturnForm.value.partyRefNo || "",
+      "SUPINVDATE": this.advanceReturnForm.value.date,
+      "HHACCOUNT_HEAD": this.advanceReturnForm.value.advanceFromCustomers || "",
       "SALESPERSON_CODE": this.advanceReturnForm.value.enteredByCode,
-      "BALANCE_FC":this.advanceReturnForm.value.partyAmount || 0,
+      "SALESPERSON_NAME": this.advanceReturnForm.value.enteredBy,
+      "BALANCE_FC": this.advanceReturnForm.value.partyAmount || 0,
       "BALANCE_CC": this.advanceReturnForm.value.partyAmount || 0,
       "AUTHORIZEDPOSTING": true,
       "AUTOGENREF": "",
@@ -508,11 +576,11 @@ export class AdvanceReturnComponent implements OnInit {
       "AUTOPOSTING": true,
       "POSTDATE": this.advanceReturnForm.value.vocDate,
       "ADVRETURN": true,
-      "HTUSERNAME":  this.comService.userName,
+      "HTUSERNAME": this.comService.userName,
       "GENSEQNO": 0,
-      "BASE_CURRENCY": "",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
+      "BASE_CURRENCY": this.advanceReturnForm.value.partyCurrency || "",
+      "BASE_CURR_RATE": this.advanceReturnForm.value.partyCurrencyRate || "0",
+      "BASE_CONV_RATE": this.advanceReturnForm.value.partyCurrencyRate || "0",
       "PRINT_COUNT": 0,
       "GST_REGISTERED": true,
       "GST_STATE_CODE": "",
@@ -529,7 +597,7 @@ export class AdvanceReturnComponent implements OnInit {
       "TDS_APPLICABLE": true,
       "TDS_TOTALFC": 0,
       "TDS_TOTALCC": 0,
-      "ADRRETURNREF": "",
+      "ADRRETURNREF": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${this.advanceReturnForm.value.vocNo}`,
       "SCH_SCHEME_CODE": this.advanceReturnForm.value.schemaCode || "",
       "SCH_CUSTOMER_ID": this.advanceReturnForm.value.schemaId || "",
       "REFDOCNO": "",
@@ -586,6 +654,107 @@ export class AdvanceReturnComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+  deleteCurrencyReceipt() {
+    if (this.content.MID == null) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = `AdvanceReceipt/DeleteAdvanceReceipt/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.close('reloadMainGrid') //reloads data in MainGrid
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.close('reloadMainGrid')
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
+
+  auditTrailClick() {
+    let params = {
+      BRANCH_CODE: this.branchCode,
+      VOCTYPE: this.advanceReturnForm.value.vocType,
+      VOCNO: this.advanceReturnForm.value.vocNo.toString() || '',
+      MID: this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
+      YEARMONTH: this.yearMonth,
+    }
+    this.auditTrailComponent?.showDialog(params)
+  }
+
+  AccountPosting() {
+    if (!this.content) return
+    let params = {
+      BRANCH_CODE: this.comService.nullToString(this.strBranchcode),
+      VOCTYPE: this.comService.getqueryParamVocType(),
+      VOCNO: this.advanceReturnForm.value.vocNo,
+      YEARMONTH: this.comService.nullToString(this.baseYear),
+      MID: this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
+      ACCUPDATEYN: 'Y',
+      USERNAME: this.comService.userName,
+      MAINVOCTYPE: this.comService.getqueryParamMainVocType(),
+      HEADER_TABLE: this.comService.getqueryParamTable(),
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting', params)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.comService.toastSuccessByMsgId(result.message || 'Posting Done')
+        } else {
+          this.comService.toastErrorByMsgId(result.message)
+        }
+      },
+        (err) => this.comService.toastErrorByMsgId("Server Error")
+      );
+    this.subscriptions.push(Sub);
+  }
+
+
 
   printReceiptDetailsWeb() {
     let postData = {

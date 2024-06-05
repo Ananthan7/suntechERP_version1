@@ -41,6 +41,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   ];
 
   viewOnly: boolean = false;
+  editOnly: boolean = false;
   midForInvoce: any = 0;
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -186,13 +187,14 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
 
     this.getFinancialYear();
-    this.getPartyCode();
+
 
     if (this.content?.MID != null)
       this.getArgsData();
     else {
       this.changeDueDate(null);
       this.generateVocNo();
+      this.getPartyCode();
 
     }
 
@@ -226,7 +228,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       day = ('0' + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join('-');
   }
-  
+
   generateVocNo() {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
     this.dataService.getDynamicAPI(API)
@@ -295,6 +297,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
     console.log('this.content', this.content);
     if (this.content.FLAG == 'VIEW')
       this.viewOnly = true;
+    if (this.content.FLAG == "EDIT") {
+      this.editOnly = true
+    }
 
     this.snackBar.open('Loading...');
     let Sub: Subscription = this.dataService.getDynamicAPI(`AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`)
@@ -325,13 +330,12 @@ export class PosCurrencyReceiptComponent implements OnInit {
           this.posCurrencyReceiptForm.controls.vocNo.setValue(data.VOCNO);
           this.posCurrencyReceiptForm.controls.vocDate.setValue(data.VOCDATE);
           this.posCurrencyReceiptForm.controls.partyCode.setValue(data.PARTYCODE);
-          // this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue();
+          this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(data.HHACCOUNT_HEAD);
           this.posCurrencyReceiptForm.controls.partyCurrency.setValue(data.PARTY_CURRENCY);
           this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data.PARTY_CURR_RATE);
 
           this.posCurrencyReceiptForm.controls.enteredby.setValue(data.SALESPERSON_CODE);
-          // this.posCurrencyReceiptForm.controls.enteredbyuser.setValue();
-          // this.posCurrencyReceiptForm.controls.dueDays.setValue(data.DUEDAYS);
+          this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(data.SALESPERSON_NAME);
           this.posCurrencyReceiptForm.controls.dueDaysdesc.setValue(data.DUEDAYS);
 
           this.posCurrencyReceiptForm.controls.customerCode.setValue(data.POSCUSTOMERCODE);
@@ -381,8 +385,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptForm.controls.partyCode.setValue(e.ACCODE);
+
     this.getGSTDetails(e.ACCODE);
-    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT HEAD']);
+    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e.ACCOUNT_HEAD);
     this.partyCodeChange({ target: { value: e.ACCODE } })
   }
 
@@ -518,6 +523,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "SUPINVDATE": this.posCurrencyReceiptForm.value.vocDate,
       "HHACCOUNT_HEAD": this.posCurrencyReceiptForm.value.partyCodeDesc || "",
       "SALESPERSON_CODE": this.posCurrencyReceiptForm.value.enteredby,
+      "SALESPERSON_NAME": this.posCurrencyReceiptForm.value.enteredbyuser,
       "BALANCE_FC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "BALANCE_CC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "AUTHORIZEDPOSTING": false,
@@ -556,7 +562,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "TDS_APPLICABLE": false,
       "TDS_TOTALFC": 0,
       "TDS_TOTALCC": 0,
-      "ADRRETURNREF": "",
+      "ADRRETURNREF": `${this.branchCode}-${this.posCurrencyReceiptForm.value.vocType}-${this.posCurrencyReceiptForm.value.vocNo}`,
       "SCH_SCHEME_CODE": this.posCurrencyReceiptForm.value.schemaCode || "",
       "SCH_CUSTOMER_ID": this.posCurrencyReceiptForm.value.schemaId || "",
       "REFDOCNO": "",
@@ -845,7 +851,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.receiptData = { ...data };
-    modalRef.componentInstance.queryParams = { vatPercentage: this.vatPercentage, hsnCode: this.hsnCode,igstAccode:this.igst_accode ,currecyCode: this.currencyCode, currencyConvRate: this.currencyConvRate, isViewOnly: this.viewOnly };
+    modalRef.componentInstance.queryParams = { vatPercentage: this.vatPercentage, hsnCode: this.hsnCode, igstAccode: this.igst_accode, currecyCode: this.currencyCode, currencyConvRate: this.currencyConvRate, isViewOnly: this.viewOnly };
 
     // modalRef.componentInstance.receiptData = data;
 
@@ -858,9 +864,35 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
 
+  // getGSTDetails(acCode: any) {
+
+  //   let vatData = {
+
+  //     'BranchCode': this.branchCode,
+  //     'AcCode': acCode,
+  //     'VocType': this.comService.getqueryParamVocType(),
+  //     'Date': new Date().toISOString(),
+
+  //   };
+  //   let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
+  //     .subscribe((result) => {
+
+  //       if (result.status == 'Success') {
+  //         let data = result.response;
+  //         console.log('vatData', data.GST_PER);
+  //         this.vatPercentage = data.GST_PER;
+  //         this.hsnCode = data.HSN_SAC_CODE;
+  //       }
+  //       else{
+  //         this.vatPercentage = '0';
+  //         this.hsnCode = ''
+  //       }
+  //     }
+  //     )
+  // }
+
   getGSTDetails(acCode: any) {
 
-    // this.PartyCodeData.SEARCH_VALUE = event.target.value
     let vatData = {
 
       Accode: acCode,
@@ -874,11 +906,12 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
         if (result.status == 'Success') {
           let data = result.response;
-          console.log('vatData', data.VAT_PER);
-          this.vatPercentage = data.VAT_PER;
-          this.hsnCode = data.HSN_SAC_CODE;
-          this.igst_accode = data.IGST_ACCODE;
+          this.vatPercentage = data.VAT_PER ? data.VAT_PER : '0';
+          this.hsnCode = data.HSN_SAC_CODE ? data.HSN_SAC_CODE : '';
+          this.igst_accode = data.IGST_ACCODE ? data.HSN_SAC_CODE : '';
         }
+
+
       }
       )
   }

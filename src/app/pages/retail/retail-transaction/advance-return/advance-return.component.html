@@ -6,7 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()"  [isViewDelete]="!viewOnly"  (postClick)="AccountPosting()" (printClick)="printReceiptDetailsWeb()" (auditTrailClick)="auditTrailClick()"
+(cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()" [isViewAuditTrail]="viewOnly||editOnly" [isViewPrint]="viewOnly"  [isViewPost]="viewOnly"></modal-header>
+<audit-trail></audit-trail>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="advanceReturnForm" class="p-1">
@@ -72,8 +74,8 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="partyCurrency" readonly/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="partyCurrencyCodeData"
-                        (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
+                        <!-- <master-search [MasterSearchData]="partyCurrencyCodeData"
+                        (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
@@ -87,14 +89,14 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Entered By</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="enteredByCode"/>
+                            <input type="text" [readonly]="viewOnly" matInput  formControlName="enteredByCode"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="enteredByCode"
+                        <master-search *ngIf="!viewOnly" [MasterSearchData]="enteredByCode"
                         (newRowClick)="enteredBySelected($event)"></master-search>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="enteredBy"/>
+                            <input type="text" [readonly]="viewOnly"  matInput formControlName="enteredBy"/>
                         </mat-form-field>
                     </div>
                  
@@ -105,7 +107,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Party Ref.No</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyRefNo"/>
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="partyRefNo"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
@@ -120,12 +122,12 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Base Currency</label>
                     <div class="col-md-1">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="baseCurrency" readonly />
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="baseCurrency" readonly />
                         </mat-form-field>
                     </div>
                     <div class="col-md-1">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="baseCurrencyRate" readonly/>
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="baseCurrencyRate" readonly/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -133,14 +135,14 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Customer Code</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="customerCode"/>
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="customerCode"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="customerCodeData"
+                        <master-search *ngIf="!viewOnly" [MasterSearchData]="customerCodeData"
                         (newRowClick)="customerCodeSelected($event)"></master-search>
                     </div>
                     <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="customerName"/>
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="customerName"/>
                         </mat-form-field>
                     </div>
                     <!-- <div class="col-md-10 offset-md-2">
@@ -168,7 +170,7 @@
             </div>
         </div>
         <div class="row justify-content-between mt-3">
-            <div class="col-md-6 text-center">
+            <div *ngIf="!viewOnly" class="col-md-6 text-center">
                 <div class="p-1 bd-highlight">
                     <button type="button" class="btn btn-primary add-btn" (click)="openaddposdetails()">
                         PCRVOC No
@@ -180,12 +182,12 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Amount</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyCurrency" />
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="partyCurrency" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="partyAmount"/>
+                            <input type="number" [readonly]="viewOnly" matInput formControlName="partyAmount"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -222,7 +224,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Narration</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="narration"/>
+                            <input type="text" [readonly]="viewOnly" matInput formControlName="narration"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -232,13 +234,13 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total VAT</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="totalVat"/>
+                            <input type="number" [readonly]="viewOnly" matInput formControlName="totalVat"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="total"/>
+                            <input type="number" [readonly]="viewOnly" matInput formControlName="total"/>
                         </mat-form-field>
                     </div>
                 </div>

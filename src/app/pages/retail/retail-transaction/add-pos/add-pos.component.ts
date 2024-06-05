@@ -8498,7 +8498,7 @@ export class AddPosComponent implements OnInit {
       .subscribe((result: any) => {
         console.log(result);
         let data = result.dynamicData
-        var WindowPrt = window.open(' ', ' ', 'width=' + '1024px' + ', height=' + '800px');
+        var WindowPrt = window.open(' ', ' ', 'width=' + '900px' + ', height=' + '800px');
         if (WindowPrt === null) {
           console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
           return;
