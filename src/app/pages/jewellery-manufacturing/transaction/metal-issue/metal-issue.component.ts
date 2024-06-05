@@ -44,16 +44,29 @@ export class MetalIssueComponent implements OnInit {
       currency: this.comService.compCurrency
     },alignment: 'right'},
   ];
+  // workerCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 19,
+  //   SEARCH_FIELD: 'WORKER_CODE',
+  //   SEARCH_HEADING: 'Worker Code',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "WORKER_CODE<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
+    LOOKUPID: 254,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code',
+    SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: "@strProcess='',@blnActive=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   SALESPERSON_CODEData: MasterSearchModel = {
     PAGENO: 1,
@@ -62,7 +75,7 @@ export class MetalIssueComponent implements OnInit {
     SEARCH_FIELD: 'SALESPERSON_CODE',
     SEARCH_HEADING: 'Entered by',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    WHERECONDITION: "ACTIVE=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

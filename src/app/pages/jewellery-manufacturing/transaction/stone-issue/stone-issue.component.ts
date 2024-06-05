@@ -44,11 +44,11 @@ export class StoneIssueComponent implements OnInit {
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
+    LOOKUPID: 1,
     SEARCH_FIELD: 'UsersName',
     SEARCH_HEADING: 'User',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "ACTIVE = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -205,8 +205,7 @@ export class StoneIssueComponent implements OnInit {
 
 
   userDataSelected(value: any) {
-    console.log(value);
-    this.stoneissueFrom.controls.enteredBy.setValue(value.UsersName);
+    this.stoneissueFrom.controls.enteredBy.setValue(value.SALESPERSON_CODE);
   }
 
   CurrencyCodeSelected(e: any) {
