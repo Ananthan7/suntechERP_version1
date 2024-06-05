@@ -63,7 +63,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Process Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@strType='true',@strWorker='',@strCurrentUser='${this.comService.userName}'`,
+    WHERECONDITION: `@strWorker='',@strCurrentUser='${this.comService.userName}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -89,7 +89,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION='G' AND SUBCODE=0",
+    WHERECONDITION: "DIVISION='G' AND SUBCODE=0 ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true
@@ -248,8 +248,8 @@ export class MetalIssueDetailsComponent implements OnInit {
 
 
   processCodeSelected(e: any) {
-    this.metalIssueDetailsForm.controls.processCode.setValue(e.Process_Code);
-    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.Description);
+    this.metalIssueDetailsForm.controls.processCode.setValue(e.process_code);
+    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.description);
     this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
   }
 
@@ -257,8 +257,8 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   workerCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
-    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(e.WORKER_CODE);
-    this.processCodeData.WHERECONDITION = `@strType='true',@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
+    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(e.DESCRIPTION);
+    this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
 
 
@@ -517,7 +517,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "parameter": {
         'strUNQ_JOB_ID': this.metalIssueDetailsForm.value.subJobNo,
         'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strCurrenctUser': this.comService.nullToString(this.comService.userName),
+        'strCurrenctUser': '',
       }
     }
 
@@ -530,6 +530,8 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
           this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
+          this.processCodeData.WHERECONDITION = `@strWorker='${data[0].WORKER}',@strCurrentUser='${this.comService.userName}'`
+          this.workerCodeData.WHERECONDITION = `@strProcess='${data[0].PROCESS}',@blnActive=1`
           this.metalIssueDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.metalIssueDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.metalIssueDetailsForm.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
@@ -638,6 +640,7 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.tableData = result.dynamicData[0]
+          this.columnhead = Object.keys(this.tableData[0])
         }
       }
       )

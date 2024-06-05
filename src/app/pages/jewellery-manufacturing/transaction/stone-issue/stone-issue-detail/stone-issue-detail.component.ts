@@ -98,7 +98,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Process Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@strType='true',@strWorker='',@strCurrentUser='${this.comService.userName}'`,
+    WHERECONDITION: `@strWorker='',@strCurrentUser='${this.comService.userName}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -235,15 +235,15 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   processCodeSelected(e: any) {
-    this.stoneIssueDetailsFrom.controls.process.setValue(e.process_code);
-    this.stoneIssueDetailsFrom.controls.processname.setValue(e.description);
-    this.workerCodeData.WHERECONDITION = `@strProcess='${e.process_code}',@blnActive=1`
+    this.stoneIssueDetailsFrom.controls.process.setValue(e.PROCESS_CODE);
+    this.stoneIssueDetailsFrom.controls.processname.setValue(e.DESCRIPTION);
+    this.workerCodeData.WHERECONDITION = `@strProcess='${e.PROCESS_CODE}',@blnActive=1`
   }
 
   workerCodeSelected(e: any) {
     this.stoneIssueDetailsFrom.controls.worker.setValue(e.WORKER_CODE);
     this.stoneIssueDetailsFrom.controls.workername.setValue(e.DESCRIPTION);
-    this.processCodeData.WHERECONDITION = `@strType='true',@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
+    this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
 
   stockCodeSelected(e: any) {
