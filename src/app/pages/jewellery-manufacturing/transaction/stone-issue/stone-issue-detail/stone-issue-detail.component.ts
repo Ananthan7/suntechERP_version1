@@ -235,9 +235,9 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   processCodeSelected(e: any) {
-    this.stoneIssueDetailsFrom.controls.process.setValue(e.Process_Code);
-    this.stoneIssueDetailsFrom.controls.processname.setValue(e.Description);
-    this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
+    this.stoneIssueDetailsFrom.controls.process.setValue(e.process_code);
+    this.stoneIssueDetailsFrom.controls.processname.setValue(e.description);
+    this.workerCodeData.WHERECONDITION = `@strProcess='${e.process_code}',@blnActive=1`
   }
 
   workerCodeSelected(e: any) {
