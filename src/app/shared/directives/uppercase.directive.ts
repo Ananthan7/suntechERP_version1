@@ -19,7 +19,7 @@ export class UppercaseDirective {
     const end = input.selectionEnd;
 
     // Convert only letters to uppercase
-    input.value = input.value.replace(/[a-z]/g, (char: string) => char.toUpperCase());
+    input.value = input.value?.trimStart().replace(/[a-z]/g, (char: string) => char.toUpperCase());
 
     // Restore the cursor position
     input.setSelectionRange(start, end);
