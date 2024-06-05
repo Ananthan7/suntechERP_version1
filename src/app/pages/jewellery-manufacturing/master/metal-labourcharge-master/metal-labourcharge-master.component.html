@@ -29,6 +29,7 @@
                                 maxlength="6" formControlName="metalDivision"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
                                 oninput="this.value = this.value.toUpperCase()" 
+                                (keypress)="this.stockcodeDisable"
                                 appNoEmptySpace>
                         </mat-form-field>
                         <master-search
@@ -48,7 +49,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="stockCodeData"
                             (newRowClick)="stockCodeSelected($event)"
-                            *ngIf="viewDisable || !stockcodeDisable"></master-search>
+                            *ngIf="viewDisable || stockcodeDisable  == false"></master-search>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -101,11 +102,11 @@
                         <mat-form-field style="width: 90%">
                             <input type="text" matInput
                                 [readonly]="viewMode || codeEnableMetal"
-                                maxlength="6" formControlName="metalcurrency"  oninput="this.value = this.value.toUpperCase()"  />
+                                maxlength="6" formControlName="metalcurrency"  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,currencyCodeData,'currency')" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="currencyCodeData"
                             (newRowClick)="metalcurrencyCodeSelected($event)"
-                            *ngIf=" viewDisable == false"></master-search>
+                            *ngIf="viewDisable == false"></master-search>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -121,7 +122,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="karatCodeData"
                             (newRowClick)="karatCodeSelected($event)"
-                            *ngIf=" viewDisable || stockcodeDisable == false"></master-search>
+                            *ngIf="viewDisable == false"></master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Labour
                         A/C *
@@ -135,7 +136,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="labouracCodeData"
                             (newRowClick)="labourAcSelected($event)"
-                            *ngIf=" viewDisable == false"></master-search>
+                            *ngIf="viewDisable == false"></master-search>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -150,7 +151,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="colorData"
                             (newRowClick)="colorDataSelected($event)"
-                            *ngIf=" viewDisable || stockcodeDisable == false"></master-search>
+                            *ngIf=" viewDisable == false"></master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Cost Rate
                         *
@@ -178,7 +179,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="typeCodeData"
                             (newRowClick)="typeCodeSelected($event)"
-                            *ngIf=" viewDisable || stockcodeDisable == false"></master-search>
+                            *ngIf=" viewDisable == false"></master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Selling
                         Rate *
@@ -207,7 +208,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="categoryCodeData"
                             (newRowClick)="categorySelected($event)"
-                            *ngIf=" viewDisable || stockcodeDisable == false"></master-search>
+                            *ngIf=" viewDisable == false"></master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Selling %
                         *
@@ -235,7 +236,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="subcategoryCodeData"
                             (newRowClick)="subcategorySelected($event)"
-                            *ngIf=" viewDisable || stockcodeDisable == false"></master-search>
+                            *ngIf=" viewDisable == false"></master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Wastage %
                         *
@@ -260,7 +261,7 @@
                         </mat-form-field>
                         <master-search [MasterSearchData]="brandCodeData"
                             (newRowClick)="brandSelected($event)"
-                            *ngIf=" viewDisable || brandDisable == false"></master-search>
+                            *ngIf=" viewDisable == false"></master-search>
                     </div>
                 </div>
                 <div class="row mb-2">
