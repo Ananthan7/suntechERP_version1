@@ -32,6 +32,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   public isChecked = true;
   userbranch = localStorage.getItem('userbranch');
   disableSelect = false;
+  disableStockCode = true;
   codeEnable: boolean = true;
   enableUpdate: boolean = true;
   approveDisable: boolean = true;
@@ -42,7 +43,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   selectedValue4: string = 'None';
   selectedValue5: string = 'None';
   tableDataGroupDetails: any[] = [];
-
+  designCodeEnable: boolean = true;
   groups = [
     { type: 'None', value:'None' },
     { type: 'Category', value:'Category'},
@@ -76,6 +77,7 @@ export class CustomerPriceSettingComponent implements OnInit {
 
     } else if (this.content.FLAG == 'EDIT') {
       this.codeEnable = false;
+
       this.enableUpdate = false;
       this.approveDisable = false;
       this.setFormValues()
@@ -106,7 +108,8 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   selectStock() {
     this.checkboxvalue = !this.checkboxvalue;
-  }
+      this.designCodeEnable = !this.designCodeEnable;
+    }
 
   checkPriceCode(): boolean {
 
@@ -149,7 +152,16 @@ export class CustomerPriceSettingComponent implements OnInit {
     // Check if any row's checkbox is checked in the first grid
     return this.tableDataGroupDetails.some(row => row.APPLY_ON_WEIGHT);
   }
-
+  toggleStockCode(event: any): void {
+    const isChecked = event.checked;
+    if (isChecked) {
+      this.customerpricesettingForm.get('stockCode')?.enable();
+      this.disableStockCode = false;
+    } else {
+      this.customerpricesettingForm.get('stockCode')?.disable();
+      this.disableStockCode = true;
+    }
+  }
   
   compCodetemp(data:any,value: any){
     this.tableDataGroupDetails[value.data.SRNO - 1].CompCode = data.target.value;

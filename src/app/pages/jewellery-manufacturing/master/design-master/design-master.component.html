@@ -36,7 +36,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput formControlName="code"
-                          oninput="this.value = this.value.toUpperCase()"
+                          UpperCaseDirective autocomplete="off"
                           (focusout)="checkCodeExists($event)" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="designCodeData"
@@ -78,7 +78,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;">
                         <input type="text"
-                          oninput="this.value = this.value.toUpperCase()"
+                          UpperCaseDirective autocomplete="off"
                           matInput />
                       </mat-form-field>
                     </div>
@@ -839,7 +839,7 @@
                     <input type="text" (change)="stoneTypetemp($event,data)"
                       [value]="data.value"
                       [disabled]="fieldDisable" style="width: 100%;" required
-                      oninput="this.value = this.value.toUpperCase()" />
+                      UpperCaseDirective autocomplete="off" />
                   </div>
 
                   <div *dxTemplate="let data of 'stockCodetemp'">

@@ -30,7 +30,8 @@
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
                                 oninput="this.value = this.value.toUpperCase()" 
                                 (keypress)="this.stockcodeDisable"
-                                appNoEmptySpace>
+                                appNoEmptySpace
+                                UpperCaseDirective autocomplete="off"/>
                         </mat-form-field>
                         <master-search
                             [MasterSearchData]="metalDivisionCodeData"

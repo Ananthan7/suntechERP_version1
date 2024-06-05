@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,EventEmitter, Output  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,8 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
   styleUrls: ['./melting-issue-details.component.scss']
 })
 export class MeltingIssueDetailsComponent implements OnInit {
-
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
   tableData: any[] = [];
   branchCode?: String;
@@ -136,7 +137,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.meltingIssuedetailsFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.meltingIssuedetailsFrom.controls.vocdate.setValue(this.currentDate)
+
   }
   setAllInitialValues() {
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
@@ -215,22 +216,32 @@ export class MeltingIssueDetailsComponent implements OnInit {
     pureweight:['',[Validators.required]],
     topurity:['',[Validators.required]]
   });
+  submitValidations() {
+    let form = this.meltingIssuedetailsFrom.value
+    if (form.jobNumber == '') {
+      this.toastr.error('Job Number required')
+      return
+    }
+    return false;
+  }
 
+  formSubmit(flag: any) {
+    if (this.submitValidations()) return;
+    let dataToparent = {
+      FLAG: flag,
+      POSTDATA: this.setPostData()
+    }
+    // this.close(postData);
+    this.saveDetail.emit(dataToparent);
+    if (flag == 'CONTINUE') {
+      // this.resetStockDetails()
+    }
+  }
 
-
-  formSubmit() {
-    let dataTOparent: any = {
-
-      METAL_DETAIL_GRID: [],
-      PROCESS_FORMDETAILS: [],
-}
-dataTOparent.PROCESS_FORMDETAILS = this.meltingIssuedetailsFrom.value;
-dataTOparent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
-dataTOparent.POSTDATA = []
-
-  
-    let API = 'JobMeltingIssueDJ/InsertJobMeltingIssueDJ'
-    let postData =  {
+setPostData() {
+  let form = this.meltingIssuedetailsFrom.value
+  let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+    return  {
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_BRANCH_CODE": this.branchCode,
@@ -290,89 +301,8 @@ dataTOparent.POSTDATA = []
       "REJ_REMARKS": "string",
       "ATTACHMENT_FILE": "string"
     }
-    dataTOparent.POSTDATA.push(postData)
-    this.close(dataTOparent);
   }
-  
-  
 
-
-setFormValues() {
-}
-
-update() {
-  if (this.meltingIssuedetailsFrom.invalid) {
-    this.toastr.error('select all required fields')
-    return
-  }
- 
-  
-    let API = 'JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/'+ this.meltingIssuedetailsFrom.value.voctype + this.meltingIssuedetailsFrom.value.vocno + this.meltingIssuedetailsFrom.value.vocdate
-    let postData =  {
-    //   "UNIQUEID": 0,
-    //   "SRNO": 0,
-    //   "DT_BRANCH_CODE": this.branchCode,
-    //   "DT_VOCTYPE": "stri",
-    //   "DT_VOCNO": 0,
-    //   "DT_VOCDATE": "2023-10-21T10:15:43.790Z",
-    //   "DT_YEARMONTH": this.yearMonth,
-    //   "JOB_NUMBER": this.meltingIssuedetailsFrom.value.jobno,
-    //   "JOB_DESCRIPTION": this.meltingIssuedetailsFrom.value.jobdes,
-    //   "PROCESS_CODE": this.meltingIssuedetailsFrom.value.process,
-    //   "PROCESS_DESC": this.meltingIssuedetailsFrom.value.processdes,
-    //   "WORKER_CODE": this.meltingIssuedetailsFrom.value.worker,
-    //   "WORKER_DESC": this.meltingIssuedetailsFrom.value.workerdes,
-    //   "STOCK_CODE": this.meltingIssuedetailsFrom.value.stockcode,
-    //   "STOCK_DESCRIPTION": this.meltingIssuedetailsFrom.value.stockdes,
-    //   "DIVCODE": "s",
-    //   "KARAT_CODE": "0",
-    //   "PCS": this.meltingIssuedetailsFrom.value.pcs,
-    //   "GROSS_WT": this.meltingIssuedetailsFrom.value.grossweight,
-    //   "STONE_WT": this.meltingIssuedetailsFrom.value.stoneweight,
-    //   "PURITY": this.meltingIssuedetailsFrom.value.purity,
-    //   "PUREWT": this.meltingIssuedetailsFrom.value.pureweight,
-    //   "PUDIFF": 0,
-    //   "IRON_WT": 0,
-    //   "NET_WT": this.meltingIssuedetailsFrom.value.netweight,
-    //   "TOTAL_WEIGHT": 0,
-    //   "IRON_PER": 0,
-    //   "STONEDIFF": 0,
-    //   "WAX_WT": this.meltingIssuedetailsFrom.value.waxweight,
-    //   "TREE_NO": this.meltingIssuedetailsFrom.value.treeno,
-    //   "WIP_ACCODE": "",
-    //   "CURRENCY_CODE": "",
-    //   "CURRENCY_RATE": 0,
-    //   "MKG_RATEFC": 0,
-    //   "MKG_RATECC": 0,
-    //   "MKGVALUEFC": 0,
-    //   "MKGVALUECC": 0,
-    //   "DLOC_CODE": "",
-    //   "REMARKS": this.meltingIssuedetailsFrom.value.remarks,
-    //   "LOCTYPE_CODE": this.meltingIssuedetailsFrom.value.location,
-    //   "TOSTOCKCODE": this.meltingIssuedetailsFrom.value.tostock,
-    //   "LOSSWT": this.meltingIssuedetailsFrom.value.lossweight,
-    //   "TODIVISION_CODE": "s",
-    //   "LOT_NO": this.meltingIssuedetailsFrom.value.lotno,
-    //   "BAR_NO": this.meltingIssuedetailsFrom.value.barno,
-    //   "TICKET_NO": this.meltingIssuedetailsFrom.value.ticketno,
-    //   "SILVER_PURITY": 0,
-    //   "SILVER_PUREWT": 0,
-    //   "TOPURITY": this.meltingIssuedetailsFrom.value.topurity,
-    //   "PUR_PER": 0,
-    //   "MELTING_TYPE": "0",
-    //   "ISALLOY": "s",
-    //   "UNQ_JOB_ID": "",
-    //   "SUB_STOCK_CODE": "",
-    //   "IS_REJECT": true,
-    //   "REASON": "",
-    //   "REJ_REMARKS": "",
-    //   "ATTACHMENT_FILE": ""
-    // }
-  
-    // this.close({postData});
-    }
-  }
-  
   
   deleteRecord() {
     if (!this.content.VOCTYPE) {
@@ -462,6 +392,7 @@ update() {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data[0],'datapassing')
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
@@ -471,6 +402,9 @@ update() {
           this.meltingIssuedetailsFrom.controls.processdes.setValue(data[0].PROCESSDESC)
           this.meltingIssuedetailsFrom.controls.grossweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.purity.setValue(data[0].PURITY)
+          this.meltingIssuedetailsFrom.controls.waxweight.setValue(data[0].WAX_WEIGHT)
+          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_DESCRIPTION)
+          this.meltingIssuedetailsFrom.controls.topurity.setValue(data[0].PURE_WT)
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))

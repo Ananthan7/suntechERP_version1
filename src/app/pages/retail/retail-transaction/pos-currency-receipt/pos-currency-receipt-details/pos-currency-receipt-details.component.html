@@ -60,20 +60,21 @@
             <span class="col-md-3">
               <mat-form-field style="width: 70%">
                 <input [readonly]="viewOnly ||hideMasterSearch" type="text" matInput formControlName="debitAmount"
-                (change)="DebitamountChange($event)" />
+                  (change)="DebitamountChange($event)" />
               </mat-form-field>
 
-              <master-search *ngIf="hideDebitLookup" [MasterSearchData]="debitAmountData" (newRowClick)="debitAmountSelected($event)">
+              <master-search *ngIf="hideDebitLookup&&!viewOnly" [MasterSearchData]="debitAmountData"
+                (newRowClick)="debitAmountSelected($event)">
               </master-search>
             </span>
             <div class="col-md-6">
               <mat-form-field style="width: 100%">
                 <input [readonly]="viewOnly||hideMasterSearch" type="text" matInput formControlName="debitAmountDesc" />
               </mat-form-field>
-            
+
             </div>
           </div>
-      
+
           <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Currency :</label>
             <div class="col-md-3">
@@ -124,30 +125,28 @@
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label">Valid:</label>
             <div class="col-md-3">
-              <!-- need to work for mm/yy -->
-              <mat-form-field style="width: 100%" dateFormat2>
+              <!-- <mat-form-field style="width: 100%" dateFormat2>
                 <input matInput [matDatepicker]="creditCardDate" name="creditCardDate" placeholder="MM/YYYY"
                   formControlName="creditCardDate" [min]="today" />
                 <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
                 <mat-datepicker #creditCardDate startView="multi-year"
                   (monthSelected)="setMonthAndYear($event, creditCardDate)"></mat-datepicker>
-              </mat-form-field>
+              </mat-form-field> -->
+
+
+              <mat-form-field style="width: 100%" dateFormat2>
+                <input matInput [matDatepicker]="creditCardDate" [min]="today" name="creditCardDate" placeholder="MM/YYYY" formControlName="creditCardDate"
+               />
+               <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
+               <mat-datepicker #creditCardDate startView="multi-year"
+                 (monthSelected)="setMonthAndYear($event, creditCardDate)"></mat-datepicker>
+                </mat-form-field>
+
+
 
             </div>
 
-            <!-- <div class="col-md-3">
-              <mat-form-field style="width: 100%" dateFormat2>
-                <input [readonly]="viewOnly" matInput [matDatepicker]="creditCardDate" name="creditCardDate"
-                  placeholder="MM/YYYY" formControlName="creditCardDate" [matDatepickerFilter]="dateFilter" />
-                <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
-                <mat-datepicker #creditCardDate startView="multi-year"
-                  (monthSelected)="setMonthAndYear($event, creditCardDate)">
-                </mat-datepicker>
-              </mat-form-field>
-              <mat-error *ngIf="posCurrencyReceiptDetailsForm.get('creditCardDate')?.hasError('invalidDate')">
-                Selected date cannot be in the past
-              </mat-error>
-            </div> -->
+
 
 
           </div>
@@ -212,7 +211,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">Deposit Bank:</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
-                <input [readonly]="true" type="text"  matInput formControlName="chequeDepositBank" />
+                <input [readonly]="true" type="text" matInput formControlName="chequeDepositBank" />
               </mat-form-field>
             </div>
           </div>

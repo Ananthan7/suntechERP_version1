@@ -94,6 +94,17 @@ export class MetalIssueDetailsComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true
   }
+  divCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "division = 'G'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     VOCNO: [''],
     VOCDATE: [''],
@@ -160,7 +171,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       }
     }
   }
-  setNewFormValue(){
+  setNewFormValue() {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
@@ -174,9 +185,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (!this.content) return;
     this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalIssueDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
-    this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocdate)
+    this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.HEADERDETAILS.vocdate || this.content.VOCDATE)
     this.metalIssueDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
- 
+
     this.metalIssueDetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)
     this.metalIssueDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.metalIssueDetailsForm.controls.jobNumDes.setValue(this.content.JOB_DESCRIPTION)
@@ -232,7 +243,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.DIVISION_CODE);
-    this.stockCodeValidate({target: {value: e.STOCK_CODE}})
+    this.stockCodeValidate({ target: { value: e.STOCK_CODE } })
   }
 
 
@@ -289,11 +300,11 @@ export class MetalIssueDetailsComponent implements OnInit {
       };
     }
   }
-  changeJobClicked(){
+  changeJobClicked() {
     this.formSubmit('CONTINUE')
     this.metalIssueDetailsForm.reset()
   }
-  resetStockDetails() { 
+  resetStockDetails() {
     this.metalIssueDetailsForm.controls.stockCode.setValue('')
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue('')
     this.metalIssueDetailsForm.controls.toStockCode.setValue('')
@@ -308,7 +319,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
     this.tableData[0].STOCK_CODE = ''
   }
-  setPostData(){
+  setPostData() {
     let form = this.metalIssueDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
 
@@ -316,7 +327,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.nullToString(form.JOB_DATE),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.jobNumber),
@@ -402,7 +413,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     return false
   }
   /**use: to save data to grid*/
-  formSubmit(flag:any) {
+  formSubmit(flag: any) {
     if (this.submitValidations(this.metalIssueDetailsForm.value)) return;
     let dataToparent = {
       FLAG: flag,
@@ -410,39 +421,39 @@ export class MetalIssueDetailsComponent implements OnInit {
     }
     // this.close(postData);
     this.saveDetail.emit(dataToparent);
-    if (flag == 'CONTINUE'){
+    if (flag == 'CONTINUE') {
       this.resetStockDetails()
     }
   }
-  masterMetalChange(event: any){
+  masterMetalChange(event: any) {
     console.log(event);
     console.log(event.target.checked);
     this.masterMetalChecked = event.target.checked
-    
+
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.metalIssueDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
   }
-  stoneValidate(){
-    if(this.calculateNetWt()){
-      this.setValueWithDecimal('GROSS_WT',this.tableData[0].METAL, 'METAL')
-      this.setValueWithDecimal('STONE_WT',this.tableData[0].STONE, 'STONE')
+  stoneValidate() {
+    if (this.calculateNetWt()) {
+      this.setValueWithDecimal('GROSS_WT', this.tableData[0].METAL, 'METAL')
+      this.setValueWithDecimal('STONE_WT', this.tableData[0].STONE, 'STONE')
     }
   }
-  grossValidate(){
-    if(this.calculateNetWt()){
-      this.setValueWithDecimal('GROSS_WT',this.tableData[0].METAL, 'METAL')
-      this.setValueWithDecimal('STONE_WT',this.tableData[0].STONE, 'STONE')
+  grossValidate() {
+    if (this.calculateNetWt()) {
+      this.setValueWithDecimal('GROSS_WT', this.tableData[0].METAL, 'METAL')
+      this.setValueWithDecimal('STONE_WT', this.tableData[0].STONE, 'STONE')
     }
   }
   /**use: for stone wt and gross wt calculation */
-  private calculateNetWt(): boolean{
+  private calculateNetWt(): boolean {
     let form = this.metalIssueDetailsForm.value
     let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
     let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
-    if(STONE_WT>GROSS_WT){
+    if (STONE_WT > GROSS_WT) {
       this.comService.toastErrorByMsgId('Stone weight cannot be greater than gross weight')
       return true
     }
@@ -478,13 +489,14 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalIssueDetailsForm.controls.jobNumDes.setValue(data[0].JOB_DESCRIPTION)
             this.subJobNumberValidate()
+            this.metalIssueDetailsForm.controls.DIVCODE.setValue("G");
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            if(data[0].KARAT_CODE != ''){
-            this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION+`AND KARAT_CODE='${data[0].KARAT_CODE}'` 
+            if (data[0].KARAT_CODE != '') {
+              this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION + `AND KARAT_CODE='${data[0].KARAT_CODE}'`
             }
-            this.setValueWithDecimal('jobPurity',data[0].JOB_PURITY, 'PURITY')
+            this.setValueWithDecimal('jobPurity', data[0].JOB_PURITY, 'PURITY')
           } else {
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')
             this.comService.toastErrorByMsgId('MSG1531')
@@ -525,9 +537,9 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(data[0].STOCK_DESCRIPTION);
           this.metalIssueDetailsForm.controls.toDIVCODE.setValue(data[0].DIVCODE);
           this.metalIssueDetailsForm.controls.masterMetal.setValue(false);
-          this.comService.formControlSetReadOnly('toDIVCODE',true)
-          this.comService.formControlSetReadOnly('toStockCode',true)
-          this.comService.formControlSetReadOnly('toStockCodeDes',true)
+          this.comService.formControlSetReadOnly('toDIVCODE', true)
+          this.comService.formControlSetReadOnly('toStockCode', true)
+          this.comService.formControlSetReadOnly('toStockCodeDes', true)
           this.metalIssueDetailsForm.controls.workerCodeDes.setValue(data[0].WORKERDESC)
           this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
           this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
@@ -543,11 +555,11 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
           let purityFlag = this.comService.getCompanyParamValue('ALLOWPURITYCHANGEINMETALISSUE')
-          if(!purityFlag){
-            this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION+`AND PURITY='${data[0].PURITY}'` 
+          if (!purityFlag && data[0].PURITY != '') {
+            this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION + `AND PURITY='${data[0].PURITY}'`
           }
           this.FillMtlRequiredDetail()
-          this.setStockCodeCondition()
+          // this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           // // this.stockCodeScrapValidate()
@@ -565,26 +577,26 @@ export class MetalIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setStockCodeCondition() {
-    let form = this.metalIssueDetailsForm.value
-    let val = `@strBranch_Code='${this.comService.branchCode}',`
-    val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
-    val += `@strMetalStone='',@strProcess_Code='',`
-    val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
-    this.stockCodeData.WHERECONDITION = val
-  }
+  // setStockCodeCondition() {
+  //   let form = this.metalIssueDetailsForm.value
+  //   let val = `@strBranch_Code='${this.comService.branchCode}',`
+  //   val += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
+  //   val += `@strMetalStone='',@strProcess_Code='',`
+  //   val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
+  //   this.stockCodeData.WHERECONDITION = val
+  // }
   stockCodeValidate(event: any) {
     if (event.target.value == '') return
     let postData = {
       "SPID": "046",
       "parameter": {
-        strStockCode:  event.target.value,                                                  
-        strBranchCode:  this.comService.nullToString(this.branchCode),                                      
-        strVocType:  this.content.HEADERDETAILS.VOCTYPE,                                                  
-        strUserName:  this.comService.nullToString(this.userName),                                         
-        strLocation:  '',                                                
-        strPartyCode:   '',                                                  
-        strVocDate:   this.comService.formatDateTime(this.comService.currentDate)
+        strStockCode: event.target.value,
+        strBranchCode: this.comService.nullToString(this.branchCode),
+        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strUserName: this.comService.nullToString(this.userName),
+        strLocation: '',
+        strPartyCode: '',
+        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
       }
     }
 
@@ -595,8 +607,8 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data) {
-           console.log(data,'data');
-            
+            console.log(data, 'data');
+
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             return
@@ -610,7 +622,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  FillMtlRequiredDetail(){
+  FillMtlRequiredDetail() {
     let postData = {
       "SPID": "056",
       "parameter": {
@@ -628,7 +640,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.tableData = result.dynamicData[0]
         }
       }
-    )
+      )
     this.subscriptions.push(Sub)
   }
 

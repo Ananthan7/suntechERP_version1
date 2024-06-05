@@ -25,9 +25,9 @@
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
                                     [readonly]="viewMode || editMode" #code
-                                    oninput="this.value = this.value.toUpperCase()"
+                                    UpperCaseDirective
                                     (focusout)="checkWorkerExists($event)"
-                                    (keyup)="codeEnabled()" />
+                                    (keyup)="codeEnabled()" autocomplete="off"/>
                                 <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
@@ -54,7 +54,8 @@
                                     (input)="inputValidate($event)"
                                     UpperCaseDirective
                                     (focusout)="validateLookupField($event,accountMasterData,'WorkerAcCode')"
-                                    formControlName="WorkerAcCode" />
+                                    formControlName="WorkerAcCode" 
+                                    autocomplete="off"/>
                             </mat-form-field>
                             <master-search
                                 [MasterSearchData]="accountMasterData"
@@ -73,7 +74,8 @@
                                     UpperCaseDirective
                                     (focusout)="validateLookupField($event,supervisorData,'NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable"
-                                    formControlName="NameOfSupervisor" />
+                                    formControlName="NameOfSupervisor" 
+                                    autocomplete="off"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="supervisorData"
                                 *ngIf="viewMode == false"

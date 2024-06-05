@@ -28,7 +28,6 @@
                                     maxlength="6" UpperCaseDirective
                                     formControlName="sequenceCode"
                                     [readonly]="viewMode || editMode"
-                                    appNoEmptySpace
                                     (focusout)="checkCodeExists($event)"
                                     (keyup)="codeEnabled()" id="code" 
                                     autocomplete="off"/>
@@ -39,8 +38,7 @@
                                     placeholder="Description"
                                     [readonly]="viewMode || editMode"
                                     formControlName="sequenceDESCRIPTION"
-                                    appNoEmptySpace
-                                    oninput="this.value = this.value.toUpperCase()" />
+                                    UpperCaseDirective />
                             </mat-form-field>
                         </span>
                     </div>
@@ -58,7 +56,7 @@
                                     (change)="PrefixCodeChange($event)"
                                     (focusout)="validateLookupField($event,sequenceMasterData,'sequencePrefixCode')"
                                     formControlName="sequencePrefixCode"
-                                    appNoEmptySpace />
+                                    UpperCaseDirective />
                             </mat-form-field>
                             <master-search *ngIf="!viewMode"
                                 [MasterSearchData]="sequenceMasterData"
