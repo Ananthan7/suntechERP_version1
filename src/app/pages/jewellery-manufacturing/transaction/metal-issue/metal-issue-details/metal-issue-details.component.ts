@@ -24,7 +24,6 @@ export class MetalIssueDetailsComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   branchCode?: String;
-  yearMonth?: String;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   jobNumberDetailData: any[] = [];
@@ -112,6 +111,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     BRANCH_CODE: [''],
     EXCLUDE_TRANSFER_WT: [false],
     JOB_DATE: [''],
+    JOB_SO_NUMBER: [''],
     jobNumber: ['', [Validators.required]],
     jobNumDes: ['', [Validators.required]],
     subJobNo: [''],
@@ -161,7 +161,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.setNewFormValue()
+    this.branchCode = this.comService.branchCode;
     if (this.content && this.content.FLAG) {
       this.setInitialValues()
       this.metalIssueDetailsForm.controls.FLAG.setValue(this.content.FLAG)
@@ -169,11 +169,17 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.viewMode = true;
         this.masterMetalChecked = true;
       }
+    }else{
+      this.setNewFormValue()
     }
   }
   setNewFormValue() {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
+    if(this.content?.HEADERDETAILS){
+      this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.HEADERDETAILS.VOCTYPE)
+      this.metalIssueDetailsForm.controls.VOCNO.setValue(this.content.HEADERDETAILS.VOCNO)
+      this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.HEADERDETAILS.vocdate)
+      this.metalIssueDetailsForm.controls.BRANCH_CODE.setValue(this.content.HEADERDETAILS.BRANCH_CODE)
+    }
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
     this.setValueWithDecimal('PURITY', 0, 'PURITY')
@@ -185,7 +191,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (!this.content) return;
     this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalIssueDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
-    this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.HEADERDETAILS.vocdate || this.content.VOCDATE)
+    this.metalIssueDetailsForm.controls.VOCDATE.setValue(new Date(this.content.VOCDATE) || this.content.HEADERDETAILS.vocdate)
     this.metalIssueDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
 
     this.metalIssueDetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)
@@ -197,7 +203,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.workerCodeDes.setValue(this.content.WORKER_NAME)
     this.metalIssueDetailsForm.controls.DIVCODE.setValue(this.content.DIVCODE)
     this.metalIssueDetailsForm.controls.pcs.setValue(this.content.PCS)
-    this.metalIssueDetailsForm.controls.subJobNo.setValue(this.content.JOB_SO_NUMBER)
+    this.metalIssueDetailsForm.controls.subJobNo.setValue(this.content.UNQ_JOB_ID)
+    this.metalIssueDetailsForm.controls.JOB_SO_NUMBER.setValue(this.content.JOB_SO_NUMBER)
     this.metalIssueDetailsForm.controls.subJobNoDes.setValue(this.content.JOB_DESCRIPTION)
     this.metalIssueDetailsForm.controls.stockCode.setValue(this.content.STOCK_CODE)
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)

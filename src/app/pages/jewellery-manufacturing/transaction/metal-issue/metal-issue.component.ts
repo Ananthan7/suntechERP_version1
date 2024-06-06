@@ -253,6 +253,7 @@ export class MetalIssueComponent implements OnInit {
       return
     }
     if (dataToChild) {
+      dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.metalIssueForm.value;
     } else {
       dataToChild = { HEADERDETAILS: this.metalIssueForm.value }
