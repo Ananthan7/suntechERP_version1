@@ -557,9 +557,15 @@ export class AdvanceReturnComponent implements OnInit {
     const formatedRecieptDetails = this.modifyRecieptDetails(this.pcrSelectionData);
 
     console.log(formatedRecieptDetails);
-    const vocnos = this.vocNumList.map(detail =>
-      `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${detail}`
+    const vocnos = this.vocNumList.map(vocNum =>
+      `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${vocNum}`
     ).join(',');
+
+    console.log(vocnos);
+    
+    // this.vocNumList.map(detail =>
+    //   `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${detail}`
+    // ).join(',');
 
 
     let postData = {
@@ -638,7 +644,7 @@ export class AdvanceReturnComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "",
-      "pospcrSelection": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${vocnos}`,
+      "pospcrSelection":vocnos,
 
       // "pospcrSelection": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${this.advanceReturnForm.value.vocNo}`,
       "userName": this.strUser,
