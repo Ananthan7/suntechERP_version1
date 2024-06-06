@@ -44,6 +44,9 @@ export class MetalDivisionMasterComponent implements OnInit {
         // this.processMasterForm();
       } else if (this.content.FLAG == 'EDIT') {
         this.editableMode = true;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
       }
     }
   }
@@ -263,6 +266,7 @@ export class MetalDivisionMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   deleteRecord() {
+
     if (!this.content.MID) {
       Swal.fire({
         title: '',
@@ -276,6 +280,8 @@ export class MetalDivisionMasterComponent implements OnInit {
       });
       return
     }
+
+    if (this.content && this.content.FLAG == 'VIEW') return
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

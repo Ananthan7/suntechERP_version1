@@ -792,9 +792,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+   
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    // this.stockcodeDisable = event.target.value
-    this.stockcodeDisable = false
+
+     this.stockcodeDisable = false;
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -805,9 +807,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        this.isDisableSaveBtn = false;
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
-          this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
+          this.metallabourMasterForm.controls[FORMNAME].setValue('')
+          this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
@@ -1135,7 +1139,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
 
     // Check if the data parameter is not 'wtfrom'
-    if (data !== 'wtfrom') {
+    if (data == 'wtto') {
       // Check if Wt From is greater than Wt To
       if (wtf > wtt) {
         // Display an error message

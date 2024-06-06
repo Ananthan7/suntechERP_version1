@@ -29,7 +29,7 @@
                                 maxlength="6" formControlName="metalDivision"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
                                 (keypress)="this.stockcodeDisable"
-                                appNoEmptySpace
+                                appNoEmptySpace (input)="inputValidate($event)"
                                 UpperCaseDirective autocomplete="off"/>
                         </mat-form-field>
                         <master-search
@@ -44,7 +44,7 @@
                             <input type="text" matInput
                                 [readonly]="viewMode  || stockcodeDisable"
                                 (focusout)="validateLookupField($event,stockCodeData,'stock_code')"
-                                oninput="this.value = this.value.toUpperCase()" 
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
                                 formControlName="stock_code" appNoEmptySpace />
                         </mat-form-field>
                         <master-search [MasterSearchData]="stockCodeData"
@@ -102,7 +102,7 @@
                         <mat-form-field style="width: 90%">
                             <input type="text" matInput
                                 [readonly]="viewMode || codeEnableMetal"
-                                maxlength="6" formControlName="metalcurrency"  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,currencyCodeData,'currency')" />
+                                maxlength="6" formControlName="metalcurrency"  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,currencyCodeData,'currency')" (input)="inputValidate($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="currencyCodeData"
                             (newRowClick)="metalcurrencyCodeSelected($event)"
@@ -118,7 +118,7 @@
                                 [readonly]="viewMode || codeEnableMetal"
                                 (focusout)="validateLookupField($event,karatCodeData,'karat')"
                                 maxlength="6" formControlName="karat"
-                                oninput="this.value = this.value.toUpperCase()"  />
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="karatCodeData"
                             (newRowClick)="karatCodeSelected($event)"
@@ -132,7 +132,7 @@
                             <input matInput type="text"
                                 [readonly]="viewMode || codeEnableMetal"
                                 formControlName="labourAc"
-                                oninput="this.value = this.value.toUpperCase()"  />
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"  />
                         </mat-form-field>
                         <master-search [MasterSearchData]="labouracCodeData"
                             (newRowClick)="labourAcSelected($event)"
@@ -147,7 +147,7 @@
                             <input type="text" matInput
                                 [readonly]="viewMode  || stockcodeDisable || codeEnableMetal"
                                 maxlength="6" formControlName="color" 
-                                oninput="this.value = this.value.toUpperCase()" />
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="colorData"
                             (newRowClick)="colorDataSelected($event)"
@@ -175,7 +175,7 @@
                             <input type="text" matInput
                                 [readonly]="viewMode || codeEnableMetal"
                                 maxlength="6" formControlName="typecode" 
-                                oninput="this.value = this.value.toUpperCase()" />
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="typeCodeData"
                             (newRowClick)="typeCodeSelected($event)"
@@ -204,7 +204,7 @@
                         <mat-form-field style="width: 90%">
                             <input type="text" matInput
                                 [readonly]="viewMode || codeEnableMetal"
-                                maxlength="6" formControlName="category"  oninput="this.value = this.value.toUpperCase()" />
+                                maxlength="6" formControlName="category"  oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="categoryCodeData"
                             (newRowClick)="categorySelected($event)"
@@ -232,7 +232,7 @@
                         <mat-form-field style="width: 90%">
                             <input type="text" matInput
                                 [readonly]="viewMode || codeEnableMetal"
-                                maxlength="6" formControlName="subCategory"  oninput="this.value = this.value.toUpperCase()" />
+                                maxlength="6" formControlName="subCategory"  oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="subcategoryCodeData"
                             (newRowClick)="subcategorySelected($event)"
@@ -257,7 +257,7 @@
                         <mat-form-field style="width: 90%">
                             <input type="text" matInput
                                 [readonly]="viewMode || codeEnableMetal"
-                                maxlength="6" formControlName="brand"  oninput="this.value = this.value.toUpperCase()" />
+                                maxlength="6" formControlName="brand"  oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="brandCodeData"
                             (newRowClick)="brandSelected($event)"
@@ -300,9 +300,10 @@
                             <input matInput type="text"
                                 [readonly]="viewMode || codeEnableMetal"
                                 matInput
+                                MetalDecimalInput
                                 formControlName="wtFrom"
                                 class="text-right"
-                                (change)="onweightto($event,'wtto')"
+                                maxlength="2"
                                 (keyup)="WtcodeEnabled()" />
                         </mat-form-field>
                     </div>
@@ -315,6 +316,8 @@
                             <input matInput type="text"
                                 [readonly]="viewMode  || codeEnable1 || codeEnableMetal"
                                 matInput
+                                maxlength="2"
+                                MetalDecimalInput
                                 (change)="onweightto($event,'wtto')"
                                 formControlName="wtTo" class="text-right" />
                         </mat-form-field>
