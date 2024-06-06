@@ -300,9 +300,10 @@
                             <input matInput type="text"
                                 [readonly]="viewMode || codeEnableMetal"
                                 matInput
+                                MetalDecimalInput
                                 formControlName="wtFrom"
                                 class="text-right"
-                                (change)="onweightto($event,'wtto')"
+                                maxlength="2"
                                 (keyup)="WtcodeEnabled()" />
                         </mat-form-field>
                     </div>
@@ -315,6 +316,8 @@
                             <input matInput type="text"
                                 [readonly]="viewMode  || codeEnable1 || codeEnableMetal"
                                 matInput
+                                maxlength="2"
+                                MetalDecimalInput
                                 (change)="onweightto($event,'wtto')"
                                 formControlName="wtTo" class="text-right" />
                         </mat-form-field>

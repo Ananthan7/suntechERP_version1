@@ -57,7 +57,7 @@ export class ComponentSizeSetComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-   
+
     console.log(this.content);
     if (this.content) {
       this.setFormValues()
@@ -110,7 +110,7 @@ export class ComponentSizeSetComponent implements OnInit {
           this.tableData = data.response.detail;
           console.log(data.response.detail);
           this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE === item.COMPSIZE_CODE) || null);
-   
+
         }
       });
   }
@@ -126,7 +126,7 @@ export class ComponentSizeSetComponent implements OnInit {
   //       if (data.status === 'Success') {
   //         this.tableData = data.response.detail;
   //         console.log(data.response.detail);
-          
+
   //         // Initialize selectedOptions based on the fetched data
   //         this.selectedOptions = this.tableData.map(item => ({
   //           SRNO: item.SRNO,
@@ -153,6 +153,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
   addTableData() {
 
+
     let length = this.tableData.length;
     let sn = length + 1;
     let data = {
@@ -167,6 +168,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
     this.selectedOptions.push(null);
   }
+
 
 
   close(data?: any) {
@@ -327,6 +329,19 @@ export class ComponentSizeSetComponent implements OnInit {
     }
     if (this.componentsizesetmasterForm.invalid) {
       this.toastr.error('select all required fields')
+      return
+    }
+
+    let data: any = false;
+    this.tableData.forEach((result: any) => {
+
+      if (result.COMPONENT_DESCRIPTION == '' && result.COMPSIZE_CODE == '') {
+        data = true
+        this.toastr.error('select all required fields');
+      }
+    })
+
+    if (data == true) {
       return
     }
 
@@ -513,7 +528,7 @@ export class ComponentSizeSetComponent implements OnInit {
         if (result.status == 'Success') {
           Swal.fire({
             title: '',
-            text:'Code Already Exists!',
+            text: 'Code Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
@@ -534,6 +549,6 @@ export class ComponentSizeSetComponent implements OnInit {
     this.subscriptions.push(sub);
   }
 
- 
-  
+
+
 }

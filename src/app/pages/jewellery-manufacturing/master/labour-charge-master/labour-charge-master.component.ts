@@ -544,17 +544,17 @@ export class LabourChargeMasterComponent implements OnInit {
 
     this.diamondlabourMasterForm.controls.selling_rate.setValue(
       this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.SELLING_RATE));
 
     this.diamondlabourMasterForm.controls.selling.setValue(
       this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.SELLING_PER));
 
     this.diamondlabourMasterForm.controls.cost_rate.setValue(
       this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.COST_RATE));
 
 
@@ -821,9 +821,11 @@ export class LabourChargeMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
-        if (data.length === 0) {
+        if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531');
           this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+         
+          this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = '';
           if (FORMNAME === 'sieve') {
             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
@@ -1151,7 +1153,7 @@ export class LabourChargeMasterComponent implements OnInit {
   //   if (data != 'wtFrom') {
   //     if (wtf > wtt) {
   //       Swal.fire({
-  //         title: event.message || 'Weight From should be lesser than Weight To',
+  //         title: event.message || 'Weight From should be lesseTr than Weight To',
   //         text: '',
   //         icon: 'error',
   //         confirmButtonColor: '#336699',
@@ -1163,29 +1165,29 @@ export class LabourChargeMasterComponent implements OnInit {
   //   }
   // }
 
-  onweightto(event: any, data: string) {
-    // Retrieve the values of Wt From and Wt To from the form
-    const wtf: number = parseFloat(this.metallabourMasterForm.value.wtFrom);
-    const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
+  //onweightto(event: any, data: string) {
+  //   // Retrieve the values of Wt From and Wt To from the form
+  //   const wtf: number = parseFloat(this.metallabourMasterForm.value.wtFrom);
+  //   const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
 
-    // Check if the data parameter is not 'wtfrom'
-    if (data !== 'wtfrom') {
-      // Check if Wt From is greater than Wt To
-      if (wtf > wtt) {
-        // Display an error message
-        Swal.fire({
-          title: event.message || 'Weight From should be lesser than Weight To',
-          text: '',
-          icon: 'error',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        });
+  //   // Check if the data parameter is not 'wtfrom'
+  //   if (data !== 'wtfrom') {
+  //     // Check if Wt From is greater than Wt To
+  //     if (wtf > wtt) {
+  //       // Display an error message
+  //       Swal.fire({
+  //         title: event.message || 'Weight From should be lesser than Weight To',
+  //         text: '',
+  //         icon: 'error',
+  //         confirmButtonColor: '#336699',
+  //         confirmButtonText: 'Ok'
+  //       });
 
-        // Clear the value of Wt To input field
-        this.metallabourMasterForm.controls.wtTo.setValue('');
-      }
-    }
-  }
+  //       // Clear the value of Wt To input field
+  //       this.metallabourMasterForm.controls.wtTo.setValue('');
+  //     }
+  //   }
+  // }
 
 
   //  onCtweighttto(event: any, data: String) {
@@ -1194,7 +1196,7 @@ export class LabourChargeMasterComponent implements OnInit {
   //   if (data != 'Ctwtfrom') {
   //     if (Ctwtf > Ctwtt) {
   //       Swal.fire({
-  //         title: event.message || 'Weight From should be lesser than Weight To',
+  //         title: event.message || 'Weight From sHhould be lesser than Weight To',
   //         text: '',
   //         icon: 'error',
   //         confirmButtonColor: '#336699',
@@ -1213,7 +1215,7 @@ export class LabourChargeMasterComponent implements OnInit {
     const Ctwtt: number = parseFloat(this.diamondlabourMasterForm.value.ctWtTo);
 
     // Check if the data parameter is not 'Ctwtfrom'
-    if (data !== 'Ctwtfrom') {
+    if (data == 'Ctwtto') {
       // Check if Ct Wt From is greater than Ct Wt To
       if (Ctwtf > Ctwtt) {
         // Display an error message
@@ -1300,7 +1302,7 @@ export class LabourChargeMasterComponent implements OnInit {
   // onCtweighttto(event: any) {
   //   if (this.diamondlabourMasterForm.value.ctWtFrom < this.diamondlabourMasterForm.value.ctWtTo) {
   //     Swal.fire({
-  //       title: event.message || 'Ct Weight From should be lesser than Weight To',
+  //       title: event.message || 'Ct Y',
   //       text: '',
   //       icon: 'error',
   //       confirmButtonColor: '#336699',

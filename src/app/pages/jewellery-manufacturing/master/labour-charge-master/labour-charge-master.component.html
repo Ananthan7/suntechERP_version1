@@ -226,8 +226,8 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput [readonly]="viewMode || codeEnableDiamond" matInput class="text-right"
-                [max]="2" formControlName="ctWtFrom" (change)="onCtweighttto($event,'Ctwtto')"
+              <input type="text" matInput [readonly]="viewMode || codeEnableDiamond" class="text-right"
+              maxlength="2" formControlName="ctWtFrom" MetalDecimalInput
                 (keyup)="CtWtcodeEnabled()" />
             </mat-form-field>
           </div>
@@ -251,7 +251,7 @@
           <div class="col-sm-3">
             <mat-form-field>
               <input type="text" matInput [readonly]="viewMode  || codeEnable2 || codeEnableDiamond" matInput
-                class="text-right" formControlName="ctWtTo" [max]="2" (change)="onCtweighttto($event,'Ctwtto')" />
+                class="text-right" formControlName="ctWtTo" MetalDecimalInput maxlength="2" (change)="onCtweighttto($event,'Ctwtto')" />
             </mat-form-field>
           </div>
           <div class="col-sm-6">
