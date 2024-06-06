@@ -161,13 +161,15 @@ export class StoneIssueComponent implements OnInit {
           this.stoneissueFrom.controls.currencyrate.setValue(
             this.comService.decimalQuantityFormat(data.CURRENCY_RATE, 'RATE')
           )
-          this.stoneissueFrom.controls.worker.setValue(data.WORKER)
-          this.stoneissueFrom.controls.workername.setValue(data.WORKER_NAME)
+          // this.stoneissueFrom.controls.worker.setValue(data.WORKER)
+          // this.stoneissueFrom.controls.workername.setValue(data.WORKER_NAME)
           this.stoneissueFrom.controls.enteredBy.setValue(data.SMAN)
           this.stoneissueFrom.controls.narration.setValue(data.REMARKS)
           this.stoneissueFrom.controls.caratTotal.setValue(data.REMARKS)
-
           this.stoneIssueData = data.Details
+          this.stoneissueFrom.controls.worker.setValue(this.stoneIssueData[0].WORKER_CODE)
+          this.stoneissueFrom.controls.workername.setValue(this.stoneIssueData[0].WORKER_NAME)
+
           let detailData = data.Details
           // if (detailData.length > 0) {
           //   detailData.forEach((element: any) => {
@@ -360,7 +362,7 @@ export class StoneIssueComponent implements OnInit {
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "SMAN": this.comService.nullToString(form.SMAN),
+      "SMAN": this.comService.nullToString(form.enteredBy),
       "REMARKS": this.comService.nullToString(form.narration),
       "NAVSEQNO": 0,
       "BASE_CURRENCY": "",

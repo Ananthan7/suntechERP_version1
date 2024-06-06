@@ -155,10 +155,8 @@ export class StoneIssueDetailComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private comService: CommonServiceService,
   ) { }
 
@@ -394,7 +392,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "BRANCH_CODE": this.comService.nullToString(this.comService.branchCode),
       "DESIGN_CODE": this.comService.nullToString(form.DESIGN_CODE),
       "DIVCODE": this.comService.nullToString(form.DIVCODE),
-      "STOCK_CODE": this.comService.nullToString(form.stock),
+      "STOCK_CODE": this.comService.nullToString(form.stockCode),
       "STOCK_DESCRIPTION": this.comService.nullToString(form.stockCodeDes),
       "SIEVE": this.comService.nullToString(form.sieve),
       "SHAPE": this.comService.nullToString(form.shape),
