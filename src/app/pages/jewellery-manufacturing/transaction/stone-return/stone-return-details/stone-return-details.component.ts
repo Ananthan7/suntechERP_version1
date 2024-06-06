@@ -25,7 +25,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   jobDate = new Date();
   jobNumberDetailData: any[] = [];
   viewMode: boolean = false;
-  
+
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -101,20 +101,21 @@ export class StoneReturnDetailsComponent implements OnInit {
     FRONTENDFILTER: true
   }
   stonereturndetailsFrom: FormGroup = this.formBuilder.group({
-    jobNumber: ['',[Validators.required]],
-    jobDesc: ['',[Validators.required]],
+    jobNumber: ['', [Validators.required]],
+    jobDesc: ['', [Validators.required]],
     subjobno: [''],
-    subjobDesc : [''],
+    subjobDesc: [''],
     designcode: [''],
     salesorderno: [''],
-    process: ['',[Validators.required]],
+    process: ['', [Validators.required]],
     processname: [''],
-    worker: ['',[Validators.required]],
+    worker: ['', [Validators.required]],
     workername: [''],
     stockCode: [''],
     stockCodeDes: [''],
     batchid: [''],
     broken: [''],
+    brokenDescription: [''],
     location: [''],
     pieces: [''],
     size: [''],
@@ -134,6 +135,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     YEARMONTH: [''],
     CURRENCY_CODE: [''],
     CURRENCY_RATE: [''],
+    DIVCODE: [''],
     SMAN: [''],
     FLAG: [null]
   });
@@ -157,7 +159,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   }
 
   setFormValues() {
-    console.log(this.content,'formfunction')
+    console.log(this.content, 'formfunction')
     if (!this.content) return
     this.stonereturndetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stonereturndetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -173,7 +175,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.subjobno.setValue(this.content.UNQ_JOB_ID)
     this.stonereturndetailsFrom.controls.subjobDesc.setValue(this.content.JOB_DESCRIPTION)
     this.stonereturndetailsFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.stonereturndetailsFrom.controls.salesorderno.setValue(this.content.PROCESS_NAME)
+    // this.stonereturndetailsFrom.controls.salesorderno.setValue(this.content.PROCESS_NAME)
     this.stonereturndetailsFrom.controls.process.setValue(this.content.PROCESS_CODE)
     this.stonereturndetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
     this.stonereturndetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
@@ -187,23 +189,23 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.sieve.setValue(this.content.SIEVE)
     this.stonereturndetailsFrom.controls.color.setValue(this.content.COLOR)
     this.stonereturndetailsFrom.controls.clarity.setValue(this.content.CLARITY)
-   
+
   };
 
-  JobNumberSelected(e:any){
+  JobNumberSelected(e: any) {
     this.stonereturndetailsFrom.controls.jobNumber.setValue(e.job_number);
     this.stonereturndetailsFrom.controls.jobDesc.setValue(e.job_description);
     this.subJobNoCodeData.WHERECONDITION += `AND JOB_NUMBER = '${e.job_number} AND ISNULL(PROD_REF,0)=0'`
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
-  subJobNoCodeSelected(e:any){
+  subJobNoCodeSelected(e: any) {
     this.stonereturndetailsFrom.controls.subjobno.setValue(e.UNQ_JOB_ID);
     this.stonereturndetailsFrom.controls.subjobDesc.setValue(e.DESCRIPTION);
     this.subJobNoCodeData.WHERECONDITION += `AND UNQ_JOB_ID = '${e.UNQ_JOB_ID}'`
     this.setProcessCodeWhereCondition()
     this.setWorkerCodeWhereCondition()
     this.setStockCodeWhereCondition()
-    
+
   }
   processCodeSelected(e: any) {
     this.stonereturndetailsFrom.controls.process.setValue(e.PROCESS_CODE);
@@ -222,32 +224,50 @@ export class StoneReturnDetailsComponent implements OnInit {
 
   stockCodeSelected(e: any) {
     this.stonereturndetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
-    this.stonereturndetailsFrom.controls.stockCodeDes.setValue(e.DESCRIPTION);
-    this.stonereturndetailsFrom.controls.DIVCODE.setValue(e.Item);
+    this.stonereturndetailsFrom.controls.stockCodeDes.setValue(e.Discription);
+    this.stonereturndetailsFrom.controls.DIVCODE.setValue(e.DivCode);
+
+    this.stonereturndetailsFrom.controls.pieces.setValue(e.Pcs)
+    this.stonereturndetailsFrom.controls.size.setValue(e.Size)
+    this.stonereturndetailsFrom.controls.sieve.setValue(e.sieve)
+    this.stonereturndetailsFrom.controls.sieveset.setValue(e.sieve_set)
+    this.stonereturndetailsFrom.controls.color.setValue(e.color)
+    this.stonereturndetailsFrom.controls.unitrate.setValue(
+      this.comService.emptyToZero(e.rate)
+    )
+    this.stonereturndetailsFrom.controls.shape.setValue(e.shape)
+    this.stonereturndetailsFrom.controls.amount.setValue(e.AmountLC)
+    this.stonereturndetailsFrom.controls.pointerwt.setValue(e.Weight)
+    this.stonereturndetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
+    this.stonereturndetailsFrom.controls.broken.setValue(e.STOCK_CODE)
+    this.stonereturndetailsFrom.controls.brokenDescription.setValue(e.Discription)
+
+    // this.stonereturndetailsFrom.controls.carat.setValue(e.KARAT_CODE)
+
     this.setStockCodeWhereCondition()
   }
-  setProcessCodeWhereCondition(){
+  setProcessCodeWhereCondition() {
     let WHERECONDITION = `@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
-    WHERECONDITION+=`@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
-    WHERECONDITION+=`@strCurrentUser='${this.comService.userName}',`
-    WHERECONDITION+=`@strBranchCode='${this.comService.branchCode}'`,
-    this.processCodeData.WHERECONDITION = WHERECONDITION
+    WHERECONDITION += `@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
+    WHERECONDITION += `@strCurrentUser='${this.comService.userName}',`
+    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}'`,
+      this.processCodeData.WHERECONDITION = WHERECONDITION
   }
-  setWorkerCodeWhereCondition(){
+  setWorkerCodeWhereCondition() {
     let WHERECONDITION = `@strWorkerCode='${this.stonereturndetailsFrom.value.worker}',`
-    WHERECONDITION+=`@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
-    WHERECONDITION+=`@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
-    WHERECONDITION+=`@strCurrentUser='${this.comService.userName}',`
-    WHERECONDITION+=`@strBranchCode='${this.comService.branchCode}'`
+    WHERECONDITION += `@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
+    WHERECONDITION += `@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
+    WHERECONDITION += `@strCurrentUser='${this.comService.userName}',`
+    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}'`
     this.workerCodeData.WHERECONDITION = WHERECONDITION
   }
-  setStockCodeWhereCondition(){
+  setStockCodeWhereCondition() {
     let form = this.stonereturndetailsFrom.value;
-    let WHERECONDITION =`@strProcessCode='${this.comService.nullToString(form.process)}',`
-    WHERECONDITION+=`@strWorkerCode='${this.comService.nullToString(form.worker)}',`
-    WHERECONDITION+=`@strSubJobNumber='${this.comService.nullToString(form.subjobno)}',`
-    WHERECONDITION+=`@strBranchCode='${this.comService.branchCode}',`
-    WHERECONDITION+=`@strStockCode='${this.comService.nullToString(form.stockCode)}'`
+    let WHERECONDITION = `@strProcessCode='${this.comService.nullToString(form.process)}',`
+    WHERECONDITION += `@strWorkerCode='${this.comService.nullToString(form.worker)}',`
+    WHERECONDITION += `@strSubJobNumber='${this.comService.nullToString(form.subjobno)}',`
+    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}',`
+    WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
     this.stockCodeData.WHERECONDITION = WHERECONDITION
   }
   close(data?: any) {
@@ -256,7 +276,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.closeDetail.emit()
   }
 
-  setPostData(form:any){
+  setPostData(form: any) {
     return {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
@@ -269,7 +289,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "JOB_DESCRIPTION": form.jobDesc,
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
       "DESIGN_CODE": this.comService.nullToString(form.designcode),
-      "DIVCODE": "",
+      "DIVCODE": this.comService.nullToString(form.DIVCODE),
       "STOCK_CODE": this.comService.nullToString(form.stockCode),
       "STOCK_DESCRIPTION": this.comService.nullToString(form.stockCodeDes),
       "SIEVE": this.comService.nullToString(form.sieve),
@@ -292,7 +312,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "UNQ_DESIGN_ID": "",
       "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE":this.comService.nullToString(form.location),
+      "LOCTYPE_CODE": this.comService.nullToString(form.location),
       "STOCK_CODE_BRK": "",
       "WASTAGE_QTY": 0,
       "WASTAGE_PER": 0,
@@ -320,8 +340,8 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SUB_STOCK_CODE": ""
     }
   }
-  
-  submitValidations(form:any){
+
+  submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
       this.toastr.error('Job Number code required')
       return true
@@ -372,90 +392,79 @@ export class StoneReturnDetailsComponent implements OnInit {
     }
   }
 
-subJobNumberValidate(event?: any) {
-  let postData = {
-    "SPID": "040",
-    "parameter": {
-      'strUNQ_JOB_ID': this.stonereturndetailsFrom.value.subjobno,
-      'strBranchCode': this.comService.nullToString(this.branchCode),
-      'strCurrenctUser': ''
-    }
-  }
-
-  this.comService.showSnackBarMsg('MSG81447')
-  let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result) => {
-      this.comService.closeSnackBarMsg()
-      if (result.dynamicData && result.dynamicData[0].length > 0) {
-        let data = result.dynamicData[0]
-        this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
-        this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-        this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
-        this.stonereturndetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-        this.stonereturndetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
-        this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
-        this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
-        this.stonereturndetailsFrom.controls.batchid.setValue(data[0].WORKERDESC)
-        this.stonereturndetailsFrom.controls.broken.setValue(data[0].PROCESSDESC)
-        this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
-        this.stonereturndetailsFrom.controls.pieces.setValue(data[0].pieces)
-        this.stonereturndetailsFrom.controls.size.setValue(data[0].SIZE)
-        this.stonereturndetailsFrom.controls.sieve.setValue(data[0].SIEVE)
-        this.stonereturndetailsFrom.controls.carat.setValue(data[0].KARAT_CODE)
-        this.stonereturndetailsFrom.controls.color.setValue(data[0].COLOR)
-        this.stonereturndetailsFrom.controls.unitrate.setValue(data[0].unitrate)
-        this.stonereturndetailsFrom.controls.shape.setValue(data[0].SHAPE)
-        this.stonereturndetailsFrom.controls.sieveset.setValue(data[0].SIEVE_SET)
-        this.stonereturndetailsFrom.controls.amount.setValue(data[0].AMOUNTFC)
-        this.stonereturndetailsFrom.controls.pointerwt.setValue(data[0].pointerwt)
-        this.setProcessCodeWhereCondition()
-        this.setWorkerCodeWhereCondition()
-        this.setStockCodeWhereCondition()
-      } else {
-        this.comService.toastErrorByMsgId('MSG1747')
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.stonereturndetailsFrom.value.subjobno,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
       }
-    }, err => {
-      this.comService.closeSnackBarMsg()
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
-jobNumberValidate(event: any) {
-  if (event.target.value == '') return
-  let postData = {
-    "SPID": "028",
-    "parameter": {
-      'strBranchCode': this.comService.nullToString(this.branchCode),
-      'strJobNumber': this.comService.nullToString(event.target.value),
-      'strCurrenctUser': this.comService.nullToString(this.comService.userName)
     }
-  }
 
-  this.comService.showSnackBarMsg('MSG81447')
-  let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result) => {
-      this.comService.closeSnackBarMsg()
-      if (result.status == "Success" && result.dynamicData[0]) {
-        let data = result.dynamicData[0]
-        if (data[0] && data[0].UNQ_JOB_ID != '') {
-          this.jobNumberDetailData = data
-          this.stonereturndetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
-          this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
+          this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
+          this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
+          this.stonereturndetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          // this.stonereturndetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
           this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+          this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
 
-          this.subJobNumberValidate()
+          this.setProcessCodeWhereCondition()
+          this.setWorkerCodeWhereCondition()
+          this.setStockCodeWhereCondition()
         } else {
-          this.comService.toastErrorByMsgId('MSG1531')
-          return
+          this.comService.toastErrorByMsgId('MSG1747')
         }
-      } else {
-        this.comService.toastErrorByMsgId('MSG1747')
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.comService.userName)
       }
-    }, err => {
-      this.comService.closeSnackBarMsg()
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
+            this.stonereturndetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
+            this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
+            this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
 }

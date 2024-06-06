@@ -107,7 +107,7 @@ export class MasterSearchComponent implements OnInit {
         this.dataSource = result.dynamicData[0];
         if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         let dataCount = result.dynamicData[1];
-        if(dataCount[0]) this.totalItems = dataCount[0].COUNT
+        if(dataCount) this.totalItems = this.commonService.emptyToZero(dataCount[0]?.COUNT)
         // if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
       }
@@ -210,21 +210,7 @@ export class MasterSearchComponent implements OnInit {
   //     }
   //   });
   // }
-  searchItems(array:any, searchValue: any) {
-    // Convert the search value to lowercase for a case-insensitive search
-    const lowerSearchValue = this.commonService.nullToString(searchValue).toLowerCase();
-    
-    return array.filter((item:any) => {
-      // Iterate over all the keys of the object
-      for (const key in item) {
-        // Check if the property value includes the search value
-        if (item[key].toString().toLowerCase().startsWith(lowerSearchValue)) {
-          return true; // If found, return true
-        }
-      }
-      return false; // If not found, return false
-    });
-  }
+
   //search Value Change
   searchValueChange(event?: any) {
     this.currentPage = 1
@@ -237,7 +223,7 @@ export class MasterSearchComponent implements OnInit {
         this.dataSource = result.dynamicData[0]
         this.dataSourceHead = Object.keys(this.dataSource[0]);
         if(this.MasterSearchData.FRONTENDFILTER && this.MasterSearchData.SEARCH_VALUE != ''){
-          this.dataSource = this.searchItems(this.dataSource, this.MasterSearchData.SEARCH_VALUE)
+          this.dataSource = this.commonService.searchStartsWithItemsInArray(this.dataSource, this.MasterSearchData.SEARCH_VALUE)
           this.dataSourceHead = Object.keys(this.dataSource[0]);
           return
         }

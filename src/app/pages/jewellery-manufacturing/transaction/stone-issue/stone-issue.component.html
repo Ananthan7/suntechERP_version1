@@ -7,6 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  [isViewAuditTrail]="editMode || viewMode" [isViewPost]="editMode || viewMode"
   (deleteClick)="deleteRecord()" [isViewDelete]="editMode"></modal-header>
 <div class="container-fluid pt-3">
   <div class="row">

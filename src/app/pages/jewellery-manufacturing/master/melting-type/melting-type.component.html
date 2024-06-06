@@ -26,6 +26,7 @@
                                 <input type="text" #codeInput maxlength="15"
                                     [readonly]="editCode" matInput
                                     formControlName="code"
+                                    (focusout)="checkCodeExists($event)"
                                     UpperCaseDirective autocomplete="off"
                                     (keyup)="codeEnabled()" >
                             </mat-form-field>

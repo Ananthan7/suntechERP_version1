@@ -96,19 +96,6 @@ export class MeltingTypeComponent implements OnInit {
   });
 
   onSelectionChanged(event: any) {
-    // const values = event.selectedRowKeys;
-    // console.log(values);
-    // let indexes: Number[] = [];
-    // this.tableData.reduce((acc, value, index) => {
-    //   if (values.includes(parseFloat(value.SRNO))) {
-    //     acc.push(index);
-    //     console.log(acc);
-
-    //   }
-    //   return acc;
-    // }, indexes);
-    // this.selectedIndexes = indexes;
-    // console.log(this.selectedIndexes);
     const values: number[] = event.selectedRowKeys;
     const indexes: number[] = [];
 
@@ -123,6 +110,29 @@ export class MeltingTypeComponent implements OnInit {
 
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
+  }
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+    const API = 'MeltingType/GetMeltingTypeList/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.status == 'Success') {
+            this.commonService.toastErrorByMsgId('Code Already Exists!')
+            // Clear the input value
+            this.meltingTypeForm.controls.code.setValue('');
+            this.codeEnabled()
+        }
+      }, err => {
+        this.meltingTypeForm.reset();
+      });
+
+    this.subscriptions.push(sub);
   }
   // validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -183,7 +193,7 @@ export class MeltingTypeComponent implements OnInit {
 
 
   codeEnabled() {
-    if (this.meltingTypeForm.value.WorkerCode == '') {
+    if (this.meltingTypeForm.value.code == '') {
       this.codeEnable = true;
     }
     else {

@@ -202,8 +202,7 @@ export class MetalReturnComponent implements OnInit {
   }
 
   userDataSelected(value: any) {
-    console.log(value);
-    this.metalReturnForm.controls.enteredBy.setValue(value.UsersName);
+    this.metalReturnForm.controls.enteredBy.setValue(value.SALESPERSON_CODE);
   }
 
   ProcessCodeSelected(e: any) {

@@ -82,6 +82,36 @@ export class CommonServiceService {
     let currdata = this.allBranchCurrency.filter((item:any)=> item.CURRENCY_CODE == currencyCode)
     return this.setCommaSerperatedNumber(currdata[0].CONV_RATE,'RATE')
   }
+  searchStartsWithItemsInArray(array:any, searchValue: any) {
+    // Convert the search value to lowercase for a case-insensitive search
+    const lowerSearchValue = this.nullToString(searchValue).toLowerCase();
+    
+    return array.filter((item:any) => {
+      // Iterate over all the keys of the object
+      for (const key in item) {
+        // Check if the property value startsWith the search value
+        if (item[key].toString().toLowerCase().startsWith(lowerSearchValue)) {
+          return true; // If found, return true
+        }
+      }
+      return false; // If not found, return false
+    });
+  }
+  searchAllItemsInArray(array:any, searchValue: any) {
+    // Convert the search value to lowercase for a case-insensitive search
+    const lowerSearchValue = this.nullToString(searchValue).toLowerCase();
+    
+    return array.filter((item:any) => {
+      // Iterate over all the keys of the object
+      for (const key in item) {
+        // Check if the property value includes the search value
+        if (item[key].toString().toLowerCase().includes(lowerSearchValue)) {
+          return true; // If found, return true
+        }
+      }
+      return false; // If not found, return false
+    });
+  }
   priceToTextWithCurrency(price: any, currency: any) {
     const parts = price.toFixed(2).split('.');
     const integerPart = Number(parts[0]);

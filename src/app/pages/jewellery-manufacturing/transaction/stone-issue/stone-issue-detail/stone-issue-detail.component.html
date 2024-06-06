@@ -22,7 +22,7 @@
             <mat-form-field style="width: 80%;">
               <input type="text" matInput formControlName="jobNumber"
                 [readonly]="viewMode" 
-                (focusout)="jobNumberValidate($event)"/>
+                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')"/>
             </mat-form-field>
             <master-search [MasterSearchData]="jobNumberCodeData"
               (newRowClick)="jobNumberCodeSelected($event)"
@@ -73,7 +73,7 @@
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="salesorderno"
-                [readonly]="viewMode" />
+                readonly/>
             </mat-form-field>
           </div>
         </div>
@@ -86,7 +86,8 @@
           <div class="col-md-5">
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="process"
-                [readonly]="viewMode" />
+                [readonly]="viewMode" UpperCaseDirective
+                (focusout)="SPvalidateLookupField($event,processCodeData,'process')"/>
             </mat-form-field>
             <master-search [MasterSearchData]="processCodeData"
               (newRowClick)="processCodeSelected($event)"
@@ -95,7 +96,7 @@
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="processname"
-                [readonly]="viewMode" />
+                readonly />
             </mat-form-field>
           </div>
         </div>
@@ -105,7 +106,8 @@
           <div class="col-md-5">
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="worker"
-                [readonly]="viewMode" />
+                [readonly]="viewMode" UpperCaseDirective
+                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')"/>
             </mat-form-field>
             <master-search [MasterSearchData]="workerCodeData"
               (newRowClick)="workerCodeSelected($event)"
@@ -114,7 +116,7 @@
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="workername"
-                [readonly]="viewMode" />
+                readonly />
             </mat-form-field>
           </div>
         </div>
@@ -124,7 +126,7 @@
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="DIVCODE"  placeholder="divcode"
-                [readonly]="viewMode" />
+                [readonly]="viewMode" UpperCaseDirective/>
             </mat-form-field>
           </div>
           <div class="col-md-4">
@@ -153,7 +155,7 @@
             </mat-form-field>
           </div>
           <div class="col-sm-4 mt-3">
-            <mat-checkbox class="example-margin"
+            <mat-checkbox class="example-margin" [disabled]="viewMode"
               formControlName="consignment">Consignment</mat-checkbox>
           </div>
         </div>
@@ -176,8 +178,8 @@
           <button class="btn btnnew border-dark">
             <img src={{urls}} style="width:200px;height:185px">
           </button>
-          <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg"
-            #fileInput class="uploadproduct" (change)="onFileChanged($event)">
+          <!-- <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg"
+            #fileInput class="uploadproduct" (change)="onFileChanged($event)"> -->
         </div>
       </div>
     </div>

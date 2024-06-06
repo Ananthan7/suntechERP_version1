@@ -104,31 +104,36 @@ export class StoneIssueComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    //this.content provide the data and flag from main grid to the form
+    if (this.content?.FLAG) {
+      this.setInitialValues()
+      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
+      switch (this.content.FLAG) {
+        case 'VIEW':
+          this.viewMode = true;
+          break;
+        case 'EDIT':
+          this.editMode = true;
+          break;
+        case 'DELETE':
+          this.viewMode = true;
+          this.deleteRecord();
+          break;
+        // Add other cases if needed
+        default:
+          // Handle unexpected FLAG values if necessary
+          break;
+      }
+      return
+    }
+    this.setvalues()
+    this.setCompanyCurrency()
     // this.gridAmountDecimalFormat = {
     //   type: 'fixedPoint',
     //   precision: this.comService.allbranchMaster?.BAMTDECIMALS,
     //   currency: this.comService.compCurrency
     // };
 
-    //this.content provide the data and flag from main grid to the form
-    if (this.content?.FLAG) {
-      this.setInitialValues()
-      this.stoneissueFrom.controls.FLAG.setValue(this.content.FLAG)
-
-      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
-        this.viewMode = true;
-      }
-      // this.isSaved = true;
-      if (this.content.FLAG == 'DELETE') {
-        this.editMode = true
-      }
-      if (this.content.FLAG == 'DELETE') {
-        this.deleteRecord()
-      }
-      return
-    }
-    this.setvalues()
-    this.setCompanyCurrency()
   }
   setvalues() {
     this.branchCode = this.comService.branchCode;
@@ -287,6 +292,7 @@ export class StoneIssueComponent implements OnInit {
   openaddstoneissuedetail(data?: any) {
     // console.log(data,'data to child')
     if (data) {
+      data.FLAG = this.content?.FLAG || 'EDIT'
       data.HEADERDETAILS = this.stoneissueFrom.value;
     } else {
       data = { HEADERDETAILS: this.stoneissueFrom.value }
@@ -339,7 +345,7 @@ export class StoneIssueComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  setPostData(form:any) {
+  setPostData(form: any) {
     return {
       "MID": 0,
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
