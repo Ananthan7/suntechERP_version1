@@ -273,8 +273,9 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Item);
+    this.stockCodeValidate({target: { value: e.STOCK_CODE}})
   }
-
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     // this.activeModal.close(data);
@@ -462,7 +463,56 @@ export class StoneIssueDetailComponent implements OnInit {
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
     this.tableData[0].STOCK_CODE = ''
   }
+  stockCodeValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "046",
+      "parameter": {
+        strStockCode: event.target.value,
+        strBranchCode: this.comService.nullToString(this.branchCode),
+        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strUserName: this.comService.nullToString(this.userName),
+        strLocation: '',
+        strPartyCode: '',
+        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+      }
+    }
 
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          let stockDetails = result.dynamicData[1]
+          if(data.RESULT_TYPE == "Failed"){
+            this.comService.toastErrorByMsgId("MSG1464")
+            return
+          }
+          if (stockDetails) {
+            console.log(data, 'data');
+            this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(stockDetails[0].DIVCODE)
+            this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails[0].KARAT)
+  
+            this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails[0].SIEVE_SET)
+            this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails[0].SIZE)
+            this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails[0].SIEVE)
+            this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails[0].SIEVE_DESC)
+            this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails[0].PCS)
+            this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails[0].SHAPE)
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   subJobNumberValidate(event?: any) {
     // let postData = {
     //   "SPID": "071",

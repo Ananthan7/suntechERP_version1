@@ -21,8 +21,8 @@
           <div class="col-md-2">
             <mat-form-field style="width: 80%;">
               <input type="text" matInput formControlName="jobNumber"
-                [readonly]="viewMode" 
-                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')"/>
+                [readonly]="viewMode"
+                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')" />
             </mat-form-field>
             <master-search [MasterSearchData]="jobNumberCodeData"
               (newRowClick)="jobNumberCodeSelected($event)"
@@ -57,7 +57,7 @@
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="DESIGN_CODE"
-                readonly/>
+                readonly />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label">Part Code:
@@ -65,7 +65,7 @@
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="PART_CODE"
-                readonly/>
+                readonly />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label">Salesorder
@@ -74,7 +74,7 @@
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="salesorderno"
                 class="text-right"
-                readonly/>
+                readonly />
             </mat-form-field>
           </div>
         </div>
@@ -88,7 +88,7 @@
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="process"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="SPvalidateLookupField($event,processCodeData,'process')"/>
+                (focusout)="SPvalidateLookupField($event,processCodeData,'process')" />
             </mat-form-field>
             <master-search [MasterSearchData]="processCodeData"
               (newRowClick)="processCodeSelected($event)"
@@ -108,7 +108,7 @@
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="worker"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')"/>
+                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')" />
             </mat-form-field>
             <master-search [MasterSearchData]="workerCodeData"
               (newRowClick)="workerCodeSelected($event)"
@@ -126,13 +126,16 @@
           </label>
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="DIVCODE"  placeholder="divcode"
-                [readonly]="viewMode" UpperCaseDirective/>
+              <input type="text" matInput formControlName="DIVCODE"
+                placeholder="divcode"
+                [readonly]="viewMode" UpperCaseDirective />
             </mat-form-field>
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 90%;">
-              <input type="text" matInput formControlName="stockCode" placeholder="stockcode"
+              <input type="text" matInput formControlName="stockCode"
+                placeholder="stockcode"
+                (focusout)="stockCodeValidate($event)"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="stockCodeData"
@@ -141,7 +144,8 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="stockCodeDes" placeholder="description"
+              <input type="text" matInput formControlName="stockCodeDes"
+                placeholder="description"
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
@@ -200,14 +204,14 @@
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="shape" readonly/>
+              <input type="text" matInput formControlName="shape" readonly />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Clarity:
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="clarity" readonly/>
+              <input type="text" matInput formControlName="clarity" readonly />
             </mat-form-field>
           </div>
         </div>
@@ -225,14 +229,15 @@
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="size" readonly/>
+              <input type="text" matInput formControlName="size" readonly />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Sieve Set :
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="SIEVE_SET" readonly/>
+              <input type="text" matInput formControlName="SIEVE_SET"
+                readonly />
             </mat-form-field>
           </div>
         </div>
@@ -242,8 +247,7 @@
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="unitrate"
-                SixDecimalInput readonly class="text-right"
-                 />
+                SixDecimalInput readonly class="text-right" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Sieve:
@@ -251,12 +255,13 @@
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="sieve"
-              readonly/>
+                readonly />
             </mat-form-field>
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="SIEVE_DESC" readonly/>
+              <input type="text" matInput formControlName="SIEVE_DESC"
+                readonly />
             </mat-form-field>
           </div>
         </div>
