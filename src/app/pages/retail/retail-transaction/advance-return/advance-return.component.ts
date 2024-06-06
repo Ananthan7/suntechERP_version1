@@ -29,6 +29,8 @@ export class AdvanceReturnComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   pcrSelectionData: any[] = [];
+  strUser = localStorage.getItem('username');
+  vocNumList: any[] = [];
   vocMaxDate = new Date();
   currentDate = new Date();
   isCustomerRequired = false;
@@ -37,7 +39,7 @@ export class AdvanceReturnComponent implements OnInit {
   gridAmountDecimalFormat: any;
   companyCurrency?: String;
   viewOnly: boolean = false;
-   editOnly: boolean = false;
+  editOnly: boolean = false;
   strBranchcode: any = localStorage.getItem('userbranch');
   baseYear: any = localStorage.getItem('YEAR') || '';
   midForInvoce: any = 0;
@@ -211,6 +213,7 @@ export class AdvanceReturnComponent implements OnInit {
     if (this.content.FLAG == 'VIEW')
       this.viewOnly = true;
     if (this.content.FLAG == "EDIT") {
+      console.log(this.comService.EditDetail.REASON) 
       this.editOnly = true
     }
 
@@ -526,12 +529,37 @@ export class AdvanceReturnComponent implements OnInit {
     }
   }
 
+  modifyRecieptDetails(array: any[]): any[] {
+    return array.map(item => {
+      item.MIDPCR = item.MID;
+
+      delete item.MID;
+      // item.selectedVocNum=item.VOCNO;
+      item.VOCTYPE = this.advanceReturnForm.value.vocType,
+
+        item.BRANCH_CODE = this.branchCode;
+      this.vocNumList.push(item.VOCNO);
+      item.VOCNO = this.advanceReturnForm.value.vocNo || 0;
+
+
+      return item;
+    });
+  }
+
+
   formSubmit() {
 
 
     if (!this.validateForm()) {
       return;
     }
+
+    const formatedRecieptDetails = this.modifyRecieptDetails(this.pcrSelectionData);
+
+    console.log(formatedRecieptDetails);
+    const vocnos = this.vocNumList.map(detail =>
+      `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${detail}`
+    ).join(',');
 
 
     let postData = {
@@ -554,7 +582,7 @@ export class AdvanceReturnComponent implements OnInit {
       "HAWALACOMMPER": 0,
       "FLAG_UPDATED": "0",
       "FLAG_INPROCESS": "0",
-      "SUPINVNO":this.advanceReturnForm.value.partyRefNo || "",
+      "SUPINVNO": this.advanceReturnForm.value.partyRefNo || "",
       "SUPINVDATE": this.advanceReturnForm.value.date,
       "HHACCOUNT_HEAD": this.advanceReturnForm.value.advanceFromCustomers || "",
       "SALESPERSON_CODE": this.advanceReturnForm.value.enteredByCode,
@@ -597,7 +625,7 @@ export class AdvanceReturnComponent implements OnInit {
       "TDS_APPLICABLE": true,
       "TDS_TOTALFC": 0,
       "TDS_TOTALCC": 0,
-      "ADRRETURNREF": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${this.advanceReturnForm.value.vocNo}`,
+      "ADRRETURNREF": "",
       "SCH_SCHEME_CODE": this.advanceReturnForm.value.schemaCode || "",
       "SCH_CUSTOMER_ID": this.advanceReturnForm.value.schemaId || "",
       "REFDOCNO": "",
@@ -610,7 +638,13 @@ export class AdvanceReturnComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "",
-      "currencyReceiptDetails": this.pcrSelectionData,
+      "pospcrSelection": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${vocnos}`,
+
+      // "pospcrSelection": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${this.advanceReturnForm.value.vocNo}`,
+      "userName": this.strUser,
+      "editReason":this.content?.FLAG == "EDIT"?this.comService.EditDetail.REASON  : "",
+      "editDesc": this.content?.FLAG == "EDIT"?this.comService.EditDetail.DESCRIPTION  : "",
+      "currencyReceiptDetails": formatedRecieptDetails,
     }
 
 
