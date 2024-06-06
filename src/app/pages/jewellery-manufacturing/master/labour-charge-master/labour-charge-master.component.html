@@ -34,7 +34,7 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" [readonly]="editMode || viewMode"
+              <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" id="code" [readonly]="editMode || viewMode"
                 formControlName="labour_code" (focusout)="diamondLabourCodeValidate()"
                 oninput="this.value = this.value.toUpperCase()" appNoEmptySpace 
                 />

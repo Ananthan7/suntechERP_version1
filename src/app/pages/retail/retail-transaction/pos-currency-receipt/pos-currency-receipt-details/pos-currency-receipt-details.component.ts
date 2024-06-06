@@ -261,6 +261,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       });
   }
 
+  onInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > 16) {
+      input.value = input.value.slice(0, 16);
+      this.posCurrencyReceiptDetailsForm.get('creditCardNumber')?.setValue(input.value);
+    }
+  }
+
   // getGSTDetails(acCode: any) {
 
   //   // this.PartyCodeData.SEARCH_VALUE = event.target.value

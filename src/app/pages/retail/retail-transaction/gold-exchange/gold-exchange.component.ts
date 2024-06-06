@@ -23,14 +23,26 @@ export class GoldExchangeComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  
+  columnsList: any[] = [
+    { title: 'Sr #', field: 'SRNO' },
+    { title: 'Stock Code', field: 'STOCK_CODE' },
+    { title: 'Pcs', field: 'PCS' },
+    { title: 'Gr.Wt', field: 'GROSSWT' },
+    { title: 'Purity', field: 'PURITY' },
+    { title: 'Pure Wt', field: 'PUREWT' },
+    { title: 'Mkg.RATE', field: 'MKG_RATECC' },
+    { title: 'Mkg.Amount', field: 'MKGVALUECC' },
+    { title: 'Metal Amt', field: 'METALVALUECC' },
+    { title: 'St.Amt', field: 'STONEVALUECC' },
+    { title: 'Wastage', field: 'WASTAGEAMOUNTCC' },
+    { title: 'Total', field: 'TOTAL_AMOUNTCC' },
+  ];
 
   currentDate = new Date();
   tableData: any[] = [];
   strBranchcode:any= '';
   goldExchangeDetailsData : any[] = [];
   columnhead:any[] = ['Karat','Sale Rate','Purchase Rate'];
-  columnheadDetails:any[] = ['Stock Code','Pcs','Gr.Wt','Purity','Pure Wt','Mkg.RATE','Mkg.Amount','Metal Amt','St.Amt','Wastage','Total','']
   
   partyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -293,7 +305,7 @@ export class GoldExchangeComponent implements OnInit {
       "TOTAL_STONEDIFF": 0,
       "ITEM_VALUE_FC": 0,
       "ITEM_VALUE_CC": 0,
-      "PARTY_VALUE_FC": this.goldExchangeForm.value.partyCurrency,
+      "PARTY_VALUE_FC": "AED",
       "PARTY_VALUE_CC": this.goldExchangeForm.value.partyCurrencyCode,
       "NET_VALUE_FC": this.goldExchangeForm.value.rndNetAmt,
       "NET_VALUE_CC": this.goldExchangeForm.value.rndNetAmtDes,

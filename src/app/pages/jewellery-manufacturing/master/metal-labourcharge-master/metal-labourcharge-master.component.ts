@@ -934,7 +934,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
+    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' +  this.content.CODE;
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
