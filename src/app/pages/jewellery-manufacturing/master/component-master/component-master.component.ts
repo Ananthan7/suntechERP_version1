@@ -199,6 +199,7 @@ export class ComponentMasterComponent implements OnInit {
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -227,10 +228,10 @@ export class ComponentMasterComponent implements OnInit {
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
   }
 
-  stockCodeDataSelected(value: any, data: any, controlName: string) {
+  stockCodeDataSelected(value: any, data: any, controlName: string,) {
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
     this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
-    this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.DIVISION_CODE;
+    this.stockCodeValidate(this.tableData[data.data.SRNO - 1]);
     //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
@@ -1213,6 +1214,53 @@ export class ComponentMasterComponent implements OnInit {
   extColor(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
+  stockCodeValidate(event: any) {
+    console.log(this.stockCodeData)
+    let postData = {
+      "SPID": "082",
+      "parameter": {
+        "strDivision": this.componentmasterForm.value.divisionCode|| '',
+         "StockCode": event.STOCK_CODE,
 
+      }
+    }
+    console.log('Post data:', postData); // Debugging statement
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            console.log('API response:', result); // Debugging statement
+
+            if (result.status == "Success" && result.dynamicData[0]) {
+                let data = result.dynamicData[0];
+                if (data) {
+                  this.tableData[event.SRNO - 1].CARAT=data[0].KARAT_CODE
+                  this.tableData[event.SRNO - 1].DIVCODE=data[0].DIVISION
+                  this.tableData[event.SRNO - 1].DESCRIPTION=data[0].DESCRIPTION
+                  this.tableData[event.SRNO - 1].SIEVE=data[0].SIEVE
+                  this.tableData[event.SRNO - 1].COLOR=data[0].DIVISIONMS
+                  this.tableData[event.SRNO - 1].CLARITY=data[0].CLARITY
+                  this.tableData[event.SRNO - 1].SHAPE=data[0].SHAPE
+                  this.tableData[event.SRNO - 1].DSIZE=data[0].SIZE
+                  this.tableData[event.SRNO - 1].SHAPE=data[0].SHAPE
+                  this.tableData[event.SRNO - 1].SIEVE_FROM=data[0].SIEVE_SET
+                  
+                    console.log('Dynamic data:', data[0]); // Debugging statement
+                } else {
+                    this.comService.toastErrorByMsgId('MSG1531');
+                    return;
+                }
+            } else {
+                this.comService.toastErrorByMsgId('MSG1747');
+            }
+        }, (err) => {
+            console.error('API error:', err); // Debugging statement
+            this.comService.closeSnackBarMsg();
+            this.comService.toastErrorByMsgId('MSG1531');
+        });
+
+    this.subscriptions.push(Sub);
+}
 
 }

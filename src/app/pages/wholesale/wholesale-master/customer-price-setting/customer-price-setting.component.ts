@@ -29,6 +29,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   selectedIndexes: any = [];
   isdisabled: boolean = false;
   checkboxvalue: boolean = true
+  disableDesignCode: boolean = true;
   public isChecked = true;
   userbranch = localStorage.getItem('userbranch');
   disableSelect = false;
@@ -109,6 +110,16 @@ export class CustomerPriceSettingComponent implements OnInit {
   selectStock() {
     this.checkboxvalue = !this.checkboxvalue;
       this.designCodeEnable = !this.designCodeEnable;
+    }
+    onStockCodeChange(event: any): void {
+      const isChecked = event.checked;
+      this.disableDesignCode = !isChecked;
+      
+      if (isChecked) {
+        this.customerpricesettingForm.controls.designCode.enable();
+      } else {
+        this.customerpricesettingForm.controls.designCode.disable();
+      }
     }
 
   checkPriceCode(): boolean {
