@@ -1,1 +1,270 @@
-<p>diamond-prefix-master works!</p>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Prefix Master </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMetalPrefix()"></modal-header>
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="diamondprefixForm">
+        <div class="container-fluid pt-3">
+          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+            <mat-tab label="General">
+              <div class="card metal-sales-card">
+                <div class="card-body sales-card-body p-2">
+                  <div class="row justify-content-between">
+                    <div class="col-md-9">
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Prefix Code :</label>
+                        <div class="col-md-3">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="prefixcode"  oninput="this.value = this.value.toUpperCase()" maxlength="6" [readonly]="editableMode || viewMode" [disabled]="viewMode"/>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="prefixcodedes" oninput="this.value = this.value.toUpperCase()" maxlength="50" [readonly]="editableMode || viewMode" [disabled]="viewMode"/>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Last No :</label>
+                        <div class="col-md-3">
+                          <mat-form-field style="width: 100%;">
+                            <input type="number" matInput formControlName="lastno"  [readonly]="viewMode"/>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" formControlName="jobcardprefix"  [readonly]="viewMode"> 
+                              Exclusive For Job Card
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" formControlName="schemeprefix" [readonly]="viewMode">
+                              Exclusive For Scheme
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Tag Wt :</label>
+                        <div class="col-md-3">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="tagWt" class="text-right" [max]="2" MetalDecimalInput [readonly]="viewMode"/>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" formControlName="setrefprefix" [readonly]="viewMode">
+                              Set Ref Prefix
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" formControlName="refinervprefix" [readonly]="viewMode">
+                              Exclusive For Refinery
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Branch :</label>
+                        <div class="col-md-3">
+                          <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="branch" [readonly]="viewMode"/>
+                          </mat-form-field>
+                          <master-search [MasterSearchData]="BranchCodeData"
+                          (newRowClick)="branchCodeSelected($event)" *ngIf="!viewMode">
+                      </master-search>
+                        </div>
+                        <div class="col-md-3 offset-md-3">
+                          <div class="form-check">
+                            <label class="form-check-label">  
+                            <input class="form-check-input" type="checkbox" formControlName="designprefix" [readonly]="viewMode">
+                              Design Prefix
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Suffix Code :</label>
+                        <div class="col-md-3">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="suffixcode" maxlength="6" [readonly]="viewMode"/>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">HSN :</label>
+                        <div class="col-md-3">
+                          <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="hsn" [readonly]="viewMode"/>
+                          </mat-form-field>
+                          <master-search [MasterSearchData]="HSNCodeData"
+                                        (newRowClick)="HSNCenterSelected($event)" *ngIf="!viewMode"> 
+                                    </master-search>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="UDF Grouping">
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_1" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_2" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_3" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_4" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_5" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_6" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_7" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_8" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_9" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_10" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_11" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_12" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_13" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_14" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                    <div class="col-md-8">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="userdefined_15" />
+                      </mat-form-field>
+                      <master-search></master-search>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </form>
+    </div>
+  </div>

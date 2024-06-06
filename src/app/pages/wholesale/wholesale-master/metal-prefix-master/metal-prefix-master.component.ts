@@ -54,9 +54,11 @@ export class MetalPrefixMasterComponent implements OnInit {
     this.metalprefixForm.controls.lastno.setValue(this.content.LAST_NO)
     this.metalprefixForm.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.metalprefixForm.controls.currencyRate.setValue(this.content.CONV_RATE)
-    this.metalprefixForm.controls.refinervprefix.setValue(this.content.COST_CODE)
-    this.metalprefixForm.controls.setrefprefix.setValue(this.content.JOB_PREFIX)
-    this.metalprefixForm.controls.jobcardprefix.setValue(this.content.JOB_PREFIX)
+    this.metalprefixForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
+    this.metalprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
+    this.metalprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
+    this.metalprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
+    this.metalprefixForm.controls.schemeprefix.setValue(this.viewchangeYorN(this.content.SCHEME_PREFIX))
     this.metalprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
     this.metalprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
     this.metalprefixForm.controls.tagWt.setValue(this.content.TAG_WT)
@@ -142,6 +144,20 @@ export class MetalPrefixMasterComponent implements OnInit {
       this.metalprefixForm.controls.jobcardprefix.enable();
     }
   }
+  viewchangeYorN(e: any) {
+    if (e == 'Y') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  onchangeCheckBox(e: any) {
+    if (e == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -160,15 +176,15 @@ export class MetalPrefixMasterComponent implements OnInit {
     "BRAND_CODE": " ",
     "TYPE_CODE": " ",
     "COUNTRY_CODE": " ",
-    "MID": 0,
+    "MID":this.content?.MID || 0,
     "DIVISION": "M",
     "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
     "PM_BRANCHCODE": "",
-    "JOB_PREFIX": true,
-    "SETREF_PREFIX": true,
+    "JOB_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.jobcardprefix),
+    "SETREF_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.setrefprefix),
     "BRANCH_CODE": this.commonService.branchCode,
     "BOIL_PREFIX": true,
-    "SCHEME_PREFIX": this.metalprefixForm.value.schemeprefix,
+    "SCHEME_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.schemeprefix),
     "UDF1": this.metalprefixForm.value.userdefined_1 || "",
     "UDF2": this.metalprefixForm.value.userdefined_2 || "",
     "UDF3": this.metalprefixForm.value.userdefined_3 || "",
@@ -186,8 +202,8 @@ export class MetalPrefixMasterComponent implements OnInit {
     "UDF15": this.metalprefixForm.value.userdefined_15 || "",
     "TAG_WT": this.metalprefixForm.value.tagWt || "",
     "COMP_PREFIX": true,
-    "DESIGN_PREFIX": this.metalprefixForm.value.designprefix,
-    "REFINE_PREFIX": true,
+    "DESIGN_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.designprefix),
+    "REFINE_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.refinervprefix),
     "SUBLEDGER_PREFIX": true,
     "SUFFIX_CODE": this.metalprefixForm.value.suffixcode || "",
     "HSN_CODE": this.metalprefixForm.value.hsn || "",
@@ -227,11 +243,12 @@ export class MetalPrefixMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.showErrorDialog('Code Already Exists')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+ 
   update() {
     if (this.metalprefixForm.invalid) {
       this.toastr.error('select all required fields')
@@ -316,6 +333,17 @@ export class MetalPrefixMasterComponent implements OnInit {
           }, err => alert(err))
         this.subscriptions.push(Sub)
       }
+    });
+  }
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      // this.afterSave(result.value)
     });
   }
 
