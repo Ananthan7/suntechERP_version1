@@ -793,6 +793,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+   // this.stockCodeSelected()
     // this.stockcodeDisable = event.target.value
     this.stockcodeDisable = false
     if (event.target.value == '' || this.viewMode == true) return
