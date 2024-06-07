@@ -21,6 +21,7 @@ export class MetalPrefixMasterComponent implements OnInit {
   tableData: any[] = [];
   editableMode: boolean = false;
   viewMode: boolean = false;
+  isDisabled: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -83,7 +84,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     branch: [''],
     suffixcode: [''],
     hsn: [''],
-    jobcardprefix: [{ value: false, disabled: this.viewMode }],
+    jobcardprefix: false,
     setrefprefix: false,
     schemeprefix: false,
     refinervprefix: false,
@@ -167,7 +168,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     return{
     "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
     "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
-    "LAST_NO": this.commonService.nullToString(this.metalprefixForm.value.lastno),
+    "LAST_NO": this.commonService.emptyToZero(this.metalprefixForm.value.lastno),
     "CURRENCY_CODE": this.commonService.nullToString(this.metalprefixForm.value.currency),
     "CONV_RATE": this.commonService.emptyToZero(this.metalprefixForm.value.currencyRate),
     "COST_CODE": " ",

@@ -20,6 +20,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   tableData: any[] = [];
   editableMode: boolean = false;
   viewMode: boolean = false;
+  userbranch = localStorage.getItem('userbranch');
 
 
   constructor(
@@ -78,14 +79,19 @@ export class DiamondPrefixMasterComponent implements OnInit {
     prefixcodedes: ['',[Validators.required]],
     currencyRate: ['',[Validators.required]],
     currency: [''],
-    lastno: ['00000', ''],
-    tagWt: ['',[Validators.required]],
+    lastno: ['000000', ''],
+    costcode: ['',[Validators.required]],
+    brand: [''],
     branch: [''],
+    Category:[''],
+    subCategory:[''],
+    Country:[''],
+    Type:[''],
     suffixcode: [''],
     hsn: [''],
-    jobcardprefix: [{ value: false, disabled: this.viewMode }],
+    jobcardprefix:false,
     setrefprefix: false,
-    schemeprefix: false,
+    Componentprefix: false,
     refinervprefix: false,
     designprefix: false,
     userdefined_1: [''],
@@ -103,6 +109,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     userdefined_13: [''],
     userdefined_14: [''],
     userdefined_15: [''],
+    currencydes:[''],
   })
 
   BranchCodeData: MasterSearchModel = {
@@ -135,6 +142,113 @@ export class DiamondPrefixMasterComponent implements OnInit {
   HSNCenterSelected(e: any) {
     console.log(e);
     this.diamondprefixForm.controls.hsn.setValue(e.CODE);
+  }
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 176,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  currencyCodeSelected(e: any) {
+    console.log(e);
+    this.diamondprefixForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.diamondprefixForm.controls.currencyRate.setValue(e.CONV_RATE);
+  }
+  costCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  costCodeSelected(e: any) {
+    console.log(e);
+    this.diamondprefixForm.controls.costcode.setValue(e.COST_CODE);
+  }
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  categoryCodeSelected(e: any) {
+    this.diamondprefixForm.controls.Category.setValue(e.CODE);
+  }
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 31,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  subcategoryCodeSelected(e: any) {
+    this.diamondprefixForm.controls.subCategory.setValue(e.CODE);
+  }
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  typeCodeSelected(e: any) {
+    this.diamondprefixForm.controls.Type.setValue(e.CODE);
+  }
+  BrandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'BRAND MASTER' AND DIV_Y=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  brandCodeSelected(e: any) {
+    this.diamondprefixForm.controls.brand.setValue(e.CODE);
+  }
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  countryCodeSelected(e: any) {
+    console.log(e);
+    this.diamondprefixForm.controls.Country.setValue(e.CODE);
   }
   toggleViewMode(): void {
     this.viewMode = !this.viewMode;

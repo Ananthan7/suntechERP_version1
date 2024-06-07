@@ -16,7 +16,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class MetalDivisionMasterComponent implements OnInit {
 
   subscriptions: any;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   viewMode: boolean = false;
   isDisabled: boolean = false;
@@ -34,10 +34,10 @@ export class MetalDivisionMasterComponent implements OnInit {
     private renderer: Renderer2,
     private commonService: CommonServiceService,
   ) { }
- 
- 
-  ngOnInit(): void {
 
+
+  ngOnInit(): void {
+    this.setFormValues()
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -49,11 +49,11 @@ export class MetalDivisionMasterComponent implements OnInit {
         this.editMode = true;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
-        this.deleteRecord()
+        this.deleteMetalDivision()
       }
     }
   }
-  
+
 
   inputValidate(event: any) {
     if (event.target.value != '') {
@@ -65,13 +65,13 @@ export class MetalDivisionMasterComponent implements OnInit {
 
 
   metaldivisionForm: FormGroup = this.formBuilder.group({
-    code:['',[Validators.required]],
-    codedes:[''],
-    costcenter:[''],
-    stockcode:[''],
-    costcentermaking:[''],
-    Abbreviation:[''],
-    currency:[''],
+    code: ['', [Validators.required]],
+    codedes: ['',[Validators.required]],
+    costcenter: [''],
+    stockcode: [''],
+    costcentermaking: [''],
+    Abbreviation: [''],
+    currency: [''],
   })
 
 
@@ -135,7 +135,7 @@ export class MetalDivisionMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  costCenterSelected(e:any){
+  costCenterSelected(e: any) {
     console.log(e);
     this.metaldivisionForm.controls.costcenter.setValue(e.COST_CODE);
   }
@@ -151,7 +151,7 @@ export class MetalDivisionMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  costSelected(e:any){
+  costSelected(e: any) {
     console.log(e);
     this.metaldivisionForm.controls.costcentermaking.setValue(e.COST_CODE);
   }
@@ -167,8 +167,8 @@ export class MetalDivisionMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  stockCodeSelected(e:any){
-    console.log(e); 
+  stockCodeSelected(e: any) {
+    console.log(e);
     this.metaldivisionForm.controls.stockcode.setValue(e.STOCK_CODE);
   }
 
@@ -176,9 +176,28 @@ export class MetalDivisionMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  formSubmit(){
+  setpostData() {
+    return {
+      "MID": this.content?.MID || 0,
+      "DIVISION_CODE": this.metaldivisionForm.value.code || "",
+      "DESCRIPTION": this.metaldivisionForm.value.codedes || "",
+      "DIVISION": "s",
+      "REPORT_DEFAULT": "s",
+      "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
+      "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
+      "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
+      "ISCURRENCY": this.onchangeCheckBox(this.metaldivisionForm.value.currency),
+      "DESCRIPTION_OTHER": "string",
+      "COSTCODE_MAKING": this.metaldivisionForm.value.costcentermaking || "",
+      "METAL_PURITY": 0,
+      "DESCRIPTION_CHINESE": "string",
+      "DESCRIPTION_TURKISH": "string",
+      "AUTOFIXSTOCK": this.metaldivisionForm.value.stockcode,
+    }
+  }
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -186,30 +205,14 @@ export class MetalDivisionMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'DivisionMaster/InsertDivisionMaster'
-    let postData = {
-      "MID": 0,
-      "DIVISION_CODE": this.metaldivisionForm.value.code || "",
-      "DESCRIPTION":this.metaldivisionForm.value.codedes || "",
-      "DIVISION": "s",
-      "REPORT_DEFAULT": "s",
-      "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
-      "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
-      "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
-      "ISCURRENCY": this.metaldivisionForm.value.currency || false,
-      "DESCRIPTION_OTHER": "string",
-      "COSTCODE_MAKING":this.metaldivisionForm.value.costcentermaking || "",
-      "METAL_PURITY": 0,
-      "DESCRIPTION_CHINESE": "string",
-      "DESCRIPTION_TURKISH": "string",
-      "AUTOFIXSTOCK": this.metaldivisionForm.value.stockcode || "",
-    }
-    
+    let postData = this.setpostData()
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -230,37 +233,19 @@ export class MetalDivisionMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  update(){
+  update() {
     if (this.metaldivisionForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = '/DivisionMaster/UpdateDivisionMaster/'+this.content.DIVISION_CODE
-    let postData = 
-    {
-      "MID": 0,
-      "DIVISION_CODE": this.metaldivisionForm.value.code || "",
-      "DESCRIPTION":this.metaldivisionForm.value.codedes || "",
-      "DIVISION": "s",
-      "REPORT_DEFAULT": "s",
-      "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
-      "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
-      "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
-      "ISCURRENCY": this.metaldivisionForm.value.currency || false,
-      "DESCRIPTION_OTHER": "string",
-      "COSTCODE_MAKING":this.metaldivisionForm.value.costcentermaking || "",
-      "METAL_PURITY": 0,
-      "DESCRIPTION_CHINESE": "string",
-      "DESCRIPTION_TURKISH": "string",
-      "AUTOFIXSTOCK": this.metaldivisionForm.value.stockcode || "",
-    }
-    
-  
+
+    let API = '/DivisionMaster/UpdateDivisionMaster/' + this.content.DIVISION_CODE
+    let postData = this.setpostData()
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -281,22 +266,7 @@ export class MetalDivisionMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  deleteRecord() {
-
-    if (!this.content.MID) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
-
+  deleteMetalDivision() {
     if (this.content && this.content.FLAG == 'VIEW') return
     Swal.fire({
       title: 'Are you sure?',
@@ -349,13 +319,27 @@ export class MetalDivisionMasterComponent implements OnInit {
       }
     });
   }
+  viewchangeYorN(e: any) {
+    if (e == 'Y') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  onchangeCheckBox(e: any) {
+    if (e == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`

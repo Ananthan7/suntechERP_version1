@@ -33,7 +33,7 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Last No :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="lastno"  [readonly]="viewMode"/>
+                          <input type="number" matInput formControlName="lastno"  [readonly]="viewMode" maxlength="6"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
@@ -100,7 +100,7 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Suffix Code :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="suffixcode" maxlength="6" [readonly]="viewMode"/>
+                          <input type="text" matInput formControlName="suffixcode" maxlength="6" [readonly]="viewMode" UpperCaseDirective/>
                         </mat-form-field>
                       </div>
                     </div>
