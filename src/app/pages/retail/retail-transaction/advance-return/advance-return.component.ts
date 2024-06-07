@@ -651,7 +651,6 @@ export class AdvanceReturnComponent implements OnInit {
       "WOOCOMCARDID": "",
       "pospcrSelection": vocnos,
 
-      // "pospcrSelection": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${this.advanceReturnForm.value.vocNo}`,
       "userName": this.strUser,
       "editReason": this.content?.FLAG == "EDIT" ? this.comService.EditDetail.REASON : "",
       "editDesc": this.content?.FLAG == "EDIT" ? this.comService.EditDetail.DESCRIPTION : "",

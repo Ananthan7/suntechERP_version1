@@ -575,6 +575,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "",
+      "pospcrSelection": "",
+
+      "userName": this.comService.userName,
+      "editReason": this.content?.FLAG == "EDIT" ? this.comService.EditDetail.REASON : "",
+      "editDesc": this.content?.FLAG == "EDIT" ? this.comService.EditDetail.DESCRIPTION : "",
       "currencyReceiptDetails": this.posCurrencyDetailsData,
     }
 
