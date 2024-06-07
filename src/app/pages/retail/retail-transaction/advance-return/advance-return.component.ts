@@ -213,7 +213,7 @@ export class AdvanceReturnComponent implements OnInit {
     if (this.content.FLAG == 'VIEW')
       this.viewOnly = true;
     if (this.content.FLAG == "EDIT") {
-      console.log(this.comService.EditDetail.REASON) 
+      console.log(this.comService.EditDetail.REASON)
       this.editOnly = true
     }
 
@@ -535,11 +535,16 @@ export class AdvanceReturnComponent implements OnInit {
 
       delete item.MID;
       // item.selectedVocNum=item.VOCNO;
-      item.VOCTYPE = this.advanceReturnForm.value.vocType,
+      // item.VOCTYPE = this.advanceReturnForm.value.vocType,
 
-        item.BRANCH_CODE = this.branchCode;
-      this.vocNumList.push(item.VOCNO);
-      item.VOCNO = this.advanceReturnForm.value.vocNo || 0;
+      item.BRANCH_CODE = this.branchCode;
+      this.vocNumList.push({
+        vocNo: item.VOCNO,
+        Branch_Code: item.BRANCH_CODE,
+        vocType: item.VOCTYPE
+      });
+      // this.vocNumList.push(item.VOCNO);
+      // item.VOCNO = this.advanceReturnForm.value.vocNo || 0;
 
 
       return item;
@@ -556,16 +561,16 @@ export class AdvanceReturnComponent implements OnInit {
 
     const formatedRecieptDetails = this.modifyRecieptDetails(this.pcrSelectionData);
 
-    console.log(formatedRecieptDetails);
-    const vocnos = this.vocNumList.map(vocNum =>
-      `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${vocNum}`
+    const vocnos = this.vocNumList.map(item =>
+      `${item.Branch_Code}-${item.vocType}-${item.vocNo}`
     ).join(',');
 
+    formatedRecieptDetails.map((item: any) => {
+      item.VOCTYPE = this.advanceReturnForm.value.vocType;
+      item.VOCNO = this.advanceReturnForm.value.vocNo;
+    })
     console.log(vocnos);
-    
-    // this.vocNumList.map(detail =>
-    //   `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${detail}`
-    // ).join(',');
+
 
 
     let postData = {
@@ -644,12 +649,11 @@ export class AdvanceReturnComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "",
-      "pospcrSelection":vocnos,
+      "pospcrSelection": vocnos,
 
-      // "pospcrSelection": `${this.branchCode}-${this.advanceReturnForm.value.vocType}-${this.advanceReturnForm.value.vocNo}`,
       "userName": this.strUser,
-      "editReason":this.content?.FLAG == "EDIT"?this.comService.EditDetail.REASON  : "",
-      "editDesc": this.content?.FLAG == "EDIT"?this.comService.EditDetail.DESCRIPTION  : "",
+      "editReason": this.content?.FLAG == "EDIT" ? this.comService.EditDetail.REASON : "",
+      "editDesc": this.content?.FLAG == "EDIT" ? this.comService.EditDetail.DESCRIPTION : "",
       "currencyReceiptDetails": formatedRecieptDetails,
     }
 
