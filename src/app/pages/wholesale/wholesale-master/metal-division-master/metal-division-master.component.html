@@ -5,7 +5,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+[isViewMore]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metaldivisionForm">
@@ -16,12 +17,12 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="code" [maxlength]="1" oninput="this.value = this.value.toUpperCase()" id="code"  (focusout)="checkCodeExists($event)"/>
+                            <input type="text" matInput formControlName="code" [maxlength]="1" oninput="this.value = this.value.toUpperCase()" id="code"  (focusout)="checkCodeExists($event)" [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-5">
                           <mat-form-field style="width: 90%;">
-                            <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" maxlength="50"/>
+                            <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" maxlength="50" [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -32,10 +33,10 @@
                             <input type="text" matInput formControlName="costcenter" 
                             (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,costCenterData,'costcenter')"/>
+                            (focusout)="validateLookupField($event,costCenterData,'costcenter')" [readonly]="viewMode"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="costCenterData"
-                          (newRowClick)="costCenterSelected($event)">
+                          *ngIf=" viewDisable == false"  (newRowClick)="costCenterSelected($event)">
                       </master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center (making) :</label>
@@ -44,10 +45,10 @@
                             <input type="text" matInput formControlName="costcentermaking" 
                             (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,costData,'costcentermaking')"/>
+                            (focusout)="validateLookupField($event,costData,'costcentermaking')" [readonly]="viewMode"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="costData"
-                          (newRowClick)="costSelected($event)">
+                          *ngIf=" viewDisable == false"   (newRowClick)="costSelected($event)">
                       </master-search>
                         </div>
                       </div>
@@ -55,27 +56,32 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Abbreviation :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="Abbreviation" [maxlength]="4" oninput="this.value = this.value.toUpperCase()" />
+                            <input type="text" matInput formControlName="Abbreviation" [maxlength]="4" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="currency">
-                            <label class="form-check-label" for="flexCheckDefault">
-                              Currency
-                            </label>
-                          </div>
+                          <div class="form-check mt-md-5">
+                            <mat-checkbox formControlName="currency"
+                                class="example-margin"
+                                [disabled]="viewMode">
+                                Currency </mat-checkbox>
+                            <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
+                                (change)="onlossChange($event)">
+                            <label class="form-check-label">
+                                Loss
+                            </label> -->
+                        </div>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Auto Fix Stock Code :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="stockcode" 
                             (input)="inputValidate($event)"
-                            UpperCaseDirective
+                            UpperCaseDirective [readonly]="viewMode"
                             (focusout)="validateLookupField($event,stockCodeData,'stockcode')"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="stockCodeData"
-                          (newRowClick)="stockCodeSelected($event)">
+                          *ngIf=" viewDisable == false"  (newRowClick)="stockCodeSelected($event)">
                       </master-search>
                         </div>
                       </div>
@@ -83,7 +89,7 @@
                         <label for="inputPassword" class="col-sm-5 col-form-label">Code</label>
                         <div class="col-md-3">
                           <div class="form-check">
-                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn" [disabled]="viewMode">
                               Excel Import
                             </button>
                           </div>

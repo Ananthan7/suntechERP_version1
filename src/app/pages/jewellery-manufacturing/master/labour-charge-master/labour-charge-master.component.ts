@@ -531,6 +531,8 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
     this.diamondlabourMasterForm.controls.unitList.setValue(this.content.UNITCODE);
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
+    this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
+
 
     this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
       this.commonService.transformDecimalVB(
@@ -979,6 +981,12 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
+
+    if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
+      this.toastr.error('Weight From should be lesser than Weight To')
+      return 
+    }
+
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -1297,19 +1305,5 @@ export class LabourChargeMasterComponent implements OnInit {
     }
 
   }
-
-
-  // onCtweighttto(event: any) {
-  //   if (this.diamondlabourMasterForm.value.ctWtFrom < this.diamondlabourMasterForm.value.ctWtTo) {
-  //     Swal.fire({
-  //       title: event.message || 'Ct Y',
-  //       text: '',
-  //       icon: 'error',
-  //       confirmButtonColor: '#336699',
-  //       confirmButtonText: 'Ok'
-  //     })
-  //   }
-  // }
-
 
 }

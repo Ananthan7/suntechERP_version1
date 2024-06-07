@@ -22,6 +22,8 @@ export class MetalDivisionMasterComponent implements OnInit {
   isDisabled: boolean = false;
   editableMode: boolean = false;
   isDisableSaveBtn: boolean = false;
+  editMode: boolean = false;
+  viewDisable: boolean = false;
   
   constructor(
     private activeModal: NgbActiveModal,
@@ -37,13 +39,14 @@ export class MetalDivisionMasterComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.content?.FLAG) {
-     
+      this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
-      
+        this.viewDisable = true;
         this.viewMode = true;
         // this.processMasterForm();
       } else if (this.content.FLAG == 'EDIT') {
         this.editableMode = true;
+        this.editMode = true;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
@@ -71,6 +74,19 @@ export class MetalDivisionMasterComponent implements OnInit {
     currency:[''],
   })
 
+
+  setFormValues() {
+    if (!this.content) return
+
+    this.metaldivisionForm.controls.code.setValue(this.content.DIVISION_CODE);
+    this.metaldivisionForm.controls.codedes.setValue(this.content.DESCRIPTION);
+    this.metaldivisionForm.controls.Abbreviation.setValue(this.content.ABBREVIATION);
+    this.metaldivisionForm.controls.costcenter.setValue(this.content.COSTCODE_METAL);
+    this.metaldivisionForm.controls.currency.setValue(this.content.ISCURRENCY);
+    this.metaldivisionForm.controls.costcentermaking.setValue(this.content.COSTCODE_MAKING);
+    this.metaldivisionForm.controls.stockcode.setValue(this.content.AUTOFIXSTOCK);
+
+  }
 
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -231,7 +247,7 @@ export class MetalDivisionMasterComponent implements OnInit {
       "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
       "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
       "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
-      "ISCURRENCY": this.metaldivisionForm.value.currency || "",
+      "ISCURRENCY": this.metaldivisionForm.value.currency || false,
       "DESCRIPTION_OTHER": "string",
       "COSTCODE_MAKING":this.metaldivisionForm.value.costcentermaking || "",
       "METAL_PURITY": 0,
