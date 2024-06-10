@@ -522,47 +522,49 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
 
-    this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
-    this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
-    this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
-    this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
-    this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
-    this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION);
-    this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
-    this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
-    this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
-    this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
-    this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
-    this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
-    this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
+    //   this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
+    //   this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
+    //   this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
+    //  // this.diamondlabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
+    //   this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
+    //   this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION);
+    //   this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
+    //   this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
+    //   this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
+    //   this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
+    //   this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
+    //   this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
+    //   this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
 
-    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.CARATWT_FROM));
+    //   this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
+    //     this.commonService.transformDecimalVB(
+    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //       this.content.CARATWT_FROM));
 
-    this.diamondlabourMasterForm.controls.ctWtTo.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.CARATWT_TO));
+    //   this.diamondlabourMasterForm.controls.ctWtTo.setValue(
+    //     this.commonService.transformDecimalVB(
+    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //       this.content.CARATWT_TO));
 
-    this.diamondlabourMasterForm.controls.selling_rate.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.SELLING_RATE));
+    //   this.diamondlabourMasterForm.controls.selling_rate.setValue(
+    //     this.commonService.transformDecimalVB(
+    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //       this.content.SELLING_RATE));
 
-    this.diamondlabourMasterForm.controls.selling.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.SELLING_PER));
+    //   this.diamondlabourMasterForm.controls.selling.setValue(
+    //     this.commonService.transformDecimalVB(
+    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //       this.content.SELLING_PER));
 
-    this.diamondlabourMasterForm.controls.cost_rate.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.COST_RATE));
+    //   this.diamondlabourMasterForm.controls.cost_rate.setValue(
+    //     this.commonService.transformDecimalVB(
+    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //       this.content.COST_RATE));
 
 
-
+    this.metallabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
+    this.metallabourMasterForm.controls.metalunitList.setValue(this.content.UNITCODE);
+    this.metallabourMasterForm.controls.labourAc.setValue(this.content.CRACCODE);
     this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
     this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
     this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
@@ -579,6 +581,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.onGrossWt.setValue(this.viewchangeYorN(this.content.ON_GROSSWT));
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
+    this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
+    this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
 
     this.metallabourMasterForm.controls.purity.setValue(
       this.commonService.transformDecimalVB(
@@ -792,11 +796,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-   
+
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-     this.stockcodeDisable = false;
+    this.stockcodeDisable = false;
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -871,7 +875,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
       "CURRENCYCODE": this.commonService.nullToString(diamondForm.currency),
-      "UNITCODE": this.commonService.nullToString(diamondForm.metalunitList),
+      "UNITCODE": this.commonService.nullToString(metalForm.metalunitList),
       "COST_RATE": this.commonService.emptyToZero(diamondForm.metalcost_rate),
       "SELLING_RATE": this.commonService.emptyToZero(diamondForm.metalselling_rate),
       "LAST_COST_RATE": 0,
@@ -938,7 +942,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' +  this.content.CODE;
+    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
