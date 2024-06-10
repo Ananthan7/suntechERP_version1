@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,Renderer2 } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -22,6 +22,7 @@ export class MetalPrefixMasterComponent implements OnInit {
   editableMode: boolean = false;
   viewMode: boolean = false;
   isDisabled: boolean = false;
+  editMode:boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -30,17 +31,21 @@ export class MetalPrefixMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
 
   ngOnInit(): void {
     // this.setCompanyCurrency()
     this.setFormValues()
+ 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true
+     
   
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
+      this.editMode = true
     }
     else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -62,8 +67,17 @@ export class MetalPrefixMasterComponent implements OnInit {
     this.metalprefixForm.controls.schemeprefix.setValue(this.viewchangeYorN(this.content.SCHEME_PREFIX))
     this.metalprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
     this.metalprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
-    this.metalprefixForm.controls.tagWt.setValue(this.content.TAG_WT)
+    this.metalprefixForm.controls.tagWt.setValue(
+      this.commonService.decimalQuantityFormat(this.content.TAG_WT, 'METAL')
+    );
     this.metalprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
+  }
+  private setInitialValues() {
+    this.metalprefixForm.controls.tagWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  }
+  setDecimalPoint(data: any) {
+    let number = this.commonService.decimalQuantityFormat(data, 'THREE')
+    return this.commonService.commaSeperation(number)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -86,7 +100,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     hsn: [''],
     jobcardprefix: false,
     setrefprefix: false,
-    schemeprefix: false,
+    schemeprefix: [{ value: false, disabled: this.viewMode }],
     refinervprefix: false,
     designprefix: false,
     userdefined_1: [''],
@@ -137,14 +151,50 @@ export class MetalPrefixMasterComponent implements OnInit {
     console.log(e);
     this.metalprefixForm.controls.hsn.setValue(e.CODE);
   }
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+    const API = 'PrefixMaster/CheckIfPrefixCodePresent/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'PrefixCode Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            // Clear the input value
+            this.metalprefixForm.controls.prefixcode.setValue('');
+
+            setTimeout(() => {
+              this.renderer.selectRootElement('#prefixcode').focus();
+            }, 500);
+
+          });
+        }
+      }, err => {
+        this.metalprefixForm.reset();
+      });
+
+    this.subscriptions.push(sub);
+  }
   toggleViewMode(): void {
     this.viewMode = !this.viewMode;
     if (this.viewMode) {
-      this.metalprefixForm.controls.jobcardprefix.disable();
+      this.metalprefixForm.controls.schemeprefix.disable();
     } else {
-      this.metalprefixForm.controls.jobcardprefix.enable();
+      this.metalprefixForm.controls.schemeprefix.enable();
     }
   }
+
   viewchangeYorN(e: any) {
     if (e == 'Y') {
       return true;
@@ -168,7 +218,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     return{
     "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
     "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
-    "LAST_NO": this.commonService.emptyToZero(this.metalprefixForm.value.lastno),
+    "LAST_NO":this.metalprefixForm.value.lastno,
     "CURRENCY_CODE": this.commonService.nullToString(this.metalprefixForm.value.currency),
     "CONV_RATE": this.commonService.emptyToZero(this.metalprefixForm.value.currencyRate),
     "COST_CODE": " ",
@@ -201,7 +251,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     "UDF13": this.metalprefixForm.value.userdefined_13 || "",
     "UDF14": this.metalprefixForm.value.userdefined_14 || "",
     "UDF15": this.metalprefixForm.value.userdefined_15 || "",
-    "TAG_WT": this.metalprefixForm.value.tagWt || "",
+    "TAG_WT": this.commonService.emptyToZero(this.metalprefixForm.value.tagWt),
     "COMP_PREFIX": true,
     "DESIGN_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.designprefix),
     "REFINE_PREFIX": this.onchangeCheckBox(this.metalprefixForm.value.refinervprefix),
