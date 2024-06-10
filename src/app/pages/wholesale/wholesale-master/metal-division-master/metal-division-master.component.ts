@@ -21,8 +21,8 @@ export class MetalDivisionMasterComponent implements OnInit {
   viewMode: boolean = false;
   isDisabled: boolean = false;
   editableMode: boolean = false;
+  editMode: boolean=false;
   isDisableSaveBtn: boolean = false;
-  editMode: boolean = false;
   viewDisable: boolean = false;
   
   constructor(
@@ -37,7 +37,6 @@ export class MetalDivisionMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.setFormValues()
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -181,17 +180,17 @@ export class MetalDivisionMasterComponent implements OnInit {
       "MID": this.content?.MID || 0,
       "DIVISION_CODE": this.metaldivisionForm.value.code || "",
       "DESCRIPTION": this.metaldivisionForm.value.codedes || "",
-      "DIVISION": "s",
-      "REPORT_DEFAULT": "s",
+      "DIVISION": "S",
+      "REPORT_DEFAULT": "S",
       "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
       "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
       "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
       "ISCURRENCY": this.onchangeCheckBox(this.metaldivisionForm.value.currency),
-      "DESCRIPTION_OTHER": "string",
+      "DESCRIPTION_OTHER": "",
       "COSTCODE_MAKING": this.metaldivisionForm.value.costcentermaking || "",
       "METAL_PURITY": 0,
-      "DESCRIPTION_CHINESE": "string",
-      "DESCRIPTION_TURKISH": "string",
+      "DESCRIPTION_CHINESE": "",
+      "DESCRIPTION_TURKISH": "",
       "AUTOFIXSTOCK": this.metaldivisionForm.value.stockcode,
     }
   }
