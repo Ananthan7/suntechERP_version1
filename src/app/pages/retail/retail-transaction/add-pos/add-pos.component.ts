@@ -35,6 +35,7 @@ import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-tra
 import { AuditTrailModel } from 'src/app/shared/data/audit-trial-model';
 import { ItemDetailService } from 'src/app/services/modal-service.service';
 import { PlanetService } from 'src/app/services/planet-integration.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -52,8 +53,9 @@ export class AddPosComponent implements OnInit {
   @Input() content!: any;
 
   @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
+  @ViewChild('dataGrid', { static: false }) dataGrid!: DxDataGridComponent;
 
-
+  attachedImageList: any = [];
   @ViewChild('mymodal') public mymodal!: NgbModal;
   @ViewChild('adjust_sale_return_modal')
   public adjust_sale_return_modal_ref!: NgbModalRef;
@@ -12368,9 +12370,34 @@ export class AddPosComponent implements OnInit {
 
   }
 
-  openAttachment(url: string) {
-    window.open(url, '_blank');
+  openAttachment(url: any) {
+    console.log('Opening URL:', url.displayValue);
+    window.open(url.displayValue, '_blank');
+}
+
+deleteAttachment(data: any) {
+  const index = this.attachedImageList.findIndex((item: any) => item.url === data.data.ATTACHMENT_PATH);
+  if (index !== -1) {
+      this.attachedImageList.splice(index, 1);
+      this.transAttachmentList[data.rowIndex].ATTACHMENT_PATH = "";
+      // data.data.ATTACHMENT_PATH = "";
   }
+}
+
+onFileSelected(input: any) {
+  console.log(input.target.files);
+  if (input.target.files.length > 0) {
+    for (let f = 0; f < input.target.files.length; f++) {
+      const file: File = input.target.files[f];
+      // this.uploadFilesDt.push(file);
+      const url = URL.createObjectURL(file);
+      this.attachedImageList.push({ file, url });
+      // this.isImageUpdated = true;
+    }
+
+
+  }
+}
 
   importSalesEstimation() {
     this.modalRefePendingSalesEstimation = this.modalService.open(
@@ -12443,12 +12470,8 @@ export class AddPosComponent implements OnInit {
   }
 
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files;
-    console.log(file);
-    this.attachmentFile = file;
-  }
 
+  
 
   saveAttachment() {
     if (!this.attachmentForm.invalid) {
@@ -12464,7 +12487,8 @@ export class AddPosComponent implements OnInit {
       formData.append('REMARKS', this.attachmentForm.value.remarks || '');
       formData.append('UNIQUEID', '1');
       formData.append('CODE', '');
-      formData.append('ATTACH_TYPE', this.attachmentFile[0].name.split('.')[1] || ''); //pass extension
+      formData.append('ATTACH_TYPE', this.attachedImageList[0].file.type
+      || ''); 
       formData.append('EXPIRE_DATE', this.convertDateToYMD(this.attachmentForm.value.expDate));
       formData.append('BRANCH_CODE', this.strBranchcode);
       formData.append('YEARMONTH', this.baseYear);
@@ -12478,20 +12502,22 @@ export class AddPosComponent implements OnInit {
       formData.append('DOCUMENT_NO', '');
       formData.append('FROM_KYC', 'false');
 
-      for (let i = 0; i < this.attachmentFile.length; i++) {
-        formData.append(`Model.Images[${i}].Image.File`, this.attachmentFile[i], this.attachmentFile[i].name);
-      }
+      // for (let i = 0; i < this.attachedImageList.length; i++) {
+      //   formData.append(`Model.Images[${i}].Image.File`, this.attachedImageList[i], this.attachedImageList[i].file.name
+      // );
+      // }
 
       this.transAttachmentListData.push(formData);
 
       this.transAttachmentList.push({
         "REFMID": 0,
         "REMARKS": this.attachmentForm.value.remarks || '',
-        "ATTACHMENT_PATH": "",
+        "ATTACHMENT_PATH": this.attachedImageList ? this.attachedImageList[0].url
+        : '', 
         "DOC_TYPE": this.attachmentForm.value.docType || '',
         "EXPIRE_DATE": this.convertDateToYMD(this.attachmentForm.value.expDate) || this.dummyDate,
         "VOCTYPE": this.vocType
-      });
+    });
 
       this.attachmentForm.reset();
       this.attachmentForm.markAsPristine();
