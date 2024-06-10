@@ -337,7 +337,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
       if (result.COMPONENT_DESCRIPTION == '' && result.COMPSIZE_CODE == '') {
         data = true
-        this.toastr.error('select all required fields');
+        this.toastr.error('Grid Values Cannot be Empty');
       }
     })
 
