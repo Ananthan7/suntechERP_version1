@@ -21,6 +21,7 @@ export class MetalDivisionMasterComponent implements OnInit {
   viewMode: boolean = false;
   isDisabled: boolean = false;
   editableMode: boolean = false;
+  editMode: boolean=false;
   isDisableSaveBtn: boolean = false;
   
   constructor(
@@ -73,18 +74,18 @@ export class MetalDivisionMasterComponent implements OnInit {
   })
 
 
-  setFormValues() {
-    if (!this.content) return
+  // setFormValues() {
+  //   if (!this.content) return
 
-    this.metaldivisionForm.controls.code.setValue(this.content.DIVISION_CODE);
-    this.metaldivisionForm.controls.codedes.setValue(this.content.DESCRIPTION);
-    this.metaldivisionForm.controls.Abbreviation.setValue(this.content.ABBREVIATION);
-    this.metaldivisionForm.controls.costcenter.setValue(this.content.COSTCODE_METAL);
-    this.metaldivisionForm.controls.currency.setValue(this.content.ISCURRENCY);
-    this.metaldivisionForm.controls.costcentermaking.setValue(this.content.COSTCODE_MAKING);
-    this.metaldivisionForm.controls.stockcode.setValue(this.content.AUTOFIXSTOCK);
+  //   this.metaldivisionForm.controls.code.setValue(this.content.DIVISION_CODE);
+  //   this.metaldivisionForm.controls.codedes.setValue(this.content.DESCRIPTION);
+  //   this.metaldivisionForm.controls.Abbreviation.setValue(this.content.ABBREVIATION);
+  //   this.metaldivisionForm.controls.costcenter.setValue(this.content.COSTCODE_METAL);
+  //   this.metaldivisionForm.controls.currency.setValue(this.content.ISCURRENCY);
+  //   this.metaldivisionForm.controls.costcentermaking.setValue(this.content.COSTCODE_MAKING);
+  //   this.metaldivisionForm.controls.stockcode.setValue(this.content.AUTOFIXSTOCK);
 
-  }
+  // }
 
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
