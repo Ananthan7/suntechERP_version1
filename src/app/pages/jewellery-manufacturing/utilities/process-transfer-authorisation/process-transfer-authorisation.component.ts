@@ -63,7 +63,9 @@ export class ProcessTransferAuthorisationComponent implements OnInit {
   setInitialValues() {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.processTransferAuthorisationForm.controls.vocType.setValue('JBI')
+    this.processTransferAuthorisationForm.controls.vocType.setValue(
+      this.comService.getqueryParamVocType()
+    )
 
   }
 
