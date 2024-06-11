@@ -708,7 +708,7 @@ export class ComponentMasterComponent implements OnInit {
       "TOTCARAT": 0,
       "TOTGMS": 0,
       "LAST_EDT_BY": "",
-      "LAST_EDT_ON": this.commonService.formatDateTime(this.commonService.currentDate),
+      "LAST_EDT_ON": "",
       "DIA_PCS": 0,
       "DIA_CARAT": 0,
       "DIA_VALUEFC": 0,

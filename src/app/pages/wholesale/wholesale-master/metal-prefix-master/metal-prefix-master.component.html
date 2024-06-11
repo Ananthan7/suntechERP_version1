@@ -53,22 +53,19 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"
-                              formControlName="jobcardprefix"
-                              [readonly]="viewMode">
+                          <mat-checkbox type="checkbox" formControlName="jobcardprefix" [disabled]="viewMode">
                             Exclusive For Job Card
-                          </label>
+                          </mat-checkbox>
                         </div>
                       </div>
+                      
                       <div class="col-md-3">
                         <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"
+                            <mat-checkbox type="checkbox"
                               formControlName="schemeprefix"
-                              [disabled]="true">
+                              [disabled]="viewMode">
                             Exclusive For Scheme
-                          </label>
+                          </mat-checkbox>
                         </div>
                       </div>
                     </div>
@@ -79,27 +76,25 @@
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput formControlName="tagWt"
                             class="text-right" ThreeDecimalInput
-                            [readonly]="viewMode" />
+                            [disabled]="viewMode"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"
+                          <mat-checkbox  
                               formControlName="setrefprefix"
-                              [readonly]="viewMode">
+                              [disabled]="viewMode">
                             Set Ref Prefix
-                          </label>
+                        </mat-checkbox> 
                         </div>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"
+                          <mat-checkbox  type="checkbox"
                               formControlName="refinervprefix"
-                              [readonly]="viewMode">
+                              [disabled]="viewMode">
                             Exclusive For Refinery
-                          </label>
+                          </mat-checkbox>
                         </div>
                       </div>
                     </div>
@@ -118,12 +113,11 @@
                       </div>
                       <div class="col-md-3 offset-md-3">
                         <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"
+                         <mat-checkbox  type="checkbox"
                               formControlName="designprefix"
-                              [readonly]="viewMode">
+                              [disabled]="viewMode">
                             Design Prefix
-                          </label>
+                         </mat-checkbox>
                         </div>
                       </div>
                     </div>
