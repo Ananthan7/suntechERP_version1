@@ -592,17 +592,17 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metalselling_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.LAST_SELLING_RATE));
+        this.content.SELLING_RATE));
 
     this.metallabourMasterForm.controls.metalcost_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.LAST_COST_RATE));
 
-    // this.metallabourMasterForm.controls.metalselling.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.METALSTONE));
+    this.metallabourMasterForm.controls.metalselling.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.SELLING_PER));
 
   }
 
@@ -876,15 +876,15 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
       "CURRENCYCODE": this.commonService.nullToString(diamondForm.currency),
       "UNITCODE": this.commonService.nullToString(metalForm.metalunitList),
-      "COST_RATE": this.commonService.emptyToZero(diamondForm.metalcost_rate),
-      "SELLING_RATE": this.commonService.emptyToZero(diamondForm.metalselling_rate),
+      "COST_RATE": this.commonService.emptyToZero(metalForm.metalcost_rate),
+      "SELLING_RATE": this.commonService.emptyToZero(metalForm.metalselling_rate),
       "LAST_COST_RATE": 0,
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": this.commonService.nullToString(metalForm.labourAc),
       "DIVISION_CODE": this.commonService.nullToString(metalForm.metalDivision),
       "CURRENCY_CODE": this.commonService.nullToString(metalForm.metalcurrency),
-      "SELLING_PER": this.commonService.emptyToZero(diamondForm.selling),
+      "SELLING_PER": this.commonService.emptyToZero(metalForm.metalSelling),
       "ACCESSORIES": 0,
       "CARATWT_FROM": this.commonService.emptyToZero(metalForm.wtFrom),
       "CARATWT_TO": this.commonService.emptyToZero(metalForm.wtTo),
