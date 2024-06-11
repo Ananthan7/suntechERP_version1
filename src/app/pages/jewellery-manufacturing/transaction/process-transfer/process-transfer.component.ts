@@ -24,6 +24,7 @@ export class ProcessTransferComponent implements OnInit {
   tableRowCount: number = 0;
   PTFDetailsToSave: any[] = [];
   metalGridDataToSave: any[] = [];
+  LabourChargeDetailsToSave: any[] = [];
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
   private subscriptions: Subscription[] = [];
@@ -88,13 +89,35 @@ export class ProcessTransferComponent implements OnInit {
   ngOnInit(): void {
     this.setCompanyCurrency()
     this.setInitialValues() //load all initial values
+    if(this.content?.FLAG){
+      this.InitialLoadData()
+    }
   }
-
+  /**USE: get InitialLoadData */
+  InitialLoadData() {
+    this.commonService.showSnackBarMsg('Loading')
+    let API = `JobProcessTrnMasterDJ/GetJobProcessTrnMasterDJDetailList/${this.content?.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data,'data');
+          this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
-    this.processTransferFrom.controls.voctype.setValue('PTF')
+    this.processTransferFrom.controls.voctype.setValue(
+      this.commonService.getqueryParamVocType()
+    )
     //this.commonService.getqueryParamVocType()
     console.log(this.content,'grid content');
     
@@ -164,7 +187,7 @@ export class ProcessTransferComponent implements OnInit {
       this.tableData.push(detailDataToParent);
     }
     if (detailDataToParent) {
-      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+      this.detailData.push({ ID: this.tableData.length, DATA: DATA })
     }
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
     if (detailDataToParent.FLAG == 'CONTINUE') {
@@ -172,6 +195,8 @@ export class ProcessTransferComponent implements OnInit {
     };
     this.getSequenceDetailData(detailDataToParent);
     this.setDataFromDetailScreen();
+    this.setLabourChargeDetails()
+
   }
   closeDetailScreen() {
     this.modalReference.close()
@@ -214,15 +239,12 @@ export class ProcessTransferComponent implements OnInit {
     }
   }
 
-  removedata() {
-    this.tableData.pop();
-  }
 
   setLabourChargeDetails() {
     let detailScreenData = this.detailData[0].DATA
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS
 
-    return {
+    this.LabourChargeDetailsToSave.push({
       "REFMID": 0,
       "BRANCH_CODE": this.commonService.branchCode,
       "YEARMONTH": this.commonService.yearSelected,
@@ -241,13 +263,14 @@ export class ProcessTransferComponent implements OnInit {
       "LAB_ACCODE": "",
       "LAB_AMTFC": 0,
       "UNITCODE": ""
-    }
+    })
   }
   /**USE: set details from detail screen */
   setDataFromDetailScreen() {
+    console.log(this.detailData,'this.detailData');
+    
     let detailScreenData = this.detailData[0].DATA
     let PROCESS_FORMDETAILS = detailScreenData.PROCESS_FORMDETAILS
-
     let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
     let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
@@ -371,6 +394,7 @@ export class ProcessTransferComponent implements OnInit {
       return ''
     }
   }
+
   /**USE: get SEQUENCE_DETAIL_DJ table data */
   getSequenceDetailData(formData: any) {
     let API = `SequenceMasterDJ/GetSequenceMasterDJDetail/${formData.SEQ_CODE}`
@@ -591,6 +615,8 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.toastErrorByMsgId('select all required fields')
       return
     }
+    console.log(this.detailData,'detailData');
+    
     let detailScreenData = this.detailData[0].DATA;
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
@@ -616,7 +642,7 @@ export class ProcessTransferComponent implements OnInit {
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
       "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
-      "JOB_PROCESS_TRN_LABCHRG_DJ": this.setLabourChargeDetails() // labour charge details
+      "JOB_PROCESS_TRN_LABCHRG_DJ": this.LabourChargeDetailsToSave // labour charge details
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

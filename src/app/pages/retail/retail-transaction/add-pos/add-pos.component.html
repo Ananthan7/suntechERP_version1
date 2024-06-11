@@ -2899,9 +2899,8 @@
                   <div class="col-md-6">
                     <mat-form-field>
                       <mat-label>Pure Weight</mat-label>
-                      <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
-                        (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_pure_wt"
-                        id="fcn_li_pure_wt" readonly />
+                      <input class="st_txt_right" type="text" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                        matInput formControlName="fcn_li_pure_wt" id="fcn_li_pure_wt" readonly />
                     </mat-form-field>
                   </div>
                 </div>
@@ -3504,8 +3503,7 @@
           <dx-data-grid #dataGrid id="gridContainer" keyExpr="REFMID" [dataSource]="transAttachmentList"
             [showBorders]="true">
             <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
-            <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
 
             <dxi-column *ngFor="let data of transColumnList" dataField="{{ data.field }}" caption="{{ data.title }}"
               [allowEditing]="true" alignment="center" backgroundcolor="#000">
@@ -3515,12 +3513,17 @@
             </dxi-column>
 
             <div *dxTemplate="let data of 'attachmentTemp'">
-              <a href="javascript:void(0)" (click)="openAttachment(data.data.ATTACHMENT_PATH)">
-                <i class="fa fa-paperclip" style="color: #337ab7"></i>
-              </a>
-              <dxi-button icon="fa fa-paperclip"></dxi-button>
+              <ng-container *ngIf="data.data.ATTACHMENT_PATH">
+                <a href="javascript:void(0)" (click)="openAttachment(data)">
+                  <i class="fa fa-paperclip" style="color: #337ab7"></i>
+                </a>
+                <!-- <a href="javascript:void(0)" (click)="deleteAttachment(data)">
+                  <i class="fa fa-trash" style="color: red; margin-left: 10px;"></i>
+                </a> -->
+              </ng-container>
             </div>
           </dx-data-grid>
+
         </div>
       </div>
     </form>
