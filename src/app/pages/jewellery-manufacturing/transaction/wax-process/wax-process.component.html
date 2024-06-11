@@ -20,7 +20,7 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type * :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="voctype" />
+                  <input type="text" matInput [maxLength]="3" UpperCaseDirective formControlName="voctype" />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
