@@ -46,7 +46,7 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isSelectNone: boolean = false;
   @Input() isInvert: boolean = false;
   @Input() isLock: boolean = false;
-  @Input() editSaveBtnText?: string = '';
+  @Input() editSaveBtnText?: string = 'Save';
 
   branchCode: any = localStorage.getItem('userbranch')
   userName: any = localStorage.getItem('username')

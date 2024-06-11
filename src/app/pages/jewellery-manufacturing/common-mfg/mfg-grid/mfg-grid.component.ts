@@ -213,8 +213,11 @@ export class MfgGridComponent implements OnInit {
             .map((key) => {
               return { FIELD_NAME: key };
             });
-            this.orderedItemsHead = this.orderedItemsHead.filter((item:any)=> item.FIELD_NAME != 'FLAG' && item.FIELD_NAME != 'COUNT')
-          // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
+            this.orderedItemsHead = this.orderedItemsHead.filter((item:any)=> {
+              return item.FIELD_NAME !== 'FLAG' && item.FIELD_NAME !== 'COUNT' && item.FIELD_NAME !== 'MID'
+            })
+          
+            // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
           //   if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
           //     data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
           //   }

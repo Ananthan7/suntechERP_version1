@@ -74,6 +74,8 @@ export class ProcessTransferComponent implements OnInit {
     currency: [''],
     currencyrate: [''],
     Narration: [''],
+    BRANCH_CODE: [''],
+    YEARMONTH: [''],
   });
 
   constructor(
@@ -88,21 +90,39 @@ export class ProcessTransferComponent implements OnInit {
 
   ngOnInit(): void {
     this.setCompanyCurrency()
-    this.setInitialValues() //load all initial values
-    if(this.content?.FLAG){
-      this.InitialLoadData()
+    if (this.content?.FLAG) {
+      this.setInitialValues()
+      return
     }
+    this.setFormValues() //load all initial values
   }
   /**USE: get InitialLoadData */
-  InitialLoadData() {
+  setInitialValues() {
     this.commonService.showSnackBarMsg('Loading')
     let API = `JobProcessTrnMasterDJ/GetJobProcessTrnMasterDJDetailList/${this.content?.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data,'data');
           this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ
+
+          console.log(this.tableData[0].FRM_PROCESS_CODE, 'data');
+
+          if (!data) {
+            this.commonService.toastErrorByMsgId('data not found')
+            return
+          }
+          this.branchCode = data.BRANCH_CODE;
+          this.yearMonth = this.commonService.yearSelected;
+          this.processTransferFrom.controls.vocno.setValue(data.VOCNO)
+          this.processTransferFrom.controls.vocdate.setValue(data.VOCDATE)
+          this.processTransferFrom.controls.voctype.setValue(data.VOCTYPE)
+          this.processTransferFrom.controls.salesman.setValue(data.SMAN)
+          this.processTransferFrom.controls.currency.setValue(data.CURRENCY_CODE)
+          this.processTransferFrom.controls.currencyrate.setValue(
+            this.commonService.decimalQuantityFormat(data.CURRENCY_RATE, 'RATE')
+          )
+          this.processTransferFrom.controls.Narration.setValue(data.REMARKS)
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -111,16 +131,22 @@ export class ProcessTransferComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setInitialValues() {
+  setFormValues() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.processTransferFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.processTransferFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
     this.processTransferFrom.controls.voctype.setValue(
       this.commonService.getqueryParamVocType()
     )
-    //this.commonService.getqueryParamVocType()
-    console.log(this.content,'grid content');
-    
+    if (!this.content) return
+    this.processTransferFrom.controls.voctype.setValue(this.content.VOCTYPE)
+    this.processTransferFrom.controls.vocdate.setValue(this.content.VOCDATE)
+    this.processTransferFrom.controls.vocno.setValue(this.content.VOCNO)
+    this.processTransferFrom.controls.salesman.setValue(this.content.SMAN)
+    this.processTransferFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -251,9 +277,9 @@ export class ProcessTransferComponent implements OnInit {
       "VOCTYPE": this.processTransferFrom.value.voctype,
       "VOCNO": 0,
       "SRNO": 0,
-      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
+      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.JOB_NUMBER),
       "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
-      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
+      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.UNQ_JOB_ID),
       "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
       "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
       "PCS": 0,
@@ -267,23 +293,23 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: set details from detail screen */
   setDataFromDetailScreen() {
-    console.log(this.detailData,'this.detailData');
-    
+    console.log(this.detailData, 'this.detailData');
+
     let detailScreenData = this.detailData[0].DATA
     let PROCESS_FORMDETAILS = detailScreenData.PROCESS_FORMDETAILS
     let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
     let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
-    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processFrom);
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.FRM_PROCESS_CODE);
 
     METAL_DETAIL_GRID.forEach((element: any) => {
       this.metalGridDataToSave.push({
         "VOCNO": 0,
         "VOCTYPE": this.processTransferFrom.value.voctype,
         "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
-        "JOB_NUMBER": this.commonService.nullToString(PROCESS_FORMDETAILS.jobno),
+        "JOB_NUMBER": this.commonService.nullToString(PROCESS_FORMDETAILS.JOB_NUMBER),
         "JOB_SO_NUMBER": this.commonService.emptyToZero(PROCESS_FORMDETAILS.JOB_SO_NUMBER),
-        "UNQ_JOB_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.subjobno),
+        "UNQ_JOB_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_JOB_ID),
         "JOB_DESCRIPTION": this.commonService.nullToString(PROCESS_FORMDETAILS.subJobDescription),
         "BRANCH_CODE": this.commonService.branchCode,
         "DESIGN_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.DESIGN_CODE),
@@ -301,8 +327,8 @@ export class ProcessTransferComponent implements OnInit {
         "NET_WT": this.commonService.emptyToZero(element.NET_WT),
         "RATE": this.commonService.emptyToZero(element.RATE),
         "AMOUNT": this.commonService.emptyToZero(element.AMOUNTFC),
-        "PROCESS_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.processTo),
-        "WORKER_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.workerTo),
+        "PROCESS_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_PROCESS_CODE),
+        "WORKER_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_WORKER_CODE),
         "UNQ_DESIGN_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_DESIGN_ID),
         "REFMID": 0,
         "AMOUNTLC": this.commonService.emptyToZero(element.AMOUNTLC),
@@ -324,14 +350,14 @@ export class ProcessTransferComponent implements OnInit {
         "BRKSTN_RATELC": 0,
         "BRKSTN_AMTFC": 0,
         "BRKSTN_AMTLC": 0,
-        "MAIN_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.workerFrom),
-        "FRM_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.workerFrom),
-        "FRM_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.processFrom),
+        "MAIN_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_WORKER_CODE),
+        "FRM_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_WORKER_CODE),
+        "FRM_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_PROCESS_CODE),
         "CRACCODE": "",
         "LAB_ACCODE": this.commonService.nullToString(element.lab_accode),
         "LAB_AMTFC": this.commonService.emptyToZero(element.LAB_AMT),
-        "TO_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.processTo),
-        "TO_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.workerTo),
+        "TO_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_PROCESS_CODE),
+        "TO_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_WORKER_CODE),
         "LAB_RATEFC": this.commonService.emptyToZero(element.LAB_RATE),
         "RATEFC": this.commonService.emptyToZero(element.RATEFC),
         "PRINTED": true,
@@ -443,8 +469,8 @@ export class ProcessTransferComponent implements OnInit {
     let LOSS_PURE_QTY = this.calculateLossPureQty(detailScreenData);
     let stoneAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID, 'STONEAMOUNT');
     let metalAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID, 'METALAMOUNT');
-    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processFrom);
-    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processTo);
+    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.FRM_PROCESS_CODE);
+    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.TO_PROCESS_CODE);
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
     let amountFC = this.commonService.FCToCC(this.processTransferFrom.value.currency, stoneAmount)
 
@@ -453,34 +479,34 @@ export class ProcessTransferComponent implements OnInit {
     this.PTFDetailsToSave.push({
       "SRNO": 0,
       "UNIQUEID": 0,
-      "VOCNO": 0,
+      "VOCNO": this.content?.MID || 0,
       "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
+      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.JOB_NUMBER),
       "JOB_DATE": this.commonService.nullToString(detailScreenData.JOB_DATE),
-      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
+      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.UNQ_JOB_ID),
       "UNQ_DESIGN_ID": this.commonService.nullToString(detailScreenData.UNQ_DESIGN_ID),
       "DESIGN_CODE": this.commonService.nullToString(detailScreenData.DESIGN_CODE),
       "SEQ_CODE": this.commonService.nullToString(detailScreenData.SEQ_CODE),
       "JOB_DESCRIPTION": this.commonService.nullToString(this.processTransferFrom.value.subJobDescription),
       "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
-      "FRM_PROCESS_CODE": this.commonService.nullToString(detailScreenData.processFrom),
+      "FRM_PROCESS_CODE": this.commonService.nullToString(detailScreenData.FRM_PROCESS_CODE),
       "FRM_PROCESSNAME": this.commonService.nullToString(detailScreenData.PROCESSDESC),
-      "FRM_WORKER_CODE": this.commonService.nullToString(detailScreenData.workerFrom),
+      "FRM_WORKER_CODE": this.commonService.nullToString(detailScreenData.FRM_WORKER_CODE),
       "FRM_WORKERNAME": this.commonService.nullToString(detailScreenData.WORKERDESC),
       "FRM_PCS": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),
       "FRM_STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),
       "FRM_STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsFrom),
       "FRM_METAL_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightFrom),
-      "FRM_METAL_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsFrom),
+      "FRM_METAL_PCS": this.commonService.emptyToZero(detailScreenData.FRM_METAL_PCS),
       "FRM_PURE_WT": this.commonService.emptyToZero(detailScreenData.PUREWT),
       "FRM_NET_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightFrom),
-      "TO_PROCESS_CODE": this.commonService.nullToString(detailScreenData.processTo),
-      "TO_PROCESSNAME": this.commonService.nullToString(detailScreenData.processToDescription),
-      "TO_WORKER_CODE": this.commonService.nullToString(detailScreenData.workerTo),
-      "TO_WORKERNAME": this.commonService.nullToString(detailScreenData.workerToDescription),
+      "TO_PROCESS_CODE": this.commonService.nullToString(detailScreenData.TO_PROCESS_CODE),
+      "TO_PROCESSNAME": this.commonService.nullToString(detailScreenData.TO_PROCESSNAME),
+      "TO_WORKER_CODE": this.commonService.nullToString(detailScreenData.TO_WORKER_CODE),
+      "TO_WORKERNAME": this.commonService.nullToString(detailScreenData.TO_WORKER_CODEDescription),
       "TO_PCS": this.commonService.emptyToZero(detailScreenData.ToJobPcs),
       "TO_METAL_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsTo),
       "TO_STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeightTo),
@@ -547,7 +573,7 @@ export class ProcessTransferComponent implements OnInit {
       "RET_STONE_PCS": 0,
       "RET_LOC_MET": "",
       "RET_LOC_STN": "",
-      "MAIN_WORKER": this.commonService.nullToString(detailScreenData.workerFrom),
+      "MAIN_WORKER": this.commonService.nullToString(detailScreenData.FRM_WORKER_CODE),
       "MKG_LABACCODE": "",
       "REMARKS": this.commonService.nullToString(detailScreenData.remarks),
       "TREE_NO": this.commonService.nullToString(detailScreenData.treeno),
@@ -605,35 +631,24 @@ export class ProcessTransferComponent implements OnInit {
     let value = detailScreenData.stdLoss * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
-  // submit save click
-  formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      // this.update()
-      return
-    }
-    if (this.processTransferFrom.invalid) {
-      this.commonService.toastErrorByMsgId('select all required fields')
-      return
-    }
-    console.log(this.detailData,'detailData');
-    
+  // use to set payload data
+  setPostData(form: any) {
     let detailScreenData = this.detailData[0].DATA;
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
-    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
-    let postData = {
+    return {
       "MID": 0,
-      "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
+      "VOCTYPE": this.commonService.nullToString(form.value.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "VOCNO": this.commonService.nullToString(this.processTransferFrom.value.vocno),
-      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(this.processTransferFrom.value.vocdate)),
+      "VOCNO": this.commonService.nullToString(form.value.vocno),
+      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.value.vocdate)),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
-      "SMAN": this.commonService.nullToString(this.processTransferFrom.value.salesman),
-      "REMARKS": this.commonService.nullToString(this.processTransferFrom.value.Narration),
-      "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
+      "SMAN": this.commonService.nullToString(form.value.salesman),
+      "REMARKS": this.commonService.nullToString(form.value.Narration),
+      "CURRENCY_CODE": this.commonService.nullToString(form.value.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.value.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
-      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData?.METALLAB_TYPE),
+      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
       "AUTOPOSTING": false,
       "POSTDATE": "",
       "PRINT_COUNT": 0,
@@ -644,22 +659,54 @@ export class ProcessTransferComponent implements OnInit {
       "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.LabourChargeDetailsToSave // labour charge details
     }
+  }
+  // submit save click
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updatePTF()
+      return
+    }
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all required fields')
+      return
+    }
+
+    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
+    let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              this.close('reloadMainGrid')
-            });
-          }
+        if (result.response && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  // update API call
+  updatePTF() {
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all required fields')
+      return
+    }
+
+    let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/' +
+      this.processTransferFrom.value.BRANCH_CODE + '/' +
+      this.processTransferFrom.value.voctype + '/' +
+      this.processTransferFrom.value.vocno + '/' +
+      this.processTransferFrom.value.YEARMONTH
+    let postData = this.setPostData(this.processTransferFrom.value)
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -670,40 +717,14 @@ export class ProcessTransferComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if (!this.content) return
-    this.processTransferFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.processTransferFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.processTransferFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.processTransferFrom.controls.salesman.setValue(this.content.SMAN)
-    this.processTransferFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
-  }
 
 
   deleteTableData(): void {
-    if (!this.selectRowIndex) {
-      Swal.fire({
-        title: '',
-        text: 'Please select row to remove from grid!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
+    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+      this.commonService.toastErrorByMsgId('Please select row to remove from grid!')
       return
     }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
+    this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         this.tableData = this.tableData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
         this.reCalculateSRNO()
@@ -714,20 +735,13 @@ export class ProcessTransferComponent implements OnInit {
   reCalculateSRNO() {
     this.tableData.forEach((item, index) => item.SRNO = index + 1)
   }
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       this.commonService.showSnackBarMsg('Please select Data to delete')
       return
     }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
+    this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let API = 'JobProcessTrnMasterDJ/DeleteJobProcessTrnMasterDJ/' +
           this.processTransferFrom.value.branchCode + '/' +
@@ -739,16 +753,7 @@ export class ProcessTransferComponent implements OnInit {
           .subscribe((result) => {
             this.commonService.closeSnackBarMsg()
             if (result && result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                }
-              });
+              this.showSuccessDialog('deleted successfully')
             } else {
               this.commonService.showSnackBarMsg('Error Something went wrong')
             }
@@ -760,7 +765,28 @@ export class ProcessTransferComponent implements OnInit {
       }
     });
   }
-
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+  showSuccessDialog(message: string) {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.close('reloadMainGrid')
+    });
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

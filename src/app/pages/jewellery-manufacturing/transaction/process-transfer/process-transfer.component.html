@@ -42,7 +42,7 @@
                                 Number * </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="vocno" class="text-right" NumberOnly/>
+                                    <input type="text" matInput  formControlName="vocno" class="text-right" readonly/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="number" matInput SixDecimalInput class="text-right" readonly
+                                    <input type="text" matInput SixDecimalInput class="text-right" readonly
                                         formControlName="currencyrate" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="currencyMasterData"
@@ -106,26 +106,26 @@
                                     dataField="SRNO" format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Job Ref" 
-                                    dataField="subjobno">
+                                    dataField="UNQ_JOB_ID">
                                 </dxi-column>
                                 <dxi-column alignment="right" caption="Pcs" 
-                                    dataField="MetalPcsFrom">
+                                    dataField="FRM_METAL_PCS">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="From">
                                 <dxi-column alignment="center" caption="Process" 
-                                    dataField="processFrom">
+                                    dataField="FRM_PROCESS_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Worker" 
-                                    dataField="workerFrom">
+                                    dataField="FRM_WORKER_CODE">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="To">
                                 <dxi-column alignment="center" caption="Process" 
-                                    dataField="processTo">
+                                    dataField="TO_PROCESS_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Worker" 
-                                    dataField="workerTo">
+                                    dataField="TO_WORKER_CODE">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Metal">

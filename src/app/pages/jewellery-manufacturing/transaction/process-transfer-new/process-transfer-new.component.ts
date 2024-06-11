@@ -29,6 +29,7 @@ export class ProcessTransferNewComponent implements OnInit {
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
   private subscriptions: Subscription[] = [];
+  selectRowIndex: any;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -134,13 +135,15 @@ export class ProcessTransferNewComponent implements OnInit {
     });
   }
   /**USE: on clicking row Opens new detail adding screen */
-  onRowClickHandler(event: any) {
+  onRowDblClickHandler(event: any) {
     let selectedData = event.data
     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
     let allDataSelected = [detailRow[0].DATA]
     this.openProcessTransferDetails(allDataSelected)
   }
-
+  onRowClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
+  }
   setValuesToHeaderGrid(detailDataToParent: any) {
     let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
     if (PROCESS_FORMDETAILS.SRNO) {
@@ -321,7 +324,7 @@ export class ProcessTransferNewComponent implements OnInit {
         "SUB_STOCK_CODE": this.commonService.nullToString(element.SUB_STOCK_CODE),
         "KARAT_CODE": this.commonService.nullToString(element.KARAT_CODE),
         "SIEVE_SET": this.commonService.nullToString(element.SIEVE_SET),
-        "SCRAP_STOCK_CODE": this.checkScrapStockCode(detailScreenData.stockCode,element.STOCK_CODE,element.METALSTONE),
+        "SCRAP_STOCK_CODE": this.checkScrapStockCode(detailScreenData.stockCode, element.STOCK_CODE, element.METALSTONE),
         "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.MAIN_STOCK_CODE),
         "SCRAP_PURITY": this.commonService.emptyToZero(detailScreenData.SCRAP_PURITY),
         "SCRAP_WT": this.commonService.emptyToZero(detailScreenData.scrapQuantity),
@@ -337,7 +340,7 @@ export class ProcessTransferNewComponent implements OnInit {
         "TO_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_ToStockCode),
         "FROM_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_FromStockCode),
         "FROM_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.SUB_STOCK_CODE),
-        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY*detailScreenData.PURITY),
+        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY * detailScreenData.PURITY),
         "EXCLUDE_TRANSFER_WT": detailScreenData.EXCLUDE_TRANSFER_WT,
         "IRON_WT": this.commonService.emptyToZero(element.IRON_WT),
         "IRON_SCRAP_WT": this.commonService.emptyToZero(detailScreenData.METAL_ToIronScrapWt),
@@ -352,9 +355,9 @@ export class ProcessTransferNewComponent implements OnInit {
       })
     });
   }
-  checkScrapStockCode(stockCode:any,GridstockCode:any,METALSTONE:any){
+  checkScrapStockCode(stockCode: any, GridstockCode: any, METALSTONE: any) {
     try {
-      if(stockCode == GridstockCode && METALSTONE.toUpperCase() == 'M') return stockCode;
+      if (stockCode == GridstockCode && METALSTONE.toUpperCase() == 'M') return stockCode;
       return ''
     } catch (error) {
       return ''
@@ -412,9 +415,9 @@ export class ProcessTransferNewComponent implements OnInit {
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processTo);
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
     let amountFC = this.commonService.FCToCC(this.processTransferFrom.value.currency, stoneAmount)
-    
-    console.log(this.commonService.timeToMinutes(detailScreenData.consumed),'time consumed');
-    
+
+    console.log(this.commonService.timeToMinutes(detailScreenData.consumed), 'time consumed');
+
     this.PTFDetailsToSave.push({
       "SRNO": 0,
       "UNIQUEID": 0,
@@ -570,31 +573,21 @@ export class ProcessTransferNewComponent implements OnInit {
     let value = detailScreenData.stdLoss * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
-  // submit save click
-  formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      // this.update()
-      return
-    }
-    if (this.processTransferFrom.invalid) {
-      this.commonService.toastErrorByMsgId('select all required fields')
-      return
-    }
+  setPostData(form: any){
     let detailScreenData = this.detailData[0].DATA;
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
-    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
-    let postData = {
+    return {
       "MID": 0,
-      "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
+      "VOCTYPE": this.commonService.nullToString(form.value.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "VOCNO": this.commonService.nullToString(this.processTransferFrom.value.vocno),
-      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(this.processTransferFrom.value.vocdate)),
+      "VOCNO": this.commonService.nullToString(form.value.vocno),
+      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.value.vocdate)),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
-      "SMAN": this.commonService.nullToString(this.processTransferFrom.value.salesman),
-      "REMARKS": this.commonService.nullToString(this.processTransferFrom.value.Narration),
-      "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
+      "SMAN": this.commonService.nullToString(form.value.salesman),
+      "REMARKS": this.commonService.nullToString(form.value.Narration),
+      "CURRENCY_CODE": this.commonService.nullToString(form.value.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.value.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
       "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
       "AUTOPOSTING": false,
@@ -607,22 +600,53 @@ export class ProcessTransferNewComponent implements OnInit {
       "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
     }
+  }
+  // submit save click
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updatePTF()
+      return
+    }
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all required fields')
+      return
+    }
+    
+    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
+    let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              this.close('reloadMainGrid')
-            });
-          }
+        if (result.response && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  updatePTF() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updatePTF()
+      return
+    }
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all required fields')
+      return
+    }
+    
+    let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/1/1/1/1';
+    let postData = this.setPostData(this.processTransferFrom.value)
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -644,11 +668,33 @@ export class ProcessTransferNewComponent implements OnInit {
   }
 
   deleteTableData(): void {
-    this.tableRowCount = 0;
-    this.tableData = [];
+    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+     this.commonService.toastErrorByMsgId('Please select row to remove from grid!')
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tableData = this.tableData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
+  }
+  reCalculateSRNO() {
+    this.tableData.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
+    })
   }
   deleteRecord() {
-    if (!this.content.VOCTYPE) {
+    if (!this.content.VOCNO) {
       this.commonService.showSnackBarMsg('Please select Data to delete')
       return
     }
@@ -672,16 +718,7 @@ export class ProcessTransferNewComponent implements OnInit {
           .subscribe((result) => {
             this.commonService.closeSnackBarMsg()
             if (result && result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                }
-              });
+              this.showSuccessDialog('deleted successfully')
             } else {
               this.commonService.showSnackBarMsg('Error Something went wrong')
             }
@@ -693,7 +730,17 @@ export class ProcessTransferNewComponent implements OnInit {
       }
     });
   }
-
+  showSuccessDialog(message: string) {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.close('reloadMainGrid')
+    });
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

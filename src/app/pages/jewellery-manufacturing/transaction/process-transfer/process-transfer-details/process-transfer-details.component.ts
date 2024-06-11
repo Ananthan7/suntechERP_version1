@@ -64,9 +64,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SRNO: [0],
     FLAG: [''],
     barCodeNumber: [''],
-    jobno: [''],
+    JOB_NUMBER: [''],
     jobdes: [''],
-    subjobno: [''],
+    UNQ_JOB_ID: [''],
     subJobDescription: [''],
     approvedby: [''],
     approveddate: [''],
@@ -80,13 +80,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
     remarks: [''],
     toggleSwitchtIssue: [true],
     //DIAMOND DETAIL STARTS
-    processFrom: [''],
-    processTo: [''],
-    processToDescription: [''],
-    workerFrom: [''],
-    workerTo: [''],
-    workerToDescription: [''],
-    MetalPcsFrom: [''],
+    FRM_PROCESS_CODE: [''],
+    TO_PROCESS_CODE: [''],
+    TO_PROCESSNAME: [''],
+    FRM_WORKER_CODE: [''],
+    TO_WORKER_CODE: [''],
+    TO_WORKER_CODEDescription: [''],
+    FRM_METAL_PCS: [''],
     MetalPcsTo: [''],
     MetalWeightFrom: [''],
     MetalWeightTo: [''],
@@ -126,12 +126,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     EXCLUDE_TRANSFER_WT: [false],
     //METAL DETAILS STARTS
     METAL_quantity: [''],
-    METAL_processFrom: [''],
-    METAL_processTo: [''],
-    METAL_processToDescription: [''],
-    METAL_workerFrom: [''],
-    METAL_workerTo: [''],
-    METAL_workerToDescription: [''],
+    METAL_FRM_PROCESS_CODE: [''],
+    METAL_TO_PROCESS_CODE: [''],
+    METAL_TO_PROCESSNAME: [''],
+    METAL_FRM_WORKER_CODE: [''],
+    METAL_TO_WORKER_CODE: [''],
+    METAL_TO_WORKER_CODEDescription: [''],
     METAL_LossBooked: [''],
     METAL_ScrapLocCode: [''],
     METAL_GainGrWt: [''],
@@ -180,37 +180,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   }
 
-  // dateValidator(formGroup: FormGroup) {
-  //   const startdate = formGroup.get('startdate').value;
-  //   const enddate = formGroup.get('enddate').value;
-
-  //   if (startdate && enddate && startdate > enddate) {
-  //     return { dateError: true };
-  //   }
-
-  //   return null;
-  // }
-
-  // updateMinDate() {
-  //   const startDateControl = this.processTransferdetailsForm.get('startdate');
-  //   const endDateControl = this.processTransferdetailsForm.get('enddate');
-
-  //   if (startDateControl.value) {
-  //     endDateControl.setValidators([Validators.required]);
-  //     endDateControl.updateValueAndValidity();
-  //     endDateControl.setValidators([Validators.required, this.dateValidator.bind(this.processTransferdetailsForm)]);
-  //     endDateControl.updateValueAndValidity();
-
-  //     const startDate = new Date(startDateControl.value);
-  //     this.processTransferdetailsForm.get('endDate').setValidators([Validators.required, Validators.min(startDate)]);
-  //     this.processTransferdetailsForm.get('endDate').updateValueAndValidity();
-  //   } else {
-  //     endDateControl.clearValidators();
-  //     endDateControl.updateValueAndValidity();
-  //   }
-  // }
-
-
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -236,18 +205,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (!this.content) return
     let dataFromParent = this.content
     this.processTransferdetailsForm.controls.SRNO.setValue(this.comService.nullToString(this.content.SRNO))
-    this.processTransferdetailsForm.controls.jobno.setValue(dataFromParent.jobno)
+    this.processTransferdetailsForm.controls.JOB_NUMBER.setValue(dataFromParent.JOB_NUMBER)
     console.log(this.content,'this.content');
     // return
     this.processTransferdetailsForm.controls.jobdes.setValue(dataFromParent.jobdes)
-    this.processTransferdetailsForm.controls.subjobno.setValue(dataFromParent.subjobno)
+    this.processTransferdetailsForm.controls.UNQ_JOB_ID.setValue(dataFromParent.UNQ_JOB_ID)
     this.processTransferdetailsForm.controls.subJobDescription.setValue(dataFromParent.subJobDescription)
-    this.processTransferdetailsForm.controls.workerFrom.setValue(dataFromParent.workerFrom)
-    this.processTransferdetailsForm.controls.workerTo.setValue(dataFromParent.workerTo)
+    this.processTransferdetailsForm.controls.FRM_WORKER_CODE.setValue(dataFromParent.FRM_WORKER_CODE)
+    this.processTransferdetailsForm.controls.TO_WORKER_CODE.setValue(dataFromParent.TO_WORKER_CODE)
     this.processTransferdetailsForm.controls.toggleSwitchtIssue.setValue(dataFromParent.toggleSwitchtIssue)
-    this.processTransferdetailsForm.controls.processFrom.setValue(dataFromParent.processFrom)
-    this.processTransferdetailsForm.controls.processTo.setValue(dataFromParent.processTo)
-    this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(dataFromParent.MetalPcsFrom)
+    this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(dataFromParent.FRM_PROCESS_CODE)
+    this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(dataFromParent.TO_PROCESS_CODE)
+    this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(dataFromParent.FRM_METAL_PCS)
     this.processTransferdetailsForm.controls.MetalPcsTo.setValue(dataFromParent.MetalPcsTo)
     this.processTransferdetailsForm.controls.GrossWeightTo.setValue(dataFromParent.GrossWeightTo)
     this.processTransferdetailsForm.controls.approvedby.setValue(dataFromParent.approvedby)
@@ -260,8 +229,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.WORKERDESC.setValue(dataFromParent.WORKERDESC)
     this.processTransferdetailsForm.controls.PUREWT.setValue(dataFromParent.PUREWT)
     this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(dataFromParent.MetalWeightFrom)
-    this.processTransferdetailsForm.controls.processToDescription.setValue(dataFromParent.processToDescription)
-    this.processTransferdetailsForm.controls.workerToDescription.setValue(dataFromParent.workerToDescription)
+    this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(dataFromParent.TO_PROCESSNAME)
+    this.processTransferdetailsForm.controls.TO_WORKER_CODEDescription.setValue(dataFromParent.TO_WORKER_CODEDescription)
     this.processTransferdetailsForm.controls.PURITY.setValue(dataFromParent.PURITY)
     this.processTransferdetailsForm.controls.METALLAB_TYPE.setValue(dataFromParent.METALLAB_TYPE)
     this.processTransferdetailsForm.controls.remarks.setValue(dataFromParent.remarks)
@@ -271,7 +240,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
     this.processTransferdetailsForm.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
   }
-  
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.processTransferdetailsForm.controls[formControlName].setValue(
+      this.comService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
@@ -291,7 +264,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
-            this.processTransferdetailsForm.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
+            this.processTransferdetailsForm.controls.UNQ_JOB_ID.setValue(data[0].UNQ_JOB_ID)
             this.processTransferdetailsForm.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
             this.processTransferdetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.processTransferdetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
@@ -322,7 +295,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.processTransferdetailsForm.value.subjobno,
+        'strUNQ_JOB_ID': this.processTransferdetailsForm.value.UNQ_JOB_ID,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -333,24 +306,27 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          this.processTransferdetailsForm.controls.processFrom.setValue(data[0].PROCESS)
-          this.processTransferdetailsForm.controls.workerFrom.setValue(data[0].WORKER)
-          this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(
-            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
-          this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(data[0].PCS)
-          this.processTransferdetailsForm.controls.GrossWeightFrom.setValue(data[0].NETWT)
-          this.processTransferdetailsForm.controls.StoneWeightFrom.setValue(data[0].STONE)
-          this.processTransferdetailsForm.controls.PUREWT.setValue(data[0].PUREWT)
-          this.processTransferdetailsForm.controls.PURITY.setValue(data[0].PURITY)
+          this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(data[0].PROCESS)
+          this.processTransferdetailsForm.controls.FRM_WORKER_CODE.setValue(data[0].WORKER)
           this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
           this.processTransferdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
-          this.stockCodeScrapValidate()
           this.processTransferdetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.processTransferdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.processTransferdetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
           this.processTransferdetailsForm.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           this.processTransferdetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
+          this.stockCodeScrapValidate()
           this.fillStoneDetails()
+          
+          this.setValueWithDecimal('MetalWeightFrom',data[0].METAL,'METAL')
+          this.setValueWithDecimal('FromJobPcs',data[0].PCS,'AMOUNT')
+          this.setValueWithDecimal('ToJobPcs',data[0].PCS,'AMOUNT')
+          this.setValueWithDecimal('FRM_METAL_PCS',data[0].PCS,'AMOUNT')
+          this.setValueWithDecimal('GrossWeightFrom',data[0].NETWT,'METAL')
+          this.setValueWithDecimal('StoneWeightFrom',data[0].STONE,'STONE')
+          this.setValueWithDecimal('PUREWT',data[0].PUREWT,'AMOUNT')
+          this.setValueWithDecimal('PURITY',data[0].PURITY,'PURITY')
+          
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -391,10 +367,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let postData = {
       "SPID": "042",
       "parameter": {
-        strJobNumber: this.processTransferdetailsForm.value.jobno,
-        strUnq_Job_Id: this.processTransferdetailsForm.value.subjobno,
-        strProcess_Code: this.processTransferdetailsForm.value.processFrom,
-        strWorker_Code: this.processTransferdetailsForm.value.workerFrom,
+        strJobNumber: this.processTransferdetailsForm.value.JOB_NUMBER,
+        strUnq_Job_Id: this.processTransferdetailsForm.value.UNQ_JOB_ID,
+        strProcess_Code: this.processTransferdetailsForm.value.FRM_PROCESS_CODE,
+        strWorker_Code: this.processTransferdetailsForm.value.FRM_WORKER_CODE,
         strBranch_Code: this.branchCode
       }
     }
@@ -495,57 +471,54 @@ export class ProcessTransferDetailsComponent implements OnInit {
   /**USE set processcode to form */
   setProcessCodeData(Code: string, flag: any) {
     if (flag == 'FROM') {
-      this.processTransferdetailsForm.controls.processFrom.setValue(Code)
+      this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(Code)
     } else {
-      this.processTransferdetailsForm.controls.processTo.setValue(Code)
+      this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(Code)
     }
   }
   /**USE bind selected values*/
   processCodeFromSelected(event: any) {
-    this.processTransferdetailsForm.controls.processFrom.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.PROCESSDESC.setValue(event.Description)
    
   }
   processCodeToSelected(event: any) {
-    this.processTransferdetailsForm.controls.processTo.setValue(event.Process_Code)
-    this.processTransferdetailsForm.controls.processToDescription.setValue(event.Description)
+    this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(event.Description)
    
 
   }
 
   metalprocessCodeFromSelected(event: any) {
-    this.processTransferdetailsForm.controls.METAL_processFrom.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.METAL_FRM_PROCESS_CODE.setValue(event.Process_Code)
   }
   metalprocessCodeToSelected(event: any) {
-    this.processTransferdetailsForm.controls.METAL_processTo.setValue(event.Process_Code)
-    this.processTransferdetailsForm.controls.METAL_processToDescription.setValue(event.Description)
+    this.processTransferdetailsForm.controls.METAL_TO_PROCESS_CODE.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.METAL_TO_PROCESSNAME.setValue(event.Description)
 
   }
 
   workerCodeFromSelected(event: any) {
-    this.processTransferdetailsForm.controls.workerFrom.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.FRM_WORKER_CODE.setValue(event.WORKER_CODE)
   }
   workerCodeToSelected(event: any) {
-    this.processTransferdetailsForm.controls.workerTo.setValue(event.WORKER_CODE)
-    this.processTransferdetailsForm.controls.workerToDescription.setValue(event.DESCRIPTION)
+    this.processTransferdetailsForm.controls.TO_WORKER_CODE.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.TO_WORKER_CODEDescription.setValue(event.DESCRIPTION)
   }
 
   metalworkerCodeFromSelected(event: any) {
-    this.processTransferdetailsForm.controls.METAL_workerFrom.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.METAL_FRM_WORKER_CODE.setValue(event.WORKER_CODE)
   }
   
   metalworkerCodeToSelected(event: any) {
-    this.processTransferdetailsForm.controls.METAL_workerTo.setValue(event.WORKER_CODE)
-    this.processTransferdetailsForm.controls.METAL_workerToDescription.setValue(event.DESCRIPTION)
+    this.processTransferdetailsForm.controls.METAL_TO_WORKER_CODE.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.METAL_TO_WORKER_CODEDescription.setValue(event.DESCRIPTION)
   }
 
   jobNumberSelected(event: any) {
-    this.processTransferdetailsForm.controls.jobno.setValue(event.job_number)
+    this.processTransferdetailsForm.controls.JOB_NUMBER.setValue(event.job_number)
     this.processTransferdetailsForm.controls.jobdes.setValue(event.job_description)
     this.jobNumberValidate({ target: { value: event.job_number } })
-  }
-  removedata() {
-    this.tableData.pop();
   }
   /**USE: SUBMIT detail */
   formSubmit(flag:any) {
@@ -578,9 +551,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setFormValues() {
     if (!this.content) return
-    this.processTransferdetailsForm.controls.jobno.setValue(this.content.JOB_NUMBER)
+    this.processTransferdetailsForm.controls.JOB_NUMBER.setValue(this.content.JOB_NUMBER)
     this.processTransferdetailsForm.controls.jobdes.setValue(this.content.JOB_DESCRIPTION)
-    this.processTransferdetailsForm.controls.subjobno.setValue(this.content.JOB_SO_NUMBER)
+    this.processTransferdetailsForm.controls.UNQ_JOB_ID.setValue(this.content.JOB_SO_NUMBER)
     this.processTransferdetailsForm.controls.approvedby.setValue(this.content.APPROVED_USER)
     this.processTransferdetailsForm.controls.approveddate.setValue(this.content.APPROVED_DATE)
     this.processTransferdetailsForm.controls.startdate.setValue(this.content.IN_DATE)

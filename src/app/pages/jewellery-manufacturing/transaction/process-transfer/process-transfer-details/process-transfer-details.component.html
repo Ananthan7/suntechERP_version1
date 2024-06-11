@@ -45,7 +45,7 @@
                 <mat-form-field style="width: 76%;">
                   <input type="text" matInput
                     (focusout)="jobNumberValidate($event)"
-                    formControlName="jobno" />
+                    formControlName="JOB_NUMBER" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="jobNoSearch"
                   (newRowClick)="jobNumberSelected($event)">
@@ -63,7 +63,7 @@
                 Number</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="subjobno" />
+                  <input type="text" matInput formControlName="UNQ_JOB_ID" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3">
@@ -127,7 +127,7 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'FROM')"
-                              formControlName="processFrom" />
+                              formControlName="FRM_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
@@ -140,7 +140,7 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'TO')"
-                              formControlName="processTo" />
+                              formControlName="TO_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
@@ -155,7 +155,7 @@
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              formControlName="workerFrom" />
+                              formControlName="FRM_WORKER_CODE" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="workerCodeFromSelected($event)">
@@ -166,7 +166,7 @@
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              formControlName="workerTo" />
+                              formControlName="TO_WORKER_CODE" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="workerCodeToSelected($event)">
@@ -179,8 +179,8 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          NumberOnly
-                            formControlName="MetalPcsFrom" />
+                          readonly
+                          formControlName="FRM_METAL_PCS" />
                         </mat-form-field>
                       </td>
                       <td>
@@ -196,7 +196,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            readonly
                             formControlName="MetalWeightFrom" />
                         </mat-form-field>
                       </td>
@@ -217,7 +217,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          NumberOnly
+                          readonly
                             formControlName="FromJobPcs" />
                         </mat-form-field>
                       </td>
@@ -240,7 +240,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            readonly
                             formControlName="GrossWeightFrom" />
                         </mat-form-field>
                       </td>
@@ -302,7 +302,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            formControlName="StonePcsFrom" NumberOnly />
+                            formControlName="StonePcsFrom" readonly />
                         </mat-form-field>
                       </td>
                       <td>
@@ -327,7 +327,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            StoneDecimalInput
+                            readonly
                             formControlName="StoneWeightFrom" />
                         </mat-form-field>
                       </td>
@@ -370,7 +370,7 @@
             </div>
 
           </mat-tab>
-          <!-- Metal TAB section starts -->
+          <!--*** METAL TAB section starts ***-->
           <mat-tab label="Metal Jewellery" *ngIf="designType == 'DIAMOND'">
             <div class="row">
               <div class="p-3">
@@ -403,7 +403,7 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'FROM')"
-                              formControlName="METAL_processFrom" />
+                              formControlName="METAL_FRM_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
@@ -416,7 +416,7 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'TO')"
-                              formControlName="METAL_processTo" />
+                              formControlName="METAL_TO_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
@@ -438,7 +438,7 @@
                         <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              formControlName="METAL_workerFrom" />
+                              formControlName="METAL_FRM_WORKER_CODE" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="metalworkerCodeFromSelected($event)">
@@ -449,7 +449,7 @@
                         <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              formControlName="METAL_workerTo" />
+                              formControlName="METAL_TO_WORKER_CODE" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="metalworkerCodeToSelected($event)">

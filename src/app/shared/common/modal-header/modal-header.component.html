@@ -3,16 +3,14 @@
         <div class="d-flex justify-content-start text-start">
             <div class="p-1" *ngIf="isViewSave">
                 <button type="button" class="btn btn-primary text-center"
-                    *ngIf="editSaveBtnText && editSaveBtnText != ''; else elseBlock"
+                    *ngIf="!isloading; else elseBlock"
                     (click)="saveClicked()">
                     {{editSaveBtnText}}
                 </button>
                 <ng-template #elseBlock>
                     <button type="button" class="btn btn-primary text-center"
-                        [disabled]="disableSaveBtn"
-                        (click)="saveClicked()">
+                        [disabled]="disableSaveBtn">
                         <span class="loader" *ngIf="isloading"></span>       
-                        <span *ngIf="!isloading">Save</span>
                     </button>
                 </ng-template>
             </div>

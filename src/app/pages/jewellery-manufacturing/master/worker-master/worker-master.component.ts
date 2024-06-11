@@ -34,6 +34,7 @@ export class WorkerMasterComponent implements OnInit {
   codeEnable: boolean = true;
   btndisable: boolean = false;
   isDisableSaveBtn: boolean = false;
+  isloading: boolean = false;
   filteredData: any[] = []; // Data source for the filtered grid
   searchTerm: string = '';
 
@@ -259,9 +260,10 @@ export class WorkerMasterComponent implements OnInit {
     }
     let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = this.setPostData()
-
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+      this.isloading = false;
         if (result) {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -282,9 +284,10 @@ export class WorkerMasterComponent implements OnInit {
     this.viewModeBtn = false;
     let API = 'WorkerMaster/UpdateWorkerMaster/' + this.workerMasterForm.value.WorkerCode
     let postData = this.setPostData()
-
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+      this.isloading = false;
         if (result) {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -300,11 +303,9 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   afterSave(value:any){
-    if (value) {
       this.workerMasterForm.reset()
       this.tableData = []
       this.close('reloadMainGrid')
-    }
   }
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
