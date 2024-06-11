@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArrayName, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -434,7 +434,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.codeEnable1 = true;
     this.setInitialValues();
     console.log(this.content)
-    if (this.content.FLAG) {
+    if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
@@ -830,6 +830,7 @@ export class LabourChargeMasterComponent implements OnInit {
           this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = '';
           if (FORMNAME === 'sieve') {
+            console.log(FORMNAME)
             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
           }
           return;
@@ -904,7 +905,7 @@ export class LabourChargeMasterComponent implements OnInit {
     let diamondForm = this.diamondlabourMasterForm.value
     let metalForm = this.metallabourMasterForm.value
     return {
-      "MID": this.content?.MID || 0,
+      "MID":this.content?.MID || 0,
       "SRNO": 0,
       "CODE": this.commonService.nullToString(diamondForm.labour_code),
       "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description),
