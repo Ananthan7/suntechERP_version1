@@ -198,8 +198,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
     let postData = {
           "UNIQUEID": 0,
           "SRNO": 0,
-          "DIVISION_CODE": this.goldExchangeDetailsForm.value.stockType,
-          "STOCK_CODE": this.goldExchangeDetailsForm.value.stockCode,
+          "DIVISION_CODE": this.goldExchangeDetailsForm.value.stockCode ,
+          "STOCK_CODE": this.goldExchangeDetailsForm.value.stockType,
           "PCS": this.goldExchangeDetailsForm.value.pieces,
           "GROSSWT": this.goldExchangeDetailsForm.value.grossWeight,
           "STONEWT": this.goldExchangeDetailsForm.value.stoneWeight,

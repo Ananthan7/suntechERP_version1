@@ -6999,7 +6999,7 @@ export class AddPosComponent implements OnInit {
           this.isNetAmountChange=false;
           this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
           this.setRetailSalesDataPost();
-
+          this.renderer.selectRootElement('#fcn_li_item_code').focus();
           if (btn == 'finish_btn') {
             this.modalReference.close();
           }
