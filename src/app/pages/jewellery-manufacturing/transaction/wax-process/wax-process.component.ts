@@ -102,7 +102,7 @@ export class WaxProcessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    //this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.waxprocessFrom.controls.vocdate.setValue(this.commonService.currentDate)
     this.waxprocessFrom.controls.vocno.setValue('1')
     // console.log(this.branchParmeter);
@@ -286,7 +286,7 @@ export class WaxProcessComponent implements OnInit {
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_STONE_WT": 0,
-      "SMAN": this.waxprocessFrom.value.enteredBy,
+      "SMAN": this.waxprocessFrom.value.enteredBy || "",
       "REMARKS": this.waxprocessFrom.value.remarks,
       "NAVSEQNO": 0,
       "AUTOPOSTING": true,
