@@ -168,16 +168,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
 
   constructor(
-    private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService,
   ) {
-    // this.processTransferdetailsForm = this.formBuilder.group({
-    //   startdate: ['', Validators.required],
-    //   enddate: ['', Validators.required]
-    // }, { validators: this.dateValidator });
-
   }
 
   ngOnInit(): void {

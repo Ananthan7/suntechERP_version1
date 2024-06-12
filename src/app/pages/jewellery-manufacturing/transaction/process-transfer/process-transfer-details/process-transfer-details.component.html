@@ -6,7 +6,10 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit('SAVE')"
+  (continueClick)="formSubmit('CONTINUE')"
+  (cancelClick)="close()"
+  [isViewContinue]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="processTransferdetailsForm">
@@ -179,14 +182,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          readonly
-                          formControlName="FRM_METAL_PCS" />
+                            readonly
+                            formControlName="FRM_METAL_PCS" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="MetalPcsTo" />
                         </mat-form-field>
                       </td>
@@ -217,14 +220,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          readonly
+                            readonly
                             formControlName="FromJobPcs" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="ToJobPcs" />
                         </mat-form-field>
                       </td>
@@ -263,7 +266,7 @@
                       <td>
                         <mat-form-field style="width: 100px;">
                           <input type="text" matInput class="text-right"
-                            formControlName="scrapQuantity" NumberOnly/>
+                            formControlName="scrapQuantity" NumberOnly />
                         </mat-form-field>
                       </td>
                       <!-- location -->
@@ -317,7 +320,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                          NumberOnly
+                            NumberOnly
                             formControlName="StoneWeightTo" />
                         </mat-form-field>
                       </td>
@@ -760,13 +763,15 @@
                 %</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput readonly formControlName="variance"
-                    class="text-right" AmountDecimalInput [max]="3"/>
+                  <input type="text" matInput readonly
+                    formControlName="variance"
+                    class="text-right" AmountDecimalInput [max]="3" />
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput readonly formControlName="variance"
+                  <input type="text" matInput readonly
+                    formControlName="variance"
                     class="text-right" />
                 </mat-form-field>
               </div>
