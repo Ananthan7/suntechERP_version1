@@ -254,7 +254,7 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   onSievetto(event: any) {
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
+    if (this.stonePrizeMasterForm.value.sieve_from_desc > this.stonePrizeMasterForm.value.sieve_to_desc) {
       Swal.fire({
         title: event.message || ' Sieve To Should be greater than the Sieve From',
         text: '',

@@ -579,7 +579,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
     this.metallabourMasterForm.controls.forDesignOnly.setValue(this.viewchangeYorN(this.content.FOR_DESIGN));
     this.metallabourMasterForm.controls.onGrossWt.setValue(this.viewchangeYorN(this.content.ON_GROSSWT));
-    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
+  //  this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.COST_RATE);
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
     this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
     this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
@@ -597,7 +597,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metalcost_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.LAST_COST_RATE));
+        this.content.COST_RATE));
 
     this.metallabourMasterForm.controls.metalselling.setValue(
       this.commonService.transformDecimalVB(
@@ -882,7 +882,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": this.commonService.nullToString(metalForm.labourAc),
-      "DIVISION_CODE": this.commonService.nullToString(metalForm.metalDivision),
+      "DIVISION_CODE": this.commonService.nullToString(metalForm.metalDivision).toUpperCase(),
       "CURRENCY_CODE": this.commonService.nullToString(metalForm.metalcurrency),
       "SELLING_PER": this.commonService.emptyToZero(metalForm.metalSelling),
       "ACCESSORIES": 0,
