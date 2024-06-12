@@ -216,8 +216,8 @@ export class MetalPrefixMasterComponent implements OnInit {
   }
   setPostData(){
     return{
-    "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
-    "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
+    "PREFIX_CODE": this.metalprefixForm.value.prefixcode?.toUpperCase(),
+    "DESCRIPTION": this.metalprefixForm.value.prefixcodedes?.toUpperCase(),
     "LAST_NO":this.metalprefixForm.value.lastno,
     "CURRENCY_CODE": this.commonService.nullToString(this.metalprefixForm.value.currency),
     "CONV_RATE": this.commonService.emptyToZero(this.metalprefixForm.value.currencyRate),

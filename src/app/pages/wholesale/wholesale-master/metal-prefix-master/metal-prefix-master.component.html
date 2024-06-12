@@ -23,9 +23,10 @@
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput
-                            formControlName="prefixcode"
+                            formControlName="prefixcode" #prefixcode
                             (focusout)="checkCodeExists($event)"
-                            oninput="this.value = this.value.toUpperCase()"
+                            UpperCaseDirective
+                            (input)="prefixcode.value = prefixcode.value.toUpperCase()"
                             maxlength="6" [readonly]="editableMode || viewMode"
                             [disabled]="viewMode" />
                         </mat-form-field>

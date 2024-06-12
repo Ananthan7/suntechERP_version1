@@ -330,7 +330,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
                                             style="text-align: right;"
-                                            [readonly]="viewMode"
+                                            [readonly]="viewMode || lossDisable"
                                             formControlName="standard_end"
                                             [max]="3" AmountDecimalInput
                                             [readonly]="isRecovReadOnly"
@@ -360,7 +360,8 @@
                                             formControlName="min_end"
                                             [max]="3" AmountDecimalInput
                                             tabindex="18"
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly" 
+                                            [readonly]="viewMode || lossDisable"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -410,12 +411,12 @@
                                             (change)="checkAccodeSelected($event,'RECOV_ACCODE')"
                                             (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
-                                            [readonly]="isRecovReadOnly"
+                                            [readonly]="isRecovReadOnly || lossDisable"   
                                             tabindex="19" />
                                     </mat-form-field>
                                     <master-search
                                         [MasterSearchData]="RecovACCODEData"
-                                        *ngIf="!viewMode && searchModeRecov"
+                                        *ngIf="!viewMode && searchModeRecov && searchModeLoss"
                                         (newRowClick)="RECOV_ACCODESelected($event)">
                                     </master-search>
                                 </div>

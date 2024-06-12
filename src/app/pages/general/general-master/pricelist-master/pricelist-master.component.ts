@@ -94,6 +94,7 @@ export class PricelistMasterComponent implements OnInit {
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.codeEnable = false;
+       
         this.roundoffDis()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -108,6 +109,8 @@ export class PricelistMasterComponent implements OnInit {
     this.priceListMasterForm.controls.priceCode.setValue(this.content.PRICE_CODE);
     this.priceListMasterForm.controls.description.setValue(this.content.DESCRIPTION);
     this.priceListMasterForm.controls.priceMethod.setValue(this.content.PRICE_METHOD);
+    this.priceListMasterForm.controls.priceSign.setValue(this.content.PRICE_SIGN);
+    this.priceListMasterForm.controls.priceSign.setValue(this.content.PRICE_SIGN);
     this.priceListMasterForm.controls.finalPriceSign.setValue(this.content.FINALPRICE_SIGN);
     this.priceListMasterForm.controls.addlValueSign.setValue(this.content.ADDLVALUE_SIGN);
     this.priceListMasterForm.controls.roundoff_digit.setValue(this.content.ROUNDOFF_DIGIT);
@@ -426,6 +429,7 @@ export class PricelistMasterComponent implements OnInit {
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.required = false;
         this.viewMode = false;
+       
 
         this.priceListMasterForm.controls.priceSign.disable();
         //  this.priceListMasterForm.controls.priceValue.disable();
