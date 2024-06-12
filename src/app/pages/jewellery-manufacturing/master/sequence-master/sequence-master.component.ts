@@ -25,6 +25,7 @@ export class SequenceMasterComponent implements OnInit {
   showHeaderFilter!: boolean;
   selectAll: boolean = false;
   viewMode: boolean = false;
+  calculateProcessDisable: boolean = true;
   codeEnable: boolean = true;
   editMode: boolean = false;
   checkCondtion: boolean = false;
@@ -152,6 +153,11 @@ export class SequenceMasterComponent implements OnInit {
             item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
             item.isChecked = false
             item.orderId = this.dataSource.length
+            if(Number(item.MAX_TIME) > 0 || Number(item.MAX_TIME) > 0){
+              item.TIMEON_PROCESS = true
+            }else{
+              item.TIMEON_PROCESS = false
+            }
           })
 
           if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
@@ -164,7 +170,11 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-
+  calculateProcessChange(event:any){
+    if(event.checked){
+      this.calculateProcessDisable = false;
+    }
+  }
 
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
@@ -199,6 +209,7 @@ export class SequenceMasterComponent implements OnInit {
   // use: check sequence exists and fill grid
   checkSequenceExists() {
     if (this.sequenceMasterForm.value.sequenceCode == '') return
+    this.commonService.toastInfoByMsgId('Loading..');
     let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + this.sequenceMasterForm.value.sequenceCode
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -214,17 +225,17 @@ export class SequenceMasterComponent implements OnInit {
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
                 obj.STD_TIME = Number(item.STD_TIME),
-                obj.MAX_TIME = Number(item.MAX_TIME),
-                obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                obj.POINTS = item.POINTS || 0,
-                obj.GAIN_ACCODE = "",
-                obj.GAIN_AC = this.commonService.nullToString(item.GAIN_AC),
-                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                  obj.MAX_TIME = Number(item.MAX_TIME),
+                  obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
+                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
+                  obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
+                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                  obj.POINTS = item.POINTS || 0,
+                  obj.GAIN_ACCODE = "",
+                  obj.GAIN_AC = this.commonService.nullToString(item.GAIN_AC),
+                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
             });
@@ -315,6 +326,16 @@ export class SequenceMasterComponent implements OnInit {
     }
     return false;
   }
+  setPostData(form: any) {
+    return {
+      "SEQ_CODE": this.commonService.nullToString(form.sequenceCode?.toUpperCase()),
+      "DESCRIPTION": this.commonService.nullToString(form.sequenceDESCRIPTION?.toUpperCase()),
+      "PRINT_COUNT": 0,
+      "PREFIX_CODE": this.commonService.nullToString(form.sequencePrefixCode?.toUpperCase()),
+      "MID": this.content?.MID || 0,
+      "sequenceDetails": this.setSelectedSequence() || []
+    }
+  }
   /**USE:  final save API call*/
   formSubmit() {
     if (this.content?.FLAG == 'VIEW') return
@@ -328,14 +349,7 @@ export class SequenceMasterComponent implements OnInit {
       return
     }
     let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
-    let postData = {
-      "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode.toUpperCase() || "",
-      "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION.toUpperCase() || "",
-      "PRINT_COUNT": 0,
-      "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode.toUpperCase() || "",
-      "MID": 0,
-      "sequenceDetails": this.setSelectedSequence() || []
-    }
+    let postData = this.setPostData(this.sequenceMasterForm.value)
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -364,14 +378,7 @@ export class SequenceMasterComponent implements OnInit {
 
   updateWorkerMaster() {
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
-    let postData = {
-      "SEQ_CODE": this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode),
-      "DESCRIPTION": this.commonService.nullToString(this.sequenceMasterForm.value.sequenceDESCRIPTION),
-      "PRINT_COUNT": 0,
-      "PREFIX_CODE": this.commonService.nullToString(this.sequenceMasterForm.value.sequencePrefixCode),
-      "MID": this.sequenceMasterForm.value.mid || 0,
-      "sequenceDetails": this.setSelectedSequence() || []
-    }
+    let postData = this.setPostData(this.sequenceMasterForm.value)
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -396,19 +403,19 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if(data.length==0){
+        if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.sequenceMasterForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
@@ -489,7 +496,7 @@ export class SequenceMasterComponent implements OnInit {
       item.isChecked = event.target.checked
     })
   }
-  codeValidate(){
+  codeValidate() {
     if (this.sequenceMasterForm.value.sequenceCode == "") {
       Swal.fire({
         title: '',
@@ -510,21 +517,21 @@ export class SequenceMasterComponent implements OnInit {
   }
   /**use: checkbox change order*/
   changedCheckbox(dataSelected: any) {
-    if(this.codeValidate()) return;
+    if (this.codeValidate()) return;
     this.processSearch = ''
     this.dataSource = this.tableData;
     console.log(dataSelected);
-    
+
     this.dataSource.forEach((item: any, index: number) => {
       if (dataSelected.MID == item.MID) {
         item.isChecked = dataSelected.isChecked
         item.orderId = index + 1
-        if(item.orderId == this.dataSource.length){
+        if (item.orderId == this.dataSource.length) {
           item.orderId = index
         }
       }
     })
-    
+
     if (dataSelected.isChecked == false) {
       const index = this.selectedSequence.indexOf(dataSelected);
       this.selectedSequence.splice(index, 1); // Remove the item from its current position
@@ -534,9 +541,9 @@ export class SequenceMasterComponent implements OnInit {
         }
       })
     }
-    
+
     this.dataSource.sort((a, b) => a.orderId - b.orderId);
-    console.log(this.dataSource,'dataSource');
+    console.log(this.dataSource, 'dataSource');
     this.reCalculateSRNO()
   }
   /**USE: set Selected Sequence data */

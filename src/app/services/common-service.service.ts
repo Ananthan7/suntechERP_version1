@@ -293,7 +293,7 @@ export class CommonServiceService {
     })
   }
   toastInfoByMsgId(MsgId: string, Description?: string) {
-    this.toastr.info(this.getMsgByID(MsgId), Description ? Description : '', {
+    this.toastr.info(this.getMsgByID(MsgId) || MsgId, Description ? Description : '', {
       timeOut: 3000,
     })
   }

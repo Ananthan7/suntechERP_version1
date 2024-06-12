@@ -257,154 +257,7 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
-
-
-  setLabourChargeDetails() {
-    let detailScreenData = this.detailData[0].DATA
-    detailScreenData = detailScreenData.PROCESS_FORMDETAILS
-
-    this.LabourChargeDetailsToSave.push({
-      "REFMID": 0,
-      "BRANCH_CODE": this.commonService.branchCode,
-      "YEARMONTH": this.commonService.yearSelected,
-      "VOCTYPE": this.processTransferFrom.value.voctype,
-      "VOCNO": 0,
-      "SRNO": 0,
-      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.JOB_NUMBER),
-      "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
-      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.UNQ_JOB_ID),
-      "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
-      "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "LABOUR_CODE": "",
-      "LAB_RATE": 0,
-      "LAB_ACCODE": "",
-      "LAB_AMTFC": 0,
-      "UNITCODE": ""
-    })
-  }
-  /**USE: set details from detail screen */
-  setDataFromDetailScreen() {
-    console.log(this.detailData, 'this.detailData');
-
-    let detailScreenData = this.detailData[0].DATA
-    let PROCESS_FORMDETAILS = detailScreenData.PROCESS_FORMDETAILS
-    let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
-    let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
-    let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
-    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.FRM_PROCESS_CODE);
-
-    METAL_DETAIL_GRID.forEach((element: any) => {
-      this.metalGridDataToSave.push({
-        "VOCNO": 0,
-        "VOCTYPE": this.processTransferFrom.value.voctype,
-        "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
-        "JOB_NUMBER": this.commonService.nullToString(PROCESS_FORMDETAILS.JOB_NUMBER),
-        "JOB_SO_NUMBER": this.commonService.emptyToZero(PROCESS_FORMDETAILS.JOB_SO_NUMBER),
-        "UNQ_JOB_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_JOB_ID),
-        "JOB_DESCRIPTION": this.commonService.nullToString(PROCESS_FORMDETAILS.subJobDescription),
-        "BRANCH_CODE": this.commonService.branchCode,
-        "DESIGN_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.DESIGN_CODE),
-        "METALSTONE": this.commonService.nullToString(element.METALSTONE),
-        "DIVCODE": this.commonService.nullToString(element.DIVCODE),
-        "STOCK_CODE": this.commonService.nullToString(element.STOCK_CODE),
-        "STOCK_DESCRIPTION": this.commonService.nullToString(element.STOCK_DESCRIPTION),
-        "COLOR": this.commonService.nullToString(element.COLOR),
-        "CLARITY": this.commonService.nullToString(element.CLARITY),
-        "SHAPE": this.commonService.nullToString(element.SHAPE),
-        "SIZE": this.commonService.nullToString(element.SIZE),
-        "PCS": this.commonService.emptyToZero(element.PCS),
-        "GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
-        "STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
-        "NET_WT": this.commonService.emptyToZero(element.NET_WT),
-        "RATE": this.commonService.emptyToZero(element.RATE),
-        "AMOUNT": this.commonService.emptyToZero(element.AMOUNTFC),
-        "PROCESS_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_PROCESS_CODE),
-        "WORKER_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_WORKER_CODE),
-        "UNQ_DESIGN_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_DESIGN_ID),
-        "REFMID": 0,
-        "AMOUNTLC": this.commonService.emptyToZero(element.AMOUNTLC),
-        "AMOUNTFC": this.commonService.emptyToZero(element.AMOUNTFC),
-        "WASTAGE_QTY": 0,
-        "WASTAGE_PER": 0,
-        "WASTAGE_AMT": 0,
-        "CURRENCY_CODE": this.commonService.nullToString(element.CURRENCY_CODE),
-        "CURRENCY_RATE": this.commonService.getCurrRate(element.CURRENCY_CODE),
-        "YEARMONTH": this.commonService.yearSelected,
-        "LOSS_QTY": this.commonService.emptyToZero(PROCESS_FORMDETAILS.stdLoss),
-        "LABOUR_CODE": this.commonService.nullToString(element.lab_accode),
-        "LAB_RATE": this.commonService.emptyToZero(element.LAB_RATE),
-        "LAB_AMT": this.commonService.emptyToZero(element.LAB_AMT),
-        "BRKSTN_STOCK_CODE": "",
-        "BRKSTN_DIVISION_CODE": "",
-        "BRKSTN_WEIGHT": 0,
-        "BRKSTN_RATEFC": 0,
-        "BRKSTN_RATELC": 0,
-        "BRKSTN_AMTFC": 0,
-        "BRKSTN_AMTLC": 0,
-        "MAIN_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_WORKER_CODE),
-        "FRM_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_WORKER_CODE),
-        "FRM_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_PROCESS_CODE),
-        "CRACCODE": "",
-        "LAB_ACCODE": this.commonService.nullToString(element.lab_accode),
-        "LAB_AMTFC": this.commonService.emptyToZero(element.LAB_AMT),
-        "TO_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_PROCESS_CODE),
-        "TO_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_WORKER_CODE),
-        "LAB_RATEFC": this.commonService.emptyToZero(element.LAB_RATE),
-        "RATEFC": this.commonService.emptyToZero(element.RATEFC),
-        "PRINTED": true,
-        "PUREWT": this.commonService.emptyToZero((element.NET_WT) * (element.PURITY)),
-        "PURITY": this.commonService.emptyToZero(element.PURITY),
-        "SQLID": "",
-        "ISBROCKEN": 0,
-        "TREE_NO": '',
-        "SETTED": element.SETTED_FLAG,
-        "SETTED_PCS": this.commonService.emptyToZero(element.Setted),
-        "SIEVE": this.commonService.nullToString(element.SIEVE),
-        "FULL_RECOVERY": 0,
-        "RECOVERY_DATE": "2023-10-21T07:24:35.989Z",
-        "RECOV_LOSS": 0,
-        "RECOV_LOSS_PURE": 0,
-        "BROKENSTONE_PCS": 0,
-        "BROKENSTONE_WT": 0,
-        "ISMISSING": 0,
-        "PROCESS_TYPE": "",
-        "IS_AUTHORISE": false,
-        "SUB_STOCK_CODE": this.commonService.nullToString(element.SUB_STOCK_CODE),
-        "KARAT_CODE": this.commonService.nullToString(element.KARAT_CODE),
-        "SIEVE_SET": this.commonService.nullToString(element.SIEVE_SET),
-        "SCRAP_STOCK_CODE": this.checkScrapStockCode(detailScreenData.stockCode, element.STOCK_CODE, element.METALSTONE),
-        "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.MAIN_STOCK_CODE),
-        "SCRAP_PURITY": this.commonService.emptyToZero(detailScreenData.SCRAP_PURITY),
-        "SCRAP_WT": this.commonService.emptyToZero(detailScreenData.scrapQuantity),
-        "SCRAP_PURE_WT": this.commonService.emptyToZero(scrapPureWt),
-        "SCRAP_PUDIFF": this.commonService.emptyToZero((Number(detailScreenData.scrapQuantity) - Number(detailScreenData.PURITY)) * scrapPureWt),
-        "SCRAP_ACCODE": seqData.length > 0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
-        "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-        "ISSUE_GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
-        "ISSUE_STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
-        "ISSUE_NET_WT": this.commonService.emptyToZero(element.NET_WT),
-        "JOB_PCS": 1,
-        "DESIGN_TYPE": this.commonService.nullToString(detailScreenData.DESIGN_TYPE),
-        "TO_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_ToStockCode),
-        "FROM_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_FromStockCode),
-        "FROM_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.SUB_STOCK_CODE),
-        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY * detailScreenData.PURITY),
-        "EXCLUDE_TRANSFER_WT": detailScreenData.EXCLUDE_TRANSFER_WT,
-        "IRON_WT": this.commonService.emptyToZero(element.IRON_WT),
-        "IRON_SCRAP_WT": this.commonService.emptyToZero(detailScreenData.METAL_ToIronScrapWt),
-        "GAIN_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainGrWt),
-        "GAIN_PURE_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainPureWt),
-        "IS_REJECT": true,
-        "REASON": "",
-        "REJ_REMARKS": "",
-        "ATTACHMENT_FILE": "",
-        "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
-        "PUREWTTEMP": 0
-      })
-    });
-  }
+  
   checkScrapStockCode(stockCode: any, GridstockCode: any, METALSTONE: any) {
     try {
       if (stockCode == GridstockCode && METALSTONE.toUpperCase() == 'M') return stockCode;
@@ -454,6 +307,132 @@ export class ProcessTransferComponent implements OnInit {
       default:
         return 0;
     }
+  }
+
+  private calculateIronScrapWeight(data: any): number {
+    let toIronScrapWt = (this.commonService.emptyToZero(data.METAL_FromIronWeight) + this.commonService.emptyToZero(data.METAL_FromNetWeight))
+    toIronScrapWt = toIronScrapWt * (this.commonService.emptyToZero(data.METAL_ScrapGrWt) - this.commonService.emptyToZero(data.METAL_ScrapStoneWt));
+    toIronScrapWt = this.commonService.emptyToZero(data.METAL_FromIronWeight) / this.commonService.emptyToZero(data.METAL_ToIronScrapWt)
+    return this.commonService.emptyToZero(toIronScrapWt)
+  }
+  //calculate Loss Pure Qty
+  private calculateLossPureQty(detailScreenData: any): number {
+    detailScreenData.stdLoss = this.commonService.emptyToZero(detailScreenData.stdLoss);
+    detailScreenData.PURITY = this.commonService.emptyToZero(detailScreenData.PURITY);
+    let value = detailScreenData.stdLoss * detailScreenData.PURITY
+    return this.commonService.emptyToZero(value)
+  }
+
+  // submit save click
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updatePTF()
+      return
+    }
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all required fields')
+      return
+    }
+
+    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
+    let postData = this.setPostData(this.processTransferFrom.value)
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  // update API call
+  updatePTF() {
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all required fields')
+      return
+    }
+
+    let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/' +
+      this.processTransferFrom.value.BRANCH_CODE + '/' +
+      this.processTransferFrom.value.voctype + '/' +
+      this.processTransferFrom.value.vocno + '/' +
+      this.processTransferFrom.value.YEARMONTH
+    let postData = this.setPostData(this.processTransferFrom.value)
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  // use to set payload data
+  setPostData(form: any) {
+    let detailScreenData = this.detailData[0].DATA;
+    detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
+    return {
+      "MID": 0,
+      "VOCTYPE": this.commonService.nullToString(form.voctype),
+      "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+      "VOCNO": this.commonService.nullToString(form.vocno),
+      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.vocdate)),
+      "YEARMONTH": this.commonService.nullToString(this.yearMonth),
+      "DOCTIME": this.commonService.formatDateTime(this.currentDate),
+      "SMAN": this.commonService.nullToString(form.salesman),
+      "REMARKS": this.commonService.nullToString(form.Narration),
+      "CURRENCY_CODE": this.commonService.nullToString(form.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.currencyrate),
+      "NAVSEQNO": this.commonService.yearSelected,
+      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
+      "AUTOPOSTING": false,
+      "POSTDATE": "",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
+      "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
+      "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
+      "JOB_PROCESS_TRN_LABCHRG_DJ": this.LabourChargeDetailsToSave // labour charge details
+    }
+  }
+  setLabourChargeDetails() {
+    let detailScreenData = this.detailData[0].DATA
+    detailScreenData = detailScreenData.PROCESS_FORMDETAILS
+
+    this.LabourChargeDetailsToSave.push({
+      "REFMID": 0,
+      "BRANCH_CODE": this.commonService.branchCode,
+      "YEARMONTH": this.commonService.yearSelected,
+      "VOCTYPE": this.processTransferFrom.value.voctype,
+      "VOCNO": 0,
+      "SRNO": 0,
+      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.JOB_NUMBER),
+      "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
+      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.UNQ_JOB_ID),
+      "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
+      "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAB_AMTFC": 0,
+      "UNITCODE": ""
+    })
   }
   setHeaderGridDetails() {
     let dataFromParent = this.detailData[0].DATA;
@@ -611,107 +590,127 @@ export class ProcessTransferComponent implements OnInit {
       "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z"
     })
   }
-  private calculateIronScrapWeight(data: any): number {
-    let toIronScrapWt = (this.commonService.emptyToZero(data.METAL_FromIronWeight) + this.commonService.emptyToZero(data.METAL_FromNetWeight))
-    toIronScrapWt = toIronScrapWt * (this.commonService.emptyToZero(data.METAL_ScrapGrWt) - this.commonService.emptyToZero(data.METAL_ScrapStoneWt));
-    toIronScrapWt = this.commonService.emptyToZero(data.METAL_FromIronWeight) / this.commonService.emptyToZero(data.METAL_ToIronScrapWt)
-    return this.commonService.emptyToZero(toIronScrapWt)
-  }
-  //calculate Loss Pure Qty
-  private calculateLossPureQty(detailScreenData: any): number {
-    detailScreenData.stdLoss = this.commonService.emptyToZero(detailScreenData.stdLoss);
-    detailScreenData.PURITY = this.commonService.emptyToZero(detailScreenData.PURITY);
-    let value = detailScreenData.stdLoss * detailScreenData.PURITY
-    return this.commonService.emptyToZero(value)
-  }
-  // use to set payload data
-  setPostData(form: any) {
-    let detailScreenData = this.detailData[0].DATA;
-    detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
-    return {
-      "MID": 0,
-      "VOCTYPE": this.commonService.nullToString(form.voctype),
-      "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "VOCNO": this.commonService.nullToString(form.vocno),
-      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.vocdate)),
-      "YEARMONTH": this.commonService.nullToString(this.yearMonth),
-      "DOCTIME": this.commonService.formatDateTime(this.currentDate),
-      "SMAN": this.commonService.nullToString(form.salesman),
-      "REMARKS": this.commonService.nullToString(form.Narration),
-      "CURRENCY_CODE": this.commonService.nullToString(form.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(form.currencyrate),
-      "NAVSEQNO": this.commonService.yearSelected,
-      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
-      "AUTOPOSTING": false,
-      "POSTDATE": "",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
-      "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
-      "JOB_PROCESS_TRN_LABCHRG_DJ": this.LabourChargeDetailsToSave // labour charge details
-    }
-  }
-  // submit save click
-  formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.updatePTF()
-      return
-    }
-    if (this.processTransferFrom.invalid) {
-      this.commonService.toastErrorByMsgId('select all required fields')
-      return
-    }
+  /**USE: set details from detail screen */
+  setDataFromDetailScreen() {
+    console.log(this.detailData, 'this.detailData');
 
-    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
-    let postData = this.setPostData(this.processTransferFrom.value)
-    this.commonService.showSnackBarMsg('MSG81447');
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        if (result.response && result.status == "Success") {
-          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.commonService.closeSnackBarMsg()
-        this.commonService.toastErrorByMsgId('MSG1531')
+    let detailScreenData = this.detailData[0].DATA
+    let PROCESS_FORMDETAILS = detailScreenData.PROCESS_FORMDETAILS
+    let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
+    let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
+    let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.FRM_PROCESS_CODE);
+
+    METAL_DETAIL_GRID.forEach((element: any) => {
+      this.metalGridDataToSave.push({
+        "VOCNO": 0,
+        "VOCTYPE": this.processTransferFrom.value.voctype,
+        "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
+        "JOB_NUMBER": this.commonService.nullToString(PROCESS_FORMDETAILS.JOB_NUMBER),
+        "JOB_SO_NUMBER": this.commonService.emptyToZero(PROCESS_FORMDETAILS.JOB_SO_NUMBER),
+        "UNQ_JOB_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_JOB_ID),
+        "JOB_DESCRIPTION": this.commonService.nullToString(PROCESS_FORMDETAILS.subJobDescription),
+        "BRANCH_CODE": this.commonService.branchCode,
+        "DESIGN_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.DESIGN_CODE),
+        "METALSTONE": this.commonService.nullToString(element.METALSTONE),
+        "DIVCODE": this.commonService.nullToString(element.DIVCODE),
+        "STOCK_CODE": this.commonService.nullToString(element.STOCK_CODE),
+        "STOCK_DESCRIPTION": this.commonService.nullToString(element.STOCK_DESCRIPTION),
+        "COLOR": this.commonService.nullToString(element.COLOR),
+        "CLARITY": this.commonService.nullToString(element.CLARITY),
+        "SHAPE": this.commonService.nullToString(element.SHAPE),
+        "SIZE": this.commonService.nullToString(element.SIZE),
+        "PCS": this.commonService.emptyToZero(element.PCS),
+        "GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
+        "STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
+        "NET_WT": this.commonService.emptyToZero(element.NET_WT),
+        "RATE": this.commonService.emptyToZero(element.RATE),
+        "AMOUNT": this.commonService.emptyToZero(element.AMOUNTFC),
+        "PROCESS_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_PROCESS_CODE),
+        "WORKER_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_WORKER_CODE),
+        "UNQ_DESIGN_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_DESIGN_ID),
+        "REFMID": 0,
+        "AMOUNTLC": this.commonService.emptyToZero(element.AMOUNTLC),
+        "AMOUNTFC": this.commonService.emptyToZero(element.AMOUNTFC),
+        "WASTAGE_QTY": 0,
+        "WASTAGE_PER": 0,
+        "WASTAGE_AMT": 0,
+        "CURRENCY_CODE": this.commonService.nullToString(element.CURRENCY_CODE),
+        "CURRENCY_RATE": this.commonService.getCurrRate(element.CURRENCY_CODE),
+        "YEARMONTH": this.commonService.yearSelected,
+        "LOSS_QTY": this.commonService.emptyToZero(PROCESS_FORMDETAILS.stdLoss),
+        "LABOUR_CODE": this.commonService.nullToString(element.lab_accode),
+        "LAB_RATE": this.commonService.emptyToZero(element.LAB_RATE),
+        "LAB_AMT": this.commonService.emptyToZero(element.LAB_AMT),
+        "BRKSTN_STOCK_CODE": "",
+        "BRKSTN_DIVISION_CODE": "",
+        "BRKSTN_WEIGHT": 0,
+        "BRKSTN_RATEFC": 0,
+        "BRKSTN_RATELC": 0,
+        "BRKSTN_AMTFC": 0,
+        "BRKSTN_AMTLC": 0,
+        "MAIN_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_WORKER_CODE),
+        "FRM_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_WORKER_CODE),
+        "FRM_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.FRM_PROCESS_CODE),
+        "CRACCODE": "",
+        "LAB_ACCODE": this.commonService.nullToString(element.lab_accode),
+        "LAB_AMTFC": this.commonService.emptyToZero(element.LAB_AMT),
+        "TO_PROCESS": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_PROCESS_CODE),
+        "TO_WORKER": this.commonService.nullToString(PROCESS_FORMDETAILS.TO_WORKER_CODE),
+        "LAB_RATEFC": this.commonService.emptyToZero(element.LAB_RATE),
+        "RATEFC": this.commonService.emptyToZero(element.RATEFC),
+        "PRINTED": true,
+        "PUREWT": this.commonService.emptyToZero((element.NET_WT) * (element.PURITY)),
+        "PURITY": this.commonService.emptyToZero(element.PURITY),
+        "SQLID": "",
+        "ISBROCKEN": 0,
+        "TREE_NO": '',
+        "SETTED": element.SETTED_FLAG,
+        "SETTED_PCS": this.commonService.emptyToZero(element.Setted),
+        "SIEVE": this.commonService.nullToString(element.SIEVE),
+        "FULL_RECOVERY": 0,
+        "RECOVERY_DATE": "2023-10-21T07:24:35.989Z",
+        "RECOV_LOSS": 0,
+        "RECOV_LOSS_PURE": 0,
+        "BROKENSTONE_PCS": 0,
+        "BROKENSTONE_WT": 0,
+        "ISMISSING": 0,
+        "PROCESS_TYPE": "",
+        "IS_AUTHORISE": false,
+        "SUB_STOCK_CODE": this.commonService.nullToString(element.SUB_STOCK_CODE),
+        "KARAT_CODE": this.commonService.nullToString(element.KARAT_CODE),
+        "SIEVE_SET": this.commonService.nullToString(element.SIEVE_SET),
+        "SCRAP_STOCK_CODE": this.checkScrapStockCode(detailScreenData.stockCode, element.STOCK_CODE, element.METALSTONE),
+        "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.MAIN_STOCK_CODE),
+        "SCRAP_PURITY": this.commonService.emptyToZero(detailScreenData.SCRAP_PURITY),
+        "SCRAP_WT": this.commonService.emptyToZero(detailScreenData.scrapQuantity),
+        "SCRAP_PURE_WT": this.commonService.emptyToZero(scrapPureWt),
+        "SCRAP_PUDIFF": this.commonService.emptyToZero((Number(detailScreenData.scrapQuantity) - Number(detailScreenData.PURITY)) * scrapPureWt),
+        "SCRAP_ACCODE": seqData.length > 0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
+        "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
+        "ISSUE_GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
+        "ISSUE_STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
+        "ISSUE_NET_WT": this.commonService.emptyToZero(element.NET_WT),
+        "JOB_PCS": 1,
+        "DESIGN_TYPE": this.commonService.nullToString(detailScreenData.DESIGN_TYPE),
+        "TO_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_ToStockCode),
+        "FROM_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_FromStockCode),
+        "FROM_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.SUB_STOCK_CODE),
+        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY * detailScreenData.PURITY),
+        "EXCLUDE_TRANSFER_WT": detailScreenData.EXCLUDE_TRANSFER_WT,
+        "IRON_WT": this.commonService.emptyToZero(element.IRON_WT),
+        "IRON_SCRAP_WT": this.commonService.emptyToZero(detailScreenData.METAL_ToIronScrapWt),
+        "GAIN_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainGrWt),
+        "GAIN_PURE_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainPureWt),
+        "IS_REJECT": true,
+        "REASON": "",
+        "REJ_REMARKS": "",
+        "ATTACHMENT_FILE": "",
+        "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
+        "PUREWTTEMP": 0
       })
-    this.subscriptions.push(Sub)
+    });
   }
-  // update API call
-  updatePTF() {
-    if (this.processTransferFrom.invalid) {
-      this.commonService.toastErrorByMsgId('select all required fields')
-      return
-    }
-
-    let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/' +
-      this.processTransferFrom.value.BRANCH_CODE + '/' +
-      this.processTransferFrom.value.voctype + '/' +
-      this.processTransferFrom.value.vocno + '/' +
-      this.processTransferFrom.value.YEARMONTH
-    let postData = this.setPostData(this.processTransferFrom.value)
-    this.commonService.showSnackBarMsg('MSG81447');
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        if (result.response && result.status == "Success") {
-          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.commonService.closeSnackBarMsg()
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
-
-
-
   deleteTableData(): void {
     if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
       this.commonService.toastErrorByMsgId('Please select row to remove from grid!')
