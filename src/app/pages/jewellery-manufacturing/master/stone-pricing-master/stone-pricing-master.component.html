@@ -105,7 +105,7 @@
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="sieve_to"
-                                                (change)="onSievetto($event)" (input)="inputValidate($event)"
+                                               (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sievetoData,'sieve_to')"/>
                                         </mat-form-field>
@@ -258,6 +258,7 @@
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text" matInput
+                                            (change)="onSievetto($event)"
                                                 formControlName="sieve_to_desc"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>

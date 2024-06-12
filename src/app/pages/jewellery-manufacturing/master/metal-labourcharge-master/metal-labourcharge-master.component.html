@@ -28,8 +28,7 @@
                                 [readonly]="viewMode"
                                 maxlength="1" formControlName="metalDivision"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
-                               
-                                appNoEmptySpace (input)="inputValidate($event)"
+                                 (input)="inputValidate($event)"
                                 UpperCaseDirective />
                         </mat-form-field>
                         <master-search
@@ -306,7 +305,7 @@
                                 MetalDecimalInput
                                 formControlName="wtFrom"
                                 class="text-right"
-                                maxlength="2"
+                                [max]="2"
                                 (keyup)="WtcodeEnabled()" />
                         </mat-form-field>
                     </div>
@@ -319,7 +318,7 @@
                             <input matInput type="text"
                                 [readonly]="viewMode  || codeEnable1 || codeEnableMetal"
                                 matInput
-                                maxlength="2"
+                                [max]="2"
                                 MetalDecimalInput
                                 (change)="onweightto($event,'wtto')"
                                 formControlName="wtTo" class="text-right" />
