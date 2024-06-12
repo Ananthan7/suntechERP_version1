@@ -140,13 +140,6 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.voctype.setValue(
       this.commonService.getqueryParamVocType()
     )
-    if (!this.content) return
-    this.processTransferFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.processTransferFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.processTransferFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.processTransferFrom.controls.salesman.setValue(this.content.SMAN)
-    this.processTransferFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -637,16 +630,16 @@ export class ProcessTransferComponent implements OnInit {
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
     return {
       "MID": 0,
-      "VOCTYPE": this.commonService.nullToString(form.value.voctype),
+      "VOCTYPE": this.commonService.nullToString(form.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "VOCNO": this.commonService.nullToString(form.value.vocno),
-      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.value.vocdate)),
+      "VOCNO": this.commonService.nullToString(form.vocno),
+      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.vocdate)),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
-      "SMAN": this.commonService.nullToString(form.value.salesman),
-      "REMARKS": this.commonService.nullToString(form.value.Narration),
-      "CURRENCY_CODE": this.commonService.nullToString(form.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(form.value.currencyrate),
+      "SMAN": this.commonService.nullToString(form.salesman),
+      "REMARKS": this.commonService.nullToString(form.Narration),
+      "CURRENCY_CODE": this.commonService.nullToString(form.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
       "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
       "AUTOPOSTING": false,
