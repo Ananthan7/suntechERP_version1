@@ -454,7 +454,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.getcurrencyOptions()
   }
 
-  
+
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -507,11 +507,22 @@ export class LabourChargeMasterComponent implements OnInit {
         this.ViewModemethod = false;
 
       } else {
-        
+
         this.viewModeSetting = true;
         this.ViewModemethod = true;
       }
     });
+  }
+  onSievetto(event: any) {
+    if (this.diamondlabourMasterForm.value.size_form > this.diamondlabourMasterForm.value.size_to) {
+      Swal.fire({
+        title: event.message || ' Sieve To Should be greater than the Sieve From',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
+    }
   }
 
   setFormValues() {
@@ -782,85 +793,110 @@ export class LabourChargeMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
-  //     .subscribe((result) => {
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-
-  validateLookupField(event: any, LOOKUPDATA: any, FORMNAME: string) {
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
-  
-    if (event.target.value === '' || this.viewMode) return;
-  
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    };
-  
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`;
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     this.commonService.showSnackBarMsg('MSG81447');
-  
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
       .subscribe((result) => {
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531');
-          this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
-         
-          this.renderer.selectRootElement(FORMNAME).focus();
-          LOOKUPDATA.SEARCH_VALUE = '';
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'sieve') {
-            console.log(FORMNAME)
-            this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+            if (FORMNAME === 'sieve') {
+              console.log(FORMNAME)
+              this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+            }
           }
-          return;
+          return
         }
-  
-        const matchedItem = data.find((item: any) => item.CODE === inputValue);
-        if (matchedItem) {
-          this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-          if (FORMNAME === 'sieve') {
-            this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
-            
-          }
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531');
-          this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
-         
-              this.renderer.selectRootElement(FORMNAME).focus();
-              //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-   
-          if (FORMNAME === 'sieve') {
-            this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
-          }
-        }
+        const matchedItem = data.find((item: any) => item.CODE.toUpperCase() == inputValue);
+              if (matchedItem) {
+                this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+                if (FORMNAME === 'sieve') {
+                  this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+      
+                }
+              } else {
+                this.commonService.toastErrorByMsgId('MSG1531');
+                this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+      
+                    this.renderer.selectRootElement(FORMNAME).focus();
+                    //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+      
+                if (FORMNAME === 'sieve') {
+                  this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+                }
+              }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found');
-      });
-  
-    this.subscriptions.push(Sub);
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
   }
-  
+
+  // validateLookupField(event: any, LOOKUPDATA: any, FORMNAME: string) {
+  //   const inputValue = event.target.value.toUpperCase();
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+  //   if (event.target.value === '' || this.viewMode) return;
+
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   };
+
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`;
+  //   this.commonService.showSnackBarMsg('MSG81447');
+
+  //   let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531');
+  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+
+  //         this.renderer.selectRootElement(FORMNAME).focus();
+  //         LOOKUPDATA.SEARCH_VALUE = '';
+  //         if (FORMNAME === 'sieve') {
+  //           console.log(FORMNAME)
+  //           this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+  //         }
+  //         return;
+  //       }
+
+  //       const matchedItem = data.find((item: any) => item.CODE === inputValue);
+  //       if (matchedItem) {
+  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+  //         if (FORMNAME === 'sieve') {
+  //           this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+
+  //         }
+  //       } else {
+  //         this.commonService.toastErrorByMsgId('MSG1531');
+  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+
+  //             this.renderer.selectRootElement(FORMNAME).focus();
+  //             //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+
+  //         if (FORMNAME === 'sieve') {
+  //           this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+  //         }
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found');
+  //     });
+
+  //   this.subscriptions.push(Sub);
+  // }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -905,13 +941,13 @@ export class LabourChargeMasterComponent implements OnInit {
     let diamondForm = this.diamondlabourMasterForm.value
     let metalForm = this.metallabourMasterForm.value
     return {
-      "MID":this.content?.MID || 0,
+      "MID": this.content?.MID || 0,
       "SRNO": 0,
-      "CODE": this.commonService.nullToString(diamondForm.labour_code),
-      "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description),
+      "CODE": this.commonService.nullToString(diamondForm.labour_code?.toUpperCase()),
+      "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description?.toUpperCase()),
       "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
       "METHOD": this.commonService.nullToString(diamondForm.method),
-      "DIVISION":this.commonService.nullToString(diamondForm.divisions),
+      "DIVISION": this.commonService.nullToString(diamondForm.divisions),
       "SHAPE": this.commonService.nullToString(diamondForm.shape),
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
@@ -923,7 +959,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": this.commonService.nullToString(diamondForm.labour_ac),
-      "DIVISION_CODE":  this.commonService.nullToString(diamondForm.divisions),
+      "DIVISION_CODE": this.commonService.nullToString(diamondForm.divisions),
       "CURRENCY_CODE": this.commonService.nullToString(metalForm.currency),
       "SELLING_PER": this.commonService.emptyToZero(diamondForm.selling),
       "ACCESSORIES": diamondForm.accessories ? 1 : 0,
@@ -985,7 +1021,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
-      return 
+      return
     }
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;

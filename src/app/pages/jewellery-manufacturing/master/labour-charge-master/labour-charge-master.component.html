@@ -152,9 +152,9 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput  [readonly]="viewMode || codeEnableDiamond" maxlength="6" oninput="this.value = this.value.toUpperCase()"
+              <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
-                (change)="sizeFromToValidate('size_to')" />
+                (change)="sizeFromToValidate('size_to')" readonly />
             </mat-form-field>
             <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"
               *ngIf="!viewDisable"></master-search>
@@ -186,10 +186,11 @@
           <label for="input" class="col-sm-2 col-form-label">Sieve:</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput [readonly]="viewMode || codeEnableDiamond"
+              <input type="text" matInput readonly 
                 oninput="this.value = this.value.toUpperCase()"
                 (focusout)="validateLookupField($event, sieveCodeData, 'sieve')" maxlength="6"
-                formControlName="sieve" />
+                formControlName="sieve" 
+                />
             </mat-form-field>
             <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)"
               *ngIf="!viewDisable"></master-search>

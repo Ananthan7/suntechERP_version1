@@ -610,8 +610,8 @@ export class ProcessMasterComponent implements OnInit {
     console.log(form.processType);
     return {
       "MID": this.commonService.emptyToZero(this.content?.MID),
-      "PROCESS_CODE": form.processCode || "",
-      "DESCRIPTION": form.processDesc || "",
+      "PROCESS_CODE": form.processCode?.toUpperCase(),
+      "DESCRIPTION": form.processDesc?.toUpperCase(),
       "STD_TIME": this.commonService.emptyToZero(this.formattedTime),
       "MAX_TIME": this.commonService.emptyToZero(this.formattedMaxTime),
       "LOSS_ACCODE": form.LOSS_ACCODE,

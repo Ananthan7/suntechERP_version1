@@ -36,7 +36,8 @@
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
                                     placeholder="Description"
-                                    [readonly]="viewMode || editMode"
+                                    maxlength="50"
+                                    [readonly]="viewMode"
                                     formControlName="sequenceDESCRIPTION"
                                     UpperCaseDirective />
                             </mat-form-field>
@@ -224,7 +225,7 @@
                                         [(ngModel)]="data['STD_TIME']"
                                         (change)="stdTimeChanged(data)"
                                         class="text-right"
-                                        [readonly]="viewMode" />
+                                        [readonly]="calculateProcessDisable" />
                                 </td>
                                 <td>
                                     <input type="number" style="width: 100%;"
@@ -232,10 +233,11 @@
                                         [(ngModel)]="data['MAX_TIME']"
                                         (change)="maxTimeChanged(data)"
                                         class="text-right"
-                                        [readonly]="viewMode" />
+                                        [readonly]="calculateProcessDisable" />
                                 </td>
                                 <td>
                                     <input type="checkbox"
+                                        (change)="calculateProcessChange($event)"
                                         [(ngModel)]="data['TIMEON_PROCESS']"
                                         [disabled]="!data['isChecked'] || viewMode" />
                                 </td>
