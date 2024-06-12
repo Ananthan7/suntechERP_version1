@@ -132,7 +132,7 @@ export class GoldExchangeComponent implements OnInit {
     partyCode1:[''],
 
   });
-
+  zeroAmtVal: any;
 
 
   constructor(
@@ -144,6 +144,10 @@ export class GoldExchangeComponent implements OnInit {
     private toastr: ToastrService,
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
+    this.zeroAmtVal = this.comService.transformDecimalVB(
+      this.comService.allbranchMaster?.BAMTDECIMALS,
+      0
+    );
    }
 
   ngOnInit(): void {
@@ -231,6 +235,11 @@ export class GoldExchangeComponent implements OnInit {
     this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
     this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
     this.goldExchangeForm.controls.rndNetAmt.setValue(this.content.NET_VALUE_FC);
+
+    this.goldExchangeForm.controls['rndNetAmt'].setValue(
+      this.comService.decimalQuantityFormat(this.zeroAmtVal, 'AMOUNT')
+
+    );
     this.goldExchangeForm.controls.rndNetAmtDes.setValue(this.content.NET_VALUE_CC);
     this.goldExchangeForm.controls.otherAmt.setValue(this.content.ADDL_VALUE_FC);
     this.goldExchangeForm.controls.otherAmtDes.setValue(this.content.ADDL_VALUE_CC);
@@ -307,12 +316,12 @@ export class GoldExchangeComponent implements OnInit {
       "ITEM_VALUE_CC": 0,
       "PARTY_VALUE_FC": 0,
       "PARTY_VALUE_CC": 0,
-      "NET_VALUE_FC": 0,
-      "NET_VALUE_CC": 0,
-      "ADDL_VALUE_FC": 0,
-      "ADDL_VALUE_CC": 0,
-      "GROSS_VALUE_FC": 0,
-      "GROSS_VALUE_CC": 0,
+      "NET_VALUE_FC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndNetAmt, 'AMOUNT'),
+      "NET_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndNetAmtDes, 'AMOUNT'),
+      "ADDL_VALUE_FC":this.comService.decimalQuantityFormat(this.goldExchangeForm.value.otherAmt, 'AMOUNT'),
+      "ADDL_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.otherAmtDes, 'AMOUNT'),
+      "GROSS_VALUE_FC":this.comService.decimalQuantityFormat(this.goldExchangeForm.value.grossAmt, 'AMOUNT'),
+      "GROSS_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.grossAmtDes, 'AMOUNT'),
       "REMARKS": this.goldExchangeForm.value.narration,
       "SYSTEM_DATE": "2024-02-08T12:18:43.101Z",
       "FLAG_EDIT_ALLOW": "",
@@ -345,7 +354,7 @@ export class GoldExchangeComponent implements OnInit {
       "TOTAL_WASTQTY": 0,
       "TOTAL_AMT_FC": 0,
       "PARTYADDRESS": this.goldExchangeForm.value.partyCode1,
-      "CREDITDAY": 0,
+      "CREDITDAY":parseInt(this.goldExchangeForm.value.creditDaysCode) ,
       "AUTOPOSTING": true,
       "POSTDATE": "",
       "AUTHORIZEDPOSTING": true,
@@ -430,8 +439,8 @@ export class GoldExchangeComponent implements OnInit {
       "SHIPCODE": "",
       "SHIPDESC": "",
       "STAMPCHARGE": true,
-      "TOTSTAMP_AMTFC": 0,
-      "TOTSTAMP_AMTCC":0,
+      "TOTSTAMP_AMTFC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.amount, 'AMOUNT'),
+      "TOTSTAMP_AMTCC":this.comService.decimalQuantityFormat(this.goldExchangeForm.value.amountDes, 'AMOUNT'),
       "TOTSTAMP_PARTYAMTFC": 0,
       "REFPURIMPORT": "",
       "BOE_EXPIRY_DATE": "2024-02-08T12:18:43.101Z",
@@ -515,8 +524,8 @@ export class GoldExchangeComponent implements OnInit {
       "TAX_APPLICABLE": true,
       "TOTAL_WASTAGE_AMOUNTFC": 0,
       "TRANSFER_BRANCH": "",
-      "VATAMOUNTFCROUND": 0,
-      "VATAMOUNTFCROUNDCC":0,
+      "VATAMOUNTFCROUND": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndOfAmt, 'AMOUNT'),
+      "VATAMOUNTFCROUNDCC":this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndOfAmtDes, 'AMOUNT'),
       "metalPurchaseDetails": this.goldExchangeDetailsData,
     }
     
