@@ -40,22 +40,29 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processMasterSearch: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 259,
     SEARCH_FIELD: 'process_code',
     SEARCH_HEADING: 'Process Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code <> ''",
+    WHERECONDITION: `@StrCurrentUser='',
+    @StrProcessCode='',
+    @StrSubJobNo='',
+    @StrBranchCode=${this.comService.branchCode}`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   workerMasterSearch: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
+    LOOKUPID: 260,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE <> ''",
+    WHERECONDITION: `@StrSubJobNo='',
+    @StrFromProcess='',
+    @StrFromWorker='',
+    @StrBranchCode=${this.comService.branchCode},
+	  @blnProcessAuthroize=0`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -168,16 +175,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
 
   constructor(
-    private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService,
   ) {
-    // this.processTransferdetailsForm = this.formBuilder.group({
-    //   startdate: ['', Validators.required],
-    //   enddate: ['', Validators.required]
-    // }, { validators: this.dateValidator });
-
   }
 
   ngOnInit(): void {
@@ -244,6 +245,19 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
+  }
+  setProcessWhereCond(){
+    this.processMasterSearch.WHERECONDITION=`@StrCurrentUser='${this.comService.userName}',
+    @StrProcessCode='${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
+    @StrSubJobNo='${this.comService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
+    @StrBranchCode='${this.comService.branchCode}'`
+  }
+  setWorkerCodeWhereCond(){
+    this.workerMasterSearch.WHERECONDITION=`@StrSubJobNo='${this.comService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
+    @StrFromProcess='${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
+    @StrFromWorker='${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',
+    @StrBranchCode='${this.comService.branchCode}',
+	  @blnProcessAuthroize=0`
   }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
@@ -317,7 +331,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
           this.stockCodeScrapValidate()
           this.fillStoneDetails()
-          
+          this.setProcessWhereCond()
+          this.setWorkerCodeWhereCond()
+
           this.setValueWithDecimal('MetalWeightFrom',data[0].METAL,'METAL')
           this.setValueWithDecimal('FromJobPcs',data[0].PCS,'AMOUNT')
           this.setValueWithDecimal('ToJobPcs',data[0].PCS,'AMOUNT')
@@ -480,7 +496,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.PROCESSDESC.setValue(event.Description)
-   
+    this.setProcessWhereCond()
+    this.setWorkerCodeWhereCond()
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(event.Process_Code)
@@ -500,6 +517,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   workerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_WORKER_CODE.setValue(event.WORKER_CODE)
+    this.setWorkerCodeWhereCond()
   }
   workerCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.TO_WORKER_CODE.setValue(event.WORKER_CODE)
@@ -549,20 +567,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (!Number(a) && !Number(a) && !Number(a)) return 0
     return (this.comService.emptyToZero(a) - (this.comService.decimalQuantityFormat((Number(b) + Number(c)), 'METAL')))
   }
-  setFormValues() {
-    if (!this.content) return
-    this.processTransferdetailsForm.controls.JOB_NUMBER.setValue(this.content.JOB_NUMBER)
-    this.processTransferdetailsForm.controls.jobdes.setValue(this.content.JOB_DESCRIPTION)
-    this.processTransferdetailsForm.controls.UNQ_JOB_ID.setValue(this.content.JOB_SO_NUMBER)
-    this.processTransferdetailsForm.controls.approvedby.setValue(this.content.APPROVED_USER)
-    this.processTransferdetailsForm.controls.approveddate.setValue(this.content.APPROVED_DATE)
-    this.processTransferdetailsForm.controls.startdate.setValue(this.content.IN_DATE)
-    this.processTransferdetailsForm.controls.enddate.setValue(this.content.OUT_DATE)
-    this.processTransferdetailsForm.controls.stdtime.setValue(this.content.STD_TIME)
-    this.processTransferdetailsForm.controls.timetaken.setValue(this.content.TIME_TAKEN_HRS)
-    this.processTransferdetailsForm.controls.treeno.setValue(this.content.TREE_NO)
-    this.processTransferdetailsForm.controls.remarks.setValue(this.content.REMARKS)
-  }
+
 
   close(data?: any) {
     // this.activeModal.close(data);
