@@ -513,17 +513,29 @@ export class LabourChargeMasterComponent implements OnInit {
       }
     });
   }
-  onSievetto(event: any) {
-    if (this.diamondlabourMasterForm.value.size_form > this.diamondlabourMasterForm.value.size_to) {
-      Swal.fire({
-        title: event.message || ' Sieve To Should be greater than the Sieve From',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
-    }
-  }
+    onSievetto(event: any, data: string) {
+      // Retrieve the values of Ct Wt From and Ct Wt To from the form
+      const sizefrom: number = parseFloat(this.diamondlabourMasterForm.value.size_from);
+      const sizeto: number = parseFloat(this.diamondlabourMasterForm.value.size_to);
+  
+      // Check if the data parameter is not 'Ctwtfrom'
+      if (data == 'size_to') {
+        // Check if Ct Wt From is greater than Ct Wt To
+        if (sizefrom > sizeto) {
+          // Display an error message
+          Swal.fire({
+            title: event.message || 'Size From should be lesser than Size To',
+            text: '',
+            icon: 'error',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          });
+  
+          // Clear the value of Ct Wt To input field
+          this.diamondlabourMasterForm.controls.size_to.setValue('');
+        }
+      }
+    } 
 
   setFormValues() {
     if (!this.content) return
@@ -918,7 +930,10 @@ export class LabourChargeMasterComponent implements OnInit {
       this.toastr.error('Select Either Selling % or Selling Rate');
       return true
     }
-
+    if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
+      this.toastr.error('Size From should be lesser than Size To')
+      return true
+    }
 
 
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {

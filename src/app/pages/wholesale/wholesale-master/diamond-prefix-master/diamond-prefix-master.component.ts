@@ -21,7 +21,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   editableMode: boolean = false;
   viewMode: boolean = false;
   userbranch = localStorage.getItem('userbranch');
-
+  editMode:boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -36,11 +36,13 @@ export class DiamondPrefixMasterComponent implements OnInit {
   ngOnInit(): void {
     // this.setCompanyCurrency()
     this.setFormValues()
+    // this.setCompanyCurrency()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true
   
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
+      this.editMode = true
     }
     else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -59,10 +61,14 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
     this.diamondprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
     this.diamondprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
-    this.diamondprefixForm.controls.schemeprefix.setValue(this.viewchangeYorN(this.content.SCHEME_PREFIX))
     this.diamondprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
     this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
-    this.diamondprefixForm.controls.tagWt.setValue(this.content.TAG_WT)
+    this.diamondprefixForm.controls.Country.setValue(this.content.COUNTRY_CODE)
+    this.diamondprefixForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
+    this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
+    this.diamondprefixForm.controls.Category.setValue(this.content.CATEGORY_CODE)
+    this.diamondprefixForm.controls.brand.setValue(this.content.BRAND_CODE)
+    this.diamondprefixForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
     this.diamondprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
   }
   /**USE: to set currency from company parameter */
@@ -279,19 +285,19 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   setPostData(){
     return{
-    "PREFIX_CODE": this.diamondprefixForm.value.prefixcode || "",
-    "DESCRIPTION": this.diamondprefixForm.value.prefixcodedes || "",
+    "PREFIX_CODE": this.diamondprefixForm.value.prefixcode?.toUpperCase(),
+    "DESCRIPTION": this.diamondprefixForm.value.prefixcodedes?.toUpperCase(),
     "LAST_NO": this.commonService.nullToString(this.diamondprefixForm.value.lastno),
     "CURRENCY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.currency),
     "CONV_RATE": this.commonService.emptyToZero(this.diamondprefixForm.value.currencyRate),
-    "COST_CODE": " ",
-    "CATEGORY_CODE": " ",
-    "SUBCATEGORY_CODE": " ",
-    "BRAND_CODE": " ",
-    "TYPE_CODE": " ",
-    "COUNTRY_CODE": " ",
+    "COST_CODE": this.commonService.nullToString(this.diamondprefixForm.value.costcode),
+    "CATEGORY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.Category),
+    "SUBCATEGORY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.subCategory),
+    "BRAND_CODE":this.commonService.nullToString(this.diamondprefixForm.value.brand),
+    "TYPE_CODE": this.commonService.nullToString(this.diamondprefixForm.value.Type),
+    "COUNTRY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.Country),
     "MID":this.content?.MID || 0,
-    "DIVISION": "M",
+    "DIVISION": "S",
     "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
     "PM_BRANCHCODE": "",
     "JOB_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.jobcardprefix),
@@ -314,7 +320,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     "UDF13": this.diamondprefixForm.value.userdefined_13 || "",
     "UDF14": this.diamondprefixForm.value.userdefined_14 || "",
     "UDF15": this.diamondprefixForm.value.userdefined_15 || "",
-    "TAG_WT": this.diamondprefixForm.value.tagWt || "",
+    "TAG_WT": 0,
     "COMP_PREFIX": true,
     "DESIGN_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.designprefix),
     "REFINE_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.refinervprefix),

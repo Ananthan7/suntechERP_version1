@@ -154,7 +154,7 @@
             <mat-form-field>
               <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
-                (change)="sizeFromToValidate('size_to')" readonly />
+                (change)="sizeFromToValidate('size_to')" readonly (change)="onSievetto($event,'size_to')"/>
             </mat-form-field>
             <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"
               *ngIf="!viewDisable"></master-search>

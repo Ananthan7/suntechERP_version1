@@ -6,7 +6,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteMetalPrefix()"></modal-header>
+    (deleteClick)="deleteMetalPrefix()" [isViewDelete]="editMode"
+    [isViewSave]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="diamondprefixForm">
@@ -28,10 +29,12 @@
                                                     style="width: 100%;">
                                                     <input type="text" matInput
                                                         formControlName="prefixcode"
-                                                        oninput="this.value = this.value.toUpperCase()"
+                                                        #prefixcode
+                                                        UpperCaseDirective
+                                                        (input)="prefixcode.value = prefixcode.value.toUpperCase()"
                                                         maxlength="6"
                                                         [readonly]="editableMode || viewMode"
-                                                        [disabled]="viewMode" />
+                                                        [readonly]="viewMode " />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-6">
@@ -39,10 +42,12 @@
                                                     style="width: 100%;">
                                                     <input type="text" matInput
                                                         formControlName="prefixcodedes"
-                                                        oninput="this.value = this.value.toUpperCase()"
+                                                        #prefixcodedes
+                                                        UpperCaseDirective
+                                                        (input)="prefixcodedes.value = prefixcodedes.value.toUpperCase()"
                                                         maxlength="50"
                                                         [readonly]="editableMode || viewMode"
-                                                        [disabled]="viewMode" />
+                                                        [readonly]="viewMode" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -54,9 +59,11 @@
                                             <div class="col-sm-3">
                                                 <mat-form-field
                                                     style="width: 100%;">
-                                                    <input id="lastno"
-                                                        type="number" matInput
+                                                    <input
+                                                        type="text" matInput
                                                         formControlName="lastno"
+                                                        NumberOnly
+                                                        maxlength="7"
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                             </div>
@@ -68,9 +75,11 @@
                                                     style="width: 80%;">
                                                     <input id="currency"
                                                         type="text" matInput
-                                                        formControlName="currency" />
+                                                        formControlName="currency"
+                                                        [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="currencyCodeData"
                                                     (newRowClick)="currencyCodeSelected($event)">
                                                 </master-search>
@@ -97,11 +106,10 @@
                                                     style="width: 80%;">
                                                     <input type="text" matInput
                                                         formControlName="costcode"
-                                                        [max]="2"
-                                                        MetalDecimalInput
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="costCodeData"
                                                     (newRowClick)="costCodeSelected($event)">
                                                 </master-search>
@@ -114,9 +122,11 @@
                                                     style="width: 80%;">
                                                     <input id="brand"
                                                         type="text" matInput
-                                                        formControlName="brand" />
+                                                        formControlName="brand"
+                                                        [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="BrandCodeData"
                                                     (newRowClick)="brandCodeSelected($event)">
                                                 </master-search>
@@ -133,11 +143,10 @@
                                                     style="width: 80%;">
                                                     <input type="text" matInput
                                                         formControlName="Category"
-                                                        [max]="2"
-                                                        MetalDecimalInput
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="categoryCodeData"
                                                     (newRowClick)="categoryCodeSelected($event)">
                                                 </master-search>
@@ -150,9 +159,11 @@
                                                     style="width: 80%;">
                                                     <input id="Type"
                                                         type="text" matInput
-                                                        formControlName="Type" />
+                                                        formControlName="Type"
+                                                        [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="typeCodeData"
                                                     (newRowClick)="typeCodeSelected($event)">
                                                 </master-search>
@@ -170,11 +181,10 @@
                                                     style="width: 80%;">
                                                     <input type="text" matInput
                                                         formControlName="subCategory"
-                                                        [max]="2"
-                                                        MetalDecimalInput
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="subcategoryCodeData"
                                                     (newRowClick)="subcategoryCodeSelected($event)">
                                                 </master-search>
@@ -187,9 +197,11 @@
                                                     style="width: 80%;">
                                                     <input id="Country"
                                                         type="text" matInput
-                                                        formControlName="Country" />
+                                                        formControlName="Country"
+                                                        [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="countryCodeData"
                                                     (newRowClick)="countryCodeSelected($event)">
                                                 </master-search>
@@ -206,11 +218,10 @@
                                                     style="width: 80%;">
                                                     <input type="text" matInput
                                                         formControlName="branch"
-                                                        [max]="2"
-                                                        MetalDecimalInput
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="BranchCodeData"
                                                     (newRowClick)="branchCodeSelected($event)">
                                                 </master-search>
@@ -224,7 +235,8 @@
                                                     style="width: 80%;">
                                                     <input id="suffixcode"
                                                         type="text" matInput
-                                                        formControlName="suffixcode" />
+                                                        formControlName="suffixcode"
+                                                        [readonly]="viewMode" />
                                                 </mat-form-field>
 
                                             </div>
@@ -239,11 +251,10 @@
                                                     style="width: 80%;">
                                                     <input type="text" matInput
                                                         formControlName="hsn"
-                                                        [max]="2"
-                                                        MetalDecimalInput
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                                 <master-search
+                                                    *ngIf="!viewMode"
                                                     [MasterSearchData]="HSNCodeData"
                                                     (newRowClick)="HSNCenterSelected($event)">
                                                 </master-search>
@@ -253,50 +264,51 @@
                                             class="row align-items-center mb-1">
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
-                                                    <label
+                                                    <div
                                                         class="form-check-label">
-                                                        <input
-                                                            class="form-check-input"
+                                                        <mat-checkbox
                                                             type="checkbox"
                                                             formControlName="setrefprefix"
-                                                            [readonly]="viewMode">
-                                                        Set Ref Prefix
-                                                    </label>
+                                                            [disabled]="viewMode">
+                                                            Set Ref Prefix
+                                                        </mat-checkbox>
+                                                    </div>
                                                 </div>
                                                 <div class="form-check">
-                                                    <label
+                                                    <div
                                                         class="form-check-label">
-                                                        <input
-                                                            class="form-check-input"
+                                                        <mat-checkbox
+                                                            type="checkbox"
                                                             type="checkbox"
                                                             formControlName="jobcardprefix"
-                                                            [readonly]="viewMode">
-                                                        Job Prefix
-                                                    </label>
+                                                            [disabled]="viewMode">
+                                                            Job Prefix
+                                                        </mat-checkbox>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
-                                                    <label
+                                                    <div
                                                         class="form-check-label">
-                                                        <input
-                                                            class="form-check-input"
+                                                        <mat-checkbox
                                                             type="checkbox"
                                                             formControlName="Componentprefix"
-                                                            [readonly]="viewMode">
-                                                        Component Prefix
-                                                    </label>
+                                                            [disabled]="viewMode">
+                                                            Component Prefix
+                                                        </mat-checkbox>
+                                                    </div>
                                                 </div>
                                                 <div class="form-check">
-                                                    <label
+                                                    <div
                                                         class="form-check-label">
-                                                        <input
-                                                            class="form-check-input"
+                                                        <mat-checkbox
                                                             type="checkbox"
                                                             formControlName="designprefix"
-                                                            [readonly]="viewMode">
-                                                        Design Prefix
-                                                    </label>
+                                                            [disabled]="viewMode">
+                                                            Design Prefix
+                                                        </mat-checkbox>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
