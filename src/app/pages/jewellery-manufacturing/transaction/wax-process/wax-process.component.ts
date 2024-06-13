@@ -102,9 +102,9 @@ export class WaxProcessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.waxprocessFrom.controls.vocdate.setValue(this.commonService.currentDate)
-    this.waxprocessFrom.controls.vocno.setValue('1')
+    //this.waxprocessFrom.controls.vocno.setValue('1')
     // console.log(this.branchParmeter);
     let data = this.branchParmeter.split(',');
     this.description = data[4].substring(15);
@@ -348,12 +348,28 @@ export class WaxProcessComponent implements OnInit {
       return
     }
 
-    let API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE
+    let API = 'JobWaxIssue/UpdateJobWaxIssue/' + this.content.BRANCH_CODE + this.content.VOCTYPE + this.content.VOCNO + this.content.YEARMONTH
     let postData = {
-      "APPR_CODE": this.waxprocessFrom.value.code || "",
-      "APPR_DESCRIPTION": this.waxprocessFrom.value.description || "",
-      "MID": this.content.MID,
-      "approvalDetails": this.tableData,
+      "MID": 0,
+      "VOCTYPE": this.waxprocessFrom.value.voctype,
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.waxprocessFrom.value.vocno,
+      "VOCDATE": this.waxprocessFrom.value.vocdate,
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2023-10-20T10:24:24.037Z",
+      "PROCESS_CODE": this.waxprocessFrom.value.processcode,
+      "WORKER_CODE": this.waxprocessFrom.value.workercode,
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_STONE_WT": 0,
+      "SMAN": this.waxprocessFrom.value.enteredBy || "",
+      "REMARKS": this.waxprocessFrom.value.remarks,
+      "NAVSEQNO": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "PRINT_COUNT": 0,
+      "SYSTEM_DATE": "2023-10-20T10:24:24.037Z",
+      "Details": this.tableDataJob,
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)

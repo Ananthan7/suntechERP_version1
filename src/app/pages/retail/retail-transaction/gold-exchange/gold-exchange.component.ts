@@ -151,6 +151,7 @@ export class GoldExchangeComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    console.log(this.content);
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.goldExchangeForm.controls.vocType.setValue(this.comService.getqueryParamVocType());

@@ -427,25 +427,25 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.viewDisable = true;
+    } else if (this.content.FLAG == 'EDIT') {
+      this.editMode = true;
+      this.codeEnableMetal = false;
+
+      this.stockcodeDisable = false;
+    } else if (this.content.FLAG == 'DELETE') {
+      this.viewMode = true;
+      this.deleteMeltingType()
+    }
+
     this.grossWt = true;
     this.codeEnable1 = true;
-    console.log(this.content, 'this.content');
     this.setInitialValues();
-    if (this.content.FLAG) {
-      this.setFormValues();
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true;
-        this.viewDisable = true;
-      } else if (this.content.FLAG == 'EDIT') {
-        this.codeEnableDiamond = false;
-        this.codeEnableMetal = false;
-        this.editMode = true;
-        this.stockcodeDisable = false;
-      } else if (this.content.FLAG == 'DELETE') {
-        this.viewMode = true;
-        this.deleteMeltingType()
-      }
-    }
+    this.setFormValues();
+
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
     this.metallabourMasterForm.controls['metallabourType'].enable();
@@ -579,7 +579,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
     this.metallabourMasterForm.controls.forDesignOnly.setValue(this.viewchangeYorN(this.content.FOR_DESIGN));
     this.metallabourMasterForm.controls.onGrossWt.setValue(this.viewchangeYorN(this.content.ON_GROSSWT));
-  //  this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.COST_RATE);
+    //  this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.COST_RATE);
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
     this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
     this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
@@ -844,7 +844,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.toastr.error('Labour code is required')
       return true
     }
-    if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
+    if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
       return true
     }
@@ -1183,8 +1183,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   onCtweighttto(event: any, data: string) {
     // Retrieve the values of Ct Wt From and Ct Wt To from the form
-    const Ctwtf: number = parseFloat(this.diamondlabourMasterForm.value.ctWtFrom);
-    const Ctwtt: number = parseFloat(this.diamondlabourMasterForm.value.ctWtTo);
+    const Ctwtf: number = parseFloat(this.metallabourMasterForm.value.ctWtFrom);
+    const Ctwtt: number = parseFloat(this.metallabourMasterForm.value.ctWtTo);
 
     // Check if the data parameter is not 'Ctwtfrom'
     if (data !== 'Ctwtfrom') {
@@ -1200,7 +1200,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         });
 
         // Clear the value of Ct Wt To input field
-        this.diamondlabourMasterForm.controls.ctWtTo.setValue('');
+        this.metallabourMasterForm.controls.wtTo.setValue('');
       }
     }
   }
