@@ -130,7 +130,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   locCodeSelected(e:any){
     console.log(e);
-    this.goldExchangeDetailsForm.controls.locCode.setValue(e);
+    this.goldExchangeDetailsForm.controls.locCode.setValue(e.Location);
   }
 
   constructor(

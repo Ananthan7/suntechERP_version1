@@ -1982,9 +1982,9 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Net Amount</mat-label>
-                <input [min]="0" type="number" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                <input  type="text" AmountDecimalInput [max]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_net_amount" [readonly]="true"
-                  (change)="changeExNetAmt($event)" AmountDecimalInput />
+                  (change)="changeExNetAmt($event)"  />
               </mat-form-field>
             </div>
             <!-- <div class="row" *ngIf="enableJawahara">

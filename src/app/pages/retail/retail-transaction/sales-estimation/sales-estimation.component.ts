@@ -5654,9 +5654,10 @@ export class SalesEstimationComponent implements OnInit {
         let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
         let _exchangePurity = this.exchangeForm.value.fcn_exchange_purity;
         let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
-        let _exchangeMetalAmt = this.exchangeForm.value.fcn_exchange_metal_amount;
-        let _exchangeMkgAmt = this.exchangeForm.value.fcn_exchange_making_amt;
-        let _exchangeNetAmt = this.exchangeForm.value.fcn_exchange_net_amount;
+        let _exchangeMetalAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount);
+        let _exchangeMkgAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_making_amt);
+        let _exchangeNetAmt = this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_amount);
+
 
         let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
         let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
@@ -5665,11 +5666,12 @@ export class SalesEstimationComponent implements OnInit {
 
 
         if (
-            this.exchangeForm.value.fcn_exchange_item_code != '' &&
-            _exchangeMetalAmt > 0 &&
-            _exchangeMetalAmt != '' &&
-            _exchangeNetAmt > 0 &&
-            _exchangeNetAmt != ''
+          this.exchangeForm.value.fcn_exchange_item_code != '' &&
+          _exchangeMetalAmt > 0 &&
+          // _exchangeMetalAmt != '' &&
+          _exchangeNetAmt > 0
+          //  &&
+          // _exchangeNetAmt != ''
         ) {
             // if (items_length == 0) this.exchange_items_slno_length = 1;
             // else
@@ -5771,14 +5773,15 @@ export class SalesEstimationComponent implements OnInit {
 
             this.setMetalPurchaseDataPost();
         } else {
-            // alert('Invalid Metal Amount');
-            if (this.exchangeForm.value.fcn_exchange_item_code == '') {
-                this.openDialog('Warning', 'Stock code should not be empty', true);
-            }
-            if (_exchangeMetalAmt == '' || 0)
-                this.openDialog('Warning', 'Invalid Metal Amount', true);
-            if (_exchangeNetAmt == '' || 0)
-                this.openDialog('Warning', 'Invalid Net Amount', true);
+          // alert('Invalid Metal Amount');
+          if (this.exchangeForm.value.fcn_exchange_item_code == '') {
+            this.openDialog('Warning', 'Stock code should not be empty', true);
+          }
+          if (_exchangeMetalAmt == 0)
+            this.openDialog('Warning', 'Invalid Metal Amount', true);
+          if (_exchangeNetAmt == 0)
+            // if (_exchangeNetAmt == '' || 0)
+            this.openDialog('Warning', 'Invalid Net Amount', true);
         }
     }
 
@@ -9328,29 +9331,50 @@ export class SalesEstimationComponent implements OnInit {
       changeExchangeMetalAmt(event: any) {
         if (event.target.value != '') {
     
-          this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
-            this.comFunc.transformDecimalVB(
-              this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              this.comFunc.emptyToZero(event.target.value)
-            )
-          );
-          const value =
     
-            this.comFunc.decimalQuantityFormat(
-              this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount) /
-              // this.exchangeForm.value.fcn_exchange_net_wt
-              this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_pure_weight)
-              , 'METAL')
+          let allowedMetalRate = this.exchangeForm.value.fcn_exchange_chargeable_wt * this.exchangeForm.value.fcn_exchange_metal_rate;
+
+          if (this.exchangeForm.value.fcn_exchange_metal_amount > allowedMetalRate) {
+    
+            const baseMessage = this.comFunc.getMsgByID('MSG2203');
+            this.openDialog(
+              'Warning',
+              `${baseMessage}: ${allowedMetalRate}`,
+              true
+            );
+            
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+              if (data == 'OK') {
+                this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+                  this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    this.comFunc.emptyToZero(allowedMetalRate)
+                  )
+                );
+              }
+    
+            });
+          } else {
+    
+            this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(event.target.value)
+              )
+            );
+    
+            const value =
+    
+              this.comFunc.decimalQuantityFormat(
+                this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_amount) /
+                this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt)
+                , 'METAL_RATE')
     
     
-          // const value = this.comFunc.transformDecimalVB(
-          //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          //   this.exchangeForm.value.fcn_exchange_metal_amount /
-          //   // this.exchangeForm.value.fcn_exchange_net_wt
-          //   this.exchangeForm.value.fcn_exchange_pure_weight
-          // );
-          this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(value);
-          this.setExNetAmt();
+            this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(value);
+            this.setExNetAmt();
+          }
+    
         } else {
           this.exchangeForm.controls.fcn_exchange_metal_rate.setValue(
             this.zeroAmtVal
