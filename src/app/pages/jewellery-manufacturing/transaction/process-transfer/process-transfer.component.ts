@@ -434,6 +434,7 @@ export class ProcessTransferComponent implements OnInit {
       "UNITCODE": ""
     })
   }
+  gridSRNO: number = 0
   setHeaderGridDetails() {
     let dataFromParent = this.detailData[0].DATA;
     let detailScreenData = dataFromParent.PROCESS_FORMDETAILS;
@@ -447,9 +448,9 @@ export class ProcessTransferComponent implements OnInit {
     let amountFC = this.commonService.FCToCC(this.processTransferFrom.value.currency, stoneAmount)
 
     console.log(this.commonService.timeToMinutes(detailScreenData.consumed), 'time consumed');
-
+    this.gridSRNO+=1
     this.PTFDetailsToSave.push({
-      "SRNO": 0,
+      "SRNO": this.gridSRNO,
       "UNIQUEID": 0,
       "VOCNO": this.content?.MID || 0,
       "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),

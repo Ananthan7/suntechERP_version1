@@ -130,6 +130,7 @@ export class MasterSearchComponent implements OnInit {
   }
   /**use: load datas on scroll */
   loadMoreData(currentPage?: number) {
+    if(this.MasterSearchData.FRONTENDFILTER) return;
     if (this.totalItems >= this.dataSource.length + 1 && this.currentPage != currentPage) return
     let param = this.setPostdata()
     let APIS = 'MasterLookUp'
