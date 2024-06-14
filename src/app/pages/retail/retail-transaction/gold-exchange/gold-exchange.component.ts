@@ -152,15 +152,45 @@ export class GoldExchangeComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
-    this.goldExchangeForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
-    this.goldExchangeForm.controls.partyCurrCode.setValue(this.comService.compCurrency);
-    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
-    this.goldExchangeForm.controls.itemCurr.setValue(this.comService.compCurrency);
-    this.goldExchangeForm.controls.itemCurrCode.setValue(this.comService.getCurrRate(this.comService.compCurrency));
-    this.getKaratDetails();
+
+    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
+
+  
+      this.getRetailSalesMaster(this.content);
+      if (this.content.FLAG == "EDIT") {
+        // this.editOnly = true
+      }
+      if (this.content.FLAG == 'VIEW') {
+        // this.viewOnly = true;
+      }
+
+
+
+
+    } else {
+      this.branchCode = this.comService.branchCode;
+      this.yearMonth = this.comService.yearSelected;
+      this.goldExchangeForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
+      this.goldExchangeForm.controls.partyCurrCode.setValue(this.comService.compCurrency);
+      this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+      this.goldExchangeForm.controls.itemCurr.setValue(this.comService.compCurrency);
+      this.goldExchangeForm.controls.itemCurrCode.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+      this.getKaratDetails();
+
+    }
+  
   }
+
+
+  getRetailSalesMaster(data: any) {
+
+    // this.snackBar.open('Loading...');
+    let API = `OldGoldPurchase/GetMetalPurchaseHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`
+    this.suntechApi.getDynamicAPI(API).subscribe((res) => {
+
+
+      // const values = res.response;
+      if (res.status == 'Success') {}})}
 
   getKaratDetails() {
     this.suntechApi.getDynamicAPI('BranchKaratRate/' + this.strBranchcode).subscribe((result) => {
