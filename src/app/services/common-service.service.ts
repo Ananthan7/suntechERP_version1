@@ -374,12 +374,12 @@ export class CommonServiceService {
     // this.el.nativeElement.value = value;
     return value
   }
-  convertTimeMinutesToDHM(time: any) {
-    time = parseInt(time)
+  convertTimeMinutesToDHM(param: any) {
+    let time = this.emptyToZero(param)
     const daysTime = Math.floor(time / 24 / 60);
     const hoursTime = Math.floor(time / 60 % 24);
     const minutesTime = Math.floor(time % 60);
-    return daysTime + ":" + hoursTime + ':' + minutesTime;
+    return daysTime.toString().padStart(2, '0')+":" +hoursTime.toString().padStart(2, '0')+':' +minutesTime.toString().padStart(2, '0');
   }
   getTime() {
     // Get the current time components

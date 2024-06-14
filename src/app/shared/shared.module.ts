@@ -83,6 +83,7 @@ import { GridSearchComponent } from './common/grid-search/grid-search.component'
 import { ImageSliderComponent } from './common/image-slider/image-slider.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FavoriteMenusComponent } from './common/favorite-menus/favorite-menus.component';
+import { DatetimePickerComponent } from './common/datetime-picker/datetime-picker.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -120,7 +121,8 @@ import { FavoriteMenusComponent } from './common/favorite-menus/favorite-menus.c
     AuthCheckerComponent,
     GridSearchComponent,
     ImageSliderComponent,
-    FavoriteMenusComponent
+    FavoriteMenusComponent,
+    DatetimePickerComponent
   ],
   imports: [
     CommonModule,
@@ -187,6 +189,7 @@ import { FavoriteMenusComponent } from './common/favorite-menus/favorite-menus.c
     GridSearchComponent,
     ImageSliderComponent,
     FavoriteMenusComponent,
+    DatetimePickerComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     DecimalFormatPipe,

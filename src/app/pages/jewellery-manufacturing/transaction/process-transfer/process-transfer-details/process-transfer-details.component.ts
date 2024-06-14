@@ -5,6 +5,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DateTimeModel } from 'src/app/shared/data/datetime-model';
 @Component({
   selector: 'app-process-transfer-details',
   templateUrl: './process-transfer-details.component.html',
@@ -26,6 +27,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
   MetalorProcessFlag: string = 'Process';
   designType: string = 'DIAMOND';
   private subscriptions: Subscription[] = [];
+  STDDateTimeData: DateTimeModel = {
+    TIMEINMINUTES: 0,
+    SEARCH_HEADING: 'Standard Time'
+  }
+  TimeTakenData: DateTimeModel = {
+    TIMEINMINUTES: 0,
+    SEARCH_HEADING: 'Time Taken'
+  }
+  consumedTimeData: DateTimeModel = {
+    TIMEINMINUTES: 0,
+    SEARCH_HEADING: 'Consumed Time'
+  }
   jobNoSearch: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -133,6 +146,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     variance: [''],
     treeno: [''],
     remarks: [''],
+    StdTimeInMinutes: [''],
+    timeTakenInMinutes: [''],
+    consumedInMinutes: [''],
     toggleSwitchtIssue: [true],
     //DIAMOND DETAIL STARTS
     FRM_PROCESS_CODE: [''],
@@ -294,6 +310,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+  
   setFromProcessWhereCondition(){
     this.fromProcessMasterSearch.WHERECONDITION=`@StrCurrentUser='${this.comService.userName}',
     @StrProcessCode='${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
@@ -320,25 +337,43 @@ export class ProcessTransferDetailsComponent implements OnInit {
     @StrToWorker='',
 	  @blntoWorkerFocus=1`
   }
+  stdTimeChange(event:any){
+    this.processTransferdetailsForm.controls.stdtime.setValue(event)
+  }
+  timeTakenChange(event:any){
+    this.processTransferdetailsForm.controls.timetaken.setValue(event)
+  }
+  consumedChange(event:any){
+    this.processTransferdetailsForm.controls.consumed.setValue(event)
+  }
+  StdTimeInMinutes(event:any){
+    this.processTransferdetailsForm.controls.StdTimeInMinutes.setValue(event)
+  }
+  timeTakenInMinutes(event:any){
+    this.processTransferdetailsForm.controls.timeTakenInMinutes.setValue(event)
+  }
+  consumedInMinutes(event:any){
+    this.processTransferdetailsForm.controls.consumedInMinutes.setValue(event)
+  }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
-    let postData = {
-      "SPID": "086",
-      "parameter": {
-        'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strJobNumber': this.comService.nullToString(event.target.value),
-        'strCurrenctUser': this.comService.nullToString(this.userName)
-      }
-    }
     // let postData = {
-    //   "SPID": "028",
+    //   "SPID": "086",
     //   "parameter": {
     //     'strBranchCode': this.comService.nullToString(this.branchCode),
     //     'strJobNumber': this.comService.nullToString(event.target.value),
     //     'strCurrenctUser': this.comService.nullToString(this.userName)
     //   }
     // }
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
@@ -472,7 +507,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data,'data');
-          
+          this.STDDateTimeData.TIMEINMINUTES = data[0].STD_TIME
+          let time  = this.comService.convertTimeMinutesToDHM(data[0].STD_TIME)
+          this.processTransferdetailsForm.controls.stdtime.setValue(
+            time
+          )
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }

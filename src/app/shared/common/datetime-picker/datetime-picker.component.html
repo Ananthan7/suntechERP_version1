@@ -1,0 +1,51 @@
+<!-- prime ng drop down -->
+<span class="dropdown dropsMain" ngbDropdown
+    (openChange)="dorpdownToggle($event)"
+    #dropdown="ngbDropdown">
+    <i class="fa fa-clock search-btn" name="search"
+        (click)="showOverlayPanel($event)"
+        aria-haspopup="true" aria-expanded="true"
+        ngbDropdownToggle></i>
+    <div class="dropdown-menu dropdown-menu-lg searchDropdown"
+        ngbDropdownMenu>
+        <div class="p-2">
+            <div
+                class="d-flex justify-content-between border-bottom searchspan">
+                <h6>{{DateTimeModelData.SEARCH_HEADING}} (D:H:M)</h6>
+                <i (click)="closeOverlayPanel()"
+                    class="fas fa-times icon-common"></i>
+            </div>
+            <form [formGroup]="durationPickerForm">
+                <div class="row mb-3">
+
+                    <div class="col-md-3">
+                        <ng-select [items]="days" bindLabel="name"
+                            bindValue="value"
+                            (change)="getDays($event)" formControlName="days"
+                            [readonly]="viewMode"></ng-select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <ng-select [items]="minutes" bindLabel="name"
+                            bindValue="value" formControlName="hours"
+                            (change)="getHours($event)"
+                            [readonly]="viewMode">
+                        </ng-select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <ng-select [items]="seconds" bindLabel="name"
+                            bindValue="value" formControlName="minutes"
+                            (change)="getMinutes($event)"
+                            [readonly]="viewMode">
+                        </ng-select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="col-md-12 col-form-label">(D:H:M)</label>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</span>

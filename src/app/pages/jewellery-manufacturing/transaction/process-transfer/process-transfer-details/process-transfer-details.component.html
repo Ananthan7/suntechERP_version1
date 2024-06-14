@@ -56,7 +56,8 @@
               </div>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="jobdes" readonly/>
+                  <input type="text" matInput formControlName="jobdes"
+                    readonly />
                 </mat-form-field>
               </div>
 
@@ -67,7 +68,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                  appNoEmptySpace />
+                    appNoEmptySpace />
                 </mat-form-field>
               </div>
               <div class="col-sm-3">
@@ -162,7 +163,8 @@
                               appNoEmptySpace
                               formControlName="FRM_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search [MasterSearchData]="fromWorkerMasterSearch"
+                          <master-search
+                            [MasterSearchData]="fromWorkerMasterSearch"
                             (newRowClick)="workerCodeFromSelected($event)">
                           </master-search>
                         </div>
@@ -174,7 +176,8 @@
                               appNoEmptySpace
                               formControlName="TO_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search [MasterSearchData]="toWorkerMasterSearch"
+                          <master-search
+                            [MasterSearchData]="toWorkerMasterSearch"
                             (newRowClick)="workerCodeToSelected($event)">
                           </master-search>
                         </div>
@@ -265,9 +268,9 @@
                             formControlName="stockCode" />
                         </mat-form-field>
                         <master-search
-                            [MasterSearchData]="stockCodeSearch"
-                            (newRowClick)="stockCodeSelected($event)">
-                          </master-search>
+                          [MasterSearchData]="stockCodeSearch"
+                          (newRowClick)="stockCodeSelected($event)">
+                        </master-search>
                       </td>
                       <!-- quantity -->
                       <td>
@@ -450,7 +453,8 @@
                             <input type="text" matInput
                               formControlName="METAL_FRM_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search [MasterSearchData]="fromWorkerMasterSearch"
+                          <master-search
+                            [MasterSearchData]="fromWorkerMasterSearch"
                             (newRowClick)="metalworkerCodeFromSelected($event)">
                           </master-search>
                         </span>
@@ -461,7 +465,8 @@
                             <input type="text" matInput
                               formControlName="METAL_TO_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search [MasterSearchData]="toWorkerMasterSearch"
+                          <master-search
+                            [MasterSearchData]="toWorkerMasterSearch"
                             (newRowClick)="metalworkerCodeToSelected($event)">
                           </master-search>
                         </span>
@@ -736,21 +741,31 @@
           </div>
           <div class="col-md-3">
             <div class="row mb-2">
-              <label for="input" class="col-sm-4 col-form-label">Std
-                Time</label>
+              <label for="input" class="col-sm-4 col-form-label">
+                Std Time</label>
               <div class="col-sm-7">
-                <mat-form-field>
-                  <input type="time" matInput formControlName="stdtime" />
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="stdtime"
+                    readonly />
                 </mat-form-field>
+                <datetime-picker [DateTimeModelData]="STDDateTimeData"
+                  (datetimeClick)="stdTimeChange($event)"
+                  (updateDuration)="StdTimeInMinutes($event)">
+                </datetime-picker>
               </div>
             </div>
             <div class="row mb-2">
               <label for="input" class="col-sm-4 col-form-label">Time
                 Taken</label>
               <div class="col-sm-7">
-                <mat-form-field>
-                  <input type="time" matInput formControlName="timetaken" />
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="timetaken"
+                    readonly />
                 </mat-form-field>
+                <datetime-picker [DateTimeModelData]="TimeTakenData"
+                  (datetimeClick)="timeTakenChange($event)"
+                  (updateDuration)="timeTakenInMinutes($event)">
+                </datetime-picker>
               </div>
             </div>
           </div>
@@ -759,10 +774,14 @@
               <label for="input"
                 class="col-sm-4 col-form-label">Consumed</label>
               <div class="col-sm-7">
-                <mat-form-field>
-                  <input type="time" matInput
-                    formControlName="consumed" />
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput
+                    formControlName="consumed" readonly />
                 </mat-form-field>
+                <datetime-picker [DateTimeModelData]="consumedTimeData"
+                  (datetimeClick)="consumedChange($event)"
+                  (updateDuration)="consumedInMinutes($event)">
+                </datetime-picker>
               </div>
             </div>
             <div class="row mb-3">
