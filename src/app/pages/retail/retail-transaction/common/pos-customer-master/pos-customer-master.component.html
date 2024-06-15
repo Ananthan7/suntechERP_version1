@@ -249,6 +249,21 @@
           <div class="col-md-3">
             <mat-form-field class="w-100">
               <mat-label>Date Of Birth</mat-label>
+              <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
+                formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY"  />
+              <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+
+              <mat-error *ngIf="
+                  customerDetailForm.controls.fcn_cust_detail_dob.hasError(
+                    'required'
+                  )
+                ">
+                Date of Birth is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <!-- <mat-form-field class="w-100">
+              <mat-label>Date Of Birth</mat-label>
 
               <mat-form-field style="width: 100%" dateFormat2>
                 <input matInput  name="fcn_cust_detail_dob" placeholder="MM/YYYY"
@@ -259,19 +274,7 @@
                 [for]="dob"
               ></mat-datepicker-toggle>
               </mat-form-field>
-              <!-- <input
-                matInput
-                [matDatepicker]="dob"
-                [max]="vocMaxDate"
-                name="fcn_cust_detail_dob"
-                formControlName="fcn_cust_detail_dob"
-                placeholder="DD/MM/YYYY"
-                [readonly]="viewOnly"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="dob"
-              ></mat-datepicker-toggle> -->
+           
               <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
 
               <mat-error
@@ -283,7 +286,7 @@
               >
                 Date of Birth is <strong>required</strong>
               </mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
           <div class="col-md-3">
             <mat-form-field>
