@@ -28,6 +28,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   yearMonth: String = this.comService.yearSelected;
   MetalorProcessFlag: string = 'Process';
   designType: string = 'DIAMOND';
+  gridAmountDecimalFormat:any;
   viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
   STDDateTimeData: DateTimeModel = {
@@ -68,7 +69,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 259,
-    SEARCH_FIELD: 'process_code',
+    SEARCH_FIELD: 'PROCESS',
     SEARCH_HEADING: 'Process Master',
     SEARCH_VALUE: '',
     WHERECONDITION: `@StrCurrentUser='',
@@ -84,7 +85,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 261,
-    SEARCH_FIELD: 'process_code',
+    SEARCH_FIELD: 'PROCESS_CODE',
     SEARCH_HEADING: 'Process Master',
     SEARCH_VALUE: '',
     WHERECONDITION: `@JobNumber='',
@@ -248,8 +249,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    };
+
     this.setInitialValues() //set all values from parent to child
     this.processTransferdetailsForm.controls['enddate'].disable();
+    this.processTransferdetailsForm.controls['startdate'].setValue(this.comService.currentDate);
+    this.processTransferdetailsForm.controls['enddate'].setValue(this.comService.currentDate);
   }
   onStartDateChange() {
     this.processTransferdetailsForm.controls['enddate'].enable();
@@ -600,9 +609,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
   formatMetalDetailDataGrid() {
     this.metalDetailData.forEach((element: any) => {
       element.SETTED_FLAG = false
-      element.GROSS_WT = this.comService.decimalQuantityFormat(element.GROSS_WT, 'METAL')
-      element.STONE_WT = this.comService.decimalQuantityFormat(element.STONE_WT, 'STONE')
-      element.PURITY = this.comService.decimalQuantityFormat(element.PURITY, 'PURITY')
+      element.GEN = 'GEN'
+      element.GROSS_WT = this.comService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.STONE_WT = this.comService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
+      element.PURITY = this.comService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
     });
   }
   /**USE: barcode Number Validate API call */
@@ -687,10 +697,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
-        if (result.dynamicData && result.dynamicData[0] > 0) {
-          let data = result.dynamicData[0]
+        let data = result.dynamicData[0]
+        if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
-            let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
+            let result =  this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
             if (result && result.length == 0) {
               this.comService.toastErrorByMsgId('No data found')
               this.processTransferdetailsForm.controls[FORMNAME].setValue('')
@@ -708,12 +718,26 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  selectAllBtnChange(event:any){
+    console.log(event);
+    if(event.target.checked){
+      this.metalDetailData.forEach((item:any)=>{
+        item.SETTED_FLAG = true;
+      })
+    }
+  }
   /**USE bind selected values*/
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(event.PROCESS)
     this.processTransferdetailsForm.controls.FRM_PROCESSNAME.setValue(event.Description)
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
+    let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
+    if(data && data.length>0){
+      this.setSubJobTransferDetails(data)
+    }else{
+      this.comService.toastErrorByMsgId('no data found')
+    }
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(event.PROCESS_CODE)
