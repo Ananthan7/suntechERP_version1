@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+[isloading]="isloading"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="processTransferFrom">
@@ -129,9 +130,9 @@
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Metal">
-                                <dxi-column alignment="right" caption="Psc" dataField="MetalPcsTo" format="fixedPoint">
+                                <dxi-column alignment="right" caption="Psc" dataField="TO_METAL_PCS" format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="right" caption="Weight" dataField="MetalWeightTo">
+                                <dxi-column alignment="right" caption="Weight" dataField="FRM_METAL_WT">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Stone">
@@ -141,16 +142,21 @@
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption>
-                                <dxi-column alignment="right" caption="Loss" dataField="Population_Total"
+                                <dxi-column alignment="right" caption="Loss QTY" dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Time" dataField="">
+                                <dxi-column alignment="center" caption="Time" dataField="STD_TIME"
+                                width="auto">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Return Metal" dataField="">
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="Return">
+                                <dxi-column alignment="center" caption="Return Metal" dataField="" width="auto">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Return Stone" dataField="">
+                                <dxi-column alignment="center" caption="Return Stone" dataField="" width="auto">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Scrap Div" dataField="">
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="">
+                                <dxi-column alignment="center" caption="Scrap Div" dataField="" width="auto">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Gain Wt" dataField="">
                                 </dxi-column>

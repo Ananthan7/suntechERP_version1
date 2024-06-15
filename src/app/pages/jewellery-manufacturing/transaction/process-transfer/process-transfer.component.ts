@@ -29,7 +29,7 @@ export class ProcessTransferComponent implements OnInit {
   sequenceDetails: any[] = []
   private subscriptions: Subscription[] = [];
   modalReference!: NgbModalRef;
-
+  isloading: boolean = false;
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -337,8 +337,10 @@ export class ProcessTransferComponent implements OnInit {
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         this.commonService.closeSnackBarMsg()
         if (result.response && result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -365,8 +367,10 @@ export class ProcessTransferComponent implements OnInit {
       this.processTransferFrom.value.YEARMONTH
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         this.commonService.closeSnackBarMsg()
         if (result.response && result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -462,31 +466,31 @@ export class ProcessTransferComponent implements OnInit {
       "UNQ_DESIGN_ID": this.commonService.nullToString(detailScreenData.UNQ_DESIGN_ID),
       "DESIGN_CODE": this.commonService.nullToString(detailScreenData.DESIGN_CODE),
       "SEQ_CODE": this.commonService.nullToString(detailScreenData.SEQ_CODE),
-      "JOB_DESCRIPTION": this.commonService.nullToString(detailScreenData.subJobDescription),
+      "JOB_DESCRIPTION": this.commonService.nullToString(detailScreenData.JOB_DESCRIPTION),
       "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
       "FRM_PROCESS_CODE": this.commonService.nullToString(detailScreenData.FRM_PROCESS_CODE),
       "FRM_PROCESSNAME": this.commonService.nullToString(detailScreenData.FRM_PROCESSNAME),
       "FRM_WORKER_CODE": this.commonService.nullToString(detailScreenData.FRM_WORKER_CODE),
-      "FRM_WORKERNAME": this.commonService.nullToString(detailScreenData.WORKERDESC),
-      "FRM_PCS": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),
+      "FRM_WORKERNAME": this.commonService.nullToString(detailScreenData.FRM_WORKERNAME),
+      "FRM_PCS": this.commonService.emptyToZero(detailScreenData.FRM_PCS),
       "FRM_STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),
       "FRM_STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsFrom),
-      "FRM_METAL_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightFrom),
+      "FRM_METAL_WT": this.commonService.emptyToZero(detailScreenData.FRM_METAL_WT),
       "FRM_METAL_PCS": this.commonService.emptyToZero(detailScreenData.FRM_METAL_PCS),
       "FRM_PURE_WT": this.commonService.emptyToZero(detailScreenData.PUREWT),
-      "FRM_NET_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightFrom),
+      "FRM_NET_WT": this.commonService.emptyToZero(detailScreenData.FRM_METAL_WT),
       "TO_PROCESS_CODE": this.commonService.nullToString(detailScreenData.TO_PROCESS_CODE),
       "TO_PROCESSNAME": this.commonService.nullToString(detailScreenData.TO_PROCESSNAME),
       "TO_WORKER_CODE": this.commonService.nullToString(detailScreenData.TO_WORKER_CODE),
-      "TO_WORKERNAME": this.commonService.nullToString(detailScreenData.TO_WORKER_CODEDescription),
-      "TO_PCS": this.commonService.emptyToZero(detailScreenData.ToJobPcs),
-      "TO_METAL_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsTo),
+      "TO_WORKERNAME": this.commonService.nullToString(detailScreenData.TO_WORKERNAME),
+      "TO_PCS": this.commonService.emptyToZero(detailScreenData.TO_PCS),
+      "TO_METAL_PCS": this.commonService.emptyToZero(detailScreenData.TO_METAL_PCS),
       "TO_STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeightTo),
       "TO_STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsTo),
-      "TO_METAL_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightTo),
-      "TO_PURE_WT": this.commonService.emptyToZero(Number(detailScreenData.MetalWeightFrom) * Number(detailScreenData.PURITY)),
-      "TO_NET_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightTo),
+      "TO_METAL_WT": this.commonService.emptyToZero(detailScreenData.TO_METAL_WT),
+      "TO_PURE_WT": this.commonService.emptyToZero(Number(detailScreenData.FRM_METAL_WT) * Number(detailScreenData.PURITY)),
+      "TO_NET_WT": this.commonService.emptyToZero(detailScreenData.TO_METAL_WT),
       "LOSS_QTY": this.commonService.emptyToZero(detailScreenData.stdLoss),
       "LOSS_PURE_QTY": this.commonService.emptyToZero(LOSS_PURE_QTY),
       "STONE_AMOUNTFC": this.commonService.emptyToZero(stoneAmount),
@@ -538,9 +542,9 @@ export class ProcessTransferComponent implements OnInit {
       "JOB_PCS": 0,
       "STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeightTo),
       "STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsTo),
-      "METAL_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightTo),
-      "METAL_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsTo),
-      "PURE_WT": this.commonService.emptyToZero(Number(detailScreenData.MetalWeightTo) * Number(detailScreenData.PURITY)),
+      "METAL_WT": this.commonService.emptyToZero(detailScreenData.TO_METAL_WT),
+      "METAL_PCS": this.commonService.emptyToZero(detailScreenData.TO_METAL_PCS),
+      "PURE_WT": this.commonService.emptyToZero(Number(detailScreenData.TO_METAL_WT) * Number(detailScreenData.PURITY)),
       "GROSS_WT": this.commonService.emptyToZero(detailScreenData.GrossWeightTo),
       "RET_METAL_PCS": 0,
       "RET_STONE_PCS": 0,
@@ -610,7 +614,7 @@ export class ProcessTransferComponent implements OnInit {
         "JOB_NUMBER": this.commonService.nullToString(PROCESS_FORMDETAILS.JOB_NUMBER),
         "JOB_SO_NUMBER": this.commonService.emptyToZero(PROCESS_FORMDETAILS.JOB_SO_NUMBER),
         "UNQ_JOB_ID": this.commonService.nullToString(PROCESS_FORMDETAILS.UNQ_JOB_ID),
-        "JOB_DESCRIPTION": this.commonService.nullToString(PROCESS_FORMDETAILS.subJobDescription),
+        "JOB_DESCRIPTION": this.commonService.nullToString(PROCESS_FORMDETAILS.JOB_DESCRIPTION),
         "BRANCH_CODE": this.commonService.branchCode,
         "DESIGN_CODE": this.commonService.nullToString(PROCESS_FORMDETAILS.DESIGN_CODE),
         "METALSTONE": this.commonService.nullToString(element.METALSTONE),
