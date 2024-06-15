@@ -22,7 +22,7 @@ export class ProcessTransferComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   tableRowCount: number = 0;
-  PTFDetailsToSave: any[] = [];
+  JOB_PROCESS_TRN_DETAIL_DJ: any[] = [];
   metalGridDataToSave: any[] = [];
   LabourChargeDetailsToSave: any[] = [];
   currentDate: any = this.commonService.currentDate;
@@ -404,7 +404,7 @@ export class ProcessTransferComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
+      "JOB_PROCESS_TRN_DETAIL_DJ": this.JOB_PROCESS_TRN_DETAIL_DJ, //header grid details
       "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.LabourChargeDetailsToSave // labour charge details
     }
@@ -449,7 +449,7 @@ export class ProcessTransferComponent implements OnInit {
 
     console.log(this.commonService.timeToMinutes(detailScreenData.consumed), 'time consumed');
     this.gridSRNO+=1
-    this.PTFDetailsToSave.push({
+    this.JOB_PROCESS_TRN_DETAIL_DJ.push({
       "SRNO": this.gridSRNO,
       "UNIQUEID": 0,
       "VOCNO": this.content?.MID || 0,
@@ -462,11 +462,11 @@ export class ProcessTransferComponent implements OnInit {
       "UNQ_DESIGN_ID": this.commonService.nullToString(detailScreenData.UNQ_DESIGN_ID),
       "DESIGN_CODE": this.commonService.nullToString(detailScreenData.DESIGN_CODE),
       "SEQ_CODE": this.commonService.nullToString(detailScreenData.SEQ_CODE),
-      "JOB_DESCRIPTION": this.commonService.nullToString(this.processTransferFrom.value.subJobDescription),
+      "JOB_DESCRIPTION": this.commonService.nullToString(detailScreenData.subJobDescription),
       "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
       "FRM_PROCESS_CODE": this.commonService.nullToString(detailScreenData.FRM_PROCESS_CODE),
-      "FRM_PROCESSNAME": this.commonService.nullToString(detailScreenData.PROCESSDESC),
+      "FRM_PROCESSNAME": this.commonService.nullToString(detailScreenData.FRM_PROCESSNAME),
       "FRM_WORKER_CODE": this.commonService.nullToString(detailScreenData.FRM_WORKER_CODE),
       "FRM_WORKERNAME": this.commonService.nullToString(detailScreenData.WORKERDESC),
       "FRM_PCS": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),

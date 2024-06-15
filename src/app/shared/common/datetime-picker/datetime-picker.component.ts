@@ -45,37 +45,30 @@ export class DatetimePickerComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    console.log(this.DateTimeModelData,'fired')
     this.durationPickerForm = this.formBuilder.group({
       days:[this.days[0].value],
       hours: [this.minutes[0].value],
       minutes: [this.seconds[0].value],
     });
-
-    if (this.commonService.emptyToZero(this.DateTimeModelData.TIMEINMINUTES) != 0) {
+    this.setInitialTime()
+  }
+  showOverlayPanel(event?: Event) {
+    this.setInitialTime()
+    this.dropDown.open()
+    // this.overlayPanels.show(event);
+  }
+  setInitialTime(){
+    if (this.commonService.emptyToZero(this.DateTimeModelData?.TIMEINMINUTES) != 0) {
       this.timeConvert(this.DateTimeModelData.TIMEINMINUTES);
       this.durationPickerForm.controls.days.setValue(this.daystime);
       this.durationPickerForm.controls.hours.setValue(this.hoursTime);
       this.durationPickerForm.controls.minutes.setValue(this.minutesTime);
     }
-
-    // if (this.duration1 && this.duration1.MAX_TIME !== "") {
-    //   this.timeConvert1(this.duration1.MAX_TIME);
-    //   this.durationPickerForm.controls.days.setValue(this.daystime2);
-    //   this.durationPickerForm.controls.hours.setValue(this.hoursTime2);
-    //   this.durationPickerForm.controls.minutes.setValue(this.minutesTime2);
-    // }
-
   }
   dorpdownToggle(event: any) {
  
   }
-  showOverlayPanel(event?: Event) {
-    // this.loadData();
-    this.dropDown.open()
 
-    // this.overlayPanels.show(event);
-  }
   onHidePanel() {
   }
   closeOverlayPanel() {

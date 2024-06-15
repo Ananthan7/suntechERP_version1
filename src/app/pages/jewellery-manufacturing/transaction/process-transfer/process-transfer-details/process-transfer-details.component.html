@@ -130,8 +130,8 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput appNoEmptySpace
-                              (focusout)="processMasterValidate($event,'FROM')"
+                            <input type="text" matInput UpperCaseDirective
+                              (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'FRM_PROCESS_CODE')"
                               formControlName="FRM_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
@@ -143,8 +143,8 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput appNoEmptySpace
-                              (focusout)="processMasterValidate($event,'TO')"
+                            <input type="text" matInput UpperCaseDirective
+                              (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'TO_PROCESS_CODE')"
                               formControlName="TO_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
@@ -160,7 +160,8 @@
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              appNoEmptySpace
+                              UpperCaseDirective
+                              (focusout)="SPvalidateLookupField($event,fromWorkerMasterSearch,'FRM_WORKER_CODE')"
                               formControlName="FRM_WORKER_CODE" />
                           </mat-form-field>
                           <master-search
@@ -173,7 +174,8 @@
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              appNoEmptySpace
+                              UpperCaseDirective
+                              (focusout)="SPvalidateLookupField($event,toWorkerMasterSearch,'TO_WORKER_CODE')"
                               formControlName="TO_WORKER_CODE" />
                           </mat-form-field>
                           <master-search
@@ -415,7 +417,7 @@
                         <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              (focusout)="processMasterValidate($event,'FROM')"
+                              (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
                               formControlName="METAL_FRM_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
@@ -428,7 +430,7 @@
                         <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              (focusout)="processMasterValidate($event,'TO')"
+                              (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
                           </mat-form-field>
                           <master-search
