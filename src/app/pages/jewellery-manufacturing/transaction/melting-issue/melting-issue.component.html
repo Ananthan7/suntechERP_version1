@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewAuditTrail]="true"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    [isViewAuditTrail]="true"
     [isViewPost]="true"></modal-header>
 <div class="row">
     <div class="col-md-12">
@@ -15,26 +16,38 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type * :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Voc Type *
+                                :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="voctype" />
+                                    <input type="text" matInput
+                                        formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="vocno" style="text-align: right;" />
+                                    <input type="number" matInput
+                                        formControlName="vocno"
+                                        style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date * :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Voc Date *
+                                :</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="vocdate" [max]="vocdate" formControlName="vocdate"
-                                        placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                                    <input matInput [matDatepicker]="vocdate"
+                                        [max]="vocdate"
+                                        formControlName="vocdate"
+                                        placeholder="DD/MM/YYYY"
+                                        DateValidation />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="vocdate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate"
+                                        #vocdate></mat-datepicker>
                                 </mat-form-field>
                             </div>
                             <!-- <div class="col-md-4">
@@ -45,91 +58,121 @@
                             </div> -->
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Melting Type:</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Melting
+                                Type:</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="meltingtype" />
+                                    <input type="text" matInput
+                                        formControlName="meltingtype" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="MeltingCodeData"
+                                <master-search
+                                    [MasterSearchData]="MeltingCodeData"
                                     (newRowClick)="MeltingCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Job Number :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Job Number
+                                :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="jobno" />
+                                    <input type="text" matInput
+                                        formControlName="jobno" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobnoCodeData"
+                                <master-search
+                                    [MasterSearchData]="jobnoCodeData"
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobdes" />
+                                    <input type="text" matInput
+                                        formControlName="jobdes" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Process :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Process
+                                :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="processcode" />
+                                    <input type="text" matInput
+                                        formControlName="processcode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="ProcessCodeData"
+                                <master-search
+                                    [MasterSearchData]="ProcessCodeData"
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="processdes" />
+                                    <input type="text" matInput
+                                        formControlName="processdes" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Worker :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Worker :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="worker" />
+                                    <input type="text" matInput
+                                        formControlName="worker" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="WorkerCodeData"
+                                <master-search
+                                    [MasterSearchData]="WorkerCodeData"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="workerdes" />
+                                    <input type="text" matInput
+                                        formControlName="workerdes" />
                                 </mat-form-field>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Sub Job No * :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Sub Job No *
+                                :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="subjobno" class="text-right" NumberOnly/>
+                                    <input type="text" matInput
+                                        formControlName="subjobno"
+                                        class="text-right" NumberOnly />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="subjobno" class="text-right" NumberOnly/>
+                                    <input type="text" matInput
+                                        formControlName="subjobno"
+                                        class="text-right" NumberOnly />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Color :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Color :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="color" />
+                                    <input type="text" matInput
+                                        formControlName="color" />
                                 </mat-form-field>
                             </div>
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Job Purity :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Job Purity
+                                :</label>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Time :</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Time :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="time" />
+                                    <input type="text" matInput
+                                        formControlName="time" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -137,43 +180,70 @@
                 </div>
                 <div class="row py-2 border-top justify-content-between">
                     <div class="col-md-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                            (addClick)="openaddMeltingIssueDetails()" (deleteClick)="deleteTableData()">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            (addClick)="openaddMeltingIssueDetails()"
+                            (deleteClick)="deleteTableData()">
                         </menu-buttons>
                     </div>
 
                     <div class="col-md-3 text-end">
-                        <button class="btn btn-primary add-btn">Allocate</button>
+                        <button
+                            class="btn btn-primary add-btn">Allocate</button>
                     </div>
 
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8">
-                                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                                    (onRowClick)="onRowClickHandler($event)" (onRowDblClick)="onRowDoubleClickHandler($event)"[allowColumnReordering]="true" [allowColumnResizing]="true" height="200"
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    [showBorders]="true" [showRowLines]="true"
+                                    (onRowClick)="onRowClickHandler($event)"
+                                    (onRowDblClick)="onRowDoubleClickHandler($event)"
+                                    [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true" height="200"
                                     [dataSource]="meltingISsueDetailsData">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <!-- <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing> -->
-                                    <dxo-selection mode="single"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-selection
+                                        mode="single"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
                                     <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
                                         caption="{{ data }}" [allowEditing]="true" alignment="left" [width]="100"
                                         backgroundcolor="#000">
                                     </dxi-column> -->
-                                    <dxi-column [width]="100" dataField="SRNO" caption="SRNO"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="DIV" caption="DIV"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Job No" caption="Job No"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Stock Code" caption="Stock Code"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Main Stock" caption="Main Stock"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Process" caption="Process"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Worker" caption="Worker"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Pcs" caption="Pcs"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Gross Weight" caption="Gross Weight"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Purity" caption="Purity"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Pure Weight" caption="Pure Weight"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Rate" caption="Rate"></dxi-column>
-                                    <dxi-column [width]="100"  dataField="Amount" caption="Amount"></dxi-column>
+                                    <dxi-column [width]="100" dataField="SRNO"
+                                        caption="SRNO"></dxi-column>
+                                    <dxi-column [width]="100" dataField="DIVCODE"
+                                        caption="DIV"></dxi-column>
+                                    <dxi-column [width]="100" dataField="JOB_NUMBER"
+                                        caption="Job No"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="STOCK_CODE"
+                                        caption="Stock Code"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="Main Stock"
+                                        caption="Main Stock"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="PROCESS_CODE"
+                                        caption="Process"></dxi-column>
+                                    <dxi-column [width]="100" dataField="WORKER_CODE"
+                                        caption="Worker"></dxi-column>
+                                    <dxi-column [width]="100" dataField="PCS"
+                                        caption="Pcs"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="GROSS_WT"
+                                        caption="Gross Weight"></dxi-column>
+                                    <dxi-column [width]="100" dataField="PURITY"
+                                        caption="Purity"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="PUREWT"
+                                        caption="Pure Weight"></dxi-column>
+                                    <dxi-column [width]="100" dataField="Rate"
+                                        caption="Rate"></dxi-column>
+                                    <dxi-column [width]="100" dataField="Amount"
+                                        caption="Amount"></dxi-column>
 
                                     <dxo-summary>
                                         <dxi-total-item column="SRNO">
@@ -194,62 +264,96 @@
                                 <label for="inputPassword"
                                     class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
                                     / Alloy Ratio</label>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="ID" [showBorders]="true"
+                                    [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true"
                                     [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                    <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true"></dxo-editing>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
+                                    <dxi-column *ngFor="let data of columnhead1"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}"
+                                        [allowEditing]="true" alignment="left"
                                         backgroundcolor="#000">
 
                                     </dxi-column>
                                 </dx-data-grid>
-                                <button class="btn btn-sm btn-outline-primary" (click)="open(mymodal)">Add Alloy
+                                <button class="btn btn-sm btn-outline-primary"
+                                    (click)="open(mymodal)">Add Alloy
                                 </button>
 
                                 <div class="col-md-8">
                                     <ng-template #mymodal let-modal modal-sm>
-                                        <div class="" style="padding: 10px 20px">
-                                            <div class="modal-header d-flex justify-content-end">
-                                                <h5 class="meltingissueheading" id="modal-dia-metal"
-                                                    style="text-align:right;">Melting Issue </h5>
-                                                <button style="border: none" type="button" class="close "
-                                                    aria-label="Close" (click)="modal.dismiss('close1')">
-                                                    <span aria-hidden="true">x</span>
+                                        <div class style="padding: 10px 20px">
+                                            <div
+                                                class="modal-header d-flex justify-content-end">
+                                                <h5 class="meltingissueheading"
+                                                    id="modal-dia-metal"
+                                                    style="text-align:right;">Melting
+                                                    Issue </h5>
+                                                <button style="border: none"
+                                                    type="button" class="close "
+                                                    aria-label="Close"
+                                                    (click)="modal.dismiss('close1')">
+                                                    <span
+                                                        aria-hidden="true">x</span>
                                                 </button>
                                             </div>
                                             <br>
                                             <div class="col-md-12">
                                                 <div class="modal-content">
-                                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
-                                                        [showBorders]="true" [allowColumnReordering]="true"
-                                                        [allowColumnResizing]="true" [columnAutoWidth]="true">
-                                                        <dxo-paging [enabled]="false"></dxo-paging>
-                                                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                                        <dxo-selection mode="multiple"></dxo-selection>
-                                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                                        <dxi-column *ngFor="let data of db1" dataField="{{ data }}"
-                                                            caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                                    <dx-data-grid #dataGrid
+                                                        id="gridContainer"
+                                                        keyExpr="ID"
+                                                        [showBorders]="true"
+                                                        [allowColumnReordering]="true"
+                                                        [allowColumnResizing]="true"
+                                                        [columnAutoWidth]="true">
+                                                        <dxo-paging
+                                                            [enabled]="false"></dxo-paging>
+                                                        <dxo-editing mode="cell"
+                                                            [allowUpdating]="true"></dxo-editing>
+                                                        <dxo-selection
+                                                            mode="multiple"></dxo-selection>
+                                                        <dxo-scrolling
+                                                            mode="virtual"></dxo-scrolling>
+                                                        <dxi-column
+                                                            *ngFor="let data of db1"
+                                                            dataField="{{ data }}"
+                                                            caption="{{ data }}"
+                                                            [allowEditing]="true"
+                                                            alignment="left"
                                                             backgroundcolor="#000">
 
                                                         </dxi-column>
                                                     </dx-data-grid>
                                                     <div class="row my-2">
-                                                        <label for="inputPassword"
-                                                            class="col-sm-3 col-form-label">Required Alloy Qty:</label>
+                                                        <label
+                                                            for="inputPassword"
+                                                            class="col-sm-3 col-form-label">Required
+                                                            Alloy Qty:</label>
                                                         <div class="col-md-6">
-                                                            <mat-form-field style="width: 70%;">
-                                                                <input type="text" matInput formControlName="remarks" />
+                                                            <mat-form-field
+                                                                style="width: 70%;">
+                                                                <input
+                                                                    type="text"
+                                                                    matInput
+                                                                    formControlName="remarks" />
                                                             </mat-form-field>
                                                         </div>
                                                     </div>
 
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-primary">Apply</button>
-                                                        <button type="button" class="btn btn-primary">Cancel</button>
+                                                        <button type="button"
+                                                            class="btn btn-primary">Apply</button>
+                                                        <button type="button"
+                                                            class="btn btn-primary">Cancel</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -263,62 +367,83 @@
 
                 <div class="row py-2 border-top">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                            [showBorders]="true"
+                            [allowColumnReordering]="true"
+                            [allowColumnResizing]="true"
+                            [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                            <dxi-column *ngFor="let data of columnheader"
+                                dataField="{{ data }}" caption="{{ data }}"
+                                [allowEditing]="true" alignment="center"
+                                backgroundcolor="#000">
                             </dxi-column>
 
                         </dx-data-grid>
                     </div>
                     <div class="col-md-12">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Total>></label>
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Issued :</label>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Total>></label>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Issued :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="issued" />
+                                    <input type="text" matInput
+                                        formControlName="issued" />
                                 </mat-form-field>
                             </div>
 
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Required :</label>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Required
+                                :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="required" />
+                                    <input type="text" matInput
+                                        formControlName="required" />
                                 </mat-form-field>
                             </div>
 
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Allocated :</label>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Allocated
+                                :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="allocated" />
+                                    <input type="text" matInput
+                                        formControlName="allocated" />
                                 </mat-form-field>
                             </div>
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Balance :</label>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Balance
+                                :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="balance" />
+                                    <input type="text" matInput
+                                        formControlName="balance" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
                                 <div class="pt-3">
-                                    <button class="btn btn-primary add-btn">Reset</button>
+                                    <button
+                                        class="btn btn-primary add-btn">Reset</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row my-2">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
+                            <label for="inputPassword"
+                                class="col-sm-3 col-form-label">Remarks
+                                :</label>
                             <div class="col-md-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" />
+                                    <input type="text" matInput
+                                        formControlName="remarks" />
                                 </mat-form-field>
                             </div>
                         </div>

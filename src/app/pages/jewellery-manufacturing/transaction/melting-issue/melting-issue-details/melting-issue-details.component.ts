@@ -137,48 +137,60 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.meltingIssuedetailsFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.setInitialValue()
 
   }
-  setAllInitialValues() {
-    let dataFromParent = this.content[0].PROCESS_FORMDETAILS
-    if (!dataFromParent) return
-    this.meltingIssuedetailsFrom.controls.jobno.setValue(dataFromParent.jobno)
-    this.meltingIssuedetailsFrom.controls.jobdes.setValue(dataFromParent.jobdes)
-    this.meltingIssuedetailsFrom.controls.subjobno.setValue(dataFromParent.subjobno)
-    this.meltingIssuedetailsFrom.controls.subJobDescription.setValue(dataFromParent.subJobDescription)
-    this.meltingIssuedetailsFrom.controls.workerFrom.setValue(dataFromParent.workerFrom)
-    this.meltingIssuedetailsFrom.controls.workerTo.setValue(dataFromParent.workerTo)
-    this.meltingIssuedetailsFrom.controls.toggleSwitchtIssue.setValue(dataFromParent.toggleSwitchtIssue)
-    this.meltingIssuedetailsFrom.controls.processFrom.setValue(dataFromParent.processFrom)
-    this.meltingIssuedetailsFrom.controls.processTo.setValue(dataFromParent.processTo)
-    this.meltingIssuedetailsFrom.controls.MetalPcsFrom.setValue(dataFromParent.MetalPcsFrom)
-    this.meltingIssuedetailsFrom.controls.MetalPcsTo.setValue(dataFromParent.MetalPcsTo)
-    this.meltingIssuedetailsFrom.controls.GrossWeightTo.setValue(dataFromParent.GrossWeightTo)
-    this.meltingIssuedetailsFrom.controls.approvedby.setValue(dataFromParent.approvedby)
-    this.meltingIssuedetailsFrom.controls.startdate.setValue(dataFromParent.startdate)
-    this.meltingIssuedetailsFrom.controls.enddate.setValue(dataFromParent.enddate)
-    this.meltingIssuedetailsFrom.controls.JOB_DATE.setValue(dataFromParent.JOB_DATE)
-    this.meltingIssuedetailsFrom.controls.DESIGN_CODE.setValue(dataFromParent.DESIGN_CODE)
-    this.meltingIssuedetailsFrom.controls.SEQ_CODE.setValue(dataFromParent.SEQ_CODE)
-    this.meltingIssuedetailsFrom.controls.PROCESSDESC.setValue(dataFromParent.PROCESSDESC)
-    this.meltingIssuedetailsFrom.controls.WORKERDESC.setValue(dataFromParent.WORKERDESC)
-    this.meltingIssuedetailsFrom.controls.PUREWT.setValue(dataFromParent.PUREWT)
-    this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(dataFromParent.MetalWeightFrom)
-    this.meltingIssuedetailsFrom.controls.processToDescription.setValue(dataFromParent.processToDescription)
-    this.meltingIssuedetailsFrom.controls.workerToDescription.setValue(dataFromParent.workerToDescription)
-    this.meltingIssuedetailsFrom.controls.PURITY.setValue(dataFromParent.PURITY)
-    this.meltingIssuedetailsFrom.controls.METALLAB_TYPE.setValue(dataFromParent.METALLAB_TYPE)
-    this.meltingIssuedetailsFrom.controls.remarks.setValue(dataFromParent.remarks)
-    this.meltingIssuedetailsFrom.controls.treeno.setValue(dataFromParent.treeno)
-    this.meltingIssuedetailsFrom.controls.JOB_SO_NUMBER.setValue(dataFromParent.JOB_SO_NUMBER)
-    this.meltingIssuedetailsFrom.controls.stockCode.setValue(dataFromParent.stockCode)
-    this.meltingIssuedetailsFrom.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
-    this.meltingIssuedetailsFrom.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
-  }
+  setInitialValue() {
+    console.log(this.content, 'content');
+    if (!this.content) return;
+    // this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
+
+    // this.meltingIssuedetailsFrom.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+    // this.meltingIssuedetailsFrom.controls.location.setValue(this.content.LOCTYPE_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+    // this.meltingIssuedetailsFrom.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
+
+    this.meltingIssuedetailsFrom.controls.jobno.setValue(this.content.JOB_NUMBER)
+    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.JOB_DESCRIPTION)
+    this.meltingIssuedetailsFrom.controls.process.setValue(this.content.PROCESS_CODE)
+    this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.PROCESS_DESC)
+    this.meltingIssuedetailsFrom.controls.diffgrwt.setValue(this.content.diffgrwt)
+    this.meltingIssuedetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
+    this.meltingIssuedetailsFrom.controls.workerdes.setValue(this.content.WORKER_CODE)
+    this.meltingIssuedetailsFrom.controls.treeno.setValue(this.content.TREE_NO)
+    this.meltingIssuedetailsFrom.controls.waxweight.setValue(this.content.WAX_WT)
+    this.meltingIssuedetailsFrom.controls.pcs.setValue(this.content.PCS)
+    this.meltingIssuedetailsFrom.controls.location.setValue(this.content.LOCATION_CODE)
+    this.meltingIssuedetailsFrom.controls.stockcode.setValue(this.content.STOCK_CODE)
+    this.meltingIssuedetailsFrom.controls.stockdes.setValue(this.content.STOCK_DESCRIPTION)
+    this.meltingIssuedetailsFrom.controls.tostock.setValue(this.content.TOSTOCKCODE)
+    this.meltingIssuedetailsFrom.controls.mainstock.setValue(this.content.MAIN_STOCK_CODE)
+    this.meltingIssuedetailsFrom.controls.stoneweight.setValue(this.content.STONE_WT)
+    this.meltingIssuedetailsFrom.controls.netweight.setValue(this.content.NET_WT)
+    this.meltingIssuedetailsFrom.controls.grossweight.setValue(this.content.GROSS_WT)
+    this.meltingIssuedetailsFrom.controls.topurity.setValue(this.content.TOPURITY)
+    this.meltingIssuedetailsFrom.controls.pureweight.setValue(this.content.PUREWT)
+    this.meltingIssuedetailsFrom.controls.purity.setValue(this.content.PURITY)
+    this.meltingIssuedetailsFrom.controls.remarks.setValue(this.content.REMARKS)
+    this.meltingIssuedetailsFrom.controls.lossweight.setValue(this.content.LOSSWT)
+
+
+  };
+  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+  //   this.meltingIssuedetailsFrom.controls[formControlName].setValue(
+  //     this.comService.setCommaSerperatedNumber(value, Decimal)
+  //   )
+  // }
 
   close(data?: any) {
     //TODO reset forms and data before closing
+    // this.activeModal.close(data);
+    this.closeDetail.emit()
+  }
+  closed(data?: any) {
+    //TODO reset forms and data before closing
     this.activeModal.close(data);
+    data.reopen = true;
+
   }
 
 
@@ -257,20 +269,20 @@ setPostData() {
       "WORKER_DESC": this.meltingIssuedetailsFrom.value.workerdes,
       "STOCK_CODE": this.meltingIssuedetailsFrom.value.stockcode,
       "STOCK_DESCRIPTION": this.meltingIssuedetailsFrom.value.stockdes,
-      "DIVCODE": "s",
+      "DIVCODE": "S",
       "KARAT_CODE": "stri",
-      "PCS": this.meltingIssuedetailsFrom.value.PCS,
-      "GROSS_WT": this.meltingIssuedetailsFrom.value.GROSS_WT,
-      "STONE_WT": this.meltingIssuedetailsFrom.value.STONE_WT,
-      "PURITY": this.meltingIssuedetailsFrom.value.PURITY,
-      "PUREWT": this.meltingIssuedetailsFrom.value.PUREWT,
+      "PCS": this.meltingIssuedetailsFrom.value.pcs,
+      "GROSS_WT": this.meltingIssuedetailsFrom.value.grossweight,
+      "STONE_WT": this.meltingIssuedetailsFrom.value.stoneweight,
+      "PURITY": this.meltingIssuedetailsFrom.value.purity,
+      "PUREWT": this.meltingIssuedetailsFrom.value.pureweight,
       "PUDIFF": 0,
       "IRON_WT": 0,
-      "NET_WT": this.meltingIssuedetailsFrom.value.NET_WT,
+      "NET_WT": this.meltingIssuedetailsFrom.value.netweight,
       "TOTAL_WEIGHT": 0,
       "IRON_PER": 0,
       "STONEDIFF": 0,
-      "WAX_WT": this.meltingIssuedetailsFrom.value.WAX_WT,
+      "WAX_WT": this.meltingIssuedetailsFrom.value.waxweight,
       "TREE_NO": this.meltingIssuedetailsFrom.value.treeno,
       "WIP_ACCODE": "string",
       "CURRENCY_CODE": "stri",
@@ -283,14 +295,14 @@ setPostData() {
       "REMARKS": this.meltingIssuedetailsFrom.value.remarks,
       "LOCTYPE_CODE": this.meltingIssuedetailsFrom.value.location,
       "TOSTOCKCODE": this.meltingIssuedetailsFrom.value.tostock,
-      "LOSSWT": this.meltingIssuedetailsFrom.value.LOSSWT,
+      "LOSSWT": this.meltingIssuedetailsFrom.value.lossweight,
       "TODIVISION_CODE": "s",
       "LOT_NO": this.meltingIssuedetailsFrom.value.lotno,
       "BAR_NO": this.meltingIssuedetailsFrom.value.barno,
       "TICKET_NO": this.meltingIssuedetailsFrom.value.ticketno,
       "SILVER_PURITY": 0,
       "SILVER_PUREWT": 0,
-      "TOPURITY": this.meltingIssuedetailsFrom.value.TOPURITY,
+      "TOPURITY": this.meltingIssuedetailsFrom.value.topurity,
       "PUR_PER": 0,
       "MELTING_TYPE": "string",
       "ISALLOY": "s",
@@ -406,6 +418,7 @@ setPostData() {
           this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.topurity.setValue(data[0].PURE_WT)
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
+          this.meltingIssuedetailsFrom.controls.mainstock.setValue(data[0].MAIN_STOCK_CODE)
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
 

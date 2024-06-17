@@ -35,6 +35,9 @@ export class MeltingIssueComponent implements OnInit {
   meltingISsueDetailsData: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
+  viewMode: boolean = false;
+  isSaved: boolean = false;
+  isloading: boolean = false;
 
   branchCode?: String;
   yearMonth?: String;
@@ -152,6 +155,7 @@ export class MeltingIssueComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private comService: CommonServiceService,
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
@@ -164,8 +168,16 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.setCompanyCurrency()
     this.setAllInitialValues()
+    this.setNewFormValues
 
   }
+  setNewFormValues() {
+    this.meltingIssueFrom.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
+    this.meltingIssueFrom.controls.vocdate.setValue(this.comService.currentDate)
+    this.meltingIssueFrom.controls.YEARMONTH.setValue(this.comService.yearSelected)
+    this.meltingIssueFrom.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+  }
+  
 
   setAllInitialValues() {
     console.log(this.content)
@@ -176,6 +188,7 @@ export class MeltingIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.meltingISsueDetailsData = data.Details
+          console.log(this.meltingISsueDetailsData,'data')
           // data.Details.forEach((element: any) => {
           // //   this.tableData.push({
           // //     // 
@@ -375,21 +388,21 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
-  setValuesToHeaderGrid(DATA: any) {
-    console.log(DATA, 'detailDataToParent');
-    let detailDataToParent = DATA.POSTDATA
-    if (detailDataToParent.SRNO != 0) {
-      this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
-    } else {
-      console.log(detailDataToParent,'passing')
-      this.meltingISsueDetailsData.push(detailDataToParent);
-      this.recalculateSRNO()
+ 
+    setValuesToHeaderGrid(DATA: any) {
+      console.log(DATA, 'detailDataToParent');
+      let detailDataToParent = DATA.POSTDATA
+      if (detailDataToParent.SRNO != 0) {
+        this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+      } else {
+        this.meltingISsueDetailsData.push(detailDataToParent);
+        this.recalculateSRNO()
+      }
+      if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
+      if(DATA.FLAG == 'CONTINUE'){
+        this.commonService.showSnackBarMsg('Details added successfully')
+      };
     }
-    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
-    if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')
-    };
-  }
   closeDetailScreen() {
     this.modalReference.close()
   }
@@ -397,6 +410,7 @@ export class MeltingIssueComponent implements OnInit {
     this.selectRowIndex = event.data.SRNO
   }
   onRowDoubleClickHandler(event: any) {
+    console.log(this.selectRowIndex,'passing')
     this.selectRowIndex = event.data.SRNO
     let selectedData = event.data
     this.openaddMeltingIssueDetails(selectedData)
@@ -412,6 +426,70 @@ export class MeltingIssueComponent implements OnInit {
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
     })
   }
+
+  setPostData(form:any) {
+    console.log(form,'form');
+return{
+  "MID":this.commonService.emptyToZero(this.content?.MID),
+  "BRANCH_CODE":this.commonService.nullToString(this.meltingIssueFrom.value.BRANCH_CODE),
+  "VOCTYPE": this.commonService.nullToString(this.meltingIssueFrom.value.VOCTYPE),
+  "VOCNO": this.commonService.emptyToZero(this.meltingIssueFrom.value.VOCNO),
+  "VOCDATE":this.commonService.formatDateTime(form.vocdate),
+  "YEARMONTH":this.commonService.nullToString(this.meltingIssueFrom.value.YEARMONTH),
+  "NAVSEQNO": 0,
+  "WORKER_CODE": this.meltingIssueFrom.value.worker,
+  "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
+  "JOB_CODE": this.meltingIssueFrom.value.jobno,
+  "JOB_DESC": this.meltingIssueFrom.value.jobdes,
+  "SALESPERSON_CODE": "",
+  "SALESPERSON_NAME": "",
+  "DOCTIME": "2023-10-21T10:15:43.789Z",
+  "TOTAL_GROSSWT": 0,
+  "MELTING_TYPE": "",
+  "COLOR": "",
+  "RET_STOCK_CODE": "",
+  "RET_LOCATION_CODE": "",
+  "TOTAL_PUREWT": 0,
+  "TOTAL_STONEWT": 0,
+  "TOTAL_NETWT": 0,
+  "TOTAL_WAXWT": 0,
+  "TOTAL_IRONWT": 0,
+  "TOTAL_MKGVALUEFC": 0,
+  "TOTAL_MKGVALUECC": 0,
+  "TOTAL_PCS": 0,
+  "TOTAL_ISSUED_QTY": 0,
+  "TOTAL_REQUIRED_QTY": 0,
+  "TOTAL_ALLOCATED_QTY": 0,
+  "CURRENCY_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.currency),
+  "CURRENCY_RATE": this.commonService.emptyToZero(this.meltingIssueFrom.value.currencyrate),
+  "TRAY_WEIGHT": 0,
+  "REMARKS": this.meltingIssueFrom.value.remarks,
+  "AUTOPOSTING": true,
+  "POSTDATE": "",
+  "BASE_CURRENCY": "",
+  "BASE_CURR_RATE": 0,
+  "BASE_CONV_RATE": 0,
+  "PROCESS_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.processcode),
+  "PROCESS_DESC": this.commonService.nullToString(this.meltingIssueFrom.value.processdes),
+  "PRINT_COUNT": 0,
+  "RET_PURITY": 0,
+  "RET_PURE_WT": 0,
+  "SCP_STOCK_CODE": "",
+  "SCP_GROSS_WT": 0,
+  "SCP_PURITY": 0,
+  "SCP_PURE_WT": 0,
+  "SCP_LOCATION_CODE": "",
+  "LOSS_QTY": 0,
+  "LOSS_PURE_WT": 0,
+  "IS_AUTHORISE": true,
+  "IS_REJECT": true,
+  "REASON": "",
+  "REJ_REMARKS": "",
+  "ATTACHMENT_FILE": "",
+  "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
+  "Details": this.meltingISsueDetailsData
+}
+}
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -422,79 +500,18 @@ export class MeltingIssueComponent implements OnInit {
     //   this.toastr.error('select all required fields')
     //   return
     // } 
-
+  
+  
     let API = 'JobMeltingIssueDJ/InsertJobMeltingIssueDJ'
-    let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.meltingIssueFrom.value.voctype,
-      "VOCNO": this.meltingIssueFrom.value.VOCNO,
-      "VOCDATE": this.meltingIssueFrom.value.vocdate,
-      "YEARMONTH": this.yearMonth,
-      "NAVSEQNO": 0,
-      "WORKER_CODE": this.meltingIssueFrom.value.worker,
-      "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
-      "JOB_CODE": this.meltingIssueFrom.value.jobno,
-      "JOB_DESC": this.meltingIssueFrom.value.jobdes,
-      "SALESPERSON_CODE": "",
-      "SALESPERSON_NAME": "",
-      "DOCTIME": "2023-10-21T10:15:43.789Z",
-      "TOTAL_GROSSWT": 0,
-      "MELTING_TYPE": "string",
-      "COLOR": "",
-      "RET_STOCK_CODE": "string",
-      "RET_LOCATION_CODE": "string",
-      "TOTAL_PUREWT": 0,
-      "TOTAL_STONEWT": 0,
-      "TOTAL_NETWT": 0,
-      "TOTAL_WAXWT": 0,
-      "TOTAL_IRONWT": 0,
-      "TOTAL_MKGVALUEFC": 0,
-      "TOTAL_MKGVALUECC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_ISSUED_QTY": 0,
-      "TOTAL_REQUIRED_QTY": 0,
-      "TOTAL_ALLOCATED_QTY": 0,
-      "CURRENCY_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.meltingIssueFrom.value.currencyrate),
-      "TRAY_WEIGHT": 0,
-      "REMARKS": this.meltingIssueFrom.value.remarks,
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "BASE_CURRENCY": "",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
-      "PROCESS_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.processcode),
-      "PROCESS_DESC": this.commonService.nullToString(this.meltingIssueFrom.value.processdes),
-      "PRINT_COUNT": 0,
-      "RET_PURITY": 0,
-      "RET_PURE_WT": 0,
-      "SCP_STOCK_CODE": "",
-      "SCP_GROSS_WT": 0,
-      "SCP_PURITY": 0,
-      "SCP_PURE_WT": 0,
-      "SCP_LOCATION_CODE": "",
-      "LOSS_QTY": 0,
-      "LOSS_PURE_WT": 0,
-      "IS_AUTHORISE": true,
-      "IS_REJECT": true,
-      "REASON": "",
-      "REJ_REMARKS": "",
-      "ATTACHMENT_FILE": "",
-      "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
-      "Details": this.meltingISsueDetailsData
-
-
-    }
-
-
-
+    let postData = this.setPostData(this.meltingIssueFrom.value)
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status.trim() == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -502,7 +519,7 @@ export class MeltingIssueComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.meltingIssueFrom.reset()
-                this.tableData = []
+                this.isSaved = true;
                 this.close('reloadMainGrid')
               }
             });
@@ -510,7 +527,10 @@ export class MeltingIssueComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.toastr.error('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -532,140 +552,17 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   update() {
-    if (this.meltingIssueFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${this.branchCode}/${this.meltingIssueFrom.value.voctype}/${this.meltingIssueFrom.value.vocno}/${this.commonService.yearSelected}`
-    let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.meltingIssueFrom.value.voctype,
-      "VOCNO": this.meltingIssueFrom.value.VOCNO,
-      "VOCDATE": this.meltingIssueFrom.value.vocdate,
-      "YEARMONTH": this.yearMonth,
-      "NAVSEQNO": 0,
-      "WORKER_CODE": this.meltingIssueFrom.value.worker,
-      "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
-      "SALESPERSON_CODE": "string",
-      "SALESPERSON_NAME": "string",
-      "DOCTIME": "2024-01-15T21:36:42.913Z",
-      "TOTAL_GROSSWT": 0,
-      "TOTAL_PUREWT": 0,
-      "TOTAL_STONEWT": 0,
-      "TOTAL_NETWT": 0,
-      "TOTAL_WAXWT": 0,
-      "TOTAL_IRONWT": 0,
-      "TOTAL_MKGVALUEFC": 0,
-      "TOTAL_MKGVALUECC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_ISSUED_QTY": 0,
-      "TOTAL_REQUIRED_QTY": 0,
-      "TOTAL_ALLOCATED_QTY": 0,
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "TRAY_WEIGHT": 0,
-      "REMARKS": "string",
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "BASE_CURRENCY": "stri",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
-      "PROCESS_CODE": this.meltingIssueFrom.value.processcode,
-      "PROCESS_DESC": this.meltingIssueFrom.value.processdes,
-      "PRINT_COUNT": 0,
-      "MELTING_TYPE": "string",
-      "COLOR": "string",
-      "RET_STOCK_CODE": "string",
-      "RET_GROSS_WT": 0,
-      "RET_PURITY": 0,
-      "RET_PURE_WT": 0,
-      "RET_LOCATION_CODE": "string",
-      "SCP_STOCK_CODE": "string",
-      "SCP_GROSS_WT": 0,
-      "SCP_PURITY": 0,
-      "SCP_PURE_WT": 0,
-      "SCP_LOCATION_CODE": "string",
-      "LOSS_QTY": 0,
-      "LOSS_PURE_WT": 0,
-      "IS_AUTHORISE": true,
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-      "SYSTEM_DATE": "2024-01-15T21:36:42.913Z",
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "stri",
-          "DT_VOCNO": 0,
-          "DT_VOCDATE": "2024-01-15T21:36:42.913Z",
-          "DT_YEARMONTH": "string",
-          "JOB_NUMBER": "string",
-          "JOB_DESCRIPTION": "string",
-          "PROCESS_CODE": "string",
-          "PROCESS_DESC": "string",
-          "WORKER_CODE": "string",
-          "WORKER_DESC": "string",
-          "STOCK_CODE": "string",
-          "STOCK_DESCRIPTION": "string",
-          "DIVCODE": "s",
-          "KARAT_CODE": "stri",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "STONE_WT": 0,
-          "PURITY": 0,
-          "PUREWT": 0,
-          "PUDIFF": 0,
-          "IRON_WT": 0,
-          "NET_WT": 0,
-          "TOTAL_WEIGHT": 0,
-          "IRON_PER": 0,
-          "STONEDIFF": 0,
-          "WAX_WT": 0,
-          "TREE_NO": "string",
-          "WIP_ACCODE": "string",
-          "CURRENCY_CODE": "stri",
-          "CURRENCY_RATE": 0,
-          "MKG_RATEFC": 0,
-          "MKG_RATECC": 0,
-          "MKGVALUEFC": 0,
-          "MKGVALUECC": 0,
-          "DLOC_CODE": "string",
-          "REMARKS": "string",
-          "LOCTYPE_CODE": "string",
-          "TOSTOCKCODE": "string",
-          "LOSSWT": 0,
-          "TODIVISION_CODE": "s",
-          "LOT_NO": "string",
-          "BAR_NO": "string",
-          "TICKET_NO": "string",
-          "SILVER_PURITY": 0,
-          "SILVER_PUREWT": 0,
-          "TOPURITY": 0,
-          "PUR_PER": 0,
-          "MELTING_TYPE": "string",
-          "ISALLOY": "s",
-          "UNQ_JOB_ID": "string",
-          "SUB_STOCK_CODE": "string",
-          "IS_REJECT": true,
-          "REASON": "string",
-          "REJ_REMARKS": "string",
-          "ATTACHMENT_FILE": "string"
-        }
-      ]
-    }
-
-
+    let form = this.meltingIssueFrom.value
+    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
+    let postData = this.setPostData(this.meltingIssueFrom.value)
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -673,7 +570,6 @@ export class MeltingIssueComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.meltingIssueFrom.reset()
-                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
@@ -681,7 +577,10 @@ export class MeltingIssueComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err =>{
+        this.isloading = false;
+        this.toastr.error('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
   deleteRecord() {
