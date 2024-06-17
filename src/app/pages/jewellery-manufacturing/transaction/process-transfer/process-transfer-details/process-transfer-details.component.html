@@ -307,7 +307,8 @@
                       <td>
                         <mat-form-field style="width: 50px;">
                           <input type="text" matInput AmountDecimalInput
-                            formControlName="stdLossper" [max]="10"/>
+                            formControlName="stdLossper" [max]="10"
+                            class="text-right"/>
                         </mat-form-field>
                       </td>
                       <!-- balance wt -->
@@ -957,9 +958,9 @@
               <dxi-column dataField="SHAPE" caption="SHAPE"
                 alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SIZE" caption="SIZE"
-                alignment="left" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="PCS" caption="PCS"
-                alignment="left" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="GROSS WT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="Rate" caption="Rate"
@@ -967,13 +968,13 @@
               <dxi-column dataField="Amount" caption="Amount"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="PROCESS_CODE" caption="Process Code"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="WORKER_CODE" caption="Worker Code"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="UNQ_DESIGN_ID" caption="Unq Design Id"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="REFMID" caption="RefMID"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="AMOUNTLC" caption="Amount LC"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="AMOUNTFC" caption="Amount FC"
@@ -991,41 +992,41 @@
               <dxi-column dataField="YEARMONTH" caption="YEARMONTH"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LOSS_QTY" caption="LOSS QTY"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LABOUR_CODE" caption="LABOUR CODE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LAB_RATE" caption="LAB RATE"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LAB_AMT" caption="LAB AMT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN STOCK CODE"
                 caption="BRKSTN_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_DIVISION_CODE"
                 caption="BRKSTN_DIVISION_CODE" alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_WEIGHT" caption="BRKSTN WEIGHT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_RATEFC" caption="BRKSTN RATEFC"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_RATELC" caption="BRKSTN RATELC"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_AMTFC" caption="BRKSTN AMTLC"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="MAIN_WORKER" caption="MAIN WORKER"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="FRM_WORKER" caption="FRM WORKER"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="FRM_PROCESS" caption="FRM PROCESS"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="CRACCODE" caption="CRACCODE"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LAB_ACCODE" caption="LAB ACCODE"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LAB_AMTFC" caption="LAB AMTFC"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="TO_PROCESS" caption="TO PROCESS"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="TO_WORKER" caption="TO WORKER"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="left" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LAB_RATEFC" caption="Lab Rate FC"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="RATEFC" caption="Rate FC"
@@ -1033,13 +1034,13 @@
               <dxi-column dataField="PRINTED" caption="Printed"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="PUREWT" caption="PUREWT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SQLID" caption="ISBROCKEN"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="TREE_NO" caption="TREE NO"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SETTED" caption="SETTED"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SIEVE" caption="SIEVE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="FULL_RECOVERY" caption="FULL RECOVERY"
@@ -1047,19 +1048,19 @@
               <dxi-column dataField="RECOVERY_DATE" caption="RECOVERY DATE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="RECOV_LOSS" caption="RECOV LOSS"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="RECOV_LOSS_PURE" caption="RECOV LOSS PURE"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="STONE_WT" caption="STONE WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SYSTEM_DATE" caption="SYSTEM DATE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BROKENSTONE_PCS" caption="BROKENSTONE PCS"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BROKENSTONE_WT" caption="BROKENSTONE WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="PUREWTTEMP" caption="PUREWTTEMP"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="ISMISSING" caption="ISMISSING"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IS_AUTHORISE" caption="IS AUTHORISE"
@@ -1069,17 +1070,17 @@
               <dxi-column dataField="SCRAP_SUB_STOCK_CODE"
                 caption="SCRAP_SUB_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_PURITY" caption="SCRAP_PURITY"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_WT" caption="SCRAP_WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_PURE_WT" caption="SCRAP_PURE_WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_PUDIFF" caption="SCRAP_PUDIFF"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_ACCODE" caption="SCRAP_ACCODE"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="JOB_PCS" caption="JOB_PCS"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="TO_STOCK_CODE" caption="TO_STOCK_CODE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="FROM_STOCK_CODE" caption="FROM_STOCK_CODE"
@@ -1087,13 +1088,13 @@
               <dxi-column dataField="FROM_SUB_STOCK_CODE"
                 caption="FROM_SUB_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LOSS_PURE_WT" caption="LOSS_PURE_WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IRON_SCRAP_WT" caption="IRON_SCRAP_WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="EXCLUDE_TRANSFER_WT"
-                caption="EXCLUDE_TRANSFER_WT" alignment="center" [allowEditing]="false"></dxi-column>
+                caption="EXCLUDE_TRANSFER_WT" alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IRON_WT" caption="IRON_WT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+                alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="AUTORIZE_TIME" caption="AUTORIZE_TIME"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IS_REJECT" caption="IS_REJECT"

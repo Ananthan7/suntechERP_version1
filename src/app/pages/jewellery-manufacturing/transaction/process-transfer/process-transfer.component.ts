@@ -23,7 +23,7 @@ export class ProcessTransferComponent implements OnInit {
   yearMonth?: String;
   tableRowCount: number = 0;
   JOB_PROCESS_TRN_DETAIL_DJ: any[] = [];
-  metalGridDataToSave: any[] = [];
+  JOB_PROCESS_TRN_STNMTL_DJ: any[] = [];
   LabourChargeDetailsToSave: any[] = [];
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
@@ -152,36 +152,6 @@ export class ProcessTransferComponent implements OnInit {
       this.processTransferFrom.controls.vocdate.setValue(new Date(date))
     }
   }
-
-  dataToDetailScreen: any;
-  @ViewChild('processTransferDetailScreen') public ProcessTransferDetailScreen!: NgbModal;
-  openProcessTransferDetails(dataToChild?: any) {
-    if (dataToChild) {
-      dataToChild.HEADERDETAILS = this.processTransferFrom.value;
-    } else {
-      dataToChild = { HEADERDETAILS: this.processTransferFrom.value }
-    }
-    console.log(dataToChild, 'openProcessTransferDetails to parent');
-
-    this.dataToDetailScreen = dataToChild
-    this.modalReference = this.modalService.open(this.ProcessTransferDetailScreen, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
-    // modalRef.componentInstance.content = data;
-    // modalRef.result.then((result) => {
-    //   if (result) {
-    //     this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
-
-
-    //     // this.setLabourChargeDetails()
-    //   }
-    // }, (reason) => {
-    //   // Handle modal dismissal (if needed)
-    // });
-  }
   /**USE: on clicking row Opens new detail adding screen */
   selectRowIndex: any;
   onRowClickHandler(event: any) {
@@ -193,9 +163,28 @@ export class ProcessTransferComponent implements OnInit {
     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
     console.log(detailRow, 'detailRow');
 
-    this.openProcessTransferDetails(selectedData)
+    this.openProcessTransferDetails(detailRow)
   }
+  //use open modal of detail screen
+  dataToDetailScreen: any;
+  @ViewChild('processTransferDetailScreen') public ProcessTransferDetailScreen!: NgbModal;
+  openProcessTransferDetails(dataToChild?: any) {
+    if (dataToChild) {
+      dataToChild[0].HEADERDETAILS = this.processTransferFrom.value;
+    } else {
+      dataToChild = [{ HEADERDETAILS: this.processTransferFrom.value }]
+    }
+    console.log(dataToChild, 'openProcessTransferDetails to parent');
 
+    this.dataToDetailScreen = dataToChild
+    this.modalReference = this.modalService.open(this.ProcessTransferDetailScreen, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+  //use: to set the data from child component to post data
   setValuesToHeaderGrid(DATA: any) {
     console.log(DATA, 'setValuesToHeaderGrid');
     let detailDataToParent = DATA.PROCESS_FORMDETAILS
@@ -206,7 +195,7 @@ export class ProcessTransferComponent implements OnInit {
       this.tableData.push(detailDataToParent);
     }
     if (detailDataToParent) {
-      this.detailData.push({ ID: this.tableData.length, DATA: DATA })
+      this.detailData.push({ ID: this.tableData.length, ...DATA })
     }
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
     if (detailDataToParent.FLAG == 'CONTINUE') {
@@ -386,7 +375,7 @@ export class ProcessTransferComponent implements OnInit {
 
   // use to set payload data
   setPostData(form: any) {
-    let detailScreenData = this.detailData[0].DATA;
+    let detailScreenData = this.detailData[0]
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
     return {
       "MID": 0,
@@ -409,12 +398,12 @@ export class ProcessTransferComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.JOB_PROCESS_TRN_DETAIL_DJ, //header grid details
-      "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
+      "JOB_PROCESS_TRN_STNMTL_DJ": this.JOB_PROCESS_TRN_STNMTL_DJ, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.LabourChargeDetailsToSave // labour charge details
     }
   }
   setLabourChargeDetails() {
-    let detailScreenData = this.detailData[0].DATA
+    let detailScreenData = this.detailData[0]
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS
 
     this.LabourChargeDetailsToSave.push({
@@ -440,9 +429,9 @@ export class ProcessTransferComponent implements OnInit {
   }
   gridSRNO: number = 0
   setHeaderGridDetails() {
-    let dataFromParent = this.detailData[0].DATA;
+    let dataFromParent = this.detailData[0];
     let detailScreenData = dataFromParent.PROCESS_FORMDETAILS;
-    let METAL_DETAIL_GRID = dataFromParent.METAL_DETAIL_GRID;
+    let METAL_DETAIL_GRID = dataFromParent.JOB_PROCESS_TRN_STNMTL_DJ;
     let LOSS_PURE_QTY = this.calculateLossPureQty(detailScreenData);
     let stoneAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID, 'STONEAMOUNT');
     let metalAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID, 'METALAMOUNT');
@@ -453,6 +442,8 @@ export class ProcessTransferComponent implements OnInit {
 
     console.log(this.commonService.timeToMinutes(detailScreenData.consumed), 'time consumed');
     this.gridSRNO+=1
+
+    
     this.JOB_PROCESS_TRN_DETAIL_DJ.push({
       "SRNO": this.gridSRNO,
       "UNIQUEID": 0,
@@ -599,15 +590,15 @@ export class ProcessTransferComponent implements OnInit {
   setDataFromDetailScreen() {
     console.log(this.detailData, 'this.detailData');
 
-    let detailScreenData = this.detailData[0].DATA
+    let detailScreenData = this.detailData[0]
     let PROCESS_FORMDETAILS = detailScreenData.PROCESS_FORMDETAILS
-    let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
+    let METAL_DETAIL_GRID = detailScreenData.JOB_PROCESS_TRN_STNMTL_DJ
     let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
     let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.FRM_PROCESS_CODE);
 
     METAL_DETAIL_GRID.forEach((element: any) => {
-      this.metalGridDataToSave.push({
+      this.JOB_PROCESS_TRN_STNMTL_DJ.push({
         "VOCNO": 0,
         "VOCTYPE": this.processTransferFrom.value.voctype,
         "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
