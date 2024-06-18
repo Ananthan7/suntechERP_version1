@@ -21,14 +21,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   metalDetailData: any[] = [];
+  sequenceDetails: any[] = [];
   jobNumberDetailData: any[] = [];
   ProcessTypeList: any[] = [{ type: 'GEN' }];
-  userName = this.comService.userName;
-  branchCode: String = this.comService.branchCode;
-  yearMonth: String = this.comService.yearSelected;
+  userName = this.commonService.userName;
+  branchCode: String = this.commonService.branchCode;
+  yearMonth: String = this.commonService.yearSelected;
   MetalorProcessFlag: string = 'Process';
   designType: string = 'DIAMOND';
-  gridAmountDecimalFormat:any;
+  gridAmountDecimalFormat: any;
   viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
   STDDateTimeData: DateTimeModel = {
@@ -75,7 +76,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     WHERECONDITION: `@StrCurrentUser='',
     @StrProcessCode='',
     @StrSubJobNo='',
-    @StrBranchCode=${this.comService.branchCode}`,
+    @StrBranchCode=${this.commonService.branchCode}`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -89,8 +90,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SEARCH_HEADING: 'Process Master',
     SEARCH_VALUE: '',
     WHERECONDITION: `@JobNumber='',
-    @BranchCode='${this.comService.branchCode}',
-    @CurrentUser='${this.comService.userName}',
+    @BranchCode='${this.commonService.branchCode}',
+    @CurrentUser='${this.commonService.userName}',
     @ToWorker='',
     @EntStr='',
     @ToWorkerFocus=1`,
@@ -109,7 +110,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     WHERECONDITION: `@StrSubJobNo='',
     @StrFromProcess='',
     @StrFromWorker='',
-    @StrBranchCode=${this.comService.branchCode},
+    @StrBranchCode=${this.commonService.branchCode},
 	  @blnProcessAuthroize=1`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -135,6 +136,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processTransferdetailsForm: FormGroup = this.formBuilder.group({
     SRNO: [0],
     FLAG: [''],
+    BRANCH_CODE: [''],
+    YEARMONTH: [''],
+    VOCTYPE: [''],
+    VOCNO: [''],
+    VOCDATE: [''],
+    CURRENCY_CODE: [''],
+    CURRENCY_RATE: [''],
     barCodeNumber: [''],
     JOB_NUMBER: [''],
     JOB_DESCRIPTION: [''],
@@ -241,45 +249,52 @@ export class ProcessTransferDetailsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private comService: CommonServiceService,
+    private commonService: CommonServiceService,
     private modalService: NgbModal,
   ) {
   }
 
   ngOnInit(): void {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
-      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
-      currency: this.comService.compCurrency
+      precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.commonService.compCurrency
     };
-
+    this.setHearderDetails()
     this.setInitialValues() //set all values from parent to child
     this.processTransferdetailsForm.controls['enddate'].disable();
-    this.processTransferdetailsForm.controls['startdate'].setValue(this.comService.currentDate);
-    this.processTransferdetailsForm.controls['enddate'].setValue(this.comService.currentDate);
+    this.processTransferdetailsForm.controls['startdate'].setValue(this.commonService.currentDate);
+    this.processTransferdetailsForm.controls['enddate'].setValue(this.commonService.currentDate);
   }
-  onStartDateChange() {
-    this.processTransferdetailsForm.controls['enddate'].enable();
-    const startDateValue = this.processTransferdetailsForm.get('startdate')?.value;
-    if (startDateValue) {
-      // Enable the end date control
-      this.processTransferdetailsForm.controls['enddate'].enable();
-      // Set the minimum end date to the selected start date
-      this.minEndDate = startDateValue;
+
+  setHearderDetails() {
+    console.log(this.content, 'this.content');
+    let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
+    if (HEADERDETAILS) {
+      this.nullToStringSetValue('BRANCH_CODE', HEADERDETAILS.BRANCH_CODE)
+      this.nullToStringSetValue('VOCTYPE', HEADERDETAILS.VOCTYPE)
+      this.nullToStringSetValue('YEARMONTH', HEADERDETAILS.YEARMONTH)
+      this.nullToStringSetValue('CURRENCY_CODE', HEADERDETAILS.CURRENCY_CODE)
+      this.nullToStringSetValue('CURRENCY_RATE', HEADERDETAILS.CURRENCY_RATE)
+      this.nullToStringSetValue('FLAG', HEADERDETAILS.FLAG)
+      this.processTransferdetailsForm.controls.SRNO.setValue(HEADERDETAILS.SRNO)
+      this.processTransferdetailsForm.controls.VOCNO.setValue(HEADERDETAILS.VOCNO)
+      this.processTransferdetailsForm.controls.VOCDATE.setValue(HEADERDETAILS.VOCDATE)
     }
   }
 
   setInitialValues() {
     if (!this.content) return
-    console.log(this.content, 'this.content');
-    let parentDetail = this.content[0].PROCESS_FORMDETAILS
-    let gridDetail = this.content[0].JOB_PROCESS_TRN_STNMTL_DJ
-    if(gridDetail && gridDetail.length>0){
+    let parentDetail = this.content[0]?.PROCESS_FORMDETAILS
+    let gridDetail = this.content[0]?.TRN_STNMTL_GRID
+    if (gridDetail && gridDetail.length > 0) {
       this.metalDetailData = gridDetail
     }
-    this.nullToStringSetValue('SRNO', parentDetail.SRNO)
+    if (!parentDetail) return;
+    this.processTransferdetailsForm.controls.SRNO.setValue(this.content[0]?.SRNO)
+
     this.nullToStringSetValue('JOB_NUMBER', parentDetail.JOB_NUMBER)
     this.nullToStringSetValue('JOB_DESCRIPTION', parentDetail.JOB_DESCRIPTION)
     this.nullToStringSetValue('UNQ_JOB_ID', parentDetail.UNQ_JOB_ID)
@@ -304,20 +319,20 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('METALSTONE', parentDetail.METALSTONE)
     this.nullToStringSetValue('FRM_METAL_PCS', parentDetail.FRM_METAL_PCS)
     this.nullToStringSetValue('TO_METAL_PCS', parentDetail.TO_METAL_PCS)
-    
-    this.setValueWithDecimal('FRM_METAL_WT',  parentDetail.FRM_METAL_WT, 'METAL')
-    this.setValueWithDecimal('TO_METAL_WT',  parentDetail.TO_METAL_WT, 'METAL')
-    this.setValueWithDecimal('FRM_PCS',  parentDetail.FRM_PCS, 'AMOUNT')
-    this.setValueWithDecimal('TO_PCS',  parentDetail.TO_PCS, 'AMOUNT')
-    this.setValueWithDecimal('GrossWeightFrom',  parentDetail.GrossWeightFrom, 'METAL')
-    this.setValueWithDecimal('GrossWeightTo',  parentDetail.GrossWeightTo, 'METAL')
-    this.setValueWithDecimal('StoneWeightFrom',  parentDetail.StoneWeightFrom, 'STONE')
-    this.setValueWithDecimal('StoneWeightTo',  parentDetail.StoneWeightTo, 'STONE')
-    this.setValueWithDecimal('StonePcsFrom',  parentDetail.StonePcsFrom, 'STONE')
-    this.setValueWithDecimal('StonePcsTo',  parentDetail.StonePcsTo, 'STONE')
-    this.setValueWithDecimal('PUREWT',  parentDetail.PUREWT, 'AMOUNT')
-    this.setValueWithDecimal('PURITY',  parentDetail.PURITY, 'PURITY')
-    
+
+    this.setValueWithDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
+    this.setValueWithDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
+    this.setValueWithDecimal('FRM_PCS', parentDetail.FRM_PCS, 'AMOUNT')
+    this.setValueWithDecimal('TO_PCS', parentDetail.TO_PCS, 'AMOUNT')
+    this.setValueWithDecimal('GrossWeightFrom', parentDetail.GrossWeightFrom, 'METAL')
+    this.setValueWithDecimal('GrossWeightTo', parentDetail.GrossWeightTo, 'METAL')
+    this.setValueWithDecimal('StoneWeightFrom', parentDetail.StoneWeightFrom, 'STONE')
+    this.setValueWithDecimal('StoneWeightTo', parentDetail.StoneWeightTo, 'STONE')
+    this.setValueWithDecimal('StonePcsFrom', parentDetail.StonePcsFrom, 'STONE')
+    this.setValueWithDecimal('StonePcsTo', parentDetail.StonePcsTo, 'STONE')
+    this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
+    this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
+
     this.processTransferdetailsForm.controls.startdate.setValue(this.content.startdate)
     this.processTransferdetailsForm.controls.enddate.setValue(this.content.enddate)
     this.processTransferdetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)
@@ -325,29 +340,55 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.processTransferdetailsForm.controls[formControlName].setValue(
-      this.comService.setCommaSerperatedNumber(value, Decimal)
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+  getSequenceDetailData() {
+    let API = `SequenceMasterDJ/GetSequenceMasterDJDetail/${this.processTransferdetailsForm.value.SEQ_CODE}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.sequenceDetails = data.sequenceDetails
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  onStartDateChange() {
+    this.processTransferdetailsForm.controls['enddate'].enable();
+    const startDateValue = this.processTransferdetailsForm.get('startdate')?.value;
+    if (startDateValue) {
+      // Enable the end date control
+      this.processTransferdetailsForm.controls['enddate'].enable();
+      // Set the minimum end date to the selected start date
+      this.minEndDate = startDateValue;
+    }
+  }
+
   setFromProcessWhereCondition() {
-    //${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
-    this.fromProcessMasterSearch.WHERECONDITION = `@StrCurrentUser='${this.comService.userName}',
+    //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
+    this.fromProcessMasterSearch.WHERECONDITION = `@StrCurrentUser='${this.commonService.userName}',
     @StrProcessCode='',
-    @StrSubJobNo='${this.comService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
-    @StrBranchCode='${this.comService.branchCode}'`
+    @StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
+    @StrBranchCode='${this.commonService.branchCode}'`
   }
   setToProcessWhereCondition() {
-    this.toProcessMasterSearch.WHERECONDITION = `@JobNumber='${this.comService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER)}',
-    @BranchCode='${this.comService.branchCode}',
-    @CurrentUser='${this.comService.userName}',
-    @ToWorker='${this.comService.nullToString(this.processTransferdetailsForm.value.TO_WORKER_CODE)}',
+    this.toProcessMasterSearch.WHERECONDITION = `@JobNumber='${this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER)}',
+    @BranchCode='${this.commonService.branchCode}',
+    @CurrentUser='${this.commonService.userName}',
+    @ToWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.TO_WORKER_CODE)}',
     @EntStr='',
     @ToWorkerFocus=1`
   }
   setFromWorkerWhereCondition() {
-    this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.comService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
-    @StrFromProcess='${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
-    @StrFromWorker='${this.comService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',
-    @StrBranchCode='${this.comService.branchCode}',
+    this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
+    @StrFromProcess='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
+    @StrFromWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',
+    @StrBranchCode='${this.commonService.branchCode}',
 	  @blnProcessAuthroize=1`
   }
   setToWorkerWhereCondition() {
@@ -375,7 +416,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   nullToStringSetValue(formcontrol: string, value: any) {
     this.processTransferdetailsForm.controls[formcontrol].setValue(
-      this.comService.nullToString(value)
+      this.commonService.nullToString(value)
     )
   }
   /**USE: jobnumber validate API call */
@@ -384,23 +425,23 @@ export class ProcessTransferDetailsComponent implements OnInit {
     // let postData = {
     //   "SPID": "086",
     //   "parameter": {
-    //     'strBranchCode': this.comService.nullToString(this.branchCode),
-    //     'strJobNumber': this.comService.nullToString(event.target.value),
-    //     'strCurrenctUser': this.comService.nullToString(this.userName)
+    //     'strBranchCode': this.commonService.nullToString(this.branchCode),
+    //     'strJobNumber': this.commonService.nullToString(event.target.value),
+    //     'strCurrenctUser': this.commonService.nullToString(this.userName)
     //   }
     // }
     let postData = {
       "SPID": "028",
       "parameter": {
-        'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strJobNumber': this.comService.nullToString(event.target.value.trim()),
-        'strCurrenctUser': this.comService.nullToString(this.userName)
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
+        'strJobNumber': this.commonService.nullToString(event.target.value.trim()),
+        'strCurrenctUser': this.commonService.nullToString(this.userName)
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
@@ -413,25 +454,26 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.nullToStringSetValue('SEQ_CODE', data[0].SEQ_CODE)
             this.nullToStringSetValue('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.nullToStringSetValue('DESIGN_TYPE', data[0].DESIGN_TYPE)
-            this.designType = this.comService.nullToString(data[0].DESIGN_TYPE).toUpperCase();
+            this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE).toUpperCase();
             this.subJobNumberValidate()
+            this.getSequenceDetailData()
           } else {
             this.nullToStringSetValue('JOB_NUMBER', '')
-            this.comService.toastErrorByMsgId('MSG1531')
+            this.commonService.toastErrorByMsgId('MSG1531')
             return
           }
         } else {
           this.nullToStringSetValue('JOB_NUMBER', '')
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
   subJobDetailDataSRNO() {
-    this.subJobDetailData.forEach((item:any,index:any)=> item.SRNO = index+1)
+    this.subJobDetailData.forEach((item: any, index: any) => item.SRNO = index + 1)
   }
   subJobDetailData: any[] = []
   /**USE: subjobnumber validate API call subjobvalidate  '156516/4/01'*/
@@ -440,14 +482,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SPID": "040",
       "parameter": {
         'strUNQ_JOB_ID': this.processTransferdetailsForm.value.UNQ_JOB_ID,
-        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.subJobDetailData = result.dynamicData[0]
           this.subJobDetailDataSRNO()
@@ -457,11 +499,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
           }
           this.setSubJobTransferDetails(this.subJobDetailData)
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -469,10 +511,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
   onRowClickHandler(event: any) {
     if (!event.data.PROCESS) return;
     let data = this.subJobDetailData.filter((item: any) => event.data.SRNO == item.SRNO)
-    if(data && data.length>0){
+    if (data && data.length > 0) {
       this.setSubJobTransferDetails(data)
-    }else{
-      this.comService.toastErrorByMsgId('no data found')
+    } else {
+      this.commonService.toastErrorByMsgId('no data found')
     }
     this.modalReference.close()
   }
@@ -512,7 +554,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('PUREWT', data[0].PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
   }
- 
+
   modalReference!: NgbModalRef;
   @ViewChild('transferDetails') public transferDetails!: NgbModal;
 
@@ -525,62 +567,62 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   //stockCode Scrap Validate
   stockCodeScrapValidate() {
-    if (this.comService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
+    if (this.commonService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
     let postData = {
       "SPID": "044",
       "parameter": {
-        'STRSTOCKCODE': this.comService.nullToString(this.processTransferdetailsForm.value.stockCode)
+        'STRSTOCKCODE': this.commonService.nullToString(this.processTransferdetailsForm.value.stockCode)
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           this.processTransferdetailsForm.controls.MAIN_STOCK_CODE.setValue(data[0].MAIN_STOCK_CODE)
           this.processTransferdetailsForm.controls.SCRAP_PURITY.setValue(data[0].PURITY)
         } else {
           this.processTransferdetailsForm.controls.stockCode.setValue('')
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
   getTimeAndLossDetails() {
-    if (this.comService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
+    if (this.commonService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
     let form = this.processTransferdetailsForm.value;
     let postData = {
       "SPID": "087",
       "parameter": {
-        'StrDesignCode': this.comService.nullToString(form.DESIGN_CODE),
-        'strProcess_Code': this.comService.nullToString(form.FRM_PROCESS_CODE),
-        'StrSeq_Code': this.comService.nullToString(form.SEQ_CODE),
-        'strWorker_Code': this.comService.nullToString(form.FRM_WORKER_CODE),
-        'strUNQ_JOB_ID': this.comService.nullToString(form.UNQ_JOB_ID),
-        'strBranchCode': this.comService.nullToString(this.comService.branchCode)
+        'StrDesignCode': this.commonService.nullToString(form.DESIGN_CODE),
+        'strProcess_Code': this.commonService.nullToString(form.FRM_PROCESS_CODE),
+        'StrSeq_Code': this.commonService.nullToString(form.SEQ_CODE),
+        'strWorker_Code': this.commonService.nullToString(form.FRM_WORKER_CODE),
+        'strUNQ_JOB_ID': this.commonService.nullToString(form.UNQ_JOB_ID),
+        'strBranchCode': this.commonService.nullToString(this.commonService.branchCode)
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           this.STDDateTimeData.TIMEINMINUTES = data[0].STD_TIME
-          let time = this.comService.convertTimeMinutesToDHM(data[0].STD_TIME)
+          let time = this.commonService.convertTimeMinutesToDHM(data[0].STD_TIME)
           this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(data[0].TO_PROCESS_CODE)
           this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(data[0].TO_PROCESSNAME)
           this.processTransferdetailsForm.controls.stdtime.setValue(
             time
           )
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -596,25 +638,25 @@ export class ProcessTransferDetailsComponent implements OnInit {
         strBranch_Code: this.branchCode
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
-          let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
             this.formatMetalDetailDataGrid()
           } else {
-            this.comService.toastErrorByMsgId('MSG1531')
+            this.commonService.toastErrorByMsgId('MSG1531')
             return
           }
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -622,9 +664,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.metalDetailData.forEach((element: any) => {
       element.SETTED_FLAG = false
       element.GEN = 'GEN'
-      element.GROSS_WT = this.comService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
-      element.STONE_WT = this.comService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
-      element.PURITY = this.comService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
+      element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
     });
   }
   /**USE: barcode Number Validate API call */
@@ -633,16 +675,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let postData = {
       "SPID": "041",
       "parameter": {
-        'BLNPROCESS': this.comService.nullToString(this.processTransferdetailsForm.value.toggleSwitchtIssue ? 1 : 0),
-        'STRBRANCH': this.comService.nullToString(this.branchCode),
-        'STRYEARMONTH': this.comService.nullToString('2008'),
-        'TXTISSUEREF': this.comService.nullToString(event.target.value)
+        'BLNPROCESS': this.commonService.nullToString(this.processTransferdetailsForm.value.toggleSwitchtIssue ? 1 : 0),
+        'STRBRANCH': this.commonService.nullToString(this.branchCode),
+        'STRYEARMONTH': this.commonService.nullToString('2008'),
+        'TXTISSUEREF': this.commonService.nullToString(event.target.value)
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           console.log(data, 'data');
@@ -650,15 +692,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (data[0]) {
 
           } else {
-            this.comService.toastErrorByMsgId('MSG1531')
+            this.commonService.toastErrorByMsgId('MSG1531')
             return
           }
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -705,35 +747,35 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "searchField": LOOKUPDATA.SEARCH_FIELD,
       "searchValue": LOOKUPDATA.SEARCH_VALUE
     }
-    this.comService.showSnackBarMsg('MSG81447');
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         let data = result.dynamicData[0]
         if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
-            let result =  this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
+            let result = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
             if (result && result.length == 0) {
-              this.comService.toastErrorByMsgId('No data found')
+              this.commonService.toastErrorByMsgId('No data found')
               this.processTransferdetailsForm.controls[FORMNAME].setValue('')
               LOOKUPDATA.SEARCH_VALUE = ''
             }
             return
           }
         } else {
-          this.comService.toastErrorByMsgId('No data found')
+          this.commonService.toastErrorByMsgId('No data found')
           this.processTransferdetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
         }
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
-  selectAllBtnChange(event:any){
+  selectAllBtnChange(event: any) {
     console.log(event);
-    if(event.target.checked){
-      this.metalDetailData.forEach((item:any)=>{
+    if (event.target.checked) {
+      this.metalDetailData.forEach((item: any) => {
         item.SETTED_FLAG = true;
       })
     }
@@ -745,10 +787,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
-    if(data && data.length>0){
+    if (data && data.length > 0) {
       this.setSubJobTransferDetails(data)
-    }else{
-      this.comService.toastErrorByMsgId('no data found')
+    } else {
+      this.commonService.toastErrorByMsgId('no data found')
     }
   }
   processCodeToSelected(event: any) {
@@ -795,12 +837,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.jobNumberValidate({ target: { value: event.job_number } })
   }
   submitValidations(form: any): boolean {
-    if (this.comService.nullToString(form.JOB_NUMBER) == '') {
-      this.comService.toastErrorByMsgId('To Job Number cannot be empty')
+    if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
+      this.commonService.toastErrorByMsgId('To Job Number cannot be empty')
       return true;
     }
-    if (this.comService.nullToString(form.TO_WORKER_CODE) == '') {
-      this.comService.toastErrorByMsgId('To worker code cannot be empty')
+    if (this.commonService.nullToString(form.TO_WORKER_CODE) == '') {
+      this.commonService.toastErrorByMsgId('To worker code cannot be empty')
       return true;
     }
     return false;
@@ -808,20 +850,361 @@ export class ProcessTransferDetailsComponent implements OnInit {
   /**USE: SUBMIT detail */
   formSubmit(flag: any) {
     if (this.submitValidations(this.processTransferdetailsForm.value)) return;
-    let detailDataToParent: any = {
-      PROCESS_FORMDETAILS: [],
-      JOB_PROCESS_TRN_STNMTL_DJ: [],
-      JOB_VALIDATE_DATA: []
-    }
-    this.processTransferdetailsForm.controls.FLAG.setValue(flag)
     this.calculateGain()
+    this.processTransferdetailsForm.controls.FLAG.setValue(flag)
 
-    detailDataToParent.PROCESS_FORMDETAILS = this.processTransferdetailsForm.value;
-    detailDataToParent.JOB_PROCESS_TRN_STNMTL_DJ = this.metalDetailData; //grid data
-    detailDataToParent.JOB_VALIDATE_DATA = this.jobNumberDetailData;
-    // this.close(detailDataToParent)
-    console.log(detailDataToParent, 'child invoked');
+    let detailDataToParent: any = {
+      PROCESS_FORMDETAILS: this.processTransferdetailsForm.value,
+      TRN_STNMTL_GRID: this.metalDetailData,
+      JOB_PROCESS_TRN_DETAIL_DJ: this.setJOB_PROCESS_TRN_DETAIL_DJ(),
+      JOB_PROCESS_TRN_STNMTL_DJ: this.setJOB_PROCESS_TRN_STNMTL_DJ(),
+      JOB_PROCESS_TRN_LABCHRG_DJ: this.setLabourChargeDetails()
+    }
+    console.log(detailDataToParent, 'child detailDataToParent');
     this.saveDetail.emit(detailDataToParent);
+  }
+
+  gridSRNO: number = 0
+  setJOB_PROCESS_TRN_DETAIL_DJ() {
+    let form = this.processTransferdetailsForm.value;
+    let LOSS_PURE_QTY = this.calculateLossPureQty(form);
+    let stoneAmount = this.calculateMetalGridSum(this.metalDetailData, 'STONEAMOUNT');
+    let metalAmount = this.calculateMetalGridSum(this.metalDetailData, 'METALAMOUNT');
+    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
+    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
+    let scrapPureWt = this.commonService.emptyToZero(Number(form.scrapQuantity) * Number(form.SCRAP_PURITY))
+    let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
+
+    console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
+    this.gridSRNO += 1
+
+
+    return {
+      "SRNO": this.commonService.emptyToZero(form.SRNO),
+      "UNIQUEID": 0,
+      "VOCNO": this.commonService.emptyToZero(form.VOCNO),
+      "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
+      "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
+      "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+      "JOB_DATE": this.commonService.nullToString(form.JOB_DATE),
+      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+      "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
+      "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
+      "SEQ_CODE": this.commonService.nullToString(form.SEQ_CODE),
+      "JOB_DESCRIPTION": this.commonService.nullToString(form.JOB_DESCRIPTION),
+      "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY_CODE),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.CURRENCY_RATE),
+      "FRM_PROCESS_CODE": this.commonService.nullToString(form.FRM_PROCESS_CODE),
+      "FRM_PROCESSNAME": this.commonService.nullToString(form.FRM_PROCESSNAME),
+      "FRM_WORKER_CODE": this.commonService.nullToString(form.FRM_WORKER_CODE),
+      "FRM_WORKERNAME": this.commonService.nullToString(form.FRM_WORKERNAME),
+      "FRM_PCS": this.commonService.emptyToZero(form.FRM_PCS),
+      "FRM_STONE_WT": this.commonService.emptyToZero(form.StoneWeighFrom),
+      "FRM_STONE_PCS": this.commonService.emptyToZero(form.StonePcsFrom),
+      "FRM_METAL_WT": this.commonService.emptyToZero(form.FRM_METAL_WT),
+      "FRM_METAL_PCS": this.commonService.emptyToZero(form.FRM_METAL_PCS),
+      "FRM_PURE_WT": this.commonService.emptyToZero(form.PUREWT),
+      "FRM_NET_WT": this.commonService.emptyToZero(form.FRM_METAL_WT),
+      "TO_PROCESS_CODE": this.commonService.nullToString(form.TO_PROCESS_CODE),
+      "TO_PROCESSNAME": this.commonService.nullToString(form.TO_PROCESSNAME),
+      "TO_WORKER_CODE": this.commonService.nullToString(form.TO_WORKER_CODE),
+      "TO_WORKERNAME": this.commonService.nullToString(form.TO_WORKERNAME),
+      "TO_PCS": this.commonService.emptyToZero(form.TO_PCS),
+      "TO_METAL_PCS": this.commonService.emptyToZero(form.TO_METAL_PCS),
+      "TO_STONE_WT": this.commonService.emptyToZero(form.StoneWeightTo),
+      "TO_STONE_PCS": this.commonService.emptyToZero(form.StonePcsTo),
+      "TO_METAL_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
+      "TO_PURE_WT": this.commonService.emptyToZero(Number(form.FRM_METAL_WT) * Number(form.PURITY)),
+      "TO_NET_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
+      "LOSS_QTY": this.commonService.emptyToZero(form.stdLoss),
+      "LOSS_PURE_QTY": this.commonService.emptyToZero(LOSS_PURE_QTY),
+      "STONE_AMOUNTFC": this.commonService.emptyToZero(stoneAmount),
+      "STONE_AMOUNTLC": this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount),
+      "METAL_AMOUNTFC": this.commonService.emptyToZero(metalAmount),
+      "METAL_AMOUNTLC": this.commonService.FCToCC(form.CURRENCY_CODE, metalAmount),
+      "MAKING_RATEFC": 0,
+      "MAKING_RATELC": 0,
+      "MAKING_AMOUNTFC": 0,
+      "MAKING_AMOUNTLC": 0,
+      "LAB_AMOUNTFC": 0,
+      "LAB_AMOUNTLC": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "COSTFC_PER_PCS": 0,
+      "COSTLC_PER_PCS": 0,
+      "LAB_CODE": "",
+      "LAB_UNIT": "",
+      "LAB_RATEFC": 0,
+      "LAB_RATELC": 0,
+      "LAB_ACCODE": "",
+      "LOSS_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].LOSS_ACCODE) : '',
+      "FRM_WIP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].wip_accode) : '',
+      "TO_WIP_ACCODE": seqDataTo.length > 0 ? this.commonService.nullToString(seqDataTo[0].wip_accode) : '',
+      "RET_METAL_DIVCODE": "",
+      "RET_METAL_STOCK_CODE": "",
+      "RET_STONE_DIVCODE": "",
+      "RET_STONE_STOCK_CODE": "",
+      "RET_METAL_WT": 0,
+      "RET_PURITY": 0,
+      "RET_PURE_WT": 0,
+      "RET_STONE_WT": 0,
+      "RET_METAL_RATEFC": 0,
+      "RET_METAL_RATELC": 0,
+      "RET_METAL_AMOUNTFC": 0,
+      "RET_METAL_AMOUNTLC": 0,
+      "RET_STONE_RATEFC": 0,
+      "RET_STONE_RATELC": 0,
+      "RET_STONE_AMOUNTFC": 0,
+      "RET_STONE_AMOUNTLC": 0,
+      "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "TIME_TAKEN_HRS": 0,
+      "METAL_DIVISION": "",
+      "LOCTYPE_CODE": "",
+      "PICTURE_PATH": this.commonService.nullToString(form.PICTURE_PATH),
+      "AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
+      "AMOUNTFC": 0,
+      "JOB_PCS": 0,
+      "STONE_WT": this.commonService.emptyToZero(form.StoneWeightTo),
+      "STONE_PCS": this.commonService.emptyToZero(form.StonePcsTo),
+      "METAL_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
+      "METAL_PCS": this.commonService.emptyToZero(form.TO_METAL_PCS),
+      "PURE_WT": this.commonService.emptyToZero(Number(form.TO_METAL_WT) * Number(form.PURITY)),
+      "GROSS_WT": this.commonService.emptyToZero(form.GrossWeightTo),
+      "RET_METAL_PCS": 0,
+      "RET_STONE_PCS": 0,
+      "RET_LOC_MET": "",
+      "RET_LOC_STN": "",
+      "MAIN_WORKER": this.commonService.nullToString(form.FRM_WORKER_CODE),
+      "MKG_LABACCODE": "",
+      "REMARKS": this.commonService.nullToString(form.remarks),
+      "TREE_NO": this.commonService.nullToString(form.treeno),
+      "STD_TIME": this.commonService.emptyToZero(form.stdtime),
+      "WORKER_ACCODE": "",
+      "PRODLAB_ACCODE": "",
+      "DT_BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
+      "DT_VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
+      "DT_VOCNO": this.commonService.emptyToZero(form.VOCNO),
+      "DT_YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
+      "ISSUE_REF": this.commonService.nullToString(form.barCodeNumber),
+      "IS_AUTHORISE": false,
+      "TIME_CONSUMED": this.commonService.emptyToZero(form.consumed),
+      "SCRAP_STOCK_CODE": this.commonService.nullToString(form.stockCode),
+      "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
+      "SCRAP_PURITY": this.commonService.emptyToZero(form.SCRAP_PURITY),
+      "SCRAP_WT": this.commonService.emptyToZero(form.scrapQuantity),
+      "SCRAP_PURE_WT": scrapPureWt,
+      "SCRAP_PUDIFF": this.commonService.emptyToZero((Number(form.scrapQuantity) - Number(form.PURITY)) * scrapPureWt),
+      "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
+      "APPROVED_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "APPROVED_USER": this.commonService.nullToString(form.approvedby),
+      "SCRAP_PCS": this.commonService.emptyToZero(form.METAL_ScrapPCS),
+      "SCRAP_STONEWT": this.commonService.emptyToZero(form.METAL_ScrapStoneWt),
+      "SCRAP_NETWT": this.commonService.emptyToZero(form.METAL_ScrapNetWt),
+      "FROM_IRONWT": this.commonService.emptyToZero(form.METAL_FromIronWeight),
+      "FROM_MSTOCKCODE": this.commonService.nullToString(form.METAL_FromStockCode),
+      "TO_MSTOCKCODE": this.commonService.nullToString(form.METAL_ToStockCode),
+      "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
+      "TO_IRONWT": this.commonService.emptyToZero(form.METAL_ToIronWt),
+      "FRM_DIAGROSS_WT": this.commonService.emptyToZero(form.METAL_GrossWeightFrom),
+      "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
+      "SCRAP_DIVCODE": this.commonService.nullToString(form.DIVCODE),
+      "IRON_SCRAP_WT": this.calculateIronScrapWeight(form),
+      "GAIN_WT": this.commonService.emptyToZero(form.METAL_GainGrWt),
+      "GAIN_PURE_WT": this.commonService.emptyToZero(form.METAL_GainPureWt),
+      "GAIN_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
+      "IS_REJECT": true,
+      "REASON": "",
+      "REJ_REMARKS": "",
+      "ATTACHMENT_FILE": "",
+      "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z"
+    }
+  }
+    /**USE:  calculate Metal Grid Sum of data*/
+    calculateMetalGridSum(data: any, flag: string) {
+      let stoneAmount: number = 0
+      let metalAmount: number = 0
+      data.forEach((item: any) => {
+        switch (item.METALSTONE) {
+          case 'S':
+            stoneAmount += item.AMOUNTFC;
+            break;
+          case 'M':
+            metalAmount += item.AMOUNTFC;
+            break;
+          // Add more cases as needed
+        }
+      })
+      switch (flag) {
+        case 'STONEAMOUNT':
+          return stoneAmount;
+        case 'METALAMOUNT':
+          return metalAmount;
+        default:
+          return 0;
+      }
+    }
+  private calculateIronScrapWeight(data: any): number {
+    let toIronScrapWt = (this.commonService.emptyToZero(data.METAL_FromIronWeight) + this.commonService.emptyToZero(data.METAL_FromNetWeight))
+    toIronScrapWt = toIronScrapWt * (this.commonService.emptyToZero(data.METAL_ScrapGrWt) - this.commonService.emptyToZero(data.METAL_ScrapStoneWt));
+    toIronScrapWt = this.commonService.emptyToZero(data.METAL_FromIronWeight) / this.commonService.emptyToZero(data.METAL_ToIronScrapWt)
+    return this.commonService.emptyToZero(toIronScrapWt)
+  }
+  //calculate Loss Pure Qty
+  private calculateLossPureQty(detailScreenData: any): number {
+    detailScreenData.stdLoss = this.commonService.emptyToZero(detailScreenData.stdLoss);
+    detailScreenData.PURITY = this.commonService.emptyToZero(detailScreenData.PURITY);
+    let value = detailScreenData.stdLoss * detailScreenData.PURITY
+    return this.commonService.emptyToZero(value)
+  }
+  /**USE: set details from detail screen */
+  setJOB_PROCESS_TRN_STNMTL_DJ() {
+    let form = this.processTransferdetailsForm.value;
+    let scrapPureWt = this.commonService.emptyToZero(Number(form.scrapQuantity) * Number(form.SCRAP_PURITY))
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
+    let data: any[] = []
+    this.metalDetailData.forEach((element: any) => {
+      data.push({
+        "VOCNO": this.commonService.emptyToZero(form.VOCNO),
+        "VOCTYPE": this.commonService.nullToString(form.JOB_NUMBER),
+        "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
+        "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+        "JOB_SO_NUMBER": this.commonService.emptyToZero(form.JOB_SO_NUMBER),
+        "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+        "JOB_DESCRIPTION": this.commonService.nullToString(form.JOB_DESCRIPTION),
+        "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
+        "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
+        "METALSTONE": this.commonService.nullToString(element.METALSTONE),
+        "DIVCODE": this.commonService.nullToString(element.DIVCODE),
+        "STOCK_CODE": this.commonService.nullToString(element.STOCK_CODE),
+        "STOCK_DESCRIPTION": this.commonService.nullToString(element.STOCK_DESCRIPTION),
+        "COLOR": this.commonService.nullToString(element.COLOR),
+        "CLARITY": this.commonService.nullToString(element.CLARITY),
+        "SHAPE": this.commonService.nullToString(element.SHAPE),
+        "SIZE": this.commonService.nullToString(element.SIZE),
+        "PCS": this.commonService.emptyToZero(element.PCS),
+        "GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
+        "STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
+        "NET_WT": this.commonService.emptyToZero(element.NET_WT),
+        "RATE": this.commonService.emptyToZero(element.RATE),
+        "AMOUNT": this.commonService.emptyToZero(element.AMOUNTFC),
+        "PROCESS_CODE": this.commonService.nullToString(form.TO_PROCESS_CODE),
+        "WORKER_CODE": this.commonService.nullToString(form.TO_WORKER_CODE),
+        "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
+        "REFMID": 0,
+        "AMOUNTLC": this.commonService.emptyToZero(element.AMOUNTLC),
+        "AMOUNTFC": this.commonService.emptyToZero(element.AMOUNTFC),
+        "WASTAGE_QTY": 0,
+        "WASTAGE_PER": 0,
+        "WASTAGE_AMT": 0,
+        "CURRENCY_CODE": this.commonService.nullToString(element.CURRENCY_CODE),
+        "CURRENCY_RATE": this.commonService.getCurrRate(element.CURRENCY_CODE),
+        "YEARMONTH": this.commonService.yearSelected,
+        "LOSS_QTY": this.commonService.emptyToZero(form.stdLoss),
+        "LABOUR_CODE": this.commonService.nullToString(element.lab_accode),
+        "LAB_RATE": this.commonService.emptyToZero(element.LAB_RATE),
+        "LAB_AMT": this.commonService.emptyToZero(element.LAB_AMT),
+        "BRKSTN_STOCK_CODE": "",
+        "BRKSTN_DIVISION_CODE": "",
+        "BRKSTN_WEIGHT": 0,
+        "BRKSTN_RATEFC": 0,
+        "BRKSTN_RATELC": 0,
+        "BRKSTN_AMTFC": 0,
+        "BRKSTN_AMTLC": 0,
+        "MAIN_WORKER": this.commonService.nullToString(form.FRM_WORKER_CODE),
+        "FRM_WORKER": this.commonService.nullToString(form.FRM_WORKER_CODE),
+        "FRM_PROCESS": this.commonService.nullToString(form.FRM_PROCESS_CODE),
+        "CRACCODE": "",
+        "LAB_ACCODE": this.commonService.nullToString(element.lab_accode),
+        "LAB_AMTFC": this.commonService.emptyToZero(element.LAB_AMT),
+        "TO_PROCESS": this.commonService.nullToString(form.TO_PROCESS_CODE),
+        "TO_WORKER": this.commonService.nullToString(form.TO_WORKER_CODE),
+        "LAB_RATEFC": this.commonService.emptyToZero(element.LAB_RATE),
+        "RATEFC": this.commonService.emptyToZero(element.RATEFC),
+        "PRINTED": true,
+        "PUREWT": this.commonService.emptyToZero((element.NET_WT) * (element.PURITY)),
+        "PURITY": this.commonService.emptyToZero(element.PURITY),
+        "SQLID": "",
+        "ISBROCKEN": 0,
+        "TREE_NO": '',
+        "SETTED": element.SETTED_FLAG,
+        "SETTED_PCS": this.commonService.emptyToZero(element.Setted),
+        "SIEVE": this.commonService.nullToString(element.SIEVE),
+        "FULL_RECOVERY": 0,
+        "RECOVERY_DATE": "2023-10-21T07:24:35.989Z",
+        "RECOV_LOSS": 0,
+        "RECOV_LOSS_PURE": 0,
+        "BROKENSTONE_PCS": 0,
+        "BROKENSTONE_WT": 0,
+        "ISMISSING": 0,
+        "PROCESS_TYPE": "",
+        "IS_AUTHORISE": false,
+        "SUB_STOCK_CODE": this.commonService.nullToString(element.SUB_STOCK_CODE),
+        "KARAT_CODE": this.commonService.nullToString(element.KARAT_CODE),
+        "SIEVE_SET": this.commonService.nullToString(element.SIEVE_SET),
+        "SCRAP_STOCK_CODE": this.checkScrapStockCode(form.stockCode, element.STOCK_CODE, element.METALSTONE),
+        "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
+        "SCRAP_PURITY": this.commonService.emptyToZero(form.SCRAP_PURITY),
+        "SCRAP_WT": this.commonService.emptyToZero(form.scrapQuantity),
+        "SCRAP_PURE_WT": this.commonService.emptyToZero(scrapPureWt),
+        "SCRAP_PUDIFF": this.commonService.emptyToZero((Number(form.scrapQuantity) - Number(form.PURITY)) * scrapPureWt),
+        "SCRAP_ACCODE": seqData.length > 0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
+        "SYSTEM_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+        "ISSUE_GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
+        "ISSUE_STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
+        "ISSUE_NET_WT": this.commonService.emptyToZero(element.NET_WT),
+        "JOB_PCS": 1,
+        "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
+        "TO_STOCK_CODE": this.commonService.nullToString(form.METAL_ToStockCode),
+        "FROM_STOCK_CODE": this.commonService.nullToString(form.METAL_FromStockCode),
+        "FROM_SUB_STOCK_CODE": this.commonService.nullToString(form.SUB_STOCK_CODE),
+        "LOSS_PURE_WT": this.commonService.emptyToZero(form.LOSS_QTY * form.PURITY),
+        "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
+        "IRON_WT": this.commonService.emptyToZero(element.IRON_WT),
+        "IRON_SCRAP_WT": this.commonService.emptyToZero(form.METAL_ToIronScrapWt),
+        "GAIN_WT": this.commonService.emptyToZero(form.METAL_GainGrWt),
+        "GAIN_PURE_WT": this.commonService.emptyToZero(form.METAL_GainPureWt),
+        "IS_REJECT": true,
+        "REASON": "",
+        "REJ_REMARKS": "",
+        "ATTACHMENT_FILE": "",
+        "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
+        "PUREWTTEMP": 0
+      })
+    });
+    return data
+  }
+  checkScrapStockCode(stockCode: any, GridstockCode: any, METALSTONE: any) {
+    try {
+      if (stockCode == GridstockCode && METALSTONE.toUpperCase() == 'M') return stockCode;
+      return ''
+    } catch (error) {
+      return ''
+    }
+  }
+  setLabourChargeDetails() {
+    let form = this.processTransferdetailsForm.value
+    return {
+      "REFMID": 0,
+      "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
+      "YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
+      "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
+      "VOCNO": this.commonService.emptyToZero(form.VOCNO),
+      "SRNO": this.commonService.emptyToZero(form.SRNO),
+      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+      "STOCK_CODE": this.commonService.nullToString(form.stockCode),
+      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+      "METALSTONE": this.commonService.nullToString(form.METALSTONE),
+      "DIVCODE": this.commonService.nullToString(form.DIVCODE),
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAB_AMTFC": 0,
+      "UNITCODE": ""
+    }
   }
   /**USE: to calculate gain detail */
   private calculateGain() {
@@ -833,10 +1216,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   calculateGainGrWt(a: any, b: any, c: any) {
     if (!Number(a) && !Number(a) && !Number(a)) return 0
-    return (this.comService.emptyToZero(a) - (this.comService.decimalQuantityFormat((Number(b) + Number(c)), 'METAL')))
+    return (this.commonService.emptyToZero(a) - (this.commonService.decimalQuantityFormat((Number(b) + Number(c)), 'METAL')))
   }
-
-
   close(data?: any) {
     // this.activeModal.close(data);
     this.closeDetail.emit()

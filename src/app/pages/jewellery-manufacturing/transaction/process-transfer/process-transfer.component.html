@@ -22,7 +22,7 @@
                                 Type * </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput readonly formControlName="voctype" />
+                                    <input type="text" matInput readonly formControlName="VOCTYPE" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%">
                                     <input matInput DateValidation (dateChange)="formatDate($event)"
-                                        [matDatepicker]="dob" formControlName="vocdate" placeholder="DD/MM/YYYY" />
+                                        [matDatepicker]="dob" formControlName="VOCDATE" placeholder="DD/MM/YYYY" />
                                     <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                                     <mat-datepicker #dob></mat-datepicker>
                                 </mat-form-field>
@@ -43,7 +43,7 @@
                                 Number * </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="vocno" class="text-right" readonly/>
+                                    <input type="text" matInput  formControlName="VOCNO" class="text-right" readonly/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -61,13 +61,13 @@
                             <div class="col-sm-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput (change)="currencyDataSelected($event)"
-                                        formControlName="currency" />
+                                        formControlName="CURRENCY_CODE" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput SixDecimalInput class="text-right" readonly
-                                        formControlName="currencyrate" />
+                                        formControlName="CURRENCY_RATE" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="currencyMasterData"
                                     (newRowClick)="currencyDataSelected($event)">
