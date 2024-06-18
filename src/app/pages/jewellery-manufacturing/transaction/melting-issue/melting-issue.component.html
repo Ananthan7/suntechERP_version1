@@ -6,8 +6,10 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewAuditTrail]="true"
+<modal-header (saveClick)="formSubmit()" [isloading]="isloading"
+    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
+    (cancelClick)="close()" [isViewDelete]="false"
+    [isViewSave]="!viewMode"
     [isViewPost]="true"></modal-header>
 <div class="row">
     <div class="col-md-12">
@@ -215,9 +217,11 @@
                                     </dxi-column> -->
                                     <dxi-column [width]="100" dataField="SRNO"
                                         caption="SRNO"></dxi-column>
-                                    <dxi-column [width]="100" dataField="DIVCODE"
+                                    <dxi-column [width]="100"
+                                        dataField="DIVCODE"
                                         caption="DIV"></dxi-column>
-                                    <dxi-column [width]="100" dataField="JOB_NUMBER"
+                                    <dxi-column [width]="100"
+                                        dataField="JOB_NUMBER"
                                         caption="Job No"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="STOCK_CODE"
@@ -228,7 +232,8 @@
                                     <dxi-column [width]="100"
                                         dataField="PROCESS_CODE"
                                         caption="Process"></dxi-column>
-                                    <dxi-column [width]="100" dataField="WORKER_CODE"
+                                    <dxi-column [width]="100"
+                                        dataField="WORKER_CODE"
                                         caption="Worker"></dxi-column>
                                     <dxi-column [width]="100" dataField="PCS"
                                         caption="Pcs"></dxi-column>
