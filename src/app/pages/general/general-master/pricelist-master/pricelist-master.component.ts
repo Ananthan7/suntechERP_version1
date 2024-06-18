@@ -91,10 +91,11 @@ export class PricelistMasterComponent implements OnInit {
       this.setFormValues()
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.onPriceTypeChange()
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.codeEnable = false;
-       
+        this.onPriceTypeChange()
         this.roundoffDis()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -150,7 +151,7 @@ export class PricelistMasterComponent implements OnInit {
       return false;
     }
   }
-
+  
 
   formSubmit() {
     console.log(this.priceListMasterForm.value.priceMethod);
@@ -533,3 +534,5 @@ export class PricelistMasterComponent implements OnInit {
   }
 
 }
+
+
