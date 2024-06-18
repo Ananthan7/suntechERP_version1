@@ -283,7 +283,7 @@ setPostData() {
       "IRON_PER": 0,
       "STONEDIFF": 0,
       "WAX_WT": this.meltingIssuedetailsFrom.value.waxweight,
-      "TREE_NO": this.meltingIssuedetailsFrom.value.treeno,
+      "TREE_NO":this.comService.nullToString(this.meltingIssuedetailsFrom.value.treeno),
       "WIP_ACCODE": "string",
       "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,
@@ -292,9 +292,9 @@ setPostData() {
       "MKGVALUEFC": 0,
       "MKGVALUECC": 0,
       "DLOC_CODE": "string",
-      "REMARKS": this.meltingIssuedetailsFrom.value.remarks,
-      "LOCTYPE_CODE": this.meltingIssuedetailsFrom.value.location,
-      "TOSTOCKCODE": this.meltingIssuedetailsFrom.value.tostock,
+      "REMARKS": this.comService.nullToString(this.meltingIssuedetailsFrom.value.remarks),
+      "LOCTYPE_CODE": this.comService.nullToString(this.meltingIssuedetailsFrom.value.location),
+      "TOSTOCKCODE": this.comService.nullToString(this.meltingIssuedetailsFrom.value.tostock),
       "LOSSWT": this.meltingIssuedetailsFrom.value.lossweight,
       "TODIVISION_CODE": "s",
       "LOT_NO": this.meltingIssuedetailsFrom.value.lotno,
@@ -317,7 +317,7 @@ setPostData() {
 
   
   deleteRecord() {
-    if (!this.content.VOCTYPE) {
+    if (!this.content.WORKER_CODE) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',

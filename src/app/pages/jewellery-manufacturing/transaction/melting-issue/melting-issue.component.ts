@@ -38,6 +38,12 @@ export class MeltingIssueComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
+  gridAmountDecimalFormat: any = {
+    type: 'fixedPoint',
+    precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+    currency: this.commonService.compCurrency
+  };
 
   branchCode?: String;
   yearMonth?: String;
@@ -118,10 +124,7 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   meltingIssueFrom: FormGroup = this.formBuilder.group({
-    voctype: [''],
     vocno: [1],
-    vocdate: [''],
-    voctime: [''],
     meltingtype: [''],
     jobno: [''],
     jobdes: [''],
@@ -143,6 +146,13 @@ export class MeltingIssueComponent implements OnInit {
     process: [''],
     currency: [''],
     currencyrate: [''],
+    FLAG: [null],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
+    VOCNO: [''],
+    MID: [0],
+    voctype: ['', [Validators.required]],
+    vocdate: ['', [Validators.required]],
 
 
   });
@@ -159,25 +169,45 @@ export class MeltingIssueComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-    // this.voctype = this.commonService.getqueryParamMainVocType();
-    // this.jobalocationFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType());
 
-    this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
-    this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-    this.setCompanyCurrency()
+    this.setNewFormValues()
+    // this.voctype = this.commonService.getqueryParamMainVocType();
+    this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType());
     this.setAllInitialValues()
-    this.setNewFormValues
+    //this.content provide the data and flag from main grid to the form
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+      this.isSaved = true;
+      if (this.content.FLAG == 'DELETE') {
+        this.deleteRecord()
+      }
+      this.meltingIssueFrom.controls.FLAG.setValue(this.content.FLAG)
+      this.setAllInitialValues()
+    } else {
+      this.setNewFormValues()
+    }
 
   }
   setNewFormValues() {
-    this.meltingIssueFrom.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
-    this.meltingIssueFrom.controls.vocdate.setValue(this.comService.currentDate)
-    this.meltingIssueFrom.controls.YEARMONTH.setValue(this.comService.yearSelected)
-    this.meltingIssueFrom.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+    this.branchCode = this.commonService.branchCode;
+    this.meltingIssueFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
+    this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
+    this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    this.meltingIssueFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
   }
-  
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.meltingIssueFrom.controls.vocdate.setValue(new Date(date))
+    }
+  }
 
   setAllInitialValues() {
     console.log(this.content)
@@ -188,7 +218,7 @@ export class MeltingIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.meltingISsueDetailsData = data.Details
-          console.log(this.meltingISsueDetailsData,'data')
+          console.log(this.meltingISsueDetailsData, 'data')
           // data.Details.forEach((element: any) => {
           // //   this.tableData.push({
           // //     // 
@@ -205,14 +235,6 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.jobno.setValue(data.Details[0].JOB_NUMBER)
           this.meltingIssueFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
-          this.meltingIssueFrom.controls.grossweight.setValue(data.Details[0].GROSS_WT)
-          this.meltingIssueFrom.controls.pureweight.setValue(data.Details[0].PUREWT)
-          this.meltingIssueFrom.controls.pcs.setValue(data.Details[0].PCS)
-          this.meltingIssueFrom.controls.stockcode.setValue(data.Details[0].STOCK_CODE)
-          this.meltingIssueFrom.controls.purity.setValue(data.Details[0].PURITY)
-          this.meltingIssueFrom.controls.SRNO.setValue(data.Details[0].SRNO)
-
-
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -388,21 +410,21 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
- 
-    setValuesToHeaderGrid(DATA: any) {
-      console.log(DATA, 'detailDataToParent');
-      let detailDataToParent = DATA.POSTDATA
-      if (detailDataToParent.SRNO != 0) {
-        this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
-      } else {
-        this.meltingISsueDetailsData.push(detailDataToParent);
-        this.recalculateSRNO()
-      }
-      if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
-      if(DATA.FLAG == 'CONTINUE'){
-        this.commonService.showSnackBarMsg('Details added successfully')
-      };
+
+  setValuesToHeaderGrid(DATA: any) {
+    console.log(DATA, 'detailDataToParent');
+    let detailDataToParent = DATA.POSTDATA
+    if (detailDataToParent.SRNO != 0) {
+      this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+    } else {
+      this.meltingISsueDetailsData.push(detailDataToParent);
+      this.reCalculateSRNO()
     }
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE') {
+      this.commonService.showSnackBarMsg('Details added successfully')
+    };
+  }
   closeDetailScreen() {
     this.modalReference.close()
   }
@@ -410,86 +432,113 @@ export class MeltingIssueComponent implements OnInit {
     this.selectRowIndex = event.data.SRNO
   }
   onRowDoubleClickHandler(event: any) {
-    console.log(this.selectRowIndex,'passing')
+    console.log(this.selectRowIndex, 'passing')
     this.selectRowIndex = event.data.SRNO
     let selectedData = event.data
     this.openaddMeltingIssueDetails(selectedData)
   }
 
   deleteTableData(): void {
-    this.meltingISsueDetailsData = this.meltingISsueDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
-    this.recalculateSRNO()
+    if (!this.selectRowIndex) {
+      Swal.fire({
+        title: '',
+        text: 'Please select row to remove from grid!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.meltingISsueDetailsData = this.meltingISsueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
   }
-  recalculateSRNO(): void {
+  reCalculateSRNO(): void {
     this.meltingISsueDetailsData.forEach((element: any, index: any) => {
       element.SRNO = index + 1
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
     })
   }
 
-  setPostData(form:any) {
-    console.log(form,'form');
-return{
-  "MID":this.commonService.emptyToZero(this.content?.MID),
-  "BRANCH_CODE":this.commonService.nullToString(this.meltingIssueFrom.value.BRANCH_CODE),
-  "VOCTYPE": this.commonService.nullToString(this.meltingIssueFrom.value.VOCTYPE),
-  "VOCNO": this.commonService.emptyToZero(this.meltingIssueFrom.value.VOCNO),
-  "VOCDATE":this.commonService.formatDateTime(form.vocdate),
-  "YEARMONTH":this.commonService.nullToString(this.meltingIssueFrom.value.YEARMONTH),
-  "NAVSEQNO": 0,
-  "WORKER_CODE": this.meltingIssueFrom.value.worker,
-  "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
-  "JOB_CODE": this.meltingIssueFrom.value.jobno,
-  "JOB_DESC": this.meltingIssueFrom.value.jobdes,
-  "SALESPERSON_CODE": "",
-  "SALESPERSON_NAME": "",
-  "DOCTIME": "2023-10-21T10:15:43.789Z",
-  "TOTAL_GROSSWT": 0,
-  "MELTING_TYPE": "",
-  "COLOR": "",
-  "RET_STOCK_CODE": "",
-  "RET_LOCATION_CODE": "",
-  "TOTAL_PUREWT": 0,
-  "TOTAL_STONEWT": 0,
-  "TOTAL_NETWT": 0,
-  "TOTAL_WAXWT": 0,
-  "TOTAL_IRONWT": 0,
-  "TOTAL_MKGVALUEFC": 0,
-  "TOTAL_MKGVALUECC": 0,
-  "TOTAL_PCS": 0,
-  "TOTAL_ISSUED_QTY": 0,
-  "TOTAL_REQUIRED_QTY": 0,
-  "TOTAL_ALLOCATED_QTY": 0,
-  "CURRENCY_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.currency),
-  "CURRENCY_RATE": this.commonService.emptyToZero(this.meltingIssueFrom.value.currencyrate),
-  "TRAY_WEIGHT": 0,
-  "REMARKS": this.meltingIssueFrom.value.remarks,
-  "AUTOPOSTING": true,
-  "POSTDATE": "",
-  "BASE_CURRENCY": "",
-  "BASE_CURR_RATE": 0,
-  "BASE_CONV_RATE": 0,
-  "PROCESS_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.processcode),
-  "PROCESS_DESC": this.commonService.nullToString(this.meltingIssueFrom.value.processdes),
-  "PRINT_COUNT": 0,
-  "RET_PURITY": 0,
-  "RET_PURE_WT": 0,
-  "SCP_STOCK_CODE": "",
-  "SCP_GROSS_WT": 0,
-  "SCP_PURITY": 0,
-  "SCP_PURE_WT": 0,
-  "SCP_LOCATION_CODE": "",
-  "LOSS_QTY": 0,
-  "LOSS_PURE_WT": 0,
-  "IS_AUTHORISE": true,
-  "IS_REJECT": true,
-  "REASON": "",
-  "REJ_REMARKS": "",
-  "ATTACHMENT_FILE": "",
-  "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
-  "Details": this.meltingISsueDetailsData
-}
-}
+  setPostData() {
+    let form = this.meltingIssueFrom.value
+    console.log(form, 'form');
+    return {
+      "MID": this.commonService.emptyToZero(this.content?.MID),
+      "BRANCH_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.BRANCH_CODE),
+      "VOCTYPE": this.commonService.nullToString(this.meltingIssueFrom.value.voctype),
+      "VOCNO": this.comService.emptyToZero(form.VOCNO),
+      "VOCDATE": this.meltingIssueFrom.value.vocdate,
+      "YEARMONTH": this.commonService.nullToString(this.meltingIssueFrom.value.YEARMONTH),
+      "NAVSEQNO": 0,
+      "WORKER_CODE": this.meltingIssueFrom.value.worker,
+      "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
+      "JOB_CODE": this.meltingIssueFrom.value.jobno,
+      "JOB_DESC": this.meltingIssueFrom.value.jobdes,
+      "SALESPERSON_CODE": "",
+      "SALESPERSON_NAME": "",
+      "DOCTIME": "2023-10-21T10:15:43.789Z",
+      "TOTAL_GROSSWT": 0,
+      "MELTING_TYPE": "",
+      "COLOR": "",
+      "RET_STOCK_CODE": "",
+      "RET_LOCATION_CODE": "",
+      "TOTAL_PUREWT": 0,
+      "TOTAL_STONEWT": 0,
+      "TOTAL_NETWT": 0,
+      "TOTAL_WAXWT": 0,
+      "TOTAL_IRONWT": 0,
+      "TOTAL_MKGVALUEFC": 0,
+      "TOTAL_MKGVALUECC": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_ISSUED_QTY": 0,
+      "TOTAL_REQUIRED_QTY": 0,
+      "TOTAL_ALLOCATED_QTY": 0,
+      "CURRENCY_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(this.meltingIssueFrom.value.currencyrate),
+      "TRAY_WEIGHT": 0,
+      "REMARKS": this.meltingIssueFrom.value.remarks,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "BASE_CURRENCY": "",
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": 0,
+      "PROCESS_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.processcode),
+      "PROCESS_DESC": this.commonService.nullToString(this.meltingIssueFrom.value.processdes),
+      "PRINT_COUNT": 0,
+      "RET_PURITY": 0,
+      "RET_PURE_WT": 0,
+      "SCP_STOCK_CODE": "",
+      "SCP_GROSS_WT": 0,
+      "SCP_PURITY": 0,
+      "SCP_PURE_WT": 0,
+      "SCP_LOCATION_CODE": "",
+      "LOSS_QTY": 0,
+      "LOSS_PURE_WT": 0,
+      "IS_AUTHORISE": true,
+      "IS_REJECT": true,
+      "REASON": "",
+      "REJ_REMARKS": "",
+      "ATTACHMENT_FILE": "",
+      "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
+      "Details": this.meltingISsueDetailsData
+    }
+  }
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -500,10 +549,10 @@ return{
     //   this.toastr.error('select all required fields')
     //   return
     // } 
-  
-  
+
+
     let API = 'JobMeltingIssueDJ/InsertJobMeltingIssueDJ'
-    let postData = this.setPostData(this.meltingIssueFrom.value)
+    let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -553,16 +602,17 @@ return{
 
   update() {
     let form = this.meltingIssueFrom.value
-    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
-    let postData = this.setPostData(this.meltingIssueFrom.value)
+    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${form.BRANCH_CODE}/${form.voctype}/${form.vocno}/${form.YEARMONTH}`
+    let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
         if (result.response) {
           if (result.status == "Success") {
+            this.isSaved = true;
             Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -570,21 +620,23 @@ return{
             }).then((result: any) => {
               if (result.value) {
                 this.meltingIssueFrom.reset()
+                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err =>{
+      }, err => {
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.comService.toastErrorByMsgId('Not saved')
       })
     this.subscriptions.push(Sub)
   }
+
   deleteRecord() {
-    if (!this.content.VOCTYPE) {
+    if (!this.content) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -597,8 +649,6 @@ return{
       });
       return
     }
-
-
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -609,7 +659,9 @@ return{
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMeltingIssueDJ/DeleteJobMeltingIssueDJ/' + this.meltingIssueFrom.value.voctype + this.meltingIssueFrom.value.vocno + this.meltingIssueFrom.value.vocdate
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -768,7 +820,5 @@ return{
   }
 
 }
-function deleteRecord() {
-  throw new Error('Function not implemented.');
-}
+
 
