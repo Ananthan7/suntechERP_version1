@@ -204,6 +204,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             NumberOnly maxlength="10"
+                            (focusout)="checkFromToValues('FRM_METAL_PCS','TO_METAL_PCS')"
                             formControlName="TO_METAL_PCS" />
                         </mat-form-field>
                       </td>
@@ -221,6 +222,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput [max]="10"
+                            (focusout)="checkFromToValues('FRM_METAL_WT','TO_METAL_WT')"
                             formControlName="TO_METAL_WT" />
                         </mat-form-field>
                       </td>
@@ -242,6 +244,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             NumberOnly  maxlength="10"
+                            (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
                         </mat-form-field>
                       </td>
@@ -265,6 +268,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput [max]="10"
+                            (focusout)="checkFromToValues('GrossWeightFrom','GrossWeightTo')"
                             formControlName="GrossWeightTo" />
                         </mat-form-field>
                       </td>
@@ -332,6 +336,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             formControlName="StonePcsTo" NumberOnly 
+                            (focusout)="checkFromToValues('StonePcsFrom','StonePcsTo')"
                             maxlength="10"/>
                         </mat-form-field>
                       </td>
@@ -359,6 +364,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             StoneDecimalInput [max]="10" 
+                            (focusout)="checkFromToValues('StoneWeightFrom','StoneWeightTo')"
                             formControlName="StoneWeightTo" />
                         </mat-form-field>
                       </td>
@@ -862,7 +868,7 @@
               [columnAutoWidth]="true"
               [allowColumnResizing]="true"
               (onRowUpdated)="formatMetalDetailDataGrid()"
-              [showRowLines]="true">
+              [showRowLines]="true" (onRowUpdated)="onRowUpdateGrid($event)">
               <dxo-paging [enabled]="false"></dxo-paging>
               <dxo-editing mode="cell" [allowUpdating]="true">
               </dxo-editing>
