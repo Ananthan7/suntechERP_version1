@@ -91,6 +91,7 @@ export class PricelistMasterComponent implements OnInit {
       this.setFormValues()
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.editMode = true
         this.onPriceTypeChange()
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
@@ -469,45 +470,47 @@ export class PricelistMasterComponent implements OnInit {
       this.priceListMasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
     }
   }
-
-  checkWorkerExists(event: any) {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      return; // Exit the function if in edit mode
+  checkCodeExists(event: any) {
+    // Exit the function if in edit mode or view mode
+    if ((this.content && (this.content.FLAG === 'EDIT' || this.content.FLAG === 'VIEW')) || this.viewMode) {
+      return; 
     }
-
-    if (event.target.value === '' || this.viewMode) {
-      return; // Exit the function if the input is empty or in view mode
+  
+    // Exit the function if the input is empty
+    if (event.target.value === '') {
+      return; 
     }
-
+  
     const API = 'PriceMaster/CheckIfPriceCodeExists/' + event.target.value;
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.checkifExists) {
           Swal.fire({
             title: '',
-            text: result.message || 'Worker Already Exists!',
+            text: result.message || 'Price code already exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
           }).then(() => {
-            // Clear the input value
-            this.priceListMasterForm.controls.priceCode.setValue('');
-
-            this.codeEnable = true;
-            setTimeout(() => {
-              this.renderer.selectRootElement('#priceCode').focus();
-            }, 500);
-
+            // Clear the input value only if not in view mode
+            if (!this.viewMode) {
+              this.priceListMasterForm.controls.priceCode.setValue('');
+              this.codeEnabled();
+            }
           });
         }
       }, err => {
-        this.priceListMasterForm.reset();
+        if (!this.viewMode) {
+          this.priceListMasterForm.reset();
+        }
       });
-
+  
     this.subscriptions.push(sub);
-  }
+  }  
+  
+  
   codeEnabled() {
-    if (this.priceListMasterForm.value.WorkerCode == '') {
+    if (this.priceListMasterForm.value.priceCode == '') {
       this.codeEnable = true;
     }
     else {

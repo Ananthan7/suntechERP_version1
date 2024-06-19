@@ -647,7 +647,11 @@ export class LabourChargeMasterComponent implements OnInit {
   divisionCodeSelected(e: any) {
     this.diamondlabourMasterForm.controls.divisions.setValue(e.DIVISION_CODE);
   }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.diamondlabourMasterForm.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
 
   categorySelected(e: any) {
     if (this.checkCode()) return
