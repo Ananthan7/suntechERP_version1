@@ -860,10 +860,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
       JOB_PROCESS_TRN_STNMTL_DJ: this.setJOB_PROCESS_TRN_STNMTL_DJ(),
       JOB_PROCESS_TRN_LABCHRG_DJ: this.setLabourChargeDetails()
     }
-    console.log(detailDataToParent, 'child detailDataToParent');
+    console.log(detailDataToParent, 'formSubmit clicked');
     this.saveDetail.emit(detailDataToParent);
+    if (flag == 'CONTINUE') {
+      this.resetPTFDetails()
+    }
   }
-
+  resetPTFDetails(){
+    this.processTransferdetailsForm.reset()
+    this.metalDetailData = []
+  }
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
@@ -1067,7 +1073,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.metalDetailData.forEach((element: any) => {
       data.push({
         "VOCNO": this.commonService.emptyToZero(form.VOCNO),
-        "VOCTYPE": this.commonService.nullToString(form.JOB_NUMBER),
+        "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
         "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
         "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
         "JOB_SO_NUMBER": this.commonService.emptyToZero(form.JOB_SO_NUMBER),
