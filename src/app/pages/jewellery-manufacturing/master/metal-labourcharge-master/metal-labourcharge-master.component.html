@@ -58,9 +58,9 @@
                     </div>
                     <div class="col-sm-5">
                         <mat-form-field style="width: 90%">
-                            <input type="text" matInput maxlength="75" [readonly]="viewMode || codeEnableMetal"
+                            <input type="text" matInput autocomplete="off" maxlength="75" [readonly]="viewMode || codeEnableMetal"
                                 formControlName="metallabour_description" #description1
-                                (input)="description1.value = description1.value.toUpperCase()" appNoEmptySpace />
+                                oninput="this.value = this.value.toUpperCase()" appNoEmptySpace />
                         </mat-form-field>
                     </div>
                 </div>

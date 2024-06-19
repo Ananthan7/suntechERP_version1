@@ -401,18 +401,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     forDesignOnly: [false],
   });
 
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
+
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('codeInput2') codeInput2!: ElementRef;
@@ -440,6 +429,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.viewMode = true;
       this.deleteMeltingType()
     }
+
+    
 
     this.grossWt = true;
     this.codeEnable1 = true;
@@ -519,6 +510,19 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     });
   }
 
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+  
   setFormValues() {
     if (!this.content) return
 
@@ -561,7 +565,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
     //       this.content.COST_RATE));
 
-
+    
     this.metallabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
     this.metallabourMasterForm.controls.metalunitList.setValue(this.content.UNITCODE);
     this.metallabourMasterForm.controls.labourAc.setValue(this.content.CRACCODE);
@@ -689,6 +693,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
+
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
