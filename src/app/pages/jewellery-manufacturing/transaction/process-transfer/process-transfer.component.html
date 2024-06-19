@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-[isloading]="isloading"></modal-header>
+[isloading]="isloading" [isViewDelete]="editMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="processTransferFrom">

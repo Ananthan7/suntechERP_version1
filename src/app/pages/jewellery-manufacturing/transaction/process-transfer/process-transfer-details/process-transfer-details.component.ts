@@ -156,6 +156,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     timetaken: [''],
     consumed: [''],
     variance: [''],
+    variancePercentage: [''],
     treeno: [''],
     remarks: [''],
     StdTimeInMinutes: [''],
@@ -283,6 +284,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.VOCNO.setValue(HEADERDETAILS.VOCNO)
       this.processTransferdetailsForm.controls.VOCDATE.setValue(HEADERDETAILS.VOCDATE)
     }
+    let branchParam = this.commonService.allbranchMaster
+    this.processTransferdetailsForm.controls.location.setValue(branchParam.DMFGMLOC)
   }
 
   setInitialValues() {
@@ -472,27 +475,37 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  subJobDetailDataSRNO() {
-    this.subJobDetailData.forEach((item: any, index: any) => item.SRNO = index + 1)
-  }
+  
   subJobDetailData: any[] = []
   /**USE: subjobnumber validate API call subjobvalidate  '156516/4/01'*/
   subJobNumberValidate(event?: any) {
     let postData = {
-      "SPID": "040",
+      "SPID": "088",
       "parameter": {
-        'strUNQ_JOB_ID': this.processTransferdetailsForm.value.UNQ_JOB_ID,
-        'strBranchCode': this.commonService.nullToString(this.branchCode),
-        'strCurrenctUser': ''
+        'StrSubJobNo': this.processTransferdetailsForm.value.UNQ_JOB_ID,
+        'StrBranchCode': this.commonService.nullToString(this.branchCode),
       }
     }
+    // let postData = {
+    //   "SPID": "040",
+    //   "parameter": {
+    //     'strUNQ_JOB_ID': this.processTransferdetailsForm.value.UNQ_JOB_ID,
+    //     'strBranchCode': this.commonService.nullToString(this.branchCode),
+    //     'strCurrenctUser': ''
+    //   }
+    // }
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.subJobDetailData = result.dynamicData[0]
-          this.subJobDetailDataSRNO()
+          this.subJobDetailData.forEach((item: any, index: any) => {
+            item.SRNO = index + 1
+            item.METAL = this.commonService.decimalQuantityFormat(item.METAL,'METAL')
+            item.STONE = this.commonService.decimalQuantityFormat(item.STONE,'STONE')
+          })
+
           if (this.subJobDetailData.length > 1) {
             this.openJobTransferDetails()
             return
@@ -522,7 +535,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(data[0].PROCESS)
     this.processTransferdetailsForm.controls.FRM_WORKER_CODE.setValue(data[0].WORKER)
     this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
-    this.processTransferdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
     this.processTransferdetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
     this.processTransferdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
     this.processTransferdetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
@@ -592,7 +604,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   getTimeAndLossDetails() {
-    if (this.commonService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
+    if (this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID == '')) return
     let form = this.processTransferdetailsForm.value;
     let postData = {
       "SPID": "087",
@@ -610,13 +622,23 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          this.STDDateTimeData.TIMEINMINUTES = data[0].STD_TIME
-          let time = this.commonService.convertTimeMinutesToDHM(data[0].STD_TIME)
           this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(data[0].TO_PROCESS_CODE)
           this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(data[0].TO_PROCESSNAME)
           this.processTransferdetailsForm.controls.stdtime.setValue(
-            time
+            this.commonService.convertTimeMinutesToDHM(data[0].STD_TIME)
           )
+          this.STDDateTimeData.TIMEINMINUTES = data[0].STD_TIME
+          const differenceInMinutes = this.getDifferenceInMinutes(data[0].IN_DATE);
+          this.TimeTakenData.TIMEINMINUTES = differenceInMinutes
+          this.consumedTimeData.TIMEINMINUTES = differenceInMinutes
+
+          this.processTransferdetailsForm.controls.timetaken.setValue(
+            this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
+          )
+          this.processTransferdetailsForm.controls.consumed.setValue(
+            this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
+          )
+          this.Calc_TimeDiff()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
@@ -626,6 +648,36 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  Calc_TimeDiff(): void {
+    try {
+      let stdTime = this.commonService.emptyToZero(this.STDDateTimeData.TIMEINMINUTES)
+      let consumedTime = this.commonService.emptyToZero(this.consumedTimeData.TIMEINMINUTES)
+      let variance = consumedTime - stdTime > 0 ? (consumedTime - stdTime) : 0;
+      this.processTransferdetailsForm.controls.variance.setValue(variance)
+      if (variance > 0 && stdTime > 0) {
+        let variancePercentage = ((variance / stdTime) * 100).toFixed(2)
+        this.processTransferdetailsForm.controls.variancePercentage.setValue(variancePercentage)
+      } else {
+        this.processTransferdetailsForm.controls.variancePercentage.setValue(0)
+      }
+
+    } catch (error: any) {
+      this.commonService.toastErrorByMsgId("MSG2100");
+    }
+  }
+  getDifferenceInMinutes(indate: string): number {
+    // Parse the given date-time string into a Date object
+    const inDate = new Date(indate);
+    // Get the current date-time as a Date object
+    const currentDate = new Date();
+    // Calculate the difference in milliseconds
+    const differenceInMillis = currentDate.getTime() - inDate.getTime();
+    // Convert the difference from milliseconds to minutes
+    const differenceInMinutes = Math.floor(differenceInMillis / (1000 * 60));
+    return differenceInMinutes;
+  }
+
+
   /**USE: fillStoneDetails grid data */
   private fillStoneDetails(): void {
     let postData = {
@@ -866,7 +918,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.resetPTFDetails()
     }
   }
-  resetPTFDetails(){
+  resetPTFDetails() {
     this.processTransferdetailsForm.reset()
     this.metalDetailData = []
   }
@@ -1027,30 +1079,30 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z"
     }
   }
-    /**USE:  calculate Metal Grid Sum of data*/
-    calculateMetalGridSum(data: any, flag: string) {
-      let stoneAmount: number = 0
-      let metalAmount: number = 0
-      data.forEach((item: any) => {
-        switch (item.METALSTONE) {
-          case 'S':
-            stoneAmount += item.AMOUNTFC;
-            break;
-          case 'M':
-            metalAmount += item.AMOUNTFC;
-            break;
-          // Add more cases as needed
-        }
-      })
-      switch (flag) {
-        case 'STONEAMOUNT':
-          return stoneAmount;
-        case 'METALAMOUNT':
-          return metalAmount;
-        default:
-          return 0;
+  /**USE:  calculate Metal Grid Sum of data*/
+  calculateMetalGridSum(data: any, flag: string) {
+    let stoneAmount: number = 0
+    let metalAmount: number = 0
+    data.forEach((item: any) => {
+      switch (item.METALSTONE) {
+        case 'S':
+          stoneAmount += item.AMOUNTFC;
+          break;
+        case 'M':
+          metalAmount += item.AMOUNTFC;
+          break;
+        // Add more cases as needed
       }
+    })
+    switch (flag) {
+      case 'STONEAMOUNT':
+        return stoneAmount;
+      case 'METALAMOUNT':
+        return metalAmount;
+      default:
+        return 0;
     }
+  }
   private calculateIronScrapWeight(data: any): number {
     let toIronScrapWt = (this.commonService.emptyToZero(data.METAL_FromIronWeight) + this.commonService.emptyToZero(data.METAL_FromNetWeight))
     toIronScrapWt = toIronScrapWt * (this.commonService.emptyToZero(data.METAL_ScrapGrWt) - this.commonService.emptyToZero(data.METAL_ScrapStoneWt));
