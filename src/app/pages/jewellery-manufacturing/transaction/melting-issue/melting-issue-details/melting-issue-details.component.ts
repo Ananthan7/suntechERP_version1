@@ -24,7 +24,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
   jobNumberDetailData: any[] = [];
   currentDate = new Date();
   userName = localStorage.getItem('username');
-
+  viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
 
  
@@ -134,11 +134,15 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
     
   ngOnInit(): void {
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-    this.meltingIssuedetailsFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.setInitialValue()
-
+    this.branchCode = this.comService.branchCode;
+    if (this.content && this.content.FLAG) {
+      this.setInitialValue()
+      this.meltingIssuedetailsFrom.controls.FLAG.setValue(this.content.FLAG)
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      
+      }
+    }
   }
   setInitialValue() {
     console.log(this.content, 'content');
@@ -226,7 +230,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     pcs:[''],
     netweight:[''],
     pureweight:['',[Validators.required]],
-    topurity:['',[Validators.required]]
+    topurity:['',[Validators.required]],
+    FLAG: [null]
   });
   submitValidations() {
     let form = this.meltingIssuedetailsFrom.value
@@ -257,10 +262,10 @@ setPostData() {
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": this.meltingIssuedetailsFrom.value.voctype,
+      "DT_VOCTYPE": "stri",
       "DT_VOCNO": 0,
       "DT_VOCDATE": this.comService.formatDateTime(this.currentDate),
-      "DT_YEARMONTH": this.yearMonth,
+      "DT_YEARMONTH": this.comService.yearSelected,
       "JOB_NUMBER": this.meltingIssuedetailsFrom.value.jobno,
       "JOB_DESCRIPTION": this.meltingIssuedetailsFrom.value.jobdes,
       "PROCESS_CODE": this.meltingIssuedetailsFrom.value.process,
@@ -273,7 +278,7 @@ setPostData() {
       "KARAT_CODE": "stri",
       "PCS": this.meltingIssuedetailsFrom.value.pcs,
       "GROSS_WT": this.meltingIssuedetailsFrom.value.grossweight,
-      "STONE_WT": this.meltingIssuedetailsFrom.value.stoneweight,
+      "STONE_WT": this.comService.emptyToZero(this.meltingIssuedetailsFrom.value.stoneweight),
       "PURITY": this.meltingIssuedetailsFrom.value.purity,
       "PUREWT": this.meltingIssuedetailsFrom.value.pureweight,
       "PUDIFF": 0,
@@ -295,7 +300,7 @@ setPostData() {
       "REMARKS": this.comService.nullToString(this.meltingIssuedetailsFrom.value.remarks),
       "LOCTYPE_CODE": this.comService.nullToString(this.meltingIssuedetailsFrom.value.location),
       "TOSTOCKCODE": this.comService.nullToString(this.meltingIssuedetailsFrom.value.tostock),
-      "LOSSWT": this.meltingIssuedetailsFrom.value.lossweight,
+      "LOSSWT": this.comService.emptyToZero(this.meltingIssuedetailsFrom.value.lossweight),
       "TODIVISION_CODE": "s",
       "LOT_NO": this.meltingIssuedetailsFrom.value.lotno,
       "BAR_NO": this.meltingIssuedetailsFrom.value.barno,
