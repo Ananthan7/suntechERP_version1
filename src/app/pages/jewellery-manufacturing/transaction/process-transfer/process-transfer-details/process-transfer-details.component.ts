@@ -269,6 +269,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setHearderDetails()
     this.setInitialValues() //set all values from parent to child
     this.processTransferdetailsForm.controls['enddate'].disable();
+    this.processTransferdetailsForm.controls['startdate'].disable();
     this.processTransferdetailsForm.controls['startdate'].setValue(this.commonService.currentDate);
     this.processTransferdetailsForm.controls['enddate'].setValue(this.commonService.currentDate);
   }

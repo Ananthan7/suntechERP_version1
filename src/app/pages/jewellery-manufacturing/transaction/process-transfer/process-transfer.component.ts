@@ -399,7 +399,7 @@ export class ProcessTransferComponent implements OnInit {
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.JOB_PROCESS_TRN_DETAIL_DJ, //header grid details
       "JOB_PROCESS_TRN_STNMTL_DJ": this.JOB_PROCESS_TRN_STNMTL_DJ, //detail screen data
-      "JOB_PROCESS_TRN_LABCHRG_DJ": this.JOB_PROCESS_TRN_LABCHRG_DJ // labour charge details
+      "JOB_PROCESS_TRN_LABCHRG_DJ": [] //no need of saving now labour charge details
     }
   }
 
