@@ -7,14 +7,14 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-[isloading]="isloading"></modal-header>
+[isloading]="isloading" [isViewDelete]="editMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="processTransferFrom">
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="col-md-12">
-                        <h6>{{branchCode}} - {{companyName}}</h6>
+                        <h6>{{processTransferFrom.value.BRANCH_CODE}} - {{companyName}}</h6>
                     </div>
                     <div class="col-md-8">
                         <div class="row mb-2">
