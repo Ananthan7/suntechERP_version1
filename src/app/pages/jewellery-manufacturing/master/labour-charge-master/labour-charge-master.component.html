@@ -22,11 +22,11 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput maxlength="1"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond"
+              <input type="text" matInput maxlength="1"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"
                 formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace />
             </mat-form-field>
             <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
-              *ngIf=" viewDisable == false"></master-search>
+              *ngIf=" viewDisable || editMode == false"></master-search>
           </div>
         </div>
         <div class="row mb-2">
@@ -40,7 +40,8 @@
                 />
             </mat-form-field>
           </div>
-          <div class="col-sm-5">
+          <label for="input" class="col-sm-2 col-form-label">Description * :</label>
+          <div class="col-sm-3">
             <mat-form-field>
               <input type="text" matInput maxlength="75" [readonly]="viewMode || codeEnableDiamond"
                 formControlName="labour_description" #description
@@ -77,7 +78,7 @@
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Method *
+          <label for="input" class="col-sm-2 col-form-label">Method
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
@@ -154,7 +155,7 @@
             <mat-form-field>
               <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
-                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode"  (change)="onSievetto($event,'size_to')"/>
+                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode"  />
             </mat-form-field>
             <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"
               *ngIf="!viewDisable"></master-search>
@@ -210,7 +211,7 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field>
-              <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond" formControlName="sieve_desc" />
+              <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" readonly formControlName="sieve_desc" />
             </mat-form-field>
           </div>
           <label for="input" class="col-sm-2 col-form-label">Selling %

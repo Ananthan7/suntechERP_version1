@@ -368,7 +368,7 @@ export class LabourChargeMasterComponent implements OnInit {
     ctWtTo: [''],
     settingType: [''],
     labourType: ['', [Validators.required]],
-    unitList: [''],
+    unitList: ['', [Validators.required]],
     method: [''],
     currency: ['', [Validators.required]],
     accessories: [''],
@@ -500,14 +500,14 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   onlabourtypeChange() {
-    this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
+    //this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
-
+       
       } else {
-
+        this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
         this.viewModeSetting = true;
         this.ViewModemethod = true;
       }
@@ -539,6 +539,13 @@ export class LabourChargeMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
+
+    this.diamondlabourMasterForm.controls.selling_rate.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.SELLING_RATE));
+
+
     this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
     this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
     this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
@@ -555,7 +562,15 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.unitList.setValue(this.content.UNITCODE);
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
+    this.diamondlabourMasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE);
 
+
+    this.diamondlabourMasterForm.controls.selling.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.SELLING_PER));
+
+    //"PROCESS_TYPE": this.commonService.nullToString(diamondForm.settingType),
 
     this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
       this.commonService.transformDecimalVB(
@@ -567,15 +582,7 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.CARATWT_TO));
 
-    this.diamondlabourMasterForm.controls.selling_rate.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.SELLING_RATE));
-
-    this.diamondlabourMasterForm.controls.selling.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.SELLING_PER));
+  
 
     this.diamondlabourMasterForm.controls.cost_rate.setValue(
       this.commonService.transformDecimalVB(
@@ -750,6 +757,9 @@ export class LabourChargeMasterComponent implements OnInit {
     let form: any = this.diamondlabourMasterForm.value;
     let size_from: any;
     let size_to: any;
+    console.log(form.size_from);
+    console.log(form.size_to);
+    
     if (form.size_from.includes('-')) {
       let val: any = form.size_from.split('-')
       size_from = val[1]
@@ -757,8 +767,8 @@ export class LabourChargeMasterComponent implements OnInit {
       size_from = form.size_from
     }
     if (form.size_to.includes('-')) {
-      let val: any = form.size_to.split('-')
-      size_to = val[1]
+      let sizeArr: any = form.size_to.split('-')
+      size_to = sizeArr[1]
     } else {
       size_to = form.size_from
     }
@@ -770,7 +780,7 @@ export class LabourChargeMasterComponent implements OnInit {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
       // Display an error message
-      this.commonService.toastErrorByMsgId('Size From should be lesser than Weight To');
+      this.commonService.toastErrorByMsgId('Size From should be lesser than Size To');
       // Clear the value of Ct Wt To input field
       this.diamondlabourMasterForm.controls.size_to.setValue('');
     }
@@ -815,7 +825,7 @@ export class LabourChargeMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_VALUE}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     this.commonService.showSnackBarMsg('MSG81447');
@@ -1037,7 +1047,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-
+    if (this.submitValidation()) return
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
       return
