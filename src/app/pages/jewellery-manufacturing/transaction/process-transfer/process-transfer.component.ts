@@ -89,7 +89,6 @@ export class ProcessTransferComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -98,7 +97,7 @@ export class ProcessTransferComponent implements OnInit {
         this.editMode = true;
       }
       if (this.content.FLAG == 'DELETE') {
-        this.deleteRecord()
+        this.deleteClicked()
       }
       this.processTransferFrom.controls.FLAG.setValue(this.content.FLAG)
       this.setInitialValues()
@@ -116,15 +115,16 @@ export class ProcessTransferComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ
-          let dataset:any = {}
-          this.tableData.forEach((item:any,index:number)=>{
-            if(this.tableData[index])
-            dataset.SRNO = item.SRNO
-            dataset.JOB_PROCESS_TRN_DETAIL_DJ = item
-            dataset.JOB_PROCESS_TRN_LABCHRG_DJ = item
-            this.detailData.push(dataset)
+          this.tableData.forEach((item: any, index: number) => {
+            this.detailData.push({
+              SRNO: item.SRNO,
+              FLAG: this.commonService.nullToString(this.content.FLAG),
+              JOB_PROCESS_TRN_DETAIL_DJ: item,
+              JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+              JOB_PROCESS_TRN_STNMTL_DJ: data.JOB_PROCESS_TRN_STNMTL_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+            })
           })
-          
+          console.log(this.detailData);
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
@@ -153,7 +153,7 @@ export class ProcessTransferComponent implements OnInit {
     )
   }
 
-  
+
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
@@ -201,10 +201,10 @@ export class ProcessTransferComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
   }
-  addItemWithCheck(existingArray: any, newItem: any){
-    const duplicate = existingArray.find((item:any) => item.JOB_NUMBER === newItem.JOB_NUMBER && 
-    item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
-    item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
+  addItemWithCheck(existingArray: any, newItem: any) {
+    const duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER &&
+      item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
+      item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
     if (duplicate) {
       this.commonService.toastErrorByMsgId('cannot add duplicate record')
       return true
@@ -214,7 +214,7 @@ export class ProcessTransferComponent implements OnInit {
   //use: to set the data from child component to post data
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PROCESS_FORMDETAILS
-    if(this.addItemWithCheck(this.tableData,detailDataToParent)) return;
+    if (this.addItemWithCheck(this.tableData, detailDataToParent)) return;
     if (detailDataToParent.SRNO != 0) {
       this.tableData[detailDataToParent.SRNO - 1] = detailDataToParent
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
@@ -372,17 +372,17 @@ export class ProcessTransferComponent implements OnInit {
       delete item[key];
     });
   }
+
   // use to set payload data
   setPostData(form: any) {
     let detailScreenData = this.detailData[0]
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
-    this.removeKeyValue(this.JOB_PROCESS_TRN_STNMTL_DJ, 'SRNO')
     return {
       "MID": 0,
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.commonService.nullToString(form.VOCNO),
-      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(form.VOCDATE)),
+      "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
       "YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
       "SMAN": this.commonService.nullToString(form.salesman),
@@ -390,7 +390,7 @@ export class ProcessTransferComponent implements OnInit {
       "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY_CODE),
       "CURRENCY_RATE": this.commonService.emptyToZero(form.CURRENCY_RATE),
       "NAVSEQNO": this.commonService.yearSelected,
-      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
+      "LAB_TYPE": 0,
       "AUTOPOSTING": false,
       "POSTDATE": "",
       "PRINT_COUNT": 0,
@@ -422,7 +422,7 @@ export class ProcessTransferComponent implements OnInit {
     this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
   }
 
-  deleteRecord() {
+  deleteClicked() {
     if (!this.content.VOCTYPE) {
       this.commonService.showSnackBarMsg('Please select Data to delete')
       return

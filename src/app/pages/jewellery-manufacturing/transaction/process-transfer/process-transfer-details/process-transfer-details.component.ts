@@ -31,6 +31,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   designType: string = 'DIAMOND';
   gridAmountDecimalFormat: any;
   viewMode: boolean = false;
+  editMode: boolean = false;
   private subscriptions: Subscription[] = [];
   STDDateTimeData: DateTimeModel = {
     TIMEINMINUTES: 0,
@@ -289,13 +290,31 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let branchParam = this.commonService.allbranchMaster
     this.processTransferdetailsForm.controls.location.setValue(branchParam.DMFGMLOC)
   }
-
+  setFlagMode(FLAG:any){
+    switch (FLAG) {
+      case 'VIEW':
+        this.viewMode = true;
+        break;
+      case 'EDIT':
+        this.editMode = true;
+        break;
+      default:
+        this.viewMode = false;
+        this.editMode = false;
+        break;
+    }
+  }
   setInitialValues() {
     if (!this.content) return
-    let parentDetail = this.content[0]?.PROCESS_FORMDETAILS
-    let gridDetail = this.content[0]?.TRN_STNMTL_GRID
-    if (gridDetail && gridDetail.length > 0) {
-      this.metalDetailData = gridDetail
+    let parentDetail, gridDetail
+    if (this.content[0]?.FLAG) {
+      this.setFlagMode(this.content[0]?.FLAG)
+      this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
+      parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
+      this.metalDetailData = this.content[0]?.JOB_PROCESS_TRN_STNMTL_DJ
+    } else {
+      parentDetail = this.content[0]?.PROCESS_FORMDETAILS
+      this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID
     }
     if (!parentDetail) return;
     this.processTransferdetailsForm.controls.SRNO.setValue(this.content[0]?.SRNO)
@@ -348,6 +367,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+
   getSequenceDetailData() {
     let API = `SequenceMasterDJ/GetSequenceMasterDJDetail/${this.processTransferdetailsForm.value.SEQ_CODE}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -549,11 +569,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Setted cannot be greater than pcs')
     }
   }
-  checkFromToValues(fromValue:string,ToValue:string){
+  checkFromToValues(fromValue: string, ToValue: string) {
     let form = this.processTransferdetailsForm.value
-    if(this.commonService.emptyToZero(form[fromValue]) > this.commonService.emptyToZero(form[ToValue])){
+    if (this.commonService.emptyToZero(form[fromValue]) < this.commonService.emptyToZero(form[ToValue])) {
       this.processTransferdetailsForm.controls[ToValue].setValue(form[fromValue])
-      this.commonService.toastErrorByMsgId(`To value cannot be less than from value`)
+      this.commonService.toastErrorByMsgId(`To value cannot be greater than ${form[fromValue]}`)
     }
   }
   setSubJobTransferDetails(data: any) {
@@ -797,6 +817,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
       element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
       element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
+      element.LOSS_QTY = this.commonService.setCommaSerperatedNumber(element.LOSS_QTY, 'THREE')
+      element.CURRENCY_RATE = this.commonService.setCommaSerperatedNumber(element.CURRENCY_RATE, 'RATE')
+      element.AMOUNTLC = this.commonService.setCommaSerperatedNumber(element.AMOUNTLC, 'AMOUNT')
+      element.AMOUNTFC = this.commonService.setCommaSerperatedNumber(element.AMOUNTFC, 'AMOUNT')
     });
   }
   /**USE: barcode Number Validate API call */
@@ -1000,6 +1024,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.reset()
     this.metalDetailData = []
   }
+
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
@@ -1073,10 +1098,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "LAB_UNIT": "",
       "LAB_RATEFC": 0,
       "LAB_RATELC": 0,
-      "LAB_ACCODE": "",
+      "LAB_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0]?.LAB_ACCODE): '',
       "LOSS_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].LOSS_ACCODE) : '',
-      "FRM_WIP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].wip_accode) : '',
-      "TO_WIP_ACCODE": seqDataTo.length > 0 ? this.commonService.nullToString(seqDataTo[0].wip_accode) : '',
+      "FRM_WIP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].WIP_ACCODE) : '',
+      "TO_WIP_ACCODE": seqDataTo.length > 0 ? this.commonService.nullToString(seqDataTo[0].WIP_ACCODE) : '',
       "RET_METAL_DIVCODE": "",
       "RET_METAL_STOCK_CODE": "",
       "RET_STONE_DIVCODE": "",
@@ -1097,7 +1122,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "TIME_TAKEN_HRS": 0,
       "METAL_DIVISION": "",
-      "LOCTYPE_CODE": "",
+      "LOCTYPE_CODE": this.commonService.nullToString(form.location),
       "PICTURE_PATH": this.commonService.nullToString(form.PICTURE_PATH),
       "AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
       "AMOUNTFC": 0,
@@ -1341,6 +1366,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "LAB_AMTFC": 0,
       "UNITCODE": ""
     }
+  }
+  GrossWeightToChange(event:any){
+    this.checkFromToValues('GrossWeightFrom','GrossWeightTo')
+    let form = this.processTransferdetailsForm.value;
+    let Balance_WT = this.commonService.emptyToZero(form.GrossWeightFrom)-this.commonService.emptyToZero(form.GrossWeightTo)
+    this.setValueWithDecimal('Balance_WT',Balance_WT,'THREE')
   }
   /**USE: to calculate gain detail */
   private calculateGain() {

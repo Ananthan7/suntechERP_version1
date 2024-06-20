@@ -9,7 +9,8 @@
 <modal-header (saveClick)="formSubmit('SAVE')"
   (continueClick)="formSubmit('CONTINUE')"
   (cancelClick)="close()" [isViewDelete]="false"
-  [isViewMore]="false" [isViewContinue]="true">
+  [isViewMore]="false" [isViewContinue]="!viewMode"
+  [isViewSave]="!viewMode">
 </modal-header>
 <div class="row">
   <div class="col-md-12">
@@ -26,6 +27,7 @@
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput
+                    [readonly]="viewMode"
                     (focusout)="barcodeNumberValidate($event)"
                     formControlName="barCodeNumber" />
                 </mat-form-field>
@@ -49,9 +51,10 @@
                 <mat-form-field style="width: 76%;">
                   <input type="text" matInput appNoEmptySpace
                     (focusout)="jobNumberValidate($event)"
-                    formControlName="JOB_NUMBER" />
+                    formControlName="JOB_NUMBER" [readonly]="viewMode"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="jobNoSearch"
+                  *ngIf="!viewMode"
                   (newRowClick)="jobNumberSelected($event)">
                 </master-search>
               </div>
@@ -138,9 +141,9 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'FRM_PROCESS_CODE')"
-                              formControlName="FRM_PROCESS_CODE" />
+                              formControlName="FRM_PROCESS_CODE" [readonly]="viewMode"/>
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="fromProcessMasterSearch"
                             (newRowClick)="processCodeFromSelected($event)">
                           </master-search>
@@ -149,11 +152,11 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput UpperCaseDirective
+                            <input type="text" matInput [readonly]="viewMode" UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'TO_PROCESS_CODE')"
                               formControlName="TO_PROCESS_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="toProcessMasterSearch"
                             (newRowClick)="processCodeToSelected($event)">
                           </master-search>
@@ -165,12 +168,12 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,fromWorkerMasterSearch,'FRM_WORKER_CODE')"
                               formControlName="FRM_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="fromWorkerMasterSearch"
                             (newRowClick)="workerCodeFromSelected($event)">
                           </master-search>
@@ -179,12 +182,12 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,toWorkerMasterSearch,'TO_WORKER_CODE')"
                               formControlName="TO_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="toWorkerMasterSearch"
                             (newRowClick)="workerCodeToSelected($event)">
                           </master-search>
@@ -202,7 +205,7 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_METAL_PCS','TO_METAL_PCS')"
                             formControlName="TO_METAL_PCS" />
@@ -220,7 +223,7 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             MetalDecimalInput [max]="10"
                             (focusout)="checkFromToValues('FRM_METAL_WT','TO_METAL_WT')"
                             formControlName="TO_METAL_WT" />
@@ -242,7 +245,7 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             NumberOnly  maxlength="10"
                             (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
@@ -266,9 +269,9 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             MetalDecimalInput [max]="10"
-                            (focusout)="checkFromToValues('GrossWeightFrom','GrossWeightTo')"
+                            (focusout)="GrossWeightToChange($event)"
                             formControlName="GrossWeightTo" />
                         </mat-form-field>
                       </td>
@@ -279,7 +282,7 @@
                             (focusout)="stockCodeScrapValidate()"
                             formControlName="stockCode" />
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                           [MasterSearchData]="stockCodeSearch"
                           (newRowClick)="stockCodeSelected($event)">
                         </master-search>
@@ -287,7 +290,7 @@
                       <!-- quantity -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             formControlName="scrapQuantity" NumberOnly 
                             maxlength="10"/>
                         </mat-form-field>
@@ -302,7 +305,7 @@
                       <!-- stdLoss -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             MetalDecimalInput [max]="10"
                             formControlName="stdLoss" />
                         </mat-form-field>
@@ -310,7 +313,7 @@
                       <!-- stdLossper -->
                       <td>
                         <mat-form-field style="width: 50px;">
-                          <input type="text" matInput AmountDecimalInput
+                          <input type="text" matInput [readonly]="viewMode" AmountDecimalInput
                             formControlName="stdLossper" [max]="10"
                             class="text-right"/>
                         </mat-form-field>
@@ -318,7 +321,7 @@
                       <!-- balance wt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput  maxlength="10"
+                          <input type="text" matInput [readonly]="viewMode"  maxlength="10"
                             formControlName="Balance_WT" NumberOnly
                             class="text-right" />
                         </mat-form-field>
@@ -334,7 +337,7 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             formControlName="StonePcsTo" NumberOnly 
                             (focusout)="checkFromToValues('StonePcsFrom','StonePcsTo')"
                             maxlength="10"/>
@@ -362,7 +365,7 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             StoneDecimalInput [max]="10" 
                             (focusout)="checkFromToValues('StoneWeightFrom','StoneWeightTo')"
                             formControlName="StoneWeightTo" />
@@ -373,7 +376,7 @@
                       <td>Stone Weight</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput [readonly]="viewMode" class="text-right"
                             StoneDecimalInput [max]="10"
                             formControlName="StoneWeightTo" />
                         </mat-form-field>
@@ -433,11 +436,11 @@
                       <td>
                         <span>
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput
+                            <input type="text" matInput readonly
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
                               formControlName="METAL_FRM_PROCESS_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="fromProcessMasterSearch"
                             (newRowClick)="metalprocessCodeFromSelected($event)">
                           </master-search>
@@ -446,11 +449,11 @@
                       <td>
                         <span>
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="toProcessMasterSearch"
                             (newRowClick)="metalprocessCodeToSelected($event)">
                           </master-search>
@@ -472,7 +475,7 @@
                             <input type="text" matInput
                               formControlName="METAL_FRM_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="fromWorkerMasterSearch"
                             (newRowClick)="metalworkerCodeFromSelected($event)">
                           </master-search>
@@ -484,7 +487,7 @@
                             <input type="text" matInput
                               formControlName="METAL_TO_WORKER_CODE" />
                           </mat-form-field>
-                          <master-search
+                          <master-search *ngIf="!viewMode"
                             [MasterSearchData]="toWorkerMasterSearch"
                             (newRowClick)="metalworkerCodeToSelected($event)">
                           </master-search>
@@ -886,11 +889,11 @@
               <dxi-column dataField="SHAPE" caption="Shape"
                 [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="PCS" caption="Pcs"
-                alignment="right"></dxi-column>
+                alignment="right" [allowEditing]="!viewMode"></dxi-column>
               <dxi-column dataField="FRM_PCS" caption="Setted"
-                alignment="right"></dxi-column>
+                alignment="right" [allowEditing]="!viewMode"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="Weight"
-                alignment="right"></dxi-column>
+                alignment="right" [allowEditing]="!viewMode"></dxi-column>
               <dxi-column dataField="LOSS_QTY" caption="Loss"
                 [allowEditing]="false" alignment="right"></dxi-column>
               <dxi-column dataField="Div" caption="Gain Wt"
