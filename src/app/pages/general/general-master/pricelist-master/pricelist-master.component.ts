@@ -92,11 +92,15 @@ export class PricelistMasterComponent implements OnInit {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
         this.editMode = true
-        this.onPriceTypeChange()
+        
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.codeEnable = false;
-        this.onPriceTypeChange()
+        this.priceListMasterForm.controls.priceSign.disable();
+        this.priceListMasterForm.controls.finalPriceSign.disable();
+        this.priceListMasterForm.controls.finalPriceValue.disable();
+        this.priceListMasterForm.controls.addlValueSign.disable();
+        this.priceListMasterForm.controls.addlValue.disable();
         this.roundoffDis()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
