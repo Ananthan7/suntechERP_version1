@@ -416,7 +416,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -429,7 +428,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.deleteMeltingType()
     }
 
-    
+
 
     this.grossWt = true;
     this.codeEnable1 = true;
@@ -528,7 +527,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     )
   }
 
-  
+
   setFormValues() {
     if (!this.content) return
 
@@ -571,7 +570,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
     //       this.content.COST_RATE));
 
-    
+
     this.metallabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
     this.metallabourMasterForm.controls.metalunitList.setValue(this.content.UNITCODE);
     this.metallabourMasterForm.controls.labourAc.setValue(this.content.CRACCODE);
@@ -607,28 +606,28 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_RATE));
 
-        this.metallabourMasterForm.controls.metalselling_rate.setValue(
-          this.commonService.commaSeperation(this.content.SELLING_RATE)
-        )
+    this.metallabourMasterForm.controls.metalselling_rate.setValue(
+      this.commonService.commaSeperation(this.content.SELLING_RATE)
+    )
 
     this.metallabourMasterForm.controls.metalcost_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.COST_RATE));
 
-        this.metallabourMasterForm.controls.metalcost_rate.setValue(
-          this.commonService.commaSeperation(this.content.COST_RATE)
-        )
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(
+      this.commonService.commaSeperation(this.content.COST_RATE)
+    )
 
     this.metallabourMasterForm.controls.metalselling.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_PER));
 
-        this.metallabourMasterForm.controls.metalselling.setValue(
-          this.commonService.commaSeperation(this.content.SELLING_PER)
-        )
-      
+    this.metallabourMasterForm.controls.metalselling.setValue(
+      this.commonService.commaSeperation(this.content.SELLING_PER)
+    )
+
 
   }
 
@@ -715,12 +714,13 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
-    console.log(this.metallabourMasterForm.value)
 
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+    this.getKaratcode()
+
   }
 
   currencyCodeSelected(e: any) {
@@ -857,6 +857,24 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  getKaratcode() {
+
+    let API = 'MetalStockMaster/GetMetalStockMasterHeaderAndDetail/'  + this.metallabourMasterForm.value.stock_code +"/"+ this.metallabourMasterForm.value.metalDivision;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+
+        this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
+        this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
+    
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+
+  }
+
+
 
   submitValidation(): boolean {
     if (this.content && this.content.FLAG == 'VIEW') return true
