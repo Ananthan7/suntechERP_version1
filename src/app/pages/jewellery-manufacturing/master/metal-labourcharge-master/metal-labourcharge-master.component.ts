@@ -423,7 +423,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.editMode = true;
       this.codeEnableMetal = false;
-
       this.stockcodeDisable = false;
     } else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -522,6 +521,13 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   };
+
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.metallabourMasterForm.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
+
   
   setFormValues() {
     if (!this.content) return
@@ -588,6 +594,9 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
     this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
 
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+
+
     this.metallabourMasterForm.controls.purity.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
@@ -598,15 +607,28 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_RATE));
 
+        this.metallabourMasterForm.controls.metalselling_rate.setValue(
+          this.commonService.commaSeperation(this.content.SELLING_RATE)
+        )
+
     this.metallabourMasterForm.controls.metalcost_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.COST_RATE));
 
+        this.metallabourMasterForm.controls.metalcost_rate.setValue(
+          this.commonService.commaSeperation(this.content.COST_RATE)
+        )
+
     this.metallabourMasterForm.controls.metalselling.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_PER));
+
+        this.metallabourMasterForm.controls.metalselling.setValue(
+          this.commonService.commaSeperation(this.content.SELLING_PER)
+        )
+      
 
   }
 
@@ -693,6 +715,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
+    console.log(this.metallabourMasterForm.value)
 
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
