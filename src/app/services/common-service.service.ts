@@ -900,9 +900,11 @@ export class CommonServiceService {
   /**purpose: Get a date time as a string, using the ISO standard*/
   formatDateTime(date: any) {
     if (!date) return '';
+    if (typeof date === 'string') {
+      return date;
+    }
     return date.toISOString()
   }
-
   /**purpose: to format number with M,K values(eg: 1k,2M) */
   numberFormatter(value: any) {
     if (value >= 1000000) {

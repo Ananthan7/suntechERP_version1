@@ -24,15 +24,15 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                [readonly]="viewMode || editMode"
-                                                maxlength="6" #priceCode
-                                                appNoEmptySpace
-                                                id="priceCode"
-                                                formControlName="priceCode"
-                                                (focusout)="checkWorkerExists($event)"
-                                                (keyup)="codeEnabled()"
-                                                (input)="priceCode.value = priceCode.value.toUpperCase()" />
-                                        </mat-form-field>
+                                            [readonly]="viewMode || editMode"
+                                            maxlength="6" #priceCode
+                                            appNoEmptySpace
+                                            id="priceCode"
+                                            formControlName="priceCode"
+                                            (focusout)="checkCodeExists($event)"
+                                            (keyup)="codeEnabled()"
+                                            (input)="priceCode.value = priceCode.value.toUpperCase()" />
+                                   </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">

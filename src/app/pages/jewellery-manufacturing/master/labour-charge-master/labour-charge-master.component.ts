@@ -654,7 +654,11 @@ export class LabourChargeMasterComponent implements OnInit {
   divisionCodeSelected(e: any) {
     this.diamondlabourMasterForm.controls.divisions.setValue(e.DIVISION_CODE);
   }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.diamondlabourMasterForm.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
 
   categorySelected(e: any) {
     if (this.checkCode()) return
@@ -753,6 +757,9 @@ export class LabourChargeMasterComponent implements OnInit {
     let form: any = this.diamondlabourMasterForm.value;
     let size_from: any;
     let size_to: any;
+    console.log(form.size_from);
+    console.log(form.size_to);
+    
     if (form.size_from.includes('-')) {
       let val: any = form.size_from.split('-')
       size_from = val[1]
@@ -760,8 +767,8 @@ export class LabourChargeMasterComponent implements OnInit {
       size_from = form.size_from
     }
     if (form.size_to.includes('-')) {
-      let val: any = form.size_to.split('-')
-      size_to = val[1]
+      let sizeArr: any = form.size_to.split('-')
+      size_to = sizeArr[1]
     } else {
       size_to = form.size_from
     }
@@ -773,7 +780,7 @@ export class LabourChargeMasterComponent implements OnInit {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
       // Display an error message
-      this.commonService.toastErrorByMsgId('Size From should be lesser than Weight To');
+      this.commonService.toastErrorByMsgId('Size From should be lesser than Size To');
       // Clear the value of Ct Wt To input field
       this.diamondlabourMasterForm.controls.size_to.setValue('');
     }
