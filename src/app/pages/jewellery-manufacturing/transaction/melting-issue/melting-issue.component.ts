@@ -210,21 +210,13 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   setAllInitialValues() {
-    console.log(this.content)
-    if (!this.content) return
+    if (!this.content?.FLAG) return
     let API = `JobMeltingIssueDJ/GetJobMeltingIssueDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.meltingISsueDetailsData = data.Details
-          console.log(this.meltingISsueDetailsData, 'data')
-          // data.Details.forEach((element: any) => {
-          // //   this.tableData.push({
-          // //     // 
-
-          // //   })
-          //  });
+          this.meltingIssueFrom.controls.MID.setValue(data.MID)
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
           this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
           this.meltingIssueFrom.controls.vocdate.setValue(data.VOCDATE)
@@ -243,27 +235,6 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-
-
-    // this.meltingIssueFrom.controls.jobno.setValue(dataFromParent.jobno)
-    // this.meltingIssueFrom.controls.jobdes.setValue(dataFromParent.jobdes)
-    // this.meltingIssueFrom.controls.subjobno.setValue(dataFromParent.subjobno)
-    // this.meltingIssueFrom.controls.subJobDescription.setValue(dataFromParent.subJobDescription)
-    // this.meltingIssueFrom.controls.worker.setValue(dataFromParent.WORKER_CODE)
-    // this.meltingIssueFrom.controls.workerTo.setValue(dataFromParent.workerTo)
-    // this.meltingIssueFrom.controls.toggleSwitchtIssue.setValue(dataFromParent.toggleSwitchtIssue)
-    // this.meltingIssueFrom.controls.processFrom.setValue(dataFromParent.processFrom)
-    // this.meltingIssueFrom.controls.processTo.setValue(dataFromParent.processTo)
-    // this.meltingIssueFrom.controls.currency.setValue(dataFromParent.currency)
-    // this.meltingIssueFrom.controls.currencyrate.setValue(dataFromParent.currencyrate)
-    // this.meltingIssueFrom.controls.TotalgrossWt.setValue(dataFromParent.TotalgrossWt)
-    // this.meltingIssueFrom.controls.TotalpureWt.setValue(dataFromParent.TotalpureWt)
-    // this.meltingIssueFrom.controls.TOTAL_STONEWT.setValue(dataFromParent.TOTAL_STONEWT)
-    // this.meltingIssueFrom.controls.netweight.setValue(dataFromParent.netweight)
-    // this.meltingIssueFrom.controls.TOTAL_WAXWT.setValue(dataFromParent.TOTAL_WAXWT)
-    // this.meltingIssueFrom.controls.TOTAL_IRONWT.setValue(dataFromParent.TOTAL_IRONWT)
-    // this.meltingIssueFrom.controls.pcs.setValue(dataFromParent.pcs)
-    // this.meltingIssueFrom.controls.subjobno.setValue(dataFromParent.subjobno)
 
   }
 
