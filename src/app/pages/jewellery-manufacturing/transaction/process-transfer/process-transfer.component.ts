@@ -30,6 +30,8 @@ export class ProcessTransferComponent implements OnInit {
   isloading: boolean = false;
   viewMode: boolean = false;
   editMode: boolean = false;
+  isSaved: boolean = false;
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -90,6 +92,7 @@ export class ProcessTransferComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.content?.FLAG) {
+      this.isSaved = true;
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
       }
@@ -115,12 +118,14 @@ export class ProcessTransferComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ
+          this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ
+          this.JOB_PROCESS_TRN_STNMTL_DJ = data.JOB_PROCESS_TRN_STNMTL_DJ
           this.tableData.forEach((item: any, index: number) => {
             this.detailData.push({
               SRNO: item.SRNO,
               FLAG: this.commonService.nullToString(this.content.FLAG),
               JOB_PROCESS_TRN_DETAIL_DJ: item,
-              JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+              // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
               JOB_PROCESS_TRN_STNMTL_DJ: data.JOB_PROCESS_TRN_STNMTL_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
             })
           })
@@ -202,6 +207,7 @@ export class ProcessTransferComponent implements OnInit {
     });
   }
   addItemWithCheck(existingArray: any, newItem: any) {
+    if(this.content?.FLAG == 'EDIT') return false;
     const duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER &&
       item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
       item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
@@ -221,7 +227,7 @@ export class ProcessTransferComponent implements OnInit {
     } else {
       DATA.PROCESS_FORMDETAILS.SRNO = this.tableData.length + 1
       DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.tableData.length + 1
-      DATA.JOB_PROCESS_TRN_LABCHRG_DJ.SRNO = this.tableData.length + 1
+      // DATA.JOB_PROCESS_TRN_LABCHRG_DJ.SRNO = this.tableData.length + 1
       this.detailData.push({ SRNO: this.tableData.length + 1, ...DATA })
       this.tableData.push(DATA.PROCESS_FORMDETAILS);
     }
@@ -236,10 +242,9 @@ export class ProcessTransferComponent implements OnInit {
   editFinalArray(DATA: any) {
     this.JOB_PROCESS_TRN_DETAIL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_DETAIL_DJ)
     this.JOB_PROCESS_TRN_STNMTL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_STNMTL_DJ).flat()
-    this.JOB_PROCESS_TRN_LABCHRG_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_LABCHRG_DJ)
+    // this.JOB_PROCESS_TRN_LABCHRG_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_LABCHRG_DJ)
     console.log(this.JOB_PROCESS_TRN_DETAIL_DJ, 'Detail');
     console.log(this.JOB_PROCESS_TRN_STNMTL_DJ, 'Stone metal');
-    console.log(this.JOB_PROCESS_TRN_LABCHRG_DJ, 'Labourcharge');
   }
 
   closeDetailScreen() {
@@ -325,6 +330,7 @@ export class ProcessTransferComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
+        this.isSaved = true;
         this.commonService.closeSnackBarMsg()
         if (result.response && result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
@@ -354,6 +360,7 @@ export class ProcessTransferComponent implements OnInit {
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isSaved = true;
         this.isloading = false;
         this.commonService.closeSnackBarMsg()
         if (result.response && result.status == "Success") {

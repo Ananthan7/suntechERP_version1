@@ -290,7 +290,9 @@
                       <!-- quantity -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
+                          <input type="text" matInput 
+                            [readonly]="viewMode || processTransferdetailsForm.value.stockCode == ''" 
+                            class="text-right"
                             formControlName="scrapQuantity" NumberOnly 
                             maxlength="10"/>
                         </mat-form-field>
@@ -1149,7 +1151,6 @@
       [allowColumnResizing]="true" [showBorders]="true"
       [showRowLines]="true"
       (onRowClick)="onRowClickHandler($event)"
-      [allowColumnReordering]="true" height="200"
       [dataSource]="subJobDetailData">
       <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-selection mode="single"></dxo-selection>

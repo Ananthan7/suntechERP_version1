@@ -234,6 +234,10 @@ export class MasterSearchComponent implements OnInit {
       }
     })
   }
+  isNumber(value: string): boolean {
+    let bol = /^\d+(\.\d+)?$/.test(value);
+    return bol;
+  }
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
