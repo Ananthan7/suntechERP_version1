@@ -71,6 +71,7 @@ export class ProcessTransferComponent implements OnInit {
     VOCTYPE: ['', [Validators.required]],
     VOCDATE: ['', [Validators.required]],
     VOCNO: [''],
+    MID: [''],
     salesman: [''],
     SalesmanName: [''],
     CURRENCY_CODE: [''],
@@ -135,6 +136,7 @@ export class ProcessTransferComponent implements OnInit {
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
           this.processTransferFrom.controls.VOCDATE.setValue(data.VOCDATE)
           this.processTransferFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
+          this.processTransferFrom.controls.MID.setValue(data.MID)
           this.processTransferFrom.controls.CURRENCY_CODE.setValue(data.CURRENCY_CODE)
           this.processTransferFrom.controls.CURRENCY_RATE.setValue(
             this.commonService.decimalQuantityFormat(data.CURRENCY_RATE, 'RATE')
@@ -207,7 +209,6 @@ export class ProcessTransferComponent implements OnInit {
     });
   }
   addItemWithCheck(existingArray: any, newItem: any) {
-    if(this.content?.FLAG == 'EDIT') return false;
     const duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER &&
       item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
       item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
@@ -358,7 +359,7 @@ export class ProcessTransferComponent implements OnInit {
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
     this.isloading = true;
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isSaved = true;
         this.isloading = false;
@@ -385,8 +386,8 @@ export class ProcessTransferComponent implements OnInit {
     let detailScreenData = this.detailData[0]
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
     return {
-      "MID": 0,
-      "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
+      "MID": this.commonService.nullToString(form.MID),
+      "VOCTYPE": this.commonService.nullToString(form.VOCTYPE?.toUpperCase()),
       "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.commonService.nullToString(form.VOCNO),
       "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),

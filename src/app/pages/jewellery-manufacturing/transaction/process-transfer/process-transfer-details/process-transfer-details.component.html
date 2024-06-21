@@ -910,7 +910,7 @@
                 caption="Setted" alignment="center"
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
-                  <input type="checkbox"
+                  <input type="checkbox" [disabled]="viewMode"
                     [checked]="data1.value" />
                 </div>
               </dxi-column>

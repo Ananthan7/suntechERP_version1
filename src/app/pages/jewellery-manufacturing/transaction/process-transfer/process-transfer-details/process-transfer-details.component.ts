@@ -358,6 +358,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
 
+    this.stockCodeScrapValidate()
+    this.getTimeAndLossDetails()
+    //set where conditions
+    this.setFromProcessWhereCondition()
+    this.setToProcessWhereCondition()
+    this.setFromWorkerWhereCondition()
+    this.setToWorkerWhereCondition()
+
     this.processTransferdetailsForm.controls.startdate.setValue(this.content.startdate)
     this.processTransferdetailsForm.controls.enddate.setValue(this.content.enddate)
     this.processTransferdetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)

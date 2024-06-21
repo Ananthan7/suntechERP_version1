@@ -117,7 +117,7 @@
                 </div>
                 <div class="row py-2 border-top">
                     <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
+                        [viewImportBtn]="false" *ngIf="!viewMode"
                         (addClick)="openProcessTransferDetails()"
                         (deleteClick)="deleteTableData()">
                     </menu-buttons>
