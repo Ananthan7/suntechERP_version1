@@ -84,18 +84,17 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
-
   MeltingCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 94,
-    SEARCH_FIELD: 'Melting Type',
+    SEARCH_FIELD: 'MELTING_TYPE',
     SEARCH_HEADING: 'Melting Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Melting Type<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+
   }
 
 
@@ -281,6 +280,7 @@ export class MeltingIssueComponent implements OnInit {
   MeltingCodeSelected(e: any) {
     console.log(e);
     this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
+    // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
   }
   ProcessCodeSelected(e: any) {
     console.log(e);

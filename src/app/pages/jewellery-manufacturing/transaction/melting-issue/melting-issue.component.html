@@ -24,14 +24,14 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="voctype"  [readonly]="viewMode"/>
+                                        formControlName="voctype"  readonly/>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
                                         formControlName="vocno"
-                                        style="text-align: right;"  [readonly]="viewMode"/>
+                                        style="text-align: right;" readonly/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,10 +45,10 @@
                                         [max]="vocdate"
                                         formControlName="vocdate"
                                         placeholder="DD/MM/YYYY"
-                                        DateValidation  [readonly]="viewMode"/>
+                                        DateValidation  readonly/>
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocdate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate"
+                                    <mat-datepicker [startAt]="currentDate"[disabled]="isSaved"
                                         #vocdate></mat-datepicker>
                                 </mat-form-field>
                             </div>
