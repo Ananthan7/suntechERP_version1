@@ -23,6 +23,8 @@ export class MetalPrefixMasterComponent implements OnInit {
   viewMode: boolean = false;
   isDisabled: boolean = false;
   editMode:boolean = false;
+  codeEnable: boolean = true;
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -46,6 +48,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
       this.editMode = true
+      this.codeEnable = true;
     }
     else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -151,6 +154,17 @@ export class MetalPrefixMasterComponent implements OnInit {
     console.log(e);
     this.metalprefixForm.controls.hsn.setValue(e.CODE);
   }
+  codeEnabled() {
+    if (this.metalprefixForm.value.prefixcode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+
+  }
+ 
+
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
       return; // Exit the function if in edit mode
