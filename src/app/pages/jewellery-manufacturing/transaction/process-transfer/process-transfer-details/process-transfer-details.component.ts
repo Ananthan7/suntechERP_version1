@@ -358,6 +358,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
 
+    this.stockCodeScrapValidate()
+    this.getTimeAndLossDetails()
+    //set where conditions
+    this.setFromProcessWhereCondition()
+    this.setToProcessWhereCondition()
+    this.setFromWorkerWhereCondition()
+    this.setToWorkerWhereCondition()
+
     this.processTransferdetailsForm.controls.startdate.setValue(this.content.startdate)
     this.processTransferdetailsForm.controls.enddate.setValue(this.content.enddate)
     this.processTransferdetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)
@@ -480,7 +488,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.nullToStringSetValue('SEQ_CODE', data[0].SEQ_CODE)
             this.nullToStringSetValue('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.nullToStringSetValue('DESIGN_TYPE', data[0].DESIGN_TYPE)
-            this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE).toUpperCase();
+            this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.subJobNumberValidate()
             this.getSequenceDetailData()
           } else {
@@ -499,7 +507,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   setSubJobSpPostData() {
-    if (this.designType != 'METAL') {
+    if (this.designType.toUpperCase() == 'DIAMOND') {
       return {
         "SPID": "088",
         "parameter": {
@@ -534,7 +542,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
             item.METAL = this.commonService.decimalQuantityFormat(item.METAL, 'METAL')
             item.STONE = this.commonService.decimalQuantityFormat(item.STONE, 'STONE')
           })
-
+          console.log(this.subJobDetailData,'this.subJobDetailData');
+          
           if (this.subJobDetailData.length > 1) {
             this.openJobTransferDetails() //opens modal for multiple details
             return
@@ -670,6 +679,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   modalReference!: NgbModalRef;
   @ViewChild('transferDetails') public transferDetails!: NgbModal;
   openJobTransferDetails() {
+    console.log(this.subJobDetailData,'this.subJobDetailData');
     this.modalReference = this.modalService.open(this.transferDetails, {
       size: 'lg',
       ariaLabelledBy: 'modal-basic-title',
@@ -737,6 +747,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.consumed.setValue(
             this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
           )
+          if(data[0].IN_DATE && data[0].IN_DATE != ''){
+            this.processTransferdetailsForm.controls.startdate.setValue(data[0].IN_DATE)
+          }
+          let date = this.commonService.getCompanyParamValue('PROCESSTIMEVALIDATE')
           this.Calc_TimeDiff()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')

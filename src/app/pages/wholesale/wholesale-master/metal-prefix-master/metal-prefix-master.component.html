@@ -23,11 +23,10 @@
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput
-                            formControlName="prefixcode" #prefixcode
+                            formControlName="prefixcode" 
                             (focusout)="checkCodeExists($event)"
                             UpperCaseDirective
-                            (input)="prefixcode.value = prefixcode.value.toUpperCase()"
-                            maxlength="6" [readonly]="editableMode || viewMode" appNoEmptySpace
+                            maxlength="6" [readonly]="editableMode || viewMode"  (keyup)="codeEnabled()"
                             [disabled]="viewMode" />
                         </mat-form-field>
                       </div>
@@ -35,10 +34,8 @@
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput
                             formControlName="prefixcodedes"
-                            #prefixcodedes
                             UpperCaseDirective
-                            (input)="prefixcodedes.value = prefixcodedes.value.toUpperCase()"
-                            maxlength="50" [readonly]="editableMode || viewMode" appNoEmptySpace
+                            maxlength="50"  [readonly]="viewMode || codeEnable"
                             [disabled]="viewMode" />
                         </mat-form-field>
                       </div>
