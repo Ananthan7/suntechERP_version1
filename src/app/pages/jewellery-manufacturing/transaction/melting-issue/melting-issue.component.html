@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    (cancelClick)="close()" [isViewDelete]="false"
+    (cancelClick)="close()"   (deleteClick)="deleteTableData()" 
     [isViewSave]="!viewMode"
     [isViewPost]="true"></modal-header>
 <div class="row">
@@ -151,7 +151,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="subjobno"
-                                        class="text-right" NumberOnly  [readonly]="viewMode"/>
+                                         [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
                         </div>
