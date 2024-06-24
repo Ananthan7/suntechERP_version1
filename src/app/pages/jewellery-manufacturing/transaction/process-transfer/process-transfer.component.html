@@ -67,7 +67,9 @@
                                 <mat-form-field style="width: 85%;">
                                     <input type="text" matInput
                                         [readonly]="viewMode"
-                                        formControlName="salesman" />
+                                        UpperCaseDirective formControlName="salesman"
+                                        (focusout)="validateLookupField($event,SalesmanData,'salesman')"
+                                         />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="SalesmanData"
                                     *ngIf="!viewMode"

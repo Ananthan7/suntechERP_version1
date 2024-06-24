@@ -349,12 +349,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
     this.setValueWithDecimal('FRM_PCS', parentDetail.FRM_PCS, 'AMOUNT')
     this.setValueWithDecimal('TO_PCS', parentDetail.TO_PCS, 'AMOUNT')
-    this.setValueWithDecimal('GrossWeightFrom', parentDetail.GrossWeightFrom, 'METAL')
-    this.setValueWithDecimal('GrossWeightTo', parentDetail.GrossWeightTo, 'METAL')
-    this.setValueWithDecimal('StoneWeightFrom', parentDetail.StoneWeightFrom, 'STONE')
-    this.setValueWithDecimal('StoneWeightTo', parentDetail.StoneWeightTo, 'STONE')
-    this.setValueWithDecimal('StonePcsFrom', parentDetail.StonePcsFrom, 'STONE')
-    this.setValueWithDecimal('StonePcsTo', parentDetail.StonePcsTo, 'STONE')
+    this.setValueWithDecimal('GrossWeightFrom', parentDetail.FRM_METAL_WT, 'METAL') //dbt
+    this.setValueWithDecimal('GrossWeightTo', parentDetail.TO_METAL_WT, 'METAL')//dbt
+    this.setValueWithDecimal('StoneWeightFrom', parentDetail.FRM_STONE_WT, 'STONE')
+    this.setValueWithDecimal('StoneWeightTo', parentDetail.TO_STONE_WT, 'STONE')
+    this.setValueWithDecimal('StonePcsFrom', parentDetail.FRM_STONE_PCS, 'STONE')//dbt
+    this.setValueWithDecimal('StonePcsTo', parentDetail.TO_STONE_PCS, 'STONE')//dbt
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
 
@@ -455,6 +455,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
+    if(this.viewMode) return
     if (event.target.value == '') return
     // let postData = {
     //   "SPID": "086",
@@ -627,12 +628,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFromWorkerWhereCondition()
     this.setToWorkerWhereCondition()
     // set numeric values with decimals
-    this.setValueWithDecimal('FRM_METAL_PCS', data[0].JOB_PCS, 'AMOUNT')
-    this.setValueWithDecimal('TO_METAL_PCS', data[0].JOB_PCS, 'AMOUNT')
+    this.setValueWithDecimal('FRM_METAL_PCS', 0, 'AMOUNT')
+    this.setValueWithDecimal('TO_METAL_PCS', 0, 'AMOUNT')
+    this.setValueWithDecimal('FRM_PCS', 0, 'AMOUNT')
+    this.setValueWithDecimal('TO_PCS', 0, 'AMOUNT')
     this.setValueWithDecimal('FRM_METAL_WT', data[0].METAL, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', data[0].METAL, 'METAL')
-    this.setValueWithDecimal('FRM_PCS', data[0].JOB_PCS, 'AMOUNT')
-    this.setValueWithDecimal('TO_PCS', data[0].JOB_PCS, 'AMOUNT')
     this.setValueWithDecimal('GrossWeightFrom', txtFromGrossWeight, 'METAL')
     this.setValueWithDecimal('GrossWeightTo', txtFromGrossWeight, 'METAL')
     this.setValueWithDecimal('StoneWeightFrom', txtFromStoneWt, 'STONE')
@@ -811,6 +812,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
+            this.setValueWithDecimal('FRM_METAL_PCS', this.metalDetailData[0].PCS, 'AMOUNT')
+            this.setValueWithDecimal('TO_METAL_PCS', this.metalDetailData[0].PCS, 'AMOUNT')
+            this.setValueWithDecimal('FRM_PCS', 0, 'AMOUNT')
+            this.setValueWithDecimal('TO_PCS', 0, 'AMOUNT')
             this.formatMetalDetailDataGrid()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
@@ -1007,7 +1012,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   submitValidations(form: any): boolean {
     if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
-      this.commonService.toastErrorByMsgId('To Job Number cannot be empty')
+      this.commonService.toastErrorByMsgId('Job number cannot be empty')
       return true;
     }
     if (this.commonService.nullToString(form.TO_WORKER_CODE) == '') {

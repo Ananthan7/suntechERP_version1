@@ -239,7 +239,30 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.showSnackBarMsg('Details added grid successfully')
     };
   }
-
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.processTransferFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
   editFinalArray(DATA: any) {
     this.JOB_PROCESS_TRN_DETAIL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_DETAIL_DJ)
     this.JOB_PROCESS_TRN_STNMTL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_STNMTL_DJ).flat()
@@ -312,6 +335,17 @@ export class ProcessTransferComponent implements OnInit {
     let value = detailScreenData.stdLoss * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
+  submitValidations(form:any){
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('pls reload and check')
+      return true;
+    }
+    if (this.tableData?.length == 0) {
+      this.commonService.toastErrorByMsgId('Detail Record Not Found')
+      return true;
+    }
+    return false;
+  }
 
   // submit save click
   formSubmit() {
@@ -319,10 +353,7 @@ export class ProcessTransferComponent implements OnInit {
       this.updatePTF()
       return
     }
-    if (this.processTransferFrom.invalid) {
-      this.commonService.toastErrorByMsgId('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.processTransferFrom.value)) return;
 
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
     let postData = this.setPostData(this.processTransferFrom.value)
@@ -438,10 +469,10 @@ export class ProcessTransferComponent implements OnInit {
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let API = 'JobProcessTrnMasterDJ/DeleteJobProcessTrnMasterDJ/' +
-          this.processTransferFrom.value.BRANCH_CODE + '/' +
-          this.processTransferFrom.value.VOCTYPE + '/' +
-          this.processTransferFrom.value.VOCNO + '/' +
-          this.processTransferFrom.value.YEARMONTH
+          this.content?.BRANCH_CODE + '/' +
+          this.content?.VOCTYPE + '/' +
+          this.content?.VOCNO + '/' +
+          this.content?.YEARMONTH
         this.commonService.showSnackBarMsg('Loading....')
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
