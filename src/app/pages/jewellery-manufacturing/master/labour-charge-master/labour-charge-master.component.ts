@@ -825,7 +825,7 @@ export class LabourChargeMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_VALUE}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     this.commonService.showSnackBarMsg('MSG81447');
@@ -935,6 +935,7 @@ export class LabourChargeMasterComponent implements OnInit {
       this.updatelabourChargeMaster()
       return true
     }
+    
     if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
       this.toastr.error('Select all required fields')
       return true
@@ -1047,7 +1048,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    if (this.submitValidation()) return
+   // if (this.submitValidation()) return
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
       return
