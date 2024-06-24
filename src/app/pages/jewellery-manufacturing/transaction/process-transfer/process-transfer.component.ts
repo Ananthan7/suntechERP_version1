@@ -71,7 +71,7 @@ export class ProcessTransferComponent implements OnInit {
     VOCTYPE: ['', [Validators.required]],
     VOCDATE: ['', [Validators.required]],
     VOCNO: [''],
-    MID: [''],
+    MID: [0],
     salesman: [''],
     SalesmanName: [''],
     CURRENCY_CODE: [''],
@@ -386,7 +386,7 @@ export class ProcessTransferComponent implements OnInit {
     let detailScreenData = this.detailData[0]
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
     return {
-      "MID": this.commonService.nullToString(form.MID),
+      "MID": this.commonService.emptyToZero(form.MID),
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE?.toUpperCase()),
       "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.commonService.nullToString(form.VOCNO),
