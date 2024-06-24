@@ -215,6 +215,7 @@ export class MeltingIssueComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
+          console.log(data,'data')
           this.meltingIssueFrom.controls.MID.setValue(data.MID)
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
           this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
@@ -227,6 +228,22 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
 
+          this.meltingISsueDetailsData = data.Details
+          this.reCalculateSRNO() //set to main grid
+          this.meltingISsueDetailsData.forEach((element: any) => {
+            this.tableData.push({
+              jobno: element.JOB_NUMBER,
+              jobNumDes: element.JOB_DESCRIPTION,
+              processCode: element.PROCESS_CODE,
+              processCodeDesc: element.PROCESS_NAME,
+              workerCode: element.WORKER_CODE,
+              workerCodeDes: element.WORKER_NAME,
+              pcs: element.PCS,
+              purity: element.PURITY,
+              grossWeight: element.GROSS_WT,
+              netWeight: element.NET_WT,
+            })
+          });
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -772,6 +789,7 @@ export class MeltingIssueComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
+            console.log(data,'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
 
