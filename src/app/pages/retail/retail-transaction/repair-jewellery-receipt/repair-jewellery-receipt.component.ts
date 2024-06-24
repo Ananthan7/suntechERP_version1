@@ -25,12 +25,15 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
-  branchCode?: String;
-  yearMonth?: String;
+  yearMonth?: any = localStorage.getItem('YEAR') || '';
+  branchCode?: any = localStorage.getItem('userbranch');
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   private subscriptions: Subscription[] = [];
+  isCurrencyUpdate: boolean = false;
+  viewOnly: boolean = false;
+  hideCurrecnySearch: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -42,10 +45,51 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   ) { }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
+    
+    this.repairjewelleryreceiptFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.repairjewelleryreceiptFrom.controls.vocDate.setValue(this.currentDate)
+    this.generateVocNo();
+    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
   }
+
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.branchCode}&strYEARMONTH=${this.yearMonth}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res);
+          
+          this.repairjewelleryreceiptFrom.controls.vocno.setValue(res.newvocno);
+        }
+      });
+  }
+
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join('-');
+  }
+
+  CurrencySelected(e: any) {
+    console.log(e);
+    this.resetVatFields();
+    this.repairjewelleryreceiptFrom.controls.currency.setValue(e.Currency)
+
+    this.repairjewelleryreceiptFrom.controls.currency_rate.setValue(this.comService.decimalQuantityFormat(e['Conv Rate'], 'RATE'));
+
+  }
+
+  resetVatFields() {
+    this.repairjewelleryreceiptFrom.controls.currency.setValue('');
+    this.repairjewelleryreceiptFrom.controls.currency_rate.setValue('');
+  }
+
+
 
   openrepairdetails() {
     const modalRef: NgbModalRef = this.modalService.open(RepairDetailsComponent, {
@@ -63,6 +107,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     vocno: [''],
     salesman  : [''],
     customer :[''],
+    customerDesc: [''],
     mobile :[''],
     tel  :[''],
     nationality :[''],
@@ -79,33 +124,52 @@ export class RepairJewelleryReceiptComponent implements OnInit {
    salesManCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User Name ',
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   salesManCodeSelected(e: any) {
     console.log(e);
-    this.repairjewelleryreceiptFrom.controls.salesman.setValue(e.UsersName);
+    this.repairjewelleryreceiptFrom.controls.salesman.setValue(e.SALESPERSON_CODE);
   }
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'Customer Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    LOOKUPID: 2,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Customer",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   customerCodeSelected(e: any) {
     console.log(e);
-    this.repairjewelleryreceiptFrom.controls.customer.setValue(e.UsersName);
+    this.repairjewelleryreceiptFrom.controls.customer.setValue(e.CODE);
+    this.repairjewelleryreceiptFrom.controls.customerDesc.setValue(e.NAME);
+    this.repairjewelleryreceiptFrom.controls.email.setValue(e.EMAIL);
+    this.repairjewelleryreceiptFrom.controls.tel.setValue(e.TEL1);
+    this.repairjewelleryreceiptFrom.controls.mobile.setValue(e.MOBILE);
+  }
+
+  currencyData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'Currency',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strPartyCode=''`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+
   }
 
   

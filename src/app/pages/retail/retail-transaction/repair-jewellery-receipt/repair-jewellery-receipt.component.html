@@ -51,7 +51,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="vocno"
+                                        <input class="text-right" type="number" matInput readonly formControlName="vocno"
                                              />
                                     </mat-form-field>
                                 </div>
@@ -138,10 +138,26 @@
 
                     <div class="col-md-2">
                         <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Currency :</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%">
+                                <input type="text" [readonly]="isCurrencyUpdate||viewOnly" matInput formControlName="currency" />
+                              </mat-form-field>
+                              <master-search *ngIf="!isCurrencyUpdate|| !viewOnly&&!hideCurrecnySearch"
+                                [MasterSearchData]="currencyData" (newRowClick)="CurrencySelected($event)"></master-search>
+                            </div>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%">
+                                <input type="text" class="st_txt_right" [readonly]="isCurrencyUpdate||viewOnly" matInput
+                                  formControlName="currency_rate" />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        <!-- <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label">Currency : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currency"  />
+                                    <input type="text" matInput formControlName="currency"  SixDecimalInput />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3">
@@ -149,7 +165,7 @@
                                     <input type="number" matInput class="text-right" formControlName="currency_rate"  />
                                 </mat-form-field>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label">Email : </label>
                             <div class="col-sm-6">
