@@ -90,7 +90,7 @@
                 <b>Issue Ref # </b></label> -->
             </div>
           </div>
-          <!-- <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;">
+          <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;" *ngIf="approvalReqFlag">
             <h6>Approval Details</h6>
             <div class="row mb-2">
               <label for="inputPassword"
@@ -112,7 +112,7 @@
                 </mat-form-field>
               </div>
             </div>
-          </div> -->
+          </div>
         </div>
         <!-- Tab section starts -->
         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
@@ -225,7 +225,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode" class="text-right"
                             MetalDecimalInput [max]="10"
-                            (focusout)="checkFromToValues('FRM_METAL_WT','TO_METAL_WT')"
+                            (focusout)="toMetalWeightChange('FRM_METAL_WT','TO_METAL_WT')"
                             formControlName="TO_METAL_WT" />
                         </mat-form-field>
                       </td>
@@ -360,7 +360,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            readonly />
+                            readonly formControlName="StoneWeightFrom"/>
                         </mat-form-field>
                       </td>
                       <td>
@@ -377,8 +377,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode" class="text-right"
-                            StoneDecimalInput [max]="10"
-                            formControlName="StoneWeightTo" />
+                            StoneDecimalInput [max]="10"  />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -844,7 +843,7 @@
               <label for="input" class="col-sm-4 col-form-label">Tree No</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="treeno"
+                  <input type="text" matInput formControlName="TREE_NO"
                     class="text-right" NumberOnly maxlength="10" />
                 </mat-form-field>
               </div>
