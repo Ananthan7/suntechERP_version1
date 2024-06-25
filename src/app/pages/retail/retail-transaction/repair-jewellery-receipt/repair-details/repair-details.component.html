@@ -47,7 +47,7 @@
                             <div class="col-md-2">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Pcs"   />
+                                        <input type="number" matInput formControlName="Pcs"   />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                             <div class="col-md-2">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="total_amount"   />
+                                        <input type="number" AmountDecimalInput matInput formControlName="total_amount"   />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                             <div class="col-md-2">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 80%;">
-                                        <input class="text-right" type="number" matInput formControlName="status"
+                                        <input class="text-right" type="text" matInput formControlName="status"
                                               />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="statusCodeData"
@@ -166,11 +166,11 @@
                             <div class="col-md-2">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 80%;">
-                                        <input class="text-right" type="text" matInput formControlName="Est_repair_charge"
+                                        <input class="text-right" type="number" matInput formControlName="Est_repair_charge"
                                               />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="EstRepairChargeCodeData"
-                                    (newRowClick)="EstRepairChargeCodeSelected($event)"></master-search>
+                                    <!-- <master-search [MasterSearchData]="EstRepairChargeCodeData"
+                                    (newRowClick)="EstRepairChargeCodeSelected($event)"></master-search> -->
                                 </div>
                             </div>
 
@@ -245,11 +245,11 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-4">
-                        <mat-checkbox class="example-margin "> With Stone </mat-checkbox>
+                        <mat-checkbox class="example-margin" (change)="withStoneCheck($event)"  formControlName="stoneCheck" > With Stone </mat-checkbox>
                     </div>
                 </div>
 
-                <div class="row">
+                <div *ngIf="stoneCheck === true" class="row">
                     <div class="col-md-10">
                         <div class="row mb-1 ">
                             <label for="inputPassword" class="col-sm-2 col-form-label"></label>
@@ -266,7 +266,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div *ngIf="stoneCheck === true" class="row">
                     <div class="col-md-10">
                         <div class="row mb-1 ">
                             <label for="inputPassword" class="col-sm-2 col-form-label"></label>
