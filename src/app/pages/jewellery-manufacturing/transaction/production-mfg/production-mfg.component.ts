@@ -142,7 +142,7 @@ export class ProductionMfgComponent implements OnInit {
   productionFrom: FormGroup = this.formBuilder.group({
     voctype: ["", [Validators.required]],
     vocDate: ["", [Validators.required]],
-    vocno: ["1"],
+    vocno: [1],
     enteredby: [""],
     currency: ["", [Validators.required]],
     currencyrate: ["", [Validators.required]],
@@ -596,7 +596,7 @@ export class ProductionMfgComponent implements OnInit {
       "MID": 0,
       "VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "VOCNO": 0,
+      "VOCNO": this.commonService.nullToString(this.productionFrom.value.vocno),
       "VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.vocDate),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
@@ -636,7 +636,7 @@ export class ProductionMfgComponent implements OnInit {
       "INTER_BRANCH": "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": this.commonService.nullToString(this.currentDate),
+      "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PRODUCTION_SUB_DJ": this.STOCK_FORM_DETAILS,
       "JOB_PRODUCTION_DETAIL_DJ": this.DetailScreenDataToSave,
       "JOB_PRODUCTION_STNMTL_DJ": this.STOCK_COMPONENT_GRID, //component grid from stockscreen

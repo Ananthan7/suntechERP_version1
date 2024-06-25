@@ -32,7 +32,7 @@
               <label for="inputPassword" class="col-sm-4">Voucher Type * :</label>
               <div class="col-sm-8 ">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="vocType" />
+                  <input type="text" matInput formControlName="vocType" readonly/>
                 </mat-form-field>
               </div>
             </div>
@@ -40,7 +40,7 @@
               <label for="inputPassword" class="col-sm-4">Voucher No * :</label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="vocNo" />
+                  <input type="text" matInput formControlName="vocNo" readonly/>
                 </mat-form-field>
               </div>
             </div>
@@ -53,10 +53,10 @@
                   <input type="date" matInput />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocDate" formControlName="vocDate" placeholder="DD-MM-YYYY"
+                  <input matInput [matDatepicker]="vocDate" formControlName="vocDate" placeholder="DD-MM-YYYY" [readonly]="viewMode"
                     DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                  <mat-datepicker [startAt]="currentDate" #vocDate [disabled]="isSaved"></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -64,9 +64,9 @@
               <label for="inputPassword" class="col-sm-4">Melting Type * :</label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="meltingType" />
+                  <input type="text" matInput formControlName="meltingType" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="MeltingCodeData"
+                <master-search [MasterSearchData]="MeltingCodeData" *ngIf="!viewMode"
                   (newRowClick)="MeltingCodeSelected($event)"></master-search>
               </div>
             </div>
@@ -77,12 +77,12 @@
                 Process:</label>
               <span class="col-sm-8">
                 <mat-form-field style="width: 40%">
-                  <input type="text" matInput maxlength="6" formControlName="process" />
+                  <input type="text" matInput maxlength="6" formControlName="process" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData"
+                <master-search [MasterSearchData]="processCodeData" *ngIf="!viewMode"
                   (newRowClick)="processCodeScpSelected($event)"></master-search>
                 <mat-form-field style="width: 40%; margin-left: 7px;">
-                  <input type="text" matInput class="text-right" formControlName="processDesc" />
+                  <input type="text" matInput class="text-right" formControlName="processDesc" [readonly]="viewMode"/>
                 </mat-form-field>
               </span>
             </div>
@@ -90,12 +90,12 @@
               <label for="inputPassword" class="col-sm-4">Worker * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="worker" />
+                  <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="workerDesc" />
+                  <input type="text" matInput formControlName="workerDesc" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -105,7 +105,7 @@
               <label for="inputPassword" class="col-sm-4"> Color * :</label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="color" />
+                  <input type="text" matInput formControlName="color" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -113,7 +113,7 @@
               <label for="inputPassword" class="col-sm-4">Time : </label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 70%;">
-                  <input type="time" matInput formControlName="time" />
+                  <input type="time" matInput formControlName="time" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -226,22 +226,22 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Stone Stock Code:</label>
                     <div class="col-md-2">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCode" />
+                        <input type="text" matInput formControlName="stoneStockCode" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCodeNo" />
+                        <input type="text" matInput formControlName="stoneStockCodeNo" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCodeDesc" />
+                        <input type="text" matInput formControlName="stoneStockCodeDesc" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCodeValue" />
+                        <input type="text" matInput formControlName="stoneStockCodeValue" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -251,7 +251,7 @@
                     <label for="inputPassword" class="col-sm-6 col-form-label">Stone Weight * :</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneWeight" style="text-align: right;"StoneDecimalInput />
+                        <input type="text" matInput formControlName="stoneWeight" style="text-align: right;"StoneDecimalInput [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -261,7 +261,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Rate:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;">
-                        <input type="number" matInput formControlName="rate"  style="text-align: right;" SixDecimalInput />
+                        <input type="number" matInput formControlName="rate"  style="text-align: right;" SixDecimalInput [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -271,7 +271,7 @@
                     <label for="inputPassword" class="col-sm-6 col-form-label">Stone Amount:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneAmount" AmountDecimalInput style="text-align: right;"/>
+                        <input type="text" matInput formControlName="stoneAmount" AmountDecimalInput style="text-align: right;" [readonly]="viewMode"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -293,9 +293,9 @@
                 <label for="inputPassword" class="col-sm-4"> Stock Code * :</label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="stockcodeRet" />
+                    <input type="text" matInput formControlName="stockcodeRet" [readonly]="viewMode"/>
                   </mat-form-field>
-                  <master-search [MasterSearchData]="stockCodeData"
+                  <master-search [MasterSearchData]="stockCodeData" *ngIf="!viewMode"
                     (newRowClick)="stockCodeSelected($event)"></master-search>
                 </div>
               </div>
@@ -303,7 +303,7 @@
                 <label for="inputPassword" class="col-sm-4"> Gross Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="TotalgrossWt" style="text-align: right;" MetalDecimalInput />
+                    <input type="text" matInput formControlName="TotalgrossWt" style="text-align: right;" MetalDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -311,7 +311,7 @@
                 <label for="inputPassword" class="col-sm-4"> Purity : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="purity" style="text-align: right;" SixDecimalInput />
+                    <input type="text" matInput formControlName="purity" style="text-align: right;" SixDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -319,7 +319,7 @@
                 <label for="inputPassword" class="col-sm-4">Pure Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="TotalpureWt" style="text-align: right;" MetalDecimalInput />
+                    <input type="text" matInput formControlName="TotalpureWt" style="text-align: right;" MetalDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -327,9 +327,9 @@
                 <label for="inputPassword" class="col-sm-4"> Location * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="locationRet" />
+                    <input type="text" matInput formControlName="locationRet" [readonly]="viewMode"/>
                   </mat-form-field>
-                  <master-search [MasterSearchData]="locationCodeData"
+                  <master-search [MasterSearchData]="locationCodeData" *ngIf="!viewMode"
                     (newRowClick)="locationCodeSelected($event)"></master-search>
                 </div>
               </div>
@@ -339,15 +339,15 @@
                 <label for="inputPassword" class="col-sm-3">Stock Code * :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="stockCodeScp" />
+                    <input type="text" matInput formControlName="stockCodeScp" [readonly]="viewMode"/>
                   </mat-form-field>
-                  <master-search [MasterSearchData]="stockCodeData"
+                  <master-search [MasterSearchData]="stockCodeData" *ngIf="!viewMode"
                     (newRowClick)="stockCodeScpSelected($event)"></master-search>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Loss * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="loss" style="text-align: right;" NumberOnly/>
+                    <input type="text" matInput formControlName="loss" style="text-align: right;" NumberOnly [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -355,13 +355,13 @@
                 <label for="inputPassword" class="col-sm-3"> Gross Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="textt" matInput formControlName="RETgrossWt" style="text-align: right;"  MetalDecimalInput />
+                    <input type="textt" matInput formControlName="RETgrossWt" style="text-align: right;"  MetalDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Pure Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;" MetalDecimalInput />
+                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;" MetalDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -369,13 +369,13 @@
                 <label for="inputPassword" class="col-sm-3"> Purity * :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="purityRET" style="text-align: right;" SixDecimalInput />
+                    <input type="text" matInput formControlName="purityRET" style="text-align: right;" SixDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Bal Gross * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="balGross" style="text-align: right;" ThreeDecimalInput />
+                    <input type="text" matInput formControlName="balGross" style="text-align: right;" ThreeDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -383,13 +383,13 @@
                 <label for="inputPassword" class="col-sm-3">Pure Wt : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;"  MetalDecimalInput />
+                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;"  MetalDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Bal Pure * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="balPure" style="text-align: right;" ThreeDecimalInput />
+                    <input type="text" matInput formControlName="balPure" style="text-align: right;" ThreeDecimalInput [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -397,9 +397,9 @@
                 <label for="inputPassword" class="col-sm-3"> Location : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
-                    <input type="text" matInput formControlName="locationScp" />
+                    <input type="text" matInput formControlName="locationScp" [readonly]="viewMode"/>
                   </mat-form-field>
-                  <master-search [MasterSearchData]="locationCodeData"
+                  <master-search [MasterSearchData]="locationCodeData" *ngIf="!viewMode"
                     (newRowClick)="locationCodeScpSelected($event)"></master-search>
                 </div>
               </div>
@@ -426,25 +426,25 @@
           <label for="inputPassword" class="col-sm-1 col-form-label">Issued:</label>
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="issued" />
+              <input type="text" matInput formControlName="issued" [readonly]="viewMode"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Required:</label>
           <div class="col-md-2">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="required" />
+              <input type="text" matInput formControlName="required" [readonly]="viewMode"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Allocated:</label>
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="allocated" />
+              <input type="text" matInput formControlName="allocated" [readonly]="viewMode"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Balance:</label>
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="balance" />
+              <input type="text" matInput formControlName="balance" [readonly]="viewMode"/>
             </mat-form-field>
           </div>
         </div>
@@ -456,7 +456,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Remarks:</label>
               <div class="col-md-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="remarks" />
+                  <input type="text" matInput formControlName="remarks" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>

@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="mouldMakingForm">
@@ -25,18 +25,21 @@
                   <label for="inputPassword" class="col-sm-2">Uniq :</label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="uniq" [readonly]="viewMode"/>
+                      <input type="text" matInput formControlName="uniq"
+                        [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="uniqNo" [readonly]="viewMode"/>
+                      <input type="text" matInput formControlName="uniqNo"
+                        [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-2">Job:</label>
                   <div class="col-sm-3">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="job" [readonly]="viewMode"/>
+                      <input type="text" matInput formControlName="job"
+                        [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -49,59 +52,77 @@
                 <label for="inputPassword" class="col-sm-6 ">Voucher * :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="vocher" [readonly]="viewMode" />
+                    <input type="text" matInput formControlName="vocher"
+                      [readonly]="viewMode" />
                   </mat-form-field>
-                 
+
                 </div>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="vocherNo" [readonly]="viewMode"class="text-right"/>
+                    <input type="text" matInput formControlName="vocherNo"
+                      [readonly]="viewMode" class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">Voucher Date :</label>
+                <label for="inputPassword" class="col-sm-6 ">Voucher Date
+                  :</label>
                 <div class="col-md-6">
                   <!-- <mat-form-field style="width: 100%;">
                     <input type="date" matInput formControlName="vocDate"/>
                   </mat-form-field> -->
                   <mat-form-field style="width: 100%">
-                    <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                      placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode"/>
-                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                    <input matInput [matDatepicker]="vocDate" name="vocDate"
+                      formControlName="vocDate"
+                      placeholder="DD/MM/YYYY" DateValidation
+                      [readonly]="viewMode" />
+                    <mat-datepicker-toggle matSuffix
+                      [for]="vocDate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" [disabled]="true"
+                      #vocDate></mat-datepicker>
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">Entered By :</label>
+                <label for="inputPassword" class="col-sm-6 ">Entered By
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="enteredBy" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="enteredBy"
+                      [readonly]="viewMode" />
                   </mat-form-field>
-                  <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
+                  <master-search [MasterSearchData]="user"
+                    (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                   </master-search>
                 </div>
               </div>
             </div>
             <div class="col-md-3 ">
               <div class=" row">
-                <label for="inputPassword" class="col-sm-6 ">From Process * :</label>
+                <label for="inputPassword" class="col-sm-6 ">From Process *
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="fromProcess" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="fromProcess"
+                      [readonly]="viewMode" />
                   </mat-form-field>
-                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)" *ngIf="!viewMode">
+                  <master-search [MasterSearchData]="ProcessCodeData"
+                    (newRowClick)="ProcessCodeSelected($event)"
+                    *ngIf="!viewMode">
                   </master-search>
                 </div>
               </div>
               <div class=" row">
-                <label for="inputPassword" class="col-sm-6 ">From Worker * :</label>
+                <label for="inputPassword" class="col-sm-6 ">From Worker *
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="fromWorker" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="fromWorker"
+                      [readonly]="viewMode" />
                   </mat-form-field>
-                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
+                  <master-search [MasterSearchData]="WorkerCodeData"
+                    (newRowClick)="WorkerCodeSelected($event)"
+                    *ngIf="!viewMode">
                   </master-search>
                 </div>
               </div>
@@ -109,35 +130,45 @@
                 <label for="inputPassword" class="col-sm-6 ">Job No * :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="jobNo" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="jobNo"
+                      [readonly]="viewMode" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="jobnoCodeData"
-                    (newRowClick)="jobnoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                    (newRowClick)="jobnoCodeSelected($event)"
+                    *ngIf="!viewMode"></master-search>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">Mould No * :</label>
+                <label for="inputPassword" class="col-sm-6 ">Mould No *
+                  :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="mouldNo" [readonly]="viewMode" style="text-align: right;" NumberOnly/>
+                    <input type="number" matInput formControlName="mouldNo"
+                      [readonly]="viewMode" style="text-align: right;"
+                      NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">Mould Type * :</label>
+                <label for="inputPassword" class="col-sm-6 ">Mould Type *
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="mouldType" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="mouldType"
+                      [readonly]="viewMode" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="mouldCodeData"
-                    (newRowClick)="mouldCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                    (newRowClick)="mouldCodeSelected($event)"
+                    *ngIf="!viewMode"></master-search>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
+                <label for="inputPassword" class="col-sm-6 ">No of Parts
+                  :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="noOfParts" [readonly]="viewMode" NumberOnly/>
+                    <input type="number" matInput formControlName="noOfParts"
+                      [readonly]="viewMode" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
@@ -145,50 +176,65 @@
                 <label for="inputPassword" class="col-sm-6 ">Narration:</label>
                 <div class="col-sm-6">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="narration" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="narration"
+                      [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">To Process * :</label>
+                <label for="inputPassword" class="col-sm-6 ">To Process *
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="toProcess" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="toProcess"
+                      [readonly]="viewMode" />
                   </mat-form-field>
-                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)" *ngIf="!viewMode">
+                  <master-search [MasterSearchData]="ProcessCodeData"
+                    (newRowClick)="ProcessCodeSelected($event)"
+                    *ngIf="!viewMode">
                   </master-search>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">To Worker * :</label>
+                <label for="inputPassword" class="col-sm-6 ">To Worker *
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="toWorker" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="toWorker"
+                      [readonly]="viewMode" />
                   </mat-form-field>
-                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
+                  <master-search [MasterSearchData]="WorkerCodeData"
+                    (newRowClick)="WorkerCodeSelected($event)"
+                    *ngIf="!viewMode">
                   </master-search>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">Design Code * :</label>
+                <label for="inputPassword" class="col-sm-6 ">Design Code *
+                  :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="designCode" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="designCode"
+                      [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-6 ">Item Currency:</label>
+                <label for="inputPassword" class="col-sm-6 ">Item
+                  Currency:</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="itemCurrency" [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="itemCurrency"
+                      [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="itemCurrencyRate"  style="text-align: right;" />
+                    <input type="number" matInput
+                      formControlName="itemCurrencyRate"
+                      style="text-align: right;" [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
@@ -196,7 +242,9 @@
                 <label for="inputPassword" class="col-sm-6 ">Location:</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="location" [readonly]="viewMode" AmountDecimalInput class="text-right"/>
+                    <input type="text" matInput formControlName="location"
+                      [readonly]="viewMode" AmountDecimalInput
+                      class="text-right" />
                   </mat-form-field>
                 </div>
               </div>
@@ -208,7 +256,8 @@
               <div>
                 <div class="d-flex justify-content-center text-center">
                   <div class="p-2  bd-highlight">
-                    <button type="button" class="btn btn-primary suntech-btn-primary">
+                    <button type="button"
+                      class="btn btn-primary suntech-btn-primary">
                       Capture
                     </button>
                   </div>
@@ -217,7 +266,8 @@
               <div>
                 <div class="d-flex justify-content-center text-center">
                   <div class="p-2 bd-highlight">
-                    <button type="button" class="btn btn-primary suntech-btn-primary">
+                    <button type="button"
+                      class="btn btn-primary suntech-btn-primary">
                       Browser
                     </button>
                   </div>
@@ -233,53 +283,81 @@
           <div class="row">
             <div class="row py-2 border-top">
               <div class="col-md-3 d-flex">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                <menu-buttons *ngIf="!viewMode" [viewImportBtn]="false" [viewAddBtn]="true"
+                  [viewDeleteBtn]="true"
                   (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
               </div>
-              <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
-                [showRowLines]="true" class="mt-3" keyExpr="SN" (onSelectionChanged)="onSelectionChanged($event)">
-<!--               
+              <dx-data-grid id="gridContainer" [dataSource]="tableData"
+                [showBorders]="true" [allowColumnResizing]="true"
+                [showColumnLines]="true"
+                [showRowLines]="true" class="mt-3" keyExpr="SN"
+                (onSelectionChanged)="onSelectionChanged($event)">
+                <!--               
                 <dxo-editing [allowUpdating]="true" [allowUpdating]="!viewMode"></dxo-editing> -->
 
-                <dxo-selection   [showCheckBoxesMode]="checkBoxesMode"
+                <dxo-selection [showCheckBoxesMode]="checkBoxesMode"
                   mode="multiple"></dxo-selection>
                 <dxi-column dataField="SN" caption="SN"> </dxi-column>
-                <dxi-column dataField="stock_code" caption="Stock Code" cellTemplate="stock_codetemp"></dxi-column>
-                <dxi-column dataField="description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
-                <dxi-column dataField="Psc" caption="Psc" cellTemplate="Psctemp"></dxi-column>
+                <dxi-column dataField="stock_code" caption="Stock Code"
+                  cellTemplate="stock_codetemp"></dxi-column>
+                <dxi-column dataField="description" caption="Description"
+                  cellTemplate="descriptiontemp"></dxi-column>
+                <dxi-column dataField="Psc" caption="Psc"
+                  cellTemplate="Psctemp"></dxi-column>
                 <dxi-column dataField="gross_weight" caption="Gross Weight"
                   cellTemplate="gross_weighttemp"></dxi-column>
-                <dxi-column dataField="rate" caption="Rate" cellTemplate="ratetemp"></dxi-column>
-                <dxi-column dataField="amount" caption="Amount" cellTemplate="amounttemp"></dxi-column>
-                <dxi-column dataField="location" caption="Location" cellTemplate="locationtemp"></dxi-column>
-
+                <dxi-column dataField="rate" caption="Rate"
+                  cellTemplate="ratetemp"></dxi-column>
+                <dxi-column dataField="amount" caption="Amount"
+                  cellTemplate="amounttemp"></dxi-column>
+                <dxi-column dataField="location" caption="Location"
+                  cellTemplate="locationtemp"></dxi-column>
 
                 <div *dxTemplate="let data of 'stock_codetemp'">
-                  <input type="text" (change)="stock_codetemp($event,data)" style="width: 100%;" [value]="data.value" [readonly]="viewMode"/>
+                  <input type="text" (change)="stock_codetemp($event,data)"
+                    style="width: 100%;" [value]="data.value"
+                    [readonly]="viewMode" />
                 </div>
 
                 <div *dxTemplate="let data of 'descriptiontemp'">
-                  <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                  <master-search [MasterSearchData]="stockCodeData" (newRowClick)="descriptiontemp($event,data)" *ngIf="!viewMode">
+                  <a href="javascript:void(0)" class="mx-1"
+                    [innerHTML]="data.value"></a>
+                  <master-search [MasterSearchData]="stockCodeData"
+                    (newRowClick)="descriptiontemp($event,data)"
+                    *ngIf="!viewMode">
                   </master-search>
                 </div>
 
                 <div *dxTemplate="let data of 'Psctemp'">
-                  <input type="number" NumberOnly (change)="Psctemp($event,data)" style="width: 100%; text-align: right;"  [value]="data.value" [readonly]="viewMode"/>
+                  <input type="number" NumberOnly
+                    (change)="Psctemp($event,data)"
+                    style="width: 100%; text-align: right;" [value]="data.value"
+                    [readonly]="viewMode" />
                 </div>
                 <div *dxTemplate="let data of 'gross_weighttemp'">
-                  <input type="number" (change)="gross_weighttemp($event,data)" style="width: 100%;  text-align: right;"
-                    [value]="data.value" [readonly]="viewMode" AmountDecimalInput/>
+                  <input type="number" (change)="gross_weighttemp($event,data)"
+                    style="width: 100%;  text-align: right;"
+                    [value]="data.value" [readonly]="viewMode"
+                    AmountDecimalInput />
                 </div>
-                <div *dxTemplate="let data of 'ratetemp'" >
-                  <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" AmountDecimalInput/>
+                <div *dxTemplate="let data of 'ratetemp'">
+                  <input type="number" (change)="ratetemp($event,data)"
+                    style="width: 100%;  text-align: right;"
+                    [value]="data.value" [readonly]="viewMode"
+                    AmountDecimalInput />
                 </div>
                 <div *dxTemplate="let data of 'amounttemp'">
-                  <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" AmountDecimalInput/>
+                  <input type="number" (change)="amounttemp($event,data)"
+                    style="width: 100%;  text-align: right;"
+                    [value]="data.value" [readonly]="viewMode"
+                    AmountDecimalInput />
                 </div>
                 <div *dxTemplate="let data of 'locationtemp'">
-                  <input type="text" (change)="locationtemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" [readonly]="viewMode" AmountDecimalInput/>
+                  <input type="text" (change)="locationtemp($event,data)"
+                    style="width: 100%;  text-align: right;"
+                    [value]="data.value" [readonly]="viewMode"
+                    AmountDecimalInput />
                 </div>
               </dx-data-grid>
             </div>
