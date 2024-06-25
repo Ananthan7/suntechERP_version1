@@ -156,8 +156,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     approveddate: [''],
     startdate: [''],
     enddate: [''],
-    stdtime: [''],
-    timetaken: [''],
+    STD_TIME: [''],
+    TIME_TAKEN_HRS: [''],
     consumed: [''],
     variance: [''],
     variancePercentage: [''],
@@ -314,8 +314,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFlagMode(this.content[0]?.FLAG)
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
-      this.metalDetailData = this.content[0]?.JOB_PROCESS_TRN_STNMTL_DJ
-    } else {
+      this.metalDetailData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ
+      this.metalDetailData.forEach((item:any)=>{
+        item.FRM_PCS = item.SETTED_PCS
+      })
+      this.formatMetalDetailDataGrid()
+    } else {// condition to load without saving
       parentDetail = this.content[0]?.PROCESS_FORMDETAILS
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID
     }
@@ -325,7 +329,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('JOB_NUMBER', parentDetail.JOB_NUMBER)
     this.nullToStringSetValue('JOB_DESCRIPTION', parentDetail.JOB_DESCRIPTION)
     this.nullToStringSetValue('UNQ_JOB_ID', parentDetail.UNQ_JOB_ID)
-    this.nullToStringSetValue('SUB_JOB_DESCRIPTION', parentDetail.SUB_JOB_DESCRIPTION)
+    this.nullToStringSetValue('SUB_JOB_DESCRIPTION', parentDetail.JOB_DESCRIPTION)
     this.nullToStringSetValue('FRM_WORKER_CODE', parentDetail.FRM_WORKER_CODE)
     this.nullToStringSetValue('FRM_WORKERNAME', parentDetail.FRM_WORKERNAME)
     this.nullToStringSetValue('TO_WORKER_CODE', parentDetail.TO_WORKER_CODE)
@@ -346,11 +350,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('METALSTONE', parentDetail.METALSTONE)
     this.nullToStringSetValue('FRM_METAL_PCS', parentDetail.FRM_METAL_PCS)
     this.nullToStringSetValue('TO_METAL_PCS', parentDetail.TO_METAL_PCS)
+    this.nullToStringSetValue('FRM_PCS', parentDetail.FRM_PCS)
+    this.nullToStringSetValue('TO_PCS', parentDetail.TO_PCS)
 
     this.setValueWithDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
-    this.setValueWithDecimal('FRM_PCS', parentDetail.FRM_PCS, 'AMOUNT')
-    this.setValueWithDecimal('TO_PCS', parentDetail.TO_PCS, 'AMOUNT')
     this.setValueWithDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
     this.setValueWithDecimal('GrossWeightTo', parentDetail.TO_NET_WT, 'METAL')//dbt
     this.setValueWithDecimal('StoneWeightFrom', parentDetail.FRM_STONE_WT, 'STONE')
@@ -363,10 +367,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.TimeTakenData.TIMEINMINUTES = parentDetail.TIME_TAKEN_HRS
     this.consumedTimeData.TIMEINMINUTES = parentDetail.TIME_CONSUMED
     this.STDDateTimeData.TIMEINMINUTES = parentDetail.TIME_CONSUMED
-    this.processTransferdetailsForm.controls.stdtime.setValue(
+    this.processTransferdetailsForm.controls.STD_TIME.setValue(
       this.commonService.convertTimeMinutesToDHM(parentDetail.STD_TIME)
     )
-    this.processTransferdetailsForm.controls.timetaken.setValue(
+    this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(
       this.commonService.convertTimeMinutesToDHM(parentDetail.TIME_TAKEN_HRS)
     )
     this.processTransferdetailsForm.controls.consumed.setValue(
@@ -380,10 +384,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     this.setToWorkerWhereCondition()
+    this.processTransferdetailsForm.controls.JOB_DATE.setValue(parentDetail.JOB_DATE)
 
     this.processTransferdetailsForm.controls.startdate.setValue(this.content.startdate)
     this.processTransferdetailsForm.controls.enddate.setValue(this.content.enddate)
-    this.processTransferdetailsForm.controls.JOB_DATE.setValue(this.content.JOB_DATE)
     this.processTransferdetailsForm.controls.toggleSwitchtIssue.setValue(this.content.toggleSwitchtIssue)
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
@@ -446,10 +450,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
 	  @blntoWorkerFocus=1`
   }
   stdTimeChange(event: any) {
-    this.processTransferdetailsForm.controls.stdtime.setValue(event)
+    this.processTransferdetailsForm.controls.STD_TIME.setValue(event)
   }
   timeTakenChange(event: any) {
-    this.processTransferdetailsForm.controls.timetaken.setValue(event)
+    this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(event)
   }
   consumedChange(event: any) {
     this.processTransferdetailsForm.controls.consumed.setValue(event)
@@ -797,7 +801,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(data[0].TO_PROCESS_CODE)
           this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(data[0].TO_PROCESSNAME)
-          this.processTransferdetailsForm.controls.stdtime.setValue(
+          this.processTransferdetailsForm.controls.STD_TIME.setValue(
             this.commonService.convertTimeMinutesToDHM(data[0].STD_TIME)
           )
           this.STDDateTimeData.TIMEINMINUTES = data[0].STD_TIME
@@ -805,7 +809,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.TimeTakenData.TIMEINMINUTES = differenceInMinutes
           this.consumedTimeData.TIMEINMINUTES = differenceInMinutes
 
-          this.processTransferdetailsForm.controls.timetaken.setValue(
+          this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(
             this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
           )
           this.processTransferdetailsForm.controls.consumed.setValue(
@@ -1079,6 +1083,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.toastErrorByMsgId('To worker code cannot be empty')
       return true;
     }
+    if (this.commonService.nullToString(form.TO_PROCESS_CODE) == '') {
+      this.commonService.toastErrorByMsgId('To process code cannot be empty')
+      return true;
+    }
     return false;
   }
   /**USE: SUBMIT detail */
@@ -1091,7 +1099,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       PROCESS_FORMDETAILS: this.processTransferdetailsForm.value,
       TRN_STNMTL_GRID: this.metalDetailData,
       JOB_PROCESS_TRN_DETAIL_DJ: this.setJOB_PROCESS_TRN_DETAIL_DJ(),
-      JOB_PROCESS_TRN_STNMTL_DJ: this.setJOB_PROCESS_TRN_STNMTL_DJ(),
+      JOB_PROCESS_TRN_COMP_DJ: this.setJOB_PROCESS_TRN_COMP_DJ(),
       JOB_PROCESS_TRN_LABCHRG_DJ: this.setLabourChargeDetails()
     }
     console.log(detailDataToParent, 'formSubmit clicked');
@@ -1200,7 +1208,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "RET_STONE_AMOUNTLC": 0,
       "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
-      "TIME_TAKEN_HRS": this.commonService.emptyToZero(form.timetaken),
+      "TIME_TAKEN_HRS": this.commonService.emptyToZero(form.TIME_TAKEN_HRS),
       "METAL_DIVISION": "",
       "LOCTYPE_CODE": this.commonService.nullToString(form.location),
       "PICTURE_PATH": this.commonService.nullToString(form.PICTURE_PATH),
@@ -1221,7 +1229,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "MKG_LABACCODE": "",
       "REMARKS": this.commonService.nullToString(form.remarks),
       "TREE_NO": this.commonService.nullToString(form.TREE_NO),
-      "STD_TIME": this.commonService.emptyToZero(form.stdtime),
+      "STD_TIME": this.commonService.emptyToZero(form.STD_TIME),
       "WORKER_ACCODE": "",
       "PRODLAB_ACCODE": "",
       "DT_BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
@@ -1300,7 +1308,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     return this.commonService.emptyToZero(value)
   }
   /**USE: set details from detail screen */
-  setJOB_PROCESS_TRN_STNMTL_DJ() {
+  setJOB_PROCESS_TRN_COMP_DJ() {
     let form = this.processTransferdetailsForm.value;
     let scrapPureWt = this.commonService.emptyToZero(Number(form.scrapQuantity) * Number(form.SCRAP_PURITY))
     let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
@@ -1411,7 +1419,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "REJ_REMARKS": "",
         "ATTACHMENT_FILE": "",
         "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
-        "PUREWTTEMP": 0
+        "REPAIR_PROCESS": true
       })
     });
     return data
