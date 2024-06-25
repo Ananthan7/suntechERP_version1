@@ -825,7 +825,7 @@ export class LabourChargeMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_VALUE}='${event.target.value.toUpperCase()}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     this.commonService.showSnackBarMsg('MSG81447');
@@ -839,7 +839,7 @@ export class LabourChargeMasterComponent implements OnInit {
           if (FORMNAME === 'sieve') {
             if (FORMNAME === 'sieve') {
               console.log(FORMNAME)
-              this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+              this.diamondlabourMasterForm.controls.sieve_desc.setValue('');  
             }
           }
           return
