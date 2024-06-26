@@ -197,32 +197,28 @@ export class RetailGridComponent implements OnInit {
             });
 
 
-          console.log('=================visibleFields===================');
-          console.log(this.visibleFields, this.orderedItemsHead);
-
-          console.log('====================================');
-          console.log(this.visibleFields.filter((data: any) => data.VISIBLE === true).map((data: any) => data.FIELD_NAME));
+      
 
 
 
-          this.orderedItemsHead = this.visibleFields.filter((data: any) => {
-            if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
-              data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
-            }
+          // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
+          //   if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
+          //     data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
+          //   }
 
-            // if (data.DATA_TYPE == 'datetime') {
-            //   data.FORMAT = 'dd-MM-yyyy';
-            //   data.DATATYPE = 'date';
-            // }
-            if (data.DATA_TYPE == 'bit') {
-              data.DATATYPE = 'boolean';
-            }
+          //   // if (data.DATA_TYPE == 'datetime') {
+          //   //   data.FORMAT = 'dd-MM-yyyy';
+          //   //   data.DATATYPE = 'date';
+          //   // }
+          //   if (data.DATA_TYPE == 'bit') {
+          //     data.DATATYPE = 'boolean';
+          //   }
 
-            const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);
-            const isVisible = data.VISIBLE == true;
+          //   const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);
+          //   const isVisible = data.VISIBLE == true;
 
-            return isSpecialField || (isVisible && this.orderedItemsHead.some(val => data.FIELD_NAME.toString().toLowerCase() === val.FIELD_NAME.toString().toLowerCase()));
-          });
+          //   return isSpecialField || (isVisible && this.orderedItemsHead.some(val => data.FIELD_NAME.toString().toLowerCase() === val.FIELD_NAME.toString().toLowerCase()));
+          // });
 
           // this.orderedItemsHead = this.visibleFields.filter((data: any, i) => {
 

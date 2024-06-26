@@ -94,6 +94,21 @@ export class GoldExchangeComponent implements OnInit {
 
   }
 
+  itemCurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'Currency',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strPartyCode=''`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+
+  }
+
   salesManCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -151,6 +166,7 @@ export class GoldExchangeComponent implements OnInit {
     private suntechApi: SuntechAPIService,
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
+
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
     this.companyCurrency = this.comService.compCurrency;
@@ -166,6 +182,7 @@ export class GoldExchangeComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.amlNameValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
     this.getKaratDetails();
+    this.setCompanyCurrencies();
 
     if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
       this.getRetailSalesMaster(this.content);
@@ -176,6 +193,14 @@ export class GoldExchangeComponent implements OnInit {
 
     }
 
+  }
+
+  setCompanyCurrencies() {
+    this.goldExchangeForm.controls.amount.setValue(this.comService.compCurrency);
+    this.goldExchangeForm.controls.rndOfAmt.setValue(this.comService.compCurrency);
+    this.goldExchangeForm.controls.rndNetAmt.setValue(this.comService.compCurrency);
+    this.goldExchangeForm.controls.otherAmt.setValue(this.comService.compCurrency);
+    this.goldExchangeForm.controls.grossAmt.setValue(this.comService.compCurrency);
   }
 
   partyCodeChange(event: any) {
@@ -205,6 +230,8 @@ export class GoldExchangeComponent implements OnInit {
 
               this.goldExchangeForm.controls.partyCurrCode.setValue(data[0].CURRENCY_CODE);
               this.goldExchangeForm.controls.itemCurr.setValue(data[0].CURRENCY_CODE);
+
+              this.goldExchangeForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE);
 
               this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.comService.decimalQuantityFormat(
                 this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));
@@ -432,6 +459,12 @@ export class GoldExchangeComponent implements OnInit {
   partyCurrencyCodeSelected(e: any) {
     console.log(e);
     this.goldExchangeForm.controls.partyCurrencyCode.setValue(e.CURRENCY_CODE);
+    this.goldExchangeForm.controls.partyCurrency.setValue(e.CURRENCY_CODE);
+  }
+
+  itemCurrencyCodeSelected(e: any) {
+    this.goldExchangeForm.controls.itemCurr.setValue(e["Currency"]);
+    this.goldExchangeForm.controls.itemCurrCode.setValue(this.comService.decimalQuantityFormat(e["Conv Rate"], 'RATE'));
   }
 
 
@@ -457,6 +490,9 @@ export class GoldExchangeComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+
+    modalRef.componentInstance.partyCurrencyParam = { partyCurrency:this.goldExchangeForm.value.partyCurrCode };
+
     modalRef.result.then((postData) => {
       if (postData) {
         console.log('Data from modal:', postData);

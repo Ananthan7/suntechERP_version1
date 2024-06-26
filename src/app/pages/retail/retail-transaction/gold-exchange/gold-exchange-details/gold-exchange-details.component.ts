@@ -9,6 +9,10 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { ToastrService } from "ngx-toastr";
 import * as _moment from 'moment';
 import { CommonServiceService } from "src/app/services/common-service.service";
+import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
+import { MatDialog } from "@angular/material/dialog";
+import { Subscription } from "rxjs";
 @Component({
   selector: 'app-gold-exchange-details',
   templateUrl: './gold-exchange-details.component.html',
@@ -18,13 +22,21 @@ export class GoldExchangeDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input() exchangeDetails!: any;
   @Input() queryParams!: any;
-  
+  @Input() partyCurrencyParam!: any;
+  karatDetails: any[] = [];
+  zeroMQtyVal: any;
   userName = localStorage.getItem('username');
   userbranch = localStorage.getItem('userbranch');
   branchCode?: String;
   yearMonth?: String;
   selected = 'gms';
+  partyCurrency="";
   viewOnly: boolean = false;
+  standardPurity: any;
+  standardPureWeight: any;
+  minPurity = 0;
+  maxPurity = 0;
+  currentPurity = "";
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -32,7 +44,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "DIVISION_CODE ='G' AND STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -111,7 +123,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
     netAmount: [""],
     remarks: [""],
   });
-
+  dialogBox: any;
 
 
 
@@ -121,10 +133,22 @@ export class GoldExchangeDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private comService: CommonServiceService,
-  ) { }
+    private suntechApi: SuntechAPIService,
+    public dialog: MatDialog,
+  ) {
+
+    this.zeroMQtyVal = this.comService.transformDecimalVB(
+      this.comService.allbranchMaster?.BMQTYDECIMALS,
+      0
+    );
+  }
 
   ngOnInit(): void {
+    this.partyCurrency=this.partyCurrencyParam.partyCurrency;
     this.getQueryParams(this.queryParams);
+    this.getKaratDetails();
+
+
 
     if (this.exchangeDetails && Object.keys(this.exchangeDetails).length > 0)
 
@@ -137,6 +161,431 @@ export class GoldExchangeDetailsComponent implements OnInit {
     this.goldExchangeDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
     this.goldExchangeDetailsForm.controls.stockType.setValue(e.STOCK_CODE);
     this.goldExchangeDetailsForm.controls.stockCodeDescription.setValue(e.DESCRIPTION);
+
+    this.getExchangeStockCodes(e.STOCK_CODE);
+  }
+
+  getExchangeStockCodes(stockCode: string) {
+
+    let param = {
+      BRANCH_CODE: this.comService.branchCode,
+      STOCK_CODE: stockCode,
+
+    }
+
+    // let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.comService.branchCode}&STOCK_CODE=${stockCode}`
+
+    // this.suntechApi
+    //   .getDynamicAPIwithParamsBranch(API)
+    let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailsalesExchangeLookup',param)
+      .subscribe((resp) => {
+
+        let _data = resp.response[0];
+
+        this.standardPurity = _data.PURITY;
+        this.minPurity = _data.PURITY_FROM;
+        this.maxPurity = _data.PURITY_TO;
+
+        const metalRate = this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(this.findKaratRate(_data.KARAT_CODE)), 'RATE');
+
+          this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.partyCurrency,
+            this.comService.emptyToZero(metalRate),), 'RATE'
+          ));
+
+
+        // this.goldExchangeDetailsForm.controls.metalRate.setValue(metalRate);
+
+        localStorage.setItem('defaultMetalRate', metalRate);
+
+        this.goldExchangeDetailsForm.controls.purity.setValue(this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(_data.PURITY), 'RATE'));
+
+
+
+
+
+      });
+  }
+
+  updateStoneDiffrence() {
+    const stoneDiffrence = ((this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight) -
+      (this.comService.emptyToZero(this.goldExchangeDetailsForm.value.stoneWeight))
+      -
+      this.comService.emptyToZero(this.goldExchangeDetailsForm.value.chargableWeight)
+    )) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.purity)
+
+
+    this.goldExchangeDetailsForm.controls.stoneDiffer.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+      stoneDiffrence), 'METAL'),);
+
+
+  }
+
+
+  changeStandardPurity(event: any) {
+
+    // const currentPurity=this.goldExchangeDetailsForm.value.purity;
+    if (this.comService.emptyToZero(event.target.value) > this.comService.emptyToZero(this.maxPurity)) {
+
+
+
+      const baseMessage = "Mud Wt should not be greater than Gross Wt";
+      this.openDialog(
+        'Warning',
+        `${baseMessage}`,
+        true
+      );
+
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.goldExchangeDetailsForm.controls.purity.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            this.standardPurity), 'PURITY'),);
+
+          this.goldExchangeDetailsForm.controls.pureWeight.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            this.standardPureWeight), 'METAL'),);
+          this.updateStonePurityDiffrences();
+
+        }
+
+      });
+    }
+    else if (this.comService.emptyToZero(event.target.value) < this.comService.emptyToZero(this.minPurity)) {
+
+      const baseMessage = "Mud Wt should not be greater than Gross Wt";
+      this.openDialog(
+        'Warning',
+        `${baseMessage}`,
+        true
+      );
+
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.goldExchangeDetailsForm.controls.purity.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            this.standardPurity), 'PURITY'),);
+
+          this.goldExchangeDetailsForm.controls.pureWeight.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            this.standardPureWeight), 'METAL'),);
+          this.updateStonePurityDiffrences();
+        }
+
+      });
+    }
+
+    else {
+      this.goldExchangeDetailsForm.controls.pureWeight.setValue(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(this.goldExchangeDetailsForm.value.purity * this.goldExchangeDetailsForm.value.grossWeight), 'METAL'));
+
+      this.updateStonePurityDiffrences();
+
+    }
+
+
+  }
+
+  updateStonePurityDiffrences() {
+
+    const changedPurity = this.comService.emptyToZero(this.standardPureWeight) - this.comService.emptyToZero(this.goldExchangeDetailsForm.value.pureWeight);
+    this.goldExchangeDetailsForm.controls.purityDiffer.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+      changedPurity), 'METAL'));
+
+    this.updateStoneDiffrence();
+
+    // console.log(changedPurity)
+
+
+
+
+
+  }
+
+  changeStoneweight(event: any) {
+    console.log(event.target.value);
+
+    this.updateStoneDiffrence();
+  }
+
+  changeGrossweight(event: any) {
+    console.log(event.target.value);
+
+    const metalRate = this.goldExchangeDetailsForm.value.metalRate;
+    const grossWt = this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(event.target.value), 'METAL')
+    const pureWt = this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(this.goldExchangeDetailsForm.value.purity * event.target.value), 'METAL');
+    const mudWeight = this.goldExchangeDetailsForm.value.mudWeight;
+
+    if (mudWeight > grossWt) {
+      
+
+      this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+        this.zeroMQtyVal), 'AMOUNT'));
+
+    }
+    const ozWeight = this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(pureWt || 0) /
+      31.1035, 'AMOUNT'
+    )
+
+    const metalAmount = this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero((grossWt - this.comService.emptyToZero(this.goldExchangeDetailsForm.value.mudWeight)) * metalRate), 'AMOUNT')
+
+
+
+
+
+    this.goldExchangeDetailsForm.controls.chargableWeight.setValue(grossWt);
+
+    this.goldExchangeDetailsForm.controls.netWeight.setValue(grossWt);
+
+    this.goldExchangeDetailsForm.controls.pureWeight.setValue(pureWt);
+
+    this.standardPureWeight = pureWt;
+
+    this.goldExchangeDetailsForm.controls.ozWeight.setValue(this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(
+        ozWeight), 'AMOUNT'));
+
+        this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.CCToFC(this.partyCurrency, metalAmount));
+
+
+    // this.goldExchangeDetailsForm.controls.metalAmount.setValue(
+    //   metalAmount);
+
+    this.updateNetTotal();
+    this.updateStoneDiffrence();
+
+  }
+
+  changeMakingRate(event: any) {
+    console.log(event.target.value);
+
+
+    this.goldExchangeDetailsForm.controls.unitAmount.setValue(this.comService.emptyToZero(
+      event.target.value * this.goldExchangeDetailsForm.value.grossWeight));
+    this.updateNetTotal();
+  }
+
+  changeMakingAmount(event: any) {
+    console.log(event.target.value);
+
+    this.goldExchangeDetailsForm.controls.unitRate.setValue(this.comService.emptyToZero(
+      event.target.value / this.goldExchangeDetailsForm.value.grossWeight));
+    this.updateNetTotal();
+  }
+
+  changeStoneRate(event: any) {
+    console.log(event.target.value);
+
+
+    this.goldExchangeDetailsForm.controls.stoneAmount.setValue(this.comService.emptyToZero(
+      event.target.value * this.goldExchangeDetailsForm.value.grossWeight));
+    this.updateNetTotal();
+  }
+
+  changeStoneAmount(event: any) {
+    console.log(event.target.value);
+
+    this.goldExchangeDetailsForm.controls.stoneRate.setValue(this.comService.emptyToZero(
+      event.target.value / this.goldExchangeDetailsForm.value.grossWeight));
+    this.updateNetTotal();
+  }
+
+  changeMetalRate(event: any) {
+    console.log(event.target.value);
+    this.checkMetalRateLimit(event.target.value, 'RATE', event.target.value);
+
+    // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.emptyToZero(
+    //   event.target.value * this.goldExchangeDetailsForm.value.grossWeight));
+
+    this.updateNetTotal();
+  }
+
+  changeMetalAmount(event: any) {
+    console.log(event.target.value);
+    this.checkMetalRateLimit(event.target.value, 'AMOUNT', event.target.value);
+
+
+
+    this.updateNetTotal();
+  }
+
+
+  changeMudWeight(event: any) {
+    console.log(event.target.value);
+    if (this.comService.emptyToZero(event.target.value) > this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight)) {
+
+      const baseMessage = "Mud Wt should not be greater than Gross Wt";
+      this.openDialog(
+        'Warning',
+        `${baseMessage}`,
+        true
+      );
+
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.goldExchangeDetailsForm.controls.mudWeight.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            this.zeroMQtyVal), 'AMOUNT'),);
+
+            this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.partyCurrency, this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalRate)), 'AMOUNT'));
+
+
+          // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalRate), 'AMOUNT'));
+          this.updateNetTotal();
+        }
+
+      });
+
+    }
+    else {
+      const grosWtWithoutMud = this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight) - this.comService.emptyToZero(this.goldExchangeDetailsForm.value.mudWeight);
+     
+      this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.partyCurrency, this.comService.emptyToZero(grosWtWithoutMud) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalRate)), 'AMOUNT'));
+
+     
+      // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(grosWtWithoutMud) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalRate), 'AMOUNT'));
+
+      this.updateNetTotal();
+    }
+
+
+
+
+    this.updateNetTotal();
+  }
+
+  updateNetTotal() {
+    const netTotalAmount = this.comService.emptyToZero(this.goldExchangeDetailsForm.value.unitAmount) + this.comService.emptyToZero(this.goldExchangeDetailsForm.value.stoneAmount) +
+      this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalAmount);
+
+      this.goldExchangeDetailsForm.controls.netAmount.setValue(this.comService.CCToFC(this.partyCurrency, this.comService.emptyToZero(
+        netTotalAmount)));
+      
+    // this.goldExchangeDetailsForm.controls.netAmount.setValue(this.comService.emptyToZero(
+    //   netTotalAmount));
+  }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(
+      DialogboxComponent, {
+      width: '40%',
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
+  checkMetalRateLimit(event: any, object: string, metalRate: any) {
+    const defaultMetalRate = localStorage.getItem('defaultMetalRate') || 0;
+
+    if (object == "RATE") {
+      if (this.comService.emptyToZero(event) > this.comService.emptyToZero(defaultMetalRate)) {
+
+        const baseMessage = this.comService.getMsgByID('MSG2203');
+        this.openDialog(
+          'Warning',
+          `${baseMessage}: ${defaultMetalRate}`,
+          true
+        );
+
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.partyCurrency,
+              this.comService.emptyToZero(defaultMetalRate)), 'RATE'));
+            
+            // this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            //   defaultMetalRate), 'RATE'),);
+
+            this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.partyCurrency, this.comService.emptyToZero(
+              defaultMetalRate) * this.comService.emptyToZero(
+              this.goldExchangeDetailsForm.value.grossWeight)), 'AMOUNT'));
+            
+
+            // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+            //   defaultMetalRate) * this.comService.emptyToZero(
+            //     this.goldExchangeDetailsForm.value.grossWeight), 'AMOUNT'),);
+          }
+
+        });
+
+
+
+      }
+      else {
+        this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.CCToFC(this.partyCurrency, this.comService.emptyToZero(
+          metalRate * this.goldExchangeDetailsForm.value.grossWeight)));
+        
+
+        // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.emptyToZero(
+        //   metalRate * this.goldExchangeDetailsForm.value.grossWeight));
+      }
+
+    }
+
+    else if (object == 'AMOUNT') {
+      const metalRate = this.comService.emptyToZero(event) /
+        this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight)
+
+      if (this.comService.emptyToZero(metalRate) > this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalRate)) {
+
+        const baseMessage = this.comService.getMsgByID('MSG2203');
+        this.openDialog(
+          'Warning',
+          `${baseMessage}: ${this.comService.emptyToZero(
+            this.goldExchangeDetailsForm.value.metalRate * this.goldExchangeDetailsForm.value.grossWeight)}`,
+          true
+        );
+
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+
+            this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.CCToFC(this.partyCurrency, this.comService.emptyToZero(
+              this.goldExchangeDetailsForm.value.metalRate) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight)));
+            
+
+            // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.emptyToZero(
+            //   this.goldExchangeDetailsForm.value.metalRate) * this.comService.emptyToZero(this.goldExchangeDetailsForm.value.grossWeight));
+          }
+
+        });
+
+
+
+
+      }
+      else {
+        this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(this.comService.CCToFC(this.partyCurrency,
+          this.comService.emptyToZero(this.goldExchangeDetailsForm.value.metalAmount / this.goldExchangeDetailsForm.value.grossWeight)), 'RATE'));
+
+          
+        // this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(this.comService.emptyToZero(
+        //   this.goldExchangeDetailsForm.value.metalAmount / this.goldExchangeDetailsForm.value.grossWeight), 'RATE'));
+      }
+    }
+
+
+  }
+
+  getKaratDetails() {
+    this.suntechApi.getDynamicAPI('BranchKaratRate/' + this.comService.branchCode).subscribe((result) => {
+      if (result.response) {
+
+        this.karatDetails = result.response;
+        const defaultMetalRate = this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(this.findKaratRate('24')), 'RATE');
+
+          this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.CCToFC(this.partyCurrency, defaultMetalRate));
+
+
+        // this.goldExchangeDetailsForm.controls.metalRate.setValue(defaultMetalRate);
+        console.log(this.karatDetails);
+      }
+    });
+  }
+
+  findKaratRate(karatCode: string): number | undefined {
+    const karatDetail = this.karatDetails.find(detail => detail.KARAT_CODE === karatCode);
+    return karatDetail ? karatDetail.KARAT_RATE : undefined;
   }
 
   outSideGoldSelected(e: any) {
@@ -158,7 +607,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   getQueryParams(gstDetails?: any) {
 
-    this.viewOnly = gstDetails.isViewOnly ?? false;
+    this.viewOnly = gstDetails?.isViewOnly ?? false;
 
   }
 
@@ -196,7 +645,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
       this.goldExchangeDetailsForm.controls.stoneDiffer.setValue(this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(this.exchangeDetails.STONEDIFF), 'METAL'));
       this.goldExchangeDetailsForm.controls.ozWeight.setValue(this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(this.exchangeDetails.OZWT), 'METAL'));
+        this.comService.emptyToZero(this.exchangeDetails.OZWT), 'AMOUNT'));
 
 
       this.goldExchangeDetailsForm.controls.unitValue.setValue(this.comService.decimalQuantityFormat(
@@ -218,7 +667,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
         this.comService.emptyToZero(this.exchangeDetails.WASTAGEAMOUNTFC), 'AMOUNT'));
 
       this.goldExchangeDetailsForm.controls.metalRate.setValue(this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(this.exchangeDetails.METALVALUEFC), 'PURITY'));
+        this.comService.emptyToZero(this.exchangeDetails.METALVALUEFC), 'RATE'));
       this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(this.exchangeDetails.METALVALUECC), 'AMOUNT'));
       this.goldExchangeDetailsForm.controls.netRate.setValue(this.comService.decimalQuantityFormat(
