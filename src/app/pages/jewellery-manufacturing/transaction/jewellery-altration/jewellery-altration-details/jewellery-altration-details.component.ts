@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -15,23 +15,25 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./jewellery-altration-details.component.scss'],
 })
 export class JewelleryAltrationDetailsComponent implements OnInit {
-
-
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
+  @Input() content!: any;
   divisionMS: any = 'ID';
-
   columnheads: any[] = ['Sr', 'Div', 'Components', 'Location', 'Kt', 'Purity', 'Pcs', 'Weight ', 'Rate', 'Amount', 'Sieve', 'Shape'];
   columnheads1: any[] = ['Sr', 'Division', 'Component ID', 'Location', 'Transfer To', 'Kt', 'Purity', 'Pcs', 'Weight ', 'Rate', 'Amount'];
-  @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
   summaryDetailData:any;
+  viewMode: boolean = false;
+  isSaved: boolean = false;
+  isloading: boolean = false;
   currentDate = new Date();
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   private subscriptions: Subscription[] = [];
-  metalDetailData: any[] = [];
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -141,13 +143,20 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.setAllInitialValues()
+   
+    if (this.content && this.content.FLAG) {
+      this.setFormValues()
+      this.jewelleryaltrationdetailsFrom.controls.FLAG.setValue(this.content.FLAG)
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      
+      }
+    }
 
   }
   setAllInitialValues() {
     console.log(this.content,'looo')
-    let dataFromParent = this.content[0]
-    if (!dataFromParent) return
+    if (!this.content) return;
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(this.content.STOCK_CODE)
     this.jewelleryaltrationdetailsFrom.controls.description.setValue(this.content.DESCRIPTION)
     this.jewelleryaltrationdetailsFrom.controls.pcs.setValue(this.content.PCS)
@@ -166,9 +175,10 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.remarks.setValue(this.content.REMARKS_DETAIL)
 
   }
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+ 
+    close(data?: any) {
+      //TODO reset forms and data before closing
+      this.closeDetail.emit()
   }
   //number validation
   isNumeric(event: any) {
@@ -333,20 +343,32 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  formSubmit() {
-    let dataTOparent: any = {
-
-      METAL_DETAIL_GRID: [],
-      PROCESS_FORMDETAILS: [],
+  submitValidations() {
+    let form = this.jewelleryaltrationdetailsFrom.value
+    if (form.jobNumber == '') {
+      this.toastr.error('Job Number required')
+      return
     }
-    dataTOparent.PROCESS_FORMDETAILS = this.jewelleryaltrationdetailsFrom.value;
-    dataTOparent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
-    dataTOparent.POSTDATA = []
-    console.log(this.content,'this.content');
-    
-    let postData = {
+    return false;
+  }
+  formSubmit(flag: any) {
+    if (this.submitValidations()) return;
+    let dataToparent = {
+      FLAG: flag,
+      POSTDATA: this.setPostData()
+    }
+    // this.close(postData);
+    this.saveDetail.emit(dataToparent);
+    if (flag == 'CONTINUE') {
+      // this.resetStockDetails()
+    }
+  }
+  setPostData(){
+    let form = this.jewelleryaltrationdetailsFrom.value
+    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+      return  {
       "UNIQUEID": 0,
-      "SRNO": this.content.SRNO,
+      "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode,
       "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description,
       "PCS": this.jewelleryaltrationdetailsFrom.value.pcs,
@@ -446,8 +468,6 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       "SIZE": "",
       "STONE_TYPE": ""
     }
-    dataTOparent.POSTDATA.push(postData)
-    this.close(postData);
   }
 
   setFormValues() {
