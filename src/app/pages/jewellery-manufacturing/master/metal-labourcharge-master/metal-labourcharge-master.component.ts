@@ -416,6 +416,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -429,11 +430,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
 
 
-
+    this.setFormValues();
     this.grossWt = true;
     this.codeEnable1 = true;
     this.setInitialValues();
-    this.setFormValues();
+
 
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
@@ -570,6 +571,10 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
     //       this.content.COST_RATE));
 
+    // this.metallabourMasterForm.controls.ctWtFrom.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.CARATWT_FROM));
 
     this.metallabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
     this.metallabourMasterForm.controls.metalunitList.setValue(this.content.UNITCODE);
@@ -578,7 +583,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
     this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
     this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCY_CODE);
-    this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
+    //this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
     this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
     this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
     this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
@@ -601,32 +606,41 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.PURITY));
 
-    this.metallabourMasterForm.controls.metalselling_rate.setValue(
+    this.metallabourMasterForm.controls.wastage.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.SELLING_RATE));
+        this.content.WASTAGE_PER));
+
 
     this.metallabourMasterForm.controls.metalselling_rate.setValue(
       this.commonService.commaSeperation(this.content.SELLING_RATE)
     )
 
-    this.metallabourMasterForm.controls.metalcost_rate.setValue(
+
+    this.metallabourMasterForm.controls.metalselling_rate.setValue(
       this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.COST_RATE));
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.SELLING_RATE));
 
     this.metallabourMasterForm.controls.metalcost_rate.setValue(
       this.commonService.commaSeperation(this.content.COST_RATE)
     )
 
-    this.metallabourMasterForm.controls.metalselling.setValue(
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(
       this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.SELLING_PER));
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.COST_RATE));
 
     this.metallabourMasterForm.controls.metalselling.setValue(
       this.commonService.commaSeperation(this.content.SELLING_PER)
     )
+
+    this.metallabourMasterForm.controls.metalselling.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.SELLING_PER));
+
+
 
 
   }
@@ -860,13 +874,13 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   getKaratcode() {
 
-    let API = 'MetalStockMaster/GetMetalStockMasterHeaderAndDetail/'  + this.metallabourMasterForm.value.stock_code +"/"+ this.metallabourMasterForm.value.metalDivision;
+    let API = 'MetalStockMaster/GetMetalStockMasterHeaderAndDetail/' + this.metallabourMasterForm.value.stock_code + "/" + this.metallabourMasterForm.value.metalDivision;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
 
         this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
         this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
-    
+
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')
       })
