@@ -298,6 +298,7 @@ export class LoginComponent implements OnInit {
   }
   /**USE: branch change function to call financial year API */
   changeBranch(e: any) {
+    localStorage.setItem('userbranch', e.target.value);
     if (e.target.value == '' &&
       this.validateState != 1
     ) {
@@ -315,9 +316,12 @@ export class LoginComponent implements OnInit {
     if (selectedBranch != '') {
 
       this.snackBar.open('loading...');
-      let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
-      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp) => {
-
+      let param = {
+        branchcode: selectedBranch,
+        strusername: this.user_name
+      }
+      let sub: Subscription = this.dataService.getDynamicAPIwithParamsBranch('FinancialYear',param)
+      .subscribe((resp) => {
         if (resp.status == 'Success') {
           this.snackBar.dismiss();
           this.comService.formControlSetReadOnly('year', false);

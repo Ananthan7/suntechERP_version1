@@ -21,7 +21,7 @@ export class ProcessTransferComponent implements OnInit {
   companyName = this.commonService.allbranchMaster['BRANCH_NAME']
   tableRowCount: number = 0;
   JOB_PROCESS_TRN_DETAIL_DJ: any[] = [];
-  JOB_PROCESS_TRN_STNMTL_DJ: any[] = [];
+  JOB_PROCESS_TRN_COMP_DJ: any[] = [];
   JOB_PROCESS_TRN_LABCHRG_DJ: any[] = [];
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
@@ -118,16 +118,16 @@ export class ProcessTransferComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ
-          this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ
-          this.JOB_PROCESS_TRN_STNMTL_DJ = data.JOB_PROCESS_TRN_STNMTL_DJ
+          this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ || []
+          this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ || []
+          this.JOB_PROCESS_TRN_COMP_DJ = data.JOB_PROCESS_TRN_COMP_DJ || []
           this.tableData.forEach((item: any, index: number) => {
             this.detailData.push({
               SRNO: item.SRNO,
               FLAG: this.commonService.nullToString(this.content.FLAG),
               JOB_PROCESS_TRN_DETAIL_DJ: item,
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
-              JOB_PROCESS_TRN_STNMTL_DJ: data.JOB_PROCESS_TRN_STNMTL_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+              JOB_PROCESS_TRN_COMP_DJ: data.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
             })
           })
           console.log(this.detailData);
@@ -221,11 +221,11 @@ export class ProcessTransferComponent implements OnInit {
   //use: to set the data from child component to post data
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PROCESS_FORMDETAILS
-    if (this.addItemWithCheck(this.tableData, detailDataToParent)) return;
     if (detailDataToParent.SRNO != 0) {
       this.tableData[detailDataToParent.SRNO - 1] = detailDataToParent
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
+      if (this.addItemWithCheck(this.tableData, detailDataToParent)) return;
       DATA.PROCESS_FORMDETAILS.SRNO = this.tableData.length + 1
       DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.tableData.length + 1
       // DATA.JOB_PROCESS_TRN_LABCHRG_DJ.SRNO = this.tableData.length + 1
@@ -265,10 +265,10 @@ export class ProcessTransferComponent implements OnInit {
   }
   editFinalArray(DATA: any) {
     this.JOB_PROCESS_TRN_DETAIL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_DETAIL_DJ)
-    this.JOB_PROCESS_TRN_STNMTL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_STNMTL_DJ).flat()
+    this.JOB_PROCESS_TRN_COMP_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_COMP_DJ).flat()
     // this.JOB_PROCESS_TRN_LABCHRG_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_LABCHRG_DJ)
     console.log(this.JOB_PROCESS_TRN_DETAIL_DJ, 'Detail');
-    console.log(this.JOB_PROCESS_TRN_STNMTL_DJ, 'Stone metal');
+    console.log(this.JOB_PROCESS_TRN_COMP_DJ, 'Stone metal');
   }
 
   closeDetailScreen() {
@@ -436,8 +436,8 @@ export class ProcessTransferComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "JOB_PROCESS_TRN_DETAIL_DJ": this.JOB_PROCESS_TRN_DETAIL_DJ, //header grid details
-      "JOB_PROCESS_TRN_STNMTL_DJ": this.JOB_PROCESS_TRN_STNMTL_DJ, //detail screen data
+      "JOB_PROCESS_TRN_DETAIL_DJ": this.JOB_PROCESS_TRN_DETAIL_DJ || [], //header grid details
+      "JOB_PROCESS_TRN_COMP_DJ": this.JOB_PROCESS_TRN_COMP_DJ || [], //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": [] //no need of saving now labour charge details
     }
   }

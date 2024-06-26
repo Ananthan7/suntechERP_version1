@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 import { switchMap } from 'rxjs/operators';
@@ -9,11 +9,70 @@ import { Observable } from 'rxjs';
 })
 export class SuntechAPIService {
   baseUrl: any;
-
+  DBBranch: any = localStorage.getItem('userbranch')
   constructor(
     private http: HttpClient,
     private configService: ConfigService
   ) {
+  }
+
+  // use: dynamic function for get API data 
+  getDynamicAPIBranch(apiName: string): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap((config:any) => {
+        const apiUrl = config.baseUrl;
+         // Add the DBBranch query parameter
+        const response = this.http.get(apiUrl+apiName+`/${this.DBBranch}`);
+        return response
+      })
+    );
+  }
+  // use: dynamic function for get API data 
+  getDynamicAPIwithParamsBranch(apiName: string,queryParams:any): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap((config:any) => {
+        const apiUrl = config.baseUrl;
+        let params = new HttpParams().set('DBBranch', `${this.DBBranch}`);
+        if (queryParams) {
+          for (const key in queryParams) {
+            if (queryParams.hasOwnProperty(key)) {
+              params = params.set(key, queryParams[key]);
+            }
+          }
+        }
+        const response = this.http.get(apiUrl+apiName,{params});
+        return response
+      })
+    );
+  }
+  // use: dynamic function for post API data 
+  postDynamicAPIBranch(apiName: string, data: any): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap(config => {
+        const apiUrl = config.baseUrl;
+        let params = new HttpParams().set('DBBranch', `${this.DBBranch}`);
+        return this.http.post(apiUrl+apiName, data,{params});
+      })
+    );
+  }
+ 
+  // use: dynamic function for put API data 
+  putDynamicAPIBranch(apiName: string, data: any): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap(config => {
+        const apiUrl = config.baseUrl;
+        return this.http.put(apiUrl+apiName+`/${this.DBBranch}`, data);
+      })
+    );
+  }
+  // use: dynamic function for delete API data 
+  deleteDynamicAPIBranch(apiName: string, data?: any): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap(config => {
+        const apiUrl = config.baseUrl;
+        return this.http.delete(apiUrl+apiName+`/${this.DBBranch}`, data);
+      })
+    );
   }
 
   // use: dynamic function for get API data 
@@ -43,7 +102,7 @@ export class SuntechAPIService {
         console.log(config.baseUrl,'config.baseUrl');
         
         const apiUrl = config.baseUrl;
-        return this.http.post(apiUrl+ apiName, data);
+        return this.http.post(apiUrl+apiName, data);
       })
     );
   }
@@ -66,4 +125,5 @@ export class SuntechAPIService {
       })
     );
   }
+  
 }
