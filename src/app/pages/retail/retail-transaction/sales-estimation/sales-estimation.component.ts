@@ -8114,9 +8114,9 @@ export class SalesEstimationComponent implements OnInit {
             // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
             metalPurchaseData: this.metalPurchaseDataPost,
             retailSReturnData: this.retailSReturnDataPost,
-            
-    
-    
+            "userName": this.comFunc.userName,
+            "editReason": this.content?.FLAG == "EDIT" ? this.comFunc.EditDetail.REASON : "",
+            "editDesc": this.content?.FLAG == "EDIT" ? this.comFunc.EditDetail.DESCRIPTION : "",
           };
           this.isSaved = true;
           this.snackBar.open('Processing...');
