@@ -17,7 +17,7 @@ export class SuntechAPIService {
   }
 
   // use: dynamic function for get API data 
-  getDynamicAPI(apiName: string): Observable<any> {
+  getDynamicAPIBranch(apiName: string): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap((config:any) => {
         const apiUrl = config.baseUrl;
@@ -28,7 +28,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for get API data 
-  getDynamicAPIwithParams(apiName: string,queryParams:any): Observable<any> {
+  getDynamicAPIwithParamsBranch(apiName: string,queryParams:any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap((config:any) => {
         const apiUrl = config.baseUrl;
@@ -46,7 +46,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for post API data 
-  postDynamicAPI(apiName: string, data: any): Observable<any> {
+  postDynamicAPIBranch(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -57,7 +57,7 @@ export class SuntechAPIService {
   }
  
   // use: dynamic function for put API data 
-  putDynamicAPI(apiName: string, data: any): Observable<any> {
+  putDynamicAPIBranch(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -66,7 +66,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for delete API data 
-  deleteDynamicAPI(apiName: string, data?: any): Observable<any> {
+  deleteDynamicAPIBranch(apiName: string, data?: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -76,7 +76,7 @@ export class SuntechAPIService {
   }
 
   // use: dynamic function for get API data 
-  getDynamicAPICustom(apiName: string): Observable<any> {
+  getDynamicAPI(apiName: string): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap((config:any) => {
         const apiUrl = config.baseUrl;
@@ -86,7 +86,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for get API data 
-  getDynamicAPIwithParamsCustom(apiName: string,params:any): Observable<any> {
+  getDynamicAPIwithParams(apiName: string,params:any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap((config:any) => {
         const apiUrl = config.baseUrl;
@@ -96,7 +96,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for post API data 
-  postDynamicAPICustom(apiName: string, data: any): Observable<any> {
+  postDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         console.log(config.baseUrl,'config.baseUrl');
@@ -108,7 +108,7 @@ export class SuntechAPIService {
   }
  
   // use: dynamic function for put API data 
-  putDynamicAPICustom(apiName: string, data: any): Observable<any> {
+  putDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -117,7 +117,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for delete API data 
-  deleteDynamicAPICustom(apiName: string, data?: any): Observable<any> {
+  deleteDynamicAPI(apiName: string, data?: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
