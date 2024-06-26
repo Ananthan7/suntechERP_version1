@@ -40,7 +40,7 @@ export class ModulelistComponent implements OnInit {
   getModuleList() {
     this.isLoading = true;
     let API = 'SuntechProdModuleMaster/GetProductModuleList'
-    this.subscriptions$ = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+    this.subscriptions$ = this.dataService.getDynamicAPICustom(API).subscribe((response: any) => {
       this.isLoading = false;
       if (response.status == 'Success') {
         this.menuList = response.response;
