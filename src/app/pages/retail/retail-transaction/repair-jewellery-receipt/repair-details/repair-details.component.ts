@@ -18,6 +18,7 @@ import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/
 export class RepairDetailsComponent implements OnInit {
 
   @Input() content!: any; 
+  stoneCheck : boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
@@ -66,6 +67,7 @@ export class RepairDetailsComponent implements OnInit {
     remark:[''],
     Description1:[''],
     text:[''],
+    stoneCheck: [false],
    });
 
 
@@ -90,11 +92,11 @@ export class RepairDetailsComponent implements OnInit {
   typeOfCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 62,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'type of',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "Types = 'REPAIR TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -107,34 +109,39 @@ export class RepairDetailsComponent implements OnInit {
   typeOfItemCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 62,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: "type of item",
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "Types = 'TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   typeOfItemCodeSelected(e: any) {
     console.log(e);
-    this.repairjewelleryreceiptdetailsFrom.controls.type_of_item.setValue(e.CODE);
+    this.repairjewelleryreceiptdetailsFrom.controls.type_of_item.setValue(e.DESCRIPTION);
   }
 
   statusCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 48,
-    SEARCH_FIELD: 'STATE_CODE',
-    SEARCH_HEADING: 'Status ',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: '',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STATE_CODE<> ''",
+    WHERECONDITION: "Types = 'REPAIR ITEM STATUS MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   statusCodeSelected(e: any) {
     console.log(e);
-    this.repairjewelleryreceiptdetailsFrom.controls.status.setValue(e.STATE_CODE);
-    this.repairjewelleryreceiptdetailsFrom.controls.status_des.setValue(e.STATE_DESCRIPTION);
+
+    this.repairjewelleryreceiptdetailsFrom.controls['status'].setValue(e.CODE);
+    this.repairjewelleryreceiptdetailsFrom.controls['status_des'].setValue(e.DESCRIPTION);
+
+    console.log(this.repairjewelleryreceiptdetailsFrom.controls['status'].value);
+  console.log(this.repairjewelleryreceiptdetailsFrom.controls['status_des'].value);
+
   }
 
   materialCodeData: MasterSearchModel = {
@@ -150,7 +157,7 @@ export class RepairDetailsComponent implements OnInit {
   }
   materialCodeSelected(e: any) {
     console.log(e);
-    this.repairjewelleryreceiptdetailsFrom.controls.material.setValue(e.CODE);
+    this.repairjewelleryreceiptdetailsFrom.controls.material.setValue(e.DESCRIPTION);
   }
 
   EstRepairChargeCodeData: MasterSearchModel = {
@@ -223,6 +230,10 @@ export class RepairDetailsComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  withStoneCheck(e: any) {
+    this.stoneCheck = e.checked    
+  }
+
 
   adddata() {
 
@@ -262,7 +273,7 @@ formSubmit(){
         "ITEM_DESCRIPTION": this.repairjewelleryreceiptdetailsFrom.value.Description,
         "ITEM_NARRATION": "",
         "PCS": this.repairjewelleryreceiptdetailsFrom.value.Pcs,
-        "GROSSWT": this.repairjewelleryreceiptdetailsFrom.value.gross_Wt,
+        "GROSSWT":  this.comService.decimalQuantityFormat(this.repairjewelleryreceiptdetailsFrom.value.gross_Wt, 'RATE') ,
         "AMOUNT": this.repairjewelleryreceiptdetailsFrom.value.total_amount,
         "REPAIR_TYPE": this.repairjewelleryreceiptdetailsFrom.value.type_of,
         "REPAIR_ITEMTYPE": "",

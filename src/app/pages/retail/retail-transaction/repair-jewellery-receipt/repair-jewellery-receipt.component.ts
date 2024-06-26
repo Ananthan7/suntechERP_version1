@@ -60,9 +60,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.branchCode}&strYEARMONTH=${this.yearMonth}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
     this.dataService.getDynamicAPI(API)
       .subscribe((res) => {
-        if (res.status == "Success") {
-          console.log(res);
-          
+        if (res.status == "Success") {          
           this.repairjewelleryreceiptFrom.controls.vocno.setValue(res.newvocno);
         }
       });
@@ -76,7 +74,6 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   CurrencySelected(e: any) {
-    console.log(e);
     this.resetVatFields();
     this.repairjewelleryreceiptFrom.controls.currency.setValue(e.Currency)
 
@@ -103,8 +100,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
   repairjewelleryreceiptFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
-    vocDate : [''],
     vocno: [''],
+    vocDate : [''],
     salesman  : [''],
     customer :[''],
     customerDesc: [''],
@@ -112,13 +109,13 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     tel  :[''],
     nationality :[''],
     type  :[''],
+    remark:[''],
     currency :[''],
     currency_rate :[''],
     email :[''],
     address  :[''],
     repair_narration :[''],
     customer_delivery_date :[''],
-    remark:[''],
    });
 
    salesManCodeData: MasterSearchModel = {
@@ -133,7 +130,6 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     VIEW_TABLE: true,
   }
   salesManCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptFrom.controls.salesman.setValue(e.SALESPERSON_CODE);
   }
 
@@ -149,7 +145,6 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     VIEW_TABLE: true,
   }
   customerCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptFrom.controls.customer.setValue(e.CODE);
     this.repairjewelleryreceiptFrom.controls.customerDesc.setValue(e.NAME);
     this.repairjewelleryreceiptFrom.controls.email.setValue(e.EMAIL);
@@ -213,7 +208,7 @@ formSubmit(){
     return
   }
   if (this.repairjewelleryreceiptFrom.invalid) {
-    this.toastr.error('select all required fields')
+    this.toastr.error('Please select all the required fields')
     return
   }
 
