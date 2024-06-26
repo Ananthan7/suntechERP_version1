@@ -38,8 +38,8 @@
         </dxi-column>
 
         <dxi-column *ngFor="let data of orderedItemsHead" dataField="{{data.FIELD_NAME}}"
-        caption="{{data.DISPLAY_NAME}}" [allowEditing]="true" alignment="center"
-        [visible]="data.FIELD_NAME != 'Id' && data.VISIBLE ? true : false" [dataType]="data.DATATYPE"
+        caption="{{data.FIELD_NAME}}" [allowEditing]="true" alignment="center"
+        [visible]="data.FIELD_NAME != 'Id'" [dataType]="data.DATATYPE"
         [format]="data.FORMAT" [alignment]="data.ALLIGNMENT">
       </dxi-column>
       
