@@ -46,7 +46,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for post API data 
-  postDynamicAPIBranch(apiName: string, data: any): Observable<any> {
+  postDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -57,7 +57,7 @@ export class SuntechAPIService {
   }
  
   // use: dynamic function for put API data 
-  putDynamicAPIBranch(apiName: string, data: any): Observable<any> {
+  putDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -66,7 +66,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for delete API data 
-  deleteDynamicAPIBranch(apiName: string, data?: any): Observable<any> {
+  deleteDynamicAPI(apiName: string, data?: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -96,7 +96,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for post API data 
-  postDynamicAPI(apiName: string, data: any): Observable<any> {
+  postDynamicAPICustom(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         console.log(config.baseUrl,'config.baseUrl');
@@ -108,7 +108,7 @@ export class SuntechAPIService {
   }
  
   // use: dynamic function for put API data 
-  putDynamicAPI(apiName: string, data: any): Observable<any> {
+  putDynamicAPICustom(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
@@ -117,7 +117,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for delete API data 
-  deleteDynamicAPI(apiName: string, data?: any): Observable<any> {
+  deleteDynamicAPICustom(apiName: string, data?: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
