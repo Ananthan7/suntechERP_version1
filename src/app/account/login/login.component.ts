@@ -194,7 +194,7 @@ export class LoginComponent implements OnInit {
       this.comService.formControlSetReadOnly('username', false);
       this.snackBarRef = this.snackBar.open('Validating Username ...');
       let API = 'UserDetailNetMaster/' + this.user_name
-      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.comService.formControlSetReadOnly('password', false);
           this.renderer.selectRootElement('#password')?.focus();
@@ -225,11 +225,11 @@ export class LoginComponent implements OnInit {
       );
       /* ****** vb ****** */
       let API = 'ValidatePassword?strusername=' + this.user_name + '&strPassword=' + password
-      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.snackBar.open('loading branch...');
           let API2 = 'UseBranchNetMaster/' + this.user_name + ''
-          let sub2: Subscription = this.dataService.getDynamicAPI(API2).subscribe((resp) => {
+          let sub2: Subscription = this.dataService.getDynamicAPICustom(API2).subscribe((resp) => {
             if (resp.status == 'Success') {
               this.snackBar.dismiss();
               this.comService.formControlSetReadOnly('branch', false);
@@ -320,7 +320,7 @@ export class LoginComponent implements OnInit {
         branchcode: selectedBranch,
         strusername: this.user_name
       }
-      let sub: Subscription = this.dataService.getDynamicAPIwithParamsBranch('FinancialYear',param)
+      let sub: Subscription = this.dataService.getDynamicAPIwithParams('FinancialYear',param)
       .subscribe((resp) => {
         if (resp.status == 'Success') {
           this.snackBar.dismiss();
@@ -365,7 +365,7 @@ export class LoginComponent implements OnInit {
 
 
       let API = 'BranchMaster/' + branch
-      let sub: Subscription = this.dataService.getDynamicAPI(API)
+      let sub: Subscription = this.dataService.getDynamicAPICustom(API)
         .subscribe((resp: any) => {
           //to unsubscribe
           this.subscriptions.push(sub)

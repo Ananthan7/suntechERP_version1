@@ -71,7 +71,7 @@ export class MenuUpdationComponent implements OnInit {
     this.menuModule = event.value != '' ? event.value : this.menuModule
     this.isLoading = true;
     let API = `WebMenuModuleWise/${this.menuModule}/${this.commonService.userName}/${this.commonService.branchCode}`
-    let Sub = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+    let Sub = this.dataService.getDynamicAPICustom(API).subscribe((response: any) => {
       if (response.status == 'Success') {
         this.isLoading = false;
         this.isViewTable = true;
