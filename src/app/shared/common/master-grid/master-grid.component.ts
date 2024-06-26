@@ -103,7 +103,7 @@ export class MasterGridComponent implements OnInit {
 
   getSchemeMaturedAPI() {
     let API = 'SchemeMatured/' + this.CommonService.branchCode
-    let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+    let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((resp: any) => {
       this.skeltonLoading = false;
       if (resp.schemeMatureds && resp.schemeMatureds[0].length > 0) {
         this.totalDataCount = resp.schemeMatureds[0].length
@@ -268,7 +268,7 @@ export class MasterGridComponent implements OnInit {
     }
   }
   getGridVisibleSettings() {
-    let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
+    let sub: Subscription = this.dataService.getDynamicAPICustom(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
