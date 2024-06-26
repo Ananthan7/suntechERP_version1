@@ -43,7 +43,7 @@ export class FavoriteMenusComponent implements OnInit {
   getSubmenuList(title: any) {
     let API = `WebMenuModuleWise/${title}/${this.username}/${this.branchCode}`
     this.skeltonLoading = true;
-    this.subscriptions$ = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+    this.subscriptions$ = this.dataService.getDynamicAPICustom(API).subscribe((response: any) => {
       this.skeltonLoading = false;
       if (response.status == 'Success') {
         let menuData = response.response
