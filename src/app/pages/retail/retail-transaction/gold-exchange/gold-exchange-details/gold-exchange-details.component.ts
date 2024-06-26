@@ -177,7 +177,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
     // this.suntechApi
     //   .getDynamicAPIwithParamsBranch(API)
-    let sub: Subscription = this.suntechApi.getDynamicAPIwithParamsBranch('RetailsalesExchangeLookup',param)
+    let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailsalesExchangeLookup',param)
       .subscribe((resp) => {
 
         let _data = resp.response[0];
@@ -567,7 +567,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
   }
 
   getKaratDetails() {
-    this.suntechApi.getDynamicAPIBranch('BranchKaratRate/' + this.comService.branchCode).subscribe((result) => {
+    this.suntechApi.getDynamicAPI('BranchKaratRate/' + this.comService.branchCode).subscribe((result) => {
       if (result.response) {
 
         this.karatDetails = result.response;
