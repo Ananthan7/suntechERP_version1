@@ -475,7 +475,7 @@ export class ProcessMasterComponent implements OnInit {
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions(): void {
     let API = 'ComboFilter/PROCESS TYPE MASTER';
-    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
       if (result.response) {
         this.processTypeList = result.response;
         this.processTypeList.sort((a: any, b: any) => a.SRNO - b.SRNO)
