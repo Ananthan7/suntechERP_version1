@@ -464,7 +464,7 @@
                     <div class="col-md-12">
                         <div class="price_box">
                             <a>PriceScheme</a>
-                            <master-search [MasterSearchData]="priceSchemeData"
+                            <master-search [MasterSearchData]="priceSchemeData" *ngIf="!viewMode"
                                 (newRowClick)="priceSchemeValidate($event)"></master-search>
                             <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
                         </div>
@@ -478,7 +478,7 @@
                             <input type="text" matInput
                                 formControlName="price1PER" [readonly]="viewMode"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price1CodeData"
+                        <master-search [MasterSearchData]="price1CodeData" *ngIf="!viewMode"
                             (newRowClick)="price1CodeSelected($event)">
                         </master-search>
                     </div>
@@ -514,7 +514,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price2PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price2CodeData"
+                        <master-search [MasterSearchData]="price2CodeData" *ngIf="!viewMode"
                             (newRowClick)="price2CodeSelected($event)">
                         </master-search>
                     </div>
@@ -550,7 +550,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price3PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price3CodeData"
+                        <master-search [MasterSearchData]="price3CodeData" *ngIf="!viewMode"
                             (newRowClick)="price3CodeSelected($event)">
                         </master-search>
                     </div>
@@ -586,7 +586,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price4PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price4CodeData"
+                        <master-search [MasterSearchData]="price4CodeData" *ngIf="!viewMode"
                             (newRowClick)="price4CodeSelected($event)">
                         </master-search>
                     </div>
@@ -622,7 +622,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price5PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price5CodeData"
+                        <master-search [MasterSearchData]="price5CodeData" *ngIf="!viewMode"
                             (newRowClick)="price5CodeSelected($event)">
                         </master-search>
                     </div>

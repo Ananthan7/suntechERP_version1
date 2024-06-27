@@ -321,71 +321,71 @@ setPostData() {
   }
 
   
-  deleteRecord() {
-    if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'JobMeltingIssueDJ/DeleteJobMeltingIssueDJ/' + this.meltingIssuedetailsFrom.value.voctype + this.meltingIssuedetailsFrom.value.vocno + this.meltingIssuedetailsFrom.value.vocdate
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.meltingIssuedetailsFrom.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.meltingIssuedetailsFrom.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
-    });
-  }
+  // deleteRecord() {
+  //   if (!this.content.WORKER_CODE) {
+  //     Swal.fire({
+  //       title: '',
+  //       text: 'Please Select data to delete!',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     }).then((result: any) => {
+  //       if (result.value) {
+  //       }
+  //     });
+  //     return
+  //   }
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete!'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       let API = 'JobMeltingIssueDJ/DeleteJobMeltingIssueDJ/' + this.meltingIssuedetailsFrom.value.voctype + this.meltingIssuedetailsFrom.value.vocno + this.meltingIssuedetailsFrom.value.vocdate
+  //       let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+  //         .subscribe((result) => {
+  //           if (result) {
+  //             if (result.status == "Success") {
+  //               Swal.fire({
+  //                 title: result.message || 'Success',
+  //                 text: '',
+  //                 icon: 'success',
+  //                 confirmButtonColor: '#336699',
+  //                 confirmButtonText: 'Ok'
+  //               }).then((result: any) => {
+  //                 if (result.value) {
+  //                   this.meltingIssuedetailsFrom.reset()
+  //                   this.tableData = []
+  //                   this.close('reloadMainGrid')
+  //                 }
+  //               });
+  //             } else {
+  //               Swal.fire({
+  //                 title: result.message || 'Error please try again',
+  //                 text: '',
+  //                 icon: 'error',
+  //                 confirmButtonColor: '#336699',
+  //                 confirmButtonText: 'Ok'
+  //               }).then((result: any) => {
+  //                 if (result.value) {
+  //                   this.meltingIssuedetailsFrom.reset()
+  //                   this.tableData = []
+  //                   this.close()
+  //                 }
+  //               });
+  //             }
+  //           } else {
+  //             this.toastr.error('Not deleted')
+  //           }
+  //         }, err => alert(err))
+  //       this.subscriptions.push(Sub)
+  //     }
+  //   });
+  // }
   
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
