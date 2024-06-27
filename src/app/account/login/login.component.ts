@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit {
       this.user_name = username;
       this.comService.formControlSetReadOnly('password', false);
       this.validateState = 2;
-      this.renderer.selectRootElement('#password')?.focus();
+      // this.renderer.selectRootElement('#password')?.focus();
 
 
     } else {
@@ -197,7 +197,7 @@ export class LoginComponent implements OnInit {
       let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.comService.formControlSetReadOnly('password', false);
-          this.renderer.selectRootElement('#password')?.focus();
+          // this.renderer.selectRootElement('#password')?.focus();
 
           this.userDetails = resp.response
           this.validateState = 1;
@@ -233,7 +233,7 @@ export class LoginComponent implements OnInit {
             if (resp.status == 'Success') {
               this.snackBar.dismiss();
               this.comService.formControlSetReadOnly('branch', false);
-              this.renderer.selectRootElement('#branch')?.focus();
+              // this.renderer.selectRootElement('#branch')?.focus();
               this.all_branch = resp.response;
               var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
 
@@ -264,7 +264,7 @@ export class LoginComponent implements OnInit {
           );
           this.validateState = 1;
           this.dataForm.controls.password.setValue('')
-          this.renderer.selectRootElement('#password')?.focus();
+          // this.renderer.selectRootElement('#password')?.focus();
           this.filteredOptions = undefined;
         }
       });
@@ -303,7 +303,7 @@ export class LoginComponent implements OnInit {
       this.validateState != 1
     ) {
 
-      this.renderer.selectRootElement('#branch')?.focus();
+      // this.renderer.selectRootElement('#branch')?.focus();
 
       return;
     }
@@ -325,7 +325,7 @@ export class LoginComponent implements OnInit {
         if (resp.status == 'Success') {
           this.snackBar.dismiss();
           this.comService.formControlSetReadOnly('year', false);
-          this.renderer.selectRootElement('#year')?.focus();
+          // this.renderer.selectRootElement('#year')?.focus();
 
           this.all_year = resp.response;
           this.options_year = this.all_year.map((item: any) => item.fyearcode);
@@ -340,7 +340,7 @@ export class LoginComponent implements OnInit {
 
         } else {
           this.comService.formControlSetReadOnly('year', true);
-          this.renderer.selectRootElement('#branch')?.focus();
+          // this.renderer.selectRootElement('#branch')?.focus();
 
         }
       });
