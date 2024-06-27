@@ -222,8 +222,9 @@ export class LoginComponent implements OnInit {
       strusername: this.user_name,
       strPassword: password
     }
+      let API4 = `ValidatePassword?strusername=${this.user_name}&strPassword=${password}`
     this.snackBarRef = this.snackBar.open('Validating Username & Password ...');
-    let sub: Subscription = this.dataService.getDynamicAPIwithParamsCustom('ValidatePassword', param)
+    let sub: Subscription = this.dataService.getDynamicAPICustom(API4)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
         if (resp.status == 'Success') {
@@ -242,7 +243,7 @@ export class LoginComponent implements OnInit {
     this.subscriptions.push(sub)
   }
   getBranchList() {
-    let API2 = 'UseBranchNetMaster/' + this.user_name + ''
+    let API2 = `UseBranchNetMaster/${this.user_name}/MOE` 
     this.snackBar.open('loading branch...');
     let sub2: Subscription = this.dataService.getDynamicAPICustom(API2).subscribe((resp) => {
       this.snackBar.dismiss();
@@ -289,13 +290,16 @@ export class LoginComponent implements OnInit {
       this.dataForm.controls.branch.setValue('')
       return
     }
-    let param = {
+    let params = {
       branchcode: selectedBranch,
       strusername: this.user_name,
-      DBBranch: selectedBranch
+      
     }
     this.snackBar.open('loading...');
-    let sub: Subscription = this.dataService.getDynamicAPIwithParamsCustom(`FinancialYear`, param)
+
+    let API = `FinancialYear/${params.branchcode}/${params.strusername}/${params.branchcode}`;
+
+    let sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((resp) => {
         this.snackBar.dismiss();
         if (resp.status == 'Success') {
