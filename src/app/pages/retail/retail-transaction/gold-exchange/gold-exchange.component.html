@@ -106,19 +106,25 @@
                 </div>
             </div>
             <div class="col-md-3">
+              
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Item Curr</label>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput [readonly]="true" formControlName="itemCurr" readonly />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 70%;">
                             <input type="number" class="text-end" [readonly]="true" matInput
                                 formControlName="itemCurrCode" readonly />
                         </mat-form-field>
+
+                        <master-search *ngIf="!viewOnly" [MasterSearchData]="itemCurrencyCodeData"
+                        (newRowClick)="itemCurrencyCodeSelected($event)"></master-search>
                     </div>
+
+                    
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Credit Days</label>
@@ -192,9 +198,9 @@
             <div class="col-md-3">
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [height]="250">
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
+                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing> -->
+                    <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                     <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
@@ -268,14 +274,14 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Currency</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" class="text-end" [readonly]="viewOnly" matInput
+                            <input type="text" class="text-end" readonly matInput
                                 formControlName="partyCurrency" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-5">
                         <mat-form-field style="width: 100%;">
                             <input type="number" class="text-end" [readonly]="viewOnly" matInput
-                                formControlName="partyCurrencyCode" />
+                            AmountDecimalInput  formControlName="partyCurrencyCode" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -283,7 +289,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Amount</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+                            <input type="text" class="text-end" readonly  matInput
                                 formControlName="amount" />
                         </mat-form-field>
                     </div>
@@ -298,7 +304,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Rnd Of Amt</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+                            <input type="text" class="text-end" readonly matInput
                                 formControlName="rndOfAmt" />
                         </mat-form-field>
                     </div>
@@ -313,7 +319,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Rnd Net Amt</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+                            <input type="text" class="text-end" readonly  matInput
                                 formControlName="rndNetAmt" />
                         </mat-form-field>
                     </div>
@@ -328,7 +334,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Other Amt</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+                            <input type="text" class="text-end" readonly  matInput
                                 formControlName="otherAmt" />
                         </mat-form-field>
                     </div>
@@ -343,7 +349,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Gross Amt</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+                            <input type="text" class="text-end" readonly  matInput
                                 formControlName="grossAmt" />
                         </mat-form-field>
                     </div>

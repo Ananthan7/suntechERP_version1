@@ -416,7 +416,7 @@ export class ProcessTransferComponent implements OnInit {
   setPostData(form: any) {
     let detailScreenData = this.detailData[0]
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
-    return {
+    let postdata = {
       "MID": this.commonService.emptyToZero(form.MID),
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE?.toUpperCase()),
       "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
@@ -440,6 +440,7 @@ export class ProcessTransferComponent implements OnInit {
       "JOB_PROCESS_TRN_COMP_DJ": this.JOB_PROCESS_TRN_COMP_DJ || [], //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": [] //no need of saving now labour charge details
     }
+    return postdata
   }
 
   deleteTableData(): void {
