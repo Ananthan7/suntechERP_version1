@@ -350,8 +350,7 @@ export class LoginComponent implements OnInit {
     let year = this.dataForm.value.year;
 
     if (this.submitValidations(this.dataForm.value)) return; //validations
-    this.getBranchCurrencyMaster(branch); // for indexdb
-    this.indexedApiService.setInitailLoadSetUp()
+    // this.getBranchCurrencyMaster(branch); // for indexdb
     if (this.dataForm.value.keepLog) {
       this.setGetUserAuthDetails('add');
     } else {
@@ -404,14 +403,14 @@ export class LoginComponent implements OnInit {
     this.subscriptions = []; // Clear the array
   }
 
-  getBranchCurrencyMaster(branch: any) {
-    //alert("test");
-    let API = `BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${branch}`
-    this.dataService.getDynamicAPI(API)
-      .subscribe((data: any) => {
-        this.comService.allBranchCurrency = data.response;
-        this.inDb.bulkInsert('branchCurrencyMaster', data.response);
+  // getBranchCurrencyMaster(branch: any) {
+  //   //alert("test");
+  //   let API = `BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${branch}`
+  //   this.dataService.getDynamicAPI(API)
+  //     .subscribe((data: any) => {
+  //       this.comService.allBranchCurrency = data.response;
+  //       this.inDb.bulkInsert('branchCurrencyMaster', data.response);
 
-      });
-  }
+  //     });
+  // }
 }
