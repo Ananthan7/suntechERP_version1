@@ -12397,7 +12397,7 @@ export class AddPosComponent implements OnInit {
         "Username": localStorage.getItem('username') || '',
         "Password": this.authForm.value.password
       };
-      this.suntechApi.postDynamicAPI(API, postData).subscribe((resp: any) => {
+      this.suntechApi.postDynamicAPICustom(API, postData).subscribe((resp: any) => {
         this.snackBar.dismiss();
         if (resp.status == 'Success') {
           this.modalReferenceUserAuth.close(true);
