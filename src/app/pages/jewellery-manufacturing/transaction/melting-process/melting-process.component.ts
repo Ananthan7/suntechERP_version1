@@ -152,7 +152,7 @@ export class MeltingProcessComponent implements OnInit {
     console.log(this.content)
     if (!this.content) return
     let API = `JobMeltingProcessDJ/GetJobMeltingProcessDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response

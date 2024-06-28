@@ -146,6 +146,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
    
     if (this.content && this.content.FLAG) {
       this.setFormValues()
+      this.setAllInitialValues()
       this.jewelleryaltrationdetailsFrom.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
@@ -336,6 +337,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     totalAMTFC: [''],
     totalAMTCC: [''],
     remarks: [''],
+    FLAG: [null]
   });
 
 

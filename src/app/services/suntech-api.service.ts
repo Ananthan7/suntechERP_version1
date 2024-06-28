@@ -51,7 +51,7 @@ export class SuntechAPIService {
       switchMap(config => {
         const apiUrl = config.baseUrl;
         let params = new HttpParams().set('DBBranch', `${this.DBBranch}`);
-        return this.http.post(apiUrl+apiName, data,{params});
+        return this.http.post(apiUrl+apiName+`/${this.DBBranch}`, data);
       })
     );
   }

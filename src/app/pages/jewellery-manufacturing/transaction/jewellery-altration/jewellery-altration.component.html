@@ -178,16 +178,18 @@
     <div class="pt-3">
       <div class="row">
         <div class="col-12 d-flex">
-          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-            [viewImportBtn]="false"
+          <menu-buttons *ngIf="!viewMode"
+          [viewAddBtn]="true"
+          [viewDeleteBtn]="true"
+          [viewImportBtn]="false"
             (addClick)="openjewelleryaltrationdetails()"
             (deleteClick)="deleteTableData()">
           </menu-buttons>
           <div class="col-sm-3">
             <mat-form-field style="width: 80%;">
-              <input type="text" matInput />
+              <input type="text" matInput  [readonly]="viewMode"/>
             </mat-form-field>
-            <master-search>
+            <master-search *ngIf="!viewMode">
             </master-search>
           </div>
         </div>

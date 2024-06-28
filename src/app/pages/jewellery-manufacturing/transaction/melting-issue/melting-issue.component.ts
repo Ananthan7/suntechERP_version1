@@ -211,7 +211,7 @@ export class MeltingIssueComponent implements OnInit {
   setAllInitialValues() {
     if (!this.content?.FLAG) return
     let API = `JobMeltingIssueDJ/GetJobMeltingIssueDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -622,21 +622,20 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
   deleteRecord() {
+    console.log('deleteRecord called');
+    console.log('this.content:', this.content);
     if (!this.content) {
       Swal.fire({
         title: '',
-        text: 'Please Select data to delete!',
+        text: 'Please select data to delete!',
         icon: 'error',
         confirmButtonColor: '#336699',
         confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
       });
-      return
+      return;
     }
+  
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -647,49 +646,58 @@ export class MeltingIssueComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
-          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
-          this.content.VOCNO + '/' + this.content.YEARMONTH
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        console.log('User confirmed deletion');
+        let form = this.meltingIssueFrom.value;
+        const API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
+            this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+            this.content.VOCNO + '/' + this.content.YEARMONTH;
+        
+        console.log('API endpoint:', API);
+        
+        const Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
           .subscribe((result) => {
+            console.log('API response:', result);
+            
             if (result) {
-              if (result.status == "Success") {
+              if (result.status === "Success") {
                 Swal.fire({
                   title: result.message || 'Success',
                   text: '',
                   icon: 'success',
                   confirmButtonColor: '#336699',
                   confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.meltingIssueFrom.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
+                }).then(() => {
+                  this.meltingIssueFrom.reset();
+                  this.tableData = [];
+                  this.close('reloadMainGrid');
                 });
               } else {
                 Swal.fire({
-                  title: result.message || 'Error please try again',
+                  title: result.message || 'Error, please try again',
                   text: '',
                   icon: 'error',
                   confirmButtonColor: '#336699',
                   confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.meltingIssueFrom.reset()
-                    this.tableData = []
-                    this.close()
-                  }
+                }).then(() => {
+                  this.meltingIssueFrom.reset();
+                  this.tableData = [];
+                  this.close();
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.toastr.error('Not deleted');
             }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
+          }, err => {
+            console.error('API call failed:', err);
+            this.toastr.error('Deletion failed');
+          });
+  
+        this.subscriptions.push(Sub);
       }
     });
   }
+  
+
 
 
   ngOnDestroy() {
