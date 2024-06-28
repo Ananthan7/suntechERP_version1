@@ -29,7 +29,7 @@
                                         style="width: 85%; margin-left: 7px;">
                                         <input type="text" matInput
                                             placeholder="CODE" #codeInput1
-                                            UpperCaseDirective autocomplete="off"
+                                            UpperCaseDirective 
                                             formControlName="processCode" maxlength="6"
                                             [readonly]="editableMode || viewMode"
                                             (focusout)="checkCodeExists($event)"
@@ -47,7 +47,7 @@
                                     <mat-form-field
                                         style="width: 100%; margin-left: 7px;">
                                         <input type="text" matInput #codeDes
-                                            UpperCaseDirective autocomplete="off"
+                                            UpperCaseDirective 
                                             placeholder="DESCRIPTION"
                                             formControlName="processDesc"
                                             maxlength="40"
@@ -71,7 +71,7 @@
                                             [disabled]="viewMode">
                                             <mat-option
                                                 *ngFor="let option of processTypeList"
-                                                [value]="option.SRNO">
+                                                [value]="option.ENGLISH">
                                                 {{ option.ENGLISH }}
                                             </mat-option>
                                         </mat-select>

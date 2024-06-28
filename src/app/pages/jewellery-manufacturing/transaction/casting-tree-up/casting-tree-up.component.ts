@@ -24,6 +24,8 @@ export class CastingTreeUpComponent implements OnInit {
   currentFilter: any;
   currentDate = new Date();
   viewMode: boolean = false;
+  isSaved: boolean = false;
+  isloading: boolean = false;
   // columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
   // columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
 
@@ -145,6 +147,7 @@ export class CastingTreeUpComponent implements OnInit {
     }
     if (this.content && this.content.FLAG == 'VIEW') {
       this.viewMode = true;
+      this.isSaved = true;
       this.setFormValues()
       this.setAllInitialValues()
     }
@@ -177,7 +180,7 @@ export class CastingTreeUpComponent implements OnInit {
   setAllInitialValues() {
     if (!this.content) return
     let API = `JobTreeMasterDJ/GetJobTreeMasterWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -425,16 +428,16 @@ export class CastingTreeUpComponent implements OnInit {
           "SRNO": Element.SRNO,
           "JOB_NUMBER": this.commonService.nullToString(Element.Job_Code),
           "UNQ_JOB_ID": this.commonService.nullToString(Element.Unique_job_ID),
-          "UNQ_DESIGN_ID": Element.Design_Code,
+          "UNQ_DESIGN_ID": this.commonService.nullToString(Element.Design_Code),
           "GROSS_WT": Element.Gross_Weight,
           "METAL_WT": Element.Metal_Weight,
           "STONE_WT": Element.Stone_Weight,
-          "KARAT_CODE": Element.Karat_Code,
+          "KARAT_CODE": this.commonService.nullToString(Element.Karat_Code),
           "RCVD_GROSS_WT": Element.RCVD_Gross_Weight,
           "RCVD_METAL_WT": Element.RCVD_METAL_WT,
           "PURITY": Element.Purity,
           "PURE_WT": Element.Pure_Weight,
-          "COLOR": Element.Metal_Color,
+          "COLOR": this.commonService.nullToString(Element.Metal_Color),
           "PCS": 0,
           "STOCK_CODE": this.commonService.nullToString(Element.Stock_Code),
           "DESIGN_CODE": "",
@@ -674,8 +677,10 @@ export class CastingTreeUpComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobTreeMasterDJ/DeleteJobTreeMasterDJ/' + this.castingTreeUpFrom.value.branchCode + this.castingTreeUpFrom.value.voctype + this.castingTreeUpFrom.value.vocno + this.castingTreeUpFrom.value.yearMonth;
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        let API = 'JobTreeMasterDJ/DeleteJobTreeMasterDJ/' + 
+        this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+        this.content.VOCNO + '/' + this.content.YEARMONTH
+      let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {

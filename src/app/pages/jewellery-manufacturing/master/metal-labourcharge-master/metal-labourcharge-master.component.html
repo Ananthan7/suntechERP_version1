@@ -42,7 +42,7 @@
                                 formControlName="stock_code" appNoEmptySpace />
                         </mat-form-field>
                         <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"
-                            *ngIf="viewDisable || stockcodeDisable  == false"></master-search>
+                            *ngIf="viewDisable  == false || stockcodeDisable  == false"></master-search>
                     </div>
                 </div>
                 <div class="row mb-2">

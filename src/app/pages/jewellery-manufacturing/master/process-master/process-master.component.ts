@@ -320,9 +320,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.ADJUST_ACCODE.setValue(this.content.ADJUST_ACCODE);
     // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
-    this.processMasterForm.controls.processType.setValue(
-      Number(this.content.PROCESS_TYPE)
-    );
+    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
     console.log(this.processMasterForm.value.processType, 'processType');
 
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
@@ -617,7 +615,7 @@ export class ProcessMasterComponent implements OnInit {
       "LOSS_ACCODE": form.LOSS_ACCODE,
       "WIP_ACCODE": form.WIPaccount,
       "CURRENCY_CODE": "",
-      "PROCESS_TYPE": form.processType.toString() || '',
+      "PROCESS_TYPE": form.processType || '',
       "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
