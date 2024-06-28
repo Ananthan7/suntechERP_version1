@@ -17,6 +17,9 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(){
     //fetch datas and save into indexed db
-    this.indexedApiService.setInitailLoadSetUp()
+    let branch =  localStorage.getItem('userbranch');
+    if(branch){
+      this.indexedApiService.setInitailLoadSetUp()
+    }
   }
 }
