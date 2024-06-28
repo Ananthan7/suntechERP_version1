@@ -242,7 +242,7 @@ export class LoginComponent implements OnInit {
     this.subscriptions.push(sub)
   }
   getBranchList() {
-    let API2 = `UseBranchNetMaster/${this.user_name}/MOE` 
+    let API2 = `UseBranchNetMaster/${this.user_name}` 
     this.snackBar.open('loading branch...');
     let sub2: Subscription = this.dataService.getDynamicAPICustom(API2).subscribe((resp) => {
       this.snackBar.dismiss();

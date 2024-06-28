@@ -1646,7 +1646,7 @@ export class AddPosComponent implements OnInit {
 
   getBranchList() {
 
-    this.suntechApi.getDynamicAPI('UseBranchNetMaster/' + this.strUser).subscribe((resp) => {
+    this.suntechApi.getDynamicAPICustom('UseBranchNetMaster/' + this.strUser).subscribe((resp) => {
       this.all_branch = resp.response;
       // this.all_branch = resp.Result;
       console.log('branch', this.all_branch);
@@ -3942,7 +3942,7 @@ export class AddPosComponent implements OnInit {
     let API = `TransAttachments/GetTransAttachments/${this.vocType}/${this.comFunc.nullToString(custCode)}`
     // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
     // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
-    this.suntechApi.getDynamicAPICustom(API)
+    this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         this.snackBar.dismiss();
 
