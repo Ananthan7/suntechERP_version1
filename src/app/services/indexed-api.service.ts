@@ -179,7 +179,7 @@ export class IndexedApiService {
     });
   }
   getSalespersonMasterList() {
-    this.suntechApi.getDynamicAPICustom('SalesPersonMaster/GetSalespersonMasterList').subscribe((data) => {
+    this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList').subscribe((data) => {
       if (data.status == 'Success') {
         this.comFunc.SalespersonMasterData = data.response;
         this.inDb.bulkInsert('SalespersonMaster', data.response);
@@ -188,7 +188,7 @@ export class IndexedApiService {
   }
 
   getCreditCardMaster() {
-    this.suntechApi.getDynamicAPICustom('CreditCardMaster/GetCreditCardMaster').subscribe((data) => {
+    this.suntechApi.getDynamicAPI('CreditCardMaster/GetCreditCardMaster').subscribe((data) => {
       if (data.status == 'Success') {
         this.comFunc.creditCardMasterData = data.response;
         this.inDb.bulkInsert('CreditCardMaster', data.response);
@@ -197,7 +197,7 @@ export class IndexedApiService {
   }
 
   getDivisionMaster() {
-    this.suntechApi.getDynamicAPICustom('DivisionMaster/GetDivisionMaster').subscribe((data) => {
+    this.suntechApi.getDynamicAPI('DivisionMaster/GetDivisionMaster').subscribe((data) => {
       if (data.status == 'Success') {
         this.comFunc.divisionMasterList = data.response;
         this.inDb.bulkInsert('divisionMaster', data.response);
@@ -207,7 +207,7 @@ export class IndexedApiService {
 
   getCountryMaster() {
     this.suntechApi
-      .getDynamicAPICustom(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('COUNTRY MASTER')}`)
+      .getDynamicAPI(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('COUNTRY MASTER')}`)
       .subscribe(async (data) => {
         if (data.status == 'Success') {
           this.comFunc.countryMaster = await data.response;
@@ -220,7 +220,7 @@ export class IndexedApiService {
 
   getNationalityMaster() {
     this.suntechApi
-      .getDynamicAPICustom(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('NATIONALITY MASTER')}`)
+      .getDynamicAPI(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('NATIONALITY MASTER')}`)
       .subscribe(async (data) => {
         if (data.status == 'Success') {
           this.comFunc.nationalityMaster = await data.response;
@@ -233,7 +233,7 @@ export class IndexedApiService {
       });
   }
   getIdMaster() {
-    this.suntechApi.getDynamicAPICustom(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('ID MASTER')}`).subscribe(async (data) => {
+    this.suntechApi.getDynamicAPI(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('ID MASTER')}`).subscribe(async (data) => {
       if (data.status == 'Success') {
         this.comFunc.idMaster = await data.response;
         this.inDb.bulkInsert('idMaster', data.response);
@@ -245,7 +245,7 @@ export class IndexedApiService {
     });
   }
   getCustomerTypeMaster() {
-    this.suntechApi.getDynamicAPICustom(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CUSTOMER TYPE MASTER')}`).subscribe(async (data) => {
+    this.suntechApi.getDynamicAPI(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CUSTOMER TYPE MASTER')}`).subscribe(async (data) => {
       if (data.status == 'Success') {
         this.comFunc.customerTypeMaster = await data.response;
         this.inDb.bulkInsert('customerTypeMaster', data.response);
@@ -257,7 +257,7 @@ export class IndexedApiService {
     });
   }
   async getComboFilter() {
-    this.suntechApi.getDynamicAPICustom('ComboFilter').subscribe(async (data) => {
+    this.suntechApi.getDynamicAPI('ComboFilter').subscribe(async (data) => {
       // console.table(data)
       if (data.status == 'Success') {
         this.comFunc.comboFilter = await data.response;
@@ -279,7 +279,7 @@ export class IndexedApiService {
 
   getBranchCurrencyMaster() {
     this.suntechApi
-      .getDynamicAPICustom(`BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${this.comFunc.branchCode}`)
+      .getDynamicAPI(`BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${this.comFunc.branchCode}`)
       // this.suntechApi.getBranchCurrencyMaster(branch)
       .subscribe((data) => {
         // this.comFunc.allBranchCurrency = data.response;
@@ -291,7 +291,7 @@ export class IndexedApiService {
 
   getAllCompanyParameters() {
     let map = new Map();
-    this.suntechApi.getDynamicAPICustom('CompanyParameters').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('CompanyParameters').subscribe((resp) => {
       if (resp.status == 'Success') {
         //  set data in local
         this.inDb.bulkInsert('compparams', resp.response);
@@ -356,7 +356,7 @@ export class IndexedApiService {
   }
 
   getAllMessageBox() {
-    this.suntechApi.getDynamicAPICustom('MessageBoxNet').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('MessageBoxNet').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.allMessageBoxData = resp.response;
         this.inDb.bulkInsert('messageBox', resp.response);
@@ -364,7 +364,7 @@ export class IndexedApiService {
     });
   }
   getRateTypeMaster() {
-    this.suntechApi.getDynamicAPICustom('RateTypeMaster/GetRateTypeMasterHeaderList').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('RateTypeMaster/GetRateTypeMasterHeaderList').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.RateTypeMasterData = resp.response;
         this.inDb.bulkInsert('RateTypeMaster', resp.response);
@@ -372,7 +372,7 @@ export class IndexedApiService {
     });
   }
   getLocationMasterList() {
-    this.suntechApi.getDynamicAPICustom('LocationMaster/GetLocationMasterList').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('LocationMaster/GetLocationMasterList').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.LocationMasterData = resp.response;
         this.inDb.bulkInsert('LocationMaster', resp.response);
@@ -380,7 +380,7 @@ export class IndexedApiService {
     });
   }
   getReasonMasterList() {
-    this.suntechApi.getDynamicAPICustom('GeneralMaster/GetGeneralMasterList/reason%20master').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('GeneralMaster/GetGeneralMasterList/reason%20master').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.reasonMasterList = resp.response;
         this.inDb.bulkInsert('ReasonMaster', resp.response);

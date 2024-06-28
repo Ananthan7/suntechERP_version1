@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="container-fluid pt-3">
   <div class="row">
     <div class="col-md-12">
@@ -17,12 +17,12 @@
               <label for="inputPassword" class="col-md-4 col-form-label">Voucher Type:</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 110%;">
-                  <input type="text" matInput formControlName="vocType" />
+                  <input type="text" matInput formControlName="vocType" readonly/>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field style="width: 110%;">
-                  <input type="text" matInput formControlName="vocNo" style="text-align: right;" />
+                  <input type="text" matInput formControlName="vocNo" style="text-align: right;" readonly/>
                 </mat-form-field>
               </div>
             </div>
@@ -52,9 +52,9 @@
                 </mat-form-field> -->
                 <mat-form-field style="width: 110%; margin-left:-22px; margin-top: -3px;">
                   <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob"
-                    formControlName="vocDate" placeholder="DD/MM/YYYY" />
+                    formControlName="vocDate" placeholder="DD/MM/YYYY" readonly/>
                   <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                  <mat-datepicker #dob></mat-datepicker>
+                  <mat-datepicker #dob [disabled]="isSaved"></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -269,7 +269,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="d-flex justify-content-start text-left">
-              <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+              <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" *ngIf="!viewMode"
               [viewImportBtn]="false"
               (addClick)="selectedTabIndex == 0 ? adddata():adddatas();"
               (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()"

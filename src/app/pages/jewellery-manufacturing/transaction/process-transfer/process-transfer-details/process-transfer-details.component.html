@@ -51,7 +51,7 @@
                 <mat-form-field style="width: 76%;">
                   <input type="text" matInput appNoEmptySpace
                     (focusout)="jobNumberValidate($event)"
-                    formControlName="JOB_NUMBER" [readonly]="viewMode"/>
+                    formControlName="JOB_NUMBER" [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="jobNoSearch"
                   *ngIf="!viewMode"
@@ -64,11 +64,11 @@
                     readonly />
                 </mat-form-field>
               </div>
-              <div class="col-sm-3">
+              <!-- <div class="col-sm-3">
                 <mat-form-field style="width: 50%;margin-left: 4px;">
                   <input type="text" matInput readonly />
                 </mat-form-field>
-              </div>
+              </div> -->
             </div>
             <div class="row mb-2">
               <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job
@@ -76,7 +76,7 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                    appNoEmptySpace readonly/>
+                    appNoEmptySpace readonly />
                 </mat-form-field>
               </div>
               <div class="col-sm-3">
@@ -90,7 +90,8 @@
                 <b>Issue Ref # </b></label> -->
             </div>
           </div>
-          <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;" *ngIf="approvalReqFlag">
+          <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;"
+            *ngIf="approvalReqFlag">
             <h6>Approval Details</h6>
             <div class="row mb-2">
               <label for="inputPassword"
@@ -141,7 +142,8 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'FRM_PROCESS_CODE')"
-                              formControlName="FRM_PROCESS_CODE" [readonly]="viewMode"/>
+                              formControlName="FRM_PROCESS_CODE"
+                              [readonly]="viewMode" />
                           </mat-form-field>
                           <master-search *ngIf="!viewMode"
                             [MasterSearchData]="fromProcessMasterSearch"
@@ -152,7 +154,8 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <mat-form-field style="width: 110px;">
-                            <input type="text" matInput [readonly]="viewMode" UpperCaseDirective
+                            <input type="text" matInput [readonly]="viewMode"
+                              UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'TO_PROCESS_CODE')"
                               formControlName="TO_PROCESS_CODE" />
                           </mat-form-field>
@@ -205,7 +208,8 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
                             NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_METAL_PCS','TO_METAL_PCS')"
                             formControlName="TO_METAL_PCS" />
@@ -223,7 +227,8 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
                             MetalDecimalInput [max]="10"
                             (focusout)="toMetalWeightChange('FRM_METAL_WT','TO_METAL_WT')"
                             formControlName="TO_METAL_WT" />
@@ -245,8 +250,9 @@
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
-                            NumberOnly  maxlength="10"
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
+                            NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
                         </mat-form-field>
@@ -263,13 +269,14 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            readonly  maxlength="10"
+                            readonly maxlength="10"
                             formControlName="GrossWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
                             MetalDecimalInput [max]="10"
                             (focusout)="GrossWeightToChange($event)"
                             formControlName="GrossWeightTo" />
@@ -278,9 +285,9 @@
                       <!-- stockcode -->
                       <td>
                         <mat-form-field style="width: 70px;">
-                          <input type="text" matInput  maxlength="15"
+                          <input type="text" matInput maxlength="15"
                             (focusout)="stockCodeScrapValidate()"
-                            formControlName="stockCode" />
+                            formControlName="stockCode" [readonly]="viewMode" />
                         </mat-form-field>
                         <master-search *ngIf="!viewMode"
                           [MasterSearchData]="stockCodeSearch"
@@ -290,11 +297,11 @@
                       <!-- quantity -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput 
-                            [readonly]="viewMode || processTransferdetailsForm.value.stockCode == ''" 
+                          <input type="text" matInput
+                            [readonly]="viewMode || processTransferdetailsForm.value.stockCode == ''"
                             class="text-right"
-                            formControlName="scrapQuantity" NumberOnly 
-                            maxlength="10"/>
+                            formControlName="scrapQuantity" NumberOnly
+                            maxlength="10" />
                         </mat-form-field>
                       </td>
                       <!-- location -->
@@ -307,7 +314,8 @@
                       <!-- stdLoss -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
                             MetalDecimalInput [max]="10"
                             formControlName="stdLoss" />
                         </mat-form-field>
@@ -315,15 +323,17 @@
                       <!-- stdLossper -->
                       <td>
                         <mat-form-field style="width: 50px;">
-                          <input type="text" matInput [readonly]="viewMode" AmountDecimalInput
+                          <input type="text" matInput [readonly]="viewMode"
+                            AmountDecimalInput
                             formControlName="stdLossper" [max]="10"
-                            class="text-right"/>
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                       <!-- balance wt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput [readonly]="viewMode"  maxlength="10"
+                          <input type="text" matInput [readonly]="viewMode"
+                            maxlength="10"
                             formControlName="Balance_WT" NumberOnly
                             class="text-right" />
                         </mat-form-field>
@@ -334,15 +344,16 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            formControlName="StonePcsFrom" readonly />
+                            formControlName="FRM_STONE_PCS" readonly />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
-                            formControlName="StonePcsTo" NumberOnly 
-                            (focusout)="checkFromToValues('StonePcsFrom','StonePcsTo')"
-                            maxlength="10"/>
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
+                            formControlName="TO_STONE_PCS" NumberOnly
+                            (focusout)="checkFromToValues('FRM_STONE_PCS','TO_STONE_PCS')"
+                            maxlength="10" />
                         </mat-form-field>
                       </td>
                       <td></td>
@@ -351,7 +362,7 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            NumberOnly  maxlength="10"  />
+                            NumberOnly maxlength="10" [readonly]="viewMode" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -360,15 +371,16 @@
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
-                            readonly formControlName="StoneWeightFrom"/>
+                            readonly formControlName="FRM_STONE_WT" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
-                            StoneDecimalInput [max]="10" 
-                            (focusout)="checkFromToValues('StoneWeightFrom','StoneWeightTo')"
-                            formControlName="StoneWeightTo" />
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
+                            StoneDecimalInput [max]="10"
+                            (focusout)="checkFromToValues('FRM_STONE_WT','TO_STONE_WT')"
+                            formControlName="TO_STONE_WT" />
                         </mat-form-field>
                       </td>
                       <td></td>
@@ -376,8 +388,9 @@
                       <td>Stone Weight</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode" class="text-right"
-                            StoneDecimalInput [max]="10"  />
+                          <input type="text" matInput [readonly]="viewMode"
+                            class="text-right"
+                            StoneDecimalInput [max]="10" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -600,14 +613,14 @@
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             StoneDecimalInput
-                            formControlName="METAL_StoneWeightFrom" />
+                            formControlName="METAL_FRM_STONE_WT" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             StoneDecimalInput
-                            formControlName="METAL_StoneWeightTo" />
+                            formControlName="METAL_TO_STONE_WT" />
                         </mat-form-field>
                       </td>
                       <!-- ScrapStoneWt -->
@@ -762,7 +775,7 @@
                   <input matInput DateValidation
                     (dateChange)="onStartDateChange()"
                     [matDatepicker]="end" formControlName="enddate"
-                    placeholder="DD/MM/YYYY" [min]="minEndDate"/>
+                    placeholder="DD/MM/YYYY" [min]="minEndDate" />
                   <mat-datepicker-toggle matSuffix
                     [for]="end"></mat-datepicker-toggle>
                   <mat-datepicker #end></mat-datepicker>
@@ -814,6 +827,7 @@
                     formControlName="consumed" readonly />
                 </mat-form-field>
                 <datetime-picker [DateTimeModelData]="consumedTimeData"
+                  *ngIf="!viewMode"
                   (datetimeClick)="consumedChange($event)"
                   (updateDuration)="consumedInMinutes($event)">
                 </datetime-picker>
@@ -844,7 +858,8 @@
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="TREE_NO"
-                    class="text-right" NumberOnly maxlength="10" />
+                    class="text-right" NumberOnly maxlength="10"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -855,6 +870,7 @@
                     Select All
                   </label>
                   <input class="form-check-input" type="checkbox"
+                    [disabled]="viewMode"
                     name="flexRadioDefault" id="flexRadioDefault1"
                     (change)="selectAllBtnChange($event)">
 
@@ -1008,9 +1024,11 @@
               <dxi-column dataField="LAB_AMT" caption="LAB AMT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN STOCK CODE"
-                caption="BRKSTN_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
+                caption="BRKSTN_STOCK_CODE" alignment="center"
+                [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_DIVISION_CODE"
-                caption="BRKSTN_DIVISION_CODE" alignment="center" [allowEditing]="false"></dxi-column>
+                caption="BRKSTN_DIVISION_CODE" alignment="center"
+                [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_WEIGHT" caption="BRKSTN WEIGHT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="BRKSTN_RATEFC" caption="BRKSTN RATEFC"
@@ -1074,9 +1092,11 @@
               <dxi-column dataField="IS_AUTHORISE" caption="IS AUTHORISE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_STOCK_CODE"
-                caption="SCRAP_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
+                caption="SCRAP_STOCK_CODE" alignment="center"
+                [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_SUB_STOCK_CODE"
-                caption="SCRAP_SUB_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
+                caption="SCRAP_SUB_STOCK_CODE" alignment="center"
+                [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_PURITY" caption="SCRAP_PURITY"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SCRAP_WT" caption="SCRAP_WT"
@@ -1094,13 +1114,15 @@
               <dxi-column dataField="FROM_STOCK_CODE" caption="FROM_STOCK_CODE"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="FROM_SUB_STOCK_CODE"
-                caption="FROM_SUB_STOCK_CODE" alignment="center" [allowEditing]="false"></dxi-column>
+                caption="FROM_SUB_STOCK_CODE" alignment="center"
+                [allowEditing]="false"></dxi-column>
               <dxi-column dataField="LOSS_PURE_WT" caption="LOSS_PURE_WT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IRON_SCRAP_WT" caption="IRON_SCRAP_WT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="EXCLUDE_TRANSFER_WT"
-                caption="EXCLUDE_TRANSFER_WT" alignment="right" [allowEditing]="false"></dxi-column>
+                caption="EXCLUDE_TRANSFER_WT" alignment="right"
+                [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IRON_WT" caption="IRON_WT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="AUTORIZE_TIME" caption="AUTORIZE_TIME"

@@ -140,7 +140,7 @@ export class SequenceMasterComponent implements OnInit {
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     this.commonService.toastInfoByMsgId('MSG81447');
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response

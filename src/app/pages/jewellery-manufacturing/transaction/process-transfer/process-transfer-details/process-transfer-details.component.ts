@@ -190,10 +190,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     location: [''],
     stdLoss: [''],
     stdLossper: [''],
-    StonePcsFrom: [''],
-    StonePcsTo: [''],
-    StoneWeightFrom: [''],
-    StoneWeightTo: [''],
+    FRM_STONE_PCS: [''],
+    TO_STONE_PCS: [''],
+    FRM_STONE_WT: [''],
+    TO_STONE_WT: [''],
     partCode: [''],
     DESIGN_CODE: [''],
     JOB_DATE: [''],
@@ -235,8 +235,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     METAL_GrossWeightTo: [''],
     METAL_ScrapGrWt: [''],
     METAL_BalGrWt: [''],
-    METAL_StoneWeightFrom: [''],
-    METAL_StoneWeightTo: [''],
+    METAL_FRM_STONE_WT: [''],
+    METAL_TO_STONE_WT: [''],
     METAL_ScrapStoneWt: [''],
     METAL_BalStoneWt: [''],
     METAL_FromIronWeight: [''],
@@ -320,7 +320,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
       this.formatMetalDetailDataGrid()
     } else {// condition to load without saving
-      parentDetail = this.content[0]?.PROCESS_FORMDETAILS
+      parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID
     }
     if (!parentDetail) return;
@@ -352,15 +352,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('TO_METAL_PCS', parentDetail.TO_METAL_PCS)
     this.nullToStringSetValue('FRM_PCS', parentDetail.FRM_PCS)
     this.nullToStringSetValue('TO_PCS', parentDetail.TO_PCS)
+    this.nullToStringSetValue('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)//dbt
+    this.nullToStringSetValue('TO_STONE_PCS', parentDetail.TO_STONE_PCS)//dbt
 
     this.setValueWithDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
     this.setValueWithDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
     this.setValueWithDecimal('GrossWeightTo', parentDetail.TO_NET_WT, 'METAL')//dbt
-    this.setValueWithDecimal('StoneWeightFrom', parentDetail.FRM_STONE_WT, 'STONE')
-    this.setValueWithDecimal('StoneWeightTo', parentDetail.TO_STONE_WT, 'STONE')
-    this.setValueWithDecimal('StonePcsFrom', parentDetail.FRM_STONE_PCS, 'STONE')//dbt
-    this.setValueWithDecimal('StonePcsTo', parentDetail.TO_STONE_PCS, 'STONE')//dbt
+    this.setValueWithDecimal('FRM_STONE_WT', parentDetail.FRM_STONE_WT, 'STONE')
+    this.setValueWithDecimal('TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
 
@@ -379,6 +379,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     this.stockCodeScrapValidate()
     this.getTimeAndLossDetails()
+    this.getSequenceDetailData()
     //set where conditions
     this.setFromProcessWhereCondition()
     this.setToProcessWhereCondition()
@@ -626,7 +627,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.toastErrorByMsgId(this.commonService.getMsgByID('MSG2037') + `${form[fromValue]}`)
       return
     }
-    let ToGrossWt = (this.commonService.emptyToZero(form.TO_METAL_WT) + (this.commonService.emptyToZero(form.StoneWeightTo) / 5));
+    let ToGrossWt = (this.commonService.emptyToZero(form.TO_METAL_WT) + (this.commonService.emptyToZero(form.TO_STONE_WT) / 5));
     this.setValueWithDecimal('GrossWeightTo', ToGrossWt, 'METAL')
   }
   Calc_Totals() {
@@ -648,13 +649,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
           }
         })
       }
-      this.setValueWithDecimal('StoneWeightFrom', nStWeight, 'STONE')
-      this.setValueWithDecimal('StoneWeightTo', nStWeight, 'STONE')
-      this.setValueWithDecimal('StonePcsFrom', nPcs, 'STONE')
-      this.setValueWithDecimal('StonePcsTo', nPcs, 'STONE')
+      this.setValueWithDecimal('FRM_STONE_WT', nStWeight, 'STONE')
+      this.setValueWithDecimal('TO_STONE_WT', nStWeight, 'STONE')
+      this.nullToStringSetValue('FRM_STONE_PCS', nPcs)
+      this.nullToStringSetValue('TO_STONE_PCS', nPcs)
 
-      this.setValueWithDecimal('FRM_METAL_PCS', nMPcs, 'AMOUNT')
-      this.setValueWithDecimal('TO_METAL_PCS', nMPcs, 'AMOUNT')
+      this.nullToStringSetValue('FRM_METAL_PCS', nMPcs)
+      this.nullToStringSetValue('TO_METAL_PCS', nMPcs)
       this.setValueWithDecimal('FRM_METAL_WT', nMWeight, 'METAL')
       this.setValueWithDecimal('TO_METAL_WT', nMWeight, 'METAL')
       this.setValueWithDecimal('GrossWeightTo', nMWeight + (nStWeight / 5), 'METAL')
@@ -730,18 +731,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     this.setToWorkerWhereCondition()
-    this.setValueWithDecimal('FRM_METAL_PCS', data[0].JOB_PCS, 'AMOUNT')
-    this.setValueWithDecimal('TO_METAL_PCS', data[0].JOB_PCS, 'AMOUNT')
+    this.nullToStringSetValue('FRM_METAL_PCS', data[0].JOB_PCS)
+    this.nullToStringSetValue('TO_METAL_PCS', data[0].JOB_PCS)
     this.setValueWithDecimal('FRM_METAL_WT', data[0].METAL, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', data[0].METAL, 'METAL')
-    this.setValueWithDecimal('FRM_PCS', data[0].JOB_PCS, 'AMOUNT')
-    this.setValueWithDecimal('TO_PCS', data[0].JOB_PCS, 'AMOUNT')
+    this.nullToStringSetValue('FRM_PCS', data[0].JOB_PCS)
+    this.nullToStringSetValue('TO_PCS', data[0].JOB_PCS)
     this.setValueWithDecimal('GrossWeightFrom', data[0].NETWT, 'METAL')
     this.setValueWithDecimal('GrossWeightTo', data[0].NETWT, 'METAL')
-    this.setValueWithDecimal('StoneWeightFrom', data[0].STONE, 'STONE')
-    this.setValueWithDecimal('StoneWeightTo', data[0].STONE, 'STONE')
-    this.setValueWithDecimal('StonePcsFrom', data[0].JOB_PCS, 'STONE')
-    this.setValueWithDecimal('StonePcsTo', data[0].JOB_PCS, 'STONE')
+    this.setValueWithDecimal('FRM_STONE_WT', data[0].STONE, 'STONE')
+    this.setValueWithDecimal('TO_STONE_WT', data[0].STONE, 'STONE')
+    this.nullToStringSetValue('FRM_STONE_PCS', data[0].JOB_PCS)
+    this.nullToStringSetValue('TO_STONE_PCS', data[0].JOB_PCS)
     this.setValueWithDecimal('PUREWT', data[0].PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
   }
@@ -1122,7 +1123,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
     let scrapPureWt = this.commonService.emptyToZero(Number(form.scrapQuantity) * Number(form.SCRAP_PURITY))
-    let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
+    // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
 
     console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
     this.gridSRNO += 1
@@ -1149,8 +1150,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "FRM_WORKER_CODE": this.commonService.nullToString(form.FRM_WORKER_CODE),
       "FRM_WORKERNAME": this.commonService.nullToString(form.FRM_WORKERNAME),
       "FRM_PCS": this.commonService.emptyToZero(form.FRM_PCS),
-      "FRM_STONE_WT": this.commonService.emptyToZero(form.StoneWeighFrom),
-      "FRM_STONE_PCS": this.commonService.emptyToZero(form.StonePcsFrom),
+      "FRM_STONE_WT": this.commonService.emptyToZero(form.FRM_STONE_WT),
+      "FRM_STONE_PCS": this.commonService.emptyToZero(form.FRM_STONE_PCS),
       "FRM_METAL_WT": this.commonService.emptyToZero(form.FRM_METAL_WT),
       "FRM_METAL_PCS": this.commonService.emptyToZero(form.FRM_METAL_PCS),
       "FRM_PURE_WT": this.commonService.emptyToZero(form.PUREWT),
@@ -1161,17 +1162,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "TO_WORKERNAME": this.commonService.nullToString(form.TO_WORKERNAME),
       "TO_PCS": this.commonService.emptyToZero(form.TO_PCS),
       "TO_METAL_PCS": this.commonService.emptyToZero(form.TO_METAL_PCS),
-      "TO_STONE_WT": this.commonService.emptyToZero(form.StoneWeightTo),
-      "TO_STONE_PCS": this.commonService.emptyToZero(form.StonePcsTo),
+      "TO_STONE_WT": this.commonService.emptyToZero(form.TO_STONE_WT),
+      "TO_STONE_PCS": this.commonService.emptyToZero(form.TO_STONE_PCS),
       "TO_METAL_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
       "TO_PURE_WT": this.commonService.emptyToZero(Number(form.FRM_METAL_WT) * Number(form.PURITY)),
       "TO_NET_WT": this.commonService.emptyToZero(form.GrossWeightTo),
       "LOSS_QTY": this.commonService.emptyToZero(form.stdLoss),
       "LOSS_PURE_QTY": this.commonService.emptyToZero(LOSS_PURE_QTY),
       "STONE_AMOUNTFC": this.commonService.emptyToZero(stoneAmount),
-      "STONE_AMOUNTLC": this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount),
+      "STONE_AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
       "METAL_AMOUNTFC": this.commonService.emptyToZero(metalAmount),
-      "METAL_AMOUNTLC": this.commonService.FCToCC(form.CURRENCY_CODE, metalAmount),
+      "METAL_AMOUNTLC": this.commonService.emptyToZero(metalAmount),
       "MAKING_RATEFC": 0,
       "MAKING_RATELC": 0,
       "MAKING_AMOUNTFC": 0,
@@ -1215,8 +1216,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
       "AMOUNTFC": 0,
       "JOB_PCS": 0,
-      "STONE_WT": this.commonService.emptyToZero(form.StoneWeightTo),
-      "STONE_PCS": this.commonService.emptyToZero(form.StonePcsTo),
+      "STONE_WT": this.commonService.emptyToZero(form.TO_STONE_WT),
+      "STONE_PCS": this.commonService.emptyToZero(form.TO_STONE_PCS),
       "METAL_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
       "METAL_PCS": this.commonService.emptyToZero(form.TO_METAL_PCS),
       "PURE_WT": this.commonService.emptyToZero(Number(form.TO_METAL_WT) * Number(form.PURITY)),

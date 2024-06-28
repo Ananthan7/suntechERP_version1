@@ -300,7 +300,7 @@ stockCodeData: MasterSearchModel = {
   setAllInitialValues() {
     if (!this.content?.FLAG) return
     let API = `JobMouldHeaderDj/GetJobMouldHeaderDJWithMid/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -547,7 +547,7 @@ stockCodeData: MasterSearchModel = {
         let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' + 
         this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
         this.content.VOCNO + '/' + this.content.YEARMONTH;
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        let Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
