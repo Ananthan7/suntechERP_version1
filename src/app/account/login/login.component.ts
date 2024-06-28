@@ -209,7 +209,7 @@ export class LoginComponent implements OnInit {
   }
   // use: to check username and password from API
   checkUserNamePassword(event: any) {
-    this.validateState = 1
+    this.validateState = 0
     let password = event.target.value;
     if (!password) {
       this.dataForm.controls.year.setValue('')
@@ -228,11 +228,10 @@ export class LoginComponent implements OnInit {
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
         if (resp.status == 'Success') {
-          this.validateState = 2
           this.getBranchList()
         } else {
           this.comService.toastErrorByMsgId('Invalid User Credentials! Check Username & Password.');
-          this.validateState = 1;
+          this.validateState = 0
           this.dataForm.controls.password.setValue('')
           this.dataForm.controls.year.setValue('')
           this.dataForm.controls.branch.setValue('')
@@ -248,8 +247,7 @@ export class LoginComponent implements OnInit {
     let sub2: Subscription = this.dataService.getDynamicAPICustom(API2).subscribe((resp) => {
       this.snackBar.dismiss();
       if (resp.status == 'Success') {
-        // this.comService.formControlSetReadOnly('branch', false);
-        // this.renderer.selectRootElement('#branch')?.focus();
+        this.validateState = 2 // for login check final state will be 2
         this.all_branch = resp.response;
         var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
 
