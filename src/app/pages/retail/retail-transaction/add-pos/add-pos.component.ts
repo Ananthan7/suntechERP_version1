@@ -1269,7 +1269,7 @@ export class AddPosComponent implements OnInit {
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSalesDataInDotnet/GetRetailSalesData/${data.BRANCH_CODE}/{data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`
+    let API = `RetailSalesDataInDotnet/GetRetailSalesData/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`
     console.log('getRetailSalesMaster vocno', data.VOCNO);
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res) => {
@@ -2737,7 +2737,7 @@ export class AddPosComponent implements OnInit {
 
     this.disableSaveBtn = true;
 
-    let API = `RetailSalesStockValidation${value.STOCK_CODE}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
+    let API = `RetailSalesStockValidation/${value.STOCK_CODE}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
     await
       this.suntechApi.getDynamicAPI(API)
         .subscribe(async (resp: any) => {
@@ -3939,10 +3939,10 @@ export class AddPosComponent implements OnInit {
 
     this.snackBar.open('Loading...');
     // TransAttachments/GetTransAttachments
-    let API = `TransAttachments/GetTransAttachments/${this.vocType}/${custCode}`
+    let API = `TransAttachments/GetTransAttachments/${this.vocType}/${this.comFunc.nullToString(custCode)}`
     // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
     // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
-    this.suntechApi.getDynamicAPI(API)
+    this.suntechApi.getDynamicAPICustom(API)
       .subscribe((resp) => {
         this.snackBar.dismiss();
 
@@ -12218,7 +12218,7 @@ export class AddPosComponent implements OnInit {
   }
 
   getCityMasterByID(countryCode: any, stateCode: any) {
-    let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CITY MASTER')}/${encodeURIComponent(countryCode)}/${encodeURIComponent(stateCode)}`
+    let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CITY MASTER')}/${encodeURIComponent(this.comFunc.nullToString(countryCode))}/${this.comFunc.nullToString(encodeURIComponent(stateCode))}`
     this.suntechApi.getDynamicAPI(API).
       subscribe(async data => {
         if (data.status == "Success") {

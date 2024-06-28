@@ -314,7 +314,7 @@ export class IndexedApiService {
     });
   }
   getAllCompanyParametersAsObj() {
-     this.suntechApi.getDynamicAPI('CompanyParameters/GetCompanyParameterandParametervalue').subscribe((resp) => {
+     this.suntechApi.getDynamicAPICustom('CompanyParameters/GetCompanyParameterandParametervalue').subscribe((resp) => {
       if (resp.status == 'Success') {
          this.inDb.bulkInsert('companyParameter', resp.response);
          console.log(resp.response);
@@ -388,7 +388,7 @@ export class IndexedApiService {
     });
   }
   getKaratMasterList() {
-    this.suntechApi.getDynamicAPI('karatMaster/GetKaratMasterList').subscribe((resp) => {
+    this.suntechApi.getDynamicAPICustom('karatMaster/GetKaratMasterList').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.karatMasterData = resp.response;
         this.inDb.bulkInsert('karatMaster', resp.response);
