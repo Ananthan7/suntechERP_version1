@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
     public dataService: SuntechAPIService,
     private comService: CommonServiceService,
     private inDb: IndexedDbService,
+    private indexedApiService: IndexedApiService,
     private renderer: Renderer2
 
   ) {
@@ -242,7 +243,7 @@ export class LoginComponent implements OnInit {
     this.subscriptions.push(sub)
   }
   getBranchList() {
-    let API2 = `UseBranchNetMaster/${this.user_name}/MOE` 
+    let API2 = `UseBranchNetMaster/${this.user_name}` 
     this.snackBar.open('loading branch...');
     let sub2: Subscription = this.dataService.getDynamicAPICustom(API2).subscribe((resp) => {
       this.snackBar.dismiss();
@@ -350,7 +351,7 @@ export class LoginComponent implements OnInit {
 
     if (this.submitValidations(this.dataForm.value)) return; //validations
     this.getBranchCurrencyMaster(branch); // for indexdb
-
+    this.indexedApiService.setInitailLoadSetUp()
     if (this.dataForm.value.keepLog) {
       this.setGetUserAuthDetails('add');
     } else {
