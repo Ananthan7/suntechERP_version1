@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
     public dataService: SuntechAPIService,
     private comService: CommonServiceService,
     private inDb: IndexedDbService,
+    private indexedApiService: IndexedApiService,
     private renderer: Renderer2
 
   ) {
@@ -350,7 +351,7 @@ export class LoginComponent implements OnInit {
 
     if (this.submitValidations(this.dataForm.value)) return; //validations
     this.getBranchCurrencyMaster(branch); // for indexdb
-
+    this.indexedApiService.setInitailLoadSetUp()
     if (this.dataForm.value.keepLog) {
       this.setGetUserAuthDetails('add');
     } else {
