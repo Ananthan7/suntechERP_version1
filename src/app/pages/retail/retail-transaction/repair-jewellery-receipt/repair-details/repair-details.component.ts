@@ -9,6 +9,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
+import { IndexedDbService } from 'src/app/services/indexed-db.service';
 
 @Component({
   selector: 'app-repair-details',
@@ -18,6 +19,7 @@ import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/
 export class RepairDetailsComponent implements OnInit {
 
   @Input() content!: any; 
+  @Input() receiptData!: any;
   stoneCheck : boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -38,12 +40,23 @@ export class RepairDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService,
+    // private indexedDb: IndexedDbService,
   ) { }
 
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+
+
+    if (this.receiptData && Object.keys(this.receiptData).length > 0)
+
+      this.setReceiptData();
+    else
+      this.getAccountHead();
+      
+
   }
 
   repairjewelleryreceiptdetailsFrom: FormGroup = this.formBuilder.group({
@@ -226,12 +239,101 @@ export class RepairDetailsComponent implements OnInit {
 
 
   close(data?: any) {
+    console.log(data);
+    
     //TODO reset forms and data before closing
+    if (this.receiptData != null && this.receiptData != undefined && data != null) {
+      data!.isUpdate = true;
+    }
     this.activeModal.close(data);
   }
 
   withStoneCheck(e: any) {
     this.stoneCheck = e.checked    
+  }
+
+  getAccountHead(e?: any) {
+
+    console.log(e);
+    
+
+    // const API = `GetPOSDefaultAccode/${this.branchCode}`;
+    // this.dataService.getDynamicAPI(API)
+    //   .subscribe((res: any) => {
+    //     if (res.status == "Success") {
+    //       console.log('res', res);
+    //       // console.log('res', res.response.ACCODE); ACCOUNT_HEAD
+          
+    //       this.repairjewelleryreceiptdetailsFrom.controls.debitAmount.setValue(res.response.ACCODE);
+    //       this.repairjewelleryreceiptdetailsFrom.controls.debitAmountDesc.setValue(res.response.ACCOUNT_HEAD);
+    //       // this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${res.response.ACCODE}'`;
+
+
+
+
+    //     }
+    //   });
+  }
+
+
+  setReceiptData() {
+
+    if (this.receiptData != null && this.receiptData != undefined && Object.keys(this.receiptData).length > 0) {
+
+
+
+
+      this.repairjewelleryreceiptdetailsFrom.controls['Description'].setValue(this.receiptData.RECPAY_TYPE);
+
+      this.repairjewelleryreceiptdetailsFrom.controls['Description1'].setValue(this.receiptData.MODE);
+
+      this.repairjewelleryreceiptdetailsFrom.controls['Pcs'].setValue(this.receiptData.CURRENCY_CODE);
+
+      this.repairjewelleryreceiptdetailsFrom.controls['type_of'].setValue(this.comService.decimalQuantityFormat(this.receiptData.CURRENCY_RATE, 'RATE'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['delivery_date'].setValue(this.receiptData.HDACCOUNT_HEAD);
+      this.repairjewelleryreceiptdetailsFrom.controls['gross_Wt'].setValue(this.receiptData.ACCODE);
+
+      this.repairjewelleryreceiptdetailsFrom.controls['type_of_item'].setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.AMOUNTFC),
+        'AMOUNT'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['total_amount'].setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.AMOUNTCC),
+        'AMOUNT'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['status'].setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+        'AMOUNT'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['status_des'].setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTFC),
+        'AMOUNT'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['material'].setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+        'AMOUNT'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['Est_repair_charge'].setValue(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
+        'AMOUNT'));
+
+      this.repairjewelleryreceiptdetailsFrom.controls['own_stock'].setValue(this.receiptData.REMARKS);
+      this.repairjewelleryreceiptdetailsFrom.controls['accept_checkbox'].setValue(this.receiptData.MODEDESC);
+      this.repairjewelleryreceiptdetailsFrom.controls['changes_checkbox'].setValue(this.receiptData.CARD_NO);
+      this.repairjewelleryreceiptdetailsFrom.controls['repair_bags'].setValue(this.receiptData.CARD_HOLDER);
+      this.repairjewelleryreceiptdetailsFrom.controls['remark'].setValue(this.receiptData.CARD_HOLDER);
+      this.repairjewelleryreceiptdetailsFrom.controls['stoneCheck'].setValue(this.receiptData.CARD_HOLDER);
+      this.repairjewelleryreceiptdetailsFrom.controls['stone_type'].setValue(this.receiptData.CARD_HOLDER);
+      this.repairjewelleryreceiptdetailsFrom.controls['no_of'].setValue(this.receiptData.CARD_HOLDER);
+      this.repairjewelleryreceiptdetailsFrom.controls['Cut'].setValue(this.receiptData.CARD_HOLDER);
+      this.repairjewelleryreceiptdetailsFrom.controls['Approx'].setValue(this.receiptData.CARD_HOLDER);
+
+    }
+
+
+
+    // receiptData
   }
 
 
@@ -254,6 +356,8 @@ removedatas(){
 
 
 formSubmit(){
+  console.log(this.content);
+  
 
   if(this.content && this.content.FLAG == 'EDIT'){
     this.update()
@@ -273,14 +377,14 @@ formSubmit(){
         "ITEM_DESCRIPTION": this.repairjewelleryreceiptdetailsFrom.value.Description,
         "ITEM_NARRATION": "",
         "PCS": this.repairjewelleryreceiptdetailsFrom.value.Pcs,
-        "GROSSWT":  this.comService.decimalQuantityFormat(this.repairjewelleryreceiptdetailsFrom.value.gross_Wt, 'RATE') ,
-        "AMOUNT": this.repairjewelleryreceiptdetailsFrom.value.total_amount,
         "REPAIR_TYPE": this.repairjewelleryreceiptdetailsFrom.value.type_of,
-        "REPAIR_ITEMTYPE": "",
+        "GROSSWT":  this.comService.decimalQuantityFormat(this.repairjewelleryreceiptdetailsFrom.value.gross_Wt, 'RATE') ,
         "ITEM_STATUSTYPE": this.repairjewelleryreceiptdetailsFrom.value.type_of_item,
-        "ITEM_PICTUREPATH": "",
         "DELIVERY_DATE": this.repairjewelleryreceiptdetailsFrom.value.delivery_date,
+        "AMOUNT": this.repairjewelleryreceiptdetailsFrom.value.total_amount,
         "STATUS": this.repairjewelleryreceiptdetailsFrom.value.status,
+        "REPAIR_ITEMTYPE": "",
+        "ITEM_PICTUREPATH": "",
         "TRANSFERID": 0,
         "TRANSFERCID": 0,
         "RECEIVEID": 0,
@@ -294,7 +398,7 @@ formSubmit(){
         "DIAMONDAMOUNT": 0,
         "LABOURCHARGE": 0,
         "METALCODE": "",
-        "REPAIRBAGNO": "",
+        "REPAIRBAGNO": this.repairjewelleryreceiptdetailsFrom.value.repair_bags,
         "MATERIAL_TYPE": this.repairjewelleryreceiptdetailsFrom.value.material,
         "STONE_TYPE": this.repairjewelleryreceiptdetailsFrom.value.stone_type,
         "NO_OF_STONES": this.repairjewelleryreceiptdetailsFrom.value.no_of,
@@ -304,21 +408,21 @@ formSubmit(){
         "CHECKED": 0,
         "DAMAGED": 0,
         "RECEIPT": 0,
-        "WITHSTONE": 0,
+        "WITHSTONE": this.repairjewelleryreceiptdetailsFrom.value.stoneCheck,
         "AUTHORIZE": true,
-        "AUTHORIZEDDATE": "2024-03-13T06:56:20.277Z",
+        "AUTHORIZEDDATE": "",
         "TRANSFERFLAG": true,
         "REPAIRRETURNID": 0,
         "DT_WSID": 0,
-        "DT_VOCDATE": "2024-03-13T06:56:20.277Z",
+        "DT_VOCDATE": "",
         "DT_STATUS": 0,
         "DT_SALESPERSON_CODE": "",
         "DT_POSCUSTCODE": "",
         "DT_PARTYNAME": "",
         "DT_MOBILE": "",
         "FROM_BRANCH": "",
-        "DT_DELIVERY_DATE": "2024-03-13T06:56:20.277Z",
-        "DELIVERED_DATE": "2024-03-13T06:56:20.277Z",
+        "DT_DELIVERY_DATE": "",
+        "DELIVERED_DATE": "",
         "DT_TRANSFERID": 0,
         "DT_VOCTYPE": "",
         "DT_VOCNO": 0,
@@ -330,7 +434,7 @@ formSubmit(){
         "DT_TYPE": "",
         "DT_EMAIL": "",
         "DT_REMARKS": this.repairjewelleryreceiptdetailsFrom.value.remark,
-        "DT_DELIVERYDATE": "2024-03-13T06:56:20.277Z",
+        "DT_DELIVERYDATE": "",
         "DT_TOTAL_PCS": 0,
         "DT_TOTAL_GRWT": 0,
         "DT_NAVSEQNO": 0,
@@ -341,13 +445,13 @@ formSubmit(){
         "DT_RELIGION": "",
         "DT_CITY": "",
         "DT_TEL2": "",
-        "DT_SYSTEM_DATE": "2024-03-13T06:56:20.277Z",
+        "DT_SYSTEM_DATE": "",
         "DT_SALESREFERENCE": "",
         "DT_AUTHORISE": 0,
         "DT_AUTHORISE_BRANCH": "",
-        "EST_REPAIR_CHARGES": 0,
-        "AUTH_INBRANCH_DATE": "2024-03-13T06:56:20.277Z",
-        "AUTH_INHO_DATE": "2024-03-13T06:56:20.277Z",
+        "EST_REPAIR_CHARGES": this.repairjewelleryreceiptdetailsFrom.value.Est_repair_charge,
+        "AUTH_INBRANCH_DATE": "",
+        "AUTH_INHO_DATE": "",
         "AUTH_INBRANCH_REMARKS": "",
         "AUTH_INBRANCH_USER": "",
         "AUTH_INHO_REMARKS": "",
@@ -356,6 +460,8 @@ formSubmit(){
         "JOBCARD_FLAG": 0,
         "DIRECT_DELIVERY": 0
       }
+
+      this.close(postData);
   
 
   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -490,8 +596,8 @@ deleteRecord() {
 
 ngOnDestroy() {
   if (this.subscriptions.length > 0) {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-    this.subscriptions = []; // Clear the array
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions = [];
   }
 }
 }
