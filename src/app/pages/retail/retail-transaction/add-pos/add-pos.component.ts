@@ -1889,7 +1889,7 @@ export class AddPosComponent implements OnInit {
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
       this.suntechApi
-        .getDynamicAPI(`BranchKaratRate/${this.strBranchcode}/${this.strBranchcode}`)
+        .getDynamicAPI(`BranchKaratRate/${this.strBranchcode}`)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
             let temp_karatrate: any = resp.response;
@@ -7165,6 +7165,7 @@ export class AddPosComponent implements OnInit {
                 this.divisionMS = stockInfos.DIVISIONMS;
 
                 this.setGiftType();
+                const validDivisionCodes = ['M', 'D', 'W','P','N'];
 
 
                 this.isStoneIncluded = stockInfos.STONE;
@@ -7185,6 +7186,11 @@ export class AddPosComponent implements OnInit {
                   stockInfos.BALANCE_PCS
                 );
                 this.lineItemPcs = stockInfos.BALANCE_PCS;
+                const filteredValidationCodes = validDivisionCodes.filter(
+                  (code) => code === stockInfos.DIVISION.toUpperCase()
+                );
+
+              
                 this.lineItemGrossWt = this.comFunc.transformDecimalVB(
                   this.comFunc.allbranchMaster?.BMQTYDECIMALS,
                   this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
@@ -7192,7 +7198,7 @@ export class AddPosComponent implements OnInit {
                 this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
                   stockInfos.BALANCE_QTY
                 );
-                this.setGrossWtFocus();
+                // this.setGrossWtFocus();
                 this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
                   stockInfos.STONE_WT || this.zeroSQtyVal
                 ); // need field
@@ -7276,6 +7282,11 @@ export class AddPosComponent implements OnInit {
 
                   this.manageCalculations();
                 } else {
+
+                  // if (filteredValidationCodes.length > 0) {
+                  //   this.changePCS({ target: { value: 1 } },true);
+                  // }
+
                   this.lineItemForm.controls['fcn_li_rate'].setValue(
                     this.comFunc.transformDecimalVB(
                       this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -7298,7 +7309,7 @@ export class AddPosComponent implements OnInit {
 
                   this.manageCalculations();
                 }
-
+                this.setGrossWtFocus();
                 this.li_tax_amount_val =
                   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
                 this.li_net_amount_val =
@@ -8321,7 +8332,7 @@ export class AddPosComponent implements OnInit {
             }
           );
       } else {
-        this.suntechApi.postDynamicAPI(`RetailSalesDataInDotnet/InsertRetailSalesData}`, postData).subscribe(
+        this.suntechApi.postDynamicAPI(`RetailSalesDataInDotnet/InsertRetailSalesData`,postData).subscribe(
           (res) => {
             this.snackBar.dismiss();
             // try {
@@ -8706,8 +8717,8 @@ export class AddPosComponent implements OnInit {
       data: { title, msg, okBtn, swapColor },
     });
   }
-
-  changePCS(event: any) {
+ 
+  changePCS(event: any,divisionBasedAutoUpdation:boolean=false) {
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
@@ -8739,6 +8750,8 @@ export class AddPosComponent implements OnInit {
         }
       } else if (this.blockNegativeStock == 'W') {
         if (this.comFunc.emptyToZero(this.lineItemPcs) < value) {
+          if(!divisionBasedAutoUpdation)
+        {
           this.openDialog(
             'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
@@ -8760,6 +8773,11 @@ export class AddPosComponent implements OnInit {
 
             }
           });
+        }
+        else{
+          this.checkDivisionForPcs(value)
+          this.manageCalculations();
+        }
         } else {
 
           // this.lineItemForm.controls['fcn_li_pcs'].setValue(
@@ -12317,7 +12335,7 @@ export class AddPosComponent implements OnInit {
 
 
     //   }
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.vocType}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}/false`;
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.vocType}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`;
     this.suntechApi.getDynamicAPI(API)
       // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('GenerateNewVoucherNumber/GenerateNewVocNum',param)
       .subscribe((resp) => {
@@ -12808,7 +12826,7 @@ export class AddPosComponent implements OnInit {
     // {
 
     // }
-    const API = `UspGetSubVouchers?DBBranch=${this.strBranchcode}`;
+    const API = `UspGetSubVouchers`;
     const postData = {
       "strBranchCode": this.strBranchcode,
       "strMainVocType": this.mainVocType

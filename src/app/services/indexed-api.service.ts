@@ -291,7 +291,7 @@ export class IndexedApiService {
 
   getAllCompanyParameters() {
     let map = new Map();
-    this.suntechApi.getDynamicAPI('CompanyParameters').subscribe((resp) => {
+    this.suntechApi.getDynamicAPICustom('CompanyParameters').subscribe((resp) => {
       if (resp.status == 'Success') {
         //  set data in local
         this.inDb.bulkInsert('compparams', resp.response);
