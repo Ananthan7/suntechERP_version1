@@ -23,11 +23,13 @@ export class ModulelistComponent implements OnInit {
     private ChangeDetector: ChangeDetectorRef
   ) {
     this.getModuleList()
+    this.indexedApiService.setInitailLoadSetUp()
   }
 
   ngOnInit(): void {
     this.setVoctypeMaster()
   }
+ 
   setVoctypeMaster(){
     let branch = localStorage.getItem('userbranch')
     this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
