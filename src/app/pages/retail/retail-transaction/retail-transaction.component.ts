@@ -367,7 +367,7 @@ export class RetailTransactionComponent implements OnInit {
         "Username": localStorage.getItem('username') || '',
         "Password": this.authForm.value.password
       };
-      let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
+      let sub: Subscription = this.dataService.postDynamicAPICustom(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
 
           this.CommonService.EditDetail.REASON =  this.authForm.value.reason
