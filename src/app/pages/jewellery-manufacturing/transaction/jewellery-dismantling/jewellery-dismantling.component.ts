@@ -119,8 +119,16 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.jewellerydismantlingFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     // this.setCompanyCurrency()
-    this.setvalues()
-    this.setAllInitialValues()
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.setvalues()
+      this.setAllInitialValues()
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.isSaved = true;
+      this.setvalues()
+      this.setAllInitialValues()
+    }
   }
 
   userDataSelected(value: any) {
@@ -439,7 +447,10 @@ setPostData(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'DiamondDismantle/DeleteDiamondDismantle/'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth
+        let form = this.jewellerydismantlingFrom.value
+        let API = 'DiamondDismantle/DeleteDiamondDismantle/' + 
+        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
+        this.content.VOCNO+ '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
