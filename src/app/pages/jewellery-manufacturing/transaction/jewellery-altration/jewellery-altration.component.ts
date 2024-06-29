@@ -121,6 +121,10 @@ export class JewelleryAltrationComponent implements OnInit {
     if (this.content && this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.isSaved = true;
+      this.isSaved = true;
+      if(this.content.FLAG == 'DELETE'){
+        this.deleteRecord()
+      }
       this.setNewFormValues()
       this.setAllInitialValues()
     }
@@ -158,15 +162,15 @@ export class JewelleryAltrationComponent implements OnInit {
     console.log(this.content)
     if (!this.content) return
     let API = `DiamondJewelAlteration/GetDiamondJewelAlterationWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
           console.log(data,'data')
-          this.jewelleryaltrationFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
-          this.jewelleryaltrationFrom.controls.VOCNO.setValue(data.VOCNO)
-          this.jewelleryaltrationFrom.controls.MID.setValue(data.MID)
-          this.jewelleryaltrationFrom.controls.vocdate.setValue(new Date(data.VOCDATE))
+          this.jewelleryaltrationdetail = data.Details
+
+          // this.jewelleryaltrationFrom.controls.MID.setValue(data.MID)
+          // this.jewelleryaltrationFrom.controls.vocdate.setValue(new Date(data.VOCDATE))
           this.jewelleryaltrationFrom.controls.enteredby.setValue(data.HTUSERNAME)
           this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
           this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(data.CC_RATE)
@@ -176,23 +180,23 @@ export class JewelleryAltrationComponent implements OnInit {
           this.jewelleryaltrationFrom.controls.lossaccount.setValue(data.LOSS_ACCODE)
           this.jewelleryaltrationFrom.controls.costcode.setValue(data.COUNT)
 
-          this.jewelleryaltrationdetail = data.Details
+          
           this.reCalculateSRNO() //set to main grid
 
-          this.jewelleryaltrationdetail.forEach((element: any) => {
-            this.tableData.push({
-              jobNumber: element.JOB_NUMBER,
-              jobNumDes: element.JOB_DESCRIPTION,
-              processCode: element.PROCESS_CODE,
-              processCodeDesc: element.PROCESS_NAME,
-              workerCode: element.WORKER_CODE,
-              workerCodeDes: element.WORKER_NAME,
-              pcs: element.PCS,
-              purity: element.PURITY,
-              grossWeight: element.GROSS_WT,
-              netWeight: element.NET_WT,
-            })
-          });
+          // this.jewelleryaltrationdetail.forEach((element: any) => {
+          //   this.tableData.push({
+          //     jobNumber: element.JOB_NUMBER,
+          //     jobNumDes: element.JOB_DESCRIPTION,
+          //     processCode: element.PROCESS_CODE,
+          //     processCodeDesc: element.PROCESS_NAME,
+          //     workerCode: element.WORKER_CODE,
+          //     workerCodeDes: element.WORKER_NAME,
+          //     pcs: element.PCS,
+          //     purity: element.PURITY,
+          //     grossWeight: element.GROSS_WT,
+          //     netWeight: element.NET_WT,
+          //   })
+          // });
 
         } else {
           this.comService.toastErrorByMsgId('MSG1531')
@@ -549,7 +553,7 @@ export class JewelleryAltrationComponent implements OnInit {
   }
 
   deleteRecord() {
-    if (!this.content.MID) {
+    if (!this.content) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -572,8 +576,11 @@ export class JewelleryAltrationComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = `DiamondJewelAlteration/DeleteDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}`
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        let form = this.jewelleryaltrationFrom.value
+        let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + 
+        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
+        this.content.VOCNO+ '/' + this.content.YEARMONTH
+        let Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {

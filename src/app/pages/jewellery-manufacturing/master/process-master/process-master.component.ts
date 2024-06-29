@@ -473,7 +473,7 @@ export class ProcessMasterComponent implements OnInit {
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions(): void {
     let API = 'ComboFilter/PROCESS TYPE MASTER';
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
+    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         this.processTypeList = result.response;
         this.processTypeList.sort((a: any, b: any) => a.SRNO - b.SRNO)
@@ -867,8 +867,8 @@ export class ProcessMasterComponent implements OnInit {
       WHERECOND: `LOSS_ACCODE='${value}' OR RECOV_ACCODE='${value}' OR GAIN_ACCODE='${value}' OR WIP_ACCODE='${value}'`
       // WHERECOND: this.getAccodeField(formControlName,value)
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -896,7 +896,7 @@ export class ProcessMasterComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])

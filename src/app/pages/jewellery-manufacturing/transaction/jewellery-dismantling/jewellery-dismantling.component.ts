@@ -24,6 +24,9 @@ export class JewelleryDismantlingComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  viewMode: boolean = false;
+  isSaved: boolean = false;
+  isloading: boolean = false;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -61,6 +64,17 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  rateTypeMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'RATE TYPE MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   StockcodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -78,7 +92,17 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.jewellerydismantlingFrom.controls.stock.setValue(value.STOCK_CODE);
     this.jewellerydismantlingFrom.controls.description.setValue(value.DESCRIPTION);
   }
+  rateTypeSelected(event: any) {
+    this.jewellerydismantlingFrom.controls.metalrate.setValue(event.RATE_TYPE)
+    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.RATE_TYPE == event.RATE_TYPE)
 
+    data.forEach((element: any) => {
+      if (element.RATE_TYPE == event.RATE_TYPE) {
+        let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
+        this.jewellerydismantlingFrom.controls.metalratetype.setValue(WHOLESALE_RATE)
+      }
+    });
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -87,12 +111,14 @@ export class JewelleryDismantlingComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.setCompanyCurrency()
+    this.jewellerydismantlingFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    // this.setCompanyCurrency()
     this.setvalues()
   }
 
@@ -148,7 +174,7 @@ export class JewelleryDismantlingComponent implements OnInit {
 
  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
    voctype:['',[Validators.required]],
-   vocno:['',[Validators.required]],
+   vocno:[''],
    vocdate:[,[Validators.required]],
    enteredby:[''],
    lossaccount:[''],
@@ -179,7 +205,87 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.jewellerydismantlingFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.jewellerydismantlingFrom.controls.vocdate.setValue(this.comService.currentDate)
   }
-
+setPostData(){
+  let form = this.jewellerydismantlingFrom.value
+  console.log(form, 'form');
+  return {
+  "MID": 0,
+  "BRANCH_CODE": this.branchCode,
+  "VOCTYPE": this.jewellerydismantlingFrom.value.voctype,
+  "VOCNO": this.comService.emptyToZero(this.jewellerydismantlingFrom.value.VOCNO),
+  "VOCDATE": this.jewellerydismantlingFrom.value.vocdate,
+  "YEARMONTH": this.yearMonth,
+  "SMAN": "",
+  "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount,
+  "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency,
+  "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencDesc,
+  "MET_RATE_TYPE": this.comService.nullToString(this.jewellerydismantlingFrom.value.MET_RATE_TYPE),
+  "METAL_RATE": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.METAL_RATE),
+  "NAVSEQNO": 0,
+  "TOTALPCS": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.pcs),
+  "TOTMETALAMOUNTFC": 0,
+  "TOTMETALAMOUNTCC": 0,
+  "TOTSTONEAMOUNTFC": 0,
+  "TOTSTONEAMOUNTCC": 0,
+  "TOTLABOURAMOUNTFC": 0,
+  "TOTLABOURAMOUNTCC": 0,
+  "TOTLOSSAMOUNTFC": 0,
+  "TOTLOSSAMOUNTCC": 0,
+  "TOTAMOUNTFC": 0,
+  "TOTAMOUNTCC": 0,
+  "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
+  "GENSEQNO": 0,
+  "PRINT_COUNT": 0,
+  "AUTOPOSTING": true,
+  "POSTDATE": "",
+  "HTUSERNAME": this.jewellerydismantlingFrom.value.enteredby,
+  "PRINT_COUNT_ACCOPY": 0,
+  "PRINT_COUNT_CNTLCOPY": 0,
+  "Details": [
+    {
+      "UNIQUEID": 0,
+      "SRNO": 0,
+      "STOCK_CODE": "",
+      "DESCRIPTION": "",
+      "PCS": 0,
+      "METAL_AMOUNTFC": 0,
+      "METAL_AMOUNTCC": 0,
+      "STONE_AMOUNTFC": 0,
+      "STONE_AMOUNTCC": 0,
+      "LABOR_AMOUNTFC": 0,
+      "LABOR_AMOUNTCC": 0,
+      "LOSS_AMOUNTFC": 0,
+      "LOSS_AMOUNTCC": 0,
+      "SETTINGCHARGEFC": 0,
+      "SETTINGCHARGECC": 0,
+      "POLISHCHARGEFC": 0,
+      "POLISHCHARGECC": 0,
+      "RHODIUMCHARGEFC": 0,
+      "RHODIUMCHARGECC": 0,
+      "LABOURCHARGEFC": 0,
+      "LABOURCHARGECC": 0,
+      "MISCLCHARGEFC": 0,
+      "MISCLCHARGECC": 0,
+      "TOTALAMOUNTFC": 0,
+      "TOTALAMOUNTCC": 0,
+      "MFGVOC_REF": "",
+      "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
+      "LOSS_ACCODE": "",
+      "COST_CODE": "",
+      "DIFF_TOTAL": 0,
+      "RCVD_TOTAL": 0,
+      "DIFF_WGT": 0,
+      "DREMARKS": "",
+      "DLOCTYPE_CODE": "",
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "STKLOCTYPE_CODE": ""
+    }
+  ] 
+}
+}
 
   formSubmit(){
 
@@ -187,95 +293,22 @@ export class JewelleryDismantlingComponent implements OnInit {
       this.update()
       return
     }
-    if (this.jewellerydismantlingFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.jewellerydismantlingFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
   
     let API = 'DiamondDismantle/InsertDiamondDismantle'
-    let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.jewellerydismantlingFrom.value.voctype || "",
-      "VOCNO": this.jewellerydismantlingFrom.value.vocno || "",
-      "VOCDATE": this.jewellerydismantlingFrom.value.vocdate || "",
-      "YEARMONTH": this.yearMonth,
-      "SMAN": "",
-      "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount || "",
-      "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency || "",
-      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencDesc || "",
-      "MET_RATE_TYPE": this.jewellerydismantlingFrom.value.metalratetype || "",
-      "METAL_RATE": this.jewellerydismantlingFrom.value.metalrate || "",
-      "NAVSEQNO": 0,
-      "TOTALPCS": this.jewellerydismantlingFrom.value.pcs || "",
-      "TOTMETALAMOUNTFC": 0,
-      "TOTMETALAMOUNTCC": 0,
-      "TOTSTONEAMOUNTFC": 0,
-      "TOTSTONEAMOUNTCC": 0,
-      "TOTLABOURAMOUNTFC": 0,
-      "TOTLABOURAMOUNTCC": 0,
-      "TOTLOSSAMOUNTFC": 0,
-      "TOTLOSSAMOUNTCC": 0,
-      "TOTAMOUNTFC": 0,
-      "TOTAMOUNTCC": 0,
-      "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
-      "GENSEQNO": 0,
-      "PRINT_COUNT": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "HTUSERNAME": this.jewellerydismantlingFrom.value.enteredby,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "STOCK_CODE": "",
-          "DESCRIPTION": "",
-          "PCS": 0,
-          "METAL_AMOUNTFC": 0,
-          "METAL_AMOUNTCC": 0,
-          "STONE_AMOUNTFC": 0,
-          "STONE_AMOUNTCC": 0,
-          "LABOR_AMOUNTFC": 0,
-          "LABOR_AMOUNTCC": 0,
-          "LOSS_AMOUNTFC": 0,
-          "LOSS_AMOUNTCC": 0,
-          "SETTINGCHARGEFC": 0,
-          "SETTINGCHARGECC": 0,
-          "POLISHCHARGEFC": 0,
-          "POLISHCHARGECC": 0,
-          "RHODIUMCHARGEFC": 0,
-          "RHODIUMCHARGECC": 0,
-          "LABOURCHARGEFC": 0,
-          "LABOURCHARGECC": 0,
-          "MISCLCHARGEFC": 0,
-          "MISCLCHARGECC": 0,
-          "TOTALAMOUNTFC": 0,
-          "TOTALAMOUNTCC": 0,
-          "MFGVOC_REF": "",
-          "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
-          "LOSS_ACCODE": "",
-          "COST_CODE": "",
-          "DIFF_TOTAL": 0,
-          "RCVD_TOTAL": 0,
-          "DIFF_WGT": 0,
-          "DREMARKS": "",
-          "DLOCTYPE_CODE": "",
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": ""
-        }
-      ] 
-    }
-  
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let postData = this.setPostData()
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.postDynamicAPICustom(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status.trim() == "Success") {
+            this.isSaved = true;
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -289,106 +322,30 @@ export class JewelleryDismantlingComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.comService.toastErrorByMsgId('Not saved')
+        console.log(err);
+      })
     this.subscriptions.push(Sub)
-  }
-
-  setFormValues() {
   }
 
 
   update(){
-    if (this.jewellerydismantlingFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-  
+    let form = this.jewellerydismantlingFrom.value
     let API = 'DiamondDismantle/UpdateDiamondDismantle'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth;
-    let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.jewellerydismantlingFrom.value.voctype || "",
-      "VOCNO": this.jewellerydismantlingFrom.value.vocno || "",
-      "VOCDATE": this.jewellerydismantlingFrom.value.vocdate || "",
-      "YEARMONTH": this.yearMonth,
-      "SMAN": "",
-      "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount || "",
-      "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency || "",
-      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencDesc || "",
-      "MET_RATE_TYPE": this.jewellerydismantlingFrom.value.metalratetype || "",
-      "METAL_RATE": this.jewellerydismantlingFrom.value.metalrate || "",
-      "NAVSEQNO": 0,
-      "TOTALPCS": 0,
-      "TOTMETALAMOUNTFC": 0,
-      "TOTMETALAMOUNTCC": 0,
-      "TOTSTONEAMOUNTFC": 0,
-      "TOTSTONEAMOUNTCC": 0,
-      "TOTLABOURAMOUNTFC": 0,
-      "TOTLABOURAMOUNTCC": 0,
-      "TOTLOSSAMOUNTFC": 0,
-      "TOTLOSSAMOUNTCC": 0,
-      "TOTAMOUNTFC": 0,
-      "TOTAMOUNTCC": 0,
-      "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
-      "GENSEQNO": 0,
-      "PRINT_COUNT": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "HTUSERNAME":  "",
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "STOCK_CODE": "",
-          "DESCRIPTION": "",
-          "PCS": 0,
-          "METAL_AMOUNTFC": 0,
-          "METAL_AMOUNTCC": 0,
-          "STONE_AMOUNTFC": 0,
-          "STONE_AMOUNTCC": 0,
-          "LABOR_AMOUNTFC": 0,
-          "LABOR_AMOUNTCC": 0,
-          "LOSS_AMOUNTFC": 0,
-          "LOSS_AMOUNTCC": 0,
-          "SETTINGCHARGEFC": 0,
-          "SETTINGCHARGECC": 0,
-          "POLISHCHARGEFC": 0,
-          "POLISHCHARGECC": 0,
-          "RHODIUMCHARGEFC": 0,
-          "RHODIUMCHARGECC": 0,
-          "LABOURCHARGEFC": 0,
-          "LABOURCHARGECC": 0,
-          "MISCLCHARGEFC": 0,
-          "MISCLCHARGECC": 0,
-          "TOTALAMOUNTFC": 0,
-          "TOTALAMOUNTCC": 0,
-          "MFGVOC_REF": "",
-          "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
-          "LOSS_ACCODE": "",
-          "COST_CODE": "",
-          "DIFF_TOTAL": 0,
-          "RCVD_TOTAL": 0,
-          "DIFF_WGT": 0,
-          "DREMARKS": "",
-          "DLOCTYPE_CODE": "",
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": ""
-        }
-      ]   
-    }
-  
+    let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
+            this.isSaved = true;
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -402,9 +359,12 @@ export class JewelleryDismantlingComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.comService.toastErrorByMsgId('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
   

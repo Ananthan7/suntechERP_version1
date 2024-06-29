@@ -1112,8 +1112,13 @@ export class AddPosComponent implements OnInit {
 
   getAccountHead(parameterValue: string) {
 
-    const API = `AccountMaster/${parameterValue}`;
-    this.suntechApi.getDynamicAPI(API)
+    // const API = `AccountMaster/${parameterValue}`;
+    // this.suntechApi.getDynamicAPI(API)
+
+
+
+    let sub: Subscription = this.suntechApi.getDynamicAPI(`AccountMaster`)
+
       .subscribe((res: any) => {
         if (res.status == "Success") {
           console.log('res', res);
@@ -1253,355 +1258,367 @@ export class AddPosComponent implements OnInit {
   getRetailSalesMaster(data: any) {
 
     this.snackBar.open('Loading...');
-    let API = `RetailSalesDataInDotnet/GetRetailSalesData/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}/Mid=${data.MID}`
+
+    // let param={
+    //   BranchCode:data.BRANCH_CODE,
+    //   VocType:data.VOCTYPE,
+    //   YearMonth:data.YEARMONTH,
+    //   VocNo:data.VOCNO,
+    //   Mid:data.MID
+
+    // }
+    // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
+
+    let API = `RetailSalesDataInDotnet/GetRetailSalesData/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`
     console.log('getRetailSalesMaster vocno', data.VOCNO);
-    this.suntechApi.getDynamicAPI(API).subscribe((res) => {
-      this.snackBar.dismiss();
-      // console.log(res, 'getRetailSalesMaster');
-      const posCustomer = res.response.customer;
-      const retailSaleData = res.response.retailSales;
-      const retailSReturnData = res.response.retailsReturn;
-      const metalPurchaseData = res.response.metalPurchase;
-      this.receiptDetailsList = res.response.retailReceipt;
-      this.sumTotalValues();
-
-      // const values = res.response;
-      if (res.status == 'Success') {
-        /**start set customer data */
-        this.vocDataForm.controls['vocdate'].setValue(retailSaleData.VOCDATE);
-        // this.vocDataForm.controls.vocdate.setHours(0,0,0);
-        const karatRate = res.response.karatRate;
-        this.retailSaleDataVocNo = retailSaleData.VOCNO;
-        this.retailSReturnVocNo = retailSReturnData.VOCNO;
-        this.metalPurchaseDataVocNo = metalPurchaseData?.VOCNO;
-
-        this.retailSalesMID = retailSaleData.MID;
-        this.retailSReturnDataMID = retailSReturnData.MID;
-        this.metalPurchaseDataMID = metalPurchaseData?.MID;
-        // alert(this.retailSaleDataVocNo);
-        // alert(this.retailSReturnVocNo);
-        // alert(this.metalPurchaseDataVocNo);
-        this.karatRateDetails = karatRate;
-
-        if (data.VOCNO == retailSaleData.VOCNO) {
-          this.vocDataForm.controls['fcn_voc_no'].setValue(
-            retailSaleData.VOCNO
-          );
-        } else {
-          this.vocDataForm.controls['fcn_voc_no'].setValue(data.VOCNO);
-        }
-        // salesperson code
-        this.vocDataForm.controls['sales_person'].setValue(
-          retailSaleData.SALESPERSON_CODE
-        );
-
-        this.customerDataForm.controls['fcn_customer_name'].setValue(
-          posCustomer.NAME
-        );
-        this.customerDataForm.controls['fcn_customer_id_type'].setValue(
-          posCustomer.IDCATEGORY
-          // posCustomer.CUST_TYPE
-        );
-        this.customerDataForm.controls['fcn_customer_id_number'].setValue(
-          posCustomer.POSCUSTIDNO
-        );
-        this.customerDataForm.controls['fcn_customer_mobile'].setValue(
-          posCustomer.MOBILE
-        );
-
-
-        this.customerDataForm.controls.tourVatRefuncYN.setValue(
-          retailSaleData.TRAYN || false
-        );
-        this.customerDataForm.controls.tourVatRefundNo.setValue(
-          retailSaleData.TRANO
-        );
-
-
-        this.inv_customer_name = posCustomer.NAME;
-        this.inv_cust_mobile_no = posCustomer.MOBILE;
-
-        this.customerDetailForm.controls.fcn_mob_code.setValue(
-          posCustomer.MOBILECODE1
-        );
-        this.customerDataForm.controls.fcn_customer_code.setValue(
-          posCustomer.CODE
-        );
-        this.getUserAttachments();
-
-        this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
-          posCustomer.MOBILE
-        );
-        this.customerDetailForm.controls['fcn_cust_detail_email'].setValue(
-          posCustomer.EMAIL
-        );
-        this.customerDetailForm.controls['fcn_cust_detail_address'].setValue(
-          posCustomer.ADDRESS
-        );
-        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(
-          posCustomer.COUNTRY_CODE
-        );
-        this.getStateMasterByID(posCustomer.COUNTRY_CODE);
-
-
-        this.customerDetailForm.controls['fcn_cust_detail_state'].setValue(
-          posCustomer.STATE
-        );
-
-        this.getCityMasterByID(posCustomer.COUNTRY_CODE, posCustomer.STATE);
-        this.customerDetailForm.controls['fcn_cust_detail_city'].setValue(
-          posCustomer.CITY
-        );
-
-        this.customerDetailForm.controls['fcn_cust_detail_idcard'].setValue(
-          posCustomer.NATIONAL_IDENTIFICATION_NO
-        );
-
-        // Customer data
-        this.customerDetailForm.controls.fcn_customer_detail_name.setValue(
-          posCustomer.NAME
-        );
-        this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
-          posCustomer.FIRSTNAME
-        );
-        this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
-          posCustomer.MIDDLENAME
-        );
-        this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
-          posCustomer.LASTNAME
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
-          posCustomer.MOBILE1
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
-          posCustomer.GENDER
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
-          posCustomer.MARITAL_ST
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
-          posCustomer.MARITAL_ST
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
-          this.dummyDateCheck(posCustomer.DATE_OF_BIRTH)
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
-          posCustomer.DESIGNATION
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
-          posCustomer.COMPANY
-        );
-        this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
-          posCustomer.NATIONALITY
-        );
-        this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-          this.dummyDateCheck(posCustomer.POSCUSTIDEXP_DATE)
-        );
-        this.customerDataForm.controls.fcn_customer_exp_date.setValue(
-          this.dummyDateCheck(posCustomer.POSCUSTIDEXP_DATE)
-        );
-
-        this.customerDetails = posCustomer;
-
-        if (this.amlNameValidation)
-          if (!posCustomer.AMLNAMEVALIDATION && posCustomer.DIGISCREENED) {
-            this.amlNameValidationData = false;
-          } else {
-            this.amlNameValidationData = true;
-            if (!this.viewOnly)
-              this.openDialog('Warning', 'Pending for approval', true);
-          }
-        /**end set customer data */
-
-        this.boardingPassForm.controls.passDetails.setValue(retailSaleData.BOARDINGPASS);
-        this.boardingPassForm.controls.flightNo.setValue(retailSaleData.FLIGHTNO);
-        this.boardingPassForm.controls.boardingDate.setValue(retailSaleData.BOARDINGDATE);
-        this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
-        this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
-
-        this.invoiceWiseForm.controls.lifeTimeWarr.setValue(retailSaleData.LIFETIMEWARRANTY);
-        this.invoiceWiseForm.controls.serviceInv.setValue(retailSaleData.SERVICE_INVOICE);
-
-        /**start set line item*/
-        if (retailSaleData != null && retailSaleData.RetailDetails != null)
-          retailSaleData.RetailDetails.forEach((data: any, index: any) => {
-            data.SRNO = index + 1;
-          });
-
-        retailSaleData.RetailDetails.map((data: any, index: any) => {
-          console.log(
-            '===============retailSalesDetails====================='
-          );
-          console.log(data, index);
-          console.log('====================================');
-
-          this.newLineItem = data;
-          // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.RetailDetails?.[0]?.IGST_ACCODE ?? '';
-          // this.newLineItem.HSN_CODE = retailSaleData?.RetailDetails?.[0]?.HSN_CODE ?? '';
-
-
-          const values: any = {
-            ID: data.SRNO,
-            sn_no: data.SRNO,
-            // sn_no: index + 1,
-            stock_code: data.STOCK_CODE,
-            // mkg_amount: ( || 0),
-            total_amount: data.DIVISION_CODE == 'D' ? (data.MKGVALUEFC - data.DISCOUNTVALUEFC) : data.MKGVALUEFC || 0,
-            pcs: data.PCS,
-            weight: data.GROSSWT,
-            description: data.STOCK_DOCDESC,
-            tax_amount: data.VAT_AMOUNTFC,
-            net_amount: data.TOTALWITHVATFC,
-            // net_amount: data.NETVALUEFC,
-            pure_wt: data.PUREWT,
-            making_amt: data.MKGVALUEFC || 0,
-            dis_amt: data.DISCOUNTVALUEFC || 0,
-            // gross_amt: (data.GROSS_AMT || 0),
-            rate: data.MKG_RATECC || 0,
-            metal_rate: data.METALVALUECC || 0,
-            taxPer: data.VAT_PER || 0,
-            metal_amt: data.METALVALUECC,
-            // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
-            stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
-          };
-
-          // this.newLineItem.pcs = data.PCS;
-          // this.newLineItem.pure_wt = data.PURITY;
-          // this.newLineItem.STONEWT = data.STONE_WT;
-          // this.newLineItem.total_amount = data.MKGVALUEFC;
-          // this.newLineItem.divisionMS = data.divisionMS;
-          this.order_items_slno_length = data.ID;
-          this.ordered_items.push(values);
-          this.currentLineItems.push(data);
-          const divisionMS: any = this.comFunc.getDivisionMS(data.DIVISION_CODE);
-          this.currentLineItems[index].divisionMS = divisionMS;
-          if (divisionMS == 'M') {
-            values.gross_amt = data.TOTAL_AMOUNTCC;
-            this.currentLineItems[index].GROSS_AMT = data.TOTAL_AMOUNTCC;
-          } else {
-            values.gross_amt = data.MKGVALUEFC - data.DISCOUNTVALUECC;
-            this.currentLineItems[index].GROSS_AMT = data.MKGVALUEFC - data.DISCOUNTVALUECC;
-          }
-          console.log(
-            '==============currentLineItems val======================'
-          );
-          console.log(this.currentLineItems);
-          console.log(this.currentLineItems[index]);
-          console.log('====================================');
-        });
-
-        this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
-
-        this.retailSalesDataPost = retailSaleData;
-        this.retailSalesDataPost.RetailDetails = [];
-
-        if (this.ordered_items.length >= 0)
-          this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((res) => {
+        this.snackBar.dismiss();
+        // console.log(res, 'getRetailSalesMaster');
+        const posCustomer = res.response.customer;
+        const retailSaleData = res.response.retailSales;
+        const retailSReturnData = res.response.retailsReturn;
+        const metalPurchaseData = res.response.metalPurchase;
+        this.receiptDetailsList = res.response.retailReceipt;
         this.sumTotalValues();
 
+        // const values = res.response;
+        if (res.status == 'Success') {
+          /**start set customer data */
+          this.vocDataForm.controls['vocdate'].setValue(retailSaleData.VOCDATE);
+          // this.vocDataForm.controls.vocdate.setHours(0,0,0);
+          const karatRate = res.response.karatRate;
+          this.retailSaleDataVocNo = retailSaleData.VOCNO;
+          this.retailSReturnVocNo = retailSReturnData.VOCNO;
+          this.metalPurchaseDataVocNo = metalPurchaseData?.VOCNO;
 
-        /**end set line item */
+          this.retailSalesMID = retailSaleData.MID;
+          this.retailSReturnDataMID = retailSReturnData.MID;
+          this.metalPurchaseDataMID = metalPurchaseData?.MID;
+          // alert(this.retailSaleDataVocNo);
+          // alert(this.retailSReturnVocNo);
+          // alert(this.metalPurchaseDataVocNo);
+          this.karatRateDetails = karatRate;
 
-        /**start set sales return item */
-        if (
-          retailSReturnData != null &&
-          retailSReturnData.retailSReturnDetails != null
-        )
-          retailSReturnData.retailSReturnDetails.map((data: any, index: any) => {
+          if (data.VOCNO == retailSaleData.VOCNO) {
+            this.vocDataForm.controls['fcn_voc_no'].setValue(
+              retailSaleData.VOCNO
+            );
+          } else {
+            this.vocDataForm.controls['fcn_voc_no'].setValue(data.VOCNO);
+          }
+          // salesperson code
+          this.vocDataForm.controls['sales_person'].setValue(
+            retailSaleData.SALESPERSON_CODE
+          );
+
+          this.customerDataForm.controls['fcn_customer_name'].setValue(
+            posCustomer.NAME
+          );
+          this.customerDataForm.controls['fcn_customer_id_type'].setValue(
+            posCustomer.IDCATEGORY
+            // posCustomer.CUST_TYPE
+          );
+          this.customerDataForm.controls['fcn_customer_id_number'].setValue(
+            posCustomer.POSCUSTIDNO
+          );
+          this.customerDataForm.controls['fcn_customer_mobile'].setValue(
+            posCustomer.MOBILE
+          );
+
+
+          this.customerDataForm.controls.tourVatRefuncYN.setValue(
+            retailSaleData.TRAYN || false
+          );
+          this.customerDataForm.controls.tourVatRefundNo.setValue(
+            retailSaleData.TRANO
+          );
+
+
+          this.inv_customer_name = posCustomer.NAME;
+          this.inv_cust_mobile_no = posCustomer.MOBILE;
+
+          this.customerDetailForm.controls.fcn_mob_code.setValue(
+            posCustomer.MOBILECODE1
+          );
+          this.customerDataForm.controls.fcn_customer_code.setValue(
+            posCustomer.CODE
+          );
+          this.getUserAttachments();
+
+          this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
+            posCustomer.MOBILE
+          );
+          this.customerDetailForm.controls['fcn_cust_detail_email'].setValue(
+            posCustomer.EMAIL
+          );
+          this.customerDetailForm.controls['fcn_cust_detail_address'].setValue(
+            posCustomer.ADDRESS
+          );
+          this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(
+            posCustomer.COUNTRY_CODE
+          );
+          this.getStateMasterByID(posCustomer.COUNTRY_CODE);
+
+
+          this.customerDetailForm.controls['fcn_cust_detail_state'].setValue(
+            posCustomer.STATE
+          );
+
+          this.getCityMasterByID(posCustomer.COUNTRY_CODE, posCustomer.STATE);
+          this.customerDetailForm.controls['fcn_cust_detail_city'].setValue(
+            posCustomer.CITY
+          );
+
+          this.customerDetailForm.controls['fcn_cust_detail_idcard'].setValue(
+            posCustomer.NATIONAL_IDENTIFICATION_NO
+          );
+
+          // Customer data
+          this.customerDetailForm.controls.fcn_customer_detail_name.setValue(
+            posCustomer.NAME
+          );
+          this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
+            posCustomer.FIRSTNAME
+          );
+          this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
+            posCustomer.MIDDLENAME
+          );
+          this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+            posCustomer.LASTNAME
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
+            posCustomer.MOBILE1
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
+            posCustomer.GENDER
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
+            posCustomer.MARITAL_ST
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
+            posCustomer.MARITAL_ST
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
+            this.dummyDateCheck(posCustomer.DATE_OF_BIRTH)
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
+            posCustomer.DESIGNATION
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
+            posCustomer.COMPANY
+          );
+          this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
+            posCustomer.NATIONALITY
+          );
+          this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+            this.dummyDateCheck(posCustomer.POSCUSTIDEXP_DATE)
+          );
+          this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+            this.dummyDateCheck(posCustomer.POSCUSTIDEXP_DATE)
+          );
+
+          this.customerDetails = posCustomer;
+
+          if (this.amlNameValidation)
+            if (!posCustomer.AMLNAMEVALIDATION && posCustomer.DIGISCREENED) {
+              this.amlNameValidationData = false;
+            } else {
+              this.amlNameValidationData = true;
+              if (!this.viewOnly)
+                this.openDialog('Warning', 'Pending for approval', true);
+            }
+          /**end set customer data */
+
+          this.boardingPassForm.controls.passDetails.setValue(retailSaleData.BOARDINGPASS);
+          this.boardingPassForm.controls.flightNo.setValue(retailSaleData.FLIGHTNO);
+          this.boardingPassForm.controls.boardingDate.setValue(retailSaleData.BOARDINGDATE);
+          this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
+          this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
+
+          this.invoiceWiseForm.controls.lifeTimeWarr.setValue(retailSaleData.LIFETIMEWARRANTY);
+          this.invoiceWiseForm.controls.serviceInv.setValue(retailSaleData.SERVICE_INVOICE);
+
+          /**start set line item*/
+          if (retailSaleData != null && retailSaleData.RetailDetails != null)
+            retailSaleData.RetailDetails.forEach((data: any, index: any) => {
+              data.SRNO = index + 1;
+            });
+
+          retailSaleData.RetailDetails.map((data: any, index: any) => {
             console.log(
-              '============retailSReturnDetails========================'
+              '===============retailSalesDetails====================='
             );
             console.log(data, index);
             console.log('====================================');
 
-            this.sales_returns_total_amt += parseFloat(
-              parseFloat(data.TOTALWITHVATFC).toFixed(2)
-            );
+            this.newLineItem = data;
+            // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.RetailDetails?.[0]?.IGST_ACCODE ?? '';
+            // this.newLineItem.HSN_CODE = retailSaleData?.RetailDetails?.[0]?.HSN_CODE ?? '';
+
+
             const values: any = {
-              rid: this.comFunc.generateNumber(),
               ID: data.SRNO,
               sn_no: data.SRNO,
+              // sn_no: index + 1,
               stock_code: data.STOCK_CODE,
-              mkg_amount: data.MKG_RATEFC,
-              total_amount: data.TOTALWITHVATFC,
+              // mkg_amount: ( || 0),
+              total_amount: data.DIVISION_CODE == 'D' ? (data.MKGVALUEFC - data.DISCOUNTVALUEFC) : data.MKGVALUEFC || 0,
               pcs: data.PCS,
               weight: data.GROSSWT,
               description: data.STOCK_DOCDESC,
-              net_amount: data.NETVALUEFC,
-              slsReturn: data,
-              // new values
-              making_amt: data.MKGVALUEFC,
-              metal_amt: data.METALVALUEFC,
+              tax_amount: data.VAT_AMOUNTFC,
+              net_amount: data.TOTALWITHVATFC,
+              // net_amount: data.NETVALUEFC,
               pure_wt: data.PUREWT,
-              stone_amt: data.STONEVALUEFC,
+              making_amt: data.MKGVALUEFC || 0,
+              dis_amt: data.DISCOUNTVALUEFC || 0,
+              // gross_amt: (data.GROSS_AMT || 0),
+              rate: data.MKG_RATECC || 0,
+              metal_rate: data.METALVALUECC || 0,
+              taxPer: data.VAT_PER || 0,
+              metal_amt: data.METALVALUECC,
+              // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
+              stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
             };
 
-            values.PUDIFF = data.PUDIFF;
-            values.STONEDIFF = data.STONEDIFF;
-            values.DISCOUNTVALUEFC = data.DISCOUNTVALUEFC;
-            values.DISCOUNT = data.DISCOUNT;
-            values.VAT_AMOUNTFC = data.VAT_AMOUNTFC;
-            values.UNIQUEID = data.UNIQUEID;
-
-            this.sales_returns_items.push(values);
-            this.sales_returns_pre_items.push(values);
-            this.sales_returns_items_slno_length = 1;
-            this.currentsalesReturnItems.push(data);
-            this.currentsalesReturnItems.rid = this.comFunc.generateNumber();
-          });
-        this.retailSReturnDataPost = retailSReturnData;
-        // this.retailSReturnDataPost.retailSReturnDetails = [];
-
-        this.sumTotalValues();
-        /**end set sales return item */
-
-        /**start set Metal purchase (Exchange) item */
-        if (
-          metalPurchaseData != null &&
-          metalPurchaseData.metalPurchaseDetails != null
-        )
-          metalPurchaseData.metalPurchaseDetails.map((data: any, index: any) => {
+            // this.newLineItem.pcs = data.PCS;
+            // this.newLineItem.pure_wt = data.PURITY;
+            // this.newLineItem.STONEWT = data.STONE_WT;
+            // this.newLineItem.total_amount = data.MKGVALUEFC;
+            // this.newLineItem.divisionMS = data.divisionMS;
+            this.order_items_slno_length = data.ID;
+            this.ordered_items.push(values);
+            this.currentLineItems.push(data);
+            const divisionMS: any = this.comFunc.getDivisionMS(data.DIVISION_CODE);
+            this.currentLineItems[index].divisionMS = divisionMS;
+            if (divisionMS == 'M') {
+              values.gross_amt = data.TOTAL_AMOUNTCC;
+              this.currentLineItems[index].GROSS_AMT = data.TOTAL_AMOUNTCC;
+            } else {
+              values.gross_amt = data.MKGVALUEFC - data.DISCOUNTVALUECC;
+              this.currentLineItems[index].GROSS_AMT = data.MKGVALUEFC - data.DISCOUNTVALUECC;
+            }
             console.log(
-              '============metalPurchaseDetail========================'
+              '==============currentLineItems val======================'
             );
-            console.log(data, index);
+            console.log(this.currentLineItems);
+            console.log(this.currentLineItems[index]);
             console.log('====================================');
-            var values: any = {
-              ID: data.SRNO,
-              sn_no: data.SRNO,
-              stock_code: data.STOCK_CODE,
-              mkg_amount: data.MKGVALUEFC,
-              total_amount: data.NETVALUEFC,
-              pcs: data.PCS,
-              weight: data.GROSSWT,
-              description: data.STOCK_DOCDESC,
-              tax_amount: '0',
-              net_amount: data.NETVALUEFC,
-              metalRate: data.METAL_RATE,
-              metalAmt: data.METALVALUEFC,
-              ozWeight: data.OZWT,
-
-              gross_wt: data.GROSSWT || 0,
-              pure_wt: data.PUREWT || 0,
-              stone_amt: data.STONEVALUEFC,
-              purity_diff: data.PUDIFF,
-              METAL_RATE_TYPE: data.METAL_RATE_TYPE,
-              METAL_RATE: data.METAL_RATE,
-              METAL_RATE_PERGMS_ITEMKARAT: data.METAL_RATE_PERGMS_ITEMKARAT,
-              OZWT: data.OZWT,
-            };
-
-            this.exchange_items.push(values);
-            this.currentExchangeMetalPurchase.push(data);
           });
-        this.metalPurchaseDataPost = metalPurchaseData;
-        // this.metalPurchaseDataPost.metalPurchaseDetail = [];
-        this.exchange_items_slno_length = this.exchange_items.length;
-        this.sumTotalValues();
-        /**end set Metal purchase (Exchange) item */
-      } else {
-      }
-    });
+
+          this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
+
+          this.retailSalesDataPost = retailSaleData;
+          this.retailSalesDataPost.RetailDetails = [];
+
+          if (this.ordered_items.length >= 0)
+            this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
+          this.sumTotalValues();
+
+
+          /**end set line item */
+
+          /**start set sales return item */
+          if (
+            retailSReturnData != null &&
+            retailSReturnData.retailSReturnDetails != null
+          )
+            retailSReturnData.retailSReturnDetails.map((data: any, index: any) => {
+              console.log(
+                '============retailSReturnDetails========================'
+              );
+              console.log(data, index);
+              console.log('====================================');
+
+              this.sales_returns_total_amt += parseFloat(
+                parseFloat(data.TOTALWITHVATFC).toFixed(2)
+              );
+              const values: any = {
+                rid: this.comFunc.generateNumber(),
+                ID: data.SRNO,
+                sn_no: data.SRNO,
+                stock_code: data.STOCK_CODE,
+                mkg_amount: data.MKG_RATEFC,
+                total_amount: data.TOTALWITHVATFC,
+                pcs: data.PCS,
+                weight: data.GROSSWT,
+                description: data.STOCK_DOCDESC,
+                net_amount: data.NETVALUEFC,
+                slsReturn: data,
+                // new values
+                making_amt: data.MKGVALUEFC,
+                metal_amt: data.METALVALUEFC,
+                pure_wt: data.PUREWT,
+                stone_amt: data.STONEVALUEFC,
+              };
+
+              values.PUDIFF = data.PUDIFF;
+              values.STONEDIFF = data.STONEDIFF;
+              values.DISCOUNTVALUEFC = data.DISCOUNTVALUEFC;
+              values.DISCOUNT = data.DISCOUNT;
+              values.VAT_AMOUNTFC = data.VAT_AMOUNTFC;
+              values.UNIQUEID = data.UNIQUEID;
+
+              this.sales_returns_items.push(values);
+              this.sales_returns_pre_items.push(values);
+              this.sales_returns_items_slno_length = 1;
+              this.currentsalesReturnItems.push(data);
+              this.currentsalesReturnItems.rid = this.comFunc.generateNumber();
+            });
+          this.retailSReturnDataPost = retailSReturnData;
+          // this.retailSReturnDataPost.retailSReturnDetails = [];
+
+          this.sumTotalValues();
+          /**end set sales return item */
+
+          /**start set Metal purchase (Exchange) item */
+          if (
+            metalPurchaseData != null &&
+            metalPurchaseData.metalPurchaseDetails != null
+          )
+            metalPurchaseData.metalPurchaseDetails.map((data: any, index: any) => {
+              console.log(
+                '============metalPurchaseDetail========================'
+              );
+              console.log(data, index);
+              console.log('====================================');
+              var values: any = {
+                ID: data.SRNO,
+                sn_no: data.SRNO,
+                stock_code: data.STOCK_CODE,
+                mkg_amount: data.MKGVALUEFC,
+                total_amount: data.NETVALUEFC,
+                pcs: data.PCS,
+                weight: data.GROSSWT,
+                description: data.STOCK_DOCDESC,
+                tax_amount: '0',
+                net_amount: data.NETVALUEFC,
+                metalRate: data.METAL_RATE,
+                metalAmt: data.METALVALUEFC,
+                ozWeight: data.OZWT,
+
+                gross_wt: data.GROSSWT || 0,
+                pure_wt: data.PUREWT || 0,
+                stone_amt: data.STONEVALUEFC,
+                purity_diff: data.PUDIFF,
+                METAL_RATE_TYPE: data.METAL_RATE_TYPE,
+                METAL_RATE: data.METAL_RATE,
+                METAL_RATE_PERGMS_ITEMKARAT: data.METAL_RATE_PERGMS_ITEMKARAT,
+                OZWT: data.OZWT,
+              };
+
+              this.exchange_items.push(values);
+              this.currentExchangeMetalPurchase.push(data);
+            });
+          this.metalPurchaseDataPost = metalPurchaseData;
+          // this.metalPurchaseDataPost.metalPurchaseDetail = [];
+          this.exchange_items_slno_length = this.exchange_items.length;
+          this.sumTotalValues();
+          /**end set Metal purchase (Exchange) item */
+        } else {
+        }
+      });
 
 
   }
@@ -1628,7 +1645,8 @@ export class AddPosComponent implements OnInit {
   }
 
   getBranchList() {
-    this.suntechApi.getDynamicAPI('UseBranchNetMaster/' + this.strUser).subscribe((resp) => {
+
+    this.suntechApi.getDynamicAPICustom('UseBranchNetMaster/' + this.strUser).subscribe((resp) => {
       this.all_branch = resp.response;
       // this.all_branch = resp.Result;
       console.log('branch', this.all_branch);
@@ -1871,7 +1889,7 @@ export class AddPosComponent implements OnInit {
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
       this.suntechApi
-        .getDynamicAPI('BranchKaratRate/' + this.strBranchcode)
+        .getDynamicAPI(`BranchKaratRate/${this.strBranchcode}`)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
             let temp_karatrate: any = resp.response;
@@ -2719,11 +2737,7 @@ export class AddPosComponent implements OnInit {
 
     this.disableSaveBtn = true;
 
-    let API = 'RetailSalesStockValidation?strStockCode=' + value.STOCK_CODE
-      +
-      '&strBranchCode=' + this.strBranchcode +
-      '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
-      '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+    let API = `RetailSalesStockValidation/${value.STOCK_CODE}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
     await
       this.suntechApi.getDynamicAPI(API)
         .subscribe(async (resp: any) => {
@@ -3149,7 +3163,12 @@ export class AddPosComponent implements OnInit {
 
   }
   getSalesPersonMaster() {
-    this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList')
+
+
+
+    let sub: Subscription = this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList')
+
+      // this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList')
       .subscribe((resp: any) => {
         var data = resp.response;
         this.salesPersonOptions = data;
@@ -3536,10 +3555,14 @@ export class AddPosComponent implements OnInit {
           posCustomer.CODE.toString() !== '0'
         ) {
           apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
-          custResponse = this.suntechApi.putDynamicAPI(apiCtrl, posCustomer)
+
+          // this.suntechApi.getDynamicAPICustom('AccountLookup/GetAccountLookupWithAccMode/R').subscribe
+          custResponse = this.suntechApi.putDynamicAPI(`PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`, posCustomer)
         } else {
           apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
-          custResponse = this.suntechApi.postDynamicAPI(apiCtrl, posCustomer)
+          custResponse = this.suntechApi.postDynamicAPI(`PosCustomerMaster/InsertCustomerMaster`, posCustomer)
+
+          // custResponse = this.suntechApi.postDynamicAPICustom(apiCtrl, posCustomer)
         }
 
 
@@ -3763,7 +3786,7 @@ export class AddPosComponent implements OnInit {
         fcn_cust_detail_phone: custMobile,
       });
       // }
-      this.suntechApi.getDynamicAPI('PosCustomerMaster/GetCustomerMaster/Mobile=' + _cust_mobile_no)
+      this.suntechApi.getDynamicAPI(`PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}`)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
             // const result = resp[0];
@@ -3916,7 +3939,7 @@ export class AddPosComponent implements OnInit {
 
     this.snackBar.open('Loading...');
     // TransAttachments/GetTransAttachments
-    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&CUSTOMER_CODE=${custCode}`
+    let API = `TransAttachments/GetTransAttachments/${this.vocType}/${this.comFunc.nullToString(custCode)}`
     // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
     // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
@@ -4075,7 +4098,8 @@ export class AddPosComponent implements OnInit {
   }
 
   getExchangeStockCodes() {
-    let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.strBranchcode}&STOCK_CODE=`
+
+    let API = `RetailsalesExchangeLookup/${this.strBranchcode}&STOCK_CODE=`
     this.suntechApi
       .getDynamicAPI(this.strBranchcode)
       .subscribe((resp) => {
@@ -4103,7 +4127,7 @@ export class AddPosComponent implements OnInit {
 
   getCreditCardList() {
     let userBranch = localStorage.getItem('userbranch');
-    this.suntechApi.getDynamicAPI('CreditCardMaster/getPaymentButtons').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI(`CreditCardMaster/getPaymentButtons`).subscribe((resp) => {
       // let _resp = resp.Result;
       this.receiptModesList = resp.paymentButtons;
       this.receiptModesTypes = resp.creditCardMaster;
@@ -5836,7 +5860,11 @@ export class AddPosComponent implements OnInit {
     let _exchangeItem: any;
     let _karatRateRec: any;
     let _karatCode: any;
-    let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.strBranchcode}&STOCK_CODE=${_exchangeCode}`
+
+
+
+
+    let API = `RetailsalesExchangeLookup/${this.strBranchcode}/${_exchangeCode}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
@@ -7045,7 +7073,7 @@ export class AddPosComponent implements OnInit {
   }
   imageURL: any[] = []
   getStockImage() {
-    let API = 'RetailSalesItemImage/' + this.lineItemForm.value.fcn_li_item_code
+    let API = `RetailSalesItemImage/${this.lineItemForm.value.fcn_li_item_code}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp: any) => {
         console.log(resp.response);
@@ -7084,10 +7112,7 @@ export class AddPosComponent implements OnInit {
       try {
 
 
-        let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
-          '&strBranchCode=' + this.strBranchcode +
-          '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
-          '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+        let API = `RetailSalesStockValidation/${event.target.value}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
         this.suntechApi.getDynamicAPI(API)
           .subscribe((resp) => {
             this.snackBar.dismiss();
@@ -7140,6 +7165,7 @@ export class AddPosComponent implements OnInit {
                 this.divisionMS = stockInfos.DIVISIONMS;
 
                 this.setGiftType();
+                const validDivisionCodes = ['M', 'D', 'W','P','N'];
 
 
                 this.isStoneIncluded = stockInfos.STONE;
@@ -7160,6 +7186,11 @@ export class AddPosComponent implements OnInit {
                   stockInfos.BALANCE_PCS
                 );
                 this.lineItemPcs = stockInfos.BALANCE_PCS;
+                const filteredValidationCodes = validDivisionCodes.filter(
+                  (code) => code === stockInfos.DIVISION.toUpperCase()
+                );
+
+              
                 this.lineItemGrossWt = this.comFunc.transformDecimalVB(
                   this.comFunc.allbranchMaster?.BMQTYDECIMALS,
                   this.comFunc.emptyToZero(stockInfos.BALANCE_QTY)
@@ -7167,7 +7198,7 @@ export class AddPosComponent implements OnInit {
                 this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
                   stockInfos.BALANCE_QTY
                 );
-                this.setGrossWtFocus();
+                // this.setGrossWtFocus();
                 this.lineItemForm.controls['fcn_li_stone_wt'].setValue(
                   stockInfos.STONE_WT || this.zeroSQtyVal
                 ); // need field
@@ -7251,6 +7282,11 @@ export class AddPosComponent implements OnInit {
 
                   this.manageCalculations();
                 } else {
+
+                  // if (filteredValidationCodes.length > 0) {
+                  //   this.changePCS({ target: { value: 1 } },true);
+                  // }
+
                   this.lineItemForm.controls['fcn_li_rate'].setValue(
                     this.comFunc.transformDecimalVB(
                       this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -7273,7 +7309,7 @@ export class AddPosComponent implements OnInit {
 
                   this.manageCalculations();
                 }
-
+                this.setGrossWtFocus();
                 this.li_tax_amount_val =
                   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
                 this.li_net_amount_val =
@@ -7381,8 +7417,9 @@ export class AddPosComponent implements OnInit {
       let voc_no = this.salesReturnForm.value.fcn_returns_voc_no;
 
       if (event.target.value != '') {
-        let API = 'RetailSReturnLookUp?strBranchCode=' + branch + '&strVoctype=' + voc_type +
-          '&intVocNo=' + voc_no + '&stryearmonth=' + fin_year
+        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`;
+
+
         this.suntechApi.getDynamicAPI(API)
           .subscribe((resp: any) => {
             if (resp.status == 'Failed') {
@@ -8252,7 +8289,7 @@ export class AddPosComponent implements OnInit {
 
 
       if (this.editOnly) {
-        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
+        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`
         this.suntechApi.putDynamicAPI(API, postData)
           .subscribe(
             (res) => {
@@ -8295,7 +8332,7 @@ export class AddPosComponent implements OnInit {
             }
           );
       } else {
-        this.suntechApi.postDynamicAPI('RetailSalesDataInDotnet/InsertRetailSalesData', postData).subscribe(
+        this.suntechApi.postDynamicAPI(`RetailSalesDataInDotnet/InsertRetailSalesData`,postData).subscribe(
           (res) => {
             this.snackBar.dismiss();
             // try {
@@ -8383,7 +8420,7 @@ export class AddPosComponent implements OnInit {
   }
 
   AccountPosting(mid: any) {
-    // if (!this.content) return
+    if (!this.content) return
     let params = {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
       VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -8394,8 +8431,13 @@ export class AddPosComponent implements OnInit {
       USERNAME: this.comFunc.userName,
       MAINVOCTYPE: this.comFunc.getqueryParamMainVocType(),
       HEADER_TABLE: this.comFunc.getqueryParamTable(),
+
+
     }
-    let Sub: Subscription = this.suntechApi.getDynamicAPIwithParams('AccountPosting', params)
+    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.YEARMONTH}/${params.VOCNO}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}`;
+
+
+    let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
           this.comFunc.toastSuccessByMsgId(result.message || 'Posting Done')
@@ -8498,7 +8540,7 @@ export class AddPosComponent implements OnInit {
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
       "YEARMONTH": this.comFunc.nullToString(this.baseYear),
     }
-    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+    this.suntechApi.postDynamicAPI(`UspReceiptDetailsWeb`, postData)
       .subscribe((result: any) => {
         console.log(result);
         let data = result.dynamicData
@@ -8675,8 +8717,8 @@ export class AddPosComponent implements OnInit {
       data: { title, msg, okBtn, swapColor },
     });
   }
-
-  changePCS(event: any) {
+ 
+  changePCS(event: any,divisionBasedAutoUpdation:boolean=false) {
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
@@ -8708,6 +8750,8 @@ export class AddPosComponent implements OnInit {
         }
       } else if (this.blockNegativeStock == 'W') {
         if (this.comFunc.emptyToZero(this.lineItemPcs) < value) {
+          if(!divisionBasedAutoUpdation)
+        {
           this.openDialog(
             'Warning',
             'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
@@ -8729,6 +8773,11 @@ export class AddPosComponent implements OnInit {
 
             }
           });
+        }
+        else{
+          this.checkDivisionForPcs(value)
+          this.manageCalculations();
+        }
         } else {
 
           // this.lineItemForm.controls['fcn_li_pcs'].setValue(
@@ -9520,7 +9569,7 @@ export class AddPosComponent implements OnInit {
           `${baseMessage}: ${allowedMetalRate}`,
           true
         );
-        
+
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
@@ -11704,7 +11753,7 @@ export class AddPosComponent implements OnInit {
     );
   }
   getYearList() {
-    let API = `FinancialYear?branchcode=${this.strBranchcode}&strusername=${this.strUser}`
+    let API = `FinancialYear/${this.strBranchcode}/${this.strUser}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status != 'Failed') {
@@ -12187,7 +12236,7 @@ export class AddPosComponent implements OnInit {
   }
 
   getCityMasterByID(countryCode: any, stateCode: any) {
-    let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CITY MASTER')}/${encodeURIComponent(countryCode)}/${encodeURIComponent(stateCode)}`
+    let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CITY MASTER')}/${encodeURIComponent(this.comFunc.nullToString(countryCode))}/${this.comFunc.nullToString(encodeURIComponent(stateCode))}`
     this.suntechApi.getDynamicAPI(API).
       subscribe(async data => {
         if (data.status == "Success") {
@@ -12273,8 +12322,22 @@ export class AddPosComponent implements OnInit {
   }
 
   generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
+    // getDynamicAPIwithParams
+
+    //  let param = { 
+    //   VocType:this.vocType,
+    //   BranchCode:this.strBranchcode,
+    //   strYEARMONTH:this.baseYear,
+    //   vocdate:this.convertDateToYMD(this.vocDataForm.value.vocdate),
+    //   blnTransferDummyDatabase:false
+
+
+
+
+    //   }
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.vocType}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`;
     this.suntechApi.getDynamicAPI(API)
+      // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('GenerateNewVoucherNumber/GenerateNewVocNum',param)
       .subscribe((resp) => {
         if (resp.status == "Success") {
           this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
@@ -12352,7 +12415,7 @@ export class AddPosComponent implements OnInit {
         "Username": localStorage.getItem('username') || '',
         "Password": this.authForm.value.password
       };
-      this.suntechApi.postDynamicAPI(API, postData).subscribe((resp: any) => {
+      this.suntechApi.postDynamicAPICustom(API, postData).subscribe((resp: any) => {
         this.snackBar.dismiss();
         if (resp.status == 'Success') {
           this.modalReferenceUserAuth.close(true);
@@ -12728,7 +12791,7 @@ export class AddPosComponent implements OnInit {
   async getFinancialYear() {
     console.log(' this.vocDataForm.value.vocdate ', this.vocDataForm.value.vocdate);
 
-    const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
+    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
     const res = await this.suntechApi.getDynamicAPI(API).toPromise()
     // .subscribe((resp) => {
     console.log(res);
@@ -12839,6 +12902,11 @@ export class AddPosComponent implements OnInit {
   // }
 
   getBranchCurrencyList() {
+    // let param={
+
+    // }
+    //     let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('CurrencyMaster/GetCurrencyMasterList',param)
+
     const API = `CurrencyMaster/GetCurrencyMasterList`;
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res: any) => {
@@ -12972,7 +13040,7 @@ export class AddPosComponent implements OnInit {
       "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
       "YEARMONTH": this.comFunc.nullToString(this.baseYear),
     }
-    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+    this.suntechApi.postDynamicAPI(`UspReceiptDetailsWeb`, postData)
       .subscribe((result: any) => {
         console.log(result);
         let data = result.dynamicData
@@ -13047,7 +13115,7 @@ export class AddPosComponent implements OnInit {
       "YEARMONTH": this.comFunc.nullToString(this.baseYear),
     };
 
-    this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
+    this.suntechApi.postDynamicAPI(`UspReceiptDetailsWeb`, postData)
       .subscribe((result: any) => {
         console.log(result);
         // let data = result.dynamicData;

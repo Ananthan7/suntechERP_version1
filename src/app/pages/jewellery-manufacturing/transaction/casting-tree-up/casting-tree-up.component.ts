@@ -180,7 +180,7 @@ export class CastingTreeUpComponent implements OnInit {
   setAllInitialValues() {
     if (!this.content) return
     let API = `JobTreeMasterDJ/GetJobTreeMasterWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response

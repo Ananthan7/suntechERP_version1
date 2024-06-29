@@ -26,7 +26,7 @@
                 formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace />
             </mat-form-field>
             <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
-              *ngIf=" viewDisable || editMode == false"></master-search>
+            *ngIf=" viewDisable == false && editMode == false "     ></master-search>
           </div>
         </div>
         <div class="row mb-2">

@@ -160,7 +160,7 @@
                                         style="width: 100%;">
                                         <!-- <mat-label>Outline form field</mat-label> -->
                                         <!-- <input matInput placeholder="Placeholder"> -->
-                                        <input matInput id="username" value
+                                        <input matInput id="username"
                                             (keyup)="changeTextUpperCase($event)"
                                             (focusout)="checkUserName($event)"
                                             formControlName="username">
@@ -175,7 +175,7 @@
                                     <mat-form-field appearance="outline"
                                         style="width: 100%;">
                                         <input id="password" type="password"
-                                            matInput value
+                                            matInput
                                             (focusout)="checkUserNamePassword($event)"
                                             formControlName="password">
                                         <mat-icon matPrefix
@@ -192,6 +192,7 @@
                                             autocomplete="new-password" matInput
                                             formControlName="branch"
                                             [matAutocomplete]="branch"
+                                            [readonly]="validateState == 0"
                                             (keyup)="changeBranchText($event)"
                                             (focusout)="changeBranch($event)">
                                         <mat-autocomplete
@@ -215,6 +216,7 @@
                                         <input id="year" matInput type="text"
                                             formControlName="year"
                                             [matAutocomplete]="year"
+                                            [readonly]="validateState == 0"
                                             (focusout)="validateYear($event)">
                                         <mat-autocomplete
                                             #year="matAutocomplete"

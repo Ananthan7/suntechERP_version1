@@ -379,6 +379,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     this.stockCodeScrapValidate()
     this.getTimeAndLossDetails()
+    this.getSequenceDetailData()
     //set where conditions
     this.setFromProcessWhereCondition()
     this.setToProcessWhereCondition()
@@ -1122,7 +1123,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
     let scrapPureWt = this.commonService.emptyToZero(Number(form.scrapQuantity) * Number(form.SCRAP_PURITY))
-    let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
+    // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
 
     console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
     this.gridSRNO += 1
@@ -1169,9 +1170,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "LOSS_QTY": this.commonService.emptyToZero(form.stdLoss),
       "LOSS_PURE_QTY": this.commonService.emptyToZero(LOSS_PURE_QTY),
       "STONE_AMOUNTFC": this.commonService.emptyToZero(stoneAmount),
-      "STONE_AMOUNTLC": this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount),
+      "STONE_AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
       "METAL_AMOUNTFC": this.commonService.emptyToZero(metalAmount),
-      "METAL_AMOUNTLC": this.commonService.FCToCC(form.CURRENCY_CODE, metalAmount),
+      "METAL_AMOUNTLC": this.commonService.emptyToZero(metalAmount),
       "MAKING_RATEFC": 0,
       "MAKING_RATELC": 0,
       "MAKING_AMOUNTFC": 0,
