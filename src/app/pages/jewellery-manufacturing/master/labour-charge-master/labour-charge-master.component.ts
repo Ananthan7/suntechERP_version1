@@ -1068,7 +1068,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
-    let Sub: Subscription = this.dataService.putDynamicAPICustom(API, postData)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
