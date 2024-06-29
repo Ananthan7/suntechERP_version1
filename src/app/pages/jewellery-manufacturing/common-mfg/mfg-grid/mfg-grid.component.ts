@@ -251,7 +251,7 @@ export class MfgGridComponent implements OnInit {
     this.subscriptions$.push(sub)
   }
   getGridVisibleSettings() {
-    let sub: Subscription = this.dataService.getDynamicAPICustom(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
+    let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
@@ -509,7 +509,7 @@ export class MfgGridComponent implements OnInit {
 //     this.subscriptions$.push(sub)
 //   }
 //   getGridVisibleSettings() {
-//     let sub: Subscription = this.dataService.getDynamicAPICustom(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
+//     let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
 //       .subscribe((resp: any) => {
 //         this.snackBar.dismiss();
 //         this.skeltonLoading = false;
