@@ -33,6 +33,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   approvalReqFlag: any = false
+  DIAMANFBARCODE: any = false
 
   private subscriptions: Subscription[] = [];
   STDDateTimeData: DateTimeModel = {
@@ -277,6 +278,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
 
   setHearderDetails() {
+    this.DIAMANFBARCODE = this.commonService.getCompanyParamValue('DIAMANFBARCODE')
     console.log(this.content, 'this.content');
     let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
     if (HEADERDETAILS) {

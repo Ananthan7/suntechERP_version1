@@ -18,7 +18,7 @@
       <div class="p-3">
         <div class="row">
           <div class="col-md-6">
-            <div class="row align-items-center mb-2">
+            <div class="row align-items-center mb-2" *ngIf="DIAMANFBARCODE">
               <div class="col-sm-2">
                 <!-- ./../../assets/images/barcode-scanner.png -->
                 <img class="image" width="40px" height="40px"
@@ -358,12 +358,15 @@
                       </td>
                       <td></td>
                       <td></td>
-                      <td>Stone Pcs</td>
                       <td>
-                        <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
-                            NumberOnly maxlength="10" [readonly]="viewMode" />
-                        </mat-form-field>
+                        <ng-template *ngIf="false">Stone Pcs</ng-template></td>
+                      <td>
+                        <ng-template *ngIf="false">
+                          <mat-form-field style="width: 110px;">
+                            <input type="text" matInput class="text-right"
+                              NumberOnly maxlength="10" [readonly]="viewMode" />
+                          </mat-form-field>
+                        </ng-template>
                       </td>
                     </tr>
                     <tr>
@@ -385,13 +388,20 @@
                       </td>
                       <td></td>
                       <td></td>
-                      <td>Stone Weight</td>
+                      <!-- need tochange -->
                       <td>
-                        <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode"
-                            class="text-right"
-                            StoneDecimalInput [max]="10" />
-                        </mat-form-field>
+                        <ng-template *ngIf="false">
+                          Stone Weight
+                        </ng-template>
+                      </td>
+                      <td>
+                        <ng-template *ngIf="false">
+                          <mat-form-field style="width: 110px;">
+                            <input type="text" matInput [readonly]="viewMode"
+                              class="text-right"
+                              StoneDecimalInput [max]="10" />
+                          </mat-form-field>
+                        </ng-template>
                       </td>
                     </tr>
                   </thead>
