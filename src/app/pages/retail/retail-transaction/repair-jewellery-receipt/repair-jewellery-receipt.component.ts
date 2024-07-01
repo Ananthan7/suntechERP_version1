@@ -252,15 +252,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         this.repairjewelleryreceiptFrom.controls["remark"].setValue(
           this.filteredData[0].REMARKS
         );
+        let API = `Repair/GetRepairDetailList/${this.branchCode}/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${this.yearMonth}`
 
         let detailSub: Subscription = this.dataService
-          .getDynamicAPI(
-            `Repair/GetRepairDetailList/${
-              this.branchCode
-            }/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${
-              this.yearMonth
-            }`
-          )
+          .getDynamicAPI(API)
           .subscribe((result) => {
             this.snackBar.dismiss();
 
@@ -410,7 +405,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       SYSTEM_DATE: new Date().toISOString(),
       NAVSEQNO: 0,
       DELIVERYDATE:
-        this.repairjewelleryreceiptFrom.value.customer_delivery_date._d.toISOString(),
+        this.repairjewelleryreceiptFrom.value.customer_delivery_date,
       SALESREFERENCE: "",
       STATUS: 0,
       TRANSFERID: 0,

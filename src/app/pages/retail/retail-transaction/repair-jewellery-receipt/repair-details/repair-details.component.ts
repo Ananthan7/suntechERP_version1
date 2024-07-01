@@ -46,7 +46,6 @@ export class RepairDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
 
@@ -318,6 +317,7 @@ export class RepairDetailsComponent implements OnInit {
       this.repairjewelleryreceiptdetailsFrom.controls["withStone"].setValue(
         this.receiptData.WITHSTONE !== 0
       );
+      this.stoneCheck = this.receiptData.WITHSTONE !== 0;
       this.repairjewelleryreceiptdetailsFrom.controls["stone_type"].setValue(
         this.receiptData.STONE_TYPE
       );
