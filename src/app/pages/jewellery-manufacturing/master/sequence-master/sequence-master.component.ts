@@ -140,7 +140,7 @@ export class SequenceMasterComponent implements OnInit {
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     this.commonService.toastInfoByMsgId('MSG81447');
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response
@@ -410,8 +410,8 @@ export class SequenceMasterComponent implements OnInit {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])

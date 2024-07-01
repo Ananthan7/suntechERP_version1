@@ -827,9 +827,9 @@ export class LabourChargeMasterComponent implements OnInit {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value.toUpperCase()}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
     this.commonService.showSnackBarMsg('MSG81447');
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
@@ -891,10 +891,10 @@ export class LabourChargeMasterComponent implements OnInit {
   //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
   //   };
 
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`;
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
   //   this.commonService.showSnackBarMsg('MSG81447');
 
-  //   let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
   //     .subscribe((result) => {
   //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
   //       if (data.length == 0) {
@@ -1068,7 +1068,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
-    let Sub: Subscription = this.dataService.putDynamicAPICustom(API, postData)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
