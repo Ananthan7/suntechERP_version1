@@ -356,7 +356,7 @@ setPostData(){
     let API = 'DiamondDismantle/InsertDiamondDismantle'
     let postData = this.setPostData()
     this.isloading = true;
-    let Sub: Subscription = this.dataService.postDynamicAPICustom(API, postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
         if (result.response) {
