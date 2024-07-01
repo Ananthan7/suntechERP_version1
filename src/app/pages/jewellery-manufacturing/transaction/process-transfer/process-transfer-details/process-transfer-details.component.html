@@ -18,7 +18,7 @@
       <div class="p-3">
         <div class="row">
           <div class="col-md-6">
-            <div class="row align-items-center mb-2">
+            <div class="row align-items-center mb-2" *ngIf="DIAMANFBARCODE">
               <div class="col-sm-2">
                 <!-- ./../../assets/images/barcode-scanner.png -->
                 <img class="image" width="40px" height="40px"
@@ -317,6 +317,7 @@
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
+                            (focusout)="stdLossChange($event)"
                             formControlName="stdLoss" />
                         </mat-form-field>
                       </td>
@@ -358,12 +359,15 @@
                       </td>
                       <td></td>
                       <td></td>
-                      <td>Stone Pcs</td>
                       <td>
-                        <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
-                            NumberOnly maxlength="10" [readonly]="viewMode" />
-                        </mat-form-field>
+                        <ng-template *ngIf="false">Stone Pcs</ng-template></td>
+                      <td>
+                        <ng-template *ngIf="false">
+                          <mat-form-field style="width: 110px;">
+                            <input type="text" matInput class="text-right"
+                              NumberOnly maxlength="10" [readonly]="viewMode" />
+                          </mat-form-field>
+                        </ng-template>
                       </td>
                     </tr>
                     <tr>
@@ -385,13 +389,20 @@
                       </td>
                       <td></td>
                       <td></td>
-                      <td>Stone Weight</td>
+                      <!-- need tochange -->
                       <td>
-                        <mat-form-field style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode"
-                            class="text-right"
-                            StoneDecimalInput [max]="10" />
-                        </mat-form-field>
+                        <ng-template *ngIf="false">
+                          Stone Weight
+                        </ng-template>
+                      </td>
+                      <td>
+                        <ng-template *ngIf="false">
+                          <mat-form-field style="width: 110px;">
+                            <input type="text" matInput [readonly]="viewMode"
+                              class="text-right"
+                              StoneDecimalInput [max]="10" />
+                          </mat-form-field>
+                        </ng-template>
                       </td>
                     </tr>
                   </thead>
@@ -1057,8 +1068,15 @@
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="RATEFC" caption="Rate FC"
                 alignment="right" [allowEditing]="false"></dxi-column>
-              <dxi-column dataField="PRINTED" caption="Printed"
-                alignment="center" [allowEditing]="false"></dxi-column>
+              <dxi-column dataField="PRINTED" [allowEditing]="false"
+                caption="Printed" alignment="center"
+                cellTemplate="Printed">
+                <div *dxTemplate="let data1 of 'Printed'">
+                  <input type="checkbox" [disabled]="viewMode"
+                    [checked]="data1.value" />
+                </div>
+              </dxi-column>
+
               <dxi-column dataField="PUREWT" caption="PUREWT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="SQLID" caption="ISBROCKEN"
@@ -1089,8 +1107,14 @@
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="ISMISSING" caption="ISMISSING"
                 alignment="center" [allowEditing]="false"></dxi-column>
-              <dxi-column dataField="IS_AUTHORISE" caption="IS AUTHORISE"
-                alignment="center" [allowEditing]="false"></dxi-column>
+              <dxi-column dataField="IS_AUTHORISE" [allowEditing]="false"
+                caption="IS AUTHORISE" alignment="center"
+                cellTemplate="IS_AUTHORISE">
+                <div *dxTemplate="let data1 of 'IS_AUTHORISE'">
+                  <input type="checkbox" [disabled]="viewMode"
+                    [checked]="data1.value" />
+                </div>
+              </dxi-column>
               <dxi-column dataField="SCRAP_STOCK_CODE"
                 caption="SCRAP_STOCK_CODE" alignment="center"
                 [allowEditing]="false"></dxi-column>
@@ -1120,23 +1144,40 @@
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="IRON_SCRAP_WT" caption="IRON_SCRAP_WT"
                 alignment="right" [allowEditing]="false"></dxi-column>
-              <dxi-column dataField="EXCLUDE_TRANSFER_WT"
-                caption="EXCLUDE_TRANSFER_WT" alignment="right"
-                [allowEditing]="false"></dxi-column>
+              <dxi-column dataField="EXCLUDE_TRANSFER_WT" [allowEditing]="false"
+                caption="EXCLUDE TRANSFER WT" alignment="center"
+                cellTemplate="EXCLUDE_TRANSFER_WT">
+                <div *dxTemplate="let data1 of 'EXCLUDE_TRANSFER_WT'">
+                  <input type="checkbox" [disabled]="viewMode"
+                    [checked]="data1.value" />
+                </div>
+              </dxi-column>
               <dxi-column dataField="IRON_WT" caption="IRON_WT"
                 alignment="right" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="AUTORIZE_TIME" caption="AUTORIZE_TIME"
                 alignment="center" [allowEditing]="false"></dxi-column>
-              <dxi-column dataField="IS_REJECT" caption="IS_REJECT"
-                alignment="center" [allowEditing]="false"></dxi-column>
+              <dxi-column dataField="IS_REJECT" [allowEditing]="false"
+                caption="IS_REJECT" alignment="center"
+                cellTemplate="IS_REJECT">
+                <div *dxTemplate="let data1 of 'IS_REJECT'">
+                  <input type="checkbox" [disabled]="viewMode"
+                    [checked]="data1.value" />
+                </div>
+              </dxi-column>
               <dxi-column dataField="REASON" caption="REASON"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="REJ_REMARKS" caption="REJ_REMARKS"
                 alignment="center" [allowEditing]="false"></dxi-column>
               <dxi-column dataField="ATTACHMENT_FILE" caption="ATTACHMENT_FILE"
                 alignment="center" [allowEditing]="false"></dxi-column>
-              <dxi-column dataField="REPAIR_PROCESS" caption="REPAIR_PROCESS"
-                alignment="center" [allowEditing]="false"></dxi-column>
+              <dxi-column dataField="REPAIR_PROCESS" [allowEditing]="false"
+                caption="REPAIR_PROCESS" alignment="center"
+                cellTemplate="REPAIR_PROCESS">
+                <div *dxTemplate="let data1 of 'REPAIR_PROCESS'">
+                  <input type="checkbox" [disabled]="viewMode"
+                    [checked]="data1.value" />
+                </div>
+              </dxi-column>
             </dx-data-grid>
             <!--  backgroundcolor="#000" -->
           </div>
@@ -1146,7 +1187,7 @@
                 :</label>
               <div class="col-md-9">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="remarks" />
+                  <input type="text" matInput formControlName="remarks" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
