@@ -1,24 +1,12 @@
 import { Component, ComponentFactory, Input, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalRef,
-} from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
-import { Code } from "angular-feather/icons";
-import { AlloyAllocationComponent } from "src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component";
-import { IndexedDbService } from "src/app/services/indexed-db.service";
 
 @Component({
   selector: "app-repair-details",
@@ -28,7 +16,7 @@ import { IndexedDbService } from "src/app/services/indexed-db.service";
 export class RepairDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input() receiptData!: any;
-  stoneCheck: boolean = false;
+  stoneCheck: any = false;
   tableData: any[] = [];
   userName = localStorage.getItem("username");
   branchCode?: String;
@@ -48,41 +36,22 @@ export class RepairDetailsComponent implements OnInit {
     "Repair Type",
     "Type",
   ];
-  columnheadItemDetails1: any[] = [
-    "Comp Code",
-    "Description",
-    "Pcs",
-    "Size Set",
-    "Size Code",
-    "Type",
-    "Category",
-    "Shape",
-    "Height",
-    "Width",
-    "Length",
-    "Radius",
-    "Remarks",
-  ];
 
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
-    private comService: CommonServiceService // private indexedDb: IndexedDbService,
+    private comService: CommonServiceService
   ) {}
 
   ngOnInit(): void {
+
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
 
-    console.log(this.content);
-    
-
     if (this.receiptData && Object.keys(this.receiptData).length > 0)
       this.setReceiptData();
-    else this.getAccountHead();
   }
 
   repairjewelleryreceiptdetailsFrom: FormGroup = this.formBuilder.group({
@@ -94,7 +63,6 @@ export class RepairDetailsComponent implements OnInit {
     type_of_item: [""],
     total_amount: [""],
     status: [""],
-    status_des: [""],
     material: [""],
     Est_repair_charge: [""],
     own_stock: [""],
@@ -106,7 +74,9 @@ export class RepairDetailsComponent implements OnInit {
     remark: [""],
     description: [""],
     text: [""],
-    stoneCheck: [false],
+    withStone: [false],
+    checked: [false],
+    damaged: [false],
   });
 
   DescCodeData: MasterSearchModel = {
@@ -121,7 +91,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   DescCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.descriptionCode.setValue(
       e.CODE
     );
@@ -142,7 +111,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   typeOfCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.type_of.setValue(e.CODE);
   }
 
@@ -158,7 +126,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   typeOfItemCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.type_of_item.setValue(
       e.DESCRIPTION
     );
@@ -176,18 +143,8 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   statusCodeSelected(e: any) {
-    console.log(e);
-
-    this.repairjewelleryreceiptdetailsFrom.controls["status"].setValue(e.CODE);
-    this.repairjewelleryreceiptdetailsFrom.controls["status_des"].setValue(
+    this.repairjewelleryreceiptdetailsFrom.controls["status"].setValue(
       e.DESCRIPTION
-    );
-
-    console.log(
-      this.repairjewelleryreceiptdetailsFrom.controls["status"].value
-    );
-    console.log(
-      this.repairjewelleryreceiptdetailsFrom.controls["status_des"].value
     );
   }
 
@@ -203,7 +160,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   materialCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.material.setValue(
       e.DESCRIPTION
     );
@@ -221,7 +177,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   EstRepairChargeCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.Est_repair_charge.setValue(
       e.CODE
     );
@@ -239,7 +194,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   stoneTypeCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.stone_type.setValue(e.CODE);
   }
 
@@ -255,7 +209,6 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   CutCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.Cut.setValue(e.CODE);
   }
 
@@ -271,14 +224,10 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   ApproxCodeSelected(e: any) {
-    console.log(e);
     this.repairjewelleryreceiptdetailsFrom.controls.Approx.setValue(e.CODE);
   }
 
   close(data?: any) {
-    console.log(data);
-
-    //TODO reset forms and data before closing
     if (
       this.receiptData != null &&
       this.receiptData != undefined &&
@@ -293,23 +242,21 @@ export class RepairDetailsComponent implements OnInit {
     this.stoneCheck = e.checked;
   }
 
-  getAccountHead(e?: any) {
-    console.log(e);
-  }
-
   setReceiptData() {
     if (
       this.receiptData != null &&
       this.receiptData != undefined &&
       Object.keys(this.receiptData).length > 0
     ) {
+      console.log(this.receiptData);
+
       this.repairjewelleryreceiptdetailsFrom.controls[
         "descriptionCode"
       ].setValue(this.receiptData.ITEM_DESCRIPTION);
 
-      // this.repairjewelleryreceiptdetailsFrom.controls["description"].setValue(
-      //   this.receiptData.ITEM_DESCRIPTION
-      // );
+      this.repairjewelleryreceiptdetailsFrom.controls["description"].setValue(
+        this.receiptData.ITEM_NARRATION
+      );
 
       this.repairjewelleryreceiptdetailsFrom.controls["Pcs"].setValue(
         this.receiptData.PCS
@@ -323,103 +270,70 @@ export class RepairDetailsComponent implements OnInit {
         this.receiptData.DELIVERY_DATE
       );
       this.repairjewelleryreceiptdetailsFrom.controls["gross_Wt"].setValue(
-        this.comService.decimalQuantityFormat(
-          this.receiptData.GROSSWT,
-          "THREE"
-        )
+        this.comService.decimalQuantityFormat(this.receiptData.GROSSWT, "THREE")
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["type_of_item"].setValue(
-        this.receiptData.ITEM_STATUSTYPE
+        this.receiptData.REPAIR_ITEMTYPE
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["total_amount"].setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.AMOUNT),
-          "AMOUNT"
-        )
+        this.receiptData.AMOUNT
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["status"].setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
-          "AMOUNT"
-        )
-      );
-
-      this.repairjewelleryreceiptdetailsFrom.controls["status_des"].setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTFC),
-          "AMOUNT"
-        )
+        this.receiptData.ITEM_STATUSTYPE
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["material"].setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
-          "AMOUNT"
-        )
+        this.receiptData.MATERIAL_TYPE
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls[
         "Est_repair_charge"
       ].setValue(
         this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
+          this.comService.emptyToZero(this.receiptData.EST_REPAIR_CHARGES),
           "AMOUNT"
         )
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["own_stock"].setValue(
-        this.receiptData.REMARKS
+        this.receiptData.OWN_STOCK
       );
-      this.repairjewelleryreceiptdetailsFrom.controls[
-        "accept_checkbox"
-      ].setValue(this.receiptData.MODEDESC);
-      this.repairjewelleryreceiptdetailsFrom.controls[
-        "changes_checkbox"
-      ].setValue(this.receiptData.CARD_NO);
+
+      this.repairjewelleryreceiptdetailsFrom.controls["checked"].setValue(
+        this.receiptData.CHECKED !== 0
+      );
+
+      this.repairjewelleryreceiptdetailsFrom.controls["damaged"].setValue(
+        this.receiptData.DAMAGED !== 0
+      );
       this.repairjewelleryreceiptdetailsFrom.controls["repair_bags"].setValue(
-        this.receiptData.CARD_HOLDER
+        this.receiptData.REPAIRBAGNO
       );
       this.repairjewelleryreceiptdetailsFrom.controls["remark"].setValue(
-        this.receiptData.CARD_HOLDER
+        this.receiptData.DT_REMARKS
       );
-      this.repairjewelleryreceiptdetailsFrom.controls["stoneCheck"].setValue(
-        this.receiptData.CARD_HOLDER
+      this.repairjewelleryreceiptdetailsFrom.controls["withStone"].setValue(
+        this.receiptData.WITHSTONE !== 0
       );
       this.repairjewelleryreceiptdetailsFrom.controls["stone_type"].setValue(
-        this.receiptData.CARD_HOLDER
+        this.receiptData.STONE_TYPE
       );
       this.repairjewelleryreceiptdetailsFrom.controls["no_of"].setValue(
-        this.receiptData.CARD_HOLDER
+        this.receiptData.NO_OF_STONES
       );
       this.repairjewelleryreceiptdetailsFrom.controls["Cut"].setValue(
-        this.receiptData.CARD_HOLDER
+        this.receiptData.CUT
       );
       this.repairjewelleryreceiptdetailsFrom.controls["Approx"].setValue(
-        this.receiptData.CARD_HOLDER
+        this.receiptData.APPROX_SIZE
       );
     }
-
-    // receiptData
-  }
-
-  adddata() {}
-
-  adddatas() {}
-
-  removedata() {
-    this.tableData.pop();
-  }
-
-  removedatas() {
-    this.tableData.pop();
   }
 
   formSubmit() {
-    console.log(this.content);
-
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
@@ -437,7 +351,7 @@ export class RepairDetailsComponent implements OnInit {
       STOCK_CODE: "",
       ITEM_DESCRIPTION:
         this.repairjewelleryreceiptdetailsFrom.value.descriptionCode,
-      ITEM_NARRATION: "",
+      ITEM_NARRATION: this.repairjewelleryreceiptdetailsFrom.value.description,
       PCS: this.repairjewelleryreceiptdetailsFrom.value.Pcs,
       REPAIR_TYPE: this.repairjewelleryreceiptdetailsFrom.value.type_of,
       GROSSWT: this.comService.decimalQuantityFormat(
@@ -448,7 +362,7 @@ export class RepairDetailsComponent implements OnInit {
         this.repairjewelleryreceiptdetailsFrom.value.type_of_item,
       DELIVERY_DATE: this.repairjewelleryreceiptdetailsFrom.value.delivery_date,
       AMOUNT: this.repairjewelleryreceiptdetailsFrom.value.total_amount,
-      STATUS: this.repairjewelleryreceiptdetailsFrom.value.status,
+      STATUS: 0,
       REPAIR_ITEMTYPE: "",
       ITEM_PICTUREPATH: "",
       TRANSFERID: 0,
@@ -474,21 +388,21 @@ export class RepairDetailsComponent implements OnInit {
       CHECKED: 0,
       DAMAGED: 0,
       RECEIPT: 0,
-      WITHSTONE: this.repairjewelleryreceiptdetailsFrom.value.stoneCheck,
+      WITHSTONE: this.stoneCheck === true ? 1 : 0,
       AUTHORIZE: true,
-      AUTHORIZEDDATE: "",
+      AUTHORIZEDDATE: new Date().toISOString(),
       TRANSFERFLAG: true,
       REPAIRRETURNID: 0,
       DT_WSID: 0,
-      DT_VOCDATE: "",
+      DT_VOCDATE: new Date().toISOString(),
       DT_STATUS: 0,
       DT_SALESPERSON_CODE: "",
       DT_POSCUSTCODE: "",
       DT_PARTYNAME: "",
       DT_MOBILE: "",
       FROM_BRANCH: "",
-      DT_DELIVERY_DATE: "",
-      DELIVERED_DATE: "",
+      DT_DELIVERY_DATE: new Date().toISOString(),
+      DELIVERED_DATE: new Date().toISOString(),
       DT_TRANSFERID: 0,
       DT_VOCTYPE: "",
       DT_VOCNO: 0,
@@ -500,7 +414,7 @@ export class RepairDetailsComponent implements OnInit {
       DT_TYPE: "",
       DT_EMAIL: "",
       DT_REMARKS: this.repairjewelleryreceiptdetailsFrom.value.remark,
-      DT_DELIVERYDATE: "",
+      DT_DELIVERYDATE: new Date().toISOString(),
       DT_TOTAL_PCS: 0,
       DT_TOTAL_GRWT: 0,
       DT_NAVSEQNO: 0,
@@ -511,14 +425,14 @@ export class RepairDetailsComponent implements OnInit {
       DT_RELIGION: "",
       DT_CITY: "",
       DT_TEL2: "",
-      DT_SYSTEM_DATE: "",
+      DT_SYSTEM_DATE: new Date().toISOString(),
       DT_SALESREFERENCE: "",
       DT_AUTHORISE: 0,
       DT_AUTHORISE_BRANCH: "",
       EST_REPAIR_CHARGES:
         this.repairjewelleryreceiptdetailsFrom.value.Est_repair_charge,
-      AUTH_INBRANCH_DATE: "",
-      AUTH_INHO_DATE: "",
+      AUTH_INBRANCH_DATE: new Date().toISOString(),
+      AUTH_INHO_DATE: new Date().toISOString(),
       AUTH_INBRANCH_REMARKS: "",
       AUTH_INBRANCH_USER: "",
       AUTH_INHO_REMARKS: "",

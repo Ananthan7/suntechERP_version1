@@ -6,7 +6,11 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header *ngIf="viewOnly == false"  (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header
+  *ngIf="viewOnly == false"
+  (saveClick)="formSubmit()"
+  (cancelClick)="close()"
+></modal-header>
 <!-- content section -->
 <div class="row">
   <form [formGroup]="repairjewelleryreceiptFrom">
@@ -42,7 +46,7 @@
             <div class="col-md-3">
               <div class="position-relative d-flex">
                 <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="voctype" />
+                  <input type="text" matInput formControlName="vocType" />
                 </mat-form-field>
               </div>
             </div>

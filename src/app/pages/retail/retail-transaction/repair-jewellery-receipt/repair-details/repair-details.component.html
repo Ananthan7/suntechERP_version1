@@ -183,14 +183,6 @@
                   ></master-search>
                 </div>
               </div>
-
-              <div class="col-md-2">
-                <div class="position-relative d-flex">
-                  <mat-form-field style="width: 100%">
-                    <input type="text" matInput formControlName="status_des" />
-                  </mat-form-field>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -266,7 +258,7 @@
               <span>Check The Diamond/Product before Accepting for</span>
               <mat-checkbox
                 class="example-margin"
-                formControlName="accept_checkbox"
+                formControlName="checked"
               ></mat-checkbox>
             </div>
           </div>
@@ -287,7 +279,7 @@
               >
               <mat-checkbox
                 class="example-margin"
-                formControlName="changes_checkbox"
+                formControlName="damaged"
               ></mat-checkbox>
             </div>
           </div>
@@ -333,14 +325,14 @@
             <mat-checkbox
               class="example-margin"
               (change)="withStoneCheck($event)"
-              formControlName="stoneCheck"
+              formControlName="withStone"
             >
               With Stone
             </mat-checkbox>
           </div>
         </div>
 
-        <div *ngIf="stoneCheck === true" class="row">
+        <div *ngIf="stoneCheck === true " class="row">
           <div class="col-md-10">
             <div class="row mb-1">
               <label

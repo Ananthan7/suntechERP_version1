@@ -1,10 +1,5 @@
-import { Component, ComponentFactory, Input, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { Component, Input, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import {
   NgbActiveModal,
   NgbModal,
@@ -17,8 +12,6 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
-import { Code } from "angular-feather/icons";
-import { AlloyAllocationComponent } from "src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component";
 import { RepairDetailsComponent } from "./repair-details/repair-details.component";
 
 @Component({
@@ -37,22 +30,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     "REPAIR_TYPE",
     "ITEM_STATUSTYPE",
   ];
-  columnheadItemDetails1: any[] = [
-    "Comp Code",
-    "Description",
-    "Pcs",
-    "Size Set",
-    "Size Code",
-    "Type",
-    "Category",
-    "Shape",
-    "Height",
-    "Width",
-    "Length",
-    "Radius",
-    "Remarks",
-  ];
-  columnheadItemDetails2: any[] = ["Repair Narration"];
+
   @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem("username");
@@ -86,8 +64,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     if (this.content?.MID != null) this.getArgsData();
     else this.generateVocNo();
 
-    this.snackBar.open("Loading...");
-    this.repairjewelleryreceiptFrom.controls.voctype.setValue(
+    this.repairjewelleryreceiptFrom.controls.vocType.setValue(
       this.comService.getqueryParamVocType()
     );
     this.repairjewelleryreceiptFrom.controls.vocDate.setValue(this.currentDate);
@@ -97,19 +74,11 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   generateVocNo() {
-    let params = {
-      VocType: this.comService.getqueryParamVocType(),
-      branchCode: this.branchCode,
-      yearMonth: this.yearMonth,
-      vocDate: this.convertDateToYMD(this.currentDate),
-      blnTransferDummyDatabase: false,
-    };
-
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
+      this.branchCode
+    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
     let sub: Subscription = this.dataService
-      .getDynamicAPIwithParams(
-        "GenerateNewVoucherNumber/GenerateNewVocNum",
-        params
-      )
+      .getDynamicAPI(API)
       .subscribe((res) => {
         if (res.status == "Success") {
           this.repairjewelleryreceiptFrom.controls.vocno.setValue(res.newvocno);
@@ -139,7 +108,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   repairjewelleryreceiptFrom: FormGroup = this.formBuilder.group({
-    voctype: [""],
+    vocType: [""],
     vocno: [""],
     vocDate: [""],
     salesman: [""],
@@ -155,7 +124,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     email: [""],
     address: [""],
     repair_narration: [""],
-    customer_delivery_date: [""],
+    customer_delivery_date: [null],
+    repairAmt: [""],
   });
 
   salesManCodeData: MasterSearchModel = {
@@ -229,7 +199,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         );
         this.voucherNo = this.filteredData[0].VOCNO;
 
-        this.repairjewelleryreceiptFrom.controls["voctype"].setValue(
+        this.repairjewelleryreceiptFrom.controls["vocType"].setValue(
           this.filteredData[0].VOCTYPE
         );
         this.repairjewelleryreceiptFrom.controls["vocno"].setValue(
@@ -272,7 +242,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         this.repairjewelleryreceiptFrom.controls["address"].setValue(
           this.filteredData[0].ADDRESS
         );
-        // this.repairjewelleryreceiptFrom.controls['repair_narration'].setValue(this.filteredData[0].EMAIL)
+        this.repairjewelleryreceiptFrom.controls["repair_narration"].setValue(
+          this.filteredData[0].SALESREFERENCE
+        );
         this.repairjewelleryreceiptFrom.controls[
           "customer_delivery_date"
         ].setValue(this.filteredData[0].DELIVERYDATE);
@@ -292,9 +264,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
           .subscribe((result) => {
             this.snackBar.dismiss();
 
-            console.log(result.response.Details);
-
             this.repairDetailsData = result.response.Details;
+            this.repairjewelleryreceiptFrom.controls["repairAmt"].setValue(
+              this.repairDetailsData[0].AMOUNT
+            );
           });
       });
   }
@@ -304,13 +277,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  adddata() {}
-
-  adddatas() {}
-
   removedata() {}
-
-  removedatas() {}
 
   validateForm() {
     if (this.repairjewelleryreceiptFrom.invalid) {
@@ -335,7 +302,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     let postData = {
       MID: 0,
       BRANCH_CODE: this.branchCode,
-      VOCTYPE: this.repairjewelleryreceiptFrom.value.voctype,
+      VOCTYPE: this.repairjewelleryreceiptFrom.value.vocType,
       VOCNO: this.repairjewelleryreceiptFrom.value.vocno,
       VOCDATE: this.repairjewelleryreceiptFrom.value.vocDate,
       YEARMONTH: this.yearMonth,
@@ -352,10 +319,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       REMARKS: this.repairjewelleryreceiptFrom.value.remark,
       TOTAL_PCS: 0,
       TOTAL_GRWT: 0,
-      SYSTEM_DATE: "",
+      SYSTEM_DATE: new Date().toISOString(),
       NAVSEQNO: 0,
       DELIVERYDATE:
-        this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+        this.repairjewelleryreceiptFrom.value.customer_delivery_date._d.toISOString(),
       SALESREFERENCE: "",
       STATUS: 0,
       TRANSFERID: 0,
@@ -364,7 +331,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       BASE_CURRENCY: this.repairjewelleryreceiptFrom.value.currency,
       BASE_CURR_RATE: this.repairjewelleryreceiptFrom.value.currency_rate,
       ISAUTHORIZED: true,
-      AUTHORIZEDDATE: "",
+      AUTHORIZEDDATE: new Date().toISOString(),
       AUTOPOSTING: true,
       PRINT_COUNT: 0,
       TOT_EST_REPAIR_CHARGES: 0,
@@ -419,16 +386,11 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       return;
     }
 
-    let API =
-      "Repair/UpdateRepair/" +
-      this.branchCode +
-      this.repairjewelleryreceiptFrom.value.voctype +
-      this.repairjewelleryreceiptFrom.value.vocno +
-      this.yearMonth;
+    let API = `Repair/UpdateRepair/${this.branchCode}/${this.repairjewelleryreceiptFrom.value.vocType}/${this.repairjewelleryreceiptFrom.value.vocno}/${this.yearMonth}`;
     let postData = {
       MID: 0,
       BRANCH_CODE: this.branchCode,
-      VOCTYPE: this.repairjewelleryreceiptFrom.value.voctype,
+      VOCTYPE: this.repairjewelleryreceiptFrom.value.vocType,
       VOCNO: this.repairjewelleryreceiptFrom.value.vocno,
       VOCDATE: this.repairjewelleryreceiptFrom.value.vocDate,
       YEARMONTH: this.yearMonth,
@@ -445,10 +407,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       REMARKS: this.repairjewelleryreceiptFrom.value.remark,
       TOTAL_PCS: 0,
       TOTAL_GRWT: 0,
-      SYSTEM_DATE: "2024-03-13T06:56:20.277Z",
+      SYSTEM_DATE: new Date().toISOString(),
       NAVSEQNO: 0,
       DELIVERYDATE:
-        this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+        this.repairjewelleryreceiptFrom.value.customer_delivery_date._d.toISOString(),
       SALESREFERENCE: "",
       STATUS: 0,
       TRANSFERID: 0,
@@ -457,7 +419,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       BASE_CURRENCY: this.repairjewelleryreceiptFrom.value.currency,
       BASE_CURR_RATE: this.repairjewelleryreceiptFrom.value.currency_rate,
       ISAUTHORIZED: true,
-      AUTHORIZEDDATE: "2024-03-13T06:56:20.277Z",
+      AUTHORIZEDDATE: new Date().toISOString(),
       AUTOPOSTING: true,
       PRINT_COUNT: 0,
       TOT_EST_REPAIR_CHARGES: 0,
@@ -531,7 +493,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         let API =
           "Repair/DeleteRepair/" +
           this.branchCode +
-          this.repairjewelleryreceiptFrom.value.voctype +
+          this.repairjewelleryreceiptFrom.value.vocType +
           this.repairjewelleryreceiptFrom.value.vocno +
           this.yearMonth;
         let Sub: Subscription = this.dataService
@@ -587,10 +549,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
   onRowDoubleClicked(e: any) {
     e.cancel = true;
-    
+
     this.openRepairdetails(e.data);
     console.log(this.repairDetailsData);
-    
 
     // let detailSub: Subscription = this.dataService
     //   .getDynamicAPI(
