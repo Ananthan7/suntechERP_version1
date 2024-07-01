@@ -427,30 +427,30 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   setFromProcessWhereCondition() {
     //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
-    this.fromProcessMasterSearch.WHERECONDITION = `@StrCurrentUser='${this.commonService.userName}',
-    @StrProcessCode='',
-    @StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
-    @StrBranchCode='${this.commonService.branchCode}'`
+    this.fromProcessMasterSearch.WHERECONDITION = `@StrCurrentUser='${this.commonService.userName}',`
+    this.fromProcessMasterSearch.WHERECONDITION += `@StrProcessCode='',`
+    this.fromProcessMasterSearch.WHERECONDITION +=  `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',`
+    this.fromProcessMasterSearch.WHERECONDITION += `@StrBranchCode='${this.commonService.branchCode}'`
   }
   setToProcessWhereCondition() {
-    this.toProcessMasterSearch.WHERECONDITION = `@JobNumber='${this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER)}',
-    @BranchCode='${this.commonService.branchCode}',
-    @CurrentUser='${this.commonService.userName}',
-    @ToWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.TO_WORKER_CODE)}',
-    @EntStr='',
-    @ToWorkerFocus=1`
+    this.toProcessMasterSearch.WHERECONDITION = `@JobNumber='${this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER)}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@BranchCode='${this.commonService.branchCode}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@CurrentUser='${this.commonService.userName}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@ToWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.TO_WORKER_CODE)}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@EntStr='',`
+    this.toProcessMasterSearch.WHERECONDITION += `@ToWorkerFocus=1`
   }
   setFromWorkerWhereCondition() {
-    this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
-    @StrFromProcess='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
-    @StrFromWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',
-    @StrBranchCode='${this.commonService.branchCode}',
-	  @blnProcessAuthroize=1`
+    this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromProcess='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrBranchCode='${this.commonService.branchCode}',`
+	  this.fromWorkerMasterSearch.WHERECONDITION += `@blnProcessAuthroize=1`
   }
   setToWorkerWhereCondition() {
-    this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='stk pp',
-    @StrToWorker='',
-	  @blntoWorkerFocus=1`
+    this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='stk pp',`
+    this.toWorkerMasterSearch.WHERECONDITION += `@StrToWorker='',`
+	  this.toWorkerMasterSearch.WHERECONDITION += `@blntoWorkerFocus=1`
   }
   stdTimeChange(event: any) {
     this.processTransferdetailsForm.controls.STD_TIME.setValue(event)
