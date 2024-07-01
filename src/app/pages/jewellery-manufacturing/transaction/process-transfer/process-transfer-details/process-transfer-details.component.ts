@@ -317,7 +317,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       this.metalDetailData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ
-      this.metalDetailData.forEach((item:any)=>{
+      this.metalDetailData.forEach((item: any) => {
         item.FRM_PCS = item.SETTED_PCS
       })
       this.formatMetalDetailDataGrid()
@@ -608,6 +608,57 @@ export class ProcessTransferDetailsComponent implements OnInit {
   onRowUpdateGrid(event: any) {
     let data = event.data
     this.checkSettedValue(data)
+  }
+  stdLossChange(event: any) {
+    let form = this.processTransferdetailsForm.value;
+    let msg = this.commonService.getMsgByID('MSG1397')
+    if (this.commonService.emptyToZero(form.stdLoss) > this.commonService.emptyToZero(form.FRM_METAL_WT)) {
+      this.commonService.toastErrorByMsgId(msg + " " + form.FRM_METAL_WT)
+      this.setValueWithDecimal('stdLoss', 0, 'METAL')
+      return
+    }
+    if (this.commonService.emptyToZero(form.stdLoss) > 0) {
+      if (this.sequenceDetails.length > 0) {
+        let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
+        if (processData[0]?.STD_LOSS > 0) {
+          let nMax_Loss = (this.commonService.emptyToZero(form.FRM_METAL_WT) * this.commonService.emptyToZero(processData[0]["MAX_LOSS"])) / 100;
+          if (this.commonService.emptyToZero(form.stdLoss) > nMax_Loss) {
+            this.commonService.toastErrorByMsgId(msg + " " + nMax_Loss)
+            this.setValueWithDecimal('stdLoss', nMax_Loss, 'METAL')
+            return;
+          }
+          let nMin_Loss = (this.commonService.emptyToZero(form.FRM_METAL_WT) * this.commonService.emptyToZero(processData[0]["MIN_LOSS"])) / 100;
+          if (this.commonService.emptyToZero(form.stdLoss) > nMin_Loss) {
+            this.commonService.toastErrorByMsgId(msg + " " + nMin_Loss)
+            this.setValueWithDecimal('stdLoss', nMin_Loss, 'METAL')
+            return;
+          }
+
+        } else {
+          this.commonService.toastErrorByMsgId(msg + " " + form.FRM_METAL_WT)
+        }
+      }
+      let txtBalDiaGrWt = 0;
+      if (this.commonService.emptyToZero(form.stdLoss) == 0 && this.commonService.emptyToZero(form.FRM_METAL_WT) > this.commonService.emptyToZero(form.TO_METAL_WT)) {
+        if ((this.commonService.emptyToZero(form.TO_METAL_WT) + this.commonService.emptyToZero(form.stdLoss)) > this.commonService.emptyToZero(form.FRM_METAL_WT)) {
+          let TO_METAL_WT = (this.commonService.emptyToZero(form.FRM_METAL_WT) - this.commonService.emptyToZero(form.stdLoss));
+          this.setValueWithDecimal('TO_METAL_WT', TO_METAL_WT, 'METAL')
+          let GrossWeightTo = (this.commonService.emptyToZero(form.TO_METAL_WT) - this.commonService.emptyToZero(form.TO_STONE_WT) / 5);
+          this.setValueWithDecimal('GrossWeightTo', GrossWeightTo, 'METAL')
+        }
+        else {
+          txtBalDiaGrWt = (this.commonService.emptyToZero(form.FRM_METAL_WT) - this.commonService.emptyToZero(form.GrossWeightTo));
+        }
+      }
+      else {
+        txtBalDiaGrWt = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapPureWt) + this.commonService.emptyToZero(form.stdLoss)));
+      }
+      this.Split_Loss(form)
+    }
+  }
+  Split_Loss(form: any) {
+    let txtLossPer = (this.commonService.emptyToZero(form.stdLoss) / this.commonService.emptyToZero(form.FRM_METAL_WT)) * 100
+    this.setValueWithDecimal('stdLossper', txtLossPer, 'AMOUNT')
   }
   checkSettedValue(data: any) {
     if (data.FRM_PCS > data.PCS) {
