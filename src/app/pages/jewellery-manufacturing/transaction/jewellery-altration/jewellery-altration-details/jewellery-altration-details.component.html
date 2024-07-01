@@ -180,7 +180,14 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="diamonds"
+                                        formControlName="diamondsWT"
+                                        style="text-align: right;" [readonly]="viewMode"
+                                        (keypress)="isNumeric($event)" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput   formControlName="diamondsFC"
                                         style="text-align: right;" [readonly]="viewMode"
                                         (keypress)="isNumeric($event)" />
                                 </mat-form-field>
@@ -188,20 +195,13 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        style="text-align: right;" [readonly]="viewMode"
+                                        style="text-align: right;" [readonly]="viewMode" formControlName="diamondsNEW"
                                         (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput
-                                        style="text-align: right;" [readonly]="viewMode"
-                                        (keypress)="isNumeric($event)" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput formControlName="diamondsCC"
                                         style="text-align: right;" [readonly]="viewMode"
                                         (keypress)="isNumeric($event)" />
                                 </mat-form-field>
@@ -485,7 +485,7 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput
-                                formControlName="price1FC" [readonly]="viewMode"
+                                formControlName="price1percentage" [readonly]="viewMode"
                                 AmountDecimalInput [max]="3"
                                 class="text-right"/>
                         </mat-form-field>
@@ -493,14 +493,14 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                                formControlName="price1LC"
+                            formControlName="price1FC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
+                            <input type="text" matInput  formControlName="price1LC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -521,7 +521,7 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput
-                                formControlName="price2FC"
+                                formControlName="price2percentage"
                                 class="text-right" [readonly]="viewMode"
                                 AmountDecimalInput [max]="3"/>
                         </mat-form-field>
@@ -529,14 +529,14 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                                formControlName="price2LC"
+                            formControlName="price2FC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
+                            <input type="text" matInput formControlName="price2LC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -557,7 +557,7 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="price3FC"
+                            formControlName="price3percentage"
                                 class="text-right"
                                 AmountDecimalInput [max]="3" />
                         </mat-form-field>
@@ -565,14 +565,14 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                                formControlName="price3LC"
+                            formControlName="price3FC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
+                            <input type="text" matInput formControlName="price3LC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -593,7 +593,7 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput
-                                formControlName="price4FC"
+                                formControlName="price4percentage"
                                 class="text-right" [readonly]="viewMode"
                                 AmountDecimalInput [max]="3" />
                         </mat-form-field>
@@ -601,14 +601,14 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                                formControlName="price4LC"
+                            formControlName="price4FC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
+                            <input type="text" matInput  formControlName="price4LC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -629,7 +629,7 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput
-                                formControlName="price5FC"
+                                formControlName="price5percentage"
                                 class="text-right" [readonly]="viewMode"
                                 AmountDecimalInput [max]="3" />
                         </mat-form-field>
@@ -637,14 +637,14 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                                formControlName="price5LC"
+                            formControlName="price5FC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
+                            <input type="text" matInput  formControlName="price5LC"
                                 class="text-right" [readonly]="viewMode"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>

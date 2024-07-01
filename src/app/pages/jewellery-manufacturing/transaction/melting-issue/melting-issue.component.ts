@@ -211,10 +211,11 @@ export class MeltingIssueComponent implements OnInit {
   setAllInitialValues() {
     if (!this.content?.FLAG) return
     let API = `JobMeltingIssueDJ/GetJobMeltingIssueDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
+          this.meltingISsueDetailsData = data.Details
           console.log(data,'data')
           this.meltingIssueFrom.controls.MID.setValue(data.MID)
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
@@ -223,9 +224,9 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.processcode.setValue(data.PROCESS_CODE)
           this.meltingIssueFrom.controls.worker.setValue(data.WORKER_CODE)
           this.meltingIssueFrom.controls.workerdes.setValue(data.WORKER_DESC)
-          this.meltingIssueFrom.controls.processdes.setValue(data.PROCESS_DESC)
           this.meltingIssueFrom.controls.jobno.setValue(data.Details[0].JOB_NUMBER)
           this.meltingIssueFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
+          this.meltingIssueFrom.controls.processdes.setValue(data.PROCESS_DESC)
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
 
           this.meltingISsueDetailsData = data.Details
@@ -654,7 +655,7 @@ export class MeltingIssueComponent implements OnInit {
         
         console.log('API endpoint:', API);
         
-        const Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
+        const Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             console.log('API response:', result);
             
