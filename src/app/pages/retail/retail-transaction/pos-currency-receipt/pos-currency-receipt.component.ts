@@ -195,6 +195,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       this.changeDueDate(null);
       this.generateVocNo();
       this.getPartyCode();
+      console.log('Working+++++');
+      
 
     }
 
@@ -858,7 +860,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     modalRef.componentInstance.receiptData = { ...data };
     modalRef.componentInstance.queryParams = { vatPercentage: this.vatPercentage, hsnCode: this.hsnCode, igstAccode: this.igst_accode, currecyCode: this.currencyCode, currencyConvRate: this.currencyConvRate, isViewOnly: this.viewOnly };
 
-    // modalRef.componentInstance.receiptData = data;
 
     modalRef.result.then((postData) => {
       if (postData) {
