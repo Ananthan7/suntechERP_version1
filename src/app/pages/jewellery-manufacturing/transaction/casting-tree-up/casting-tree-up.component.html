@@ -182,8 +182,8 @@
                 <mat-form-field style="width: 93%; margin-left:-23px; margin-top: -6px;">
                   <input type="text" matInput formControlName="enteredBy" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="user" *ngIf="!viewMode"
-                (newRowClick)="userDataSelected($event)">
+                <master-search [MasterSearchData]="salesmanCodeData" *ngIf="!viewMode"
+                (newRowClick)="salesmanCodeSelected($event)">
             </master-search>
               </div>
             </div>
