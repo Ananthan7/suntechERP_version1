@@ -443,6 +443,7 @@ export class LabourChargeMasterComponent implements OnInit {
         this.codeEnableDiamond = false;
         this.codeEnableMetal = false;
         this.editMode = true;
+        this.initializeEditMode()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMeltingType()
@@ -513,6 +514,18 @@ export class LabourChargeMasterComponent implements OnInit {
       }
     });
   }
+  initializeEditMode() {
+    const selectedLabourType = this.diamondlabourMasterForm.controls.labourType.value;
+    if (selectedLabourType === 'SETTING') {
+      this.viewModeSetting = false;
+      this.ViewModemethod = false;
+    } else {
+      this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
+      this.viewModeSetting = true;
+      this.ViewModemethod = true;
+    }
+  }
+
     onSievetto(event: any, data: string) {
       // Retrieve the values of Ct Wt From and Ct Wt To from the form
       const sizefrom: number = parseFloat(this.diamondlabourMasterForm.value.size_from);

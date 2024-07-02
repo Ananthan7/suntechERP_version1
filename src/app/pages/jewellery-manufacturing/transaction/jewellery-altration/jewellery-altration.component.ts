@@ -171,6 +171,7 @@ export class JewelleryAltrationComponent implements OnInit {
 
           // this.jewelleryaltrationFrom.controls.MID.setValue(data.MID)
           // this.jewelleryaltrationFrom.controls.vocdate.setValue(new Date(data.VOCDATE))
+          this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
           this.jewelleryaltrationFrom.controls.enteredby.setValue(data.HTUSERNAME)
           this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
           this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(data.CC_RATE)
@@ -518,8 +519,7 @@ export class JewelleryAltrationComponent implements OnInit {
 
   update() {
     let form = this.jewelleryaltrationFrom.value
-    console.log(this.jewelleryaltrationdetail)
-    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}`
+    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${form.voctype}/${form.vocno}/${this.yearMonth}`
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)

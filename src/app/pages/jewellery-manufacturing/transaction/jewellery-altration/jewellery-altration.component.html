@@ -51,7 +51,7 @@
                     DateValidation />
                   <mat-datepicker-toggle matSuffix
                     [for]="vocdate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate"
+                  <mat-datepicker [startAt]="currentDate"[disabled]="isSaved"
                     #vocdate></mat-datepicker>
                 </mat-form-field>
               </div>
