@@ -552,7 +552,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  onRowDoubleClicked(e: any) {
+  onRowDoubleClicked(e: any) {    
     e.cancel = true;
     this.openRepairdetails(e.data);
   }
