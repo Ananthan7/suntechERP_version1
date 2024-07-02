@@ -16,6 +16,8 @@ import Swal from "sweetalert2";
 export class RepairDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input() receiptData!: any;
+  @Input() queryParams!: any;
+  viewOnly: boolean = false;
   stoneCheck: any = false;
   tableData: any[] = [];
   userName = localStorage.getItem("username");
@@ -46,11 +48,17 @@ export class RepairDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getQueryParams(this.queryParams);
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
 
     if (this.receiptData && Object.keys(this.receiptData).length > 0)
       this.setReceiptData();
+  }
+
+  getQueryParams(params?: any) {
+    console.log(params);
+    this.viewOnly = params.isViewOnly;
   }
 
   repairjewelleryreceiptdetailsFrom: FormGroup = this.formBuilder.group({
@@ -247,6 +255,8 @@ export class RepairDetailsComponent implements OnInit {
       this.receiptData != undefined &&
       Object.keys(this.receiptData).length > 0
     ) {
+      console.log(this.queryParams.isViewOnly);
+
       console.log(this.receiptData);
 
       this.repairjewelleryreceiptdetailsFrom.controls[
@@ -385,8 +395,10 @@ export class RepairDetailsComponent implements OnInit {
       CUT: this.repairjewelleryreceiptdetailsFrom.value.Cut,
       APPROX_SIZE: this.repairjewelleryreceiptdetailsFrom.value.Approx,
       OWN_STOCK: this.repairjewelleryreceiptdetailsFrom.value.own_stock,
-      CHECKED: 0,
-      DAMAGED: 0,
+      CHECKED:
+        this.repairjewelleryreceiptdetailsFrom.value.checked === true ? 1 : 0,
+      DAMAGED:
+        this.repairjewelleryreceiptdetailsFrom.value.damaged === true ? 1 : 0,
       RECEIPT: 0,
       WITHSTONE: this.stoneCheck === true ? 1 : 0,
       AUTHORIZE: true,

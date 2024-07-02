@@ -198,7 +198,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
           (item: any) => item.MID === this.content.MID
         );
 
-        console.log(this.filteredData)
+        console.log(this.filteredData);
         this.voucherNo = this.filteredData[0].VOCNO;
 
         this.repairjewelleryreceiptFrom.controls["vocType"].setValue(
@@ -251,10 +251,18 @@ export class RepairJewelleryReceiptComponent implements OnInit {
           "customer_delivery_date"
         ].setValue(this.filteredData[0].DELIVERYDATE);
 
+        // this.repairjewelleryreceiptFrom.controls[
+        //   "customer_delivery_date"
+        // ].disable();
+
         this.repairjewelleryreceiptFrom.controls["remark"].setValue(
           this.filteredData[0].REMARKS
         );
-        let API = `Repair/GetRepairDetailList/${this.branchCode}/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${this.yearMonth}`
+        let API = `Repair/GetRepairDetailList/${
+          this.branchCode
+        }/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${
+          this.yearMonth
+        }`;
 
         let detailSub: Subscription = this.dataService
           .getDynamicAPI(API)
@@ -320,7 +328,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       NAVSEQNO: 0,
       DELIVERYDATE:
         this.repairjewelleryreceiptFrom.value.customer_delivery_date._d.toISOString(),
-      SALESREFERENCE: "",
+      SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
       ADDRESS: this.repairjewelleryreceiptFrom.value.address,
@@ -353,7 +361,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -408,7 +416,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       NAVSEQNO: 0,
       DELIVERYDATE:
         this.repairjewelleryreceiptFrom.value.customer_delivery_date,
-      SALESREFERENCE: "",
+      SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
       ADDRESS: this.repairjewelleryreceiptFrom.value.address,
@@ -546,25 +554,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
   onRowDoubleClicked(e: any) {
     e.cancel = true;
-
     this.openRepairdetails(e.data);
-    console.log(this.repairDetailsData);
-
-    // let detailSub: Subscription = this.dataService
-    //   .getDynamicAPI(
-    //     `Repair/GetRepairDetailList/${
-    //       this.branchCode
-    //     }/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${
-    //       this.yearMonth
-    //     }`
-    //   )
-    //   .subscribe((result) => {
-    //     this.snackBar.dismiss();
-
-    //     console.log(result.response.Details);
-
-    //     this.repairDetailsData = result.response.Details;
-    //   });
   }
 
   openRepairdetails(data: any = null) {
@@ -578,6 +568,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       }
     );
     modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
 
     modalRef.result.then((postData) => {
       if (postData) {
@@ -591,9 +582,6 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     const preItemIndex = this.repairDetailsData.findIndex(
       (data: any) => data.SRNO.toString() == postData.SRNO.toString()
     );
-    postData.NET_TOTAL = (
-      parseFloat(postData.AMOUNTFC) + parseFloat(postData.IGST_AMOUNTFC)
-    ).toFixed(2);
 
     if (postData?.isUpdate && preItemIndex !== -1) {
       this.repairDetailsData[preItemIndex] = postData;
@@ -606,16 +594,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   updateFormValuesAndSRNO() {
-    let sumCGST_AMOUNTCC = 0;
-    let sumAMOUNTCC = 0;
-
     this.repairDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
-      sumCGST_AMOUNTCC += parseFloat(data.IGST_AMOUNTCC);
-      sumAMOUNTCC += parseFloat(data.TOTAL_AMOUNTCC);
     });
-
-    let totalSum = sumCGST_AMOUNTCC + sumAMOUNTCC;
   }
 
   removeLineItemsGrid(e: any) {
@@ -635,6 +616,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
+
+    console.log(values);
     let indexes: Number[] = [];
     this.repairDetailsData.reduce((acc, value, index) => {
       if (values.includes(parseFloat(value.SRNO))) {
