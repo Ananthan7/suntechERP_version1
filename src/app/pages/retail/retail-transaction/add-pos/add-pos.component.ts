@@ -88,7 +88,7 @@ export class AddPosComponent implements OnInit {
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
   gridWeghtDecimalFormat: any;
-
+ advanceRecieptVoucherNumber=0;
   posMode: string = 'ADD';
   accountHeadDetails = '';
   // baseImgUrl = baseImgUrl;
@@ -2336,8 +2336,8 @@ export class AddPosComponent implements OnInit {
         "SGST_AMOUNTFC": "0.000",
         "SGST_AMOUNTCC": "0.000",
         "IGST_PER": this.isCCTransaction ? this.newLineItem.IGST_PER : '0',
-        "IGST_AMOUNTFC": IGST_AMOUNT,
-        "IGST_AMOUNTCC": IGST_AMOUNT,
+        "IGST_AMOUNTFC": IGST_AMOUNTFC,
+        "IGST_AMOUNTCC": IGST_AMOUNTCC,
         "HSN_CODE": this.isCCTransaction ? this.newLineItem.HSN_CODE : '',
         "GST_CODE": this.isCCTransaction ? this.newLineItem.GST_CODE.toString() : '',
         "CGST_ACCODE": "0",
@@ -2416,6 +2416,8 @@ export class AddPosComponent implements OnInit {
     this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
     this.dialogBox.afterClosed().subscribe((data: any) => {
       if (data != 'No') {
+        this.advanceRecieptVoucherNumber = this.receiptDetailsList?.find((e: any) => e.RECEIPT_TYPE == "ADVANCE") ? 0 : this.advanceRecieptVoucherNumber;
+
         this.receiptDetailsList.splice(index, 1);
         this.receiptDetailsList?.forEach((e: any, i: any) => {
           e.SRNO = i + 1;
@@ -11940,6 +11942,7 @@ printReceiptDetailsWeb() {
     }
     if (this.receiptModesList?.['BTN_CREDITCARD'] == true && this.selectedTabIndex == 1) {
       if (data != null && data != undefined) {
+        
         this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
           data['RECEIPT_MODE'].toString());
         this.creditCardReceiptForm.controls.cardCCNo.setValue(data['CARD_NO'].toString());
@@ -11947,6 +11950,8 @@ printReceiptDetailsWeb() {
           this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
       }
       else {
+        this.creditCardReceiptForm.controls.cardCCNo.setValue(
+          '');
         if (this.balanceAmount != null) {
           this.creditCardReceiptForm.controls.cardAmtFC.setValue(
             this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
@@ -11960,7 +11965,13 @@ printReceiptDetailsWeb() {
     if (this.receiptModesList?.['BTN_ADVANCE'] == true && this.selectedTabIndex == 2) {
 
       this.advanceReceiptForm.controls.advanceRecNo.setValue(
-       '')
+       '');
+       this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+        '');
+        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+          '');
+          this.advanceReceiptForm.controls.advanceCustCode.setValue(
+            '')
 
       this.advanceReceiptForm.controls.advanceCustCode.setValue(
         this.customerDataForm.value.fcn_customer_code)
@@ -11980,8 +11991,8 @@ printReceiptDetailsWeb() {
         this.advanceReceiptForm.controls.advanceAmount.setValue(
           this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
 
-localStorage.setItem('advanceAmount', 
-  this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
+    localStorage.setItem('advanceAmount', 
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
 
         this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
           data['IGST_AMOUNTFC']);
@@ -12169,10 +12180,25 @@ localStorage.setItem('advanceAmount',
 
     }
 
+    checkAdvanceReciept(vocNo:any){
+      if(this.comFunc.emptyToZero(vocNo)==this.advanceRecieptVoucherNumber){
+        this.openDialog('Warning',"Selected Voucher Number already exist", true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.advanceReceiptForm.controls.advanceRecNo.setValue('');
+          }
+        });
+      }
+    
+    }
+
   changeAdvanceVocNo(event: any) {
     // const value = event.target.value;
+
+    this.checkAdvanceReciept(event.target.value);
+
     const value = this.advanceReceiptForm.value.advanceRecNo;
-    if (value != '') {
+    if (value != ''&&event.target.value!=this.advanceRecieptVoucherNumber) {
       this.snackBar.open('Loading...');
       let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/PCR/${this.advanceReceiptForm.value.advanceYear}/${this.advanceReceiptForm.value.advanceRecNo}/${this.advancePartyCode}`
       this.suntechApi.getDynamicAPI(API)
@@ -12180,6 +12206,11 @@ localStorage.setItem('advanceAmount',
           this.snackBar.dismiss();
           if (res['status'] == 'Success') {
             this.isInvalidRecNo = false;
+
+            this.advanceReceiptForm.controls.advanceCustCode.setValue( res['response']['POSCUSTOMERCODE']);
+
+            if(res['response']['POSCUSTOMERCODE'])
+            this.onCustomerNameFocus(null,true)
 
             this.advanceReceiptForm.controls.advanceAmount.setValue(
               this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
@@ -12195,6 +12226,8 @@ localStorage.setItem('advanceAmount',
 
                         this.advanceRecieptAmount=   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
                           this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString());
+
+                          this.advanceRecieptVoucherNumber=res['response']['VOCNO'];
 
             this.advanceReceiptDetails = res['response'];
           } else {
