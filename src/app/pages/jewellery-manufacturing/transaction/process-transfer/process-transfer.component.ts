@@ -358,7 +358,6 @@ export class ProcessTransferComponent implements OnInit {
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
-    return
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
