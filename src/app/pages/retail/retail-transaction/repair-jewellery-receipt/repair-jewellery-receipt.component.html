@@ -46,7 +46,12 @@
             <div class="col-md-3">
               <div class="position-relative d-flex">
                 <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="vocType" />
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="vocType"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -54,6 +59,7 @@
               <div class="position-relative d-flex">
                 <mat-form-field style="width: 100%">
                   <input
+                    [readonly]="viewOnly !== false"
                     class="text-right"
                     type="number"
                     matInput
@@ -71,6 +77,7 @@
             <div class="col-sm-6">
               <mat-form-field style="width: 72%">
                 <input
+                  [readonly]="viewOnly !== false"
                   matInput
                   [matDatepicker]="vocDate"
                   formControlName="vocDate"
@@ -91,9 +98,15 @@
             </label>
             <div class="col-sm-6">
               <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="salesman" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="salesman"
+                />
               </mat-form-field>
               <master-search
+                *ngIf="viewOnly == false"
                 [MasterSearchData]="salesManCodeData"
                 (newRowClick)="salesManCodeSelected($event)"
               ></master-search>
@@ -107,14 +120,25 @@
             </label>
             <div class="col-sm-8">
               <mat-form-field style="width: 40%">
-                <input type="text" matInput formControlName="customer" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="customer"
+                />
               </mat-form-field>
               <master-search
+                *ngIf="viewOnly == false"
                 [MasterSearchData]="customerCodeData"
                 (newRowClick)="customerCodeSelected($event)"
               ></master-search>
               <mat-form-field style="width: 40%">
-                <input type="text" matInput formControlName="customerDesc" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="customerDesc"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -125,7 +149,12 @@
 
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="mobile" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="mobile"
+                />
               </mat-form-field>
             </div>
 
@@ -134,7 +163,12 @@
             </label>
             <div class="col-sm-3">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="tel" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="tel"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -145,7 +179,12 @@
 
             <div class="col-sm-3">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="nationality" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="nationality"
+                />
               </mat-form-field>
             </div>
 
@@ -154,7 +193,12 @@
             </label>
             <div class="col-sm-3">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="type" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="type"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -164,7 +208,12 @@
             </label>
             <div class="col-sm-8">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="remark" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="remark"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -178,6 +227,7 @@
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
                 <input
+                  [readonly]="viewOnly !== false"
                   type="text"
                   [readonly]="isCurrencyUpdate || viewOnly"
                   matInput
@@ -185,7 +235,10 @@
                 />
               </mat-form-field>
               <master-search
-                *ngIf="!isCurrencyUpdate || (!viewOnly && !hideCurrecnySearch)"
+                *ngIf="
+                  !viewOnly &&
+                  (!isCurrencyUpdate || (!viewOnly && !hideCurrecnySearch))
+                "
                 [MasterSearchData]="currencyData"
                 (newRowClick)="CurrencySelected($event)"
               ></master-search>
@@ -193,6 +246,7 @@
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
                 <input
+                  [readonly]="viewOnly !== false"
                   type="text"
                   class="st_txt_right"
                   [readonly]="isCurrencyUpdate || viewOnly"
@@ -208,7 +262,12 @@
             </label>
             <div class="col-sm-6">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="email" />
+                <input
+                  [readonly]="viewOnly !== false"
+                  type="text"
+                  matInput
+                  formControlName="email"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -219,7 +278,11 @@
             <div class="col-sm-6">
               <mat-form-field style="width: 100%">
                 <!-- <input type="text" matInput formControlName="address"  /> -->
-                <textarea matInput formControlName="address"></textarea>
+                <textarea
+                  [readonly]="viewOnly !== false"
+                  matInput
+                  formControlName="address"
+                ></textarea>
               </mat-form-field>
             </div>
           </div>
@@ -233,6 +296,7 @@
               <mat-form-field style="width: 100%">
                 <!-- <input type="text" matInput formControlName="address"  /> -->
                 <textarea
+                  [readonly]="viewOnly !== false"
                   matInput
                   formControlName="repair_narration"
                 ></textarea>
@@ -247,6 +311,7 @@
             <div class="col-sm-5">
               <mat-form-field style="width: 72%">
                 <input
+                  [readonly]="viewOnly !== false"
                   matInput
                   [matDatepicker]="customer_delivery_date"
                   formControlName="customer_delivery_date"
@@ -329,18 +394,33 @@
 
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%">
-                    <input type="text" matInput formControlName="vocType" />
+                    <input
+                      [readonly]="viewOnly !== false"
+                      type="text"
+                      matInput
+                      formControlName="vocType"
+                    />
                   </mat-form-field>
                 </div>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%">
-                    <input type="text" matInput formControlName="repairAmt" />
+                    <input
+                      [readonly]="viewOnly !== false"
+                      type="text"
+                      matInput
+                      formControlName="repairAmt"
+                    />
                   </mat-form-field>
                 </div>
 
                 <div class="col-sm-5">
                   <mat-form-field style="width: 100%">
-                    <input type="text" matInput formControlName="repairAmt" />
+                    <input
+                      [readonly]="viewOnly !== false"
+                      type="text"
+                      matInput
+                      formControlName="repairAmt"
+                    />
                   </mat-form-field>
                 </div>
               </div>
