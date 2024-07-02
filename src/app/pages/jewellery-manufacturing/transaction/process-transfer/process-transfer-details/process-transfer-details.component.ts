@@ -1471,7 +1471,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "ISSUE_GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
         "ISSUE_STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
         "ISSUE_NET_WT": this.commonService.emptyToZero(element.NET_WT),
-        "JOB_PCS": 1,
+        "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
         "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
         "TO_STOCK_CODE": this.commonService.nullToString(form.METAL_ToStockCode),
         "FROM_STOCK_CODE": this.commonService.nullToString(form.METAL_FromStockCode),
