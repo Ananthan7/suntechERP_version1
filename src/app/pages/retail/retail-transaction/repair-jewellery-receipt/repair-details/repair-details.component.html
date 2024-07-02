@@ -9,7 +9,7 @@
 <modal-header
   (saveClick)="formSubmit()"
   (cancelClick)="close()"
-  *ngIf="receiptData.UNIQUEID == null"
+  *ngIf="viewOnly === false"
 ></modal-header>
 <!-- content section -->
 <div class="row">
@@ -26,7 +26,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="descriptionCode"
@@ -38,7 +38,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 90%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       class="text-right"
                       type="text"
                       formControlName="description"
@@ -46,7 +46,7 @@
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="DescCodeData"
                     (newRowClick)="DescCodeSelected($event)"
                   ></master-search>
@@ -66,7 +66,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="number"
                       matInput
                       formControlName="Pcs"
@@ -82,7 +82,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       class="text-right"
                       type="text"
                       matInput
@@ -90,7 +90,7 @@
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="typeOfCodeData"
                     (newRowClick)="typeOfCodeSelected($event)"
                   ></master-search>
@@ -114,7 +114,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly"
                       type="text"
                       matInput
                       formControlName="gross_Wt"
@@ -131,7 +131,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       class="text-right"
                       type="text"
                       matInput
@@ -139,7 +139,7 @@
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="typeOfItemCodeData"
                     (newRowClick)="typeOfItemCodeSelected($event)"
                   ></master-search>
@@ -149,7 +149,7 @@
               <div class="col-sm-2">
                 <mat-form-field style="width: 100%">
                   <input
-                    [readonly]="receiptData.UNIQUEID !== null"
+                    [readonly]="viewOnly === true"
                     matInput
                     [matDatepicker]="delivery_date"
                     formControlName="delivery_date"
@@ -157,6 +157,7 @@
                     DateValidation
                   />
                   <mat-datepicker-toggle
+                    *ngIf="viewOnly === false"
                     matSuffix
                     [for]="delivery_date"
                   ></mat-datepicker-toggle>
@@ -177,7 +178,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="number"
                       AmountDecimalInput
                       matInput
@@ -194,7 +195,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       class="text-right"
                       type="text"
                       matInput
@@ -202,7 +203,7 @@
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="statusCodeData"
                     (newRowClick)="statusCodeSelected($event)"
                   ></master-search>
@@ -222,14 +223,14 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="material"
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="materialCodeData"
                     (newRowClick)="materialCodeSelected($event)"
                   ></master-search>
@@ -246,7 +247,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       class="text-right"
                       type="number"
                       matInput
@@ -271,7 +272,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="own_stock"
@@ -294,7 +295,7 @@
             >
               <span>Check The Diamond/Product before Accepting for</span>
               <mat-checkbox
-                [disabled]="receiptData.UNIQUEID !== null"
+                [disabled]="viewOnly === true"
                 class="example-margin"
                 formControlName="checked"
               ></mat-checkbox>
@@ -316,7 +317,7 @@
                 jobs</span
               >
               <mat-checkbox
-                [disabled]="receiptData.UNIQUEID !== null"
+                [disabled]="viewOnly === true"
                 class="example-margin"
                 formControlName="damaged"
               ></mat-checkbox>
@@ -334,7 +335,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="repair_bags"
@@ -356,7 +357,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="remark"
@@ -372,7 +373,7 @@
           <div class="col-md-2"></div>
           <div class="col-md-4">
             <mat-checkbox
-              [disabled]="receiptData.UNIQUEID !== null"
+              [disabled]="viewOnly === true"
               class="example-margin"
               (change)="withStoneCheck($event)"
               formControlName="withStone"
@@ -420,14 +421,14 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="stone_type"
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="stoneTypeCodeData"
                     (newRowClick)="stoneTypeCodeSelected($event)"
                   ></master-search>
@@ -438,7 +439,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="no_of"
@@ -451,14 +452,14 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="Cut"
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="CutCodeData"
                     (newRowClick)="CutCodeSelected($event)"
                   ></master-search>
@@ -469,14 +470,14 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
                     <input
-                      [readonly]="receiptData.UNIQUEID !== null"
+                      [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="Approx"
                     />
                   </mat-form-field>
                   <master-search
-                    *ngIf="receiptData.UNIQUEID == null"
+                    *ngIf="viewOnly === false"
                     [MasterSearchData]="ApproxCodeData"
                     (newRowClick)="ApproxCodeSelected($event)"
                   ></master-search>

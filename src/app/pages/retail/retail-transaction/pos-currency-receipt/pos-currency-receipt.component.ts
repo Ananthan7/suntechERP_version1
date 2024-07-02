@@ -727,9 +727,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
-  /**USE: close modal window */
   close(data?: any) {
-    // this.activeModal.close();
     this.activeModal.close(data);
 
   }
