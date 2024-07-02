@@ -197,6 +197,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         this.filteredData = result.response.filter(
           (item: any) => item.MID === this.content.MID
         );
+
+        console.log(this.filteredData)
         this.voucherNo = this.filteredData[0].VOCNO;
 
         this.repairjewelleryreceiptFrom.controls["vocType"].setValue(

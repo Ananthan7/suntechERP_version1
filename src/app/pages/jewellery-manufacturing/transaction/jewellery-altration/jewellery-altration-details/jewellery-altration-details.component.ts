@@ -129,6 +129,17 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  } 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -233,7 +244,10 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(e.PRICE_CODE);
   }
-
+  locationCodeSelected(event: any, value: any) {
+    console.log(event)
+    this.tableData[value.data.Srno - 1].Location = event.LOCATION_CODE;
+  }
   price5CodeSelected(e: any) {
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
@@ -345,6 +359,8 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     price3percentage:[''],
     price4percentage:[''],
     price5percentage:[''],
+    tagdetails:[''],
+    image:[''],
     FLAG: [null]
   });
 
@@ -713,7 +729,24 @@ stockCodeValidate(event: any) {
           this.jewelleryaltrationdetailsFrom.controls.price4LC.setValue(data[0].PRICE4LC)
           this.jewelleryaltrationdetailsFrom.controls.price5FC.setValue(data[0].PRICE5FC)
           this.jewelleryaltrationdetailsFrom.controls.price5LC.setValue(data[0].PRICE5LC)
-         
+          this.jewelleryaltrationdetailsFrom.controls.settings.setValue(data[0].CHARGE1FC)
+          this.jewelleryaltrationdetailsFrom.controls.settingsAMTFC.setValue(data[0].CHARGE1LC)
+          this.jewelleryaltrationdetailsFrom.controls.polishing.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.polishingAMTFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.rhodium.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.rhodiumAMTFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.making.setValue(data[0].CHARGE4FC)
+          this.jewelleryaltrationdetailsFrom.controls.makingAMTFC.setValue(data[0].CHARGE4LC)
+          this.jewelleryaltrationdetailsFrom.controls.platecharges.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.platechargesFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.certcharges.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.certchargesFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.misccharges.setValue(data[0].CHARGE5FC)
+          this.jewelleryaltrationdetailsFrom.controls.miscchargesAMTFC.setValue(data[0].CHARGE5LC)
+          this.jewelleryaltrationdetailsFrom.controls.totalAMTFC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.totalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.tagdetails.setValue(data[0].TAG_LINESWOENTER)
+          this.jewelleryaltrationdetailsFrom.controls.image.setValue(data[0].PICTURE_NAME)
 
 
         } else {

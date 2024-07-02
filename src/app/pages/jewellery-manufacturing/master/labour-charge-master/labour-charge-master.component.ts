@@ -500,7 +500,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   onlabourtypeChange() {
-    //this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
+    this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
@@ -1027,6 +1027,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
   formSubmit() {
     if (this.submitValidation()) return
+    
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData = this.setPostData();
@@ -1060,9 +1061,13 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-   // if (this.submitValidation()) return
+  //  if (this.submitValidation()) return
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
+      return
+    }
+    if (this.diamondlabourMasterForm.invalid) {
+      this.toastr.error('select all required fields')
       return
     }
 

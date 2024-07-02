@@ -1556,7 +1556,7 @@
                 <mat-form-field>
                   <mat-label>Customer Code</mat-label>
                   <input type="text" matInput formControlName="advanceCustCode" value id="advanceCustCode"
-                    (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
+                    (change)="changeCustomerCode($event)" [readonly]="viewOnly" />
 
                   <mat-error *ngIf="
                       advanceReceiptForm.controls.advanceCustCode.hasError(
@@ -1570,7 +1570,7 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="text" class="st_txt_right" matInput formControlName="advanceAmount" id="advanceAmount"
+                  <input type="text" class="st_txt_right" (change)="changeAdvanceAmount($event)" matInput formControlName="advanceAmount" id="advanceAmount"
                     [readonly]="viewOnly" AmountDecimalInput />
                   <mat-error *ngIf="
                       advanceReceiptForm.controls.advanceAmount.hasError(
