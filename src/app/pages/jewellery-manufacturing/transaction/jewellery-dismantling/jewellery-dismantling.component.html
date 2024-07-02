@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 
 <div class="container-fluid">
   <form [formGroup]="jewellerydismantlingFrom">

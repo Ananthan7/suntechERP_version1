@@ -129,6 +129,17 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  } 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -233,7 +244,10 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(e.PRICE_CODE);
   }
-
+  locationCodeSelected(event: any, value: any) {
+    console.log(event)
+    this.tableData[value.data.Srno - 1].Location = event.LOCATION_CODE;
+  }
   price5CodeSelected(e: any) {
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
@@ -285,7 +299,10 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     metalWT: [''],
     metalAMTCC: [''],
     metalWTNEW: [''],
-    diamonds: [''],
+    diamondsWT: [''],
+    diamondsFC: [''],
+    diamondsNEW: [''],
+    diamondsCC: [''],
     gross: [''],
     grossWTNEW: [''],
     costFC: [''],
@@ -337,6 +354,13 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     totalAMTFC: [''],
     totalAMTCC: [''],
     remarks: [''],
+    price1percentage:[''],
+    price2percentage:[''],
+    price3percentage:[''],
+    price4percentage:[''],
+    price5percentage:[''],
+    tagdetails:[''],
+    image:[''],
     FLAG: [null]
   });
 
@@ -660,7 +684,7 @@ stockCodeValidate(event: any) {
       StockCode: this.jewelleryaltrationdetailsFrom.value.stockcode,
       BranchCode: this.comService.nullToString(this.branchCode),
       CurrencyCode: '',
-      ParentCurrencyRate: '',
+      ParentCurrencyRate: '0'
     }
   }
   console.log('Post data:', postData);
@@ -674,6 +698,56 @@ stockCodeValidate(event: any) {
         let data = result.dynamicData[0]
         if (data) {
           console.log(data, 'data');
+          this.jewelleryaltrationdetailsFrom .controls.costcode.setValue(data[0].COST_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue(data[0].COLOR)
+          this.jewelleryaltrationdetailsFrom.controls.refvoc.setValue(data[0].MANF_BR_VOCTYPE_NO)
+          this.jewelleryaltrationdetailsFrom.controls.dated.setValue(data[0].OPENED_ON)
+          this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(data[0].METAL_TOTALGROSSWT)
+          this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(data[0].METAL_TOTALGROSSWT)
+          this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.diamondsWT.setValue(data[0].LOOSE_TOTALWT)
+          this.jewelleryaltrationdetailsFrom.controls.diamondsFC.setValue(data[0].LOOSE_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.diamondsNEW.setValue(data[0].LOOSE_TOTALWT)
+          this.jewelleryaltrationdetailsFrom.controls.diamondsCC.setValue(data[0].LOOSE_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.gross.setValue(data[0].POSGROSSWT)
+          this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(data[0].POSGROSSWT)
+          this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(data[0].HANDLING_CHARGEFC)
+          this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(data[0].HANDLING_CHARGELC)
+          this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(data[0].PRICE1PER)
+          this.jewelleryaltrationdetailsFrom.controls.price2PER.setValue(data[0].PRICE2PER)
+          this.jewelleryaltrationdetailsFrom.controls.price3PER.setValue(data[0].PRICE3PER)
+          this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(data[0].PRICE4PER)
+          this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(data[0].PRICE5PER)
+          this.jewelleryaltrationdetailsFrom.controls.price1FC.setValue(data[0].PRICE1FC)
+          this.jewelleryaltrationdetailsFrom.controls.price1LC.setValue(data[0].PRICE1LC)
+          this.jewelleryaltrationdetailsFrom.controls.price2FC.setValue(data[0].PRICE2FC)
+          this.jewelleryaltrationdetailsFrom.controls.price2LC.setValue(data[0].PRICE2LC)
+          this.jewelleryaltrationdetailsFrom.controls.price3FC.setValue(data[0].PRICE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.price3LC.setValue(data[0].PRICE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.price4FC.setValue(data[0].PRICE4FC)
+          this.jewelleryaltrationdetailsFrom.controls.price4LC.setValue(data[0].PRICE4LC)
+          this.jewelleryaltrationdetailsFrom.controls.price5FC.setValue(data[0].PRICE5FC)
+          this.jewelleryaltrationdetailsFrom.controls.price5LC.setValue(data[0].PRICE5LC)
+          this.jewelleryaltrationdetailsFrom.controls.settings.setValue(data[0].CHARGE1FC)
+          this.jewelleryaltrationdetailsFrom.controls.settingsAMTFC.setValue(data[0].CHARGE1LC)
+          this.jewelleryaltrationdetailsFrom.controls.polishing.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.polishingAMTFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.rhodium.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.rhodiumAMTFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.making.setValue(data[0].CHARGE4FC)
+          this.jewelleryaltrationdetailsFrom.controls.makingAMTFC.setValue(data[0].CHARGE4LC)
+          this.jewelleryaltrationdetailsFrom.controls.platecharges.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.platechargesFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.certcharges.setValue(data[0].CHARGE3FC)
+          this.jewelleryaltrationdetailsFrom.controls.certchargesFC.setValue(data[0].CHARGE3LC)
+          this.jewelleryaltrationdetailsFrom.controls.misccharges.setValue(data[0].CHARGE5FC)
+          this.jewelleryaltrationdetailsFrom.controls.miscchargesAMTFC.setValue(data[0].CHARGE5LC)
+          this.jewelleryaltrationdetailsFrom.controls.totalAMTFC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.totalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.tagdetails.setValue(data[0].TAG_LINESWOENTER)
+          this.jewelleryaltrationdetailsFrom.controls.image.setValue(data[0].PICTURE_NAME)
+
 
         } else {
           this.comService.toastErrorByMsgId('MSG1531')

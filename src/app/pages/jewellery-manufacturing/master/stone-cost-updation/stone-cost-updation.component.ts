@@ -27,6 +27,8 @@ export class StoneCostUpdationComponent implements OnInit {
   selection!: number;
   userName = this.commonService.userName;
   @Input() content!: any;
+  isSaved: boolean = false;
+  isloading: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -38,14 +40,16 @@ export class StoneCostUpdationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private comService: CommonServiceService,
     private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
    this.branchCode = this.commonService.branchCode;
    this.yearMonth = this.commonService.yearSelected;
-   this.setCompanyCurrency()
-    this.basesetCompanyCurrency()
+   this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+  //  this.setCompanyCurrency()
+  //   this.basesetCompanyCurrency()
    this.setvalues()
   }
 
@@ -96,9 +100,7 @@ export class StoneCostUpdationComponent implements OnInit {
     text:[false],
   });
 
-  setvalues(){
-    console.log(this.commonService);
-    
+  setvalues(){ 
     this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.stonecostupdationFrom.controls.vocno.setValue(this.commonService.popMetalValueOnNet)
     this.stonecostupdationFrom.controls.vocdate.setValue(this.commonService.currentDate)
@@ -313,7 +315,72 @@ basesetCurrencyRate() {
     this.commonService.toastErrorByMsgId('MSG1531')
   }
 }
- 
+ setPostData(){
+  return{
+  "MID": 0,
+  "BRANCH_CODE": this.branchCode,
+  "VOCTYPE": this.stonecostupdationFrom.value.voctype,
+  "VOCNO": this.stonecostupdationFrom.value.vocno,
+  "VOCDATE": this.stonecostupdationFrom.value.vocdate,
+  "YEARMONTH": this.yearMonth,
+  "DIVCODE": "string",
+  "STOCK_CODE": this.stonecostupdationFrom.value.stockcode,
+  "RATELC": this.stonecostupdationFrom.value.currentrate_LC,
+  "RATEFC": this.stonecostupdationFrom.value.currentrate_FC,
+  "NEW_RATELC": this.stonecostupdationFrom.value.newrate_FC,
+  "NEW_RATEFC": this.stonecostupdationFrom.value.newrate_FC,
+  "SMAN_CODE": "string",
+  "REMARKS": this.stonecostupdationFrom.value.remarks,
+  "SHAPE": this.stonecostupdationFrom.value.shape,
+  "SIZE": this.stonecostupdationFrom.value.size,
+  "SIEVE": this.stonecostupdationFrom.value.sieve,
+  "COLOR": this.stonecostupdationFrom.value.color,
+  "CLARITY": this.stonecostupdationFrom.value.clarity,
+  "SIEVE_SET": this.stonecostupdationFrom.value.sieve_set,
+  "SYSTEM_DATE": "2024-01-20T08:08:50.955Z",
+  "NAVSEQNO": 0,
+  "AUTOPOSTING": true,
+  "POSTDATE": "string",
+  "CURRENCY_CODE": this.stonecostupdationFrom.value.itemcurrency,
+  "CURRENCY_RATE": this.stonecostupdationFrom.value.itemcurrency_rate,
+  "BASE_CURRENCY": this.stonecostupdationFrom.value.basecurrency,
+  "BASE_CURR_RATE":this.stonecostupdationFrom.value.basecurrency_rate,
+  "BASE_CONV_RATE": 0,
+  "HTUSERNAME": "string",
+  "Details": [
+    {
+      "UNIQUEID": 0,
+      "DT_BRANCH_CODE": "string",
+      "DT_VOCTYPE": "str",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "string",
+      "SRNO": 0,
+      "JOB_NUMBER": "string",
+      "UNQ_JOB_ID": "string",
+      "UNQ_DESIGN_ID": "string",
+      "DT_DIVCODE": "string",
+      "DT_STOCK_CODE": "string",
+      "DT_RATELC": 0,
+      "DT_RATEFC": 0,
+      "DT_NEW_RATELC": 0,
+      "DT_NEW_RATEFC": 0,
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "AMOUNTLC": 0,
+      "AMOUNTFC": 0,
+      "NEW_AMOUNTLC": 0,
+      "NEW_AMOUNTFC": 0,
+      "TRN_BRANCH_CODE": "string",
+      "TRN_VOCTYPE": "str",
+      "TRN_VOCNO": 0,
+      "TRN_YEARMONTH": "string",
+      "REFMID": 0,
+      "PROCESS_CODE": "string",
+      "WORKER_CODE": "string"
+    }
+  ]
+};
+}
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -327,77 +394,16 @@ basesetCurrencyRate() {
     }
   
     let API = 'JobStoneRecostDJ/InsertJobStoneRecostDJ'
-    let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.stonecostupdationFrom.value.voctype,
-      "VOCNO": this.stonecostupdationFrom.value.vocno,
-      "VOCDATE": this.stonecostupdationFrom.value.vocdate,
-      "YEARMONTH": this.yearMonth,
-      "DIVCODE": "string",
-      "STOCK_CODE": this.stonecostupdationFrom.value.stockcode,
-      "RATELC": this.stonecostupdationFrom.value.currentrate_LC,
-      "RATEFC": this.stonecostupdationFrom.value.currentrate_FC,
-      "NEW_RATELC": this.stonecostupdationFrom.value.newrate_FC,
-      "NEW_RATEFC": this.stonecostupdationFrom.value.newrate_FC,
-      "SMAN_CODE": "string",
-      "REMARKS": this.stonecostupdationFrom.value.remarks,
-      "SHAPE": this.stonecostupdationFrom.value.shape,
-      "SIZE": this.stonecostupdationFrom.value.size,
-      "SIEVE": this.stonecostupdationFrom.value.sieve,
-      "COLOR": this.stonecostupdationFrom.value.color,
-      "CLARITY": this.stonecostupdationFrom.value.clarity,
-      "SIEVE_SET": this.stonecostupdationFrom.value.sieve_set,
-      "SYSTEM_DATE": "2024-01-20T08:08:50.955Z",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "CURRENCY_CODE": this.stonecostupdationFrom.value.itemcurrency,
-      "CURRENCY_RATE": this.stonecostupdationFrom.value.itemcurrency_rate,
-      "BASE_CURRENCY": this.stonecostupdationFrom.value.basecurrency,
-      "BASE_CURR_RATE":this.stonecostupdationFrom.value.basecurrency_rate,
-      "BASE_CONV_RATE": 0,
-      "HTUSERNAME": "string",
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string",
-          "SRNO": 0,
-          "JOB_NUMBER": "string",
-          "UNQ_JOB_ID": "string",
-          "UNQ_DESIGN_ID": "string",
-          "DT_DIVCODE": "string",
-          "DT_STOCK_CODE": "string",
-          "DT_RATELC": 0,
-          "DT_RATEFC": 0,
-          "DT_NEW_RATELC": 0,
-          "DT_NEW_RATEFC": 0,
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "AMOUNTLC": 0,
-          "AMOUNTFC": 0,
-          "NEW_AMOUNTLC": 0,
-          "NEW_AMOUNTFC": 0,
-          "TRN_BRANCH_CODE": "string",
-          "TRN_VOCTYPE": "str",
-          "TRN_VOCNO": 0,
-          "TRN_YEARMONTH": "string",
-          "REFMID": 0,
-          "PROCESS_CODE": "string",
-          "WORKER_CODE": "string"
-        }
-      ]
-   };
-  
+    let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status.trim() == "Success") {
+            this.isSaved = true;
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -411,16 +417,20 @@ basesetCurrencyRate() {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.comService.toastErrorByMsgId('Not saved')
+        console.log(err);
+      })
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
-  }
+  // setFormValues() {
+  //   if(!this.content) return
+  //   console.log(this.content);
+  // }
 
 
   update(){
@@ -430,77 +440,16 @@ basesetCurrencyRate() {
     }
   
     let API = 'JobStoneRecostDJ/UpdateJobStoneRecostDJ/'+ this.branchCode + this.stonecostupdationFrom.value.voctype + this.stonecostupdationFrom.value.vocno + this.yearMonth;
-    let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.stonecostupdationFrom.value.voctype,
-      "VOCNO": this.stonecostupdationFrom.value.vocno,
-      "VOCDATE": this.stonecostupdationFrom.value.vocdate,
-      "YEARMONTH": this.yearMonth,
-      "DIVCODE": "string",
-      "STOCK_CODE": this.stonecostupdationFrom.value.stockcode,
-      "RATELC": this.stonecostupdationFrom.value.currentrate_LC,
-      "RATEFC": this.stonecostupdationFrom.value.currentrate_FC,
-      "NEW_RATELC": this.stonecostupdationFrom.value.newrate_FC,
-      "NEW_RATEFC": this.stonecostupdationFrom.value.newrate_FC,
-      "SMAN_CODE": "string",
-      "REMARKS": this.stonecostupdationFrom.value.remarks,
-      "SHAPE": this.stonecostupdationFrom.value.shape,
-      "SIZE": this.stonecostupdationFrom.value.size,
-      "SIEVE": this.stonecostupdationFrom.value.sieve,
-      "COLOR": this.stonecostupdationFrom.value.color,
-      "CLARITY": this.stonecostupdationFrom.value.clarity,
-      "SIEVE_SET": this.stonecostupdationFrom.value.sieve_set,
-      "SYSTEM_DATE": "2024-01-20T08:08:50.955Z",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "CURRENCY_CODE": this.stonecostupdationFrom.value.itemcurrency,
-      "CURRENCY_RATE": this.stonecostupdationFrom.value.itemcurrency_rate,
-      "BASE_CURRENCY": this.stonecostupdationFrom.value.basecurrency,
-      "BASE_CURR_RATE":this.stonecostupdationFrom.value.basecurrency_rate,
-      "BASE_CONV_RATE": 0,
-      "HTUSERNAME": "string",
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string",
-          "SRNO": 0,
-          "JOB_NUMBER": "string",
-          "UNQ_JOB_ID": "string",
-          "UNQ_DESIGN_ID": "string",
-          "DT_DIVCODE": "string",
-          "DT_STOCK_CODE": "string",
-          "DT_RATELC": 0,
-          "DT_RATEFC": 0,
-          "DT_NEW_RATELC": 0,
-          "DT_NEW_RATEFC": 0,
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "AMOUNTLC": 0,
-          "AMOUNTFC": 0,
-          "NEW_AMOUNTLC": 0,
-          "NEW_AMOUNTFC": 0,
-          "TRN_BRANCH_CODE": "string",
-          "TRN_VOCTYPE": "str",
-          "TRN_VOCNO": 0,
-          "TRN_YEARMONTH": "string",
-          "REFMID": 0,
-          "PROCESS_CODE": "string",
-          "WORKER_CODE": "string"
-        }
-      ]
-   };
-  
+    let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
+            this.isSaved = true;
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.comService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -514,12 +463,15 @@ basesetCurrencyRate() {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.isloading = false;
+        this.comService.toastErrorByMsgId('Not saved')
+      })
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.VOCTYPE) {

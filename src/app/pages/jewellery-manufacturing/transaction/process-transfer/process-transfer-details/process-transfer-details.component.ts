@@ -33,6 +33,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   approvalReqFlag: any = false
+  DIAMANFBARCODE: any = false
 
   private subscriptions: Subscription[] = [];
   STDDateTimeData: DateTimeModel = {
@@ -182,6 +183,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     TO_METAL_WT: [''],
     FRM_PCS: [''],
     TO_PCS: [''],
+    JOB_PCS: [''],
     GrossWeightFrom: [''],
     GrossWeightTo: [''],
     Balance_WT: [''],
@@ -277,6 +279,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
 
   setHearderDetails() {
+    this.DIAMANFBARCODE = this.commonService.getCompanyParamValue('DIAMANFBARCODE')
     console.log(this.content, 'this.content');
     let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
     if (HEADERDETAILS) {
@@ -315,7 +318,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       this.metalDetailData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ
-      this.metalDetailData.forEach((item:any)=>{
+      this.metalDetailData.forEach((item: any) => {
         item.FRM_PCS = item.SETTED_PCS
       })
       this.formatMetalDetailDataGrid()
@@ -396,7 +399,22 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
-
+  imagepath: any[] = []
+  getImageData() {
+    let API = `Image/${this.processTransferdetailsForm.value.JOB_NUMBER}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.imagepath = data.map((item: any) => item.imagepath)
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   getSequenceDetailData() {
     let API = `SequenceMasterDJ/GetSequenceMasterDJDetail/${this.processTransferdetailsForm.value.SEQ_CODE}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -425,30 +443,30 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   setFromProcessWhereCondition() {
     //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
-    this.fromProcessMasterSearch.WHERECONDITION = `@StrCurrentUser='${this.commonService.userName}',
-    @StrProcessCode='',
-    @StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
-    @StrBranchCode='${this.commonService.branchCode}'`
+    this.fromProcessMasterSearch.WHERECONDITION = `@StrCurrentUser='${this.commonService.userName}',`
+    this.fromProcessMasterSearch.WHERECONDITION += `@StrProcessCode='',`
+    this.fromProcessMasterSearch.WHERECONDITION += `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',`
+    this.fromProcessMasterSearch.WHERECONDITION += `@StrBranchCode='${this.commonService.branchCode}'`
   }
   setToProcessWhereCondition() {
-    this.toProcessMasterSearch.WHERECONDITION = `@JobNumber='${this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER)}',
-    @BranchCode='${this.commonService.branchCode}',
-    @CurrentUser='${this.commonService.userName}',
-    @ToWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.TO_WORKER_CODE)}',
-    @EntStr='',
-    @ToWorkerFocus=1`
+    this.toProcessMasterSearch.WHERECONDITION = `@JobNumber='${this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER)}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@BranchCode='${this.commonService.branchCode}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@CurrentUser='${this.commonService.userName}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@ToWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.TO_WORKER_CODE)}',`
+    this.toProcessMasterSearch.WHERECONDITION += `@EntStr='',`
+    this.toProcessMasterSearch.WHERECONDITION += `@ToWorkerFocus=1`
   }
   setFromWorkerWhereCondition() {
-    this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',
-    @StrFromProcess='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',
-    @StrFromWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',
-    @StrBranchCode='${this.commonService.branchCode}',
-	  @blnProcessAuthroize=1`
+    this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromProcess='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrBranchCode='${this.commonService.branchCode}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@blnProcessAuthroize=1`
   }
   setToWorkerWhereCondition() {
-    this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='stk pp',
-    @StrToWorker='',
-	  @blntoWorkerFocus=1`
+    this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='stk pp',`
+    this.toWorkerMasterSearch.WHERECONDITION += `@StrToWorker='',`
+    this.toWorkerMasterSearch.WHERECONDITION += `@blntoWorkerFocus=1`
   }
   stdTimeChange(event: any) {
     this.processTransferdetailsForm.controls.STD_TIME.setValue(event)
@@ -510,6 +528,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.nullToStringSetValue('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.nullToStringSetValue('DESIGN_TYPE', data[0].DESIGN_TYPE)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
+
             this.subJobNumberValidate()
             this.getSequenceDetailData()
           } else {
@@ -547,14 +566,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
     }
   }
-  setDataFromSalesOrderDj(job_salesorder: any) {
-    this.nullToStringSetValue('FRM_PCS', this.commonService.emptyToZero(job_salesorder[0].PCS))
-    this.nullToStringSetValue('TO_PCS', this.commonService.emptyToZero(job_salesorder[0].PCS))
-    this.nullToStringSetValue('DESIGN_CODE', job_salesorder[0].DESIGN_CODE)
-    this.nullToStringSetValue('UNQ_DESIGN_ID', job_salesorder[0].UNQ_DESIGN_ID)
-    this.nullToStringSetValue('PICTURE_PATH', job_salesorder[0].PICTURE_PATH)
-    this.nullToStringSetValue('TREE_NO', job_salesorder[0].TREE_NO)
-  }
+
   subJobDetailData: any[] = []
   /**USE: subjobnumber validate API call subjobvalidate  '156516/4/01'*/
   subJobNumberValidate(event?: any) {
@@ -579,6 +591,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
               this.openJobTransferDetails() //opens modal for multiple details
               return
             }
+            this.getImageData()
             this.setSubJobAPIDetails(this.subJobDetailData)
           }
 
@@ -591,6 +604,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  setDataFromSalesOrderDj(job_salesorder: any) {
+    this.nullToStringSetValue('JOB_PCS', this.commonService.emptyToZero(job_salesorder[0].PCS))
+    this.nullToStringSetValue('DESIGN_CODE', job_salesorder[0].DESIGN_CODE)
+    this.nullToStringSetValue('UNQ_DESIGN_ID', job_salesorder[0].UNQ_DESIGN_ID)
+    this.nullToStringSetValue('PICTURE_PATH', job_salesorder[0].PICTURE_PATH)
+    this.nullToStringSetValue('TREE_NO', job_salesorder[0].TREE_NO)
   }
   //use: on row click on multiple sub job details
   onRowClickHandler(event: any) {
@@ -606,6 +626,57 @@ export class ProcessTransferDetailsComponent implements OnInit {
   onRowUpdateGrid(event: any) {
     let data = event.data
     this.checkSettedValue(data)
+  }
+  stdLossChange(event: any) {
+    let form = this.processTransferdetailsForm.value;
+    let msg = this.commonService.getMsgByID('MSG1397')
+    if (this.commonService.emptyToZero(form.stdLoss) > this.commonService.emptyToZero(form.FRM_METAL_WT)) {
+      this.commonService.toastErrorByMsgId(msg + " " + form.FRM_METAL_WT)
+      this.setValueWithDecimal('stdLoss', 0, 'METAL')
+      return
+    }
+    if (this.commonService.emptyToZero(form.stdLoss) > 0) {
+      if (this.sequenceDetails.length > 0) {
+        let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
+        if (processData[0]?.STD_LOSS > 0) {
+          let nMax_Loss = (this.commonService.emptyToZero(form.FRM_METAL_WT) * this.commonService.emptyToZero(processData[0]["MAX_LOSS"])) / 100;
+          if (this.commonService.emptyToZero(form.stdLoss) > nMax_Loss) {
+            this.commonService.toastErrorByMsgId(msg + " " + nMax_Loss)
+            this.setValueWithDecimal('stdLoss', nMax_Loss, 'METAL')
+            return;
+          }
+          let nMin_Loss = (this.commonService.emptyToZero(form.FRM_METAL_WT) * this.commonService.emptyToZero(processData[0]["MIN_LOSS"])) / 100;
+          if (this.commonService.emptyToZero(form.stdLoss) > nMin_Loss) {
+            this.commonService.toastErrorByMsgId(msg + " " + nMin_Loss)
+            this.setValueWithDecimal('stdLoss', nMin_Loss, 'METAL')
+            return;
+          }
+
+        } else {
+          this.commonService.toastErrorByMsgId(msg + " " + form.FRM_METAL_WT)
+        }
+      }
+      let txtBalDiaGrWt = 0;
+      if (this.commonService.emptyToZero(form.stdLoss) == 0 && this.commonService.emptyToZero(form.FRM_METAL_WT) > this.commonService.emptyToZero(form.TO_METAL_WT)) {
+        if ((this.commonService.emptyToZero(form.TO_METAL_WT) + this.commonService.emptyToZero(form.stdLoss)) > this.commonService.emptyToZero(form.FRM_METAL_WT)) {
+          let TO_METAL_WT = (this.commonService.emptyToZero(form.FRM_METAL_WT) - this.commonService.emptyToZero(form.stdLoss));
+          this.setValueWithDecimal('TO_METAL_WT', TO_METAL_WT, 'METAL')
+          let GrossWeightTo = (this.commonService.emptyToZero(form.TO_METAL_WT) - this.commonService.emptyToZero(form.TO_STONE_WT) / 5);
+          this.setValueWithDecimal('GrossWeightTo', GrossWeightTo, 'METAL')
+        }
+        else {
+          txtBalDiaGrWt = (this.commonService.emptyToZero(form.FRM_METAL_WT) - this.commonService.emptyToZero(form.GrossWeightTo));
+        }
+      }
+      else {
+        txtBalDiaGrWt = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapPureWt) + this.commonService.emptyToZero(form.stdLoss)));
+      }
+      this.Split_Loss(form)
+    }
+  }
+  Split_Loss(form: any) {
+    let txtLossPer = (this.commonService.emptyToZero(form.stdLoss) / this.commonService.emptyToZero(form.FRM_METAL_WT)) * 100
+    this.setValueWithDecimal('stdLossper', txtLossPer, 'AMOUNT')
   }
   checkSettedValue(data: any) {
     if (data.FRM_PCS > data.PCS) {
@@ -697,8 +768,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('JOB_SO_NUMBER', data[0].JOB_SO_NUMBER)
     this.nullToStringSetValue('DIVCODE', data[0].DIVCODE)
     this.nullToStringSetValue('METALSTONE', data[0].METALSTONE)
-    this.nullToStringSetValue('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
-
+    // this.nullToStringSetValue('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
+    this.getImageData()
     this.stockCodeScrapValidate()
     this.getTimeAndLossDetails()
     this.fillStoneDetails()
@@ -720,7 +791,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('JOB_SO_NUMBER', data[0].JOB_SO_NUMBER)
     this.nullToStringSetValue('DIVCODE', data[0].DIVCODE)
     this.nullToStringSetValue('METALSTONE', data[0].METALSTONE)
-    this.nullToStringSetValue('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
+    // this.nullToStringSetValue('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
     this.nullToStringSetValue('PICTURE_PATH', data[0].PICTURE_PATH)
     this.nullToStringSetValue('EXCLUDE_TRANSFER_WT', data[0].EXCLUDE_TRANSFER_WT)
     this.stockCodeScrapValidate()
@@ -735,14 +806,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('TO_METAL_PCS', data[0].JOB_PCS)
     this.setValueWithDecimal('FRM_METAL_WT', data[0].METAL, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', data[0].METAL, 'METAL')
-    this.nullToStringSetValue('FRM_PCS', data[0].JOB_PCS)
-    this.nullToStringSetValue('TO_PCS', data[0].JOB_PCS)
     this.setValueWithDecimal('GrossWeightFrom', data[0].NETWT, 'METAL')
     this.setValueWithDecimal('GrossWeightTo', data[0].NETWT, 'METAL')
     this.setValueWithDecimal('FRM_STONE_WT', data[0].STONE, 'STONE')
     this.setValueWithDecimal('TO_STONE_WT', data[0].STONE, 'STONE')
-    this.nullToStringSetValue('FRM_STONE_PCS', data[0].JOB_PCS)
-    this.nullToStringSetValue('TO_STONE_PCS', data[0].JOB_PCS)
     this.setValueWithDecimal('PUREWT', data[0].PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
   }
@@ -800,8 +867,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(data[0].TO_PROCESS_CODE)
-          this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(data[0].TO_PROCESSNAME)
+          this.nullToStringSetValue('TO_PROCESS_CODE', data[0].TO_PROCESS_CODE)
+          this.nullToStringSetValue('TO_PROCESSNAME', data[0].TO_PROCESSNAME)
+          this.nullToStringSetValue('FRM_PCS', this.commonService.emptyToZero(data[0].FRM_PCS))
+          this.nullToStringSetValue('TO_PCS', this.commonService.emptyToZero(data[0].FRM_PCS))
+          this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
+
+          // setTimeDetails
           this.processTransferdetailsForm.controls.STD_TIME.setValue(
             this.commonService.convertTimeMinutesToDHM(data[0].STD_TIME)
           )
@@ -1103,7 +1175,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
       JOB_PROCESS_TRN_COMP_DJ: this.setJOB_PROCESS_TRN_COMP_DJ(),
       JOB_PROCESS_TRN_LABCHRG_DJ: this.setLabourChargeDetails()
     }
-    console.log(detailDataToParent, 'formSubmit clicked');
     this.saveDetail.emit(detailDataToParent);
     if (flag == 'CONTINUE') {
       this.resetPTFDetails()
@@ -1113,22 +1184,21 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.reset()
     this.metalDetailData = []
   }
-
+  multiplyWithAmtDecimal(a:any,b:any){
+    let val = this.commonService.emptyToZero(a) * this.commonService.emptyToZero(b)
+    return this.commonService.emptyToZero(val.toFixed(2))
+  }
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
     let LOSS_PURE_QTY = this.calculateLossPureQty(form);
-    let stoneAmount = this.calculateMetalGridSum(this.metalDetailData, 'STONEAMOUNT');
-    let metalAmount = this.calculateMetalGridSum(this.metalDetailData, 'METALAMOUNT');
+    let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
     let scrapPureWt = this.commonService.emptyToZero(Number(form.scrapQuantity) * Number(form.SCRAP_PURITY))
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
-
-    console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
+    // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
     this.gridSRNO += 1
-
-
     return {
       "SRNO": this.commonService.emptyToZero(form.SRNO),
       "UNIQUEID": 0,
@@ -1154,7 +1224,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "FRM_STONE_PCS": this.commonService.emptyToZero(form.FRM_STONE_PCS),
       "FRM_METAL_WT": this.commonService.emptyToZero(form.FRM_METAL_WT),
       "FRM_METAL_PCS": this.commonService.emptyToZero(form.FRM_METAL_PCS),
-      "FRM_PURE_WT": this.commonService.emptyToZero(form.PUREWT),
+      "FRM_PURE_WT": this.multiplyWithAmtDecimal(form.FRM_METAL_WT,form.PURITY),
       "FRM_NET_WT": this.commonService.emptyToZero(form.FRM_METAL_WT),
       "TO_PROCESS_CODE": this.commonService.nullToString(form.TO_PROCESS_CODE),
       "TO_PROCESSNAME": this.commonService.nullToString(form.TO_PROCESSNAME),
@@ -1165,22 +1235,22 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "TO_STONE_WT": this.commonService.emptyToZero(form.TO_STONE_WT),
       "TO_STONE_PCS": this.commonService.emptyToZero(form.TO_STONE_PCS),
       "TO_METAL_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
-      "TO_PURE_WT": this.commonService.emptyToZero(Number(form.FRM_METAL_WT) * Number(form.PURITY)),
-      "TO_NET_WT": this.commonService.emptyToZero(form.GrossWeightTo),
+      "TO_PURE_WT": this.multiplyWithAmtDecimal(form.TO_METAL_WT,form.PURITY),
+      "TO_NET_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
       "LOSS_QTY": this.commonService.emptyToZero(form.stdLoss),
       "LOSS_PURE_QTY": this.commonService.emptyToZero(LOSS_PURE_QTY),
-      "STONE_AMOUNTFC": this.commonService.emptyToZero(stoneAmount),
-      "STONE_AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
-      "METAL_AMOUNTFC": this.commonService.emptyToZero(metalAmount),
-      "METAL_AMOUNTLC": this.commonService.emptyToZero(metalAmount),
+      "STONE_AMOUNTFC": this.commonService.emptyToZero(metalGridDataSum.STONE_AMOUNTLC),
+      "STONE_AMOUNTLC": this.commonService.emptyToZero(metalGridDataSum.STONE_AMOUNTLC),
+      "METAL_AMOUNTFC": this.commonService.emptyToZero(metalGridDataSum.METAL_AMOUNTLC),
+      "METAL_AMOUNTLC": this.commonService.emptyToZero(metalGridDataSum.METAL_AMOUNTLC),
       "MAKING_RATEFC": 0,
       "MAKING_RATELC": 0,
       "MAKING_AMOUNTFC": 0,
       "MAKING_AMOUNTLC": 0,
       "LAB_AMOUNTFC": 0,
       "LAB_AMOUNTLC": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
+      "TOTAL_AMOUNTFC": this.commonService.emptyToZero(metalGridDataSum.TOTAL_AMOUNTLC),
+      "TOTAL_AMOUNTLC": this.commonService.emptyToZero(metalGridDataSum.TOTAL_AMOUNTLC),
       "COSTFC_PER_PCS": 0,
       "COSTLC_PER_PCS": 0,
       "LAB_CODE": "",
@@ -1209,18 +1279,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "RET_STONE_AMOUNTLC": 0,
       "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
-      "TIME_TAKEN_HRS": this.commonService.emptyToZero(form.TIME_TAKEN_HRS),
+      "TIME_TAKEN_HRS": this.commonService.emptyToZero(this.TimeTakenData.TIMEINMINUTES),
       "METAL_DIVISION": "",
       "LOCTYPE_CODE": this.commonService.nullToString(form.location),
       "PICTURE_PATH": this.commonService.nullToString(form.PICTURE_PATH),
-      "AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
-      "AMOUNTFC": 0,
-      "JOB_PCS": 0,
+      "AMOUNTLC": this.commonService.emptyToZero(metalGridDataSum.TOTAL_AMOUNTLC),
+      "AMOUNTFC": this.commonService.emptyToZero(metalGridDataSum.TOTAL_AMOUNTLC),
+      "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
       "STONE_WT": this.commonService.emptyToZero(form.TO_STONE_WT),
       "STONE_PCS": this.commonService.emptyToZero(form.TO_STONE_PCS),
       "METAL_WT": this.commonService.emptyToZero(form.TO_METAL_WT),
       "METAL_PCS": this.commonService.emptyToZero(form.TO_METAL_PCS),
-      "PURE_WT": this.commonService.emptyToZero(Number(form.TO_METAL_WT) * Number(form.PURITY)),
+      "PURE_WT": this.multiplyWithAmtDecimal(form.TO_METAL_WT,form.PURITY),
       "GROSS_WT": this.commonService.emptyToZero(form.GrossWeightTo),
       "RET_METAL_PCS": 0,
       "RET_STONE_PCS": 0,
@@ -1230,7 +1300,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "MKG_LABACCODE": "",
       "REMARKS": this.commonService.nullToString(form.remarks),
       "TREE_NO": this.commonService.nullToString(form.TREE_NO),
-      "STD_TIME": this.commonService.emptyToZero(form.STD_TIME),
+      "STD_TIME": this.commonService.emptyToZero(this.STDDateTimeData.TIMEINMINUTES),
       "WORKER_ACCODE": "",
       "PRODLAB_ACCODE": "",
       "DT_BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
@@ -1239,7 +1309,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "DT_YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
       "ISSUE_REF": this.commonService.nullToString(form.barCodeNumber),
       "IS_AUTHORISE": false,
-      "TIME_CONSUMED": this.commonService.emptyToZero(form.consumed),
+      "TIME_CONSUMED": this.commonService.emptyToZero(this.consumedTimeData.TIMEINMINUTES),
       "SCRAP_STOCK_CODE": this.commonService.nullToString(form.stockCode),
       "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
       "SCRAP_PURITY": this.commonService.emptyToZero(form.SCRAP_PURITY),
@@ -1272,29 +1342,26 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
   }
   /**USE:  calculate Metal Grid Sum of data*/
-  calculateMetalGridSum(data: any, flag: string) {
+  calculateMetalStoneGridAmount() {
     let stoneAmount: number = 0
     let metalAmount: number = 0
-    data.forEach((item: any) => {
-      switch (item.METALSTONE) {
-        case 'S':
-          stoneAmount += item.AMOUNTFC;
-          break;
-        case 'M':
-          metalAmount += item.AMOUNTFC;
-          break;
-        // Add more cases as needed
+    let totalAmount: number = 0
+    this.metalDetailData.forEach((item: any) => {
+      totalAmount += this.commonService.emptyToZero(item.AMOUNTFC);
+      if (item.METALSTONE == 'S') {
+        stoneAmount += this.commonService.emptyToZero(item.AMOUNTFC);
+      }
+      if (item.METALSTONE == 'M') {
+        metalAmount += this.commonService.emptyToZero(item.AMOUNTFC);
       }
     })
-    switch (flag) {
-      case 'STONEAMOUNT':
-        return stoneAmount;
-      case 'METALAMOUNT':
-        return metalAmount;
-      default:
-        return 0;
+    return {
+      STONE_AMOUNTLC: this.commonService.emptyToZero(stoneAmount.toFixed(2)),
+      METAL_AMOUNTLC: this.commonService.emptyToZero(metalAmount.toFixed(2)),
+      TOTAL_AMOUNTLC: this.commonService.emptyToZero(totalAmount.toFixed(2))
     }
   }
+  
   private calculateIronScrapWeight(data: any): number {
     let toIronScrapWt = (this.commonService.emptyToZero(data.METAL_FromIronWeight) + this.commonService.emptyToZero(data.METAL_FromNetWeight))
     toIronScrapWt = toIronScrapWt * (this.commonService.emptyToZero(data.METAL_ScrapGrWt) - this.commonService.emptyToZero(data.METAL_ScrapStoneWt));
@@ -1404,7 +1471,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "ISSUE_GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
         "ISSUE_STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
         "ISSUE_NET_WT": this.commonService.emptyToZero(element.NET_WT),
-        "JOB_PCS": 1,
+        "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
         "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
         "TO_STOCK_CODE": this.commonService.nullToString(form.METAL_ToStockCode),
         "FROM_STOCK_CODE": this.commonService.nullToString(form.METAL_FromStockCode),

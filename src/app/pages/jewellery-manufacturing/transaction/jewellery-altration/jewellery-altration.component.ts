@@ -162,7 +162,7 @@ export class JewelleryAltrationComponent implements OnInit {
     console.log(this.content)
     if (!this.content) return
     let API = `DiamondJewelAlteration/GetDiamondJewelAlterationWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -580,7 +580,7 @@ export class JewelleryAltrationComponent implements OnInit {
         let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + 
         this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
         this.content.VOCNO+ '/' + this.content.YEARMONTH
-        let Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
