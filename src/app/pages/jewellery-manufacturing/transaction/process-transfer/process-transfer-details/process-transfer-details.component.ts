@@ -167,6 +167,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     StdTimeInMinutes: [''],
     timeTakenInMinutes: [''],
     consumedInMinutes: [''],
+    PRODLAB_ACCODE: [''],
     toggleSwitchtIssue: [true],
     //DIAMOND DETAIL STARTS
     FRM_PROCESS_CODE: [''],
@@ -869,6 +870,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           this.nullToStringSetValue('TO_PROCESS_CODE', data[0].TO_PROCESS_CODE)
           this.nullToStringSetValue('TO_PROCESSNAME', data[0].TO_PROCESSNAME)
+          this.nullToStringSetValue('PRODLAB_ACCODE', data[0].LAB_ACCODE)
           this.nullToStringSetValue('FRM_PCS', this.commonService.emptyToZero(data[0].FRM_PCS))
           this.nullToStringSetValue('TO_PCS', this.commonService.emptyToZero(data[0].FRM_PCS))
           this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
@@ -1302,7 +1304,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "TREE_NO": this.commonService.nullToString(form.TREE_NO),
       "STD_TIME": this.commonService.emptyToZero(this.STDDateTimeData.TIMEINMINUTES),
       "WORKER_ACCODE": "",
-      "PRODLAB_ACCODE": "",
+      "PRODLAB_ACCODE": this.commonService.nullToString(form.PRODLAB_ACCODE),
       "DT_BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
       "DT_VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
       "DT_VOCNO": this.commonService.emptyToZero(form.VOCNO),
