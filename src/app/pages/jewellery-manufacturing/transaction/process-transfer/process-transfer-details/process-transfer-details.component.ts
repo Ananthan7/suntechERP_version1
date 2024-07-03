@@ -70,6 +70,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  userDetailNet: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Users',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   fromProcessMasterSearch: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -1147,6 +1158,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   stockCodeSelected(event: any) {
     this.processTransferdetailsForm.controls.stockCode.setValue(event.STOCK_CODE)
   }
+  userDetailNetSelected(event: any) {
+    this.processTransferdetailsForm.controls.APPROVED_USER.setValue(event.UsersName)
+  }
 
   jobNumberSelected(event: any) {
     this.processTransferdetailsForm.controls.JOB_NUMBER.setValue(event.job_number)
@@ -1513,6 +1527,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "REPAIR_PROCESS": true
       })
     });
+    console.log(data,'data');
+    
     return data
   }
   checkScrapStockCode(stockCode: any, GridstockCode: any, METALSTONE: any) {

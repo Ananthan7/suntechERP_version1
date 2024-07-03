@@ -98,9 +98,14 @@
                 class="col-sm-4 col-form-label">Approved
                 By</label>
               <div class="col-sm-6">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="APPROVED_USER" />
+                <mat-form-field style="width: 76%;">
+                  <input type="text" matInput appNoEmptySpace
+                    formControlName="APPROVED_USER" [readonly]="viewMode" />
                 </mat-form-field>
+                <master-search [MasterSearchData]="userDetailNet"
+                  *ngIf="!viewMode"
+                  (newRowClick)="userDetailNetSelected($event)">
+                </master-search>
               </div>
             </div>
             <div class="row mb-2">
