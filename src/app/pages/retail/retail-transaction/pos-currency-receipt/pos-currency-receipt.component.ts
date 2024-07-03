@@ -768,6 +768,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   onRowDoubleClicked(e: any) {
+    console.log(e);
+    
     e.cancel = true;
     this.openAddPosARdetails(e.data);
   }
