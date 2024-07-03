@@ -353,6 +353,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
           this.posCurrencyReceiptForm.controls.partyCurr.setValue(data.PARTY_CURRENCY);
 
+          
+          this.posCurrencyReceiptForm.controls.schemaCode.setValue(data.SCH_SCHEME_CODE);
+          this.posCurrencyReceiptForm.controls.schemaId.setValue(data.SCH_CUSTOMER_ID);
+          this.posCurrencyReceiptForm.controls.narration.setValue(data.REMARKS);
+
 
           this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(this.comService.decimalQuantityFormat(
             this.comService.emptyToZero(data.TOTAL_AMOUNTFC),
@@ -899,15 +904,18 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   getGSTDetails(acCode: any) {
 
-    let vatData = {
+    // let vatData = {
 
-      Accode: acCode,
-      strdate: this.comService.formatDate(new Date()),
-      branch_code: this.comService.branchCode,
-      mainvoctype: this.comService.getqueryParamMainVocType()
+    //   Accode: acCode,
+    //   strdate: this.comService.formatDate(new Date()),
+    //   branch_code: this.comService.branchCode,
+    //   mainvoctype: this.comService.getqueryParamMainVocType()
 
-    };
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('TaxDetails', vatData)
+    // };
+
+    const API = `TaxDetails/${acCode}/${this.comService.formatDate(new Date())}/${this.comService.branchCode}/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamVocType()}`;
+
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
 
         if (result.status == 'Success') {
