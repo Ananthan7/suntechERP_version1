@@ -344,10 +344,6 @@ export class RepairDetailsComponent implements OnInit {
   }
 
   formSubmit() {
-    if (this.content && this.content.FLAG == "EDIT") {
-      this.update();
-      return;
-    }
     if (this.repairjewelleryreceiptdetailsFrom.invalid) {
       this.toastr.error("select all required fields");
       return;
@@ -356,7 +352,7 @@ export class RepairDetailsComponent implements OnInit {
     let API = "Repair/InsertRepair";
     let postData = {
       UNIQUEID: 0,
-      SRNO: 0,
+      SRNO: this.receiptData?.SRNO || 0,
       DIVISION_CODE: "3",
       STOCK_CODE: "",
       ITEM_DESCRIPTION:
@@ -368,12 +364,12 @@ export class RepairDetailsComponent implements OnInit {
         this.repairjewelleryreceiptdetailsFrom.value.gross_Wt,
         "RATE"
       ),
-      ITEM_STATUSTYPE:
-        this.repairjewelleryreceiptdetailsFrom.value.type_of_item,
+      ITEM_STATUSTYPE: this.repairjewelleryreceiptdetailsFrom.value.status,
       DELIVERY_DATE: this.repairjewelleryreceiptdetailsFrom.value.delivery_date,
       AMOUNT: this.repairjewelleryreceiptdetailsFrom.value.total_amount,
       STATUS: 0,
-      REPAIR_ITEMTYPE: "",
+      REPAIR_ITEMTYPE:
+        this.repairjewelleryreceiptdetailsFrom.value.type_of_item,
       ITEM_PICTUREPATH: "",
       TRANSFERID: 0,
       TRANSFERCID: 0,
@@ -458,49 +454,6 @@ export class RepairDetailsComponent implements OnInit {
 
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.repairjewelleryreceiptdetailsFrom.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.toastr.error("Not saved");
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
-  }
-
-  update() {
-    if (this.repairjewelleryreceiptdetailsFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
-
-    let API =
-      "JobWaxReturn/UpdateJobWaxReturn/" +
-      this.branchCode +
-      this.repairjewelleryreceiptdetailsFrom.value.voctype +
-      this.repairjewelleryreceiptdetailsFrom.value.vocno +
-      this.yearMonth;
-    let postData = {};
-
-    let Sub: Subscription = this.dataService
-      .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
           if (result.response) {

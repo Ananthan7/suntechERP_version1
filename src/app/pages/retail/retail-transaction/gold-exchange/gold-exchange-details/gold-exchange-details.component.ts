@@ -144,7 +144,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.partyCurrency=this.partyCurrencyParam.partyCurrency;
+    
     this.getQueryParams(this.queryParams);
     this.getKaratDetails();
 
@@ -153,6 +153,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
     if (this.exchangeDetails && Object.keys(this.exchangeDetails).length > 0)
 
       this.setExchangeDetails();
+      else
+      this.partyCurrency=this.partyCurrencyParam.partyCurrency;
 
   }
 
