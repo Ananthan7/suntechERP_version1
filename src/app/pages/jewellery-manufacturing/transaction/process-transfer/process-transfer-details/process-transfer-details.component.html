@@ -99,7 +99,8 @@
                 By</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 76%;">
-                  <input type="text" matInput appNoEmptySpace
+                  <input type="text" matInput UpperCaseDirective
+                  (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
                     formControlName="APPROVED_USER" [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="userDetailNet"
@@ -113,8 +114,13 @@
                 class="col-sm-4 col-form-label">Approved
                 Date</label>
               <div class="col-sm-6">
-                <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="approveddate" />
+                <mat-form-field style="width: 100%">
+                  <input matInput DateValidation
+                    [matDatepicker]="approveddate" formControlName="approveddate"
+                    placeholder="DD/MM/YYYY" />
+                  <mat-datepicker-toggle matSuffix
+                    [for]="approveddate"></mat-datepicker-toggle>
+                  <mat-datepicker #approveddate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -266,6 +272,11 @@
                       <th>Location</th>
                       <th>Std.Loss</th>
                       <th>
+                        <mat-form-field style="width: 100px;">
+                          <input type="text" matInput readonly
+                            class="text-right"
+                            formControlName="STD_LOSS" />
+                        </mat-form-field>
                       </th>
                     </tr>
                     <tr>
@@ -290,7 +301,8 @@
                       <td>
                         <mat-form-field style="width: 70px;">
                           <input type="text" matInput maxlength="15"
-                            (focusout)="stockCodeScrapValidate()"
+                            (change)="stockCodeScrapValidate()"
+                            (focusout)="validateLookupField($event,stockCodeSearch,'stockCode')"
                             formControlName="stockCode" [readonly]="viewMode" />
                         </mat-form-field>
                         <master-search *ngIf="!viewMode"
@@ -304,16 +316,21 @@
                           <input type="text" matInput
                             [readonly]="viewMode || processTransferdetailsForm.value.stockCode == ''"
                             class="text-right"
-                            formControlName="scrapQuantity" NumberOnly
+                            formControlName="scrapWeight" NumberOnly
                             maxlength="10" />
                         </mat-form-field>
                       </td>
                       <!-- location -->
                       <td>
-                        <mat-form-field style="width: 100px;">
-                          <input type="text" matInput readonly
-                            formControlName="location" />
+                        <mat-form-field style="width: 70px;">
+                          <input type="text" matInput 
+                            maxlength="15"
+                            formControlName="location" readonly />
                         </mat-form-field>
+                        <master-search *ngIf="locationSearchFlag"
+                          [MasterSearchData]="locationSearch"
+                          (newRowClick)="locationSelected($event)">
+                        </master-search>
                       </td>
                       <!-- stdLoss -->
                       <td>
@@ -321,8 +338,8 @@
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
-                            (focusout)="stdLossChange($event)"
-                            formControlName="stdLoss" />
+                            (focusout)="lossQtyChange($event)"
+                            formControlName="lossQty" />
                         </mat-form-field>
                       </td>
                       <!-- stdLossper -->
@@ -330,7 +347,7 @@
                         <mat-form-field style="width: 50px;">
                           <input type="text" matInput [readonly]="viewMode"
                             AmountDecimalInput
-                            formControlName="stdLossper" [max]="10"
+                            formControlName="lossQtyper" [max]="10"
                             class="text-right" />
                         </mat-form-field>
                       </td>
@@ -1192,7 +1209,8 @@
                 :</label>
               <div class="col-md-9">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="remarks" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="remarks"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
