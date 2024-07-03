@@ -314,7 +314,7 @@
                       <td>
                         <mat-form-field style="width: 100px;">
                           <input type="text" matInput
-                            [readonly]="viewMode || processTransferdetailsForm.value.stockCode == ''"
+                            [readonly]="viewMode || locationSearchFlag"
                             class="text-right"
                             formControlName="scrapWeight" NumberOnly
                             maxlength="10" />
@@ -345,8 +345,7 @@
                       <!-- stdLossper -->
                       <td>
                         <mat-form-field style="width: 50px;">
-                          <input type="text" matInput [readonly]="viewMode"
-                            AmountDecimalInput
+                          <input type="text" matInput readonly
                             formControlName="lossQtyper" [max]="10"
                             class="text-right" />
                         </mat-form-field>
@@ -354,7 +353,7 @@
                       <!-- balance wt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput [readonly]="viewMode"
+                          <input type="text" matInput readonly
                             maxlength="10"
                             formControlName="Balance_WT" NumberOnly
                             class="text-right" />
