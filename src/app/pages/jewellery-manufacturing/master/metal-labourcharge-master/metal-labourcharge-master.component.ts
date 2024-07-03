@@ -611,6 +611,16 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.WASTAGE_PER));
 
+        this.metallabourMasterForm.controls.wtFrom.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,
+            this.content.CARATWT_FROM));
+    
+        this.metallabourMasterForm.controls.wtTo.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,
+            this.content.CARATWT_TO));
+    
 
     this.metallabourMasterForm.controls.metalselling_rate.setValue(
       this.commonService.commaSeperation(this.content.SELLING_RATE)
@@ -639,9 +649,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.SELLING_PER));
-
-
-
 
   }
 

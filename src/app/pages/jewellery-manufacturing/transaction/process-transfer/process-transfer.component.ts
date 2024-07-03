@@ -230,7 +230,7 @@ export class ProcessTransferComponent implements OnInit {
       DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.tableData.length + 1
       // DATA.JOB_PROCESS_TRN_LABCHRG_DJ.SRNO = this.tableData.length + 1
       this.detailData.push({ SRNO: this.tableData.length + 1, ...DATA })
-      this.tableData.push(DATA.PROCESS_FORMDETAILS);
+      this.tableData.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
     }
     this.editFinalArray(DATA)
     console.log(this.detailData, 'fired detail data');
@@ -358,7 +358,6 @@ export class ProcessTransferComponent implements OnInit {
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
-    return
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {

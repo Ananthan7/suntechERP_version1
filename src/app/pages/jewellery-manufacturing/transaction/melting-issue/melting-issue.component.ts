@@ -186,6 +186,7 @@ export class MeltingIssueComponent implements OnInit {
       this.setAllInitialValues()
     } else {
       this.setNewFormValues()
+      this.setCompanyCurrency()
     }
 
   }
@@ -206,6 +207,14 @@ export class MeltingIssueComponent implements OnInit {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
       this.meltingIssueFrom.controls.vocdate.setValue(new Date(date))
     }
+  }
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.meltingIssueFrom.controls.currency.setValue(CURRENCY_CODE);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
+    this.meltingIssueFrom.controls.currencyrate.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
   }
 
   setAllInitialValues() {
@@ -256,24 +265,24 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   /**USE: to set currency from company parameter */
-  setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.meltingIssueFrom.controls.currency.setValue(CURRENCY_CODE);
-    this.setCurrencyRate()
-  }
-  /**USE: to set currency from branch currency master */
-  setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.meltingIssueFrom.value.currency);
-    if (CURRENCY_RATE.length > 0) {
-      this.meltingIssueFrom.controls.currencyrate.setValue(
-        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-      );
-    } else {
-      this.meltingIssueFrom.controls.currency.setValue('')
-      this.meltingIssueFrom.controls.currencyrate.setValue('')
-      this.commonService.toastErrorByMsgId('MSG1531')
-    }
-  }
+  // setCompanyCurrency() {
+  //   let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+  //   this.meltingIssueFrom.controls.currency.setValue(CURRENCY_CODE);
+  //   this.setCurrencyRate()
+  // }
+  // /**USE: to set currency from branch currency master */
+  // setCurrencyRate() {
+  //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.meltingIssueFrom.value.currency);
+  //   if (CURRENCY_RATE.length > 0) {
+  //     this.meltingIssueFrom.controls.currencyrate.setValue(
+  //       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+  //     );
+  //   } else {
+  //     this.meltingIssueFrom.controls.currency.setValue('')
+  //     this.meltingIssueFrom.controls.currencyrate.setValue('')
+  //     this.commonService.toastErrorByMsgId('MSG1531')
+  //   }
+  // }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -521,9 +530,9 @@ export class MeltingIssueComponent implements OnInit {
       "LOSS_PURE_WT": 0,
       "IS_AUTHORISE": true,
       "IS_REJECT": true,
-      "REASON": "",
-      "REJ_REMARKS": "",
-      "ATTACHMENT_FILE": "",
+      "REASON": "string",
+      "REJ_REMARKS": "string",
+      "ATTACHMENT_FILE": "string",
       "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
       "Details": this.meltingISsueDetailsData
     }
@@ -655,7 +664,7 @@ export class MeltingIssueComponent implements OnInit {
         
         console.log('API endpoint:', API);
         
-        const Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        const Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
           .subscribe((result) => {
             console.log('API response:', result);
             
