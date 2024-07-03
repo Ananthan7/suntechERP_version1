@@ -576,7 +576,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     }
     else {
-      const API = `AccountMaster/GetPDCAccount?strAccode=${this.posCurrencyReceiptDetailsForm.value.debitAmount}`;
+      const API = `AccountMaster/GetPDCAccount/${this.posCurrencyReceiptDetailsForm.value.debitAmount}`;
       this.dataService.getDynamicAPI(API)
         .subscribe((resp) => {
           if (resp.status == "Success") {
