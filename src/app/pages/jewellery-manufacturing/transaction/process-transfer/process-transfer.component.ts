@@ -330,9 +330,9 @@ export class ProcessTransferComponent implements OnInit {
   }
   //calculate Loss Pure Qty
   private calculateLossPureQty(detailScreenData: any): number {
-    detailScreenData.stdLoss = this.commonService.emptyToZero(detailScreenData.stdLoss);
+    detailScreenData.lossQty = this.commonService.emptyToZero(detailScreenData.lossQty);
     detailScreenData.PURITY = this.commonService.emptyToZero(detailScreenData.PURITY);
-    let value = detailScreenData.stdLoss * detailScreenData.PURITY
+    let value = detailScreenData.lossQty * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
   submitValidations(form:any){

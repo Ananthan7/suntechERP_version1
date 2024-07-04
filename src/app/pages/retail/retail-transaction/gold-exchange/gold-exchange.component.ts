@@ -261,7 +261,7 @@ export class GoldExchangeComponent implements OnInit {
   }
 
   generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
@@ -271,7 +271,7 @@ export class GoldExchangeComponent implements OnInit {
   }
 
   async getFinancialYear() {
-    const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comService.cDateFormat(this.goldExchangeForm.value.vocDate)}`;
+    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comService.cDateFormat(this.goldExchangeForm.value.vocDate)}`;
     const res = await this.suntechApi.getDynamicAPI(API).toPromise()
     console.log(res);
     if (res.status == "Success") {

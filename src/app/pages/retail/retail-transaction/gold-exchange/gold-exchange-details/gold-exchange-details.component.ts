@@ -144,7 +144,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.partyCurrency=this.partyCurrencyParam.partyCurrency;
+    
     this.getQueryParams(this.queryParams);
     this.getKaratDetails();
 
@@ -153,6 +153,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
     if (this.exchangeDetails && Object.keys(this.exchangeDetails).length > 0)
 
       this.setExchangeDetails();
+      else
+      this.partyCurrency=this.partyCurrencyParam.partyCurrency;
 
   }
 
@@ -167,17 +169,18 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   getExchangeStockCodes(stockCode: string) {
 
-    let param = {
-      BRANCH_CODE: this.comService.branchCode,
-      STOCK_CODE: stockCode,
+    // let param = {
+    //   BRANCH_CODE: this.comService.branchCode,
+    //   STOCK_CODE: stockCode,
 
-    }
+    // }
 
-    // let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.comService.branchCode}&STOCK_CODE=${stockCode}`
 
-    // this.suntechApi
-    //   .getDynamicAPIwithParamsBranch(API)
-    let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailsalesExchangeLookup',param)
+    // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailsalesExchangeLookup',param)
+
+      const API = `RetailsalesExchangeLookup/${this.comService.branchCode}/${stockCode}`;
+
+      let sub: Subscription = this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
 
         let _data = resp.response[0];

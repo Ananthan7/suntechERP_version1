@@ -232,7 +232,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
     this.dataService.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
@@ -352,6 +352,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
           this.posCurrencyReceiptForm.controls.partyAddress.setValue(data.PARTY_ADDRESS);
 
           this.posCurrencyReceiptForm.controls.partyCurr.setValue(data.PARTY_CURRENCY);
+
+          
+          this.posCurrencyReceiptForm.controls.schemaCode.setValue(data.SCH_SCHEME_CODE);
+          this.posCurrencyReceiptForm.controls.schemaId.setValue(data.SCH_CUSTOMER_ID);
+          this.posCurrencyReceiptForm.controls.narration.setValue(data.REMARKS);
 
 
           this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(this.comService.decimalQuantityFormat(
@@ -768,6 +773,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   onRowDoubleClicked(e: any) {
+    console.log(e);
+    
     e.cancel = true;
     this.openAddPosARdetails(e.data);
   }
@@ -897,15 +904,18 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   getGSTDetails(acCode: any) {
 
-    let vatData = {
+    // let vatData = {
 
-      Accode: acCode,
-      strdate: this.comService.formatDate(new Date()),
-      branch_code: this.comService.branchCode,
-      mainvoctype: this.comService.getqueryParamMainVocType()
+    //   Accode: acCode,
+    //   strdate: this.comService.formatDate(new Date()),
+    //   branch_code: this.comService.branchCode,
+    //   mainvoctype: this.comService.getqueryParamMainVocType()
 
-    };
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('TaxDetails', vatData)
+    // };
+
+    const API = `TaxDetails/${acCode}/${this.comService.formatDate(new Date())}/${this.comService.branchCode}/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamVocType()}`;
+
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
 
         if (result.status == 'Success') {
@@ -966,7 +976,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   async getFinancialYear() {
-    const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comService.cDateFormat(this.posCurrencyReceiptForm.value.vocDate)}`;
+    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comService.cDateFormat(this.posCurrencyReceiptForm.value.vocDate)}`;
     const res = await this.dataService.getDynamicAPI(API).toPromise()
     console.log(res);
     if (res.status == "Success") {
