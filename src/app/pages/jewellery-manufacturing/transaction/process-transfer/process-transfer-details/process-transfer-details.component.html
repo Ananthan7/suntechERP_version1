@@ -100,7 +100,7 @@
               <div class="col-sm-6">
                 <mat-form-field style="width: 76%;">
                   <input type="text" matInput UpperCaseDirective
-                  (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
+                    (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
                     formControlName="APPROVED_USER" [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="userDetailNet"
@@ -116,7 +116,8 @@
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%">
                   <input matInput DateValidation
-                    [matDatepicker]="approveddate" formControlName="approveddate"
+                    [matDatepicker]="approveddate"
+                    formControlName="approveddate"
                     placeholder="DD/MM/YYYY" />
                   <mat-datepicker-toggle matSuffix
                     [for]="approveddate"></mat-datepicker-toggle>
@@ -323,7 +324,7 @@
                       <!-- location -->
                       <td>
                         <mat-form-field style="width: 70px;">
-                          <input type="text" matInput 
+                          <input type="text" matInput
                             maxlength="15"
                             formControlName="location" readonly />
                         </mat-form-field>
@@ -790,11 +791,12 @@
                     id="startdate" (change)="onStartDateChange()" />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput DateValidation
+                  <input matInput DateValidation readonly
                     (dateChange)="onStartDateChange()"
                     [matDatepicker]="start" formControlName="startdate"
                     placeholder="DD/MM/YYYY" />
                   <mat-datepicker-toggle matSuffix
+                    disabled="true"
                     [for]="start"></mat-datepicker-toggle>
                   <mat-datepicker #start></mat-datepicker>
                 </mat-form-field>
@@ -805,10 +807,11 @@
                 Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%">
-                  <input matInput DateValidation
+                  <input matInput DateValidation readonly
                     [matDatepicker]="end" formControlName="enddate"
                     placeholder="DD/MM/YYYY" [min]="minEndDate" />
                   <mat-datepicker-toggle matSuffix
+                    disabled="true"
                     [for]="end"></mat-datepicker-toggle>
                   <mat-datepicker #end></mat-datepicker>
                 </mat-form-field>

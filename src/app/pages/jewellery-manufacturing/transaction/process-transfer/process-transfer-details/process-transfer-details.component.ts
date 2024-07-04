@@ -20,6 +20,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   minEndDate: string = '';
   divisionMS: any = 'ID';
   tableData: any[] = [];
+  imagepath: any[] = []
   metalDetailData: any[] = [];
   sequenceDetails: any[] = [];
   jobNumberDetailData: any[] = [];
@@ -387,7 +388,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('TO_PCS', parentDetail.TO_PCS)
     this.nullToStringSetValue('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
     this.nullToStringSetValue('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
-    this.nullToStringSetValue('APPROVED_USER', parentDetail.APPROVED_USER)
     this.nullToStringSetValue('PRODLAB_ACCODE', parentDetail.PRODLAB_ACCODE)
     this.setValueWithDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
@@ -397,6 +397,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
+    if(parentDetail.APPROVED_USER != ''){
+      this.nullToStringSetValue('APPROVED_USER', parentDetail.APPROVED_USER)
+      this.approvalReqFlag = true
+      this.processTransferdetailsForm.controls.approveddate.setValue(
+        new Date(parentDetail.APPROVED_DATE)
+      )
+    }
+
 
     this.TimeTakenData.TIMEINMINUTES = parentDetail.TIME_TAKEN_HRS
     this.consumedTimeData.TIMEINMINUTES = parentDetail.TIME_CONSUMED
@@ -410,6 +418,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.consumed.setValue(
       this.commonService.convertTimeMinutesToDHM(parentDetail.TIME_CONSUMED)
     )
+    this.processTransferdetailsForm.controls.JOB_DATE.setValue(parentDetail.JOB_DATE)
+    this.processTransferdetailsForm.controls.startdate.setValue(
+      this.commonService.formatDateTime(parentDetail.IN_DATE)
+    )
+    this.processTransferdetailsForm.controls.enddate.setValue(
+      this.commonService.formatDateTime(parentDetail.OUT_DATE)
+    )
 
     this.stockCodeScrapValidate()
     this.getTimeAndLossDetails()
@@ -419,22 +434,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     this.setToWorkerWhereCondition()
-    this.processTransferdetailsForm.controls.JOB_DATE.setValue(parentDetail.JOB_DATE)
-    this.processTransferdetailsForm.controls.approveddate.setValue(parentDetail.APPROVED_DATE)
-    this.processTransferdetailsForm.controls.startdate.setValue(
-      this.commonService.formatDateTime(parentDetail.IN_DATE)
-    )
-    this.processTransferdetailsForm.controls.enddate.setValue(
-      this.commonService.formatDateTime(parentDetail.OUT_DATE)
-    )
-    this.processTransferdetailsForm.controls.toggleSwitchtIssue.setValue(this.content.toggleSwitchtIssue)
+ 
+    // this.processTransferdetailsForm.controls.toggleSwitchtIssue.setValue(this.content.toggleSwitchtIssue)
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.processTransferdetailsForm.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
-  imagepath: any[] = []
+
+
   getImageData() {
     let API = `Image/${this.processTransferdetailsForm.value.JOB_NUMBER}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -603,7 +612,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
 
   subJobDetailData: any[] = []
-  /**USE: subjobnumber validate API call subjobvalidate  '156516/4/01'*/
+  /**USE: subjobnumber validate API call subjobvalidate */
   subJobNumberValidate(event?: any) {
     let postData = this.setSubJobSpPostData() //set post data with designtype checking
     this.commonService.showSnackBarMsg('MSG81447')
