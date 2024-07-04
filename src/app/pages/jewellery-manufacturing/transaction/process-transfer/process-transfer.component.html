@@ -25,7 +25,7 @@
                                 class="col-sm-2 col-form-label">Voucher
                                 Type * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput readonly
                                         formControlName="VOCTYPE" />
                                 </mat-form-field>
@@ -35,7 +35,7 @@
                             <label for="input" class="col-sm-2 col-form-label">
                                 Voucher Date</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field appearance="outline" style="width: 100%">
                                     <input matInput DateValidation
                                         (dateChange)="formatDate($event)"
                                         [matDatepicker]="dob"
@@ -53,7 +53,7 @@
                                 class="col-sm-2 col-form-label">Voucher
                                 Number * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="VOCNO"
                                         class="text-right" readonly />
@@ -64,7 +64,7 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Salesman</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 85%;">
+                                <mat-form-field appearance="outline" style="width: 85%;" height="30px">
                                     <input type="text" matInput
                                         [readonly]="viewMode"
                                         UpperCaseDirective formControlName="salesman"
@@ -80,7 +80,7 @@
                                 class="col-sm-2 pe-2 col-form-label">Currency *
                             </label>
                             <div class="col-sm-1">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput
                                         [readonly]="viewMode"
                                         (change)="currencyDataSelected($event)"
@@ -88,7 +88,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field appearance="outline" style="width: 80%;">
                                     <input type="text" matInput SixDecimalInput
                                         class="text-right" readonly
                                         formControlName="CURRENCY_RATE" />
@@ -529,7 +529,7 @@
                             class="col-sm-3 col-form-label">Narration
                             :</label>
                         <div class="col-md-9">
-                            <mat-form-field style="width: 100%;">
+                            <mat-form-field appearance="outline" style="width: 100%;">
                                 <input type="text" matInput [readonly]="viewMode"
                                     formControlName="Narration" />
                             </mat-form-field>
