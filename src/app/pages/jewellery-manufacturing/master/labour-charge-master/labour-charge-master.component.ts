@@ -1027,7 +1027,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
       "BRAND_CODE": this.commonService.nullToString(metalForm.brand),
-      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.settingType),
+      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.process),
       "KARAT_CODE": this.commonService.nullToString(metalForm.karat),
       "METALSTONE": "S",
       "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
