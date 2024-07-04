@@ -43,6 +43,7 @@ export class JobcardComponent implements OnInit {
   JobNo: any;
   private subscriptions: Subscription[] = [];
   selectedValue: string = 'singleMetal';
+  currencyDt: any;
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
@@ -363,11 +364,13 @@ export class JobcardComponent implements OnInit {
   ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    this.currencyDt = this.commonService.compCurrency;
   }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.setCompanyCurrency()
    
     // this.jobCardFrom.controls['date'].disable()
     console.log(this.content);
@@ -380,7 +383,10 @@ export class JobcardComponent implements OnInit {
     
 
   }
-
+  setCompanyCurrency() {
+  let CURRENCY_CODE = this.commonService.compCurrency;
+  this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
+  }
   setInitialValues() {
     // this.branchCode = this.jobCardFrom.branchCode;
     // this.companyName = this.commonService.companyName;
@@ -523,7 +529,7 @@ export class JobcardComponent implements OnInit {
     if (this.tableData.length == 0) {
       let data = {
         "SINO": sn,
-        "job_reference": '5/' + sn,
+        "job_reference": 'jobno/' + sn,
         "part_code": e.Design_Code,
         "Description": e.Design_Description,
         "Pcs": "",
@@ -588,7 +594,7 @@ export class JobcardComponent implements OnInit {
   ordertypeCodeSelected(e: any) {
     console.log(e);
     this.jobCardFrom.controls.orderType.setValue(e.CODE);
-    this.jobCardFrom.controls.jobno.setValue(e.DESCRIPTION);
+    //this.jobCardFrom.controls.jobno.setValue(e.DESCRIPTION);
   }
 
   subcatCodeSelected(e: any) {
@@ -664,8 +670,8 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_DESC)
     this.jobCardFrom.controls.purity.setValue(this.content.JOB_PURITY)
     this.jobCardFrom.controls.customername.setValue(this.content.CUSTOMER_NAME)
-    this.jobCardFrom.controls.lossbooking.setValue(this.content.LOSS_QTY_BOOKED)
-    this.jobCardFrom.controls.mainmetal.setValue(this.content.mainmetal)
+    this.jobCardFrom.controls.lossbooking.setValue(this.content.METAL_STOCK_CODE)
+    this.jobCardFrom.controls.mainmetal.setValue(this.content.COST_CENTER_DESC)
     this.jobCardFrom.controls.jobdate.setValue(this.content.JOB_DATE)
     this.jobCardFrom.controls.deldate.setValue(this.content.DEL_DATE)
     this.jobCardFrom.controls.type.setValue(this.content.TYPE)
@@ -715,7 +721,7 @@ export class JobcardComponent implements OnInit {
       "LABOUR_AMOUNTFC": 0,
       "LABOUR_AMOUNTLC": 0,
       "LOSS_QTY_CHARGED": 0,
-      "LOSS_QTY_BOOKED": this.jobCardFrom.value.lossbooking,
+      "LOSS_QTY_BOOKED":  0,
       "LOSS_QTY_TOTAL": 0,
       "LOSS_AMOUNT_CHARGED": 0,
       "LOSS_AMOUNT_BOOKED": 0,
@@ -740,7 +746,7 @@ export class JobcardComponent implements OnInit {
       "DEL_DATE": this.jobCardFrom.value.deldate || "",
       "REP_STOCK_CODE": "",
       "REPAIRJOB": 0,
-      "METAL_STOCK_CODE": "",
+      "METAL_STOCK_CODE":this.jobCardFrom.value.lossbooking || "",
       "METALLAB_TYPE": 0,
       "TIME_CODE": this.jobCardFrom.value.time || "",
       "RANGE_CODE": this.jobCardFrom.value.range || "",
@@ -757,7 +763,7 @@ export class JobcardComponent implements OnInit {
       "JOB_PURITY": this.jobCardFrom.value.purity || "",
       "DESIGN_DESC": this.jobCardFrom.value.designtype || "",
       "CUSTOMER_NAME": this.jobCardFrom.value.customername || "",
-      "COST_CENTER_DESC": "",
+      "COST_CENTER_DESC": this.jobCardFrom.value.mainmetal || "",
       "KARAT_DESC": "",
       "SEQ_DESC": "",
       "SALESPERSON_NAME": "",

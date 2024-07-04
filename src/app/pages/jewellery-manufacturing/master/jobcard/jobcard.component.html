@@ -305,8 +305,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="stockCodeData"
-                                (newRowClick)="stockCodeSelected($event)"></master-search>
+                                <!-- <master-search [MasterSearchData]="stockCodeData"
+                                (newRowClick)="stockCodeSelected($event)"></master-search> -->
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -385,14 +385,14 @@
                                 Pcs* </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  style="text-align: right;" formControlName="totalpcs" SixDecimalInput/>
+                                    <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="totalpcs" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Pending *
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput [max]="999999999" style="text-align: right;" formControlName="pending" SixDecimalInput/>
+                                    <input type="text" matInput maxlength="9" NumberOnly class="text-right" formControlName="pending" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -401,14 +401,14 @@
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput [max]="999999999"  style="text-align: right;" formControlName="parts" SixDecimalInput/>
+                                    <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="parts" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Pending *
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput [max]="999999999" style="text-align: right;" formControlName="pending1" SixDecimalInput/>
+                                    <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="pending1" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -477,36 +477,36 @@
                        
           
                             <div *dxTemplate="let data of 'job_referencetemp'">
-                                <input  type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" [value]="data.value" />
+                                <input  type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" readonly [value]="data.value" />
                               </div>
       
                         <div *dxTemplate="let data of 'part_codetemp'">
-                          <input  type="text" (change)="part_codetemp($event,data)" style="width: 100%;" [value]="data.value" />
+                          <input  type="text" (change)="part_codetemp($event,data)" style="width: 100%;" readonly [value]="data.value" />
                         </div>
 
                         <div *dxTemplate="let data of 'descriptiontemp'">
-                            <input  type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" [value]="data.value" />
+                            <input  type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" readonly [value]="data.value" />
                           </div>
 
                           
                         <div *dxTemplate="let data of 'Pcstemp'">
-                            <input  type="text" (change)="Pcstemp($event,data)" style="width: 100%;" [value]="data.value" class="text-right"/>
+                            <input  type="text" (change)="Pcstemp($event,data)" style="width: 100%;" readonly [value]="data.value" class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'metal_colortemp'">
-                            <input  type="text" (change)="metal_colortemp($event,data)" style="width: 100%;" [value]="data.value" class="text-right"/>
+                            <input  type="text" (change)="metal_colortemp($event,data)" style="width: 100%;" readonly [value]="data.value" class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'metal_wttemp'">
-                            <input  type="text" (change)="metal_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput class="text-right"/>
+                            <input  type="text" (change)="metal_wttemp($event,data)" style="width: 100%;" readonly [value]="data.value" MetalDecimalInput class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'stone_wttemp'">
-                            <input  type="text" (change)="stone_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput class="text-right"/>
+                            <input  type="text" (change)="stone_wttemp($event,data)" style="width: 100%;" readonly [value]="data.value" MetalDecimalInput class="text-right"/>
                           </div>
 
                           <div *dxTemplate="let data of 'gross_wttemp'">
-                            <input  type="text" (change)="gross_wttemp($event,data)" style="width: 100%;" [value]="data.value" MetalDecimalInput class="text-right"/>
+                            <input  type="text" (change)="gross_wttemp($event,data)" style="width: 100%;" readonly [value]="data.value" MetalDecimalInput class="text-right"/>
                           </div>
 
                       </dx-data-grid>
