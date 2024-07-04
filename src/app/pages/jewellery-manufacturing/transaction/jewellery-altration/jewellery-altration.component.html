@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
   (deleteClick)="deleteRecord()" [isViewAuditTrail]="true"
-  [isViewPost]="true"></modal-header>
+  [isViewPost]="true" [isViewDelete]="editMode"></modal-header>
 
 <div class="container-fluid">
   <form [formGroup]="jewelleryaltrationFrom">
@@ -227,7 +227,7 @@
               :</label>
             <div class="col-md-5">
               <mat-form-field style="width: 100%;">
-                <input type="text" matInput formControlName="narration" />
+                <input type="text" matInput formControlName="narration" maxlength="100"/>
               </mat-form-field>
             </div>
           </div>
