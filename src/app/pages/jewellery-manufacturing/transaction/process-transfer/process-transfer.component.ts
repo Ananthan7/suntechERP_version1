@@ -91,6 +91,7 @@ export class ProcessTransferComponent implements OnInit {
     private commonService: CommonServiceService
   ) {
   }
+
   ngOnInit(): void {
     if (this.content?.FLAG) {
       this.isSaved = true;
@@ -244,7 +245,7 @@ export class ProcessTransferComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
@@ -335,7 +336,7 @@ export class ProcessTransferComponent implements OnInit {
     let value = detailScreenData.lossQty * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
-  submitValidations(form:any){
+  submitValidations(form: any) {
     if (this.processTransferFrom.invalid) {
       this.commonService.toastErrorByMsgId('pls reload and check')
       return true;
