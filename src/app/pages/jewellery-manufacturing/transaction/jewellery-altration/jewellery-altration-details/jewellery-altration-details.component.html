@@ -25,10 +25,12 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         formControlName="stockcode"
-                                        (focusout)="stockCodeValidate($event)" [readonly]="viewMode"/>
+                                        (focusout)="stockCodeValidate($event)"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="stockCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="stockCodeData"
+                                    *ngIf="!viewMode"
                                     (newRowClick)="codeSelected($event)"
                                     jewelleryaltrationdetailsFrom>
                                 </master-search>
@@ -41,7 +43,8 @@
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="description" [readonly]="viewMode"/>
+                                        formControlName="description"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -53,7 +56,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
                                         formControlName="pcs"
-                                        style="text-align: right;" readonly/>
+                                        style="text-align: right;" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -64,7 +67,7 @@
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="refvoc" readonly/>
+                                        formControlName="refvoc" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -75,7 +78,7 @@
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="costcode" readonly/>
+                                        formControlName="costcode" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -85,7 +88,8 @@
                                 :</label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="dated" readonly
+                                    <input matInput [matDatepicker]="dated"
+                                        readonly
                                         formControlName="dated"
                                         placeholder="DD/MM/YYYY"
                                         DateValidation />
@@ -103,7 +107,7 @@
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="karat" readonly/>
+                                        formControlName="karat" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -114,7 +118,7 @@
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="metalcolor" readonly/>
+                                        formControlName="metalcolor" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -187,7 +191,8 @@
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput   formControlName="diamondsFC"
+                                    <input type="text" matInput
+                                        formControlName="diamondsFC"
                                         style="text-align: right;" readonly
                                         (keypress)="isNumeric($event)" />
                                 </mat-form-field>
@@ -195,13 +200,15 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        style="text-align: right;" readonly formControlName="diamondsNEW"
+                                        style="text-align: right;" readonly
+                                        formControlName="diamondsNEW"
                                         (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="diamondsCC"
+                                    <input type="text" matInput
+                                        formControlName="diamondsCC"
                                         style="text-align: right;" readonly
                                         (keypress)="isNumeric($event)" />
                                 </mat-form-field>
@@ -213,7 +220,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
-                                        formControlName="gross"readonly
+                                        formControlName="gross" readonly
                                         style="text-align: right;"
                                         AmountDecimalInput />
                                 </mat-form-field>
@@ -237,7 +244,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        style="text-align: right;" [readonly]="viewMode"
+                                        style="text-align: right;"
+                                        [readonly]="viewMode"
                                         AmountDecimalInput />
                                 </mat-form-field>
                             </div>
@@ -279,17 +287,23 @@
                         </div>
                     </div>
                     <div class="col-md-3 pt-1">
-                        <div class="icons">
-                            <div class="image_box" formControlName="image"></div>
-                            <div class="icons_footer">
-                                <i class="fas fa-step-backward icon-common"></i>
-                                <i class="fas fa-caret-right icon-common"></i>
-                                <span>0/10</span>
-                                <i class="fas fa-caret-right icon-common"></i>
-                                <i class="fas fa-step-forward"></i>
-                                <i class="fas fa-plus icon-common"></i>
+
+                        <div class="image_box" formControlName="image">
+                            <div class="upload-btn-wrapper">
+                                <button
+                                    class="btn btnnew border-dark">
+                                    <img src={{image}}
+                                        style="width:126px;height:124px">
+
+                                </button>
+                                <input type="file"
+                                    class="uploadproduct"
+                                    accept=".png, .jpg, .jpeg"
+                                    #fileInput
+                                    (change)="onFileChangedimage($event)">
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="p-2 bd-highlight t-a1">
                                 <button type="button"
@@ -301,8 +315,10 @@
                         <div>
                             <div class="icon">
                                 <div class="text-area">
-                                    <textarea matInput  formControlName="tagdetails"
-                                        style="height: 100px;"></textarea>
+                                    <textarea matInput
+                                        formControlName="tagdetails"
+                                        style="height: 100px;"
+                                        [readonly]="viewMode"></textarea>
                                 </div>
 
                             </div>
@@ -328,6 +344,7 @@
                         <div class="col-md-12 d-flex">
                             <div class="col-md-11">
                                 <menu-buttons [viewAddBtn]="true"
+                                    *ngIf="!viewMode"
                                     [viewDeleteBtn]="true"
                                     [viewImportBtn]="false"
                                     (addClick)="addTableData()"
@@ -346,7 +363,8 @@
                                         [allowColumnResizing]="true"
                                         [dataSource]="tableData"
                                         [showBorders]="true"
-                                        [showRowLines]="true">
+                                        [showRowLines]="true"
+                                        >
                                         <dxo-paging
                                             [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell"
@@ -367,7 +385,8 @@
                                             caption="Div"> </dxi-column>
                                         <dxi-column dataField="Components"
                                             caption="Components"> </dxi-column>
-                                        <dxi-column dataField="Location"  cellTemplate="Locationtemp"
+                                        <dxi-column dataField="Location"
+                                            cellTemplate="Locationtemp"
                                             caption="Location"> </dxi-column>
                                         <dxi-column dataField="Kt" caption="Kt">
                                         </dxi-column>
@@ -385,15 +404,18 @@
                                             caption="Sieve"> </dxi-column>
                                         <dxi-column dataField="Shape"
                                             caption="Shape"> </dxi-column>
-                                            <div *dxTemplate="let data of 'Locationtemp'">
-                                                <a href="javascript:void(0)" class="mx-1"
-                                                    [innerHTML]="data.value"></a>
-                                                <master-search [MasterSearchData]="locationCodeData"
-                                                    *ngIf="!viewMode"
-                                                    (newRowClick)="locationCodeSelected($event,data)"
-                                                    style="width: 60%;">
-                                                </master-search>
-                                            </div>
+                                        <div
+                                            *dxTemplate="let data of 'Locationtemp'">
+                                            <a href="javascript:void(0)"
+                                                class="mx-1"
+                                                [innerHTML]="data.value"></a>
+                                            <master-search
+                                                [MasterSearchData]="locationCodeData"
+                                                *ngIf="!viewMode"
+                                                (newRowClick)="locationCodeSelected($event,data)"
+                                                style="width: 60%;">
+                                            </master-search>
+                                        </div>
 
                                     </dx-data-grid>
                                 </div>
@@ -447,31 +469,33 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label text-center">Cost(LC)</label>
                 </div>
-                <!-- <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Price Scheme:</label>
-                    <div class="col-sm-3">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="pricescheme" />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-2">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
-                        </mat-form-field>
-                    </div>
-                </div> -->
                 <div class="row">
-                    <div class="col-md-12">
+                    <label for="inputPassword"
+                        class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput
+                                formControlName="pricescheme" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-2">
+                        <mat-form-field style="width: 77px; margin-left: -23px;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!-- <div class="row"> -->
+                <!-- <div class="col-md-12">
                         <div class="price_box">
                             <a>PriceScheme</a>
                             <master-search [MasterSearchData]="priceSchemeData" *ngIf="!viewMode"
@@ -479,16 +503,18 @@
                             <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <label for="inputPassword"
                         class="col-sm-3 col-form-label">Price 1 :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
-                                formControlName="price1PER" [readonly]="viewMode"/>
+                                formControlName="price1PER"
+                                [readonly]="viewMode" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price1CodeData" *ngIf="!viewMode"
+                        <master-search [MasterSearchData]="price1CodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="price1CodeSelected($event)">
                         </master-search>
                     </div>
@@ -497,20 +523,21 @@
                             <input type="text" matInput
                                 formControlName="price1percentage" readonly
                                 AmountDecimalInput [max]="3"
-                                class="text-right"/>
+                                class="text-right" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                            formControlName="price1FC"
+                                formControlName="price1FC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput  formControlName="price1LC"
+                            <input type="text" matInput
+                                formControlName="price1LC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -524,7 +551,8 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price2PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price2CodeData" *ngIf="!viewMode"
+                        <master-search [MasterSearchData]="price2CodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="price2CodeSelected($event)">
                         </master-search>
                     </div>
@@ -533,20 +561,21 @@
                             <input type="text" matInput
                                 formControlName="price2percentage"
                                 class="text-right" readonly
-                                AmountDecimalInput [max]="3"/>
+                                AmountDecimalInput [max]="3" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                            formControlName="price2FC"
+                                formControlName="price2FC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="price2LC"
+                            <input type="text" matInput
+                                formControlName="price2LC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -560,14 +589,15 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price3PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price3CodeData" *ngIf="!viewMode"
+                        <master-search [MasterSearchData]="price3CodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="price3CodeSelected($event)">
                         </master-search>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput readonly
-                            formControlName="price3percentage"
+                                formControlName="price3percentage"
                                 class="text-right"
                                 AmountDecimalInput [max]="3" />
                         </mat-form-field>
@@ -575,14 +605,15 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                            formControlName="price3FC"
+                                formControlName="price3FC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="price3LC"
+                            <input type="text" matInput
+                                formControlName="price3LC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -596,7 +627,8 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price4PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price4CodeData" *ngIf="!viewMode"
+                        <master-search [MasterSearchData]="price4CodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="price4CodeSelected($event)">
                         </master-search>
                     </div>
@@ -611,14 +643,15 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                            formControlName="price4FC"
+                                formControlName="price4FC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput  formControlName="price4LC"
+                            <input type="text" matInput
+                                formControlName="price4LC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -632,7 +665,8 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price5PER" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price5CodeData" *ngIf="!viewMode"
+                        <master-search [MasterSearchData]="price5CodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="price5CodeSelected($event)">
                         </master-search>
                     </div>
@@ -647,14 +681,15 @@
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                            formControlName="price5FC"
+                                formControlName="price5FC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput  formControlName="price5LC"
+                            <input type="text" matInput
+                                formControlName="price5LC"
                                 class="text-right" readonly
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -684,7 +719,8 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput
-                                formControlName="settingsAMTFC" [readonly]="viewMode"
+                                formControlName="settingsAMTFC"
+                                [readonly]="viewMode"
                                 class="text-right" />
                         </mat-form-field>
                     </div>
