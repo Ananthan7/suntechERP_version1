@@ -1,7 +1,37 @@
+::ng-deep {
+  // form field starts
+  .mat-form-field-outline-start {
+    border-radius: 28px 0 0 28px !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+  .mat-form-field-outline-end {
+    border-radius: 0 28px 28px 0 !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+  /* Add padding to move the label and input into the center to prevent overlapping the rounded border */
+  .mat-form-field-appearance-outline .mat-form-field-flex {
+    padding: 0 20px !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0px 0px 8px 0px;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #bcbcbc;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0px !important;
+    height: 36px !important;
+  }
+  // form field ends
+}
+
 // table section styles
 .module_form {
   // background: #F5F2ED;
   height: 100%;
+
   .table_header {
     // background: #3599cc;
     background: #2f66b4;
@@ -9,6 +39,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .btn-white {
       background: #fff;
       padding: 2px 8px;
@@ -16,17 +47,21 @@
       font-weight: 500;
       margin-right: 10px;
     }
+
     .icons_wrap {
       display: flex;
       align-items: center;
+
       a {
         margin-left: 10px;
       }
+
       .icons {
         font-size: 24px;
         margin-right: 10px;
         color: #fff;
       }
+
       .custom-control-label {
         font-size: 16px;
         font-weight: 400;
@@ -45,9 +80,11 @@
       overflow-y: scroll;
       overflow-x: hidden;
     }
-    .modal-content{
+
+    .modal-content {
       min-height: 90vh;
     }
+
     /* width */
     ::-webkit-scrollbar {
       width: 13px;
@@ -86,8 +123,10 @@
   .dx-datagrid .dx-header-row {
     font-size: 13px;
   }
+
   body[data-layout-mode="dark"] {
     #gridContainer {
+
       td,
       .dx-widget,
       .dx-datagrid-total-footer,
@@ -95,12 +134,14 @@
         color: #fff;
         background-color: #03314d;
       }
+
       .dx-datagrid-headers {
         td {
           color: #fff;
           background-color: #105c8b !important;
         }
       }
+
       .dx-datagrid-summary-item,
       .dx-datagrid-text-content {
         color: #fff;

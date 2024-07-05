@@ -6,8 +6,8 @@ table {
 th,
 td {
   border: 1px solid gainsboro;
-  padding: 3px;
   text-align: left;
+  padding: 3px !important;
 }
 
 th {
@@ -23,9 +23,10 @@ th {
 }
 .col-form-label {
   font-size: 1em !important;
-  padding-top: 16px !important;
+  padding-top: 4px !important;
 }
 ::ng-deep {
+  
   .modal-content {
     box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
   }
@@ -34,7 +35,6 @@ th {
     z-index: 1070 !important;
   }
   .mat-form-field {
-    height: 43px !important;
     font-weight: 600 !important;
   }
   .mat-flat-button {

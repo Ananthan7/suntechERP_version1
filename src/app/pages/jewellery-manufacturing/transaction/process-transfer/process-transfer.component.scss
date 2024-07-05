@@ -11,29 +11,10 @@
 
 .col-form-label {
   font-size: 1em !important;
-  padding-top: 16px !important;
+  padding-top: 4px !important;
 }
 
 ::ng-deep {
-  .mat-form-field-outline-start {
-    border-radius: 28px 0 0 28px !important;
-    min-width: 28px !important;
-  }
-
-  .mat-form-field-outline-end {
-    border-radius: 0 28px 28px 0 !important;
-    min-width: 28px !important;
-  }
-
-  /* Add padding to move the label and input into the center to prevent overlapping the rounded border */
-  .mat-form-field-appearance-outline .mat-form-field-flex {
-    padding: 0 20px !important;
-  }
-
-  .mat-form-field-appearance-outline .mat-form-field-infix {
-    padding: 0px 0px 8px 0px;
-  }
-
   .cdk-overlay-container {
     position: fixed;
     z-index: 1070 !important;
