@@ -33,6 +33,7 @@ export class JewelleryAltrationComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  editMode: boolean = false
   selectedKey: number[] = []
 
   private subscriptions: Subscription[] = [];
@@ -116,6 +117,7 @@ export class JewelleryAltrationComponent implements OnInit {
     this.userName = this.commonService.userName;
     this.setNewFormValues()
     if (this.content && this.content.FLAG == 'EDIT') {
+      this.editMode= true;
       this.setNewFormValues()
       this.setAllInitialValues()
     }

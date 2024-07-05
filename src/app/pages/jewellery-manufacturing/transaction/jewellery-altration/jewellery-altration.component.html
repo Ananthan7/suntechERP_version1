@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Altration</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Alteration</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
   (deleteClick)="deleteRecord()" [isViewAuditTrail]="true"
-  [isViewPost]="true"></modal-header>
+  [isViewPost]="true" [isViewDelete]="editMode"></modal-header>
 
 <div class="container-fluid">
   <form [formGroup]="jewelleryaltrationFrom">
@@ -24,8 +24,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="voctype"
-                      [readonly]="viewMode"
-                      [readonly]="viewMode" />
+                      readonly/>
                   </mat-form-field>
                 </div>
               </div>
@@ -35,7 +34,7 @@
                     <input type="number" matInput formControlName="vocno"
                       [readonly]="viewMode"
                       style="text-align: right;"
-                      [readonly]="viewMode" />
+                      readonly />
                   </mat-form-field>
                 </div>
               </div>
@@ -227,7 +226,7 @@
               :</label>
             <div class="col-md-5">
               <mat-form-field style="width: 100%;">
-                <input type="text" matInput formControlName="narration" />
+                <input type="text" matInput formControlName="narration" maxlength="100"/>
               </mat-form-field>
             </div>
           </div>
