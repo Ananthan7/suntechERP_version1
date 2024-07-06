@@ -23,7 +23,7 @@
                                 Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput #codeInput1 formControlName="orderType" [readonly]="viewMode"  />
+                                    <input type="text" matInput #codeInput1 formControlName="orderType" [readonly]="viewMode" maxlength="20"  oninput="this.value = this.value.toUpperCase()" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="ordertypeCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="ordertypeCodeSelected($event)"></master-search>
@@ -35,7 +35,7 @@
                             <div class="col-sm-3">
                                 <!-- <input class="form-control" type="text" /> -->
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobno" [readonly]="viewMode"  />
+                                    <input type="text" matInput formControlName="jobno"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"   [(ngModel)]="jobnumber" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Job
@@ -59,14 +59,14 @@
                                 Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="designcode"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="designcode"   maxlength="20" oninput="this.value = this.value.toUpperCase()"  [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="designCodeData"
                                 *ngIf="viewMode == false"    (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="designtype"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="designtype"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -75,14 +75,14 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="customer"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="customer"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="customerCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="customerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="customername"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="customername"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                                 Order :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="salesorder"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="salesorder"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Date
@@ -113,7 +113,7 @@
                                 Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="costcode"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="costcode"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="costCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="costCodeSelected($event)"></master-search>
@@ -122,7 +122,7 @@
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="prefix"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="prefix"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="prefixCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="prefixCodeSelected($event)"></master-search>
@@ -133,7 +133,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" class="text-left" matInput formControlName="karat"  [readonly]="viewMode" />
+                                    <input type="text" class="text-left" matInput formControlName="karat"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="karatCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="karatCodeSelected($event)"></master-search>
@@ -142,7 +142,7 @@
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="type"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="type"  maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="typeCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="typeCodeSelected($event)"></master-search>
@@ -153,7 +153,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="category"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="category"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="categoryCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="categoryCodeSelected($event)"></master-search>
@@ -162,7 +162,7 @@
                                 Cat : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="subcat"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="subcat"   maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="subcatCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="subcatCodeSelected($event)"></master-search>
@@ -173,7 +173,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="color" UpperCaseDirective  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="color"  maxlength="20" UpperCaseDirective  [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="colorCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="colorCodeSelected($event)"></master-search>
@@ -182,7 +182,7 @@
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="brand"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="brand"   maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="brandCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="brandCodeSelected($event)"></master-search>
@@ -193,7 +193,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="country"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="country"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="countryCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="countryCodeSelected($event)"></master-search>
@@ -202,7 +202,7 @@
                                 Ref : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="setref"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="setref"  maxlength="20"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -219,14 +219,14 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="size"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="size"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Length
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="length"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="length"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="lengthCodeData"
                                 *ngIf="viewMode == false"    (newRowClick)="lengthCodeSelected($event)"></master-search>
@@ -246,14 +246,14 @@
                                 Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput readonly formControlName="jobtype"  [readonly]="viewMode" />
+                                    <input type="text" matInput readonly formControlName="jobtype"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Purity *
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput readonly class="text-right" formControlName="purity" SixDecimalInput  [readonly]="viewMode" />
+                                    <input type="text" matInput readonly class="text-right"  maxlength="20" formControlName="purity" SixDecimalInput  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -292,7 +292,7 @@
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="salesman"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="salesman"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="salesmanCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="salesmanCodeSelected($event)"></master-search>
@@ -303,7 +303,7 @@
                                 Code : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="stockcode"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="stockcode"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <!-- <master-search [MasterSearchData]="stockCodeData"
                                 (newRowClick)="stockCodeSelected($event)"></master-search> -->
@@ -314,7 +314,7 @@
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="currency"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="currency"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="currencyMasterData"
                                 *ngIf="viewMode == false"   (newRowClick)="currencyCodeSelected($event)"></master-search>
@@ -341,7 +341,7 @@
                                 Metal : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="mainmetal"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="mainmetal"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="mainmetalCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="mainmetalCodeSelected($event)"></master-search>
@@ -352,7 +352,7 @@
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="time"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="time"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="timeCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="timeCodeSelected($event)"></master-search>
@@ -363,7 +363,7 @@
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="range"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="range"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="rangeCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="rangeCodeSelected($event)"></master-search>
@@ -374,7 +374,7 @@
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="seqcode"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="seqcode"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="seqCodeData"
                                 *ngIf="viewMode == false"   (newRowClick)="seqCodeSelected($event)"></master-search>
@@ -417,7 +417,7 @@
                                 : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="srewFiled"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="srewFiled"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
