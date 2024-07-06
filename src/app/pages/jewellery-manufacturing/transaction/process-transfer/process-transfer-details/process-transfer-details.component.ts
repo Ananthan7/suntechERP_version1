@@ -676,6 +676,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   onRowUpdateGrid(event: any) {
     let data = event.data
+    this.Calc_Totals(0)
     this.checkSettedValue(data)
   }
   // use: change of loss qty
@@ -724,8 +725,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
         txtBalDiaGrWt = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapPureWt) + this.commonService.emptyToZero(form.lossQty)));
       }
       this.setValueWithDecimal('Balance_WT', txtBalDiaGrWt, 'METAL')
-      this.Split_Loss(this.processTransferdetailsForm.value)
+    }else{
+      this.setValueWithDecimal('Balance_WT', form.lossQty, 'METAL')
     }
+    this.Split_Loss(this.processTransferdetailsForm.value)
   }
 
   checkSettedValue(data: any) {
@@ -751,7 +754,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let ToGrossWt = (this.commonService.emptyToZero(form.TO_METAL_WT) + (this.commonService.emptyToZero(form.TO_STONE_WT) / 5));
     this.setValueWithDecimal('GrossWeightTo', ToGrossWt, 'METAL')
   }
-  Calc_Totals() {
+  Calc_Totals(flag: any) {
     let nPcs = 0;
     let nStWeight = 0;
     let nMPcs = 0;
@@ -769,6 +772,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
           }
         })
+      }
+      if(flag == 0){
+        this.setValueWithDecimal('TO_STONE_WT', nStWeight, 'STONE')
+        this.nullToStringSetValue('TO_STONE_PCS', nPcs)
+        this.nullToStringSetValue('TO_METAL_PCS', nMPcs)
+        this.setValueWithDecimal('TO_METAL_WT', nMWeight, 'METAL')
+        this.setValueWithDecimal('GrossWeightTo', nMWeight + (nStWeight / 5), 'METAL')
+        return
       }
       this.setValueWithDecimal('FRM_STONE_WT', nStWeight, 'STONE')
       this.setValueWithDecimal('TO_STONE_WT', nStWeight, 'STONE')
@@ -1012,7 +1023,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
-            this.Calc_Totals()
+            this.Calc_Totals(1)
             this.formatMetalDetailDataGrid()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
@@ -1690,6 +1701,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.metalDetailData.forEach((item:any)=>{
         if(item.METALSTONE == 'M' && lossQtyper>0){
           item.LOSS_QTY = form.lossQty
+          item.GROSS_WT = form.TO_METAL_WT
         }
       })
     }
