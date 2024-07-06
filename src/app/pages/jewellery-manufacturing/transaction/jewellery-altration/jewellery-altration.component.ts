@@ -395,8 +395,34 @@ export class JewelleryAltrationComponent implements OnInit {
     })
   }
   deleteTableData(): void {
-    this.jewelleryaltrationdetail = this.jewelleryaltrationdetail.filter((element: any) => element.SRNO != this.selectRowIndex)
-    this.reCalculateSRNO()
+    if (!this.selectRowIndex) {
+      Swal.fire({
+        title: '',
+        text: 'Please select row to remove from grid!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+          this.jewelleryaltrationdetail = this.jewelleryaltrationdetail.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+          this.reCalculateSRNO()
+        }
+      }
+    )
   }
 
   removedata() {
@@ -418,7 +444,7 @@ export class JewelleryAltrationComponent implements OnInit {
       "CC_RATE": this.jewelleryaltrationFrom.value.itemcurrencycc,
       "MET_RATE_TYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.metalrate),
       "METAL_RATE": this.comService.emptyToZero(this.jewelleryaltrationFrom.value.metalratetype),
-      "NAVSEQNO": 0,
+      "NAVSEQNO": this.comService.emptyToZero(this.jewelleryaltrationFrom.value.NAVSEQNO),
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
       "TOTAL_LAB_CHARGEFC": 0,

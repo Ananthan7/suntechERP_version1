@@ -315,8 +315,9 @@
                       <td>
                         <mat-form-field appearance="outline" style="width: 100px;">
                           <input type="text" matInput
-                            [readonly]="viewMode || locationSearchFlag"
+                            [readonly]="viewMode || !locationSearchFlag"
                             class="text-right"
+                            (focusout)="scrapWeightChange($event)"
                             formControlName="scrapWeight" NumberOnly
                             maxlength="10" />
                         </mat-form-field>
@@ -347,7 +348,7 @@
                       <td>
                         <mat-form-field appearance="outline" style="width: 100px;">
                           <input type="text" matInput readonly
-                            formControlName="lossQtyper" [max]="10"
+                            formControlName="lossQtyper"
                             class="text-right" />
                         </mat-form-field>
                       </td>

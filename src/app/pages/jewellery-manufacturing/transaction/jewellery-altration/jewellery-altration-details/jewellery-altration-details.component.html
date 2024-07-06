@@ -306,11 +306,10 @@
 
                         <div class="row">
                             <div class="p-2 bd-highlight t-a1">
-                                <button type="button"
-                                    class="btn btn-primary metal-issue-add-btn">
-                                    Tag Details
-                                </button>
-                            </div>
+                                <span class="bold-text">Tag Details</span>
+                             
+                              </div>
+                              
                         </div>
                         <div>
                             <div class="icon">
@@ -469,6 +468,14 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label text-center">Cost(LC)</label>
                 </div>
+                <div class="col-md-6">
+                    <div class="price_box">
+                        <a>PriceScheme</a>
+                        <master-search [MasterSearchData]="priceSchemeData" *ngIf="!viewMode"
+                            (newRowClick)="priceSchemeValidate($event)"></master-search>
+                        <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
+                    </div>
+                </div>
                 <div class="row">
                     <label for="inputPassword"
                         class="col-sm-3 col-form-label"></label>
@@ -494,8 +501,8 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <!-- <div class="row"> -->
-                <!-- <div class="col-md-12">
+                 <!-- <div class="row"> 
+                 <div class="col-md-6">
                         <div class="price_box">
                             <a>PriceScheme</a>
                             <master-search [MasterSearchData]="priceSchemeData" *ngIf="!viewMode"
@@ -503,7 +510,7 @@
                             <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
                         </div>
                     </div>
-                </div> -->
+                </div>  -->
                 <div class="row">
                     <label for="inputPassword"
                         class="col-sm-3 col-form-label">Price 1 :</label>
