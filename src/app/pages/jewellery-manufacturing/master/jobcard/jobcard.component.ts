@@ -19,6 +19,7 @@ import themes from 'devextreme/ui/themes';
 })
 export class JobcardComponent implements OnInit {
   //variables
+  jobnumber: any[] = []
   viewMode: boolean = false;
   modalReference: any;
   imageData: any;
@@ -373,7 +374,8 @@ export class JobcardComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.setCompanyCurrency()
+    this.setCompanyCurrency();
+    this.priceSchemeValidate();
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -392,8 +394,6 @@ export class JobcardComponent implements OnInit {
     }
     console.log(this.content);
     this.serialNo = this.content;
-    
-
   }
   setCompanyCurrency() {
   let CURRENCY_CODE = this.commonService.compCurrency;
@@ -407,6 +407,8 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
     //this.commonService.getqueryParamVocType()
+
+    
   }
 
   onFileChanged(event: any) {
@@ -1322,6 +1324,27 @@ export class JobcardComponent implements OnInit {
       }
     });
   }
+
+  priceSchemeValidate() {
+  
+    // this.jobCardFrom.controls.jobCardFrom.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "096",
+      "parameter": {
+        STRBRANCHCODE: this.branchCode
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

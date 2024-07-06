@@ -35,7 +35,7 @@
                             <div class="col-sm-3">
                                 <!-- <input class="form-control" type="text" /> -->
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobno"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"  />
+                                    <input type="text" matInput formControlName="jobno"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"   [(ngModel)]="jobnumber" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Job
