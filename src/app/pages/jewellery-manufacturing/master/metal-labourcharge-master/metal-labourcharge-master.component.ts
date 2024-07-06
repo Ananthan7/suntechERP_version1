@@ -420,10 +420,12 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
+      this.unitSelected();
     } else if (this.content.FLAG == 'EDIT') {
       this.editMode = true;
       this.codeEnableMetal = false;
       this.stockcodeDisable = false;
+      this.unitSelected();
     } else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
       this.deleteMeltingType()

@@ -89,7 +89,7 @@ export class MasterSearchComponent implements OnInit {
       this.getAPIValue()
       return
     }
-    if(!this.MasterSearchData) return
+    if (!this.MasterSearchData) return
     let param = {
       "PAGENO": this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
@@ -105,9 +105,9 @@ export class MasterSearchComponent implements OnInit {
       this.isLoading = false;
       if (result.dynamicData && result.dynamicData[0].length > 0) {
         this.dataSource = result.dynamicData[0];
-        if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
+        if (this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         let dataCount = result.dynamicData[1];
-        if(dataCount) this.totalItems = this.commonService.emptyToZero(dataCount[0]?.COUNT)
+        if (dataCount) this.totalItems = this.commonService.emptyToZero(dataCount[0]?.COUNT)
         // if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
       }
@@ -130,7 +130,7 @@ export class MasterSearchComponent implements OnInit {
   }
   /**use: load datas on scroll */
   loadMoreData(currentPage?: number) {
-    if(this.MasterSearchData.FRONTENDFILTER) return;
+    if (this.MasterSearchData.FRONTENDFILTER) return;
     if (this.totalItems >= this.dataSource.length + 1 && this.currentPage != currentPage) return
     let param = this.setPostdata()
     let APIS = 'MasterLookUp'
@@ -149,10 +149,10 @@ export class MasterSearchComponent implements OnInit {
     })
 
   }
-  dataSourceAlteration(){
-    if(this.MasterSearchData.LOOKUPID == 8){
-      this.dataSource.forEach((item:any)=>{
-        item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE,'RATE')
+  dataSourceAlteration() {
+    if (this.MasterSearchData.LOOKUPID == 8) {
+      this.dataSource.forEach((item: any) => {
+        item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE, 'RATE')
       })
     }
     //continue adding with conditions
@@ -185,7 +185,7 @@ export class MasterSearchComponent implements OnInit {
     // this.dropDown.close()
   }
   dorpdownToggle(event: any) {
-    if (!event){
+    if (!event) {
       if (this.MasterSearchData.SEARCH_VALUE != '') {
         // this.currentPage = 1
         this.MasterSearchData.LOAD_ONCLICK = true
@@ -220,10 +220,10 @@ export class MasterSearchComponent implements OnInit {
     this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param).subscribe((result) => {
       this.isLoading = false;
       let data = result.dynamicData[0]
-      if (data && data.length>0) {
+      if (data && data.length > 0) {
         this.dataSource = result.dynamicData[0]
         this.dataSourceHead = Object.keys(this.dataSource[0]);
-        if(this.MasterSearchData.FRONTENDFILTER && this.MasterSearchData.SEARCH_VALUE != ''){
+        if (this.MasterSearchData.FRONTENDFILTER && this.MasterSearchData.SEARCH_VALUE != '') {
           this.dataSource = this.commonService.searchStartsWithItemsInArray(this.dataSource, this.MasterSearchData.SEARCH_VALUE)
           this.dataSourceHead = Object.keys(this.dataSource[0]);
           return
@@ -246,13 +246,14 @@ export class MasterSearchComponent implements OnInit {
   close() {
 
   }
+  f2Flag = false;
+  SearchPlaceholder:string = 'Search StartsWith';
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // Check if the pressed key is Enter
-    if (event.key === 'Enter') {
-      // Call your function here
-      this.closeOverlayPanel();
-    }
+    if (event.key != 'F2') return
+    this.f2Flag = !this.f2Flag
+    this.SearchPlaceholder = this.f2Flag ? 'Search AnyWhere' : 'Search StartsWith'
   }
   //unsubscriptions of streams
   ngOnDestroy(): void {

@@ -39,6 +39,22 @@ export class JobStickerPrintComponent implements OnInit {
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
+  jobstickerpointForm: FormGroup = this.formBuilder.group({
+   sgljobfltr: [],
+   jobrange: [],
+   jobrangeDesc: [''],
+   blankjobpouch: [''],
+   mrqprint: [''],
+   selectedvalue: [''],
+   rftag: [''],
+   normaltag: [''],
+   setref: [''],
+   printjobpouch: [''],
+   printjobpouchwithcomponents: [''],
+   prtonelblperpge: [''],
+   stones: [''],
+  });
+
   ngOnInit(): void {
   }
 
