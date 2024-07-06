@@ -737,7 +737,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let form = this.processTransferdetailsForm.value
     if (this.commonService.emptyToZero(form[fromValue]) < this.commonService.emptyToZero(form[ToValue])) {
       this.processTransferdetailsForm.controls[ToValue].setValue(form[fromValue])
-      this.commonService.toastErrorByMsgId(`To value cannot be greater than ${form[fromValue]}`)
+      this.commonService.toastErrorByMsgId(`Value cannot be greater than ${form[fromValue]}`)
     }
   }
   toMetalWeightChange(fromValue: string, ToValue: string) {

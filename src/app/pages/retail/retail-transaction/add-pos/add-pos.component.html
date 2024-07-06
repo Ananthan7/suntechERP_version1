@@ -2792,7 +2792,7 @@
                   <mat-form-field>
                     <mat-label>Item Description </mat-label>
                     <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
-                      [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
+                      [readonly]="viewOnly || !allowDescription" />
                   </mat-form-field>
                 </div>
                 <div class="col-md-2" *ngIf="!!this.lineItemForm.value.fcn_li_location">
