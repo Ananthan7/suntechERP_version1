@@ -426,7 +426,11 @@ span {
     font-size: 12px !important; /* Adjust the font size to your preference */
   }
 }
-
+.masterSearch{
+  position: absolute;
+  top: -4px;
+  margin-left: -0.3rem !important;
+}
 .text-right{
   text-align: right !important;
 }
