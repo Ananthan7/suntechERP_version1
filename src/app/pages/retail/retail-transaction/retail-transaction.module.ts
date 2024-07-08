@@ -88,10 +88,12 @@ import { ItemDetailTable } from '../common-retail/item-list-grid/item-detail.com
 import { SalesReturnModal } from '../common-retail/sales-return-modal/sales-return.component';
 import { customerDetailsModal } from '../common-retail/customer-details-modal/item-list-grid/customer-details.component';
 import { ExchangeDetailModal } from '../common-retail/exchange-detail-modal/exchange-detail.component';
+import { DailyRatesOunceComponent } from './repair-jewellery-receipt/daily-rates-ounce/daily-rates-ounce.component';
 
 
 @NgModule({
   declarations: [
+    DailyRatesOunceComponent,
     RetailTransactionComponent,
     // AddCustomerComponent,
     PosCustomerMasterComponent,
