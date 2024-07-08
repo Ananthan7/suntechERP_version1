@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="processTransferFrom">
-            <div class="container-fluid pt-3">
+            <div class="card m-3 p-3">
                 <div class="row">
                     <div class="col-md-12">
                         <h6>{{processTransferFrom.value.BRANCH_CODE}} -
@@ -25,7 +25,7 @@
                                 class="col-sm-2 col-form-label">Voucher
                                 Type * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput readonly
                                         formControlName="VOCTYPE" />
                                 </mat-form-field>
@@ -35,7 +35,7 @@
                             <label for="input" class="col-sm-2 col-form-label">
                                 Voucher Date</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field appearance="outline" style="width: 100%">
                                     <input matInput DateValidation
                                         (dateChange)="formatDate($event)"
                                         [matDatepicker]="dob"
@@ -53,7 +53,7 @@
                                 class="col-sm-2 col-form-label">Voucher
                                 Number * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="VOCNO"
                                         class="text-right" readonly />
@@ -64,7 +64,7 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Salesman</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 85%;">
+                                <mat-form-field appearance="outline" style="width: 85%;" height="30px">
                                     <input type="text" matInput
                                         [readonly]="viewMode"
                                         UpperCaseDirective formControlName="salesman"
@@ -79,16 +79,15 @@
                             <label for="input"
                                 class="col-sm-2 pe-2 col-form-label">Currency *
                             </label>
-                            <div class="col-sm-1">
-                                <mat-form-field style="width: 100%;">
+                            
+                            <div class="col-sm-4">
+                                <mat-form-field appearance="outline" style="width: 20%;">
                                     <input type="text" matInput
                                         [readonly]="viewMode"
                                         (change)="currencyDataSelected($event)"
                                         formControlName="CURRENCY_CODE" />
                                 </mat-form-field>
-                            </div>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field appearance="outline" style="width: 70%;">
                                     <input type="text" matInput SixDecimalInput
                                         class="text-right" readonly
                                         formControlName="CURRENCY_RATE" />
@@ -102,7 +101,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="row">
+                        <!-- <div class="row">
                             <h6>Post</h6>
                         </div>
                         <div class="row align-items-end mb-2">
@@ -113,7 +112,7 @@
                                         [readonly]="viewMode"></textarea>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
@@ -166,24 +165,24 @@
                                     format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="right" caption="Weight"
-                                    dataField="FRM_METAL_WT">
+                                    dataField="TO_METAL_WT">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Stone">
                                 <dxi-column alignment="right" caption="Psc"
-                                    dataField="StonePcsTo" format="fixedPoint">
+                                    dataField="TO_STONE_PCS" format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="right" caption="Weight"
-                                    dataField="StoneWeightTo">
+                                    dataField="TO_STONE_WT">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption>
                                 <dxi-column alignment="right" caption="Loss QTY"
-                                    dataField="Population_Total"
+                                    dataField="LOSS_QTY"
                                     format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Time"
-                                    dataField="STD_TIME"
+                                    dataField="TIME_TAKEN_HRS"
                                     width="auto">
                                 </dxi-column>
                             </dxi-column>
@@ -214,209 +213,209 @@
                                     caption="UNIQUEID" dataField>
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="VOCNO"
-                                    dataField>
+                                    dataField="VOCNO">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="VOCDATE"
-                                    dataField>
+                                    dataField="VOCDATE">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="VOCTYPE"
-                                    dataField>
+                                    dataField="VOCTYPE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="BRANCH_CODE" dataField>
+                                    caption="BRANCH_CODE" dataField="BRANCH_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="JOB_NUMBER" dataField>
+                                    caption="JOB_NUMBER" dataField="JOB_NUMBER">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="JOB_DATE" dataField>
+                                    caption="JOB_DATE" dataField="JOB_DATE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="UNQ_DESIGN_ID" dataField>
+                                    caption="UNQ_DESIGN_ID" dataField="UNQ_DESIGN_ID">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="DESIGN_CODE" dataField>
+                                    caption="DESIGN_CODE" dataField="DESIGN_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="SEQ_CODE" dataField>
+                                    caption="SEQ_CODE" dataField="SEQ_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="JOB_DESCRIPTION" dataField>
+                                    caption="JOB_DESCRIPTION" dataField="JOB_DESCRIPTION">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="CURRENCY_CODE" dataField>
+                                    caption="CURRENCY_CODE" dataField="CURRENCY_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="CURRENCY_RATE" dataField>
+                                    caption="CURRENCY_RATE" dataField="CURRENCY_RATE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="FRM_PROCESS_CODE" dataField>
+                                    caption="FRM_PROCESS_CODE" dataField="FRM_PROCESS_CODE">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="FRM_PROCESSNAME" dataField>
+                                    caption="FRM_PROCESSNAME" dataField="FRM_PROCESSNAME">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="FRM_WORKERNAME" dataField>
+                                    caption="FRM_WORKERNAME" dataField="FRM_WORKERNAME">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="FRM_STONE_PCS" dataField>
+                                    caption="FRM_STONE_PCS" dataField="FRM_STONE_PCS">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="FRM_METAL_PCS" dataField>
+                                    caption="FRM_METAL_PCS" dataField="FRM_METAL_PCS">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="TO_PROCESSNAME" dataField>
+                                    caption="TO_PROCESSNAME" dataField="TO_PROCESSNAME">
                                 </dxi-column>
                                 <dxi-column alignment="center"
-                                    caption="TO_WORKERNAME" dataField>
+                                    caption="TO_WORKERNAME" dataField="TO_WORKERNAME">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="TO_PCS"
-                                    dataField>
+                                    dataField="TO_PCS">
                                 </dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TO_METAL_PCS"
-                                    dataField></dxi-column>
+                                    dataField="TO_METAL_PCS"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TO_STONE_WT"
-                                    dataField></dxi-column>
+                                    dataField="TO_STONE_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TO_STONE_PCS"
-                                    dataField></dxi-column>
+                                    dataField="TO_STONE_PCS"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TO_METAL_WT"
-                                    dataField></dxi-column>
+                                    dataField="TO_METAL_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="STONE_AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="STONE_AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="STONE_AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="STONE_AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="METAL_AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="METAL_AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="METAL_AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="METAL_AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="MAKING_RATEFC"
-                                    dataField></dxi-column>
+                                    dataField="MAKING_RATEFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="MAKING_RATELC"
-                                    dataField></dxi-column>
+                                    dataField="MAKING_RATELC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="MAKING_AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="MAKING_AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="MAKING_AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="MAKING_AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LAB_AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="LAB_AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TOTAL_AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="TOTAL_AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TOTAL_AMOUNT_LC"
-                                    dataField></dxi-column>
+                                    dataField="TOTAL_AMOUNT_LC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="COSTFC_PER_PCS"
-                                    dataField></dxi-column>
+                                    dataField="COSTFC_PER_PCS"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="COST_FC_PER_PCS"
-                                    dataField></dxi-column>
+                                    dataField="COST_FC_PER_PCS"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LAB_CODE"
-                                    dataField></dxi-column>
+                                    dataField="LAB_CODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LAB_UNIT"
-                                    dataField></dxi-column>
+                                    dataField="LAB_UNIT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LAB_RATEFC"
-                                    dataField></dxi-column>
+                                    dataField="LAB_RATEFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LAB_RATELC"
-                                    dataField></dxi-column>
+                                    dataField="LAB_RATELC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LAB_ACCODE"
-                                    dataField></dxi-column>
+                                    dataField="LAB_ACCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LOSS_ACCCODE"
-                                    dataField></dxi-column>
+                                    dataField="LOSS_ACCCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="FRM_WIP_ACCODE"
-                                    dataField></dxi-column>
+                                    dataField="FRM_WIP_ACCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TO_WIP_ACCODE"
-                                    dataField></dxi-column>
+                                    dataField="TO_WIP_ACCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_DIVCODE"
-                                    dataField></dxi-column>
+                                    dataField="RET_METAL_DIVCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_STOCK_CODE"
-                                    dataField></dxi-column>
+                                    dataField="RET_METAL_STOCK_CODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_STONE_DIVCODE"
-                                    dataField></dxi-column>
+                                    dataField="RET_STONE_DIVCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_STONE_STOCK_CODE"
-                                    dataField></dxi-column>
+                                    dataField="RET_STONE_STOCK_CODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_PURITY"
-                                    dataField></dxi-column>
+                                    dataField="RET_PURITY"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_PURE_WT"
-                                    dataField></dxi-column>
+                                    dataField="RET_PURE_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_RATEFC"
-                                    dataField></dxi-column>
+                                    dataField="RET_METAL_RATEFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_RATELC"
-                                    dataField></dxi-column>
+                                    dataField="RET_METAL_RATELC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="RET_METAL_AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="RET_METAL_AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_STONE_RATEFC"
-                                    dataField></dxi-column>
+                                    dataField="RET_STONE_RATEFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_STONE_RATELC"
-                                    dataField></dxi-column>
+                                    dataField="RET_STONE_RATELC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_STONE_AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="RET_STONE_AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_STONE_AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="RET_STONE_AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center" caption="IN_DATE"
-                                    dataField></dxi-column>
+                                    dataField="IN_DATE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="OUT_DATE"
-                                    dataField></dxi-column>
+                                    dataField="OUT_DATE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="METAL_DIVISION"
-                                    dataField></dxi-column>
+                                    dataField="METAL_DIVISION"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="LOCTYPE_CODE"
-                                    dataField></dxi-column>
+                                    dataField="LOCTYPE_CODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="PICTURE_PATH"
-                                    dataField></dxi-column>
+                                    dataField="PICTURE_PATH"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="AMOUNTLC"
-                                    dataField></dxi-column>
+                                    dataField="AMOUNTLC"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="AMOUNTFC"
-                                    dataField></dxi-column>
+                                    dataField="AMOUNTFC"></dxi-column>
                                 <dxi-column alignment="center" caption="JOB_PCS"
-                                    dataField></dxi-column>
+                                    dataField="JOB_PCS"></dxi-column>
                                 <dxi-column alignment="center" caption="PURE_WT"
-                                    dataField></dxi-column>
+                                    dataField="PURE_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="GROSS_WT"
-                                    dataField></dxi-column>
+                                    dataField="GROSS_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="RET_METAL_PCS"
                                     dataField></dxi-column>
@@ -431,94 +430,94 @@
                                     dataField></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="MAIN_WORKER"
-                                    dataField></dxi-column>
+                                    dataField="MAIN_WORKER"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="MKG_LABACCODE"
                                     dataField></dxi-column>
                                 <dxi-column alignment="center" caption="REMARKS"
-                                    dataField></dxi-column>
+                                    dataField="REMARKS"></dxi-column>
                                 <dxi-column alignment="center" caption="TREE_NO"
-                                    dataField></dxi-column>
+                                    dataField="TREE_NO"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="STD_TIME"
-                                    dataField></dxi-column>
+                                    dataField="STD_TIME"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="WORKER_ACCODE"
-                                    dataField></dxi-column>
+                                    dataField="WORKER_ACCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="PRODLAB_ACCODE"
-                                    dataField></dxi-column>
+                                    dataField="PRODLAB_ACCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="DT_BRANCH_CODE"
-                                    dataField></dxi-column>
+                                    dataField="DT_BRANCH_CODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="DT_VOCTYPE"
-                                    dataField></dxi-column>
+                                    dataField="DT_VOCTYPE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="DT_VOUCHER_NO"
-                                    dataField></dxi-column>
+                                    dataField="DT_VOUCHER_NO"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="DT_YEARMONTH"
-                                    dataField></dxi-column>
+                                    dataField="DT_YEARMONTH"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="ISSUE_REF"
-                                    dataField></dxi-column>
+                                    dataField="ISSUE_REF"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="IS_AUTHORISE"
-                                    dataField></dxi-column>
+                                    dataField="IS_AUTHORISE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="TIME_CONSUMED"
-                                    dataField></dxi-column>
+                                    dataField="TIME_CONSUMED"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="SCRAP_SUB_STOCK_CODE"
-                                    dataField></dxi-column>
+                                    dataField="SCRAP_SUB_STOCK_CODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="SCRAP_PURITY"
-                                    dataField></dxi-column>
+                                    dataField="SCRAP_PURITY"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="SCRAP_PUDIFF"
-                                    dataField></dxi-column>
+                                    dataField="SCRAP_PUDIFF"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="SCRAP_ACCODE"
-                                    dataField></dxi-column>
+                                    dataField="SCRAP_ACCODE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="DESIGN_TYPE"
-                                    dataField></dxi-column>
+                                    dataField="DESIGN_TYPE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="BALANCE_METAL_WT"
-                                    dataField></dxi-column>
+                                    dataField="BALANCE_METAL_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="BALANCE_STONE_WT"
-                                    dataField></dxi-column>
+                                    dataField="BALANCE_STONE_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="BALANCE_PURE_WT"
-                                    dataField></dxi-column>
+                                    dataField="BALANCE_PURE_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="BALANCE_NET_WT"
-                                    dataField></dxi-column>
+                                    dataField="BALANCE_NET_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="EXCLUDE_TRANSFER_WT"
-                                    dataField></dxi-column>
+                                    dataField="EXCLUDE_TRANSFER_WT"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="AUTHORIZE_TIME"
-                                    dataField></dxi-column>
+                                    dataField="AUTHORIZE_TIME"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="IS_REJECT"
-                                    dataField></dxi-column>
+                                    dataField="IS_REJECT"></dxi-column>
                                 <dxi-column alignment="center" caption="REASON"
-                                    dataField></dxi-column>
+                                    dataField="REASON"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="REJ_REMARKS"
-                                    dataField></dxi-column>
+                                    dataField="REJ_REMARKS"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="ATTACHMENT_FILE"
-                                    dataField></dxi-column>
+                                    dataField="ATTACHMENT_FILE"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="AUTHORISED_TIME"
-                                    dataField></dxi-column>
+                                    dataField="AUTHORISED_TIME"></dxi-column>
                                 <dxi-column alignment="center"
                                     caption="REPAIR_PROCESS"
-                                    dataField></dxi-column>
+                                    dataField="REPAIR_PROCESS"></dxi-column>
                             </dxi-column>
                         </dx-data-grid>
                     </div>
@@ -529,8 +528,8 @@
                             class="col-sm-3 col-form-label">Narration
                             :</label>
                         <div class="col-md-9">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <input type="text" matInput [readonly]="viewMode"
                                     formControlName="Narration" />
                             </mat-form-field>
                         </div>

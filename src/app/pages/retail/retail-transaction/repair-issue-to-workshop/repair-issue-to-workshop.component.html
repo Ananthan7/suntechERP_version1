@@ -1,232 +1,319 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Repair Transfer</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Repair Transfer</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header
+  (saveClick)="formSubmit()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteRecord()"
+></modal-header>
 <!-- content section -->
 <div class="row">
-    <div>
-        <form [formGroup]="repairTransferForm">
-            <div class="container-fluid pt-3">
-                <div class="row">
-                    <div class="col-md-6">
-
-                    </div>
-                    <div class="col-md-6 px-1">
-                        <div class="col-md-4 boxed-label">
-                            <h6>UnAuthorized Repair</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type * : </label>
-                            <div class="col-md-3">
-                                <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="voctype"   />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="vocNo" style="text-align: right;"/>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date : </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 72%;">
-                                    <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                          placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker  #vocDate></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">SalesMan : </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="salesMan"   />
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="salesManCodeData"
-                                (newRowClick)="salesManCodeSelected($event)"></master-search>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label ">Branch : </label>
-                            <div class="col-sm-8">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="branch"   />
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="branchCodeData"
-                                (newRowClick)="branchCodeSelected($event)"></master-search>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label ">Branch Name : </label>
-                            <div class="col-sm-8">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="branchName"   />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label ">Party Code : </label>
-
-                            <div class="col-sm-8">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="partyCode"   />
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="partyCodeCodeData"
-                                (newRowClick)="partyCodeSelected($event)"></master-search>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label ">Party Name : </label>
-                            <div class="col-sm-8">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="partyName"   />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-                            <dxi-column *ngFor="let data of columnheadItemDetails2" dataField="{{ data }}"
-                                caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
-                    </div>
-                </div>
-
-
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <mat-tab-group >
-                            <mat-tab label="Pending repair Jobs" id="get">
-                                <div class="row pt-2">
-                                    <div class="col-md-12">
-                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                                            [showColumnLines]="true" [showRowLines]="true" class="mt-3">
-                                            <dxo-editing mode="cell" >
-                                            </dxo-editing>
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
-                                            </dxi-column>
-
-                                        </dx-data-grid>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="Teansferred Repair Jobs">
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <dx-resizable id="gridContainer"  [height]="280"
-                                            [keepAspectRatio]="false" handles="right">
-                                            <dx-data-grid width="auto" #dataGrid id="gridContainer"
-                                                [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
-                                                [showRowLines]="true" class="mt-3">
-                                                <dxo-editing mode="cell" >
-                                                </dxo-editing>
-                                                <dxo-paging [enabled]="false"></dxo-paging>
-                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                                <dxo-selection mode="single"></dxo-selection>
-
-                                                <dxi-column *ngFor="let data of columnheadItemDetails1"
-                                                    dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center" backgroundcolor="#000">
-                                                </dxi-column>
-
-                                            </dx-data-grid>
-                                        </dx-resizable>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                        </mat-tab-group>
-                    </div>
-                </div>
-
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <mat-tab-group>
-                            <mat-tab label="Pending Items" id="get">
-                                <div class="row pt-2">
-                                    <div class="col-md-12">
-                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                                            [showColumnLines]="true" [showRowLines]="true" class="mt-3">
-                                            <dxo-editing mode="cell" >
-                                            </dxo-editing>
-                                            <dxi-column *ngFor="let data of columnheadItemDetails1"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
-                                            </dxi-column>
-
-                                        </dx-data-grid>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="Transferred Items">
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <dx-resizable id="gridContainer"  [height]="280"
-                                            [keepAspectRatio]="false" handles="right">
-                                            <dx-data-grid width="auto" #dataGrid id="gridContainer"
-                                                [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
-                                                [showRowLines]="true" class="mt-3">
-                                                <dxo-editing mode="cell" >
-                                                </dxo-editing>
-                                                <dxo-paging [enabled]="false"></dxo-paging>
-                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                                <dxo-selection mode="single"></dxo-selection>
-
-                                                <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                    dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center" backgroundcolor="#000">
-                                                </dxi-column>
-
-                                            </dx-data-grid>
-                                        </dx-resizable>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                        </mat-tab-group>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                    </div>
-                    <div class="col-md-2">
-                        <div class="p-1 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary add-btn">Add To Transfer</button>
-                        </div>
-                    </div>
-                </div>
+  <div>
+    <form [formGroup]="repairTransferForm">
+      <div class="container-fluid pt-3">
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6 px-1">
+            <div class="col-md-4 boxed-label">
+              <h6>UnAuthorized Repair</h6>
             </div>
-        </form>
-    </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Voucher Type * :
+              </label>
+              <div class="col-md-3">
+                <div class="position-relative d-flex">
+                  <mat-form-field style="width: 100%">
+                    <input type="text" matInput formControlName="voctype" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="position-relative d-flex">
+                  <mat-form-field style="width: 100%">
+                    <input
+                      class="text-right"
+                      type="number"
+                      matInput
+                      formControlName="vocNo"
+                      style="text-align: right"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Voucher Date :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 72%">
+                  <input
+                    matInput
+                    [matDatepicker]="vocDate"
+                    formControlName="vocDate"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="vocDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #vocDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >SalesMan :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 70%">
+                  <input type="text" matInput formControlName="salesMan" />
+                </mat-form-field>
+                <master-search
+                  [MasterSearchData]="salesManCodeData"
+                  (newRowClick)="salesManCodeSelected($event)"
+                ></master-search>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <!-- <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                >Branch :
+              </label>
+              <div class="col-sm-8">
+                <mat-form-field style="width: 60%">
+                  <input type="text" matInput formControlName="branch" />
+                </mat-form-field>
+                <master-search
+                  [MasterSearchData]="branchCodeData"
+                  (newRowClick)="branchCodeSelected($event)"
+                ></master-search>
+              </div>
+            </div> -->
+            <!-- <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                >Branch Name :
+              </label>
+              <div class="col-sm-8">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="branchName" />
+                </mat-form-field>
+              </div>
+            </div> -->
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                >Party Code :
+              </label>
+
+              <div class="col-sm-8">
+                <mat-form-field style="width: 60%">
+                  <input type="text" matInput formControlName="partyCode" />
+                </mat-form-field>
+                <master-search
+                  [MasterSearchData]="partyCodeData"
+                  (newRowClick)="partyCodeSelected($event)"
+                ></master-search>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                >Party Name :
+              </label>
+              <div class="col-sm-8">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="partyName" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <dx-data-grid
+              #dataGrid
+              id="gridContainer"
+              keyExpr="ID"
+              [showBorders]="true"
+            >
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxi-column
+                *ngFor="let data of columnheadItemDetails2"
+                dataField="{{ data }}"
+                caption="{{ data }}"
+                [allowEditing]="true"
+                alignment="center"
+                backgroundcolor="#000"
+              >
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <mat-tab-group>
+              <mat-tab label="Pending repair Jobs" id="get">
+                <div class="row pt-2">
+                  <div class="col-md-12">
+                    <dx-data-grid
+                      id="gridContainer"
+                      [dataSource]="tableData"
+                      [showBorders]="true"
+                      [showColumnLines]="true"
+                      [showRowLines]="true"
+                      class="mt-3"
+                    >
+                      <dxo-editing mode="cell"> </dxo-editing>
+                      <dxi-column
+                        *ngFor="let data of columnheadItemDetails"
+                        dataField="{{ data }}"
+                        caption="{{ data }}"
+                        [allowEditing]="true"
+                        alignment="center"
+                        backgroundcolor="#000"
+                      >
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Teansferred Repair Jobs">
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <dx-resizable
+                      id="gridContainer"
+                      [height]="280"
+                      [keepAspectRatio]="false"
+                      handles="right"
+                    >
+                      <dx-data-grid
+                        width="auto"
+                        #dataGrid
+                        id="gridContainer"
+                        [dataSource]="tableDatas"
+                        [showBorders]="true"
+                        [showColumnLines]="true"
+                        [showRowLines]="true"
+                        class="mt-3"
+                      >
+                        <dxo-editing mode="cell"> </dxo-editing>
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <dxo-selection mode="single"></dxo-selection>
+
+                        <dxi-column
+                          *ngFor="let data of columnheadItemDetails1"
+                          dataField="{{ data }}"
+                          caption="{{ data }}"
+                          [allowEditing]="true"
+                          alignment="center"
+                          backgroundcolor="#000"
+                        >
+                        </dxi-column>
+                      </dx-data-grid>
+                    </dx-resizable>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <mat-tab-group>
+              <mat-tab label="Pending Items" id="get">
+                <div class="row pt-2">
+                  <div class="col-md-12">
+                    <dx-data-grid
+                      id="gridContainer"
+                      [dataSource]="tableData"
+                      [showBorders]="true"
+                      [showColumnLines]="true"
+                      [showRowLines]="true"
+                      class="mt-3"
+                    >
+                      <dxo-editing mode="cell"> </dxo-editing>
+                      <dxi-column
+                        *ngFor="let data of columnheadItemDetails1"
+                        dataField="{{ data }}"
+                        caption="{{ data }}"
+                        [allowEditing]="true"
+                        alignment="center"
+                        backgroundcolor="#000"
+                      >
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Transferred Items">
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <dx-resizable
+                      id="gridContainer"
+                      [height]="280"
+                      [keepAspectRatio]="false"
+                      handles="right"
+                    >
+                      <dx-data-grid
+                        width="auto"
+                        #dataGrid
+                        id="gridContainer"
+                        [dataSource]="tableDatas"
+                        [showBorders]="true"
+                        [showColumnLines]="true"
+                        [showRowLines]="true"
+                        class="mt-3"
+                      >
+                        <dxo-editing mode="cell"> </dxo-editing>
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <dxo-selection mode="single"></dxo-selection>
+
+                        <dxi-column
+                          *ngFor="let data of columnheadItemDetails"
+                          dataField="{{ data }}"
+                          caption="{{ data }}"
+                          [allowEditing]="true"
+                          alignment="center"
+                          backgroundcolor="#000"
+                        >
+                        </dxi-column>
+                      </dx-data-grid>
+                    </dx-resizable>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-6"></div>
+
+          <div class="col-md-4"></div>
+          <div class="col-md-2">
+            <div class="p-1 bd-highlight">
+              <button type="button" class="btn btn-outline-primary add-btn">
+                Add To Transfer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

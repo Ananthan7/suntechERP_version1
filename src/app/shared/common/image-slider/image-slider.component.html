@@ -1,4 +1,4 @@
-<ngb-carousel>
+<ngb-carousel *ngIf="imageArray.length>0">
     <ng-template ngbSlide *ngFor="let item of imageArray">
         <div class="picsum-img-wrapper">
             <img [src]="item" alt="item" height="200px" width="200px"/>

@@ -35,7 +35,7 @@ export class PcrSelectionComponent implements OnInit {
       "BranchCode": this.strBranchcode,
       "CustomerCode": this.customerCode
     }
-    this.suntechApi.postDynamicAPI('AdvanceReceipt/GetPOSPCRSelection/', postData).subscribe((result) => {
+    this.suntechApi.postDynamicAPI('AdvanceReceipt/GetPOSPCRSelection', postData).subscribe((result) => {
       console.log(result);
       if (result.status == 'Success') {
         this.pcrSelectionData = result.dynamicData[0];

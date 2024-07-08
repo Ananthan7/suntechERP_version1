@@ -307,8 +307,9 @@ export class CommonServiceService {
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
     let value = this.allCompanyParameters ? this.allCompanyParameters[parameter] : ''
-    if(value.toString().toUpperCase() == 'TRUE') value = true
-    if(value.toString().toUpperCase() == 'FALSE') value = false
+    if(value.toString().toUpperCase() == 'TRUE') value = true;
+    if(value.toString().toUpperCase() == 'FALSE') value = false;
+    if(value.toString() == '0') value = false;
     return value
   }
   setCommaSerperatedNumber(value: any, decimal: any) {

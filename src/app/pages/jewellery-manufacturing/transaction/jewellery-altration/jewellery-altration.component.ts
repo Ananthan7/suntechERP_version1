@@ -33,6 +33,7 @@ export class JewelleryAltrationComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  editMode: boolean = false
   selectedKey: number[] = []
 
   private subscriptions: Subscription[] = [];
@@ -113,8 +114,10 @@ export class JewelleryAltrationComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.userName = this.commonService.userName;
     this.setNewFormValues()
     if (this.content && this.content.FLAG == 'EDIT') {
+      this.editMode= true;
       this.setNewFormValues()
       this.setAllInitialValues()
     }
@@ -162,7 +165,7 @@ export class JewelleryAltrationComponent implements OnInit {
     console.log(this.content)
     if (!this.content) return
     let API = `DiamondJewelAlteration/GetDiamondJewelAlterationWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -171,7 +174,8 @@ export class JewelleryAltrationComponent implements OnInit {
 
           // this.jewelleryaltrationFrom.controls.MID.setValue(data.MID)
           // this.jewelleryaltrationFrom.controls.vocdate.setValue(new Date(data.VOCDATE))
-          this.jewelleryaltrationFrom.controls.enteredby.setValue(data.HTUSERNAME)
+          this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
+          this.jewelleryaltrationFrom.controls.enteredby.setValue(data.SMAN)
           this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
           this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(data.CC_RATE)
           this.jewelleryaltrationFrom.controls.metalrate.setValue(data.METAL_RATE)
@@ -391,8 +395,34 @@ export class JewelleryAltrationComponent implements OnInit {
     })
   }
   deleteTableData(): void {
-    this.jewelleryaltrationdetail = this.jewelleryaltrationdetail.filter((element: any) => element.SRNO != this.selectRowIndex)
-    this.reCalculateSRNO()
+    if (!this.selectRowIndex) {
+      Swal.fire({
+        title: '',
+        text: 'Please select row to remove from grid!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+          this.jewelleryaltrationdetail = this.jewelleryaltrationdetail.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+          this.reCalculateSRNO()
+        }
+      }
+    )
   }
 
   removedata() {
@@ -408,13 +438,13 @@ export class JewelleryAltrationComponent implements OnInit {
       "VOCNO": this.jewelleryaltrationFrom.value.VOCNO,
       "VOCDATE": this.comService.formatDateTime(form.vocdate),
       "YEARMONTH": this.yearMonth,
-      "SMAN": this.comService.nullToString(this.jewelleryaltrationFrom.value.SMAN),
+      "SMAN": this.jewelleryaltrationFrom.value.enteredby,
       "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount,
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": this.jewelleryaltrationFrom.value.itemcurrencycc,
       "MET_RATE_TYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.metalrate),
       "METAL_RATE": this.comService.emptyToZero(this.jewelleryaltrationFrom.value.metalratetype),
-      "NAVSEQNO": 0,
+      "NAVSEQNO": this.comService.emptyToZero(this.jewelleryaltrationFrom.value.NAVSEQNO),
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
       "TOTAL_LAB_CHARGEFC": 0,
@@ -424,9 +454,9 @@ export class JewelleryAltrationComponent implements OnInit {
       "TOTAL_COST_NEWFC": 0,
       "REMARKS": this.jewelleryaltrationFrom.value.narration,
       "PRINT_COUNT": 0,
-      "POSTDATE": "",
+      "POSTDATE": this.commonService.formatDateTime(this.currentDate),
       "AUTOPOSTING": true,
-      "HTUSERNAME": this.jewelleryaltrationFrom.value.enteredby,
+      "HTUSERNAME": this.commonService.userName,
       "REMARKS_DETAIL": "",
       "GENSEQNO": 0,
       "Details": this.jewelleryaltrationdetail,
@@ -518,8 +548,7 @@ export class JewelleryAltrationComponent implements OnInit {
 
   update() {
     let form = this.jewelleryaltrationFrom.value
-    console.log(this.jewelleryaltrationdetail)
-    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}`
+    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${form.voctype}/${form.vocno}/${this.yearMonth}`
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -580,7 +609,7 @@ export class JewelleryAltrationComponent implements OnInit {
         let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + 
         this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
         this.content.VOCNO+ '/' + this.content.YEARMONTH
-        let Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {

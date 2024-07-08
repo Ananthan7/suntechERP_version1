@@ -119,7 +119,16 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.jewellerydismantlingFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     // this.setCompanyCurrency()
-    this.setvalues()
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.setvalues()
+      this.setAllInitialValues()
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.isSaved = true;
+      this.setvalues()
+      this.setAllInitialValues()
+    }
   }
 
   userDataSelected(value: any) {
@@ -198,6 +207,7 @@ export class JewelleryDismantlingComponent implements OnInit {
    polishing : [''],
    miscCode : [''],
    labTotal : [''],
+   MID: [0],
   });
 
   setvalues(){
@@ -205,6 +215,51 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.jewellerydismantlingFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.jewellerydismantlingFrom.controls.vocdate.setValue(this.comService.currentDate)
   }
+
+  setAllInitialValues() {
+    if (!this.content) return
+    let API = `DiamondDismantle/GetDiamondDismantleWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data,'data')
+          this.jewellerydismantlingFrom.controls.MID.setValue(data.MID)
+          this.jewellerydismantlingFrom.controls.voctype.setValue(data.VOCTYPE)
+          this.jewellerydismantlingFrom.controls.vocno.setValue(data.VOCNO)
+          this.jewellerydismantlingFrom.controls.vocdate.setValue(data.VOCDATE)
+          this.jewellerydismantlingFrom.controls.enteredby.setValue(data.HTUSERNAME)
+          this.jewellerydismantlingFrom.controls.lossaccount.setValue(data.LOSS_ACCODE)
+          this.jewellerydismantlingFrom.controls.itemcurrency.setValue(data.CC_RATE)
+          this.jewellerydismantlingFrom.controls.itemcurrencDesc.setValue(data.CURRENCY_CODE)
+          // this.jewellerydismantlingFrom.controls.color.setValue(data.COLOR)
+
+          // this.meltingISsueDetailsData = data.Details
+          // this.reCalculateSRNO() //set to main grid
+          // this.meltingISsueDetailsData.forEach((element: any) => {
+          //   this.tableData.push({
+          //     jobno: element.JOB_NUMBER,
+          //     jobNumDes: element.JOB_DESCRIPTION,
+          //     processCode: element.PROCESS_CODE,
+          //     processCodeDesc: element.PROCESS_NAME,
+          //     workerCode: element.WORKER_CODE,
+          //     workerCodeDes: element.WORKER_NAME,
+          //     pcs: element.PCS,
+          //     purity: element.PURITY,
+          //     grossWeight: element.GROSS_WT,
+          //     netWeight: element.NET_WT,
+          //   })
+          // });
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+
+  }
+  
 setPostData(){
   let form = this.jewellerydismantlingFrom.value
   console.log(form, 'form');
@@ -217,8 +272,8 @@ setPostData(){
   "YEARMONTH": this.yearMonth,
   "SMAN": "",
   "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount,
-  "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency,
-  "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencDesc,
+  "CURRENCY_CODE": this.comService.nullToString(this.jewellerydismantlingFrom.value.itemcurrency),
+  "CC_RATE": this.comService.emptyToZero(this.jewellerydismantlingFrom.value.CC_RATE),
   "MET_RATE_TYPE": this.comService.nullToString(this.jewellerydismantlingFrom.value.MET_RATE_TYPE),
   "METAL_RATE": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.METAL_RATE),
   "NAVSEQNO": 0,
@@ -301,7 +356,7 @@ setPostData(){
     let API = 'DiamondDismantle/InsertDiamondDismantle'
     let postData = this.setPostData()
     this.isloading = true;
-    let Sub: Subscription = this.dataService.postDynamicAPICustom(API, postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
         if (result.response) {
@@ -335,7 +390,7 @@ setPostData(){
 
   update(){
     let form = this.jewellerydismantlingFrom.value
-    let API = 'DiamondDismantle/UpdateDiamondDismantle'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth;
+    let API = `DiamondDismantle/UpdateDiamondDismantle/${form.branchCode}/${form.voctype}/${form.vocno}/${form.yearMonth}`
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -392,7 +447,10 @@ setPostData(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'DiamondDismantle/DeleteDiamondDismantle/'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth
+        let form = this.jewellerydismantlingFrom.value
+        let API = 'DiamondDismantle/DeleteDiamondDismantle/' + 
+        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
+        this.content.VOCNO+ '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
