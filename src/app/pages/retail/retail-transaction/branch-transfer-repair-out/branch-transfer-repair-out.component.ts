@@ -1,10 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalRef,
-} from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
@@ -22,17 +18,13 @@ export class BranchTransferRepairOutComponent implements OnInit {
 
   branchCode?: any = localStorage.getItem("userbranch");
   yearMonth?: any = localStorage.getItem("YEAR") || "";
+  PendingRepairJobsData: any;
 
   private subscriptions: Subscription[] = [];
 
   currentDate = new Date();
   tableData: any[] = [];
   strBranchcode: any = "";
-  // columnhead:any[] = [
-  //   { title: 'Karat', field: 'KARAT_CODE' },
-  //   { title: 'Sale Rate', field: 'KARAT_RATE' },
-  //   { title: 'Purchase Rate', field: 'POPKARAT_RATE' }];
-
   columnhead: any[] = [
     "Rep Voc No",
     "Stock Code",
@@ -68,16 +60,9 @@ export class BranchTransferRepairOutComponent implements OnInit {
     salesman: [""],
     branchcode: [""],
     branchname: [""],
-    partycode: [""],
-    partyname: [""],
-    costcode: [""],
-    lossaccount: [""],
-    enteredby: [""],
-    itemcurrency: [""],
-    itemcurrencycc: [""],
-    narration: [""],
-    yearmonth: [""],
+    remarks: [""],
   });
+
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -87,6 +72,7 @@ export class BranchTransferRepairOutComponent implements OnInit {
     );
 
     this.generateVocNo();
+    this.getPendingRepairJobs();
   }
 
   salesManCodeData: MasterSearchModel = {
@@ -137,6 +123,30 @@ export class BranchTransferRepairOutComponent implements OnInit {
       .subscribe((res) => {
         if (res.status == "Success") {
           this.repairtransferform.controls.vocNo.setValue(res.newvocno);
+        }
+      });
+  }
+
+  getPendingRepairJobs() {
+    let API = `ExecueteSPInterface`;
+    let bodyData = {
+      SPID: "095",
+      parameter: {
+        STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
+        STRBRANCHCODE: this.branchCode,
+        STRJOBSTATUS: "0",
+      },
+    };
+
+    let sub: Subscription = this.dataService
+      .postDynamicAPI(API, bodyData)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.PendingRepairJobsData = res.dynamicData[0].map((item: any) => ({
+            ...item,
+            DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
+          }));
+          console.log(this.PendingRepairJobsData.DELIVERYDATE);
         }
       });
   }
@@ -207,7 +217,6 @@ export class BranchTransferRepairOutComponent implements OnInit {
     };
 
     console.log(postData);
-    
 
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)

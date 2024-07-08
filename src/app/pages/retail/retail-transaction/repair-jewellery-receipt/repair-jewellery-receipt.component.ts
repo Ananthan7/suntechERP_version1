@@ -13,6 +13,7 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
 import { RepairDetailsComponent } from "./repair-details/repair-details.component";
+import { DailyRatesOunceComponent } from "./daily-rates-ounce/daily-rates-ounce.component";
 
 @Component({
   selector: "app-repair-jewellery-receipt",
@@ -555,6 +556,27 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   onRowDoubleClicked(e: any) {    
     e.cancel = true;
     this.openRepairdetails(e.data);
+  }
+
+  open(data: any = null) {
+    const modalRef: NgbModalRef = this.modalService.open(
+      DailyRatesOunceComponent,
+      {
+        size: "xl",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+    modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
+
+    modalRef.result.then((postData) => {
+      if (postData) {
+        console.log("Data from modal:", postData);
+        this.handlePostData(postData);
+      }
+    });
   }
 
   openRepairdetails(data: any = null) {
