@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { JobcardComponent } from '../jobcard.component';
 
 
 
@@ -19,6 +20,7 @@ import themes from 'devextreme/ui/themes';
 export class JobStickerPrintComponent implements OnInit {
 
   selectedTabIndex = 0;
+  viewMode: boolean = false;
   tableData: any = [];
   showHeaderFilter: boolean;
   currentFilter: any;
@@ -29,6 +31,7 @@ export class JobStickerPrintComponent implements OnInit {
   branchCode?: String;
   private subscriptions: Subscription[] = [];
   jobNumber: any = [];
+  @Input() content!: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -62,8 +65,23 @@ export class JobStickerPrintComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log(this.content?.FLAG)
     this.branchCode = this.commonService.branchCode;
-    this.priceSchemeValidate() ;
+    this.priceSchemeValidate();
+
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      console.log("view")
+
+    } else if (this.content.FLAG == 'EDIT') {
+      console.log("edit")
+
+    } else if (this.content.FLAG == 'DELETE') {
+      this.viewMode = true;
+      console.log("delete")
+    }
+
+
   }
 
   priceSchemeValidate() {
@@ -83,7 +101,7 @@ export class JobStickerPrintComponent implements OnInit {
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')
       })
-  //  this.jobstickerpointForm.push(Sub)
+    //  this.jobstickerpointForm.push(Sub)
   }
 
 
@@ -91,5 +109,11 @@ export class JobStickerPrintComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  okClick() {
 
+  }
+
+  cancelClick(data?: any) {
+    this.activeModal.close(data);
+  }
 }
