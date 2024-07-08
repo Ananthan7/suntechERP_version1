@@ -25,7 +25,7 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         formControlName="stockcode"
-                                        (focusout)="stockCodeValidate($event)"
+                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')" 
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
@@ -482,12 +482,12 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
-                                formControlName="pricescheme" />
+                                formControlName="currencycode" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 77px; margin-left: -23px;">
-                            <input type="text" matInput />
+                        <mat-form-field style="width: 77px; margin-left: -23px; text-align: right;">
+                            <input type="text" matInput formControlName="currencyrate"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
@@ -731,13 +731,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="settingsAMTCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row">
@@ -758,13 +758,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="polishingAMTCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row">
@@ -785,13 +785,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
+                    <!-- <div class="col-md-3"> -->
+                        <!-- <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="rhodiumAMTCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row">
@@ -811,13 +811,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="makingAMTCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row">
@@ -838,13 +838,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="platechargesCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row">
@@ -865,13 +865,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="certchargesCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row">
@@ -892,13 +892,13 @@
                                 class="text-right" />
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="miscchargesAMTCC"
                                 class="text-right" />
                         </mat-form-field>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="row">
                     <label for="inputPassword"
