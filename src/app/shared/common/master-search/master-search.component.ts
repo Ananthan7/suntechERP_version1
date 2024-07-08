@@ -122,7 +122,7 @@ export class MasterSearchComponent implements OnInit {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
-      "ORDER_TYPE": this.MasterSearchData.SEARCH_VALUE ? 1 : 0,
+      "ORDER_TYPE": this.f2Flag ? 0 : 1,
       "WHERECONDITION": this.MasterSearchData.WHERECONDITION,
       "searchField": this.MasterSearchData.SEARCH_FIELD,
       "searchValue": this.MasterSearchData.SEARCH_VALUE,
