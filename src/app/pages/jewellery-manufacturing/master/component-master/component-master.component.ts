@@ -145,9 +145,10 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Setting Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SETTING MASTER'",
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    //LOAD_ONCLICK:true,
   }
   processSeqCodeData: MasterSearchModel = {
     PAGENO: 1,
