@@ -129,6 +129,68 @@
           <div class="row mt-3">
             <div class="col-md-12">
               <dx-data-grid
+                [dataSource]="PendingRepairJobsData"
+                #dataGrid
+                id="gridContainer"
+                keyExpr="MID"
+                [showBorders]="true"
+              >
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column
+                  dataField="VOCNO"
+                  caption="Rep Voc No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STOCK_CODE"
+                  caption="Stock Code"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="REPAIRBAGNO"
+                  caption="Bag No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="PARTYNAME"
+                  caption="Customer Name"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="MOBILE"
+                  caption="Mobile"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="DELIVERYDATE"
+                  caption="Deliver Date"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STATUS"
+                  caption="Status"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+
+                <dxi-column type="buttons">
+                  <dxi-button name="edit"></dxi-button>
+                  <dxi-button name="delete"></dxi-button>
+                </dxi-column>
+              </dx-data-grid>
+
+              <!-- <dx-data-grid
+              [dataSource]="PendingRepairJobsData"
                 #dataGrid
                 id="gridContainer"
                 keyExpr="ID"
@@ -148,7 +210,7 @@
                   backgroundcolor="#000"
                 >
                 </dxi-column>
-              </dx-data-grid>
+              </dx-data-grid> -->
             </div>
           </div>
         </mat-tab>
