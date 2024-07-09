@@ -509,7 +509,7 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
   generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.comService.getqueryParamVocType()}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.currentDate)}&blnTransferDummyDatabase=false`;
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
     this.dataService.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
@@ -519,7 +519,7 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
   async getFinancialYear() {
-    const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comService.cDateFormat(this.advanceReturnForm.value.vocDate)}`;
+    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comService.cDateFormat(this.advanceReturnForm.value.vocDate)}`;
     const res = await this.dataService.getDynamicAPI(API).toPromise()
     console.log(res);
     if (res.status == "Success") {
@@ -774,18 +774,23 @@ export class AdvanceReturnComponent implements OnInit {
 
   AccountPosting() {
     if (!this.content) return
-    let params = {
-      BRANCH_CODE: this.comService.nullToString(this.strBranchcode),
-      VOCTYPE: this.comService.getqueryParamVocType(),
-      VOCNO: this.advanceReturnForm.value.vocNo,
-      YEARMONTH: this.comService.nullToString(this.baseYear),
-      MID: this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
-      ACCUPDATEYN: 'Y',
-      USERNAME: this.comService.userName,
-      MAINVOCTYPE: this.comService.getqueryParamMainVocType(),
-      HEADER_TABLE: this.comService.getqueryParamTable(),
-    }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting', params)
+    // let params = {
+    //   BRANCH_CODE: this.comService.nullToString(this.strBranchcode),
+    //   VOCTYPE: this.comService.getqueryParamVocType(),
+    //   VOCNO: this.advanceReturnForm.value.vocNo,
+    //   YEARMONTH: this.comService.nullToString(this.baseYear),
+    //   MID: this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce,
+    //   ACCUPDATEYN: 'Y',
+    //   USERNAME: this.comService.userName,
+    //   MAINVOCTYPE: this.comService.getqueryParamMainVocType(),
+    //   HEADER_TABLE: this.comService.getqueryParamTable(),
+    // }
+    // let Sub: Subscription = this.dataService.getDynamicAPIwithParams('AccountPosting', params)
+
+    const API = `AccountPosting/${this.comService.nullToString(this.strBranchcode)}/${this.comService.getqueryParamVocType()}/${this.advanceReturnForm.value.vocNo}/${this.comService.nullToString(this.baseYear)}/${this.content ? this.comService.emptyToZero(this.content?.MID) : this.midForInvoce}/Y/${this.comService.userName}/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamTable()}`;
+
+let Sub: Subscription = this.dataService.getDynamicAPI(API)
+
       .subscribe((result) => {
         if (result.status == "Success") {
           this.comService.toastSuccessByMsgId(result.message || 'Posting Done')

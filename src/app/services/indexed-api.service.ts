@@ -170,8 +170,8 @@ export class IndexedApiService {
   }
 
   getVocTypeMaster(branch:any) {
-    let API = `VoctypeMaster/GetVoctypeMasterWithBranchCode/BranchCode=${branch}`
-    this.suntechApi.getDynamicAPICustom(API).subscribe((data) => {
+    let API = `VoctypeMaster/GetVoctypeMasterWithBranchCode/${branch}`
+    this.suntechApi.getDynamicAPI(API).subscribe((data) => {
       if (data.status == 'Success') {
         this.comFunc.VocTypeMasterData = data.response;
         this.inDb.bulkInsert('VocTypeMaster', data.response);

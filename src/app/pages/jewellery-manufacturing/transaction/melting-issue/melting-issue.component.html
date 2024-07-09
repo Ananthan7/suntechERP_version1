@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    (cancelClick)="close()"   (deleteClick)="deleteRecord()" 
+    (cancelClick)="close()" (deleteClick)="deleteRecord()"
     [isViewSave]="!viewMode"
     [isViewPost]="true"></modal-header>
 <div class="row">
@@ -24,14 +24,14 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="voctype"  readonly/>
+                                        formControlName="voctype" readonly />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
                                         formControlName="vocno"
-                                        style="text-align: right;" readonly/>
+                                        style="text-align: right;" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,10 +45,11 @@
                                         [max]="vocdate"
                                         formControlName="vocdate"
                                         placeholder="DD/MM/YYYY"
-                                        DateValidation  readonly/>
+                                        DateValidation readonly />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocdate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate"[disabled]="isSaved"
+                                    <mat-datepicker [startAt]="currentDate"
+                                        [disabled]="isSaved"
                                         #vocdate></mat-datepicker>
                                 </mat-form-field>
                             </div>
@@ -66,10 +67,12 @@
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="meltingtype"  [readonly]="viewMode"/>
+                                        formControlName="meltingtype"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="MeltingCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="MeltingCodeData"
+                                    *ngIf="!viewMode"
                                     (newRowClick)="MeltingCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -82,16 +85,19 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="jobno"  [readonly]="viewMode"/>
+                                        formControlName="jobno"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="jobnoCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="jobnoCodeData"
+                                    *ngIf="!viewMode"
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="jobdes"  [readonly]="viewMode"/>
+                                        formControlName="jobdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -102,16 +108,19 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="processcode"  [readonly]="viewMode"/>
+                                        formControlName="processcode"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="ProcessCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="ProcessCodeData"
+                                    *ngIf="!viewMode"
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="processdes"  [readonly]="viewMode"/>
+                                        formControlName="processdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -121,16 +130,19 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="worker"  [readonly]="viewMode"/>
+                                        formControlName="worker"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="WorkerCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="WorkerCodeData"
+                                    *ngIf="!viewMode"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="workerdes"  [readonly]="viewMode"/>
+                                        formControlName="workerdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -144,14 +156,15 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="subjobno"
-                                        class="text-right" NumberOnly  [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                         readonly />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="subjobno"
-                                         [readonly]="viewMode"/>
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -161,7 +174,8 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="color"  [readonly]="viewMode"/>
+                                        formControlName="color"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -174,7 +188,8 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="time"  [readonly]="viewMode"/>
+                                        formControlName="time"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -182,7 +197,9 @@
                 </div>
                 <div class="row py-2 border-top justify-content-between">
                     <div class="col-md-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                        <menu-buttons *ngIf="!viewMode"
+                            [viewAddBtn]="true"
+                            [viewDeleteBtn]="true"
                             [viewImportBtn]="false"
                             (addClick)="openaddMeltingIssueDetails()"
                             (deleteClick)="deleteTableData()">
@@ -396,11 +413,12 @@
                             <label for="inputPassword"
                                 class="col-sm-1 col-form-label">Total>></label>
                             <label for="inputPassword"
-                                class="col-sm-1 col-form-label" >Issued :</label>
+                                class="col-sm-1 col-form-label">Issued :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="issued" [readonly]="viewMode"/>
+                                        formControlName="issued"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
 
@@ -410,7 +428,8 @@
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="required" [readonly]="viewMode"/>
+                                        formControlName="required"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
 
@@ -420,7 +439,8 @@
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="allocated" [readonly]="viewMode"/>
+                                        formControlName="allocated"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -429,7 +449,8 @@
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="balance" [readonly]="viewMode"/>
+                                        formControlName="balance"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
@@ -448,7 +469,8 @@
                             <div class="col-md-9">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="remarks" [readonly]="viewMode"/>
+                                        formControlName="remarks"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>

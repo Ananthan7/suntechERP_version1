@@ -134,6 +134,8 @@ export class RetailTransactionComponent implements OnInit {
 
   viewRowDetails(e: any) {
     let str = e.row.data;
+    console.log(str);
+    
     str.FLAG = 'VIEW'
     this.openModalView(str)
   }
@@ -214,12 +216,15 @@ export class RetailTransactionComponent implements OnInit {
     });
 
     this.modalRef.componentInstance.content = data;
+    console.log(data);
+    
 
     this.modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       } else if (result == 'OpenModal') {
         this.openModalView()
+        
       }
     }, (reason) => {
       if (reason === 'reloadMainGrid') {

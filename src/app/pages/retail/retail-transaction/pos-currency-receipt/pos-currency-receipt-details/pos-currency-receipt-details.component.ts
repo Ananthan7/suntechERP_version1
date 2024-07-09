@@ -207,12 +207,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   generateHsnCodeList(queryParams: any) {
     this.hsnCodeList = [];
 
-    // Check if the queryParams object contains hsnCode
     if (queryParams && queryParams.hsnCode) {
-      // Split the hsnCode string by comma
       const codes = queryParams.hsnCode.split(',');
 
-      // Iterate through each code and push to hsnCodeList
       codes.forEach((code: any) => {
         this.hsnCodeList.push({ code: code.trim(), value: code.trim() });
       });
@@ -360,7 +357,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
         'AMOUNT'));
 
+        this.posCurrencyReceiptDetailsForm.controls.vat.setValue(this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(this.receiptData.IGST_PER),
+          'AMOUNT'));
+
       this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(this.receiptData.REMARKS);
+      this.hsnCodeList= [{"code":this.receiptData.HSN_CODE,"value":this.receiptData}];
+      this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(this.receiptData.HSN_CODE);
       this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue(this.receiptData.MODEDESC);
       this.posCurrencyReceiptDetailsForm.controls.creditCardNumber.setValue(this.receiptData.CARD_NO);
       this.posCurrencyReceiptDetailsForm.controls.creditCardName.setValue(this.receiptData.CARD_HOLDER);
@@ -576,7 +579,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     }
     else {
-      const API = `AccountMaster/GetPDCAccount?strAccode=${this.posCurrencyReceiptDetailsForm.value.debitAmount}`;
+      const API = `AccountMaster/GetPDCAccount/${this.posCurrencyReceiptDetailsForm.value.debitAmount}`;
       this.dataService.getDynamicAPI(API)
         .subscribe((resp) => {
           if (resp.status == "Success") {
@@ -666,6 +669,21 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     }
   }
 
+  formatDateToISO(date: string | Date): string {
+    let parsedDate: Date;
+  
+    if (typeof date === 'string') {
+      parsedDate = new Date(date + 'Z');
+    } else {
+      parsedDate = date;
+    }
+    
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error("Invalid date");
+    }
+  
+    return parsedDate.toISOString();
+  }
 
 
   formSubmit() {
@@ -709,7 +727,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
         "HEADER_AMOUNT": this.posCurrencyReceiptDetailsForm.value.amountCc,
         "CHEQUE_NO": CHEQUE_NO || "",
-        "CHEQUE_DATE": CHEQUE_DATE || this.dummyDate,
+        "CHEQUE_DATE":CHEQUE_DATE?this.formatDateToISO(CHEQUE_DATE):this.formatDateToISO(this.dummyDate),
         "CHEQUE_BANK": CHEQUE_BANK || "",
         "CHEQUE_DEPOSIT_BANK": CHEQUE_DEPOSIT_BANK || "",
         "REMARKS": this.posCurrencyReceiptDetailsForm.value.remarks,
@@ -721,7 +739,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "D_POSSCHEMEUNITS": 1,
         "CARD_NO": this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
         "CARD_HOLDER": this.posCurrencyReceiptDetailsForm.value.creditCardName,
-        "CARD_EXPIRY": this.posCurrencyReceiptDetailsForm.value.creditCardDate || this.dummyDate,
+        "CARD_EXPIRY":this.posCurrencyReceiptDetailsForm.value.creditCardDate?this.formatDateToISO(this.posCurrencyReceiptDetailsForm.value.creditCardDate):this.formatDateToISO(this.dummyDate),
         "PCRMID": 0,
         "BASE_CONV_RATE": 0,
         "SUBLEDJER_CODE": "",
@@ -747,7 +765,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "GST_HEADER_AMOUNT": this.posCurrencyReceiptDetailsForm.value.headerVatAmt || 0,
         "GST_NUMBER": "",
         "INVOICE_NUMBER": this.posCurrencyReceiptDetailsForm.value.invoiceNo,
-        "INVOICE_DATE": this.posCurrencyReceiptDetailsForm.value.invoiceDate,
+        "INVOICE_DATE":this.formatDateToISO(this.posCurrencyReceiptDetailsForm.value.invoiceDate),
         "DT_GST_STATE_CODE": "",
         "DT_GST_TYPE": "IGST",
         "DT_GST_CODE": "VAT",

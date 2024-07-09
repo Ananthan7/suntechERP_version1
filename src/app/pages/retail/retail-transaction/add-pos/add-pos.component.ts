@@ -82,13 +82,13 @@ export class AddPosComponent implements OnInit {
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
-
+allowDescription:boolean=false;
   amountDecimalFormat: any;
   metalDecimalFormat: any;
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
   gridWeghtDecimalFormat: any;
-
+ advanceRecieptVoucherNumberList: any[] = [];
   posMode: string = 'ADD';
   accountHeadDetails = '';
   // baseImgUrl = baseImgUrl;
@@ -378,6 +378,7 @@ export class AddPosComponent implements OnInit {
   // }
 
   advanceReceiptDetails: any;
+  advanceRecieptAmount='0.00';
   exchangeFormMetalRateType = '';
 
   inv_customer_name: any;
@@ -479,7 +480,7 @@ export class AddPosComponent implements OnInit {
   currentExchangeMetalPurchaseGst: any[] = [];
 
   salesReturnsItems_forVoc: any = [];
-
+  advancePartyCode:string="";
   newLineItem: any = {
     STOCK_CODE: '',
     STOCK_DESCRIPTION: 'DIAMOND PENDANT',
@@ -1115,11 +1116,9 @@ export class AddPosComponent implements OnInit {
     // const API = `AccountMaster/${parameterValue}`;
     // this.suntechApi.getDynamicAPI(API)
 
-
-
-    let sub: Subscription = this.suntechApi.getDynamicAPI(`AccountMaster`)
-
-      .subscribe((res: any) => {
+    const API = `AccountMaster`;
+    // let sub: Subscription = this.suntechApi.getDynamicAPI(`AccountMaster`)
+    this.suntechApi.getDynamicAPI(API).subscribe((res: any) => {
         if (res.status == "Success") {
           console.log('res', res);
           this.accountHeadDetails = res.response.ACCOUNT_HEAD;
@@ -1796,7 +1795,7 @@ export class AddPosComponent implements OnInit {
 
     let isLayoutRTL = false;
     this.page_language = 'ENGLISH';
-
+    this.getPartyCode();
     if (this.page_language != 'ENGLISH') {
       this.suntechApi.getDynamicAPI('LanguageDictionary').subscribe((resp) => {
         let temp_labels = resp.Result;
@@ -2187,10 +2186,10 @@ export class AddPosComponent implements OnInit {
         AMOUNT_CC = this.comFunc.FCToCC(
           this.vocDataForm.value.txtCurrency,
           this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceAmount), this.vocDataForm.value.txtCurRate);
-        IGST_PER = this.advanceReceiptDetails['IGST_PER'];
-        HSN_CODE = this.advanceReceiptDetails['HSN_CODE'];
-        GST_CODE = this.advanceReceiptDetails['DT_GST_CODE'].toString();
-        IGST_ACCODE = this.advanceReceiptDetails['IGST_ACCODE'].toString();
+        IGST_PER = this.advanceReceiptDetails['IGST_PER']??0;
+        HSN_CODE = this.advanceReceiptDetails['HSN_CODE']??"";
+        GST_CODE = this.advanceReceiptDetails['DT_GST_CODE']??"";
+        IGST_ACCODE = this.advanceReceiptDetails['IGST_ACCODE']??"";
         IGST_AMOUNTFC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceVatAmountFC);
         IGST_AMOUNTCC = this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceVatAmountLC);
         // IGST_AMOUNTCC = baseCtrl.FCToCC(
@@ -2199,7 +2198,7 @@ export class AddPosComponent implements OnInit {
         PAYMENT_MODE = 'ADVANCE';
         REC_BRANCHCODE = this.advanceReceiptForm.value.advanceBranch;
         FYEARCODE = this.advanceReceiptForm.value.advanceYear;
-        ARECMID = this.advanceReceiptDetails['MID'];
+        ARECMID = this.advanceReceiptDetails['MID']??0;
       } else if (this.selectedTabIndex == 3) {
         RECEIPT_MODE = this.othersReceiptForm.value.paymentsOthers.toString();
         ARECVOCNO = '';
@@ -2335,8 +2334,8 @@ export class AddPosComponent implements OnInit {
         "SGST_AMOUNTFC": "0.000",
         "SGST_AMOUNTCC": "0.000",
         "IGST_PER": this.isCCTransaction ? this.newLineItem.IGST_PER : '0',
-        "IGST_AMOUNTFC": IGST_AMOUNT,
-        "IGST_AMOUNTCC": IGST_AMOUNT,
+        "IGST_AMOUNTFC": IGST_AMOUNTFC,
+        "IGST_AMOUNTCC": IGST_AMOUNTCC,
         "HSN_CODE": this.isCCTransaction ? this.newLineItem.HSN_CODE : '',
         "GST_CODE": this.isCCTransaction ? this.newLineItem.GST_CODE.toString() : '',
         "CGST_ACCODE": "0",
@@ -2411,10 +2410,20 @@ export class AddPosComponent implements OnInit {
   close(data: any = null) {
     this.modalService.dismissAll(data);
   }
+
   removePayments(index: any) {
     this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
     this.dialogBox.afterClosed().subscribe((data: any) => {
       if (data != 'No') {
+        const removedRecord = this.receiptDetailsList[index];
+        const arecVocNo = removedRecord.ARECVOCNO;
+  
+        // Remove ARECVOCNO from the advanceRecieptVoucherNumberList
+        const vocNoIndex = this.advanceRecieptVoucherNumberList.indexOf(arecVocNo);
+        if (vocNoIndex > -1) {
+          this.advanceRecieptVoucherNumberList.splice(vocNoIndex, 1);
+        }
+  
         this.receiptDetailsList.splice(index, 1);
         this.receiptDetailsList?.forEach((e: any, i: any) => {
           e.SRNO = i + 1;
@@ -2422,8 +2431,22 @@ export class AddPosComponent implements OnInit {
         this.sumTotalValues();
       }
     });
-
   }
+  // removePayments(index: any) {
+  //   this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
+  //   this.dialogBox.afterClosed().subscribe((data: any) => {
+  //     if (data != 'No') {
+  //       this.advanceRecieptVoucherNumber = this.receiptDetailsList?.find((e: any) => e.RECEIPT_TYPE == "ADVANCE") ? 0 : this.advanceRecieptVoucherNumber;
+
+  //       this.receiptDetailsList.splice(index, 1);
+  //       this.receiptDetailsList?.forEach((e: any, i: any) => {
+  //         e.SRNO = i + 1;
+  //       });
+  //       this.sumTotalValues();
+  //     }
+  //   });
+
+  // }
 
   customizeWeight(data: any) {
     console.log(data);
@@ -2683,6 +2706,8 @@ export class AddPosComponent implements OnInit {
   }
 
   editTable = async (event: any) => {
+    // this.newLineItem.ALLOWEDITDESCRIPTION=false;
+    this.allowDescription=false;
     console.log(event);
     // console.log(event.component);
     // console.log(event.component.state());
@@ -2754,7 +2779,8 @@ export class AddPosComponent implements OnInit {
               this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
               this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
               this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
-              this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
+              this.allowDescription=stockInfos.ALLOWEDITDESCRIPTION;
+              // this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
               this.disableSaveBtn = false;
               this.validatePCS = stockInfos.VALIDATE_PCS;
               this.enablePieces = stockInfos.ENABLE_PCS;
@@ -2826,14 +2852,20 @@ export class AddPosComponent implements OnInit {
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNTVALUEFC)
     );
-    this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+
+        this.lineItemForm.controls.fcn_li_gross_amount.setValue(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.TOTAL_AMOUNTFC - value.DISCOUNTVALUECC))
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.GROSS_AMT))
     );
-    // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
+
+    // this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+    //   this.comFunc.transformDecimalVB(
+    //     this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.TOTAL_AMOUNTFC - value.DISCOUNTVALUECC))
+    // );
+    //  this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
     this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_PER
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.IGST_PER
       )
     );
     this.lineItemForm.controls.fcn_li_tax_amount.setValue(
@@ -3761,7 +3793,7 @@ export class AddPosComponent implements OnInit {
     this.inv_customer_name = '';
     this.customerDataForm.controls['fcn_customer_name'].setValue('');
   }
-  onCustomerNameFocus(value: any = null) {
+  onCustomerNameFocus(value: any = null,advanceCustomerCode:boolean=false) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
     if (value != null) {
@@ -3772,7 +3804,7 @@ export class AddPosComponent implements OnInit {
 
 
     console.log('_cust_mobile_no ', _cust_mobile_no);
-    if (_cust_mobile_no != '' && _cust_mobile_no != null) {
+    if (_cust_mobile_no != '' && _cust_mobile_no != null||advanceCustomerCode) {
 
       let custMobile = `${this.customerDataForm.value.fcn_customer_mobile}`;
 
@@ -3786,11 +3818,18 @@ export class AddPosComponent implements OnInit {
         fcn_cust_detail_phone: custMobile,
       });
       // }
-      this.suntechApi.getDynamicAPI(`PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}`)
+       let API =!advanceCustomerCode? `PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}`:`PosCustomerMaster/GetCustomerByCode/${this.advanceReceiptForm.value.advanceCustCode}`;
+      this.suntechApi.getDynamicAPI(API)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
             // const result = resp[0];
+          
             const result = resp.response;
+           if(advanceCustomerCode){
+            this.customerDataForm.controls['fcn_customer_mobile'].setValue(
+              result.MOBILE
+            );
+           }
             this.customerDataForm.controls['fcn_customer_name'].setValue(
               result.NAME
             );
@@ -3901,6 +3940,8 @@ export class AddPosComponent implements OnInit {
                 if (data == 'OK') {
                   this.open(this.more_customer_detail_modal, false, null, true, true);
                   this.isNewCustomer = false;
+                  if(advanceCustomerCode)
+                  this.advanceReceiptForm.controls.advanceCustCode.setValue('');
                 }
               });
             } else {
@@ -4099,9 +4140,9 @@ export class AddPosComponent implements OnInit {
 
   getExchangeStockCodes() {
 
-    let API = `RetailsalesExchangeLookup/${this.strBranchcode}&STOCK_CODE=`
+    let API = `RetailsalesExchangeLookup/${this.strBranchcode}`
     this.suntechApi
-      .getDynamicAPI(this.strBranchcode)
+      .getDynamicAPI(API)
       .subscribe((resp) => {
         console.log(resp);
         let _data = resp.response;
@@ -7417,8 +7458,7 @@ export class AddPosComponent implements OnInit {
       let voc_no = this.salesReturnForm.value.fcn_returns_voc_no;
 
       if (event.target.value != '') {
-        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`;
-
+        let API = `RetailSReturnLookUp/${branch}/${voc_type}/${voc_no}/${fin_year}`
 
         this.suntechApi.getDynamicAPI(API)
           .subscribe((resp: any) => {
@@ -8523,129 +8563,104 @@ export class AddPosComponent implements OnInit {
   //   }
   // }
 
-  printReceiptDetailsWeb() {
+printReceiptDetailsWeb() {
     let _validate = this.validateBeforePrint();
     if (_validate[0] === false) {
-      if (typeof _validate[1] === 'string') {
-        this.snackBar.open(_validate[1], 'OK');
-      } else {
-        console.error('Error message is not a string:', _validate[1]);
-      }
-      return
+        if (typeof _validate[1] === 'string') {
+            this.snackBar.open(_validate[1], 'OK');
+        } else {
+            console.error('Error message is not a string:', _validate[1]);
+        }
+        return;
     }
     let postData = {
-      "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
-      "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
-      "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
-      "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
-      "YEARMONTH": this.comFunc.nullToString(this.baseYear),
-    }
+        "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
+        "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+        "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+        "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+        "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+    };
     this.suntechApi.postDynamicAPI(`UspReceiptDetailsWeb`, postData)
-      .subscribe((result: any) => {
-        console.log(result);
-        let data = result.dynamicData
-        var WindowPrt = window.open(' ', ' ', 'width=' + '900px' + ', height=' + '800px');
-        if (WindowPrt === null) {
-          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-          return;
-        }
-        let printContent = data[0][0].HTMLOUT;
-        WindowPrt.document.write(printContent);
+        .subscribe((result: any) => {
+            console.log(result);
+            let data = result.dynamicData;
+            var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
+            if (WindowPrt === null) {
+                console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+                return;
+            }
+            let printContent = data[0][0].HTMLOUT;
+            WindowPrt.document.write(printContent);
+            WindowPrt.document.close();
+            WindowPrt.focus();
 
-        WindowPrt.document.close();
-        WindowPrt.focus();
+            WindowPrt.onload = function() {
+                if (WindowPrt && WindowPrt.document.head) {
+                    let styleElement = WindowPrt.document.createElement('style');
+                    styleElement.textContent = `
+                        @page {
+                            size: A5 landscape;
+                        }
+                        body {
+                            margin: 0mm;
+                        }
+                    `;
+                    WindowPrt.document.head.appendChild(styleElement);
 
-        setTimeout(() => {
-          if (WindowPrt) {
-            WindowPrt.print();
-          } else {
-            console.error('Print window was closed before printing could occur.');
-          }
-        }, 800);
-      })
-  }
+                    setTimeout(() => {
+                        if (WindowPrt) {
+                            WindowPrt.print();
+                        } else {
+                            console.error('Print window was closed before printing could occur.');
+                        }
+                    }, 800);
+                }
+            };
+        });
+}
 
-  // printReceiptDetailsWeb() {
-  //   let _validate = this.validateBeforePrint();
-  //   if (_validate[0] === false) {
-  //     if (typeof _validate[1] === 'string') {
-  //       this.snackBar.open(_validate[1], 'OK');
-  //     } else {
-  //       console.error('Error message is not a string:', _validate[1]);
-  //     }
-  //     return;
-  //   }
 
-  //   let postData = {
-  //     "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
-  //     "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
-  //     "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
-  //     "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
-  //     "YEARMONTH": this.comFunc.nullToString(this.baseYear),
-  //   };
+// printReceiptDetailsWeb() {
+//   let _validate = this.validateBeforePrint();
+//   if (_validate[0] === false) {
+//     if (typeof _validate[1] === 'string') {
+//       this.snackBar.open(_validate[1], 'OK');
+//     } else {
+//       console.error('Error message is not a string:', _validate[1]);
+//     }
+//     return
+//   }
+//   let postData = {
+//     "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
+//     "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+//     "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+//     "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+//     "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+//   }
+//   this.suntechApi.postDynamicAPI(`UspReceiptDetailsWeb`, postData)
+//     .subscribe((result: any) => {
+//       console.log(result);
+//       let data = result.dynamicData
+//       var WindowPrt = window.open(' ', ' ', 'width=' + '900px' + ', height=' + '800px');
+//       if (WindowPrt === null) {
+//         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+//         return;
+//       }
+//       let printContent = data[0][0].HTMLOUT;
+//       WindowPrt.document.write(printContent);
 
-  //   this.suntechApi.postDynamicAPI('UspReceiptDetailsWeb', postData)
-  //     .subscribe((result: any) => {
-  //       console.log(result);
-  //       let data = result.dynamicData;
-  //       let printContent = data[0][0].HTMLOUT;
+//       WindowPrt.document.close();
+//       WindowPrt.focus();
 
-  //       let iframe = document.createElement('iframe');
-  //       document.body.appendChild(iframe);
-  //       iframe.style.position = 'absolute';
-  //       iframe.style.width = '0';
-  //       iframe.style.height = '0';
-  //       iframe.style.border = 'none';
-
-  //       let doc = iframe.contentWindow?.document;
-  //       if (doc) {
-  //         doc.open();
-  //         doc.write(`
-  //           <html>
-  //             <head>
-  //               <style>
-  //                 @media print {
-  //                   @page {
-  //                     size: A5;
-  //                     margin: 10;
-  //                   }
-  //                   body {
-  //                     width: 128mm; /* 148mm */
-  //                     height: 210mm;
-  //                     margin: 0;
-  //                     orientation: landscape;
-  //                     padding: 0;
-  //                     box-sizing: border-box;
-  //                   }
-  //                 }
-  //               </style>
-  //             </head>
-  //             <body>${printContent}</body>
-  //           </html>
-  //         `);
-  //         doc.close();
-
-  //         let printed = false;
-
-  //         iframe.onload = () => {
-  //           if (!printed) {
-  //             printed = true;
-  //             iframe.contentWindow?.focus();
-  //             iframe.contentWindow?.print();
-  //           }
-  //         };
-
-  //         setTimeout(() => {
-  //           if (!printed && iframe.contentWindow) {
-  //             printed = true;
-  //             iframe.contentWindow.focus();
-  //             iframe.contentWindow.print();
-  //             document.body.removeChild(iframe);
-  //           }
-  //         }, 1000);
-  //       }
-  //     });
-  // }
+//       setTimeout(() => {
+//         if (WindowPrt) {
+//           WindowPrt.print();
+//         } else {
+//           console.error('Print window was closed before printing could occur.');
+//         }
+//       }, 800);
+//     })
+// }
 
 
 
@@ -10004,10 +10019,17 @@ export class AddPosComponent implements OnInit {
     }
     let inputAmount = parseFloat(event.target.value?.replace(/,/g, '') || '0');
     let grossAmtValue = parseFloat(localStorage.getItem('fcn_li_net_amount')?.replace(/,/g, '') || '0');
-
     if (inputAmount > grossAmtValue) {
-      this.lineItemForm.controls.fcn_li_total_amount.setValue(this.lineItemForm.value.fcn_li_gross_amount);
-      this.lineItemForm.controls.fcn_li_rate.setValue(this.lineItemForm.value.fcn_li_gross_amount);
+      // this.lineItemForm.controls.fcn_li_total_amount.setValue(this.lineItemForm.value.fcn_li_gross_amount);
+
+      this.lineItemForm.controls.fcn_li_total_amount.setValue( this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)-
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)+this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount)) )
+     
+      this.lineItemForm.controls.fcn_li_rate.setValue(this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)/
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt))
+    )
+      // this.lineItemForm.controls.fcn_li_rate.setValue(this.lineItemForm.value.fcn_li_gross_amount);
       this.lineItemForm.controls.fcn_li_discount_amount.setValue(this.zeroAmtVal);
       this.lineItemForm.controls.fcn_li_discount_percentage.setValue(this.zeroAmtVal);
     }
@@ -11108,7 +11130,7 @@ export class AddPosComponent implements OnInit {
       PURCHASEFIXINGPUREWT: 0,
       PURCHASEFIXINGRATE: '',
       D2DTRANSFER: 'F', //need_input
-      HHACCOUNT_HEAD: this.accountHeadDetails,
+      HHACCOUNT_HEAD: this.accountHeadDetails?this.accountHeadDetails:'',
       OUSTATUS: true,
       OUSTATUSNEW: 1, //need_input
       CURRRECMID: 0, //NEED_INPUT
@@ -11949,6 +11971,7 @@ export class AddPosComponent implements OnInit {
     }
     if (this.receiptModesList?.['BTN_CREDITCARD'] == true && this.selectedTabIndex == 1) {
       if (data != null && data != undefined) {
+        
         this.creditCardReceiptForm.controls.paymentsCreditCard.setValue(
           data['RECEIPT_MODE'].toString());
         this.creditCardReceiptForm.controls.cardCCNo.setValue(data['CARD_NO'].toString());
@@ -11956,6 +11979,8 @@ export class AddPosComponent implements OnInit {
           this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
       }
       else {
+        this.creditCardReceiptForm.controls.cardCCNo.setValue(
+          '');
         if (this.balanceAmount != null) {
           this.creditCardReceiptForm.controls.cardAmtFC.setValue(
             this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
@@ -11967,6 +11992,19 @@ export class AddPosComponent implements OnInit {
       this.renderer.selectRootElement('#cardCCNo').focus();
     }
     if (this.receiptModesList?.['BTN_ADVANCE'] == true && this.selectedTabIndex == 2) {
+
+      this.advanceReceiptForm.controls.advanceRecNo.setValue(
+       '');
+       this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+        '');
+        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+          '');
+          
+
+            this.customerDataForm.value.fcn_customer_code?   this.advanceReceiptForm.controls.advanceCustCode.setValue(
+        this.customerDataForm.value.fcn_customer_code):this.advanceReceiptForm.controls.advanceCustCode.setValue(
+          '')
+
 
       if (data != null && data != undefined) {
         this.advanceReceiptForm.controls.paymentsAdvance.setValue(
@@ -11982,15 +12020,38 @@ export class AddPosComponent implements OnInit {
         this.advanceReceiptForm.controls.advanceAmount.setValue(
           this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
 
+    localStorage.setItem('advanceAmount', 
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC'].toString())));
+
         this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
           data['IGST_AMOUNTFC']);
         this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
           data['IGST_AMOUNTCC']);
       } else {
-        this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-          this.zeroAmtVal);
-        this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-          this.zeroAmtVal);
+
+        if (this.balanceAmount != null) {
+          this.advanceReceiptForm.controls.advanceAmount.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount).toString()));
+            localStorage.setItem('advanceAmount', 
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.balanceAmount.toString())));
+            
+      
+          } else {
+          this.advanceReceiptForm.controls.advanceAmount.setValue(
+            this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.order_items_total_net_amount).toString()));
+   
+            localStorage.setItem('advanceAmount', 
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero((this.order_items_total_net_amount).toString())));
+            
+          }
+
+        
+
+
+        // this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+        //   this.zeroAmtVal);
+        // this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+        //   this.zeroAmtVal);
       }
 
 
@@ -12079,7 +12140,7 @@ export class AddPosComponent implements OnInit {
 
     this.advanceReceiptForm.controls.advanceAmount.setValue(
       this.comFunc.commaSeperation(
-        this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.advanceReceiptForm.value.cardAmtFC))));
+        this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceAmount))));
 
     this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
       this.comFunc.commaSeperation(
@@ -12115,33 +12176,113 @@ export class AddPosComponent implements OnInit {
   //     this.comFunc.emptyToZero(this.order_items_total_net_amount).toString());
   // }
 
+
+  changeCustomerCode(event: any){
+
+    this.onCustomerNameFocus(null,true)
+
+  }
+
+  changeAdvanceAmount(event: any) {
+
+    const advanceAmount=this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      this.comFunc.emptyToZero(localStorage.getItem('advanceAmount')).toString()); 
+
+     if(!this.advanceReceiptForm.value.advanceRecNo){
+
+      this.openDialog('Warning',"Reciept Number Can not be empty", true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.advanceReceiptForm.controls.advanceAmount.setValue(advanceAmount);
+        }
+      });
+
+     }
+
+     else if(this.advanceReceiptForm.value.advanceRecNo && this.comFunc.emptyToZero(this.advanceRecieptAmount)<this.comFunc.emptyToZero(this.advanceReceiptForm.value.advanceAmount))
+      this.openDialog('Warning',"Advance amount exceeded", true);
+     this.dialogBox.afterClosed().subscribe((data: any) => {
+       if (data == 'OK') {
+         this.advanceReceiptForm.controls.advanceAmount.setValue(this.advanceRecieptAmount);
+       }
+     });
+
+    }
+
+
+checkAdvanceReciept(vocNo: any) {
+  if (this.advanceRecieptVoucherNumberList.includes(this.comFunc.emptyToZero(vocNo))) {
+    this.openDialog('Warning', "Selected Voucher Number already exists", true);
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+      if (data === 'OK') {
+        this.advanceReceiptForm.controls.advanceRecNo.setValue('');
+      }
+    });
+  }
+}
+
+
+    // checkAdvanceReciept(vocNo:any){
+    //   if(this.comFunc.emptyToZero(vocNo)==this.advanceRecieptVoucherNumber){
+    //     this.openDialog('Warning',"Selected Voucher Number already exist", true);
+    //     this.dialogBox.afterClosed().subscribe((data: any) => {
+    //       if (data == 'OK') {
+    //         this.advanceReceiptForm.controls.advanceRecNo.setValue('');
+    //       }
+    //     });
+    //   }
+    
+    // }
+
   changeAdvanceVocNo(event: any) {
     // const value = event.target.value;
+
+    this.checkAdvanceReciept(event.target.value);
+
     const value = this.advanceReceiptForm.value.advanceRecNo;
-    if (value != '') {
+    if (value !== '' && !this.advanceRecieptVoucherNumberList.includes(this.comFunc.emptyToZero(event.target.value))) {
+
       this.snackBar.open('Loading...');
-      let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/PCR/${this.advanceReceiptForm.value.advanceYear}/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceCustCode}`
+      let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/PCR/${this.advanceReceiptForm.value.advanceYear}/${this.advanceReceiptForm.value.advanceRecNo}/${this.advancePartyCode}`
       this.suntechApi.getDynamicAPI(API)
         .subscribe((res) => {
           this.snackBar.dismiss();
           if (res['status'] == 'Success') {
             this.isInvalidRecNo = false;
+           if(!this.advanceReceiptForm.value.advanceCustCode) 
+            this.advanceReceiptForm.controls.advanceCustCode.setValue( res['response']['POSCUSTOMERCODE']);
 
+            if(res['response']['POSCUSTOMERCODE']&&!this.customerDataForm.value.fcn_customer_code)
+            this.onCustomerNameFocus(null,true)
             this.advanceReceiptForm.controls.advanceAmount.setValue(
-              this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString());
-            this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-              this.comFunc.emptyToZero(res['response']['GST_TOTALFC']).toString());
-            this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-              this.comFunc.emptyToZero(res['response']['GST_TOTALCC']).toString());
+              this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString()));
+
+                this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+                  this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    this.comFunc.emptyToZero(res['response']['GST_TOTALFC']).toString()));
+                    
+                    this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+                      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                        this.comFunc.emptyToZero(res['response']['GST_TOTALCC']).toString()));
+
+                        this.advanceRecieptAmount=   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                          this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString());
+
+            this.advanceRecieptVoucherNumberList.push(res['response']['VOCNO']);
             this.advanceReceiptDetails = res['response'];
           } else {
             this.isInvalidRecNo = true;
             this.advanceReceiptForm.controls.advanceAmount.setValue(
-              this.zeroAmtVal);
+              this.advanceRecieptAmount);
             this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
               this.zeroAmtVal);
             this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
               this.zeroAmtVal);
+
+              this.advanceReceiptForm.controls.advanceRecNo.setValue(
+                '')
+
             this.advanceReceiptDetails = {};
 
             this.snackBar.open('Invalid Receipt No.', 'OK', {
@@ -12358,6 +12499,19 @@ export class AddPosComponent implements OnInit {
           }
         });
     });
+  }
+
+   getPartyCode() {
+
+    const API = `AdvanceReceiptParty/${this.strBranchcode}`;
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          console.log('resp', resp.Accode);
+          this.advancePartyCode=resp.Accode;
+        }
+      });
+
   }
 
   getCustDetails() {
@@ -12699,8 +12853,12 @@ export class AddPosComponent implements OnInit {
         "GrossAmount": data.TOTALWITHVATFC,// total amount with vat
         // "GrossAmount": data.GROSS_AMT, //doubt
         "Code": data.STOCK_CODE, //doubt
-        "UnitPrice": data.TOTALWITHVATFC, //doubt - c -total amount with vat
-        "NetAmount": data.TOTALWITHVATFC, //  total amount with vat
+
+        "UnitPrice": (Number(data.TOTALWITHVATFC) || 0) - (Number(data.VAT_AMOUNTFC) || 0),
+        "NetAmount": (Number(data.TOTALWITHVATFC) || 0) - (Number(data.VAT_AMOUNTFC) || 0),
+
+        // "UnitPrice": data.TOTALWITHVATFC, 
+        // "NetAmount": data.TOTALWITHVATFC, 
         "VatRate": data.VAT_PER, //doubt -c
         "VatCode": data.VATCODE ? data.GST_CODE.toString() : '',
         "VatAmount": data.VAT_AMOUNTFC,

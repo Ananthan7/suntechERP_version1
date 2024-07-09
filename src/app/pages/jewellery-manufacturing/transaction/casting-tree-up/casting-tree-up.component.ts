@@ -38,17 +38,17 @@ export class CastingTreeUpComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  user: MasterSearchModel = {
+
+  salesmanCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User',
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
 
 
@@ -180,7 +180,7 @@ export class CastingTreeUpComponent implements OnInit {
   setAllInitialValues() {
     if (!this.content) return
     let API = `JobTreeMasterDJ/GetJobTreeMasterWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -359,9 +359,9 @@ export class CastingTreeUpComponent implements OnInit {
     this.castingTreeUpFrom.controls.toWorker.setValue(e.WORKER_CODE);
   }
 
-  userDataSelected(value: any) {
-    console.log(value);
-    this.castingTreeUpFrom.controls.enteredBy.setValue(value.UsersName);
+  salesmanCodeSelected(e: any) {
+    console.log(e);
+    this.castingTreeUpFrom.controls.enteredBy.setValue(e.SALESPERSON_CODE);
   }
 
   cylinderCodeSelected(e: any) {

@@ -443,6 +443,7 @@ export class LabourChargeMasterComponent implements OnInit {
         this.codeEnableDiamond = false;
         this.codeEnableMetal = false;
         this.editMode = true;
+        this.initializeEditMode()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMeltingType()
@@ -500,7 +501,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   onlabourtypeChange() {
-    //this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
+    this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
@@ -513,6 +514,18 @@ export class LabourChargeMasterComponent implements OnInit {
       }
     });
   }
+  initializeEditMode() {
+    const selectedLabourType = this.diamondlabourMasterForm.controls.labourType.value;
+    if (selectedLabourType === 'SETTING') {
+      this.viewModeSetting = false;
+      this.ViewModemethod = false;
+    } else {
+      this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
+      this.viewModeSetting = true;
+      this.ViewModemethod = true;
+    }
+  }
+
     onSievetto(event: any, data: string) {
       // Retrieve the values of Ct Wt From and Ct Wt To from the form
       const sizefrom: number = parseFloat(this.diamondlabourMasterForm.value.size_from);
@@ -1014,7 +1027,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
       "BRAND_CODE": this.commonService.nullToString(metalForm.brand),
-      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.settingType),
+      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.process),
       "KARAT_CODE": this.commonService.nullToString(metalForm.karat),
       "METALSTONE": "S",
       "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
@@ -1027,6 +1040,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
   formSubmit() {
     if (this.submitValidation()) return
+    
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData = this.setPostData();
@@ -1060,15 +1074,19 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-   // if (this.submitValidation()) return
+  //  if (this.submitValidation()) return
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
+      return
+    }
+    if (this.diamondlabourMasterForm.invalid) {
+      this.toastr.error('select all required fields')
       return
     }
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
-    let Sub: Subscription = this.dataService.putDynamicAPICustom(API, postData)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {

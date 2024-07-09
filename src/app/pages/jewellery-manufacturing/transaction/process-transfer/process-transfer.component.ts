@@ -91,6 +91,7 @@ export class ProcessTransferComponent implements OnInit {
     private commonService: CommonServiceService
   ) {
   }
+
   ngOnInit(): void {
     if (this.content?.FLAG) {
       this.isSaved = true;
@@ -230,7 +231,7 @@ export class ProcessTransferComponent implements OnInit {
       DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.tableData.length + 1
       // DATA.JOB_PROCESS_TRN_LABCHRG_DJ.SRNO = this.tableData.length + 1
       this.detailData.push({ SRNO: this.tableData.length + 1, ...DATA })
-      this.tableData.push(DATA.PROCESS_FORMDETAILS);
+      this.tableData.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
     }
     this.editFinalArray(DATA)
     console.log(this.detailData, 'fired detail data');
@@ -244,7 +245,7 @@ export class ProcessTransferComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
@@ -330,12 +331,12 @@ export class ProcessTransferComponent implements OnInit {
   }
   //calculate Loss Pure Qty
   private calculateLossPureQty(detailScreenData: any): number {
-    detailScreenData.stdLoss = this.commonService.emptyToZero(detailScreenData.stdLoss);
+    detailScreenData.lossQty = this.commonService.emptyToZero(detailScreenData.lossQty);
     detailScreenData.PURITY = this.commonService.emptyToZero(detailScreenData.PURITY);
-    let value = detailScreenData.stdLoss * detailScreenData.PURITY
+    let value = detailScreenData.lossQty * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
-  submitValidations(form:any){
+  submitValidations(form: any) {
     if (this.processTransferFrom.invalid) {
       this.commonService.toastErrorByMsgId('pls reload and check')
       return true;
