@@ -13,13 +13,13 @@
         <div class="col-md-12">
             <div class="sales-card-body p-2">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
 
                         <div class="row mb-2">
                             <label for="input"
                                 class="col-sm-2 col-form-label">Code * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="code" id="code"
                                         [readonly]="editableMode || viewMode"
@@ -30,16 +30,16 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 80%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="codedes"
                                         UpperCaseDirective autocomplete="off"
                                         [readonly]="viewMode || editMode" />
+                                        <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
+                                            (newRowClick)="codeCodeSelected($event)"
+                                            *ngIf="!editMode && !viewMode">
+                                        </master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="codeCodeData"
-                                    (newRowClick)="codeCodeSelected($event)"
-                                    *ngIf="!editMode && !viewMode">
-                                </master-search>
                             </div>
                         </div>
 
@@ -48,30 +48,31 @@
                                 class="col-sm-2 col-form-label">Size Set
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="sizeSet"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')" />
+                                        <master-search class="mstrScrch"
+                                            [MasterSearchData]="sizeSetCodeData"
+                                            *ngIf="viewMode == false"
+                                            (newRowClick)="sizeSetCodeSelected($event)">
+                                        </master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="sizeSetCodeData"
-                                    *ngIf="viewMode == false"
-                                    (newRowClick)="sizeSetCodeSelected($event)">
-                                </master-search>
                             </div>
                             <label for="input"
                                 class="col-sm-2 col-form-label">Type :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 95%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="type"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,typeCodeData,'type')" />
+                                        <master-search [MasterSearchData]="typeCodeData"
+                                        *ngIf="viewMode == false" class="mstrScrch"
+                                        (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="typeCodeData"
-                                    *ngIf="viewMode == false"
-                                    (newRowClick)="typeCodeSelected($event)"></master-search>
+                                
                             </div>
                         </div>
 
@@ -79,31 +80,31 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Size :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="size"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,typeCodeData,'type')" />
+                                        <master-search [MasterSearchData]="sizeCodeData" class="mstrScrch"
+                                            *ngIf="viewMode == false"
+                                            (newRowClick)="sizeCodeSelected($event)">
+                                        </master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="sizeCodeData"
-                                    *ngIf="viewMode == false"
-                                    (newRowClick)="sizeCodeSelected($event)">
-                                </master-search>
                             </div>
                             <label for="input"
                                 class="col-sm-2 col-form-label">Category
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 95%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="category"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,categoryCodeData,'category')" />
+                                        <master-search class="mstrScrch"
+                                        [MasterSearchData]="categoryCodeData"
+                                        *ngIf="!viewMode"
+                                        (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="categoryCodeData"
-                                    *ngIf="!viewMode"
-                                    (newRowClick)="categoryCodeSelected($event)"></master-search>
                             </div>
                         </div>
 
@@ -111,42 +112,41 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Shape :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="shape"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,shapeCodeData,'shape')" />
+                                        <master-search class="mstrScrch"
+                                            [MasterSearchData]="shapeCodeData"
+                                            *ngIf="!viewMode"
+                                            (newRowClick)="shapeCodeSelected($event)">
+                                        </master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="shapeCodeData"
-                                    *ngIf="!viewMode"
-                                    (newRowClick)="shapeCodeSelected($event)">
-                                </master-search>
                             </div>
                             <label for="input"
                                 class="col-sm-2 col-form-label">Setting
                                 Type:</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 95%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="settingType"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')" />
+                                        <master-search class="mstrScrch"
+                                        [MasterSearchData]="settingTypeCodeData"
+                                        *ngIf="!viewMode"
+                                        (newRowClick)="settingTypeCodeSelected($event)">
+                                    </master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="settingTypeCodeData"
-                                    *ngIf="!viewMode"
-                                    (newRowClick)="settingTypeCodeSelected($event)">
-                                </master-search>
                             </div>
                         </div>
 
                         <div class="row mb-2">
                             <label for="input"
-                                class="col-sm-2 col-form-label">Remarks
-                                :</label>
+                                class="col-sm-2 col-form-label">Remarks:</label>
                             <div class="col-sm-8">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 99%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="remarks"
                                         [readonly]="viewMode" />
@@ -163,7 +163,7 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Height :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" class="text-right"
                                         AmountDecimalInput matInput NumberOnly
                                         formControlName="height"
@@ -174,7 +174,7 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Length :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" class="text-right"
                                         AmountDecimalInput matInput NumberOnly
                                         formControlName="length"
@@ -188,7 +188,7 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Width :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" class="text-right"
                                         AmountDecimalInput matInput NumberOnly
                                         formControlName="width"
@@ -199,7 +199,7 @@
                             <label for="input"
                                 class="col-sm-2 col-form-label">Radius :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" class="text-right"
                                         AmountDecimalInput matInput NumberOnly
                                         formControlName="radius"
@@ -214,17 +214,17 @@
                                 class="col-sm-4 col-form-label">Process Sequence
                                 :</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 115%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="processSeq"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')" />
-                                </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="processSeqCodeData"
-                                    *ngIf="!viewMode"
-                                    (newRowClick)="processSeqCodeSelected($event)">
+                                        <master-search class="mstrScrch"
+                                        [MasterSearchData]="processSeqCodeData"
+                                        *ngIf="!viewMode"
+                                        (newRowClick)="processSeqCodeSelected($event)">
                                 </master-search>
+                                </mat-form-field>
                             </div>
                         </div>
 
@@ -233,17 +233,17 @@
                                 class="col-sm-4 col-form-label">Cost Center
                                 :</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 115%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="costCenter"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')" />
+                                        <master-search class="mstrScrch"
+                                        [MasterSearchData]="costCenterCodeData"
+                                        *ngIf="!viewMode"
+                                        (newRowClick)="costCenterCodeSelected($event)">
+                                    </master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="costCenterCodeData"
-                                    *ngIf="!viewMode"
-                                    (newRowClick)="costCenterCodeSelected($event)">
-                                </master-search>
                             </div>
                         </div>
 
