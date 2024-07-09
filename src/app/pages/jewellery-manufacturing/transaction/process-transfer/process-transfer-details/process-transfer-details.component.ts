@@ -682,7 +682,21 @@ export class ProcessTransferDetailsComponent implements OnInit {
   onRowUpdateGrid(event: any) {
     let data = event.data
     this.Calc_Totals(0)
+    this.CalculateLoss(this.processTransferdetailsForm.value);
     this.checkSettedValue(data)
+    this.formatMetalDetailDataGrid()
+  }
+  Multi_Metal() {
+    let strDivision = "";
+    for (let i = 0; i < this.metalDetailData.length; i++){
+      if (this.metalDetailData[i].METALSTONE.toString().trim() == "M"){
+        if (strDivision == "") { strDivision = this.metalDetailData[i].DIVCODE.toString().trim(); }
+        else {
+          if (this.metalDetailData[i].DIVCODE.toString().trim() != strDivision) return true;
+        }
+      }
+    }
+    return false;
   }
   // use: change of loss qty
   lossQtyChange(event: any) {
@@ -764,6 +778,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     this.CalculateLoss(this.processTransferdetailsForm.value)
   }
+  // use: calculate total values from grid
+  // for flag 0 to values only assigned
   Calc_Totals(flag: any) {
     let nPcs = 0;
     let nStWeight = 0;
@@ -778,12 +794,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
           } else {
             nMPcs += this.commonService.emptyToZero(item["PCS"]);
-            nMWeight += this.commonService.emptyToZero(item["GROSS_WT"]);//nMWeight += objSqlObjectTrans.Empty2zero(dgvDetails.Rows[i].Cells["GROSS_WT"].Value.ToString());
+            nMWeight += this.commonService.emptyToZero(item["GROSS_WT"]);
 
           }
         })
       }
-      if (flag == 0) {
+      if (flag == 0) { // for flag 0 to values only assigned
         this.setValueWithDecimal('TO_STONE_WT', nStWeight, 'STONE')
         this.nullToStringSetValue('TO_STONE_PCS', nPcs)
         this.nullToStringSetValue('TO_METAL_PCS', nMPcs)
@@ -1773,7 +1789,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (bFlag) {
         this.metalDetailData[k].GROSS_WT = (this.commonService.emptyToZero(form.TO_METAL_WT) - dblSub_Metal);
         this.metalDetailData[k].NET_WT = this.commonService.emptyToZero(this.metalDetailData[k].GROSS_WT) - this.commonService.emptyToZero(this.metalDetailData[k].STONE_WT);
-        this.metalDetailData[k].LOSS_QTY = this.commonService.decimalQuantityFormat(form.lossQty,'METAL');
+        this.metalDetailData[k].LOSS_QTY = this.commonService.decimalQuantityFormat(form.lossQty, 'METAL');
       } else {
         let msg = this.commonService.getMsgByID("MSG7611")
         this.commonService.toastErrorByMsgId(msg);
