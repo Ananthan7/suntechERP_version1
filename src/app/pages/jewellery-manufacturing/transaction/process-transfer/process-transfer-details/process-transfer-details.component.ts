@@ -356,9 +356,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       let compData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ
       this.metalDetailData = []
-      compData.forEach((item: any) => {
+      compData.forEach((item: any,index:any) => {
         item.FRM_PCS = item.SETTED_PCS
         if (item.GROSS_WT < 0) {
+          item.SRNO = index+1
           item.GROSS_WT = Math.abs(item.GROSS_WT)
           item.PCS = Math.abs(item.PCS)
           item.AMOUNTFC = Math.abs(item.AMOUNTFC)
@@ -681,8 +682,38 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   onRowUpdateGrid(event: any) {
     let data = event.data
+    this.recalculateSrno()
     this.Calc_Totals(0)
     this.checkSettedValue(data)
+    this.formatMetalDetailDataGrid()
+    if(this.rowUpdationValidate(data)) return
+    this.CalculateLoss(this.processTransferdetailsForm.value);
+  }
+  recalculateSrno(){
+    this.metalDetailData.forEach((item:any,index:any)=>{
+      item.SRNO = index+1
+    })
+  }
+  rowUpdationValidate(data:any){
+    let form = this.processTransferdetailsForm.value
+    if (data.GROSS_WT > this.commonService.emptyToZero(form.FRM_METAL_WT)) {
+      this.metalDetailData[data.SRNO-1].GROSS_WT = form.FRM_METAL_WT
+      this.commonService.toastErrorByMsgId(this.commonService.getMsgByID('MSG2037') + `${form.FRM_METAL_WT}`)
+      return true
+    }
+    return false;
+  }
+  Multi_Metal() {
+    let strDivision = "";
+    for (let i = 0; i < this.metalDetailData.length; i++) {
+      if (this.metalDetailData[i].METALSTONE.toString().trim() == "M") {
+        if (strDivision == "") { strDivision = this.metalDetailData[i].DIVCODE.toString().trim(); }
+        else {
+          if (this.metalDetailData[i].DIVCODE.toString().trim() != strDivision) return true;
+        }
+      }
+    }
+    return false;
   }
   // use: change of loss qty
   lossQtyChange(event: any) {
@@ -764,6 +795,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     this.CalculateLoss(this.processTransferdetailsForm.value)
   }
+  // use: calculate total values from grid
+  // for flag 0 to values only assigned
   Calc_Totals(flag: any) {
     let nPcs = 0;
     let nStWeight = 0;
@@ -771,19 +804,20 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let nMWeight = 0;
     try {
       if (this.metalDetailData.length > 0) {
-        this.metalDetailData.forEach((item: any) => {
+        this.metalDetailData.forEach((item: any,index: any) => {
+          item.SRNO = index+1
           if (item.METALSTONE.toUpperCase() == 'S') {
             nPcs += this.commonService.emptyToZero(item.PCS)
             nStWeight += this.commonService.emptyToZero(item["GROSS_WT"]);
 
           } else {
             nMPcs += this.commonService.emptyToZero(item["PCS"]);
-            nMWeight += this.commonService.emptyToZero(item["GROSS_WT"]);//nMWeight += objSqlObjectTrans.Empty2zero(dgvDetails.Rows[i].Cells["GROSS_WT"].Value.ToString());
+            nMWeight += this.commonService.emptyToZero(item["GROSS_WT"]);
 
           }
         })
       }
-      if (flag == 0) {
+      if (flag == 0) { // for flag 0 to values only assigned
         this.setValueWithDecimal('TO_STONE_WT', nStWeight, 'STONE')
         this.nullToStringSetValue('TO_STONE_PCS', nPcs)
         this.nullToStringSetValue('TO_METAL_PCS', nMPcs)
@@ -1773,7 +1807,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (bFlag) {
         this.metalDetailData[k].GROSS_WT = (this.commonService.emptyToZero(form.TO_METAL_WT) - dblSub_Metal);
         this.metalDetailData[k].NET_WT = this.commonService.emptyToZero(this.metalDetailData[k].GROSS_WT) - this.commonService.emptyToZero(this.metalDetailData[k].STONE_WT);
-        this.metalDetailData[k].LOSS_QTY = this.commonService.decimalQuantityFormat(form.lossQty,'METAL');
+        this.metalDetailData[k].LOSS_QTY = this.commonService.decimalQuantityFormat(form.lossQty, 'METAL');
       } else {
         let msg = this.commonService.getMsgByID("MSG7611")
         this.commonService.toastErrorByMsgId(msg);

@@ -137,7 +137,7 @@
             <div class="row">
               <b>Transfer Details</b>
             </div>
-            <div class="row">
+            <div class="row"  style="height: 300px !important;">
               <div class="col-lg-10 col-md-12 col-sm-12">
                 <table>
                   <thead>
@@ -469,13 +469,14 @@
                     <image-slider [imageArray]="imagepath"></image-slider>
                   </div>
                 </div>
-                <div class="row  d-flex justify-content-center">
+                <div class="p-1"></div>
+                <div class="row d-flex justify-content-center">
                   <mat-form-field appearance="outline" style="width: 70%;">
                     <input type="text" matInput formControlName="DESIGN_CODE"
                       readonly />
                   </mat-form-field>
                 </div>
-                <div class="row  d-flex justify-content-center">
+                <div class="row d-flex justify-content-center">
                   <mat-form-field appearance="outline" style="width: 70%;">
                     <input type="text" matInput formControlName="partCode"
                       readonly />
@@ -996,7 +997,6 @@
               [showBorders]="true" [dataSource]="metalDetailData"
               [columnAutoWidth]="true"
               [allowColumnResizing]="true"
-              (onRowUpdated)="formatMetalDetailDataGrid()"
               [showRowLines]="true" (onRowUpdated)="onRowUpdateGrid($event)">
               <dxo-paging [enabled]="false"></dxo-paging>
               <dxo-editing mode="cell" [allowUpdating]="true">
