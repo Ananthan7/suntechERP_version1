@@ -183,7 +183,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SUB_JOB_DESCRIPTION: [''],
     UNQ_JOB_ID: [''],
     REPAIR_PROCESS: [''],
-    SCRAP_DIVISION: [''],
     APPROVED_USER: [''],
     approveddate: [''],
     startdate: [''],
@@ -244,9 +243,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     PICTURE_PATH: [''],
     MAIN_STOCK_CODE: [''],
     SCRAP_PURITY: [''],
+    SCRAP_DIVCODE: [''],
+    SCRAP_PURE_WT: [''],
     DESIGN_TYPE: [''],
     ZIRCON: [''],
-    SCRAP_PURE_WT: [''],
     GAIN_WT: [''],
     GAIN_PURE_WT: [''],
     METAL_STOCK_CODE: [''],
@@ -403,6 +403,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
     this.nullToStringSetValue('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
     this.nullToStringSetValue('PRODLAB_ACCODE', parentDetail.PRODLAB_ACCODE)
+    this.nullToStringSetValue('SCRAP_DIVCODE', parentDetail.SCRAP_DIVCODE)
+
     this.setValueWithDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
     this.setValueWithDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
     this.setValueWithDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
@@ -956,7 +958,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           this.nullToStringSetValue('MAIN_STOCK_CODE', data[0].MAIN_STOCK_CODE)
           this.nullToStringSetValue('SCRAP_PURITY', data[0].PURITY)
-          this.nullToStringSetValue('SCRAP_PURITY', data[0].DIVISION)
+          this.nullToStringSetValue('SCRAP_DIVCODE', data[0].DIVISION)
         } else {
           this.locationSearchFlag = false;
           this.processTransferdetailsForm.controls.scrapWeight.setValue('')
@@ -1466,7 +1468,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "TO_IRONWT": this.commonService.emptyToZero(form.METAL_ToIronWt),
       "FRM_DIAGROSS_WT": this.commonService.emptyToZero(form.GrossWeightFrom),
       "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
-      "SCRAP_DIVCODE": this.commonService.nullToString(form.DIVCODE),
+      "SCRAP_DIVCODE": this.commonService.nullToString(form.SCRAP_DIVCODE),
       "IRON_SCRAP_WT": this.calculateIronScrapWeight(form),
       "GAIN_WT": this.commonService.emptyToZero(form.METAL_GainGrWt),
       "GAIN_PURE_WT": this.commonService.emptyToZero(form.METAL_GainPureWt),
@@ -1860,14 +1862,48 @@ export class ProcessTransferDetailsComponent implements OnInit {
   Split_Loss_New() {
     let form = this.processTransferdetailsForm.value;
     try {
-      let dblTotalMetal_Wt = this.commonService.emptyToZero(form.FRM_METAL_WT);
-      let dblLoss_Wt = this.commonService.emptyToZero(form.lossQty);
-      let dblScrap_Wt = this.commonService.emptyToZero(form.scrapWeight);
-      let dblToMetal_Wt = this.commonService.emptyToZero(form.TO_METAL_WT);
-      let strDivision = form.SCRAP_DIVISION;
-      let dblTotLoss_Wt = 0; let dblTotScap_Wt = 0; let dblTotGross = 0;
-      let blnMultidiv = false;
-    } catch (err) {
+      let dblTotalMetal_Wt: number = this.commonService.emptyToZero(form.FRM_METAL_WT);
+      let dblLoss_Wt: number = this.commonService.emptyToZero(form.lossQty);
+      let dblScrap_Wt: number = this.commonService.emptyToZero(form.scrapWeight);
+      let dblToMetal_Wt: number = this.commonService.emptyToZero(form.TO_METAL_WT);
+      let strDivision = form.SCRAP_DIVCODE;
+      let dblTotLoss_Wt: number = 0; let dblTotScap_Wt: number = 0;
+      let dblTotGross: number = 0; let blnMultidiv = false;
+      let dblPer: number = 0
+      let dblLoss: number = 0;
+      let dblScrap: number = 0;
+      let dblGross: number = 0;
+      for (let i = 0; i < this.metalDetailData.length; i++) {
+        if (this.metalDetailData[i].METALSTONE.toString().trim() == "M") {
+          dblPer = (this.commonService.emptyToZero(this.metalDetailData[i].ISSUE_GROSS_WT.toString()) / dblTotalMetal_Wt) * 100;
+          dblLoss = 0;
+          dblScrap = 0;
+          dblGross = 0;
+
+          dblGross = this.commonService.decimalQuantityFormat((dblToMetal_Wt * dblPer) / 100, 'METAL');
+          if (dblLoss_Wt > 0) dblLoss = this.commonService.decimalQuantityFormat((dblLoss_Wt * dblPer) / 100, 'METAL');
+          if (dblScrap_Wt > 0) dblScrap = this.commonService.decimalQuantityFormat((dblScrap_Wt * dblPer) / 100, 'METAL');
+          if (strDivision == "") {
+            strDivision = this.metalDetailData[i].DIVCODE.toString().trim();
+          }
+        } else {
+          if (this.metalDetailData[i].DIVCODE.toString().trim() != strDivision) blnMultidiv = true;
+        }
+        dblTotLoss_Wt += this.commonService.emptyToZero(dblLoss);
+        dblTotScap_Wt += this.commonService.emptyToZero(dblScrap);
+        dblTotGross += this.commonService.emptyToZero(dblGross);
+
+        this.metalDetailData[i].GROSS_WT = (dblGross)
+        this.metalDetailData[i].NET_WT = this.commonService.emptyToZero(this.metalDetailData[i].GROSS_WT) - this.commonService.emptyToZero(this.metalDetailData[i].STONE_WT)
+        this.metalDetailData[i].LOSS_QTY = dblLoss
+        this.metalDetailData[i].SCRAP_WT = dblScrap
+        this.metalDetailData[i].SCRAP_STOCK_CODE = form.stockCode
+        this.metalDetailData[i].SCRAP_SUB_STOCK_CODE = form.MAIN_STOCK_CODE
+        this.metalDetailData[i].SCRAP_PURITY = this.commonService.emptyToZero(form.SCRAP_PURITY)
+        this.metalDetailData[i].SCRAP_PURE_WT = this.commonService.emptyToZero(form.SCRAP_PURITY) * dblScrap
+        // this.metalDetailData[i].SCRAP_PUDIFF = this.commonService.emptyToZero(txtScrap_Pudiff.Text) //doubt
+      }
+    } catch (err: any) {
       this.commonService.toastErrorByMsgId('error in spliting loss')
     }
   }

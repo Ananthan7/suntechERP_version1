@@ -72,6 +72,7 @@ export class ProcessTransferComponent implements OnInit {
     VOCTYPE: ['', [Validators.required]],
     VOCDATE: ['', [Validators.required]],
     VOCNO: [''],
+    PREV_VOCNO: [''],
     MAIN_VOCTYPE: [''],
     MID: [0],
     salesman: [''],
@@ -137,6 +138,7 @@ export class ProcessTransferComponent implements OnInit {
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
+          this.processTransferFrom.controls.PREV_VOCNO.setValue(data.VOCNO)
           this.processTransferFrom.controls.VOCDATE.setValue(data.VOCDATE)
           this.processTransferFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.processTransferFrom.controls.MID.setValue(data.MID)
@@ -275,16 +277,19 @@ export class ProcessTransferComponent implements OnInit {
   }
   ValidatingVocNo() {
     this.commonService.showSnackBarMsg('MSG81447');
-    let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.processTransferFrom.value.VOCNO}/`
-    API += `${this.commonService.branchCode}/${this.commonService.getVoctypeMasterByVocTypeMain}/`
-    API += `${this.commonService.yearSelected}`
+    let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.processTransferFrom.value.VOCNO}`
+    API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
+    API += `/${this.commonService.yearSelected}`
+    this.isloading = true;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
+        this.isloading = false;
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
-          this.processTransferFrom.controls.VOCNO.setValue('')
+        if (data && data[0]?.RESULT == 1) {
+          this.commonService.toastErrorByMsgId(data[0].STATUS_MESSAGE)
+          let PREV_VOCNO = this.processTransferFrom.value.PREV_VOCNO
+          this.processTransferFrom.controls.VOCNO.setValue(PREV_VOCNO)
           return
         }
       }, err => {
