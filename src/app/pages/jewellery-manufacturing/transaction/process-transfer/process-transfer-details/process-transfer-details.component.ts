@@ -183,6 +183,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SUB_JOB_DESCRIPTION: [''],
     UNQ_JOB_ID: [''],
     REPAIR_PROCESS: [''],
+    SCRAP_DIVISION: [''],
     APPROVED_USER: [''],
     approveddate: [''],
     startdate: [''],
@@ -349,17 +350,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setInitialValues() {
     if (!this.content) return
-    let parentDetail, gridDetail
+    let parentDetail: any;
     if (this.content[0]?.FLAG) {
       this.setFlagMode(this.content[0]?.FLAG)
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       let compData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ
       this.metalDetailData = []
-      compData.forEach((item: any,index:any) => {
+      compData.forEach((item: any, index: any) => {
         item.FRM_PCS = item.SETTED_PCS
         if (item.GROSS_WT < 0) {
-          item.SRNO = index+1
+          item.SRNO = index + 1
           item.GROSS_WT = Math.abs(item.GROSS_WT)
           item.PCS = Math.abs(item.PCS)
           item.AMOUNTFC = Math.abs(item.AMOUNTFC)
@@ -417,7 +418,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         new Date(parentDetail.APPROVED_DATE)
       )
     }
-
+    if (parentDetail.SCRAP_STOCK_CODE && this.processTransferdetailsForm.value.FLAG == 'EDIT') {
+      this.locationSearchFlag = true;
+    }
 
     this.TimeTakenData.TIMEINMINUTES = parentDetail.TIME_TAKEN_HRS
     this.consumedTimeData.TIMEINMINUTES = parentDetail.TIME_CONSUMED
@@ -686,23 +689,24 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.Calc_Totals(0)
     this.checkSettedValue(data)
     this.formatMetalDetailDataGrid()
-    if(this.rowUpdationValidate(data)) return
+    if (this.rowUpdationValidate(data)) return
     this.CalculateLoss(this.processTransferdetailsForm.value);
   }
-  recalculateSrno(){
-    this.metalDetailData.forEach((item:any,index:any)=>{
-      item.SRNO = index+1
+  recalculateSrno() {
+    this.metalDetailData.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
     })
   }
-  rowUpdationValidate(data:any){
+  rowUpdationValidate(data: any) {
     let form = this.processTransferdetailsForm.value
     if (data.GROSS_WT > this.commonService.emptyToZero(form.FRM_METAL_WT)) {
-      this.metalDetailData[data.SRNO-1].GROSS_WT = form.FRM_METAL_WT
+      this.metalDetailData[data.SRNO - 1].GROSS_WT = form.FRM_METAL_WT
       this.commonService.toastErrorByMsgId(this.commonService.getMsgByID('MSG2037') + `${form.FRM_METAL_WT}`)
       return true
     }
     return false;
   }
+  //use: to check if multiple metals are included in component grid
   Multi_Metal() {
     let strDivision = "";
     for (let i = 0; i < this.metalDetailData.length; i++) {
@@ -758,7 +762,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         }
       }
       else {
-        txtBalDiaGrWt = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapPureWt) + this.commonService.emptyToZero(form.lossQty)));
+        txtBalDiaGrWt = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapWeight) + this.commonService.emptyToZero(form.lossQty)));
       }
       this.setValueWithDecimal('Balance_WT', txtBalDiaGrWt, 'METAL')
     } else {
@@ -780,6 +784,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls[ToValue].setValue(form[fromValue])
       this.commonService.toastErrorByMsgId(`Value cannot be greater than ${form[fromValue]}`)
     }
+  }
+  toStoneWtChange() {
+
   }
   toMetalWeightChange(fromValue: string, ToValue: string) {
     let form = this.processTransferdetailsForm.value
@@ -804,8 +811,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let nMWeight = 0;
     try {
       if (this.metalDetailData.length > 0) {
-        this.metalDetailData.forEach((item: any,index: any) => {
-          item.SRNO = index+1
+        this.metalDetailData.forEach((item: any, index: any) => {
+          item.SRNO = index + 1
           if (item.METALSTONE.toUpperCase() == 'S') {
             nPcs += this.commonService.emptyToZero(item.PCS)
             nStWeight += this.commonService.emptyToZero(item["GROSS_WT"]);
@@ -944,11 +951,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        if (result.dynamicData && result.dynamicData[0].length > 0) {
+        if (result.dynamicData && result.dynamicData[0]?.length > 0) {
           this.locationSearchFlag = true
           let data = result.dynamicData[0]
-          this.processTransferdetailsForm.controls.MAIN_STOCK_CODE.setValue(data[0].MAIN_STOCK_CODE)
-          this.processTransferdetailsForm.controls.SCRAP_PURITY.setValue(data[0].PURITY)
+          this.nullToStringSetValue('MAIN_STOCK_CODE', data[0].MAIN_STOCK_CODE)
+          this.nullToStringSetValue('SCRAP_PURITY', data[0].PURITY)
+          this.nullToStringSetValue('SCRAP_PURITY', data[0].DIVISION)
         } else {
           this.locationSearchFlag = false;
           this.processTransferdetailsForm.controls.scrapWeight.setValue('')
@@ -1202,11 +1210,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   selectAllBtnChange(event: any) {
     console.log(event);
-    if (event.target.checked) {
-      this.metalDetailData.forEach((item: any) => {
+    this.metalDetailData.forEach((item: any) => {
+      if (event.target.checked) {
         item.SETTED_FLAG = true;
-      })
-    }
+      } else {
+        item.SETTED_FLAG = false;
+      }
+    })
   }
   /**USE bind selected values*/
   processCodeFromSelected(event: any) {
@@ -1260,6 +1270,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (event.STOCK_CODE) {
       this.locationSearchFlag = true;
     }
+    this.stockCodeScrapValidate()
   }
   locationSelected(event: any) {
     this.processTransferdetailsForm.controls.location.setValue(event.Location)
@@ -1692,6 +1703,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
+      cancelButtonText: 'No',
       confirmButtonText: 'Yes'
     });
   }
@@ -1774,7 +1786,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     form = this.processTransferdetailsForm.value;
     let Balance_WT = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapWeight) + this.commonService.emptyToZero(form.lossQty)));
     this.setValueWithDecimal('Balance_WT', Balance_WT, 'METAL')
-    this.Split_Loss(this.processTransferdetailsForm.value)
+    if (this.Multi_Metal()) {
+      this.Split_Loss_New
+    } else {
+      this.Split_Loss(this.processTransferdetailsForm.value)
+    }
   }
   Split_Loss(form: any) {
     if (form.METAL_STOCK_CODE != '') {
@@ -1840,6 +1856,21 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setValueWithDecimal('lossQty', 0, 'AMOUNT')
     }
   }
+
+  Split_Loss_New() {
+    let form = this.processTransferdetailsForm.value;
+    try {
+      let dblTotalMetal_Wt = this.commonService.emptyToZero(form.FRM_METAL_WT);
+      let dblLoss_Wt = this.commonService.emptyToZero(form.lossQty);
+      let dblScrap_Wt = this.commonService.emptyToZero(form.scrapWeight);
+      let dblToMetal_Wt = this.commonService.emptyToZero(form.TO_METAL_WT);
+      let strDivision = form.SCRAP_DIVISION;
+      let dblTotLoss_Wt = 0; let dblTotScap_Wt = 0; let dblTotGross = 0;
+      let blnMultidiv = false;
+    } catch (err) {
+      this.commonService.toastErrorByMsgId('error in spliting loss')
+    }
+  }
   /**USE: to calculate gain detail */
   private calculateGain() {
     let formValues = this.processTransferdetailsForm.value;
@@ -1874,6 +1905,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         }
         if (FORMNAME == 'stockCode') {
           this.locationSearchFlag = true; //loaction flag
+          this.stockCodeScrapValidate()
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')

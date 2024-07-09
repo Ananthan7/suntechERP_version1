@@ -5,3 +5,4 @@ export const environment = {
   baseImageUrl: 'http://94.200.156.234:85/',
   production: true
 };
+// ng build --prod --output-hashing=all command for clearing cashe in production
