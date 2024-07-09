@@ -213,7 +213,8 @@
                       class="col-sm-3 col-form-label">Style :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="style" (focusout)="validateLookupField($event,StyleCodeData,'style')"/>
+                        <input type="text" matInput formControlName="style" (focusout)="validateLookupField($event,StyleCodeData,'style')"
+                        class="text-right"/>
                         <master-search [MasterSearchData]="StyleCodeData" class="masterSearch"
                         (newRowClick)="StyleCodeSelected($event)"></master-search>
                       </mat-form-field>
