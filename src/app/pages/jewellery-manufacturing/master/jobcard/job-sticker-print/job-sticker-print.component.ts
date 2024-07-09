@@ -67,7 +67,11 @@ export class JobStickerPrintComponent implements OnInit {
 
     console.log(this.content?.FLAG)
     this.branchCode = this.commonService.branchCode;
+   // this.priceSchemeValidate();
+
+   if(this.content == undefined){
     this.priceSchemeValidate();
+  }
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -96,7 +100,12 @@ export class JobStickerPrintComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.jobNumber = result.dynamicData[0][0].JOB_NO || []
+          //this.jobNumber = result.dynamicData[0][0].JOB_NO || []
+       
+
+          this.jobstickerpointForm.controls.jobrange.setValue(result.dynamicData[0][0].JOB_NO)
+          this.jobstickerpointForm.controls.jobrangeDesc.setValue(result.dynamicData[0][0].JOB_NO)
+          console.log(this.jobstickerpointForm.value.jobrange)
         }
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')

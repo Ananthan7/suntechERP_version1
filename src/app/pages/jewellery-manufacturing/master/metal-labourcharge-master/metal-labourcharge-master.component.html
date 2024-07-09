@@ -291,6 +291,17 @@
                       </mat-radio-group> -->
                     </div>
                 </div>
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Variance %
+                        :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 100%">
+                            <input matInput type="text" [readonly]="viewMode  || codeEnableMetal"
+                                matInput   
+                                formControlName="variance" class="text-right" />
+                        </mat-form-field>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
