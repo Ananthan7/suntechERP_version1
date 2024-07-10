@@ -22,33 +22,32 @@
                             <label for="input" class="col-sm-3 col-form-label">Order
                                 Type * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput #codeInput1 formControlName="orderType" [readonly]="viewMode" maxlength="20"  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,ordertypeCodeData,'orderType')"
                                     (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="ordertypeCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="ordertypeCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="ordertypeCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="ordertypeCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Job
-                                Number * :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Job Number * :</label>
                             <div class="col-sm-3">
                                 <!-- <input class="form-control" type="text" /> -->
-                                <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="jobno"  maxlength="20" [readonly]="editMode"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="number" matInput formControlName="jobno"  maxlength="20" [readonly]="editMode"  oninput="this.value = this.value.toUpperCase()" 
+                                    [readonly]="viewMode" class="text-right"/>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Job
-                                Date :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Job Date :</label>
                             <div class="col-sm-3">
                                 <div class="datepick">
                                     <!-- <input class="form-control flatpickr-input" type="text" placeholder="Select Date*"
                                         mwlFlatpickr dateFormat="d/m/y" formControlName="jobdate"> -->
-                                    <mat-form-field style="width: 100%">
+                                    <mat-form-field style="width: 100%" appearance="outline">
                                         <input matInput DateValidation (dateChange)="formatDate($event)"
                                             [matDatepicker]="jobdate" formControlName="jobdate"
-                                            placeholder="DD/MM/YYYY"  [disabled]="viewMode" />
+                                            placeholder="DD/MM/YYYY"  [disabled]="viewMode" class="text-right" />
                                         <mat-datepicker-toggle matSuffix [for]="jobdate"></mat-datepicker-toggle>
                                         <mat-datepicker [startAt]="currentDate" #jobdate></mat-datepicker>
                                     </mat-form-field>
@@ -56,44 +55,41 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Design
-                                Code * :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Design Code * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="designcode"   maxlength="20" oninput="this.value = this.value.toUpperCase()"  [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,designCodeData,'designcode')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="designCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"    (newRowClick)="designCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="designCodeData"
-                                *ngIf="viewMode == false"    (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="designtype"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Customer * 
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Customer * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="customer"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,customerCodeData,'customer')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="customerCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="customerCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="customerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="customername"  maxlength="30" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Sales
-                                Order :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Sales Order :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="salesorder"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -101,10 +97,10 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <div class="datepick">
-                                        <mat-form-field style="width: 100%">
+                                        <mat-form-field style="width: 100%" appearance="outline">
                                             <input matInput DateValidation (dateChange)="formatDate($event)"
                                                 [matDatepicker]="date" formControlName="date"  [disabled]="viewMode" 
-                                                placeholder="DD/MM/YYYY" />
+                                                placeholder="DD/MM/YYYY" class="text-right"/>
                                             <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                                             <mat-datepicker #date></mat-datepicker>
                                         </mat-form-field>
@@ -112,160 +108,146 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Cost
-                                Code * :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Cost Code * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="costcode"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,costCodeData,'costcode')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="costCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="costCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="costCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="costCodeSelected($event)"></master-search>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Prefix
-                                : </label>
+                            <label for="input" class="col-sm-3 col-form-label">Prefix : </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="prefix"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,prefixCodeData,'prefix')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="prefixCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="prefixCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="prefixCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="prefixCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Karat * 
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Karat * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" class="text-left" matInput formControlName="karat"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,karatCodeData,'karat')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="karatCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="karatCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="karatCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="karatCodeSelected($event)"></master-search>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Type
-                                : </label>
+                            <label for="input" class="col-sm-3 col-form-label">Type : </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="type"  maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,typeCodeData,'type')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="typeCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="typeCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="typeCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Category
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="category"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,categoryCodeData,'category')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="categoryCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false" (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="categoryCodeData"
-                                *ngIf="viewMode == false" (newRowClick)="categoryCodeSelected($event)"></master-search>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Sub
-                                Cat : </label>
+                            <label for="input" class="col-sm-3 col-form-label">Sub Cat : </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="subcat"   maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,subcatCodeData,'subcat')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="subcatCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="subcatCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="subcatCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="subcatCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Color * 
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Color * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="color"  maxlength="20" UpperCaseDirective  [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,colorCodeData,'color')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="colorCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="colorCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="colorCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="colorCodeSelected($event)"></master-search>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Brand
                                 : </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="brand"   maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,brandCodeData,'brand')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="brandCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="brandCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="brandCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="brandCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Country
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Country :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="country"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,countryCodeData,'country')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="countryCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="countryCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="countryCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="countryCodeSelected($event)"></master-search>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Set
-                                Ref : </label>
+                            <label for="input" class="col-sm-3 col-form-label">Set Ref : </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="setref"  maxlength="20"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Comments
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Comments :</label>
                             <div class="col-sm-9">
-                                <textarea  rows="4" cols="67" class="tx-1" formControlName="comments" maxlength="20"></textarea>
+                                <textarea  rows="4" cols="80" class="tx-1" formControlName="comments" maxlength="20"></textarea>
                                 <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Size
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Size :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="size"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Length
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Length :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="length"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,lengthCodeData,'length')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="lengthCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"    (newRowClick)="lengthCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="lengthCodeData"
-                                *ngIf="viewMode == false"    (newRowClick)="lengthCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Instruction
-                                :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Instruction :</label>
                             <div class="col-sm-9">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput formControlName="instruction" maxlength="150"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Job
-                                Type * :</label>
+                            <label for="input" class="col-sm-3 col-form-label">Job ype * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput readonly formControlName="jobtype"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Purity *
-                                : </label>
+                            <label for="input" class="col-sm-3 col-form-label">Purity * : </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput readonly class="text-right"  maxlength="20" formControlName="purity" SixDecimalInput  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -289,34 +271,31 @@
                                 <div class="datepick">
                                     <!-- <input class="form-control flatpickr-input" type="text" placeholder="Select Date*"
                                         mwlFlatpickr dateFormat="d/m/y" formControlName="deldate"> -->
-                                    <mat-form-field style="width: 100%">
+                                    <mat-form-field style="width: 100%" appearance="outline">
                                         <input matInput DateValidation (dateChange)="formatDate($event)"
                                             [matDatepicker]="deldate" formControlName="deldate" [disabled]="viewMode" 
-                                            placeholder="DD/MM/YYYY" [min]="jobCardFrom.value.jobdate"/>
+                                            placeholder="DD/MM/YYYY" [min]="jobCardFrom.value.jobdate" class="text-right" />
                                         <mat-datepicker-toggle matSuffix [for]="deldate"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate" #deldate></mat-datepicker>
-                                        
+                                        <mat-datepicker [startAt]="currentDate" #deldate></mat-datepicker>  
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Salesman * 
-                                : </label>
+                            <label for="input" class="col-sm-5 col-form-label">Salesman * : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="salesman"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,salesmanCodeData,'salesman')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="salesmanCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="salesmanCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="salesmanCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Stock
-                                Code : </label>
+                            <label for="input" class="col-sm-5 col-form-label">Stock Code : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="stockcode"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <!-- <master-search [MasterSearchData]="stockCodeData"
@@ -324,22 +303,20 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Currency
-                                : </label>
+                            <label for="input" class="col-sm-5 col-form-label">Currency : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="currency"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,currencyMasterData,'currency')" (input)="inputValidate($event)"/>
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="currencyMasterData"
-                                *ngIf="viewMode == false"   (newRowClick)="currencyCodeSelected($event)"></master-search>
+                                    <master-search [MasterSearchData]="currencyMasterData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="currencyCodeSelected($event)"></master-search>
+                                </mat-form-field>  
                             </div>
                         </div>
                         <div class="row align-items-center mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Loss
-                                Booking : </label>
+                            <label for="input" class="col-sm-5 col-form-label">Loss Booking : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 150px;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     
                                     <mat-select formControlName="lossbooking" [(ngModel)]="selectedValue" name="selectedValue"  [disabled]="viewMode" >
                                         <mat-option value="singleMetal">Single Metal</mat-option>
@@ -352,90 +329,84 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Main
-                                Metal : </label>
+                            <label for="input" class="col-sm-5 col-form-label">Main Metal : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="mainmetal"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,mainmetalCodeData,'mainmetal')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="mainmetalCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="mainmetalCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="mainmetalCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="mainmetalCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-5 col-form-label">Time
                                 : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="time"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,timeCodeData,'time')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="timeCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="timeCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="timeCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="timeCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-5 col-form-label">Range
                                 : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="range"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,rangeCodeData,'range')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="rangeCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="rangeCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="rangeCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="rangeCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-5 col-form-label">Seq.Code * 
                                 : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="seqcode"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,seqCodeData,'seqcode')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="seqCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"   (newRowClick)="seqCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="seqCodeData"
-                                *ngIf="viewMode == false"   (newRowClick)="seqCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Total
-                                Pcs* </label>
+                            <label for="input" class="col-sm-3 col-form-label">Total Pcs* </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="totalpcs"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Pending *
-                            </label>
+                            <label for="input" class="col-sm-3 col-form-label">Pending * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly class="text-right" formControlName="pending"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Parts *
-                            </label>
+                            <label for="input" class="col-sm-3 col-form-label">Parts * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="parts"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Pending *
-                            </label>
+                            <label for="input" class="col-sm-3 col-form-label">Pending * </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="pending1"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Screw Field
-                                : </label>
+                            <label for="input" class="col-sm-4 col-form-label">Screw Field : </label>
                             <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field  appearance="outline">
                                     <input type="text" matInput formControlName="srewFiled"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
