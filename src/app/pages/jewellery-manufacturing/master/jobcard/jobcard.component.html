@@ -36,7 +36,7 @@
                             <div class="col-sm-3">
                                 <!-- <input class="form-control" type="text" /> -->
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="jobno"  maxlength="20" [readonly]="editMode"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" />
+                                    <input type="number" matInput formControlName="jobno"  maxlength="20"   oninput="this.value = this.value.toUpperCase()" readonly />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Job
@@ -214,7 +214,7 @@
                                 Ref : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="setref"  maxlength="20"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="setref"  maxlength="2"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -317,7 +317,7 @@
                                 Code : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="stockcode"  maxlength="20" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="stockcode"  maxlength="2" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <!-- <master-search [MasterSearchData]="stockCodeData"
                                 (newRowClick)="stockCodeSelected($event)"></master-search> -->
@@ -436,7 +436,7 @@
                                 : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="srewFiled"  maxlength="20" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="srewFiled"  maxlength="2" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>

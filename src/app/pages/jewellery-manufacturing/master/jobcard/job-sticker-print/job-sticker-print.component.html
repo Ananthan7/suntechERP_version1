@@ -34,7 +34,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
-                        <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                        <button type="button" [disabled]="viewMode" class="btn btn-primary metal-issue-add-btn text-center"
                         >Filter</button>
                 
                     </div>
@@ -161,16 +161,16 @@
                 <div class="col-md-12 pt-2">
                     <div class="row">
                         <div class="col-md-3">
-                            <mat-checkbox class="example-margin" formControlName="printjobpouch" >Print Job Pouch</mat-checkbox>
+                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="printjobpouch" >Print Job Pouch</mat-checkbox>
                         </div>
                         <div class="col-md-4 ">
-                            <mat-checkbox class="example-margin" formControlName="printjobpouchwithcomponents">Print Job Pouch With Components</mat-checkbox>
+                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="printjobpouchwithcomponents">Print Job Pouch With Components</mat-checkbox>
                         </div>
                         <div class="col-md-3">
-                            <mat-checkbox class="example-margin" formControlName="prtonelblperpge">Print One Label Per page</mat-checkbox>
+                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="prtonelblperpge">Print One Label Per page</mat-checkbox>
                         </div>
                         <div class="col-md-2">
-                            <mat-checkbox class="example-margin" formControlName="stones">Stones</mat-checkbox>
+                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="stones">Stones</mat-checkbox>
                         </div>
                     </div>
                 </div>

@@ -865,7 +865,7 @@ export class JobcardComponent implements OnInit {
       "SIZE_DESC": "",
       "LENGTH_DESC": "",
       "TIME_DESC": "",
-      "RANGE_DESC": this.tableData,
+      "RANGE_DESC":"",
       "JOB_MATERIAL_BOQ_DJ": [
         {
           "SRNO": 0,

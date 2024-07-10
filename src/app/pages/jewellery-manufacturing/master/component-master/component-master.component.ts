@@ -37,6 +37,7 @@ export class ComponentMasterComponent implements OnInit {
   images: any[] = [];
   private subscriptions: Subscription[] = [];
 
+
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -64,11 +65,11 @@ export class ComponentMasterComponent implements OnInit {
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'TYPES',
     SEARCH_HEADING: 'Category type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'CATEGORY MASTER'",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -101,7 +102,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SETTING TYPE MASTER'",
+    WHERECONDITION: "TYPES ='TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -131,7 +132,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'TYPES',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
     WHERECONDITION: " TYPES='SHAPE MASTER'",
@@ -142,7 +143,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'TYPES',
     SEARCH_HEADING: 'Setting Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='SETTING TYPE MASTER'",

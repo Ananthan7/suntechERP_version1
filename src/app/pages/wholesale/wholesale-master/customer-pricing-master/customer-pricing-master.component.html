@@ -68,12 +68,12 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Price Code * :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 80%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="price"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-5">
                         <mat-form-field style="width: 80%;">
-                          <input type="text" matInput formControlName="price" />
+                          <input type="text" matInput formControlName="pricedesc" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="priceCodeData" (newRowClick)="priceCodeSelected($event)">
                         </master-search>
@@ -126,12 +126,12 @@
                       <label for="inputPassword" class="col-sm-5 col-form-label">Labour type * :</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <mat-select>
-                            <mat-option value="1">None</mat-option>
-                            <mat-option value="2">Making Charge</mat-option>
-                            <mat-option value="3">Wastage</mat-option>
-                            <mat-option value="4">Making/Wastage</mat-option>
-                            <mat-option value="5">Metal Margin</mat-option>
+                          <mat-select   formControlName="labourtype">
+                            <mat-option value="None">None</mat-option>
+                            <mat-option value="Making Charge">Making Charge</mat-option>
+                            <mat-option value="Wastage">Wastage</mat-option>
+                            <mat-option value="Making/Wastage">Making/Wastage</mat-option>
+                            <mat-option value="Metal Margin">Metal Margin</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
