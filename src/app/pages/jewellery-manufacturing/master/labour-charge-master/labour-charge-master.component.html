@@ -240,7 +240,7 @@
             <mat-form-field>
               <mat-label>Select</mat-label>
               <mat-select formControlName="settingType" [disabled]="viewMode || codeEnableDiamond  || viewModeSetting">
-                <mat-option *ngFor="let option of settingTypeList" [value]="option.value">
+                <mat-option *ngFor="let option of settingTypeList" [value]="option.value" (onSelectionChange)="onlabourtypeChange()">
                   {{ option.name }}
                 </mat-option>
               </mat-select>
