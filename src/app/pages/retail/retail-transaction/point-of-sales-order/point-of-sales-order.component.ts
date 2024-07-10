@@ -1332,7 +1332,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSalesDataInDotnet/GetRetailSalesData/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`;
+    let API = `RetailSalesOrder/GetRetailSalesOrderHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.VOCNO}/${data.YEARMONTH}`;
     console.log("getRetailSalesMaster vocno", data.VOCNO);
     this.suntechApi.getDynamicAPI(API).subscribe((res) => {
       this.snackBar.dismiss();
@@ -3787,25 +3787,24 @@ export class PointOfSalesOrderComponent implements OnInit {
           posCustomer.CODE &&
           posCustomer.CODE !== "" &&
           posCustomer.CODE.toString() !== "0"
+        )
+        if (
+          posCustomer.CODE &&
+          posCustomer.CODE !== '' &&
+          posCustomer.CODE.toString() !== '0'
         ) {
           apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
 
           // this.suntechApi.getDynamicAPICustom('AccountLookup/GetAccountLookupWithAccMode/R').subscribe
-          custResponse = this.suntechApi.putDynamicAPI(
-            `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`,
-            posCustomer
-          );
+          custResponse = this.suntechApi.putDynamicAPI(`PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`, posCustomer)
         } else {
-          apiCtrl = "PosCustomerMaster/InsertCustomerMaster";
-          custResponse = this.suntechApi.postDynamicAPI(
-            `PosCustomerMaster/InsertCustomerMaster`,
-            posCustomer
-          );
+          apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
+          custResponse = this.suntechApi.postDynamicAPI(`PosCustomerMaster/InsertCustomerMaster`, posCustomer)
 
           // custResponse = this.suntechApi.postDynamicAPICustom(apiCtrl, posCustomer)
-        }
+}
 
-        custResponse.subscribe(async (data) => {
+        custResponse?.subscribe(async (data) => {
           this.isCustProcessing = false;
 
           if (data.status == "Success") {
@@ -8815,7 +8814,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       // this.posPlanetFileInsert(); // added here for testing purpose
 
       if (this.editOnly) {
-        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`;
+        let API = `RetailSalesOrder/UpdateRetailSalesOrder/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`;
         this.suntechApi.putDynamicAPI(API, postData).subscribe(
           (res) => {
             this.snackBar.dismiss();
@@ -8863,10 +8862,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         );
       } else {
         this.suntechApi
-          .postDynamicAPI(
-            `RetailSalesDataInDotnet/InsertRetailSalesData`,
-            postData
-          )
+          .postDynamicAPI(`RetailSalesOrder/InsertRetailSalesOrder`, postData)
           .subscribe(
             (res) => {
               this.snackBar.dismiss();
@@ -13383,7 +13379,8 @@ export class PointOfSalesOrderComponent implements OnInit {
         }
       });
   }
-  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> {
+  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> { 
+    // doubt
     const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${
       this.strBranchcode
     }/${stockCode}/${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
@@ -13581,7 +13578,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     );
   }
 
-  openUserAttachmentModal() {
+  openUserAttachmentModal():void {
     this.modalReferenceUserAttachment = this.modalService.open(
       this.userAttachmentModal,
       {
