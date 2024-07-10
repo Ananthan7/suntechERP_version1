@@ -370,12 +370,24 @@ export class ProcessTransferComponent implements OnInit {
     return this.commonService.emptyToZero(value)
   }
   submitValidations(form: any) {
-    if (this.processTransferFrom.invalid) {
-      this.commonService.toastErrorByMsgId('pls reload and check')
+    // if (this.commonService.nullToString(form.VOCNO) == 0) {
+    //   this.commonService.toastErrorByMsgId('MSG1940')
+    //   return true;
+    // }
+    if (this.commonService.nullToString(form.VOCTYPE) == '') {
+      this.commonService.toastErrorByMsgId('MSG1942')
       return true;
     }
-    if (this.tableData?.length == 0) {
-      this.commonService.toastErrorByMsgId('Detail Record Not Found')
+    if (this.commonService.emptyToZero(form.CURRENCY_RATE) == 0) {
+      this.commonService.toastErrorByMsgId('MSG1178')
+      return true;
+    }
+    if (this.tableData?.length <= 0) {
+      this.commonService.toastErrorByMsgId('MSG1200')
+      return true;
+    }
+    if (this.processTransferFrom.invalid) {
+      this.commonService.toastErrorByMsgId('select all requried values')
       return true;
     }
     return false;
