@@ -130,7 +130,7 @@
           <div class="col-sm-3">
             <mat-form-field>
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode ||codeEnableDiamond" maxlength="6"
-                formControlName="size_from" (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')"
+                formControlName="size_from" (focusout)="validateLookupFieldSize($event,sizeFromCodeData,'size_from')"
                 (change)="sizeFromToValidate('size_from')" />
             </mat-form-field>
             <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"
@@ -154,7 +154,7 @@
           <div class="col-sm-3">
             <mat-form-field>
               <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
-                formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
+                formControlName="size_to" (focusout)="validateLookupFieldSize($event,sizeToCodeData,'size_to')"
                 (change)="sizeFromToValidate('size_to')" [readonly]="viewMode"  />
             </mat-form-field>
             <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"
