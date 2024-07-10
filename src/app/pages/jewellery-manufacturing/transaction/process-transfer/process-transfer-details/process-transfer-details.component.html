@@ -15,7 +15,7 @@
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="processTransferdetailsForm">
-      <div class="p-2">
+      <div class="p-2 ps-3">
         <div class="row">
           <div class="col-md-6">
             <div class="row align-items-center " *ngIf="DIAMANFBARCODE">
@@ -48,7 +48,7 @@
                 style="font-weight: bold;">
                 Job Number</label>
               <div class="col-md-3">
-                <mat-form-field appearance="outline" style="width: 76%;">
+                <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput appNoEmptySpace
                     (focusout)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
@@ -320,7 +320,7 @@
                       <!-- stockcode -->
                       <td>
                         <mat-form-field appearance="outline"
-                          style="width: 70px;">
+                          style="width: 100px;">
                           <input type="text" matInput maxlength="15"
                             (change)="stockCodeScrapValidate()"
                             (focusout)="validateLookupField($event,stockCodeSearch,'stockCode')"
@@ -335,7 +335,7 @@
                       <!-- quantity -->
                       <td>
                         <mat-form-field appearance="outline"
-                          style="width: 100px;">
+                          style="width: 70px;">
                           <input type="text" matInput
                             [readonly]="viewMode || !locationSearchFlag"
                             class="text-right"
@@ -408,11 +408,11 @@
                             maxlength="10" />
                         </mat-form-field>
                       </td>
-                      <td></td>
-                      <td></td>
-                      <td>
+                      <td style="border: none;"></td>
+                      <td style="border: none;"></td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">Stone Pcs</ng-template></td>
-                      <td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">
                           <mat-form-field appearance="outline"
                             style="width: 110px;">
@@ -441,15 +441,15 @@
                             formControlName="TO_STONE_WT" />
                         </mat-form-field>
                       </td>
-                      <td></td>
-                      <td></td>
+                      <td style="border: none;"></td>
+                      <td style="border: none;"></td>
                       <!-- need tochange -->
-                      <td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">
                           Stone Weight
                         </ng-template>
                       </td>
-                      <td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">
                           <mat-form-field appearance="outline"
                             style="width: 110px;">

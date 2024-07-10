@@ -19,7 +19,9 @@ export class BranchTransferRepairOutComponent implements OnInit {
   branchCode?: any = localStorage.getItem("userbranch");
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   PendingRepairJobsData: any;
-
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
+  gridData:any;
   private subscriptions: Subscription[] = [];
 
   currentDate = new Date();
@@ -44,6 +46,7 @@ export class BranchTransferRepairOutComponent implements OnInit {
     "Rep type",
     "Delivery",
   ];
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -62,7 +65,6 @@ export class BranchTransferRepairOutComponent implements OnInit {
     branchname: [""],
     remarks: [""],
   });
-
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -142,17 +144,32 @@ export class BranchTransferRepairOutComponent implements OnInit {
       .postDynamicAPI(API, bodyData)
       .subscribe((res) => {
         if (res.status == "Success") {
-          this.PendingRepairJobsData = res.dynamicData[0].map((item: any) => ({
-            ...item,
-            DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
-          }));
+          console.log(res.dynamicData);
+const uniqueItems = new Set();
+
+res.dynamicData[0].forEach((item: any) => {
+  const identifier = item.MID;
+
+  if (!uniqueItems.has(identifier)) {
+    uniqueItems.add(identifier);
+  }
+});
+
+this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
+  return res.dynamicData[0].find((item: any) => item.MID === identifier);
+}).map((item: any) => ({
+  ...item,
+  DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
+}));
+
+        console.log(this.PendingRepairJobsData);
+
           console.log(this.PendingRepairJobsData.DELIVERYDATE);
         }
       });
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
@@ -404,4 +421,30 @@ export class BranchTransferRepairOutComponent implements OnInit {
       }
     });
   }
+
+  onSelectionChanged(selectionInfo: any) {
+    console.log(selectionInfo);    
+    const selectedRows = selectionInfo.selectedRowsData;  
+    selectedRows.forEach((row:any) => {
+      if (!this.selectedRowKeys.some(selected => selected.UNIQUEID === row.UNIQUEID)) {
+        this.selectedRowKeys.push(row);       
+      }
+    });
+    // console.log(this.rowData.length);
+    console.log('Selection changed:', this.selectedRowKeys);
+  }
+
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+  
+
+  
+  
 }
