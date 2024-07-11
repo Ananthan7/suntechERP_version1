@@ -426,7 +426,7 @@
             <mat-label>Currency</mat-label>
             <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" [readonly]="viewOnly"
               [matAutocomplete]="currencyList" />
-            <mat-autocomplete #currencyList="matAutocomplete" *ngIf="!viewOnly || !editOnly" autoActiveFirstOption
+            <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
               (optionSelected)="changeCurrency($event)">
               <mat-option *ngFor="let option of currencyMasterOptions | async" [value]="option.CURRENCY_CODE">
                 {{ option.CURRENCY_CODE }}
@@ -437,9 +437,9 @@
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>Cur. Rate</mat-label>
-            <input class="st_txt_right" type="text" SixDecimalInput matInput id="txtCurRate" formControlName="txtCurRate" [readonly]="
-                viewOnly ||editOnly||
-                this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency||
+            <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" [readonly]="
+                viewOnly ||
+                this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
               " (change)="changeCurRate($event)" />
           </mat-form-field>
         </div>

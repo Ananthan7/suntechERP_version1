@@ -130,7 +130,7 @@ insertExchangeRate(){
   const saveApi = 'DailyOunceRate';
   let Sub: Subscription = this.dataService.postDynamicAPI(saveApi, this.combinedRequest)
   .subscribe((result) => {
-    if (result.response) {
+    if (result) {
       if (result.status == "Success") {
         Swal.fire({
           title: result.message || 'Success',
