@@ -1859,7 +1859,10 @@ allowDescription:boolean=false;
 
     this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
 
-    this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
+    this.vocDataForm.controls.txtCurRate.setValue(
+      this.comFunc.decimalQuantityFormat(this.comFunc.getCurrRate(this.comFunc.compCurrency), 'RATE'))
+      
+
     // this.findCurDataByCode(this.comFunc.compCurrency, true);
 
 
@@ -12751,6 +12754,11 @@ checkAdvanceReciept(vocNo: any) {
       formData.append('DOCUMENT_NO', '');
       formData.append('FROM_KYC', 'false');
 
+      for (let i = 0; i < this.attachedImageList.length; i++) {
+        formData.append(`Model.Images[${i}].Image.File`, this.attachedImageList[i].file, this.attachedImageList[i].file.name);
+    }
+    
+
       // for (let i = 0; i < this.attachedImageList.length; i++) {
       //   formData.append(`Model.Images[${i}].Image.File`, this.attachedImageList[i], this.attachedImageList[i].file.name
       // );
@@ -13090,7 +13098,7 @@ checkAdvanceReciept(vocNo: any) {
     if (setData) {
       if (res.length > 0) {
         this.selectedCurrencyData = res[0];
-        this.vocDataForm.controls.txtCurRate.setValue(res[0].CONV_RATE);
+        this.vocDataForm.controls.txtCurRate.setValue(   this.comFunc.decimalQuantityFormat(res[0].CONV_RATE, 'RATE'));
 
         this.addValidationsForForms(this.vocDataForm, 'txtCurRate', [
           Validators.required,
@@ -13117,16 +13125,24 @@ checkAdvanceReciept(vocNo: any) {
       // }
 
       if (parseFloat(value) <= parseFloat(this.selectedCurrencyData.MIN_CONV_RATE)) {
-        this.vocDataForm.controls.txtCurRate.setValue(this.selectedCurrencyData.MIN_CONV_RATE);
+
+        this.vocDataForm.controls.txtCurRate.setValue(
+          this.comFunc.decimalQuantityFormat(this.selectedCurrencyData.MIN_CONV_RATE, 'RATE'))
       }
       if (parseFloat(value) >= parseFloat(this.selectedCurrencyData.MAX_CONV_RATE)) {
-        this.vocDataForm.controls.txtCurRate.setValue(this.selectedCurrencyData.MAX_CONV_RATE);
+
+        this.vocDataForm.controls.txtCurRate.setValue(
+          this.comFunc.decimalQuantityFormat(this.selectedCurrencyData.MAX_CONV_RATE, 'RATE'))
+
       }
 
 
     } else {
       // e.target.value = this.selectedCurrencyData.CONV_RATE;
-      this.vocDataForm.controls.txtCurRate.setValue(this.selectedCurrencyData.CONV_RATE);
+      this.vocDataForm.controls.txtCurRate.setValue(
+        this.comFunc.decimalQuantityFormat(this.selectedCurrencyData.CONV_RATE, 'RATE'))
+
+
     }
     return true;
   }
