@@ -1198,19 +1198,19 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
             let result = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
             if (result && result.length == 0) {
-              this.commonService.toastErrorByMsgId('No data found')
+              this.commonService.toastErrorByMsgId('MSG1460')
               this.processTransferdetailsForm.controls[FORMNAME].setValue('')
               LOOKUPDATA.SEARCH_VALUE = ''
             }
             return
           }
         } else {
-          this.commonService.toastErrorByMsgId('No data found')
+          this.commonService.toastErrorByMsgId('MSG1460')
           this.processTransferdetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('Error something went wrong')
       })
     this.subscriptions.push(Sub)
   }
@@ -1234,7 +1234,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (data && data.length > 0) {
       this.setSubJobAPIDetails(data)
     } else {
-      this.commonService.toastErrorByMsgId('no data found')
+      this.commonService.toastErrorByMsgId('MSG1460')
     }
   }
   processCodeToSelected(event: any) {
@@ -2002,7 +2002,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
       this.setValueWithDecimal('lossQtyper', txtLossPer, 'AMOUNT')
     } catch (err: any) {
-      this.commonService.toastErrorByMsgId('error in spliting loss')
+      this.commonService.toastErrorByMsgId('Loss Split Error')
     }
   }
   /**USE: to calculate gain detail */
@@ -2042,7 +2042,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.stockCodeScrapValidate()
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('Error something went wrong')
       })
     this.subscriptions.push(Sub)
   }
