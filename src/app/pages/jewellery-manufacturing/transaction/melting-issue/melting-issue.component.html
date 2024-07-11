@@ -31,7 +31,9 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
                                         formControlName="vocno"
-                                        style="text-align: right;" readonly />
+                                        style="text-align: right;"
+                                        (focusout)="ValidatingVocNo()"
+                                        [readonly]="LOCKVOUCHERNO" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -157,7 +159,7 @@
                                     <input type="text" matInput
                                         formControlName="subjobno"
                                         class="text-right" NumberOnly
-                                         readonly />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
