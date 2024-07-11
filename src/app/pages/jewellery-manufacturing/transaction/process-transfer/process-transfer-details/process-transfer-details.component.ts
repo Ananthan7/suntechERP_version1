@@ -683,7 +683,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (data && data.length > 0) {
       this.setSubJobAPIDetails(data)
     } else {
-      this.commonService.toastErrorByMsgId('no data found')
+      this.commonService.toastErrorByMsgId('MSG1453') //No details found!!
     }
     this.modalReference.close()
   }
@@ -744,7 +744,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
           }
           let nMin_Loss = (this.commonService.emptyToZero(form.FRM_METAL_WT) * this.commonService.emptyToZero(processData[0]["MIN_LOSS"])) / 100;
           if (this.commonService.emptyToZero(form.lossQty) < nMin_Loss) {
-            this.commonService.toastErrorByMsgId("Loss cannot be less than " + nMin_Loss)
+            let msg = this.commonService.getMsgByID('MSG1396')
+            this.commonService.toastErrorByMsgId(msg + nMin_Loss)
             this.setValueWithDecimal('lossQty', nMin_Loss, 'METAL')
             return;
           }
