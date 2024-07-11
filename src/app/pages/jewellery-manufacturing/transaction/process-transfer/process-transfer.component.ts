@@ -170,10 +170,12 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.MAIN_VOCTYPE.setValue(
       this.commonService.getqueryParamMainVocType()
     )
+    this.setVocTypeMaster()
+  }
+  setVocTypeMaster(){
     let frm = this.processTransferFrom.value
     const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
-
   }
 
   generateVocNo() {
