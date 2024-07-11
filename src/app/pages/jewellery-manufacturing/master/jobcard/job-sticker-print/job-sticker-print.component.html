@@ -25,12 +25,12 @@
                     </label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput  formControlName="jobrange" maxlength="15" NumberOnly    [readonly]="viewMode"  class="text-right"/>
+                            <input type="number" matInput  formControlName="jobrange" maxlength="15" [readonly]="viewMode"  class="text-right"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="jobrangeDesc" maxlength="15" NumberOnly   [readonly]="viewMode"  class="text-right"/>
+                            <input type="number" matInput formControlName="jobrangeDesc" maxlength="15" [readonly]="viewMode"  class="text-right"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -83,9 +83,11 @@
                 <div class="col-md-5">
                     <div class="row">
                         <div class="col-sm-3 pt-3">
-                            <button type="button" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            <!-- <button type="button" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                                Destination
-                              </button>
+                              </button> -->
+                              <label for="input"
+                              class="pt-1 col-form-label"><b>General</b></label>
                         </div>
                         <div class="col-md-5">
                             <mat-form-field style="width: 100%;">
@@ -105,15 +107,29 @@
                 </div>
                 <div class="col-md-2 pt-3">
                     <div class="row">
-                            <button type="button" (click)="okClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            <button type="button" (click)="okClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn  mx-2" >
                               Ok
                             </button>
                             <button type="button" (click)="cancelClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                               Cancel
                             </button>
-            
                       </div>
                 </div>
+
+                <!-- <div class="col-md-2 pt-3">
+                    <div class="row">
+                        <div class="col-md-2 pt-3">
+                            <button type="button" (click)="okClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn" >
+                              Ok
+                            </button>
+                        </div>
+                        <div class="col-md-2 pt-3">
+                            <button type="button" (click)="cancelClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn">
+                              Cancel
+                            </button>
+                        </div>
+                      </div>
+                </div> -->
 
             </div>
 
@@ -139,9 +155,11 @@
                 <div class="col-md-4 pt-4">
                     <div class="row">
                         <div class="col-sm-2 pt-1">
-                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            <!-- <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                               %
-                            </button>
+                            </button> -->
+                            <label for="input"
+                              class="pt-1 col-form-label"><b>%</b></label>
                             </div>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;">
