@@ -31,6 +31,7 @@ export class ProcessTransferComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   isSaved: boolean = false;
+  LOCKVOUCHERNO: boolean = true;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -71,6 +72,8 @@ export class ProcessTransferComponent implements OnInit {
     VOCTYPE: ['', [Validators.required]],
     VOCDATE: ['', [Validators.required]],
     VOCNO: [''],
+    PREV_VOCNO: [''],
+    MAIN_VOCTYPE: [''],
     MID: [0],
     salesman: [''],
     SalesmanName: [''],
@@ -135,6 +138,7 @@ export class ProcessTransferComponent implements OnInit {
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
+          this.processTransferFrom.controls.PREV_VOCNO.setValue(data.VOCNO)
           this.processTransferFrom.controls.VOCDATE.setValue(data.VOCDATE)
           this.processTransferFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.processTransferFrom.controls.MID.setValue(data.MID)
@@ -159,6 +163,13 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.VOCTYPE.setValue(
       this.commonService.getqueryParamVocType()
     )
+    this.processTransferFrom.controls.MAIN_VOCTYPE.setValue(
+      this.commonService.getqueryParamMainVocType()
+    )
+    let frm = this.processTransferFrom.value
+    const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    
   }
 
 
@@ -257,6 +268,28 @@ export class ProcessTransferComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processTransferFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
+  ValidatingVocNo() {
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.processTransferFrom.value.VOCNO}`
+    API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
+    API += `/${this.commonService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 1) {
+          this.commonService.toastErrorByMsgId(data[0].STATUS_MESSAGE)
+          let PREV_VOCNO = this.processTransferFrom.value.PREV_VOCNO
+          this.processTransferFrom.controls.VOCNO.setValue(PREV_VOCNO)
           return
         }
       }, err => {
@@ -367,6 +400,8 @@ export class ProcessTransferComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response && result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+          let res = result.response
+          this.processTransferFrom.controls.VOCNO.setValue(res.VOCNO)
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }

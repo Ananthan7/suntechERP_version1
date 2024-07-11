@@ -15,10 +15,10 @@
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="processTransferdetailsForm">
-      <div class="p-3">
+      <div class="p-2 ps-3">
         <div class="row">
           <div class="col-md-6">
-            <div class="row align-items-center mb-2" *ngIf="DIAMANFBARCODE">
+            <div class="row align-items-center " *ngIf="DIAMANFBARCODE">
               <div class="col-sm-2">
                 <!-- ./../../assets/images/barcode-scanner.png -->
                 <img class="image" width="40px" height="40px"
@@ -43,20 +43,21 @@
                 </div>
               </div> -->
             </div>
-            <div class="row mb-2">
+            <div class="row ">
               <label class="col-md-3 col-form-label"
                 style="font-weight: bold;">
                 Job Number</label>
               <div class="col-md-3">
-                <mat-form-field appearance="outline" style="width: 76%;">
+                <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput appNoEmptySpace
                     (focusout)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="jobNoSearch"
+                    *ngIf="!viewMode"
+                    (newRowClick)="jobNumberSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="jobNoSearch"
-                  *ngIf="!viewMode"
-                  (newRowClick)="jobNumberSelected($event)">
-                </master-search>
               </div>
               <div class="col-md-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
@@ -70,7 +71,7 @@
                 </mat-form-field>
               </div> -->
             </div>
-            <div class="row mb-2">
+            <div class="row ">
               <label class="col-md-3 col-form-label">Sub Job
                 Number</label>
               <div class="col-md-3">
@@ -90,7 +91,7 @@
                 <b>Issue Ref # </b></label> -->
             </div>
           </div>
-          <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;"
+          <div class="col-md-4 " style="border: 1px solid #b0b0b0;"
             *ngIf="approvalReqFlag">
             <h6>Approval Details</h6>
             <div class="row mb-2">
@@ -102,11 +103,13 @@
                   <input type="text" matInput UpperCaseDirective
                     (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
                     formControlName="APPROVED_USER" [readonly]="viewMode" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="userDetailNet"
+                    *ngIf="!viewMode"
+                    (newRowClick)="userDetailNetSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="userDetailNet"
-                  *ngIf="!viewMode"
-                  (newRowClick)="userDetailNetSelected($event)">
-                </master-search>
+
               </div>
             </div>
             <div class="row mb-2">
@@ -132,11 +135,9 @@
           <!-- Diamond section starts -->
           <mat-tab label="Diamond Jewellery" *ngIf="designType == 'DIAMOND'">
             <div class="row">
-              <div class="p-3">
-                <b>Transfer Details</b>
-              </div>
+              <b>Transfer Details</b>
             </div>
-            <div class="row">
+            <div class="row"  style="height: 310px !important;">
               <div class="col-lg-10 col-md-12 col-sm-12">
                 <table>
                   <thead>
@@ -151,30 +152,34 @@
                       <th>Process</th>
                       <td>
                         <div class="d-flex">
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'FRM_PROCESS_CODE')"
                               formControlName="FRM_PROCESS_CODE"
                               [readonly]="viewMode" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="fromProcessMasterSearch"
+                              (newRowClick)="processCodeFromSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="fromProcessMasterSearch"
-                            (newRowClick)="processCodeFromSelected($event)">
-                          </master-search>
                         </div>
                       </td>
                       <td>
                         <div class="d-flex">
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'TO_PROCESS_CODE')"
                               formControlName="TO_PROCESS_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="toProcessMasterSearch"
+                              (newRowClick)="processCodeToSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="toProcessMasterSearch"
-                            (newRowClick)="processCodeToSelected($event)">
-                          </master-search>
                         </div>
                       </td>
                     </tr>
@@ -182,44 +187,51 @@
                       <th>Worker</th>
                       <td>
                         <div class="d-flex">
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,fromWorkerMasterSearch,'FRM_WORKER_CODE')"
                               formControlName="FRM_WORKER_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="fromWorkerMasterSearch"
+                              (newRowClick)="workerCodeFromSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="fromWorkerMasterSearch"
-                            (newRowClick)="workerCodeFromSelected($event)">
-                          </master-search>
                         </div>
                       </td>
                       <td>
                         <div class="d-flex">
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (focusout)="SPvalidateLookupField($event,toWorkerMasterSearch,'TO_WORKER_CODE')"
                               formControlName="TO_WORKER_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="toWorkerMasterSearch"
+                              (newRowClick)="workerCodeToSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="toWorkerMasterSearch"
-                            (newRowClick)="workerCodeToSelected($event)">
-                          </master-search>
+
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td>Metal Pcs</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             readonly maxlength="12"
                             formControlName="FRM_METAL_PCS" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             NumberOnly maxlength="12"
@@ -230,14 +242,16 @@
                     <tr>
                       <td>Metal Weight</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             readonly
                             formControlName="FRM_METAL_WT" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
@@ -253,14 +267,16 @@
                     <tr>
                       <td>From Job Pcs</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             readonly
                             formControlName="FRM_PCS" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             NumberOnly maxlength="10"
@@ -273,7 +289,8 @@
                       <th>Location</th>
                       <th>Std.Loss</th>
                       <th>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput readonly
                             class="text-right"
                             formControlName="STD_LOSS" />
@@ -283,14 +300,16 @@
                     <tr>
                       <th>Gross Weight</th>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             readonly maxlength="10"
                             formControlName="GrossWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
@@ -300,43 +319,48 @@
                       </td>
                       <!-- stockcode -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 70px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput maxlength="15"
                             (change)="stockCodeScrapValidate()"
                             (focusout)="validateLookupField($event,stockCodeSearch,'stockCode')"
                             formControlName="stockCode" [readonly]="viewMode" />
+                          <master-search class="masterSearch" *ngIf="!viewMode"
+                            [MasterSearchData]="stockCodeSearch"
+                            (newRowClick)="stockCodeSelected($event)">
+                          </master-search>
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode"
-                          [MasterSearchData]="stockCodeSearch"
-                          (newRowClick)="stockCodeSelected($event)">
-                        </master-search>
+
                       </td>
                       <!-- quantity -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput
                             [readonly]="viewMode || !locationSearchFlag"
-                            class="text-right"
-                            (focusout)="scrapWeightChange($event)"
-                            formControlName="scrapWeight" NumberOnly
+                            class="text-right" (focusout)="scrapWeightChange($event)"
+                            formControlName="scrapWeight" MetalDecimalInput
                             maxlength="10" />
                         </mat-form-field>
                       </td>
                       <!-- location -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput
                             maxlength="15"
                             formControlName="location" readonly />
+                          <master-search class="masterSearch"
+                            *ngIf="locationSearchFlag"
+                            [MasterSearchData]="locationSearch"
+                            (newRowClick)="locationSelected($event)">
+                          </master-search>
                         </mat-form-field>
-                        <master-search *ngIf="locationSearchFlag"
-                          [MasterSearchData]="locationSearch"
-                          (newRowClick)="locationSelected($event)">
-                        </master-search>
                       </td>
                       <!-- stdLoss -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
@@ -346,7 +370,8 @@
                       </td>
                       <!-- stdLossper -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput readonly
                             formControlName="lossQtyper"
                             class="text-right" />
@@ -354,7 +379,8 @@
                       </td>
                       <!-- balance wt -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput readonly
                             maxlength="10"
                             formControlName="Balance_WT" NumberOnly
@@ -365,13 +391,15 @@
                     <tr>
                       <td>Stone Pcs</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             formControlName="FRM_STONE_PCS" readonly />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             formControlName="TO_STONE_PCS" NumberOnly
@@ -379,13 +407,14 @@
                             maxlength="10" />
                         </mat-form-field>
                       </td>
-                      <td></td>
-                      <td></td>
-                      <td>
+                      <td style="border: none;"></td>
+                      <td style="border: none;"></td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">Stone Pcs</ng-template></td>
-                      <td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput class="text-right"
                               NumberOnly maxlength="10" [readonly]="viewMode" />
                           </mat-form-field>
@@ -395,13 +424,15 @@
                     <tr>
                       <td>Stone Weight</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             readonly formControlName="FRM_STONE_WT" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             StoneDecimalInput [max]="10"
@@ -409,17 +440,18 @@
                             formControlName="TO_STONE_WT" />
                         </mat-form-field>
                       </td>
-                      <td></td>
-                      <td></td>
+                      <td style="border: none;"></td>
+                      <td style="border: none;"></td>
                       <!-- need tochange -->
-                      <td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">
                           Stone Weight
                         </ng-template>
                       </td>
-                      <td>
+                      <td style="border: none;">
                         <ng-template *ngIf="false">
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               class="text-right"
                               StoneDecimalInput [max]="10" />
@@ -436,13 +468,14 @@
                     <image-slider [imageArray]="imagepath"></image-slider>
                   </div>
                 </div>
-                <div class="row  d-flex justify-content-center">
+                <div class="p-1"></div>
+                <div class="row d-flex justify-content-center">
                   <mat-form-field appearance="outline" style="width: 70%;">
                     <input type="text" matInput formControlName="DESIGN_CODE"
                       readonly />
                   </mat-form-field>
                 </div>
-                <div class="row  d-flex justify-content-center">
+                <div class="row d-flex justify-content-center">
                   <mat-form-field appearance="outline" style="width: 70%;">
                     <input type="text" matInput formControlName="partCode"
                       readonly />
@@ -472,7 +505,8 @@
                       <th rowspan="2">Transfer to Stock</th>
                       <th>Std Loss</th>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput
                             formControlName="METAL_quantity" />
                         </mat-form-field>
@@ -482,33 +516,39 @@
                       <th>Process</th>
                       <td>
                         <span>
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput readonly
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
                               formControlName="METAL_FRM_PROCESS_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="fromProcessMasterSearch"
+                              (newRowClick)="metalprocessCodeFromSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="fromProcessMasterSearch"
-                            (newRowClick)="metalprocessCodeFromSelected($event)">
-                          </master-search>
+
                         </span>
                       </td>
                       <td>
                         <span>
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="toProcessMasterSearch"
+                              (newRowClick)="metalprocessCodeToSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="toProcessMasterSearch"
-                            (newRowClick)="metalprocessCodeToSelected($event)">
-                          </master-search>
                         </span>
                       </td>
                       <td>Act. Loss</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput maxlength="10"
                             formControlName="METAL_LossBooked" />
                         </mat-form-field>
@@ -518,30 +558,36 @@
                       <th>Worker</th>
                       <td>
                         <span>
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput
                               formControlName="METAL_FRM_WORKER_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="fromWorkerMasterSearch"
+                              (newRowClick)="metalworkerCodeFromSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="fromWorkerMasterSearch"
-                            (newRowClick)="metalworkerCodeFromSelected($event)">
-                          </master-search>
+
                         </span>
                       </td>
                       <td>
                         <span>
-                          <mat-form-field appearance="outline" style="width: 110px;">
+                          <mat-form-field appearance="outline"
+                            style="width: 110px;">
                             <input type="text" matInput
                               formControlName="METAL_TO_WORKER_CODE" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="toWorkerMasterSearch"
+                              (newRowClick)="metalworkerCodeToSelected($event)">
+                            </master-search>
                           </mat-form-field>
-                          <master-search *ngIf="!viewMode"
-                            [MasterSearchData]="toWorkerMasterSearch"
-                            (newRowClick)="metalworkerCodeToSelected($event)">
-                          </master-search>
                         </span>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_ScrapLocCode" />
@@ -549,7 +595,8 @@
                       </td>
                       <th>Gain</th>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="text" matInput
                             formControlName="METAL_GainGrWt" />
                         </mat-form-field>
@@ -558,21 +605,24 @@
                     <tr><!-- Stock Code row starts-->
                       <td>Stock Code</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_FromStockCode" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_ToStockCode" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_ScrapStockCode" />
@@ -583,14 +633,16 @@
                     <tr><!-- PCS row starts-->
                       <td>PCS</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             NumberOnly
                             formControlName="METAL_FromPCS" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             NumberOnly
                             formControlName="METAL_ToPCS" />
@@ -598,14 +650,16 @@
                       </td>
                       <!-- scrap pcs -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             NumberOnly
                             formControlName="METAL_ScrapPCS" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             NumberOnly
                             formControlName="METAL_BalPCS" />
@@ -615,27 +669,31 @@
                     <tr><!-- Gross Weight starts-->
                       <td>Gross Weight</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_GrossWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_GrossWeightTo" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_ScrapGrWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_BalGrWt" />
@@ -645,14 +703,16 @@
                     <tr><!-- Stone Weight starts-->
                       <th>Stone Weight</th>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             StoneDecimalInput
                             formControlName="METAL_FRM_STONE_WT" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             StoneDecimalInput
                             formControlName="METAL_TO_STONE_WT" />
@@ -660,14 +720,16 @@
                       </td>
                       <!-- ScrapStoneWt -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_ScrapStoneWt" />
                         </mat-form-field>
                       </td>
                       <!-- BalStoneWt -->
                       <td colspan="2">
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_BalStoneWt" />
                         </mat-form-field>
@@ -676,14 +738,16 @@
                     <tr><!-- Iron Weight starts-->
                       <td>Iron Weight</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             formControlName="METAL_FromIronWeight"
                             MetalDecimalInput />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             formControlName="METAL_ToIronWt"
                             MetalDecimalInput />
@@ -691,7 +755,8 @@
                       </td>
                       <!-- ToIronScrapWt -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_ToIronScrapWt"
                             MetalDecimalInput />
@@ -699,7 +764,8 @@
                       </td>
                       <!-- BalIronWt -->
                       <td colspan="2">
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_BalIronWt"
                             MetalDecimalInput />
@@ -709,14 +775,16 @@
                     <tr><!-- Net Weight starts-->
                       <td>Net Weight</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_FromNetWeight" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_ToNetWt" />
@@ -724,14 +792,16 @@
                       </td>
                       <!-- METAL_ScrapNetWt -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_ScrapNetWt" />
                         </mat-form-field>
                       </td>
                       <!-- BalNetWt -->
                       <td colspan="2">
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_BalNetWt" />
                         </mat-form-field>
@@ -740,14 +810,16 @@
                     <tr><!-- Pure Weight starts-->
                       <td>Pure Weight</td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_FromPureWt" />
                         </mat-form-field>
                       </td>
                       <td>
-                        <mat-form-field appearance="outline" style="width: 110px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 110px;">
                           <input type="number" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_ToPureWt" />
@@ -755,13 +827,15 @@
                       </td>
                       <!-- ScrapPureWt -->
                       <td>
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_ScrapPureWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
-                        <mat-form-field appearance="outline" style="width: 100px;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100px;">
                           <input type="number" matInput
                             formControlName="METAL_BalPureWt" />
                         </mat-form-field>
@@ -861,12 +935,13 @@
                 <mat-form-field appearance="outline" style="width: 70%;">
                   <input type="text" matInput
                     formControlName="consumed" readonly />
+                  <datetime-picker class="masterSearch" 
+                    [DateTimeModelData]="consumedTimeData"
+                    *ngIf="!viewMode"
+                    (datetimeClick)="consumedChange($event)"
+                    (updateDuration)="consumedInMinutes($event)">
+                  </datetime-picker>
                 </mat-form-field>
-                <datetime-picker [DateTimeModelData]="consumedTimeData"
-                  *ngIf="!viewMode"
-                  (datetimeClick)="consumedChange($event)"
-                  (updateDuration)="consumedInMinutes($event)">
-                </datetime-picker>
               </div>
             </div>
             <div class="row mb-3">
@@ -921,7 +996,6 @@
               [showBorders]="true" [dataSource]="metalDetailData"
               [columnAutoWidth]="true"
               [allowColumnResizing]="true"
-              (onRowUpdated)="formatMetalDetailDataGrid()"
               [showRowLines]="true" (onRowUpdated)="onRowUpdateGrid($event)">
               <dxo-paging [enabled]="false"></dxo-paging>
               <dxo-editing mode="cell" [allowUpdating]="true">
@@ -960,7 +1034,7 @@
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox" [disabled]="viewMode"
-                    [checked]="data1.value" (change)="settedCheckbox(data1)"/>
+                    [checked]="data1.value" (change)="settedCheckbox(data1)" />
                 </div>
               </dxi-column>
               <dxi-column dataField="GEN" caption="Setting Type"
@@ -1136,8 +1210,8 @@
                 caption="IS AUTHORISE" alignment="center"
                 cellTemplate="IS_AUTHORISE">
                 <div *dxTemplate="let data1 of 'IS_AUTHORISE'">
-                  <input type="checkbox" 
-                    [checked]="data1.value" disabled="true"/>
+                  <input type="checkbox"
+                    [checked]="data1.value" disabled="true" />
                 </div>
               </dxi-column>
               <dxi-column dataField="SCRAP_STOCK_CODE"
@@ -1173,8 +1247,8 @@
                 caption="EXCLUDE TRANSFER WT" alignment="center"
                 cellTemplate="EXCLUDE_TRANSFER_WT">
                 <div *dxTemplate="let data1 of 'EXCLUDE_TRANSFER_WT'">
-                  <input type="checkbox" 
-                    [checked]="data1.value" disabled="true"/>
+                  <input type="checkbox"
+                    [checked]="data1.value" disabled="true" />
                 </div>
               </dxi-column>
               <dxi-column dataField="IRON_WT" caption="IRON_WT"

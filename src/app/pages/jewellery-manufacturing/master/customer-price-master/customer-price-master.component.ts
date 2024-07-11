@@ -59,7 +59,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 6,
-    SEARCH_FIELD: 'ACCODE',
+    SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Customer Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "account_mode in ('B','R','P')",
@@ -179,6 +179,8 @@ export class CustomerPriceMasterComponent implements OnInit {
       })
 
   }
+
+  
   selectRow(rowKey: any) {
     if (!this.selectedKeys.includes(rowKey)) {
       this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
@@ -271,7 +273,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   customerCodeScpSelected(e: any) {
     console.log(e);
     this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
-    this.customerpricemasterForm.controls.desc.setValue(e['ACCOUNT HEAD']);
+    this.customerpricemasterForm.controls.desc.setValue(e.ACCOUNT_HEAD);
   }
 
   setFormValues() {
@@ -559,6 +561,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
@@ -575,9 +578,49 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.customerpricemasterForm.controls[FORMNAME].setValue('')
+          this.customerpricemasterForm.controls.desc.setValue('');
+          // this.jobCardFrom.controls.designtype.setValue('');
+          this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+
+        // if (data == '') {
+        //   this.commonService.toastErrorByMsgId('MSG1531')
+        //   this.customerpricemasterForm.controls[FORMNAME].setValue('')
+        //   LOOKUPDATA.SEARCH_VALUE = ''
+        //   if (FORMNAME === 'customercode') {
+        //     if (FORMNAME === 'customercode') {
+        //       console.log(FORMNAME)
+        //       this.customerpricemasterForm.controls.desc.setValue('');
+        //     }
+        //   }
+        //   return
+        // }
+
+        // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
+        // if (matchedItem) {
+        //   this.customerpricemasterForm.controls[FORMNAME].setValue(matchedItem.ACCODE);
+        //   if (FORMNAME === 'customercode') {
+        //     this.customerpricemasterForm.controls.desc.setValue(matchedItem.ACCOUNT_HEAD);
+
+        //   }
+
+        // } else {
+        //   this.commonService.toastErrorByMsgId('MSG1531');
+        //   this.customerpricemasterForm.controls[FORMNAME].setValue('');
+        //   this.customerpricemasterForm.controls.desc.setValue('');
+
+        //   if (FORMNAME === 'customercode') {
+        //     this.customerpricemasterForm.controls.desc.setValue('');
+        //   }
+
+        //   this.renderer.selectRootElement(FORMNAME).focus();
+        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+
+        // }
+
+
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })

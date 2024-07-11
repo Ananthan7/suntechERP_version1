@@ -7,6 +7,7 @@ import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "app-branch-transfer-repair-out",
@@ -19,7 +20,10 @@ export class BranchTransferRepairOutComponent implements OnInit {
   branchCode?: any = localStorage.getItem("userbranch");
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   PendingRepairJobsData: any;
-
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
+  gridData:any;
+  isEdit:boolean = false;
   private subscriptions: Subscription[] = [];
 
   currentDate = new Date();
@@ -44,8 +48,10 @@ export class BranchTransferRepairOutComponent implements OnInit {
     "Rep type",
     "Delivery",
   ];
+  
 
   constructor(
+    private datePipe: DatePipe,
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -62,17 +68,26 @@ export class BranchTransferRepairOutComponent implements OnInit {
     branchname: [""],
     remarks: [""],
   });
-
   ngOnInit(): void {
+    console.log(this.content);
+    if(this.content?.MID != null) {
+      this.getRepairTransferbyid()
+    }
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
 
     this.repairtransferform.controls.voctype.setValue(
       this.comService.getqueryParamVocType()
     );
+    console.log(this.comService.getqueryParamVocType());
+    
 
     this.generateVocNo();
     this.getPendingRepairJobs();
+  }
+  date(e: any) {
+    console.log(e);
+    console.log(this.repairtransferform.value.vocdate._d.toISOString())
   }
 
   salesManCodeData: MasterSearchModel = {
@@ -127,6 +142,22 @@ export class BranchTransferRepairOutComponent implements OnInit {
       });
   }
 
+  getRepairTransferbyid(){
+    console.log(this.content);
+    // let DATE = this.datePipe.transform(this.content.VOCDATE, 'dd/MM/yyyy');
+    // const vocdate =  new Date(this.content.VOCDATE,'dd-mm-yyyy').toLocaleDateString();
+    // console.log(DATE);
+    const dateParts = this.content.VOCDATE.split('T')[0].split('-').reverse().join('/');
+    this.repairtransferform.controls.voctype.setValue(this.content.VOCNO);
+    this.repairtransferform.controls.branchcode.setValue(this.content.BRANCH_CODE);
+    this.repairtransferform.controls.branchname.setValue(this.content.BRANCHTONAME);
+    this.repairtransferform.controls.vocdate.setValue(new Date(dateParts));
+    console.log(this.content.VOCDATE);
+    
+    this.repairtransferform.controls.salesman.setValue(this.content.SALESPERSON_CODE);
+    this.repairtransferform.controls.remarks.setValue(this.content.REMARKS);
+  }
+
   getPendingRepairJobs() {
     let API = `ExecueteSPInterface`;
     let bodyData = {
@@ -142,17 +173,32 @@ export class BranchTransferRepairOutComponent implements OnInit {
       .postDynamicAPI(API, bodyData)
       .subscribe((res) => {
         if (res.status == "Success") {
-          this.PendingRepairJobsData = res.dynamicData[0].map((item: any) => ({
-            ...item,
-            DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
-          }));
+          console.log(res.dynamicData);
+const uniqueItems = new Set();
+
+res.dynamicData[0].forEach((item: any) => {
+  const identifier = item.MID;
+
+  if (!uniqueItems.has(identifier)) {
+    uniqueItems.add(identifier);
+  }
+});
+
+this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
+  return res.dynamicData[0].find((item: any) => item.MID === identifier);
+}).map((item: any) => ({
+  ...item,
+  DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
+}));
+
+        console.log(this.PendingRepairJobsData);
+
           console.log(this.PendingRepairJobsData.DELIVERYDATE);
         }
       });
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
@@ -254,59 +300,56 @@ export class BranchTransferRepairOutComponent implements OnInit {
     }
 
     let API =
-      "RepairTransfer/UpdateRepairTransfer" +
-      this.content.BRANCH_CODE +
-      this.content.VOCTYPE +
-      this.content.VOCNO +
-      this.content.YEARMONTH;
-    let postData = {
-      MID: 0,
-      BRANCH_CODE: "string",
-      VOCTYPE: "str",
-      VOCNO: 0,
-      VOCDATE: "2024-03-07T13:09:28.415Z",
-      YEARMONTH: "string",
-      SALESPERSON_CODE: "string",
-      BRANCHTO: "string",
-      REMARKS: "string",
-      SYSTEM_DATE: "2024-03-07T13:09:28.415Z",
-      NAVSEQNO: 0,
-      STATUS: "string",
-      METALVOCNO: 0,
-      METALWEIGHT: 0,
-      METALAMOUNT: 0,
-      METALMID: 0,
-      METALVOCTYPE: "str",
-      METALCODE: "string",
-      DIAMONDCODE: "string",
-      DIAMONDVOCNO: 0,
-      DIAMONDVOCTYPE: "str",
-      DIAMONDMID: 0,
-      DIAMONDWGT: 0,
-      DIAMONDAMOUNT: 0,
-      SUPINVDATE: "2024-03-07T13:09:28.415Z",
-      SUPINVNO: "string",
-      TRANSFERBRANCH: "string",
-      AUTOPOSTING: true,
-      BRANCHTONAME: "string",
-      ISMETALDIAMOND: "string",
-      HASJOBDONE: "string",
-      PRINT_COUNT: 0,
-      POSCUSTCODE: "string",
-      POSCUSTNAME: "string",
-      PRINT_COUNT_ACCOPY: 0,
-      PRINT_COUNT_CNTLCOPY: 0,
-      HTUSERNAME: "string",
-      JOBDONE: 0,
-      METALANDDIAMOND: 0,
-    };
+      `RepairTransfer/UpdateRepairTransfer/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+      
+      let postData = {
+        MID: 0,
+        BRANCH_CODE: this.repairtransferform.value.branchcode,
+        VOCTYPE: this.repairtransferform.value.voctype,
+        VOCNO: this.repairtransferform.value.vocNo,
+        VOCDATE: this.repairtransferform.value.vocdate,
+        YEARMONTH: this.yearMonth,
+        SALESPERSON_CODE: this.repairtransferform.value.salesman,
+        BRANCHTO: "",
+        REMARKS: this.repairtransferform.value.remarks,
+        SYSTEM_DATE: new Date().toISOString(),
+        NAVSEQNO: 0,
+        STATUS: "",
+        METALVOCNO: 0,
+        METALWEIGHT: 0,
+        METALAMOUNT: 0,
+        METALMID: 0,
+        METALVOCTYPE: "",
+        METALCODE: "",
+        DIAMONDCODE: "",
+        DIAMONDVOCNO: 0,
+        DIAMONDVOCTYPE: "",
+        DIAMONDMID: 0,
+        DIAMONDWGT: 0,
+        DIAMONDAMOUNT: 0,
+        SUPINVDATE: new Date().toISOString(),
+        SUPINVNO: "",
+        TRANSFERBRANCH: "",
+        AUTOPOSTING: true,
+        BRANCHTONAME: this.repairtransferform.value.branchname,
+        ISMETALDIAMOND: "",
+        HASJOBDONE: "",
+        PRINT_COUNT: 0,
+        POSCUSTCODE: "",
+        POSCUSTNAME: "",
+        PRINT_COUNT_ACCOPY: 0,
+        PRINT_COUNT_CNTLCOPY: 0,
+        HTUSERNAME: "",
+        JOBDONE: 0,
+        METALANDDIAMOND: 0,
+      };
 
     let Sub: Subscription = this.dataService
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {              
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -404,4 +447,30 @@ export class BranchTransferRepairOutComponent implements OnInit {
       }
     });
   }
+
+  onSelectionChanged(selectionInfo: any) {
+    console.log(selectionInfo);    
+    const selectedRows = selectionInfo.selectedRowsData;  
+    selectedRows.forEach((row:any) => {
+      if (!this.selectedRowKeys.some(selected => selected.UNIQUEID === row.UNIQUEID)) {
+        this.selectedRowKeys.push(row);       
+      }
+    });
+    // console.log(this.rowData.length);
+    console.log('Selection changed:', this.selectedRowKeys);
+  }
+
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+  
+
+  
+  
 }

@@ -397,6 +397,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     purity: [''],
     wtFrom: [''],
     wtTo: [''],
+    variance: [''],
     onGrossWt: [false],
     forDesignOnly: [false],
   });
@@ -599,6 +600,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
     this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
     this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
+    this.metallabourMasterForm.controls.variance.setValue(this.content.WASTAGE_AMT);
+
 
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
 
@@ -959,7 +962,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "CARATWT_TO": this.commonService.emptyToZero(metalForm.wtTo),
       "SIEVE": diamondForm.sieve,
       "WASTAGE_PER": this.commonService.emptyToZero(metalForm.wastage),
-      "WASTAGE_AMT": 0,
+      "WASTAGE_AMT": this.commonService.emptyToZero(metalForm.variance),
       "TYPE_CODE": this.commonService.nullToString(metalForm.typecode),
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { JobcardComponent } from '../jobcard.component';
 
 
 
@@ -19,6 +20,7 @@ import themes from 'devextreme/ui/themes';
 export class JobStickerPrintComponent implements OnInit {
 
   selectedTabIndex = 0;
+  viewMode: boolean = false;
   tableData: any = [];
   showHeaderFilter: boolean;
   currentFilter: any;
@@ -29,6 +31,7 @@ export class JobStickerPrintComponent implements OnInit {
   branchCode?: String;
   private subscriptions: Subscription[] = [];
   jobNumber: any = [];
+  @Input() content!: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -62,8 +65,27 @@ export class JobStickerPrintComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log(this.content?.FLAG)
     this.branchCode = this.commonService.branchCode;
-    this.priceSchemeValidate() ;
+   // this.priceSchemeValidate();
+
+   if(this.content == undefined){
+    this.priceSchemeValidate();
+  }
+
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      console.log("view")
+
+    } else if (this.content.FLAG == 'EDIT') {
+      console.log("edit")
+
+    } else if (this.content.FLAG == 'DELETE') {
+      this.viewMode = true;
+      console.log("delete")
+    }
+
+
   }
 
   priceSchemeValidate() {
@@ -78,12 +100,17 @@ export class JobStickerPrintComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.jobNumber = result.dynamicData[0][0].JOB_NO || []
+          //this.jobNumber = result.dynamicData[0][0].JOB_NO || []
+       
+
+          this.jobstickerpointForm.controls.jobrange.setValue(result.dynamicData[0][0].JOB_NO)
+          this.jobstickerpointForm.controls.jobrangeDesc.setValue(result.dynamicData[0][0].JOB_NO)
+          console.log(this.jobstickerpointForm.value.jobrange)
         }
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')
       })
-  //  this.jobstickerpointForm.push(Sub)
+    //  this.jobstickerpointForm.push(Sub)
   }
 
 
@@ -91,5 +118,11 @@ export class JobStickerPrintComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  okClick() {
 
+  }
+
+  cancelClick(data?: any) {
+    this.activeModal.close(data);
+  }
 }
