@@ -960,7 +960,18 @@ handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
 }
 validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+  // Check if the input value is empty or in view mode
   if (event.target.value === '' || this.viewMode === true) return;
+
+  // Check if the input value is numeric using regex
+  if (/^\d+$/.test(event.target.value)) {
+    // Show error message and clear the input field
+    this.commonService.toastErrorByMsgId('MSG1531'); // Display an appropriate error message for numeric values
+    this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    return;
+  }
 
   let param = {
     LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -980,10 +991,14 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
         LOOKUPDATA.SEARCH_VALUE = '';
         return;
       }
-    }, 
-  );
+    }, err => {
+      this.commonService.toastErrorByMsgId('network issue found');
+    });
+
   this.subscriptions.push(Sub);
 }
+
+
 
 
   // validateLookupField(event: any, LOOKUPDATA: any, FORMNAME: string) {

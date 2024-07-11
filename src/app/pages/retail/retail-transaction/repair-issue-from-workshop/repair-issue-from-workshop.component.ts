@@ -68,6 +68,10 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
 
+    if(this.content?.FLAG == "VIEW" || this.content?.FLAG == "EDIT"){
+      this.getrepairreceiptbyid();
+    }
+
     this.repairReceiveForm.controls.voctype.setValue(
       this.comService.getqueryParamVocType()
     );
@@ -89,6 +93,16 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
     //   this.setFormValues()
     // }
     // this.repairReceiveForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
+  }
+
+  getrepairreceiptbyid(){
+    console.log(this.content);
+    const dateParts = this.content.VOCDATE.split('T')[0].split('-').reverse().join('/');
+    this.repairReceiveForm.controls.voctype.setValue(this.content.VOCTYPE);
+    this.repairReceiveForm.controls.vocNo.setValue(this.content.VOCNO);
+    this.repairReceiveForm.controls.vocDate.setValue(dateParts);
+    this.repairReceiveForm.controls.partyCode.setValue(this.content.POSCUSTCODE);
+    this.repairReceiveForm.controls.partyName.setValue(this.content.POSCUSTNAME);
   }
 
   convertDateToYMD(str: any) {
@@ -135,7 +149,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
     branchcurrcode: [""],
     partyName: [""],
     supplierInvNo: [""],
-    Date: [""],
+    date: [new Date()],
     customerCode: [""],
     customerCodeDesc: [""],
   });
@@ -159,15 +173,15 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
     let API = "/RepairTransfer/InsertRepairTransfer";
     let postData = {
       MID: 0,
-      BRANCH_CODE: "string",
-      VOCTYPE: "str",
-      VOCNO: 0,
-      VOCDATE: "2024-03-07T11:34:37.684Z",
-      YEARMONTH: "string",
-      SALESPERSON_CODE: "string",
+      BRANCH_CODE: this.branchCode,
+      VOCTYPE: this.repairReceiveForm.value.voctype,
+      VOCNO: this.repairReceiveForm.value.vocNo,
+      VOCDATE: this.repairReceiveForm.value.Date,
+      YEARMONTH: this.yearMonth,
+      SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
       BRANCHTO: "string",
       REMARKS: "string",
-      SYSTEM_DATE: "2024-03-07T11:34:37.684Z",
+      SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
       STATUS: "string",
       METALVOCNO: 0,
@@ -190,8 +204,8 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       ISMETALDIAMOND: "string",
       HASJOBDONE: "string",
       PRINT_COUNT: 0,
-      POSCUSTCODE: "string",
-      POSCUSTNAME: "string",
+      POSCUSTCODE: this.repairReceiveForm.value.partyCode,
+      POSCUSTNAME: this.repairReceiveForm.value.partyName,
       PRINT_COUNT_ACCOPY: 0,
       PRINT_COUNT_CNTLCOPY: 0,
       HTUSERNAME: "string",
@@ -203,7 +217,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -423,7 +437,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   partySelected(e: any) {
     console.log(e);
     this.repairReceiveForm.controls.partyCode.setValue(e.ACCODE);
-    this.repairReceiveForm.controls.partyName.setValue(e["ACCOUNT HEAD"]);
+    this.repairReceiveForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
   }
   customerSelected(e: any) {
     console.log(e);
