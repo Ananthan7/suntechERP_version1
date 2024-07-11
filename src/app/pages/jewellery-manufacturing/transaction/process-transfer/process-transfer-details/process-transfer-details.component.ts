@@ -683,7 +683,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (data && data.length > 0) {
       this.setSubJobAPIDetails(data)
     } else {
-      this.commonService.toastErrorByMsgId('no data found')
+      this.commonService.toastErrorByMsgId('MSG1453') //No details found!!
     }
     this.modalReference.close()
   }
@@ -744,7 +744,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
           }
           let nMin_Loss = (this.commonService.emptyToZero(form.FRM_METAL_WT) * this.commonService.emptyToZero(processData[0]["MIN_LOSS"])) / 100;
           if (this.commonService.emptyToZero(form.lossQty) < nMin_Loss) {
-            this.commonService.toastErrorByMsgId("Loss cannot be less than " + nMin_Loss)
+            let msg = this.commonService.getMsgByID('MSG1396')
+            this.commonService.toastErrorByMsgId(msg + nMin_Loss)
             this.setValueWithDecimal('lossQty', nMin_Loss, 'METAL')
             return;
           }
@@ -1197,19 +1198,19 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
             let result = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
             if (result && result.length == 0) {
-              this.commonService.toastErrorByMsgId('No data found')
+              this.commonService.toastErrorByMsgId('MSG1460')
               this.processTransferdetailsForm.controls[FORMNAME].setValue('')
               LOOKUPDATA.SEARCH_VALUE = ''
             }
             return
           }
         } else {
-          this.commonService.toastErrorByMsgId('No data found')
+          this.commonService.toastErrorByMsgId('MSG1460')
           this.processTransferdetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('Error something went wrong')
       })
     this.subscriptions.push(Sub)
   }
@@ -1233,7 +1234,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (data && data.length > 0) {
       this.setSubJobAPIDetails(data)
     } else {
-      this.commonService.toastErrorByMsgId('no data found')
+      this.commonService.toastErrorByMsgId('MSG1460')
     }
   }
   processCodeToSelected(event: any) {
@@ -1290,19 +1291,53 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.jobNumberValidate({ target: { value: event.job_number } })
   }
   submitValidations(form: any): boolean {
-    if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
-      this.commonService.toastErrorByMsgId('Job number cannot be empty')
+    try {
+      if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
+        this.commonService.toastErrorByMsgId('MSG1358')
+        // this.commonService.toastErrorByMsgId('Job number cannot be empty')
+        return true;
+      }
+      if (this.commonService.nullToString(form.TO_WORKER_CODE) == '') {
+        this.commonService.toastErrorByMsgId('MSG1912')
+        return true;
+      }
+      if (this.commonService.nullToString(form.TO_PROCESS_CODE) == '') {
+        this.commonService.toastErrorByMsgId('MSG1680')
+        return true;
+      }
+      if (this.commonService.emptyToZero(form.Balance_WT) < 0) {
+        this.commonService.toastErrorByMsgId('MSG8126')
+        return true;
+      }
+      if (this.commonService.emptyToZero(form.GrossWeightTo) < 0) {
+        this.commonService.toastErrorByMsgId('MSG1302')
+        return true;
+      }
+
+      if (this.commonService.emptyToZero(form.scrapWeight) != 0) {
+        if (this.commonService.nullToString(form.location) == '') { //&& blnLoc == true dbt
+          this.commonService.toastErrorByMsgId("MSG1381");//"Location can not be empty"
+          return true;
+        }
+        if (this.commonService.nullToString(form.stockCode) == "") {
+          this.commonService.toastErrorByMsgId("MSG3739"); // stock code scrap
+          return true;
+        }
+      }
+      if (this.metalDetailData.length <= 0) {
+        this.commonService.toastErrorByMsgId("MSG3574"); //"No components details !..."
+        return true;
+      }
+      if (this.approvalReqFlag && this.commonService.nullToString(form.APPROVED_USER) == '') {
+        this.commonService.toastErrorByMsgId("MSG1933");
+        return true;
+      }
+      return false;
+    }
+    catch (err) {
+      this.commonService.toastErrorByMsgId("MSG2100");
       return true;
     }
-    if (this.commonService.nullToString(form.TO_WORKER_CODE) == '') {
-      this.commonService.toastErrorByMsgId('To worker code cannot be empty')
-      return true;
-    }
-    if (this.commonService.nullToString(form.TO_PROCESS_CODE) == '') {
-      this.commonService.toastErrorByMsgId('To process code cannot be empty')
-      return true;
-    }
-    return false;
   }
   /**USE: SUBMIT detail */
   formSubmit(flag: any) {
@@ -1620,9 +1655,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "SCRAP_STOCK_CODE": this.checkScrapStockCode(form.stockCode, element.STOCK_CODE, element.METALSTONE),
         "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
         "SCRAP_PURITY": this.commonService.emptyToZero(form.SCRAP_PURITY),
-        "SCRAP_WT": element.METALSTONE == 'M'? SCRAP_WT : this.commonService.emptyToZero(element.SCRAP_WT),
-        "SCRAP_PURE_WT": element.METALSTONE == 'M'? SCRAP_PURE_WT : this.commonService.emptyToZero(element.SCRAP_PURE_WT),
-        "SCRAP_PUDIFF": element.METALSTONE == 'M'? this.commonService.emptyToZero((Number(form.scrapWeight) - Number(form.PURITY)) * scrapPureWt): element.SCRAP_PURE_WT,
+        "SCRAP_WT": element.METALSTONE == 'M' ? SCRAP_WT : this.commonService.emptyToZero(element.SCRAP_WT),
+        "SCRAP_PURE_WT": element.METALSTONE == 'M' ? SCRAP_PURE_WT : this.commonService.emptyToZero(element.SCRAP_PURE_WT),
+        "SCRAP_PUDIFF": element.METALSTONE == 'M' ? this.commonService.emptyToZero((Number(form.scrapWeight) - Number(form.PURITY)) * scrapPureWt) : element.SCRAP_PURE_WT,
         "SCRAP_ACCODE": element.METALSTONE == 'M' && seqData.length > 0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
         "SYSTEM_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
         "ISSUE_GROSS_WT": flag == 2 ? this.commonService.emptyToZero(element.GROSS_WT) * -1 : this.commonService.emptyToZero(element.GROSS_WT),
@@ -1633,12 +1668,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "TO_STOCK_CODE": this.commonService.nullToString(form.METAL_ToStockCode),
         "FROM_STOCK_CODE": this.commonService.nullToString(element.FROM_STOCK_CODE),
         "FROM_SUB_STOCK_CODE": this.commonService.nullToString(element.FROM_SUB_STOCK_CODE),
-        "LOSS_PURE_WT": element.METALSTONE == 'M'? LOSS_PURE_WT : 0,
+        "LOSS_PURE_WT": element.METALSTONE == 'M' ? LOSS_PURE_WT : 0,
         "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
         "IRON_WT": flag == 2 ? this.commonService.emptyToZero(element.IRON_WT) * -1 : 0,
         "IRON_SCRAP_WT": flag == 2 ? this.commonService.emptyToZero(form.METAL_ToIronScrapWt) * -1 : 0,
-        "GAIN_WT": element.METALSTONE == 'M'? GAIN_WT : 0,
-        "GAIN_PURE_WT": element.METALSTONE == 'M'? GAIN_PURE_WT : 0,
+        "GAIN_WT": element.METALSTONE == 'M' ? GAIN_WT : 0,
+        "GAIN_PURE_WT": element.METALSTONE == 'M' ? GAIN_PURE_WT : 0,
         "IS_REJECT": false,
         "REASON": "",
         "REJ_REMARKS": "",
@@ -1965,9 +2000,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       } else {
         txtLossPer = 0;
       }
-      this.setValueWithDecimal('lossQtyper',txtLossPer,'AMOUNT')
+      this.setValueWithDecimal('lossQtyper', txtLossPer, 'AMOUNT')
     } catch (err: any) {
-      this.commonService.toastErrorByMsgId('error in spliting loss')
+      this.commonService.toastErrorByMsgId('Loss Split Error')
     }
   }
   /**USE: to calculate gain detail */
@@ -2007,7 +2042,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.stockCodeScrapValidate()
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('Error something went wrong')
       })
     this.subscriptions.push(Sub)
   }
