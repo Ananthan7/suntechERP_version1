@@ -1513,19 +1513,19 @@ export class PointOfSalesOrderComponent implements OnInit {
         );
 
         /**start set line item*/
-        if (retailSaleData != null && retailSaleData.RetailDetails != null)
-          retailSaleData.RetailDetails.forEach((data: any, index: any) => {
+        if (retailSaleData != null && retailSaleData.Details != null)
+          retailSaleData.Details.forEach((data: any, index: any) => {
             data.SRNO = index + 1;
           });
 
-        retailSaleData.RetailDetails.map((data: any, index: any) => {
+        retailSaleData.Details.map((data: any, index: any) => {
           console.log("===============retailSalesDetails=====================");
           console.log(data, index);
           console.log("====================================");
 
           this.newLineItem = data;
-          // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.RetailDetails?.[0]?.IGST_ACCODE ?? '';
-          // this.newLineItem.HSN_CODE = retailSaleData?.RetailDetails?.[0]?.HSN_CODE ?? '';
+          // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.Details?.[0]?.IGST_ACCODE ?? '';
+          // this.newLineItem.HSN_CODE = retailSaleData?.Details?.[0]?.HSN_CODE ?? '';
 
           const values: any = {
             ID: data.SRNO,
@@ -1589,7 +1589,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
 
         this.retailSalesDataPost = retailSaleData;
-        this.retailSalesDataPost.RetailDetails = [];
+        this.retailSalesDataPost.Details = [];
 
         if (this.ordered_items.length >= 0)
           this.comFunc.formControlSetReadOnlyByClass("karat_code", true);
@@ -6880,7 +6880,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       // this.currentLineItems[this.orderedItemEditId - 1] = temp_pos_item_data;
       this.orderedItemEditId = "";
     }
-    this.pos_main_data.RetailDetails = this.currentLineItems;
+    this.pos_main_data.Details = this.currentLineItems;
     console.log(this.pos_main_data);
   }
   setRetailSalesRowData(sno: any, data: any) {
@@ -8732,7 +8732,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
         metalPurchase: this.metalPurchaseDataPost,
         retailsReturn: this.retailSReturnDataPost,
-        retailSales: this.retailSalesDataPost,
+        salesOrder: this.retailSalesDataPost,
 
         additionalInfo: {
           giftInfo: [
@@ -11298,8 +11298,8 @@ export class PointOfSalesOrderComponent implements OnInit {
     }
   }
   setDetailsData() {
-    if (this.retailSalesDataPost.RetailDetails.length > 0)
-      this.retailSalesDataPost.RetailDetails.forEach((data: any) => {
+    if (this.retailSalesDataPost.Details.length > 0)
+      this.retailSalesDataPost.Details.forEach((data: any) => {
         data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || "";
         data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || "";
       });
@@ -11632,7 +11632,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       GROUPREF: "",
       NEWMID: 0,
 
-      RetailDetails: this.currentLineItems,
+      Details: this.currentLineItems,
     };
     console.log("====================================");
     console.log(this.retailSalesDataPost);
