@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -152,9 +152,11 @@ export class MeltingIssueComponent implements OnInit {
     MID: [0],
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
-
+    MAIN_VOCTYPE: [''],
+    
 
   });
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
   router: any;
   onClose: any;
   modalRef: NgbModalRef | null = null
@@ -195,6 +197,15 @@ export class MeltingIssueComponent implements OnInit {
       this.setCompanyCurrency()
     }
 
+  }
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      this.codeInput1.nativeElement.focus();
+    }
+    setTimeout(() => {
+     
+    }, 2000); // Adjust the delay as needed
   }
   setNewFormValues() {
     this.branchCode = this.commonService.branchCode;
@@ -274,11 +285,15 @@ export class MeltingIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
+  minDate:any;
+  maxDate: any;
   LOCKVOUCHERNO: boolean = true;
   setvoucherTypeMaster() {
     let frm = this.meltingIssueFrom.value
     const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
   }
   ValidatingVocNo() {
     if (this.content?.FLAG == 'VIEW') return
