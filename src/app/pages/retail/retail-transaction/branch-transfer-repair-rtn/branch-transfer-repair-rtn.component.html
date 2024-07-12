@@ -5,7 +5,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header
+*ngIf="this.content?.FLAG != 'VIEW'"
+(cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="branchTransferRepairRtnForm">
@@ -101,7 +103,9 @@
 
         </div>
         <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-            <mat-tab label="Pending Repair Jobs">
+            <mat-tab 
+            *ngIf="this.content?.FLAG != 'VIEW'"
+            label="Pending Repair Jobs">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-12">
@@ -124,7 +128,9 @@
                 </mat-tab>
         </mat-tab-group>
         <mat-tab-group [(selectedIndex)]="selectedTabIndexed">
-            <mat-tab label="Pending Items">
+            <mat-tab 
+            *ngIf="this.content?.FLAG != 'VIEW'"
+            label="Pending Items">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-12">
