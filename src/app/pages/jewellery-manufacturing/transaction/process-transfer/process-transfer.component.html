@@ -43,6 +43,8 @@
                                         [matDatepicker]="dob"
                                         [readonly]="viewMode"
                                         formControlName="VOCDATE"
+                                        [min]="minDate"
+                                        [max]="maxDate"
                                         placeholder="DD/MM/YYYY" />
                                     <mat-datepicker-toggle matSuffix [for]="dob"
                                         [disabled]="viewMode"></mat-datepicker-toggle>
@@ -60,7 +62,8 @@
                                     <input type="text" matInput
                                         formControlName="VOCNO"
                                         (focusout)="ValidatingVocNo()"
-                                        class="text-right" [readonly]="LOCKVOUCHERNO"/>
+                                        class="text-right"
+                                        [readonly]="LOCKVOUCHERNO" />
                                 </mat-form-field>
                             </div>
                         </div>

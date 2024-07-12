@@ -27,6 +27,7 @@ export class ProcessTransferComponent implements OnInit {
   sequenceDetails: any[] = []
   private subscriptions: Subscription[] = [];
   modalReference!: NgbModalRef;
+  gridAmountDecimalFormat: any;
   isloading: boolean = false;
   viewMode: boolean = false;
   editMode: boolean = false;
@@ -117,6 +118,14 @@ export class ProcessTransferComponent implements OnInit {
       this.setFormValues()
       this.setCompanyCurrency()
     }
+    this.gridSettings()
+  }
+  gridSettings(){
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.commonService.compCurrency
+    };
   }
   /**USE: get InitialLoadData */
   setInitialValues() {
@@ -137,6 +146,7 @@ export class ProcessTransferComponent implements OnInit {
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
               JOB_PROCESS_TRN_COMP_DJ: data.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
             })
+            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY,'METAL')
           })
           console.log(this.detailData);
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
@@ -172,10 +182,14 @@ export class ProcessTransferComponent implements OnInit {
     )
     this.setVocTypeMaster()
   }
+  minDate:any;
+  maxDate: any;
   setVocTypeMaster(){
     let frm = this.processTransferFrom.value
     const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
   }
 
   generateVocNo() {
@@ -258,6 +272,7 @@ export class ProcessTransferComponent implements OnInit {
       this.detailData.push({ SRNO: this.tableData.length + 1, ...DATA })
       this.tableData.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
     }
+    
     this.editFinalArray(DATA)
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
     if (detailDataToParent.FLAG == 'CONTINUE') {

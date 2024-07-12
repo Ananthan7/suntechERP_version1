@@ -45,9 +45,9 @@ export class MasterSearchComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    if (!this.MasterSearchData?.LOAD_ONCLICK) {
-      this.loadData();
-    }
+    // if (!this.MasterSearchData?.LOAD_ONCLICK) {
+    //   this.loadData();
+    // }
   }
   getAPIValue() {
     let API: string = this.MasterSearchData.API_VALUE || ''
@@ -158,12 +158,13 @@ export class MasterSearchComponent implements OnInit {
     //continue adding with conditions
   }
   showOverlayPanel(event?: Event) {
-    if (this.MasterSearchData?.LOAD_ONCLICK) {
-      this.loadData();
-    }
-    if (this.MasterSearchData?.SEARCH_VALUE) {
-      this.loadData();
-    }
+    // if (this.MasterSearchData?.LOAD_ONCLICK) {
+    //   this.loadData();
+    // }
+    this.loadData();
+    // if (this.MasterSearchData?.SEARCH_VALUE) {
+    //   this.loadData();
+    // }
     this.overlayPanels.show(event);
   }
   onHidePanel() {
