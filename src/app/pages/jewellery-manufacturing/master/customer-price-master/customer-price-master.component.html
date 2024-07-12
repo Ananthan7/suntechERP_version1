@@ -208,7 +208,7 @@
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="Stone Pricing">
               <dx-data-grid #dataGrid id="gridContainer" width="100%" height="400px" [dataSource]="tableDatastone"
-                [showRowLines]="true" keyExpr="SRNO" [allowColumnResizing]="true" [showBorders]="true">
+                [showRowLines]="true"  [allowColumnResizing]="true" [showBorders]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
 
                 <dxi-column width="auto" dataField="SELECT1" caption cellTemplate="limitTemplate"
@@ -289,30 +289,111 @@
               </dx-data-grid> -->
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [height]="250" [showBorders]="true"
+              <dx-data-grid #dataGrid id="gridContainer"  [height]="250" [showBorders]="true"
                 [dataSource]="tableDatalabour" [height]="200" [allowColumnResizing]="true" [showRowLines]="true"
                 [disabled]="viewMode">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
-                <dxo-selection mode="multiple"></dxo-selection>
+          
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column *ngFor="let data of columnheader1" dataField="{{ data.field }}" caption="{{ data.title }}"
+
+                <dxi-column width="auto" dataField="SELECT1" caption cellTemplate="limitTemplate"
+                alignment="right"></dxi-column>
+              <div *dxTemplate="let data of 'limitTemplate'">
+                <mat-checkbox [checked]="data.value" [disabled]="viewMode"
+                  (change)="changedCheckbox(data)"></mat-checkbox>
+              </div>
+
+              <dxi-column dataField="LABOUR_CODE" width="auto" caption="LABOUR_CODE" alignment="center">
+              </dxi-column>
+              <dxi-column dataField="DIVISION_CODE" width="auto" caption="DIVISION CODE " [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="SHAPE" width="auto" caption="SHAPE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="DIVISION" width="auto" caption="DIVISION" [allowEditing]="true" alignment="center">
+              </dxi-column>
+              <dxi-column dataField="METHOD" width="auto" caption="METHOD" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="UNITCODE" width="auto" caption="UNITCODE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="CARATWT_FROM" width="auto" caption="CARATWT FROM" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="CARATWT_TO" width="auto" caption="CARATWT TO" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="CURRENCY_CODE" width="auto" caption="CURRENCY CODE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="CRACCODE" width="auto" caption="CRACCODE" [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="COST_RATE" width="auto" caption="COST RATE" [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="SELLING_RATE" width="auto" caption="SELLING RATE" [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+                <!-- <dxi-column *ngFor="let data of columnheader1" dataField="{{ data.field }}" caption="{{ data.title }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000" [width]="100">
-                </dxi-column>
+                </dxi-column> -->
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Design Wise Labour">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [height]="250" [showBorders]="true"
-                [allowColumnResizing]="true" [showRowLines]="true" [disabled]="viewMode">
+              <dx-data-grid #dataGrid id="gridContainer" [height]="250" [showBorders]="true"
+                [allowColumnResizing]="true" [showRowLines]="true" [disabled]="viewMode" [dataSource]="designChanges">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing> -->
-                <dxo-selection mode="multiple"></dxo-selection>
+        
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}" caption="{{ data }}"
+
+                <dxi-column width="auto" dataField="SELECT1" caption cellTemplate="limitTemplate"
+                alignment="right"></dxi-column>
+              <div *dxTemplate="let data of 'limitTemplate'">
+                <mat-checkbox [checked]="data.value" [disabled]="viewMode"
+                  (change)="changedCheckbox(data)"></mat-checkbox>
+              </div>
+              <dxi-column dataField="DESIGN_CODE" width="auto" caption="DESIGN CODE" alignment="center">
+              </dxi-column>
+              <dxi-column dataField="LABOUR_CODE" width="auto" caption="LABOUR CODE  " [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="LABTYPE" width="auto" caption="LABTYPE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="DIVISION" width="auto" caption="DIVISION" [allowEditing]="true" alignment="center">
+              </dxi-column>
+              <dxi-column dataField="METHOD" width="auto" caption="METHOD" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+                <dxi-column dataField="CURRENCY_CODE" width="auto" caption="CURRENCY CODE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="UNITCODE" width="auto" caption="UNITCODE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              
+              <dxi-column dataField="COST_RATE" width="auto" caption="COST_RATE" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="SELLING_PER" width="auto" caption="SELLING PER" [allowEditing]="true"
+                alignment="center"> </dxi-column>
+              <dxi-column dataField="CRACCODE" width="auto" caption="CRACCODE" [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="DIVISION_CODE" width="auto" caption="DIVISION CODE" [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="SELLING_RATE" width="auto" caption="SELLING RATE" [allowEditing]="true"
+                alignment="center">
+              </dxi-column>
+              <dxi-column dataField="CUSTOMER_CODE" width="auto" caption="CUSTOMER CODE" [allowEditing]="true"
+              alignment="center">
+            </dxi-column>
+            <dxi-column dataField="REFMID" width="auto" caption="REFMID" [allowEditing]="true"
+              alignment="center">
+            </dxi-column>
+            <dxi-column dataField="DT_VALID_FROM" width="auto" caption="DT_VALID_FROM" [allowEditing]="true"
+              alignment="center">
+            </dxi-column>
+                <!-- <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}" caption="{{ data }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000" [width]="100">
-                </dxi-column>
+                </dxi-column> -->
               </dx-data-grid>
             </mat-tab>
           </mat-tab-group>

@@ -209,15 +209,23 @@
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Comments :</label>
                             <div class="col-sm-9">
-                                <textarea  rows="4" cols="80" class="tx-1" formControlName="comments" maxlength="20"></textarea>
-                                <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
+                                <mat-form-field style="width: 100%;"  appearance="outline">
+                                    <input type="text" matInput formControlName="comments" maxlength="150"  [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"
+                                    (focusout)="validateLookupField($event,commentsCodeData,'comments')"/>
+                                    <master-search [MasterSearchData]="commentsCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false"    (newRowClick)="commentsCodeSelected($event)"></master-search>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Size :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="size"  maxlength="20" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="size"  maxlength="20"
+                                    oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
+                                    (focusout)="validateLookupField($event,sizeCodeData,'size')" (input)="inputValidate($event)"/>
+                                    <master-search [MasterSearchData]="sizeCodeData" class="masterSearch"
+                                    *ngIf="viewMode == false" (newRowClick)="sizeCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Length :</label>
