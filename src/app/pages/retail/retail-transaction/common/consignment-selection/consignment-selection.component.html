@@ -1,0 +1,38 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Consignment Selection 
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="scrollable-content">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <div class="col-md-12 text-end">
+                    <div class="p-1 bd-highlight">
+                        <!-- <button type="button" class="btn btn-primary add-btn" (click)="confirmSelection()">
+                            Selected
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="VOCNO" [showBorders]="true"
+                        [dataSource]="pcrSelectionData" [columnAutoWidth]="true" (onSelectionChanged)="onSelectionChanged($event)">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <dxo-selection mode="multiple"></dxo-selection>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column *ngFor="let data of columnsList" dataField="{{ data.field }}"
+                            caption="{{ data.title }}" alignment="center" backgroundcolor="#000">
+                        </dxi-column>
+                    </dx-data-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
