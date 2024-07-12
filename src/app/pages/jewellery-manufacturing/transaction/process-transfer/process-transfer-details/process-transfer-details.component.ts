@@ -678,6 +678,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('TREE_NO', job_salesorder[0].TREE_NO)
     this.nullToStringSetValue('JOB_SO_NUMBER', job_salesorder[0].JOB_SO_NUMBER)
   }
+
   //use: on row click on multiple sub job details
   onRowClickHandler(event: any) {
     if (!event.data.PROCESS) return;
@@ -902,8 +903,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     // this.nullToStringSetValue('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
     this.getImageData()
     this.stockCodeScrapValidate()
-    this.getTimeAndLossDetails()
     this.fillStoneDetails()
+    this.getTimeAndLossDetails()
     //set where conditions
     this.setFromProcessWhereCondition()
     this.setToProcessWhereCondition()
@@ -1030,7 +1031,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           }
           let date = this.commonService.getCompanyParamValue('PROCESSTIMEVALIDATE')
           this.Calc_TimeDiff()
-          this.CalculateLoss
+          this.validateSTNMTLdata(result)
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
@@ -1039,6 +1040,68 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  /**USE: validateSTNMTLdata  call */
+  validateSTNMTLdata(result: any) {
+    let metalstone_M = result.dynamicData[1] || []
+    let metalstone_S = result.dynamicData[2] || []
+    let form = this.processTransferdetailsForm.value;
+    if (metalstone_M.length > 0) {
+      let txtFromMetalPcs = this.commonService.emptyToZero(metalstone_M[0]["PCS"]);
+      let txtFromMetalWeight = this.commonService.emptyToZero(metalstone_M[0]["GROSS_WT"]);
+      let txtLossQty
+      if ((form.STD_LOSS != 0) && (this.commonService.emptyToZero(metalstone_M[0]["GROSS_WT"]) != 0)) {
+        txtLossQty = ((this.commonService.emptyToZero(metalstone_M[0]["GROSS_WT"]) * form.STD_LOSS) / 100);
+      }
+      let txtToMetalPcs = this.commonService.emptyToZero(metalstone_M[0]["PCS"]);
+      let txtToMetalWt = (this.commonService.emptyToZero(metalstone_M[0]["GROSS_WT"]) - this.commonService.emptyToZero(form.lossQty));
+      this.setValueWithDecimal('lossQty', txtLossQty, 'METAL')
+      this.setValueWithDecimal('TO_METAL_PCS', txtToMetalPcs, 'METAL')
+      this.setValueWithDecimal('TO_METAL_WT', txtToMetalWt, 'METAL')
+      this.setValueWithDecimal('FRM_METAL_PCS', txtFromMetalPcs, 'METAL')
+      this.setValueWithDecimal('FRM_METAL_WT', txtFromMetalWeight, 'METAL')
+    }
+    if (metalstone_S.length > 0) {
+      form = this.processTransferdetailsForm.value;
+      let nTotalWt = 0;
+      let nTotalPcs = 0;
+      let nWeightInGram = 0;
+      let dblZircon = this.commonService.getCompanyParamValue('MAKEZIRCONEGROSSWT');
+
+      metalstone_S.forEach((item: any) => {
+        nTotalPcs += this.commonService.emptyToZero(item["PCS"]);
+        if (dblZircon && item["DIVCODE"]?.trim().toUpperCase() == "Z") {
+          nWeightInGram += this.commonService.emptyToZero(item["GROSS_WT"]);
+          nTotalWt += this.commonService.emptyToZero(item["GROSS_WT"]) * 5;
+        }
+        else {
+          if (item["DIVCODE"]?.trim().toUpperCase() == "Z") {
+            nWeightInGram += this.commonService.emptyToZero(item["GROSS_WT"]);
+            nTotalWt += this.commonService.emptyToZero(item["GROSS_WT"]);
+          }
+          else {
+            nWeightInGram += this.commonService.emptyToZero(item["GROSS_WT"]) / 5;
+            nTotalWt += this.commonService.emptyToZero(item["GROSS_WT"]);
+          }
+        }
+      })
+      this.setValueWithDecimal('FRM_STONE_PCS', nTotalPcs, 'STONE')
+      this.setValueWithDecimal('FRM_STONE_WT', nTotalWt, 'STONE')
+      this.setValueWithDecimal('TO_STONE_PCS', nTotalPcs, 'STONE')
+      this.setValueWithDecimal('TO_STONE_WT', nTotalWt, 'STONE')
+
+      let txtFromGrossWeight = (this.commonService.emptyToZero(form.FRM_METAL_WT) + nWeightInGram);
+      let TxtToGrossWt = (this.commonService.emptyToZero(txtFromGrossWeight) - this.commonService.emptyToZero(form.lossQty));
+
+      this.setValueWithDecimal('GrossWeightFrom', txtFromGrossWeight, 'STONE')
+      this.setValueWithDecimal('GrossWeightTo', TxtToGrossWt, 'STONE')
+      let nGrossWt = this.commonService.emptyToZero(txtFromGrossWeight) - this.commonService.emptyToZero(form.lossQty);
+    }
+    if (this.Multi_Metal()) {
+      this.Split_Loss_New
+    } else {
+      this.Split_Loss(this.processTransferdetailsForm.value)
+    }
   }
   Calc_TimeDiff(): void {
     try {
@@ -1242,7 +1305,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
     if (data && data.length > 0) {
       this.setSubJobAPIDetails(data)
-    } 
+    }
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(event.PROCESS_CODE)
