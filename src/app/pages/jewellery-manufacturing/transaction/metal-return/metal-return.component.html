@@ -50,7 +50,9 @@
                                         [matDatepicker]="vocDate"
                                         formControlName="vocDate"
                                         readonly
-                                        placeholder="DD/MM/YYYY" />
+                                        placeholder="DD/MM/YYYY"
+                                        [min]="minDate"
+                                        [max]="maxDate" />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocDate"></mat-datepicker-toggle>
                                     <mat-datepicker #vocDate
