@@ -96,13 +96,16 @@ export class ProcessTransferComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //flag setting
     if (this.content?.FLAG) {
       this.isSaved = true;
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
+        this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'DELETE') {
         this.deleteClicked()
@@ -167,10 +170,12 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.MAIN_VOCTYPE.setValue(
       this.commonService.getqueryParamMainVocType()
     )
+    this.setVocTypeMaster()
+  }
+  setVocTypeMaster(){
     let frm = this.processTransferFrom.value
     const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
-
   }
 
   generateVocNo() {
@@ -284,6 +289,7 @@ export class ProcessTransferComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   ValidatingVocNo() {
+    if(this.content?.FLAG == 'VIEW') return
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.processTransferFrom.value.VOCNO}`
     API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
@@ -294,16 +300,14 @@ export class ProcessTransferComponent implements OnInit {
         this.isloading = false;
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data && data[0]?.RESULT == 1) {
+        if (data && data[0]?.RESULT == 0) {
           this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
-          let PREV_VOCNO = this.processTransferFrom.value.PREV_VOCNO
-          this.processTransferFrom.controls.VOCNO.setValue(PREV_VOCNO)
+          this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
-        let PREV_VOCNO = this.processTransferFrom.value.PREV_VOCNO
-        this.processTransferFrom.controls.VOCNO.setValue(PREV_VOCNO)
+        this.generateVocNo()
         this.commonService.toastErrorByMsgId('Error Something went wrong')
       })
     this.subscriptions.push(Sub)

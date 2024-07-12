@@ -109,6 +109,7 @@ export class MetalIssueComponent implements OnInit {
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
+    MAIN_VOCTYPE: [''],
   });
 
   constructor(
@@ -131,6 +132,10 @@ export class MetalIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO=true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.LOCKVOUCHERNO=true;
       }
       this.isSaved = true;
       if(this.content.FLAG == 'DELETE'){
@@ -139,8 +144,49 @@ export class MetalIssueComponent implements OnInit {
       this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
     } else {
+      this.generateVocNo()
       this.setNewFormValues()
+      this.setvoucherTypeMaster()  
     }
+  }
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster(){
+    let frm = this.metalIssueForm.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+  }
+  ValidatingVocNo() {
+    if(this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.metalIssueForm.value.VOCNO}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.metalIssueForm.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
   }
  
   setNewFormValues() {
@@ -148,6 +194,10 @@ export class MetalIssueComponent implements OnInit {
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
     this.metalIssueForm.controls.YEARMONTH.setValue(this.comService.yearSelected)
     this.metalIssueForm.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+    this.metalIssueForm.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+this.setvoucherTypeMaster()
   }
 
   setAllInitialValues() {

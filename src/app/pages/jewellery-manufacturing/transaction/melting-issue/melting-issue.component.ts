@@ -123,7 +123,7 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   meltingIssueFrom: FormGroup = this.formBuilder.group({
-    vocno: [1],
+    vocno: [''],
     meltingtype: [''],
     jobno: [''],
     jobdes: [''],
@@ -169,7 +169,7 @@ export class MeltingIssueComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.setNewFormValues()
+    // this.setNewFormValues()
     // this.voctype = this.commonService.getqueryParamMainVocType();
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType());
     this.setAllInitialValues()
@@ -177,6 +177,10 @@ export class MeltingIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO=true;
+      }
+      if (this.content.FLAG == 'VIEW') {
+        this.LOCKVOUCHERNO=true;
       }
       this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
@@ -185,7 +189,9 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingIssueFrom.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
     } else {
+      this.generateVocNo()
       this.setNewFormValues()
+      this.setvoucherTypeMaster() 
       this.setCompanyCurrency()
     }
 
@@ -196,6 +202,11 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.meltingIssueFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.meltingIssueFrom.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
+
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -225,7 +236,7 @@ export class MeltingIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.meltingISsueDetailsData = data.Details
-          console.log(data,'data')
+          console.log(data, 'data')
           this.meltingIssueFrom.controls.MID.setValue(data.MID)
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
           this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
@@ -262,6 +273,45 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
 
+  }
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.meltingIssueFrom.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.meltingIssueFrom.value.vocno}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.meltingIssueFrom.controls.vocno.setValue(resp.newvocno);
+        }
+      });
   }
 
   /**USE: to set currency from company parameter */
@@ -645,7 +695,7 @@ export class MeltingIssueComponent implements OnInit {
       });
       return;
     }
-  
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -659,15 +709,15 @@ export class MeltingIssueComponent implements OnInit {
         console.log('User confirmed deletion');
         let form = this.meltingIssueFrom.value;
         const API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
-            this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
-            this.content.VOCNO + '/' + this.content.YEARMONTH;
-        
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH;
+
         console.log('API endpoint:', API);
-        
+
         const Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
           .subscribe((result) => {
             console.log('API response:', result);
-            
+
             if (result) {
               if (result.status === "Success") {
                 Swal.fire({
@@ -701,12 +751,12 @@ export class MeltingIssueComponent implements OnInit {
             console.error('API call failed:', err);
             this.toastr.error('Deletion failed');
           });
-  
+
         this.subscriptions.push(Sub);
       }
     });
   }
-  
+
 
 
 
@@ -807,7 +857,7 @@ export class MeltingIssueComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
-            console.log(data,'data')
+            console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
 

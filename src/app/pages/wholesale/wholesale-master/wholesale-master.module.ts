@@ -31,6 +31,7 @@ import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/e
 import { CostCenterMakingChargesDetailsComponent } from './costcentre-magkingcharges/cost-center-making-charges-details/cost-center-making-charges-details.component';
 import { PriceschemesMasterComponent } from './priceschemes-master/priceschemes-master.component';
 import { CostCenterConsumablesDetailsComponent } from './costcentre-consumable/cost-center-consumables-details/cost-center-consumables-details.component';
+import { OunceRateMasterComponent } from './ounce-rate-master/ounce-rate-master.component';
 
 
 
@@ -65,7 +66,7 @@ import { CostCenterConsumablesDetailsComponent } from './costcentre-consumable/c
     CostCenterMakingChargesDetailsComponent,
     PriceschemesMasterComponent,
     CostCenterConsumablesDetailsComponent,
-
+    OunceRateMasterComponent,
  
    
     

@@ -113,7 +113,8 @@
                                             <input type="number" matInput
                                                 class="text-right"
                                                 formControlName="VOCNO"
-                                                readonly />
+                                                (focusout)="ValidatingVocNo()"
+                                                [readonly]="LOCKVOUCHERNO" />
                                         </mat-form-field>
                                     </div>
                                 </div>

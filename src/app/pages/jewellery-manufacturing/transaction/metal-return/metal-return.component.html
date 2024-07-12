@@ -6,7 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewDelete]="false" [isViewSave]="!viewMode"  [isloading]="isloading"
+    [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"></modal-header>
 <!-- content section -->
 <div class="row">
@@ -29,7 +29,9 @@
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="VOCNO" readonly
+                                        formControlName="VOCNO"
+                                        (focusout)="ValidatingVocNo()"
+                                        [readonly]="LOCKVOUCHERNO"
                                         style="text-align: right;" />
                                 </mat-form-field>
                             </div>
@@ -199,7 +201,8 @@
                             <dxi-column dataField="RATE_TYPE"
                                 caption="Rate"></dxi-column>
                             <dxi-column dataField="GROSS_WT"
-                                caption="Carat" [format]="gridAmountDecimalFormat"></dxi-column>
+                                caption="Carat"
+                                [format]="gridAmountDecimalFormat"></dxi-column>
                             <dxo-summary>
                                 <dxi-total-item column="Amount"
                                     summaryType="sum"
