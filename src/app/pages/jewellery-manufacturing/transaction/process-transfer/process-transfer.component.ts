@@ -172,10 +172,13 @@ export class ProcessTransferComponent implements OnInit {
     )
     this.setVocTypeMaster()
   }
+  minDate:any;
+  maxDate: any;
   setVocTypeMaster(){
     let frm = this.processTransferFrom.value
     const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
-    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null; // Set min date to today's date
+    this.maxDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null; // Set min date to today's date
   }
 
   generateVocNo() {
