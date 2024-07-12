@@ -767,10 +767,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.setValueWithDecimal('GrossWeightTo', GrossWeightTo, 'METAL')
       }
       else {
-        txtBalDiaGrWt = (this.commonService.emptyToZero(form.FRM_METAL_WT) - this.commonService.emptyToZero(form.GrossWeightTo));
+        txtBalDiaGrWt = (this.commonService.emptyToZero(form.FRM_METAL_WT) - this.commonService.emptyToZero(form.TO_METAL_WT));
       }
-    }
-    else {
+    }else {
       txtBalDiaGrWt = (this.commonService.emptyToZero(form.GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapWeight) + this.commonService.emptyToZero(form.lossQty)));
     }
     this.setValueWithDecimal('Balance_WT', txtBalDiaGrWt, 'METAL')
