@@ -1266,7 +1266,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     console.log(this.content);
     console.log("====================================");
     // need to enable
-    // this.vocType = this.comFunc.getqueryParamVocType()
+    this.vocType = this.comFunc.getqueryParamVocType();
     if (this.content != undefined) this.posMode = this.content?.FLAG;
 
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
@@ -1332,13 +1332,21 @@ export class PointOfSalesOrderComponent implements OnInit {
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSalesOrder/GetRetailSalesOrderHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.VOCNO}/${data.YEARMONTH}`;
+    let API = `RetailSalesOrder/GetRetailSalesOrder/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`;
     console.log("getRetailSalesMaster vocno", data.VOCNO);
     this.suntechApi.getDynamicAPI(API).subscribe((res) => {
+      console.log(
+        "============================================================================="
+      );
+      console.log(res);
+      console.log(
+        "============================================================================="
+      );
+
       this.snackBar.dismiss();
       // console.log(res, 'getRetailSalesMaster');
       const posCustomer = res.response.customer;
-      const retailSaleData = res.response.retailSales;
+      const retailSaleData = res.response.salesOrder;
       const retailSReturnData = res.response.retailsReturn;
       const metalPurchaseData = res.response.metalPurchase;
       this.receiptDetailsList = res.response.retailReceipt;
@@ -3788,21 +3796,27 @@ export class PointOfSalesOrderComponent implements OnInit {
           posCustomer.CODE !== "" &&
           posCustomer.CODE.toString() !== "0"
         )
-        if (
-          posCustomer.CODE &&
-          posCustomer.CODE !== '' &&
-          posCustomer.CODE.toString() !== '0'
-        ) {
-          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
+          if (
+            posCustomer.CODE &&
+            posCustomer.CODE !== "" &&
+            posCustomer.CODE.toString() !== "0"
+          ) {
+            apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
 
-          // this.suntechApi.getDynamicAPICustom('AccountLookup/GetAccountLookupWithAccMode/R').subscribe
-          custResponse = this.suntechApi.putDynamicAPI(`PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`, posCustomer)
-        } else {
-          apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
-          custResponse = this.suntechApi.postDynamicAPI(`PosCustomerMaster/InsertCustomerMaster`, posCustomer)
+            // this.suntechApi.getDynamicAPICustom('AccountLookup/GetAccountLookupWithAccMode/R').subscribe
+            custResponse = this.suntechApi.putDynamicAPI(
+              `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`,
+              posCustomer
+            );
+          } else {
+            apiCtrl = "PosCustomerMaster/InsertCustomerMaster";
+            custResponse = this.suntechApi.postDynamicAPI(
+              `PosCustomerMaster/InsertCustomerMaster`,
+              posCustomer
+            );
 
-          // custResponse = this.suntechApi.postDynamicAPICustom(apiCtrl, posCustomer)
-}
+            // custResponse = this.suntechApi.postDynamicAPICustom(apiCtrl, posCustomer)
+          }
 
         custResponse?.subscribe(async (data) => {
           this.isCustProcessing = false;
@@ -13379,7 +13393,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         }
       });
   }
-  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> { 
+  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> {
     // doubt
     const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${
       this.strBranchcode
@@ -13578,7 +13592,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     );
   }
 
-  openUserAttachmentModal():void {
+  openUserAttachmentModal(): void {
     this.modalReferenceUserAttachment = this.modalService.open(
       this.userAttachmentModal,
       {
