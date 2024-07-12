@@ -40,11 +40,12 @@ export class CustomerPriceMasterComponent implements OnInit {
   { title: 'SELLING_RATE', field: 'SELLING_RATE' },
   ];
   columnheader2: any[] = ['DESIGN_CODE', 'LABOUR_CODE', 'LABTYPE', 'METHOD', 'DIVISION', 'CURRENCY_CODE', 'UNITCODE', 'COST_RATE', 'SELLING_PER', 'CRACCODE', 'DIVISION_CODE', 'SELLING_RATE', 'CUSTOMER_CODE', 'REFMID', 'DT_VALID_FROM'];
-  subscriptions: any;
+  subscriptions: any=[];
   @Input() content!: any;
   tableData: any[] = [];
   tableDatalabour: any[] = [];
   tableDatastone: any[] = [];
+  designChanges: any[] = [];
   currentDate: any = this.commonService.currentDate;
   value: any;
   rateInput: any;
@@ -115,9 +116,11 @@ export class CustomerPriceMasterComponent implements OnInit {
         this.deleteRecord()
       }
     }
-    
-    this.getStonePriceData()
-    this.getLabourChargeMasterList()
+    this.stonepricing();
+    this.labourcharge();
+    this.designcharge();
+  //  this.getStonePriceData()
+  //  this.getLabourChargeMasterList()
   }
   setInitialValues(){
     this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
@@ -141,6 +144,92 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   }
 
+  stonepricing() {
+  
+    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "097",
+      "parameter": {
+        "strCode": this.customerpricemasterForm.value.customercode,
+        "strType": 'STON',
+        "strVocDate ": this.customerpricemasterForm.value.date,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.tableDatastone = result.dynamicData[0] || []
+          if (this.tableDatastone?.length > 0) {
+           // this.fillPriceSchemeDetails()
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+  labourcharge() {
+    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "097",
+      "parameter": {
+        "strCode": this.customerpricemasterForm.value.customercode,
+        "strType": 'LABO',
+        "strVocDate ": this.customerpricemasterForm.value.date,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+
+          this.tableDatalabour = result.dynamicData[0] || []
+          if (this.tableDatalabour?.length > 0) {
+            console.log(result.dynamicData[0]);
+           // this.fillPriceSchemeDetails()
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  designcharge() {
+  
+    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "097",
+      "parameter": {
+        "strCode": this.customerpricemasterForm.value.customercode,
+        "strType": 'DESN',
+        "strVocDate ": this.customerpricemasterForm.value.date,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.designChanges = result.dynamicData[0] || []
+          if (this.designChanges?.length > 0) {
+           // this.fillPriceSchemeDetails()
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   getLabourChargeMasterList() {
     // this.commonService.toastSuccessByMsgId('MSG81447');
@@ -159,6 +248,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
   }
+
   getStonePriceData() {
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
