@@ -12,16 +12,13 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
-import { RepairDetailsComponent } from "./repair-details/repair-details.component";
-import { DailyRatesOunceComponent } from "./daily-rates-ounce/daily-rates-ounce.component";
-import { PendingSalesOrdersComponent } from "./pending-sales-orders/pending-sales-orders.component";
-
 @Component({
-  selector: "app-repair-jewellery-receipt",
-  templateUrl: "./repair-jewellery-receipt.component.html",
-  styleUrls: ["./repair-jewellery-receipt.component.scss"],
+  selector: "app-pending-sales-orders",
+  templateUrl: "./pending-sales-orders.component.html",
+  styleUrls: ["./pending-sales-orders.component.scss"],
 })
-export class RepairJewelleryReceiptComponent implements OnInit {
+export class PendingSalesOrdersComponent implements OnInit {
+  title: string = "Pending Sales Orders";
   columnheadItemDetails: any[] = [
     "SRNO",
     "DIVISION_CODE",
@@ -559,51 +556,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     this.openRepairdetails(e.data);
   }
 
-  openNew(data: any = null) {
-    const modalRef: NgbModalRef = this.modalService.open(
-      PendingSalesOrdersComponent,
-      {
-        size: "xl",
-        backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
-      }
-    );
-    // modalRef.componentInstance.receiptData = { ...data };
-    // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
-
-    // modalRef.result.then((postData) => {
-    //   if (postData) {
-    //     console.log("Data from modal:", postData);
-    //     this.handlePostData(postData);
-    //   }
-    // });
-  }
-
-  open(data: any = null) {
-    const modalRef: NgbModalRef = this.modalService.open(
-      DailyRatesOunceComponent,
-      {
-        size: "xl",
-        backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
-      }
-    );
-    // modalRef.componentInstance.receiptData = { ...data };
-    // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
-
-    // modalRef.result.then((postData) => {
-    //   if (postData) {
-    //     console.log("Data from modal:", postData);
-    //     this.handlePostData(postData);
-    //   }
-    // });
-  }
-
   openRepairdetails(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(
-      RepairDetailsComponent,
+      // RepairDetailsComponent,
       {
         size: "xl",
         backdrop: true,
