@@ -79,6 +79,9 @@ export class AddPosComponent implements OnInit {
   private cssFilePath = '../../../assets/estimation_pdf.scss';
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
+  LOCKVOUCHERNO: boolean = true;
+  minDate:any;
+  maxDate: any;
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
@@ -1137,6 +1140,15 @@ allowDescription:boolean=false;
       this.comFunc.VocTypeMasterData = data;
     });
   }
+
+  setVoucherTypeMaster(){
+    let frm = this.vocDataForm.value
+    const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+
   // async getAllCompanyParameters() {
   //   let map = new Map();
   //   this.suntechApi.getCompanyParameters().subscribe(async (resp) => {
@@ -1203,7 +1215,7 @@ allowDescription:boolean=false;
       this.posMode = this.content?.FLAG;
 
     if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
-
+      this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
       this.getFinancialYear();
@@ -1227,6 +1239,7 @@ allowDescription:boolean=false;
     } else {
       this.getFinancialYear();
       this.generateVocNo();
+      this.setVoucherTypeMaster();
 
     }
 
@@ -1254,6 +1267,20 @@ allowDescription:boolean=false;
     //   }
     // });
   }
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.vocDataForm.controls.vocdate.setValue(new Date(date))
+    }
+  }
+
+
   getRetailSalesMaster(data: any) {
 
     this.snackBar.open('Loading...');
