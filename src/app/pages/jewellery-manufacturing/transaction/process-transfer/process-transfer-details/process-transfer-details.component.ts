@@ -58,9 +58,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number <> ''",
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.commonService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   stockCodeSearch: MasterSearchModel = {
     PAGENO: 1,
@@ -72,6 +73,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   userDetailNet: MasterSearchModel = {
     PAGENO: 1,
@@ -1240,9 +1242,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
     if (data && data.length > 0) {
       this.setSubJobAPIDetails(data)
-    } else {
-      this.commonService.toastErrorByMsgId('MSG1460')
-    }
+    } 
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(event.PROCESS_CODE)
@@ -2063,8 +2063,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   /**use: print Checkbox  change */
   settedCheckbox(event: any) {
     console.log(event.data);
-    console.log(this.tableData);
-    this.tableData[event.data.SRNO - 1].SETTED_FLAG = !event.data.SETTED_FLAG;
+    console.log(this.metalDetailData);
+    this.metalDetailData[event.data.SRNO - 1].SETTED_FLAG = !event.data.SETTED_FLAG;
   }
   close(data?: any) {
     // this.activeModal.close(data);
