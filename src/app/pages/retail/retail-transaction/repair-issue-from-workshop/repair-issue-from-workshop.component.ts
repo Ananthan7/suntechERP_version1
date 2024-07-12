@@ -96,13 +96,18 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   }
 
   getrepairreceiptbyid(){
-    console.log(this.content);
+    console.log(this.content.VOCDATE);
     const dateParts = this.content.VOCDATE.split('T')[0].split('-').reverse().join('/');
+    console.log(dateParts);    
     this.repairReceiveForm.controls.voctype.setValue(this.content.VOCTYPE);
     this.repairReceiveForm.controls.vocNo.setValue(this.content.VOCNO);
     this.repairReceiveForm.controls.vocDate.setValue(dateParts);
-    this.repairReceiveForm.controls.partyCode.setValue(this.content.POSCUSTCODE);
-    this.repairReceiveForm.controls.partyName.setValue(this.content.POSCUSTNAME);
+    this.repairReceiveForm.controls.customerCode.setValue(this.content.POSCUSTCODE);
+    this.repairReceiveForm.controls.customerCodeDesc.setValue(this.content.POSCUSTNAME);
+    this.repairReceiveForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
+    this.repairReceiveForm.controls.supplierInvNo.setValue(this.content.SUPINVNO);
+    this.repairReceiveForm.controls.partyCode.setValue(this.content.BRANCHTO);   
+
   }
 
   convertDateToYMD(str: any) {
@@ -176,36 +181,36 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       BRANCH_CODE: this.branchCode,
       VOCTYPE: this.repairReceiveForm.value.voctype,
       VOCNO: this.repairReceiveForm.value.vocNo,
-      VOCDATE: this.repairReceiveForm.value.Date,
+      VOCDATE: this.repairReceiveForm.value.vocDate,
       YEARMONTH: this.yearMonth,
       SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
-      BRANCHTO: "string",
-      REMARKS: "string",
+      BRANCHTO: this.repairReceiveForm.value.salesMan.partyCode,
+      REMARKS: "",
       SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
-      STATUS: "string",
+      STATUS: "",
       METALVOCNO: 0,
       METALWEIGHT: 0,
       METALAMOUNT: 0,
       METALMID: 0,
-      METALVOCTYPE: "str",
-      METALCODE: "string",
-      DIAMONDCODE: "string",
+      METALVOCTYPE: "",
+      METALCODE: "",
+      DIAMONDCODE: "",
       DIAMONDVOCNO: 0,
-      DIAMONDVOCTYPE: "str",
+      DIAMONDVOCTYPE: "",
       DIAMONDMID: 0,
       DIAMONDWGT: 0,
       DIAMONDAMOUNT: 0,
-      SUPINVDATE: "2024-03-07T11:34:37.685Z",
-      SUPINVNO: "string",
-      TRANSFERBRANCH: "string",
+      SUPINVDATE: this.repairReceiveForm.value.date,
+      SUPINVNO:this.repairReceiveForm.value.salesMan.supplierInvNo,
+      TRANSFERBRANCH: "",
       AUTOPOSTING: true,
-      BRANCHTONAME: "string",
-      ISMETALDIAMOND: "string",
-      HASJOBDONE: "string",
+      BRANCHTONAME: "",
+      ISMETALDIAMOND: "",
+      HASJOBDONE: "",
       PRINT_COUNT: 0,
-      POSCUSTCODE: this.repairReceiveForm.value.partyCode,
-      POSCUSTNAME: this.repairReceiveForm.value.partyName,
+      POSCUSTCODE: this.repairReceiveForm.value.customerCode,
+      POSCUSTNAME: this.repairReceiveForm.value.customerCodeDesc,
       PRINT_COUNT_ACCOPY: 0,
       PRINT_COUNT_CNTLCOPY: 0,
       HTUSERNAME: "string",
@@ -244,59 +249,55 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   updateRepairReceive() {
     console.log(this.branchCode, "working");
     let API =
-      "RepairTransfer/UpdateRepairTransfer" +
-      this.content.BRANCH_CODE +
-      this.content.VOCTYPE +
-      this.content.VOCNO +
-      this.content.YEARMONTH;
-    let postData = {
-      MID: 0,
-      BRANCH_CODE: "string",
-      VOCTYPE: "str",
-      VOCNO: 0,
-      VOCDATE: "2024-03-07T11:39:51.822Z",
-      YEARMONTH: "string",
-      SALESPERSON_CODE: "string",
-      BRANCHTO: "string",
-      REMARKS: "string",
-      SYSTEM_DATE: "2024-03-07T11:39:51.822Z",
-      NAVSEQNO: 0,
-      STATUS: "string",
-      METALVOCNO: 0,
-      METALWEIGHT: 0,
-      METALAMOUNT: 0,
-      METALMID: 0,
-      METALVOCTYPE: "str",
-      METALCODE: "string",
-      DIAMONDCODE: "string",
-      DIAMONDVOCNO: 0,
-      DIAMONDVOCTYPE: "str",
-      DIAMONDMID: 0,
-      DIAMONDWGT: 0,
-      DIAMONDAMOUNT: 0,
-      SUPINVDATE: "2024-03-07T11:39:51.822Z",
-      SUPINVNO: "string",
-      TRANSFERBRANCH: "string",
-      AUTOPOSTING: true,
-      BRANCHTONAME: "string",
-      ISMETALDIAMOND: "string",
-      HASJOBDONE: "string",
-      PRINT_COUNT: 0,
-      POSCUSTCODE: "string",
-      POSCUSTNAME: "string",
-      PRINT_COUNT_ACCOPY: 0,
-      PRINT_COUNT_CNTLCOPY: 0,
-      HTUSERNAME: "string",
-      JOBDONE: 0,
-      METALANDDIAMOND: 0,
-    };
+      `RepairTransfer/UpdateRepairTransfer/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+      let postData = {
+        MID: 0,
+        BRANCH_CODE: this.branchCode,
+        VOCTYPE: this.repairReceiveForm.value.voctype,
+        VOCNO: this.repairReceiveForm.value.vocNo,
+        VOCDATE: this.repairReceiveForm.value.vocDate,
+        YEARMONTH: this.yearMonth,
+        SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
+        BRANCHTO: this.repairReceiveForm.value.salesMan.partyCode,
+        REMARKS: "",
+        SYSTEM_DATE: new Date().toISOString(),
+        NAVSEQNO: 0,
+        STATUS: "",
+        METALVOCNO: 0,
+        METALWEIGHT: 0,
+        METALAMOUNT: 0,
+        METALMID: 0,
+        METALVOCTYPE: "",
+        METALCODE: "",
+        DIAMONDCODE: "",
+        DIAMONDVOCNO: 0,
+        DIAMONDVOCTYPE: "",
+        DIAMONDMID: 0,
+        DIAMONDWGT: 0,
+        DIAMONDAMOUNT: 0,
+        SUPINVDATE: this.repairReceiveForm.value.date,
+        SUPINVNO: this.repairReceiveForm.value.salesMan.supplierInvNo,
+        TRANSFERBRANCH: "",
+        AUTOPOSTING: true,
+        BRANCHTONAME: "",
+        ISMETALDIAMOND: "",
+        HASJOBDONE: "",
+        PRINT_COUNT: 0,
+        POSCUSTCODE: this.repairReceiveForm.value.customerCode,
+        POSCUSTNAME: this.repairReceiveForm.value.customerCodeDesc,
+        PRINT_COUNT_ACCOPY: 0,
+        PRINT_COUNT_CNTLCOPY: 0,
+        HTUSERNAME: "",
+        JOBDONE: 0,
+        METALANDDIAMOND: 0,
+      };
 
     let Sub: Subscription = this.dataService
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -437,7 +438,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   partySelected(e: any) {
     console.log(e);
     this.repairReceiveForm.controls.partyCode.setValue(e.ACCODE);
-    this.repairReceiveForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
+    //this.repairReceiveForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
   }
   customerSelected(e: any) {
     console.log(e);
