@@ -170,10 +170,12 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.MAIN_VOCTYPE.setValue(
       this.commonService.getqueryParamMainVocType()
     )
+    this.setVocTypeMaster()
+  }
+  setVocTypeMaster(){
     let frm = this.processTransferFrom.value
     const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
-
   }
 
   generateVocNo() {
@@ -300,14 +302,12 @@ export class ProcessTransferComponent implements OnInit {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
           this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
-          let PREV_VOCNO = this.processTransferFrom.value.PREV_VOCNO
-          this.processTransferFrom.controls.VOCNO.setValue(PREV_VOCNO)
+          this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
-        let PREV_VOCNO = this.processTransferFrom.value.PREV_VOCNO
-        this.processTransferFrom.controls.VOCNO.setValue(PREV_VOCNO)
+        this.generateVocNo()
         this.commonService.toastErrorByMsgId('Error Something went wrong')
       })
     this.subscriptions.push(Sub)

@@ -38,7 +38,7 @@ export class TransactionDetailsComponent implements OnInit {
 
     this.commonService.toastSuccessByMsgId('MSG81447');
      //let API = 'JobTransactionsGrid/GetJobTransaction/' + this.branchCode + '/' + 524;
-     let API = 'JobTransactionsGrid/GetJobTransaction/DMCC/14480/DMCC';
+     let API = 'JobTransactionsGrid/GetJobTransaction/DMCC/14480';
     
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe(

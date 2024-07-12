@@ -263,18 +263,7 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  mainmetalCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Main Metal type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
+
 
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -283,7 +272,7 @@ export class JobcardComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Time type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='TIME MASTER' AND DIV_D=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -295,7 +284,7 @@ export class JobcardComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Range type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types = 'RANGE MASTER' AND DIV_D=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -407,7 +396,19 @@ export class JobcardComponent implements OnInit {
   }
 
 
-
+  mainmetalCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Main Metal type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -693,6 +694,7 @@ export class JobcardComponent implements OnInit {
 
   mainmetalCodeSelected(e: any) {
     console.log(e);
+    this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
     this.jobCardFrom.controls.mainmetal.setValue(e.STOCK_CODE);
   }
 
@@ -1431,49 +1433,67 @@ export class JobcardComponent implements OnInit {
           return
         }
 
-        const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
-        if (matchedItem) {
-          this.jobCardFrom.controls[FORMNAME].setValue(matchedItem.ACCODE);
-          if (FORMNAME === 'customer') {
-            this.jobCardFrom.controls.customername.setValue(matchedItem.ACCOUNT_HEAD);
-
-          }
-
+        const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
+        if (matchedItem2) {
+            this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
+            if (FORMNAME === 'designcode') {
+                this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
+                this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
+                this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
+                this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
+                this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
+                this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
+                this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
+                this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
+                this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+            }
         } else {
-          this.commonService.toastErrorByMsgId('MSG1531');
-          this.jobCardFrom.controls[FORMNAME].setValue('');
-          this.jobCardFrom.controls.customername.setValue('');
-
-          if (FORMNAME === 'customer') {
-            this.jobCardFrom.controls.customername.setValue('');
-          }
-
-          this.renderer.selectRootElement(FORMNAME).focus();
-          //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-
+            this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
 
-        const matchedItem1 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() == inputValue);
-        if (matchedItem1) {
-          this.jobCardFrom.controls[FORMNAME].setValue(matchedItem1.DESIGN_CODE);
-          if (FORMNAME === 'designcode') {
-            this.jobCardFrom.controls.designtype.setValue(matchedItem1.DESIGN_DESCRIPTION);
+        // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
+        // if (matchedItem) {
+        //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem.ACCODE);
+        //   if (FORMNAME === 'customer') {
+        //     this.jobCardFrom.controls.customername.setValue(matchedItem.ACCOUNT_HEAD);
 
-          }
+        //   }
 
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531');
-          this.jobCardFrom.controls[FORMNAME].setValue('');
-          this.jobCardFrom.controls.designtype.setValue('');
+        // } else {
+        //   this.commonService.toastErrorByMsgId('MSG1531');
+        //   this.jobCardFrom.controls[FORMNAME].setValue('');
+        //   this.jobCardFrom.controls.customername.setValue('');
 
-          if (FORMNAME === 'designcode') {
-            this.jobCardFrom.controls.designtype.setValue('');
-          }
+        //   if (FORMNAME === 'customer') {
+        //     this.jobCardFrom.controls.customername.setValue('');
+        //   }
 
-          this.renderer.selectRootElement(FORMNAME).focus();
-          //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+        //   this.renderer.selectRootElement(FORMNAME).focus();
+        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
 
-        }
+        // }
+
+        // const matchedItem1 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() == inputValue);
+        // if (matchedItem1) {
+        //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem1.DESIGN_CODE);
+        //   if (FORMNAME === 'designcode') {
+     
+        //     this.jobCardFrom.controls.designtype.setValue(matchedItem1.DESIGN_DESCRIPTION);
+        //   }
+
+        // } else {
+        //   this.commonService.toastErrorByMsgId('MSG1531');
+        //   this.jobCardFrom.controls[FORMNAME].setValue('');
+        //   this.jobCardFrom.controls.designtype.setValue('');
+
+        //   if (FORMNAME === 'designcode') {
+        //     this.jobCardFrom.controls.designtype.setValue('');
+        //   }
+
+        //   this.renderer.selectRootElement(FORMNAME).focus();
+        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+
+        // }
 
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
@@ -1481,6 +1501,14 @@ export class JobcardComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+    this.commonService.toastErrorByMsgId('MSG1531');
+    this.jobCardFrom.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    if (FORMNAME === 'designcode') {
+        this.jobCardFrom.controls.designtype.setValue('');
+    }
+}
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
