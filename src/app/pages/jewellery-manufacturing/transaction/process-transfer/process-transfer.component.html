@@ -43,6 +43,8 @@
                                         [matDatepicker]="dob"
                                         [readonly]="viewMode"
                                         formControlName="VOCDATE"
+                                        [min]="minDate"
+                                        [max]="maxDate"
                                         placeholder="DD/MM/YYYY" />
                                     <mat-datepicker-toggle matSuffix [for]="dob"
                                         [disabled]="viewMode"></mat-datepicker-toggle>
