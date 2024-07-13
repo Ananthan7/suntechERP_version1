@@ -509,7 +509,7 @@
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ vocno_lbl }}</mat-label>
-              <input type="text" matInput formControlName="fcn_voc_no" [readonly]="LOCKVOUCHERNO" class="st_txt_right" />
+              <input type="text" matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO" class="st_txt_right" />
             </mat-form-field>
           </div>
 
@@ -545,8 +545,8 @@
                 [matDatepicker]="dob"
                 [readonly]="viewOnly"
                 formControlName="vocdate"
-                [min]="minDate"
-                [max]="maxDate"
+                [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
+                [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null"
                 placeholder="DD/MM/YYYY" />
             <mat-datepicker-toggle matSuffix [for]="dob"
                 [disabled]="viewOnly"></mat-datepicker-toggle>
@@ -2799,27 +2799,37 @@
                         </master-search> -->
                 </div>
                 <div class="col-md-2">
-                  <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
                   <mat-form-field>
-                    <mat-label>Item Code </mat-label>
-                    <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code" #fcn_li_item_code
-                      id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
+                    <mat-label>Item Code</mat-label>
+                    <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code"
+                           #fcn_li_item_code id="fcn_li_item_code" autofocus (change)="getStockDesc($event)"
+                           [readonly]="viewOnly" />
                   </mat-form-field>
-                  <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)"></master-search> -->
                 </div>
+                
+                <div class="col-md-1 d-flex align-items-center justify-content-center">
+                  <i class="fas fa-camera fa-2x" (click)="openScanner()" style="cursor: pointer;"></i>
+                </div>
+                
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>Item Description </mat-label>
                     <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
-                      [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
+                           [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
                   </mat-form-field>
                 </div>
+
+
+
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Location </mat-label>
                     <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
                       [readonly]="viewOnly" />
                   </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                <app-barcode-scanner *ngIf="scannerVisible" (barcodeDetected)="onBarcodeDetected($event)" (scannerClosed)="closeScanner()"></app-barcode-scanner>
                 </div>
 
               </div>
@@ -3263,3 +3273,4 @@
     </div>
   </div>
 </ng-template>
+
