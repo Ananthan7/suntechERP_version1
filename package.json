@@ -27,6 +27,8 @@
     "@asymmetrik/ngx-leaflet": "^8.1.0",
     "@ckeditor/ckeditor5-angular": "^2.0.2",
     "@ckeditor/ckeditor5-build-classic": "^29.0.0",
+    "@eisberg-labs/ngx-barcode-scanner": "0.0.2",
+    "@ericblade/quagga2": "^1.7.7",
     "@fullcalendar/angular": "^5.8.0",
     "@fullcalendar/daygrid": "^5.8.0",
     "@fullcalendar/interaction": "^5.8.0",
@@ -87,8 +89,7 @@
     "tslib": "^2.1.0",
     "xlsx": "^0.18.5",
     "xml-js": "^1.6.11",
-    "zone.js": "~0.11.4",
-    "@eisberg-labs/ngx-barcode-scanner": "0.0.2"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.3.11",

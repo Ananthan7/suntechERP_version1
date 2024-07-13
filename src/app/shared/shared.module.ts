@@ -87,6 +87,7 @@ import { DatetimePickerComponent } from './common/datetime-picker/datetime-picke
 // import { BarcodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { NgxBarcodeScannerModule } from '@eisberg-labs/ngx-barcode-scanner';
+import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 
 
 @NgModule({
@@ -174,11 +175,12 @@ import { NgxBarcodeScannerModule } from '@eisberg-labs/ngx-barcode-scanner';
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, NgbCarouselModule,
-    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule
+    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule
   ],
   exports: [
     //component exports
     LoaderComponent,
+    BarcodeScannerLivestreamModule,
     MenubarComponent,
     ZXingScannerModule,
     NgxBarcodeScannerModule,

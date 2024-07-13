@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { BarcodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -7,23 +8,28 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class BarcodeScannerComponent {
 
+  @ViewChild(BarcodeScannerLivestreamComponent)
+  barcodeScanner!: BarcodeScannerLivestreamComponent;
+
   @Output() barcodeDetected = new EventEmitter<string>();
-  @Output() scannerClosed = new EventEmitter<void>();
-  value: string="";
-  isError: boolean = false;
+  @Output() closeRequested = new EventEmitter<void>();
 
-  onError(error: any): void {
-    console.error('Barcode scan error: ', error);
-    this.isError = true;
+  barcodeValue: any;
+
+  ngAfterViewInit() {
+    this.barcodeScanner.start();
   }
 
-  onValueChange(value: string): void {
-    this.value = value;
-    this.barcodeDetected.emit(this.value);
+  onValueChanges(result: any) {
+    this.barcodeValue = result.codeResult.code;
+    this.barcodeDetected.emit(this.barcodeValue);
   }
 
-  close(): void {
-    this.scannerClosed.emit();
+  onStarted(started: any) {
+    console.log(started);
   }
-  
+
+  closeScanner() {
+    this.closeRequested.emit();
+  }
 }

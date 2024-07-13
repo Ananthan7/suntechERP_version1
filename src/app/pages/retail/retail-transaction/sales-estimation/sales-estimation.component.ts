@@ -10,6 +10,7 @@ import {
     AfterViewInit,
     Input,
     ElementRef,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map, pairwise, startWith } from 'rxjs/operators';
@@ -767,7 +768,8 @@ export class SalesEstimationComponent implements OnInit {
         private inDb: IndexedDbService,
         private datePipe: DatePipe,
         private planetService:PlanetService,
-        public lineItemService: ItemDetailService
+        public lineItemService: ItemDetailService,
+        private cdr: ChangeDetectorRef
 
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
@@ -12341,14 +12343,22 @@ export class SalesEstimationComponent implements OnInit {
         this.scannerVisible = true;
       }
     
-      closeScanner(): void {
+      onCloseRequested() {
         this.scannerVisible = false;
       }
     
-      onBarcodeDetected(barcode: string): void {
+      // onBarcodeDetected(barcode: string): void {
+      //   this.lineItemForm.controls.fcn_li_item_code.setValue(barcode);
+      //   this.cdr.detectChanges();
+      //   this.getStockDesc({ target: { value: barcode } });
+      //   this.closeScanner();
+      // }
+
+
+      onBarcodeDetected(barcode: string) {
         this.lineItemForm.controls.fcn_li_item_code.setValue(barcode);
+        this.scannerVisible = false;
         this.getStockDesc({ target: { value: barcode } });
-        this.closeScanner();
       }
     
 

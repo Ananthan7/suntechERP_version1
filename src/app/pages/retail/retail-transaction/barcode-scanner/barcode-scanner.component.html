@@ -1,9 +1,30 @@
 <div class="scanner-container">
-    <h2> Barcode: <small style="color: red">{{value}}</small></h2>
-    <p style="color:red" *ngIf="isError">Barcode scan is not available.</p>
-    <ngx-barcode-scanner [(value)]="value" [codes]="['code_128', 'ean', 'upc', 'upc_e', 'ean_8']"
-                         [errorThreshold]="0.1" (exception)="onError($event)"
-                         (valueChange)="onValueChange($event)"></ngx-barcode-scanner>
-    <button mat-button (click)="close()">Close</button>
+    <div class="scanner-frame">
+      <barcode-scanner-livestream
+        type="code_128"
+        (valueChanges)="onValueChanges($event)"
+        (started)="onStarted($event)">
+      </barcode-scanner-livestream>
+      <div [hidden]="!barcodeValue">
+        {{ barcodeValue }}
+      </div>
+    </div>
+    <button class="close-button" (click)="closeScanner()">Close</button>
   </div>
+  
+<!-- 
+
+  <div class="scanner-container">
+    <div class="scanner-frame">
+      <barcode-scanner-livestream
+        type="code_128"
+        (valueChanges)="onValueChanges($event)"
+        (started)="onStarted($event)">
+      </barcode-scanner-livestream>
+      <div [hidden]="!barcodeValue">
+        {{ barcodeValue }}
+      </div>
+    </div>
+    <button class="close-button" (click)="closeScanner()">Close</button>
+  </div> -->
   
