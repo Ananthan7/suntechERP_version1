@@ -20,10 +20,10 @@
                 <div class="col-md-4">
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
-                                class="col-sm-4 col-form-label">
+                            <label for="inputPassword" id="ID001"
+                                class="col-sm-2 col-form-label">
                                 Code * :</label>
-                            <mat-form-field style="width: 20%">
+                            <mat-form-field style="width: 20%" appearance="outline">
                                 <input type="text" matInput placeholder="Code"
                                     maxlength="6" UpperCaseDirective
                                     formControlName="sequenceCode"
@@ -32,7 +32,7 @@
                                     (keyup)="codeEnabled()" id="code" 
                                     autocomplete="off"/>
                             </mat-form-field>
-                            <mat-form-field
+                            <mat-form-field appearance="outline"
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
                                     placeholder="Description"
@@ -47,10 +47,10 @@
                 <div class="col-md-4">
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
-                                class="col-sm-4 col-form-label">
+                            <label for="inputPassword" id="ID002"
+                                class="col-sm-2 col-form-label">
                                 Prefix :</label>
-                            <mat-form-field style="width: 150px">
+                            <mat-form-field style="width: 150px" appearance="outline">
                                 <input type="text" matInput readonly
                                     [readonly]="viewMode || codeEnable"
                                     placeholder="Prefix Code" maxlength="6"
@@ -58,11 +58,11 @@
                                     (focusout)="validateLookupField($event,sequenceMasterData,'sequencePrefixCode')"
                                     formControlName="sequencePrefixCode"
                                     UpperCaseDirective />
+                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                        [MasterSearchData]="sequenceMasterData"
+                                        (newRowClick)="sequencePrefixCodeSelected($event)">
+                                    </master-search>
                             </mat-form-field>
-                            <master-search *ngIf="!viewMode"
-                                [MasterSearchData]="sequenceMasterData"
-                                (newRowClick)="sequencePrefixCodeSelected($event)">
-                            </master-search>
                         </span>
                     </div>
                 </div>
@@ -73,28 +73,28 @@
             <div class="col-md-11">
                 <div class="row ps-4">
                     <div class="col-md-3" *ngIf="!viewMode">
-                        <mat-form-field style="width: 60%">
+                        <mat-form-field style="width: 60%" appearance="outline">
                             <input type="text" matInput 
                                 [readonly]="viewMode"
                                 [(ngModel)]="processSearch"
                                 placeholder="Search Process" maxlength="10"
                                 (focusout)="searchFromGrid($event)"/>
+                                <button class="btn btn-white search-btn btnSearch">
+                                    <i class="fa fa-search"></i>
+                                </button>
                         </mat-form-field>
-                        <button class="btn btn-white search-btn">
-                            <i class="fa fa-search"></i>
-                        </button>
                     </div>
                 </div>
                 <div class="row ps-4"
                     style="max-height: 60vh;overflow-y: scroll;">
                     <div class="d-flex w-100"
                         style="background-color: #427dae;color: #fff;text-align: center;">
-                        <div
+                        <div id="ID003"
                             style="width: 36%; border-right: 1px solid #fff;">Sequence</div>
-                        <div
+                        <div id="ID004"
                             style="width: 26%; border-right: 1px solid #fff;">Labour
                             Account</div>
-                        <div style="width: 35%;">Manufacturing Loss</div>
+                        <div style="width: 35%;" id="ID005">Manufacturing Loss</div>
                     </div>
                     <!-- drag and drop table -->
                     <table
@@ -108,19 +108,19 @@
                                         [(ngModel)]="selectAll"
                                         (change)="checkAll()"
                                         (change)="oncalculateChange($event)" /></th>
-                                <th scope="col">No</th>
-                                <th scope="col">Process</th>
-                                <th scope="col"
+                                <th scope="col" id="ID006">No</th>
+                                <th scope="col" id="ID007">Process</th>
+                                <th scope="col" id="ID008"
                                     style="width: 300px;">Description</th>
-                                <th scope="col">WIP AC</th>
-                                <th scope="col">Gain A/c</th>
-                                <th scope="col">Lab A/c</th>
-                                <th scope="col">Loss A/c</th>
-                                <th scope="col">Std Loss</th>
-                                <th scope="col">Max Loss</th>
-                                <th scope="col">Std Time</th>
-                                <th scope="col">Max Time</th>
-                                <th scope="col">Calculate Time</th>
+                                <th scope="col" id="ID009">WIP AC</th>
+                                <th scope="col" id="ID010">Gain A/c</th>
+                                <th scope="col" id="ID011">Lab A/c</th>
+                                <th scope="col" id="ID012">Loss A/c</th>
+                                <th scope="col" id="ID013">Std Loss</th>
+                                <th scope="col" id="ID014">Max Loss</th>
+                                <th scope="col" id="ID015">Std Time</th>
+                                <th scope="col" id="ID016">Max Time</th>
+                                <th scope="col" id="ID017">Calculate Time</th>
                             </tr>
                         </thead>
                         <tbody>
