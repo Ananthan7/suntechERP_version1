@@ -90,11 +90,13 @@ import { customerDetailsModal } from '../common-retail/customer-details-modal/it
 import { ExchangeDetailModal } from '../common-retail/exchange-detail-modal/exchange-detail.component';
 import { DailyRatesOunceComponent } from './repair-jewellery-receipt/daily-rates-ounce/daily-rates-ounce.component';
 import { ConsignmentSelectionComponent } from './common/consignment-selection/consignment-selection.component';
-import { PendingSalesOrdersComponent } from './repair-jewellery-receipt/pending-sales-orders/pending-sales-orders.component';
+import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.component';
+
 
 @NgModule({
   declarations: [
     DailyRatesOunceComponent,
+    BarcodeScannerComponent,
     RetailTransactionComponent,
     // AddCustomerComponent,
     PosCustomerMasterComponent,
@@ -186,7 +188,6 @@ import { PendingSalesOrdersComponent } from './repair-jewellery-receipt/pending-
     customerDetailsModal,
     ExchangeDetailModal,
     ConsignmentSelectionComponent,
-    PendingSalesOrdersComponent,
   ],
   imports: [
     CommonModule,
