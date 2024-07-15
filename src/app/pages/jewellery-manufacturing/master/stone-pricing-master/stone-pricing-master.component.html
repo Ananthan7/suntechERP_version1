@@ -258,7 +258,7 @@
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text" matInput
-                                            (change)="onSievetto($event)"
+                                            (change)="onSievetto($event,'sieve_to_desc')"
                                                 formControlName="sieve_to_desc"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
@@ -295,7 +295,7 @@
                                                 matInput maxlength="15"
                                                 class="text-right"
                                                 formControlName="wt_to"
-                                                (change)="onweighttto($event)"
+                                                (change)="onweightto($event,'wt_to')"
                                                 StoneDecimalInput
                                                 (input)="onInputChange($event,'wt_to', 12)"
                                                 />

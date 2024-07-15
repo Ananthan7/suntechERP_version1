@@ -33,7 +33,8 @@ export class StonePricingMasterComponent implements OnInit {
   sieveSet: any;
   editMode: boolean = false;
   isDisableSaveBtn: boolean = false;
-
+  isCurrencySelected: boolean = false;
+  currencyDt: any;
 
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
@@ -189,7 +190,7 @@ export class StonePricingMasterComponent implements OnInit {
     color: [''],
     clarity: ['', [Validators.required]],
     sieve_from: [''],
-    currency: ['AED', [Validators.required]],
+    currency: ['', [Validators.required]],
     carat_wt: [0, [Validators.required]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
@@ -201,7 +202,6 @@ export class StonePricingMasterComponent implements OnInit {
     selling: [0],
     selling_rate: [0],
     sieve_desc: [0],
-
   });
 
 
@@ -214,9 +214,12 @@ export class StonePricingMasterComponent implements OnInit {
     private renderer: Renderer2,
   ) {
     this.branchCode = this.commonService.branchCode;
+    // this.currencyDt = this.commonService.compCurrency;
   }
 
   ngOnInit(): void {
+    this.setCompanyCurrency();
+    this.setInitialValues();
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW') {
         this.viewFormValues();
@@ -233,6 +236,11 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.stonePrizeMasterForm.controls.currency.setValue(CURRENCY_CODE);
+  }
+
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -241,29 +249,77 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-  onweighttto(event: any) {
-    if (this.stonePrizeMasterForm.value.wt_from > this.stonePrizeMasterForm.value.wt_to) {
-      Swal.fire({
-        title: event.message || 'Weight From should be lesser than Weight To',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+  // onweighttto(event: any) {
+  //   if (this.stonePrizeMasterForm.value.wt_from > this.stonePrizeMasterForm.value.wt_to) {
+  //     Swal.fire({
+  //       title: event.message || 'Weight From should be lesser than Weight To',
+  //       text: '',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     })
+  //   }
+  // }
+
+  onweightto(event: any, data: string) {
+    // Retrieve the values of Wt From and Wt To from the form
+    const wtf: number = parseFloat(this.stonePrizeMasterForm.value.wt_from);
+    const wtt: number = parseFloat(this.stonePrizeMasterForm.value.wt_to);
+
+    // Check if the data parameter is not 'wtfrom'
+    if (data == 'wt_to') {
+      // Check if Wt From is greater than Wt To
+      if (wtf > wtt) {
+        // Display an error message
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        });
+
+        // Clear the value of Wt To input field
+        this.stonePrizeMasterForm.controls.wt_to.setValue('');
+      }
     }
   }
 
-  onSievetto(event: any) {
-    if (this.stonePrizeMasterForm.value.sieve_from_desc > this.stonePrizeMasterForm.value.sieve_to_desc) {
-      Swal.fire({
-        title: event.message || ' Sieve To Should be greater than the Sieve From',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+  onSievetto(event: any, data: string) {
+    // Retrieve the values of Wt From and Wt To from the form
+    const wtf: number = parseFloat(this.stonePrizeMasterForm.value.sieve_from_desc);
+    const wtt: number = parseFloat(this.stonePrizeMasterForm.value.sieve_to_desc);
+
+    // Check if the data parameter is not 'wtfrom'
+    if (data == 'sieve_to_desc') {
+      // Check if Wt From is greater than Wt To
+      if (wtf > wtt) {
+        // Display an error message
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        });
+
+        // Clear the value of Wt To input field
+        this.stonePrizeMasterForm.controls.sieve_to_desc.setValue('');
+      }
     }
   }
+
+  // onSievetto(event: any) {
+  //   if (this.stonePrizeMasterForm.value.sieve_from_desc > this.stonePrizeMasterForm.value.sieve_to_desc) {
+  //     Swal.fire({
+  //       title: event.message || ' Sieve To Should be greater than the Sieve From',
+  //       text: '',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     })
+  //   }
+  // }
 
 
   setFormValues() {
@@ -317,6 +373,17 @@ export class StonePricingMasterComponent implements OnInit {
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_RATE));
+  }
+
+  private setInitialValues() {
+
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.stonePrizeMasterForm.controls.wt_from.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.stonePrizeMasterForm.controls.wt_to.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'));
+    this.stonePrizeMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0,'METAL'));
+
   }
 
 
@@ -464,7 +531,7 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
 
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to ) {
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.toastr.error('Sieve From Should not be Greater than Sieve To');
       return;
     }
@@ -500,13 +567,22 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
   checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+
     let priceCode = event.target.value;
 
     if (priceCode === '') return;
     if (this.editMode || this.viewMode) return;
-
-    let API = `StonePriceMasterDJ/GetStonePriceMasterDJWithCode?CODE=${priceCode}`
-    let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+    //let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/'+this.userbranch+'?SieveSet='+this.stonePrizeMasterForm.value.sieve_set ;
+    let API = 'StonePriceMasterDJ/GetStonePriceMasterDJWithCode/'+this.userbranch+'?CODE='+event.target.value;
+    let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe(
       (result) => {
         if (result.status == 'Success') {
           this.commonService.toastErrorByMsgId('Code already exists')
@@ -530,7 +606,7 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to ) {
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.toastr.error('Sieve From Should not be Greater than Sieve To');
       return;
     }
@@ -653,14 +729,14 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
 
     // Construct the API URL with the selected sieve_set value
-    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + encodeURIComponent(this.stonePrizeMasterForm.value.sieve_set);
+    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/'+this.userbranch+'?SieveSet='+this.stonePrizeMasterForm.value.sieve_set ;
 
-    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
       if (result.response) {
         console.log(result.response);
         // Assign values to variables
         // let sieve_form, sieve_to;
-       
+
         const responseData = result.response[0];
         const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
         const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
@@ -687,14 +763,14 @@ export class StonePricingMasterComponent implements OnInit {
   sievefromDataSelected(data: any) {
     console.log(data);
     const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
-   
+
     this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   sievetoDataSelected(data: any) {
     console.log(data);
     const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
-   
+
     this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
@@ -739,7 +815,7 @@ export class StonePricingMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`

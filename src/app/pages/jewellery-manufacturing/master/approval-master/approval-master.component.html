@@ -178,13 +178,14 @@
                                     </div>
                                     <div
                                         *dxTemplate="let data of 'mobilenumber'">
-                                        <input type="number"
+                                        <input type="text"
                                             (change)="mobilenumber($event,data)"
                                             style="text-align: right;"
                                             [value]="data.value"
                                             style="width: 100%;"
                                             [disabled]="data.value == '' || viewMode"
                                             pattern="[0-9]+"
+                                            maxlength="10"
                                             [readonly]="viewMode"
                                             (keypress)="isNumeric($event)" />
 
@@ -201,6 +202,7 @@
                                             [value]="data.value"
                                             [disabled]="data.value == ''"
                                             style="width: 100%;" required
+                                            maxlength="30"
                                             [readonly]="viewMode" />
                                     </div>
 

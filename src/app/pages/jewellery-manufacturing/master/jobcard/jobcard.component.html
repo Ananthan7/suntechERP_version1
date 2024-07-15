@@ -74,7 +74,7 @@
                             <label for="input" class="col-sm-3 col-form-label">Customer * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="customer"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
+                                    <input type="text" matInput formControlName="customer"  maxlength="50"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
                                     (focusout)="validateLookupField($event,customerCodeData,'customer')" (input)="inputValidate($event)"/>
                                     <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
                                     *ngIf="viewMode == false"   (newRowClick)="customerCodeSelected($event)"></master-search>
