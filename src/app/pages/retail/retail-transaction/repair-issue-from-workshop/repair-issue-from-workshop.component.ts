@@ -65,18 +65,23 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.comService.getqueryParamVocType());
+    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
-    if(this.content?.FLAG == "VIEW" || this.content?.FLAG == "EDIT"){
-      this.getrepairreceiptbyid();
-    }
 
     this.repairReceiveForm.controls.voctype.setValue(
       this.comService.getqueryParamVocType()
     );
 
     this.generateVocNo();
+
+    if(this.content?.FLAG == "VIEW" || this.content?.FLAG == "EDIT"){
+      this.getrepairreceiptbyid();
+    }
+
+   
+
 
     // this.setvaluesdata()
     // if (this.content) {
@@ -144,7 +149,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   // }
 
   repairReceiveForm: FormGroup = this.formBuilder.group({
-    voctype: [, ""],
+    voctype: [""],
     vocNo: [""],
     vocDate: [new Date()],
     salesMan: [""],
@@ -184,7 +189,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       VOCDATE: this.repairReceiveForm.value.vocDate,
       YEARMONTH: this.yearMonth,
       SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
-      BRANCHTO: this.repairReceiveForm.value.salesMan.partyCode,
+      BRANCHTO: this.repairReceiveForm.value.partyCode,
       REMARKS: "",
       SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
@@ -202,7 +207,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       DIAMONDWGT: 0,
       DIAMONDAMOUNT: 0,
       SUPINVDATE: this.repairReceiveForm.value.date,
-      SUPINVNO:this.repairReceiveForm.value.salesMan.supplierInvNo,
+      SUPINVNO:this.repairReceiveForm.value.supplierInvNo,
       TRANSFERBRANCH: "",
       AUTOPOSTING: true,
       BRANCHTONAME: "",
@@ -258,7 +263,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
         VOCDATE: this.repairReceiveForm.value.vocDate,
         YEARMONTH: this.yearMonth,
         SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
-        BRANCHTO: this.repairReceiveForm.value.salesMan.partyCode,
+        BRANCHTO: this.repairReceiveForm.value.partyCode,
         REMARKS: "",
         SYSTEM_DATE: new Date().toISOString(),
         NAVSEQNO: 0,
@@ -276,7 +281,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
         DIAMONDWGT: 0,
         DIAMONDAMOUNT: 0,
         SUPINVDATE: this.repairReceiveForm.value.date,
-        SUPINVNO: this.repairReceiveForm.value.salesMan.supplierInvNo,
+        SUPINVNO: this.repairReceiveForm.value.supplierInvNo,
         TRANSFERBRANCH: "",
         AUTOPOSTING: true,
         BRANCHTONAME: "",
