@@ -12342,24 +12342,17 @@ export class SalesEstimationComponent implements OnInit {
         this.lineItemForm.controls.fcn_li_item_code.setValue('');
         this.scannerVisible = true;
       }
-    
+      
       onCloseRequested() {
         this.scannerVisible = false;
       }
-    
-      // onBarcodeDetected(barcode: string): void {
-      //   this.lineItemForm.controls.fcn_li_item_code.setValue(barcode);
-      //   this.cdr.detectChanges();
-      //   this.getStockDesc({ target: { value: barcode } });
-      //   this.closeScanner();
-      // }
-
-
-      onBarcodeDetected(barcode: string) {
-        this.lineItemForm.controls.fcn_li_item_code.setValue(barcode);
+      
+      onQrcodeDetected(qrCode: string) {
+        this.lineItemForm.controls.fcn_li_item_code.setValue(qrCode);
         this.scannerVisible = false;
-        this.getStockDesc({ target: { value: barcode } });
+        this.getStockDesc({ target: { value: qrCode } });
       }
+      
     
 
 }
