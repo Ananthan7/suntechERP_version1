@@ -10,6 +10,7 @@ import {
     AfterViewInit,
     Input,
     ElementRef,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map, pairwise, startWith } from 'rxjs/operators';
@@ -47,8 +48,7 @@ export class SalesEstimationComponent implements OnInit {
     @Input() content!: any;
 
     @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
-
-
+    voucherDetails:any;
     @ViewChild('mymodal') public mymodal!: NgbModal;
     @ViewChild('adjust_sale_return_modal')
     public adjust_sale_return_modal_ref!: NgbModalRef;
@@ -72,6 +72,7 @@ export class SalesEstimationComponent implements OnInit {
     private cssFilePath = '../../../assets/estimation_pdf.scss';
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
     // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
+    scannerVisible = false;
     RECEIPT_MODEL: any = {}
     disableSaveBtn: boolean = false;
     isRateCannotLessCost: boolean = false;
@@ -767,7 +768,8 @@ export class SalesEstimationComponent implements OnInit {
         private inDb: IndexedDbService,
         private datePipe: DatePipe,
         private planetService:PlanetService,
-        public lineItemService: ItemDetailService
+        public lineItemService: ItemDetailService,
+        private cdr: ChangeDetectorRef
 
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
@@ -1227,8 +1229,8 @@ export class SalesEstimationComponent implements OnInit {
         } else {
           this.getFinancialYear();
           this.generateVocNo();
-          this.setVoucherTypeMaster();
-    
+           this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
+          console.log(this.voucherDetails);
         }
     
         if (!this.viewOnly && !this.editOnly)
@@ -10253,7 +10255,7 @@ export class SalesEstimationComponent implements OnInit {
 
       setVoucherTypeMaster(){
         let frm = this.vocDataForm.value
-        const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+        const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, frm.voc_type, this.mainVocType)
         this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
         this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
         this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
@@ -12286,7 +12288,7 @@ export class SalesEstimationComponent implements OnInit {
         return true;
       }
 
-    
+     
 
       changeExStoneAmount(event: any) {
         const value = event.target.value;
@@ -12334,6 +12336,29 @@ export class SalesEstimationComponent implements OnInit {
           }
           return null;
         };
+      }
+
+      openScanner(): void {
+        this.lineItemForm.controls.fcn_li_item_code.setValue('');
+        this.scannerVisible = true;
+      }
+    
+      onCloseRequested() {
+        this.scannerVisible = false;
+      }
+    
+      // onBarcodeDetected(barcode: string): void {
+      //   this.lineItemForm.controls.fcn_li_item_code.setValue(barcode);
+      //   this.cdr.detectChanges();
+      //   this.getStockDesc({ target: { value: barcode } });
+      //   this.closeScanner();
+      // }
+
+
+      onBarcodeDetected(barcode: string) {
+        this.lineItemForm.controls.fcn_li_item_code.setValue(barcode);
+        this.scannerVisible = false;
+        this.getStockDesc({ target: { value: barcode } });
       }
     
 

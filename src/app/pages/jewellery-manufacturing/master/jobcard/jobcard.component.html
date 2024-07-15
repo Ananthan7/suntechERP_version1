@@ -14,12 +14,12 @@
             <div class="sales-card-body p-2">
                 <div class="row mb-2">
                     <div class="row d-flex">
-                        <div class="col-sm-5"><h6>{{branchCode}}</h6></div>
-                        <div class="col-sm-3"><h6>Pending</h6></div>
+                        <div class="col-sm-5"><h6 id="ID001">{{branchCode}}</h6></div>
+                        <div class="col-sm-3"><h6 id="ID002">Pending</h6></div>
                       </div>
                     <div class="col-md-6">
                         <div class="row align-items-center mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Order
+                            <label for="input" id="ID003" class="col-sm-3 col-form-label">Order
                                 Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Job Number * :</label>
+                            <label for="input" id="ID004" class="col-sm-3 col-form-label">Job Number * :</label>
                             <div class="col-sm-3">
                                 <!-- <input class="form-control" type="text" /> -->
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -39,7 +39,7 @@
                                     [readonly]="viewMode" class="text-right"/>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Job Date :</label>
+                            <label for="input" id="ID005" class="col-sm-3 col-form-label">Job Date :</label>
                             <div class="col-sm-3">
                                 <div class="datepick">
                                     <!-- <input class="form-control flatpickr-input" type="text" placeholder="Select Date*"
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Design Code * :</label>
+                            <label for="input" id="ID006" class="col-sm-3 col-form-label">Design Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="designcode"   maxlength="20" oninput="this.value = this.value.toUpperCase()"  [readonly]="viewMode" 
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Customer * :</label>
+                            <label for="input" id="ID007" class="col-sm-3 col-form-label">Customer * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="customer"  maxlength="50"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -87,13 +87,13 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Sales Order :</label>
+                            <label for="input" id="ID008" class="col-sm-3 col-form-label">Sales Order :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="salesorder"  maxlength="20" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Date
+                            <label for="input" id="ID009" class="col-sm-3 col-form-label">Date
                                 :</label>
                             <div class="col-sm-3">
                                 <div class="datepick">
@@ -108,7 +108,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Cost Code * :</label>
+                            <label for="input" id="ID010" class="col-sm-3 col-form-label">Cost Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="costcode"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -117,7 +117,7 @@
                                     *ngIf="viewMode == false"   (newRowClick)="costCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Prefix : </label>
+                            <label for="input" id="ID011" class="col-sm-3 col-form-label">Prefix : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="prefix"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Karat * :</label>
+                            <label for="input" id="ID012" class="col-sm-3 col-form-label">Karat * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" class="text-left" matInput formControlName="karat"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -137,7 +137,7 @@
                                     *ngIf="viewMode == false"   (newRowClick)="karatCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Type : </label>
+                            <label for="input" id="ID013" class="col-sm-3 col-form-label">Type : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="type"  maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Category
+                            <label for="input" id="ID014" class="col-sm-3 col-form-label">Category
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -158,7 +158,7 @@
                                     *ngIf="viewMode == false" (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Sub Cat : </label>
+                            <label for="input" id="ID015" class="col-sm-3 col-form-label">Sub Cat : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="subcat"   maxlength="20" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Color * :</label>
+                            <label for="input" id="ID016" class="col-sm-3 col-form-label">Color * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="color"  maxlength="20" UpperCaseDirective  [readonly]="viewMode" 
@@ -178,7 +178,7 @@
                                     *ngIf="viewMode == false"   (newRowClick)="colorCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Brand
+                            <label for="input" id="ID017" class="col-sm-3 col-form-label">Brand
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -190,7 +190,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Country :</label>
+                            <label for="input" id="ID018" class="col-sm-3 col-form-label">Country :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="country"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -199,7 +199,7 @@
                                     *ngIf="viewMode == false"   (newRowClick)="countryCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Set Ref : </label>
+                            <label for="input" id="ID019" class="col-sm-3 col-form-label">Set Ref : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="setref"  maxlength="20"  [readonly]="viewMode" />
@@ -207,7 +207,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Comments :</label>
+                            <label for="input" id="ID020" class="col-sm-3 col-form-label">Comments :</label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput formControlName="comments" maxlength="150"  [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Size :</label>
+                            <label for="input" id="ID021" class="col-sm-3 col-form-label">Size :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="size"  maxlength="20"
@@ -228,7 +228,7 @@
                                     *ngIf="viewMode == false" (newRowClick)="sizeCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Length :</label>
+                            <label for="input" id="ID022" class="col-sm-3 col-form-label">Length :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="length"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -239,7 +239,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Instruction :</label>
+                            <label for="input" id="ID023" class="col-sm-3 col-form-label">Instruction :</label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput formControlName="instruction" maxlength="150"  [readonly]="viewMode" />
@@ -247,13 +247,13 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Job ype * :</label>
+                            <label for="input" id="ID024" class="col-sm-3 col-form-label">Job Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput readonly formControlName="jobtype"  maxlength="20"  />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Purity * : </label>
+                            <label for="input" id="ID025" class="col-sm-3 col-form-label">Purity * : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput readonly class="text-right"  maxlength="20" formControlName="purity" SixDecimalInput  [readonly]="viewMode" />
@@ -266,14 +266,14 @@
                             <div class="col-sm-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value id="flexCheckDefault" [disabled]="viewMode" >
-                                    <label class="form-check-label" for="flexCheckDefault">
+                                    <label class="form-check-label" id="ID026" for="flexCheckDefault">
                                         Repair Job
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Del
+                            <label id="ID027" for="input" class="col-sm-5 col-form-label">Del
                                 Date : </label>
                             <div class="col-sm-7">
                                 <div class="datepick">
@@ -290,7 +290,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Salesman * : </label>
+                            <label id="ID028" for="input" class="col-sm-5 col-form-label">Salesman * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="salesman"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -301,7 +301,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Stock Code : </label>
+                            <label id="ID029" for="input" class="col-sm-5 col-form-label">Stock Code : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="stockcode"  maxlength="20" [readonly]="viewMode" />
@@ -311,7 +311,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Currency : </label>
+                            <label id=ID030 for="input" class="col-sm-5 col-form-label">Currency : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="currency"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -322,7 +322,7 @@
                             </div>
                         </div>
                         <div class="row align-items-center mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Loss Booking : </label>
+                            <label for="input" id="ID031" class="col-sm-5 col-form-label">Loss Booking : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     
@@ -337,7 +337,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Main Metal : </label>
+                            <label for="input" id="ID032" class="col-sm-5 col-form-label">Main Metal : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="mainmetal"  maxlength="20"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" 
@@ -348,7 +348,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Time
+                            <label id="ID033" for="input" class="col-sm-5 col-form-label">Time
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -360,7 +360,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Range
+                            <label id="ID034" for="input" class="col-sm-5 col-form-label">Range
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -372,7 +372,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Seq.Code * 
+                            <label id="ID035" for="input" class="col-sm-5 col-form-label">Seq.Code * 
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
@@ -384,13 +384,13 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Total Pcs* </label>
+                            <label id="ID036" for="input" class="col-sm-3 col-form-label">Total Pcs* </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="totalpcs"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Pending * </label>
+                            <label id="ID037" for="input" class="col-sm-3 col-form-label">Pending * </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly class="text-right" formControlName="pending"  [readonly]="viewMode" />
@@ -398,13 +398,13 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Parts * </label>
+                            <label id="ID038" for="input" class="col-sm-3 col-form-label">Parts * </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="parts"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Pending * </label>
+                            <label id="ID037" for="input" class="col-sm-3 col-form-label">Pending * </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;"  appearance="outline">
                                     <input type="text" matInput maxlength="9" NumberOnly  class="text-right" formControlName="pending1"  [readonly]="viewMode" />
@@ -412,7 +412,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Screw Field : </label>
+                            <label id="ID039" for="input" class="col-sm-4 col-form-label">Screw Field : </label>
                             <div class="col-sm-5">
                                 <mat-form-field  appearance="outline">
                                     <input type="text" matInput formControlName="srewFiled"  maxlength="20" [readonly]="viewMode" />
@@ -430,12 +430,12 @@
                                         <button class="carousel-control-prev" type="button"
                                         data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
+                                        <span id="ID040" class="visually-hidden">Previous</span>
                                       </button>
                                       <button class="carousel-control-next" type="button"
                                         data-bs-target="#carouselExampleControls" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
+                                        <span class="visually-hidden" id="ID041">Next</span>
                                       </button>
                                   
                                     </button>
@@ -445,9 +445,9 @@
                         </div>
                         
                         <div class="m-3 row">
-                            <button class="btn btn-primary rounded-pill my-2" (click)="openaddcomponent()">Components</button>
-                            <button class="btn btn-primary rounded-pill my-2" (click)="openaddtransactiondetails()">Transactions</button>
-                            <button class="btn btn-primary rounded-pill my-2" (click)="openaddstickerprint()">Sticker
+                            <button class="btn btn-primary rounded-pill my-2" id="ID042" (click)="openaddcomponent()">Components</button>
+                            <button class="btn btn-primary rounded-pill my-2" id="ID043" (click)="openaddtransactiondetails()">Transactions</button>
+                            <button class="btn btn-primary rounded-pill my-2" id="ID044" (click)="openaddstickerprint()">Sticker
                                 Print</button>
                         </div>
                     </div>
