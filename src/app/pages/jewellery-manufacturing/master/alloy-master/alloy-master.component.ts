@@ -130,7 +130,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
-    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
+    WHERECONDITION: "BRANCH_CODE = '"+ this.branchCode +"' AND AC_OnHold = 0 ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -698,7 +698,7 @@ export class AlloyMasterComponent implements OnInit {
   vendorCodeSelected(e: any) {
     console.log(e);
     if (this.checkStockCode()) return
-    this.alloyMastereForm.controls.vendor.setValue(e['ACCOUNT HEAD']);
+    this.alloyMastereForm.controls.vendor.setValue(e.ACCOUNT_HEAD);
     this.alloyMastereForm.controls.vendorRef.setValue(e.ACCODE);
   }
 

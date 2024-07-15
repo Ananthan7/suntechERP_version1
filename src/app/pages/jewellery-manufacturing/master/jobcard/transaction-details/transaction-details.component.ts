@@ -16,6 +16,11 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class TransactionDetailsComponent implements OnInit {
 
   tableDataProcess: any[] = [];
+  tableDataProcessMetalReturn: any[] = [];
+  tableDataProcessStoneIssue: any[] = [];
+  tableDataProcessStoneReturn: any[] = [];
+  tableDataProcesstransaction: any[] = [];
+  tableDataproduction: any[] = [];
   selectedTabIndex = 0;
   columnhead: any[] = [''];
   columnhead2: any[] = [''];
@@ -36,27 +41,15 @@ export class TransactionDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
 
-    this.commonService.toastSuccessByMsgId('MSG81447');
-     //let API = 'JobTransactionsGrid/GetJobTransaction/' + this.branchCode + '/' + 524;
-     let API = 'JobTransactionsGrid/GetJobTransaction/DMCC/14480';
-    
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe(
-        (result) => {
-          if (result.status === 'Success' && result.response) {
-            this.tableDataProcess = result.response.map((item: any, index: number) => {
-              return { ...item, SELECT1: false, SRNO: index + 1 };
-            });
-            console.log(this.tableDataProcess);
-          } else {
-            this.commonService.toastErrorByMsgId('MSG1531');
-          }
-        },
-        err => {
-          console.error('Error fetching data:', err);
-          this.commonService.toastErrorByMsgId('MSG1531');
-        }
-      );
+    //first result Metal Issue
+    //Second result Metal Return
+       //three result Stone Issue
+    //Four result Stone Return
+     //Fifth result Process transaction
+       //Sixth result Production
+
+      this.transactionDetails();
+
   }
 
   close(data?: any) {
@@ -75,6 +68,40 @@ export class TransactionDetailsComponent implements OnInit {
   }
   customizeDate(data: any) {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
+  }
+
+  transactionDetails(){
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    //let API = 'JobTransactionsGrid/GetJobTransaction/' + this.branchCode + '/' + 524;
+    let API = 'JobTransactionsGrid/GetJobTransaction/'+this.branchCode+'/'+14480;
+   
+   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+     .subscribe(
+       (result) => {
+         if (result.status === 'Success' && result.dynamicData) {
+           this.tableDataProcess = result.dynamicData[0]
+           this.tableDataProcessMetalReturn = result.dynamicData[2]
+           this.tableDataProcessStoneIssue = result.dynamicData[3]
+           this.tableDataProcessStoneReturn = result.dynamicData[4]
+           this.tableDataProcesstransaction = result.dynamicData[5]
+           this.tableDataproduction = result.dynamicData[0][6]
+           console.log(result.dynamicData);
+           console.log(this.tableDataProcess);
+           console.log(this.tableDataProcessMetalReturn);
+           console.log(this.tableDataProcessStoneIssue);
+           console.log(this.tableDataProcessStoneReturn);
+           console.log(this.tableDataProcesstransaction);
+           console.log(this.tableDataproduction);
+
+         } else {
+           this.commonService.toastErrorByMsgId('MSG1531');
+         }
+       },
+       err => {
+         console.error('Error fetching data:', err);
+         this.commonService.toastErrorByMsgId('MSG1531');
+       }
+     );
   }
 
   jobNumberValidate(event: any) {
