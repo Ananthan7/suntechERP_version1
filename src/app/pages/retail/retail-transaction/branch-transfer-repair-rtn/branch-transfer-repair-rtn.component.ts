@@ -93,10 +93,10 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.branchTransferRepairRtnForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
-    if (this.content.FLAG == 'VIEW') {
+    if (this.content?.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
-    } else if (this.content.FLAG == 'EDIT') {
+    } else if (this.content?.FLAG == 'EDIT') {
       this.viewMode = false;
       this.setFormValues();
     }
@@ -114,7 +114,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   partyCodeSelected(e:any){
     console.log(e);
     this.branchTransferRepairRtnForm.controls.partyCode.setValue(e.ACCODE);
-    this.branchTransferRepairRtnForm.controls.partyName.setValue(e['ACCOUNT HEAD']);
+    this.branchTransferRepairRtnForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
   }
   
   branchCodeSelected(data: any) {
@@ -127,7 +127,8 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     console.log('this.content', this.content);
     if (!this.content) return
     this.branchTransferRepairRtnForm.controls.branchCode.setValue(this.content.BRANCH_CODE);
-    this.branchTransferRepairRtnForm.controls.vocType.setValue(this.content.VOCTYPE);
+    this.branchTransferRepairRtnForm.controls.branchName.setValue(this.content.BRANCHTONAME);
+    this.branchTransferRepairRtnForm.controls.vocType.setValue(this.content.VOCTYPE);    
     this.branchTransferRepairRtnForm.controls.vocNo.setValue(this.content.VOCNO);
     this.branchTransferRepairRtnForm.controls.vocDate.setValue(this.content.VOCDATE);
     this.branchTransferRepairRtnForm.controls.yearMonth.setValue(this.content.YEARMONTH);

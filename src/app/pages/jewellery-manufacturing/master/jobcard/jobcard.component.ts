@@ -72,6 +72,20 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  commentsCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'COMMENTS',
+    SEARCH_HEADING: 'Comments ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='COMMENTS MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK:true,
+  }
+
+
   ordertypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -408,7 +422,21 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 74,
+    SEARCH_FIELD: 'size',
+    SEARCH_HEADING: 'Size ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
+   // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK:true,
+  }
+
+
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -556,6 +584,17 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.length.setValue(e.DESCRIPTION);
   }
 
+  commentsCodeSelected(e: any) {
+    console.log(e);
+    this.jobCardFrom.controls.comments.setValue(e.DESCRIPTION);
+  }
+
+  sizeCodeSelected(e: any) {
+    console.log(e);
+    this.jobCardFrom.controls.size.setValue(e.DESCRIPTION);
+  }
+
+  
 
   designCodeSelected(e: any) {
     console.log(e);

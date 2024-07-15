@@ -18,6 +18,7 @@
       <div class="p-2 ps-3">
         <div class="row">
           <div class="col-md-6">
+            <!-- barcodescan -->
             <div class="row align-items-center " *ngIf="DIAMANFBARCODE">
               <div class="col-sm-2">
                 <!-- ./../../assets/images/barcode-scanner.png -->
@@ -32,17 +33,8 @@
                     formControlName="barCodeNumber" />
                 </mat-form-field>
               </div>
-              <!-- <div class="col-sm-2">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox"
-                    (change)="toggleSwitchChange($event)"
-                    id="flexSwitchCheckDefault"
-                    formControlName="toggleSwitchtIssue">
-                  <label class="form-check-label"
-                    for="flexSwitchCheckDefault">{{MetalorProcessFlag}}</label>
-                </div>
-              </div> -->
             </div>
+            <!-- jobdetails -->
             <div class="row ">
               <label class="col-md-3 col-form-label"
                 style="font-weight: bold;">
@@ -50,11 +42,13 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput appNoEmptySpace
+                    id="jobNoSearch"
+                    (keypress)="lookupKeyPress($event)"
                     (focusout)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="jobNoSearch"
-                    *ngIf="!viewMode"
+                    *ngIf="!viewMode"  #overlayjobNoSearch
                     (newRowClick)="jobNumberSelected($event)">
                   </master-search>
                 </mat-form-field>
@@ -101,6 +95,7 @@
               <div class="col-sm-6">
                 <mat-form-field appearance="outline" style="width: 76%;">
                   <input type="text" matInput UpperCaseDirective
+                    (keypress)="lookupKeyPress($event)"
                     (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
                     formControlName="APPROVED_USER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
@@ -133,7 +128,7 @@
         <!-- Tab section starts -->
         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
           <!-- Diamond section starts -->
-          <mat-tab label="Diamond Jewellery" *ngIf="designType == 'DIAMONDs'">
+          <mat-tab label="Diamond Jewellery" *ngIf="designType == 'DIAMOND'">
             <div class="row">
               <b>Transfer Details</b>
             </div>
@@ -156,11 +151,12 @@
                           <mat-form-field appearance="outline"
                             style="width: 110px;">
                             <input type="text" matInput UpperCaseDirective
-                              (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'FRM_PROCESS_CODE')"
+                              (keypress)="lookupKeyPress($event)"
+                              (focusout)="fromProcesscodeValidate($event)"
                               formControlName="FRM_PROCESS_CODE"
                               [readonly]="viewMode" />
                             <master-search class="masterSearch"
-                              *ngIf="!viewMode"
+                              *ngIf="!viewMode" #fromProcessMasterOverlay
                               [MasterSearchData]="fromProcessMasterSearch"
                               (newRowClick)="processCodeFromSelected($event)">
                             </master-search>
@@ -173,10 +169,11 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                              (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'TO_PROCESS_CODE')"
+                              (keypress)="lookupKeyPress($event)"
+                              (focusout)="toProcesscodeValidate($event)"
                               formControlName="TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
-                              *ngIf="!viewMode"
+                              *ngIf="!viewMode" #toProcessMasterOverlay
                               [MasterSearchData]="toProcessMasterSearch"
                               (newRowClick)="processCodeToSelected($event)">
                             </master-search>
@@ -192,10 +189,11 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                              (focusout)="SPvalidateLookupField($event,fromWorkerMasterSearch,'FRM_WORKER_CODE')"
+                              (keypress)="lookupKeyPress($event)"
+                              (focusout)="fromWorkercodeValidate($event)"
                               formControlName="FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
-                              *ngIf="!viewMode"
+                              *ngIf="!viewMode" #fromWorkerMasterOverley
                               [MasterSearchData]="fromWorkerMasterSearch"
                               (newRowClick)="workerCodeFromSelected($event)">
                             </master-search>
@@ -208,10 +206,11 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                              (focusout)="SPvalidateLookupField($event,toWorkerMasterSearch,'TO_WORKER_CODE')"
+                              (keypress)="lookupKeyPress($event)"
+                              (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
                             <master-search class="masterSearch"
-                              *ngIf="!viewMode"
+                              *ngIf="!viewMode"  #overlayToWorker
                               [MasterSearchData]="toWorkerMasterSearch"
                               (newRowClick)="workerCodeToSelected($event)">
                             </master-search>
@@ -403,14 +402,14 @@
                           <th colspan="3" class="text-center">Transfer to</th>
                           <th>Loss Qty</th>
                           <td><b>%</b></td>
-                          <th rowspan="2"
-                            style="text-align: center;">Balance</th>
+                          <th rowspan="2" style="text-align: center;">Balance</th>
                         </tr>
                         <tr>
                           <th>Stock Code</th>
                           <th>QTY </th>
                           <th>Location</th>
                           <th>Std.Loss</th>
+                          <!-- STD_LOSS -->
                           <th>
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
@@ -427,16 +426,15 @@
                               style="width: 100px;">
                               <input type="text" matInput maxlength="15"
                                 (change)="stockCodeScrapValidate()"
+                                (keypress)="lookupKeyPress($event)"
                                 (focusout)="validateLookupField($event,stockCodeSearch,'stockCode')"
-                                formControlName="stockCode"
-                                [readonly]="viewMode" />
-                              <master-search class="masterSearch"
-                                *ngIf="!viewMode"
-                                [MasterSearchData]="stockCodeSearch"
+                                formControlName="stockCode" [readonly]="viewMode" />
+                              <master-search class="masterSearch" *ngIf="!viewMode"
+                                [MasterSearchData]="stockCodeSearch" #stockCodeOverlay
                                 (newRowClick)="stockCodeSelected($event)">
                               </master-search>
                             </mat-form-field>
-
+    
                           </td>
                           <!-- quantity -->
                           <td>
@@ -456,6 +454,7 @@
                               style="width: 100px;">
                               <input type="text" matInput
                                 maxlength="15"
+                                (keypress)="lookupKeyPress($event)"
                                 formControlName="location" readonly />
                               <master-search class="masterSearch"
                                 *ngIf="locationSearchFlag"
@@ -464,7 +463,7 @@
                               </master-search>
                             </mat-form-field>
                           </td>
-                          <!-- stdLoss -->
+                          <!-- lossQty -->
                           <td>
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
@@ -499,7 +498,7 @@
                     </table>
                   </div>
                 </div>
-                <div class="row pt-2">
+                <div class="row pt-4">
                   <div class="col-md-4">
                     <div class="row mb-2">
                       <label for="input" class="col-sm-4 col-form-label">Start
@@ -509,8 +508,7 @@
                           <input type="date" matInput formControlName="startdate"
                             id="startdate" (change)="onStartDateChange()" />
                         </mat-form-field> -->
-                        <mat-form-field appearance="outline"
-                          style="width: 100%">
+                        <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
@@ -526,8 +524,7 @@
                       <label for="input" class="col-sm-4 col-form-label">End
                         Date</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%">
+                        <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
@@ -537,10 +534,8 @@
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
                       </div>
-                      <div
-                        *ngIf="processTransferdetailsForm.hasError('dateError')">
-                        <p class="error-message">End date cannot be before the
-                          start
+                      <div *ngIf="processTransferdetailsForm.hasError('dateError')">
+                        <p class="error-message">End date cannot be before the start
                           date.</p>
                       </div>
                     </div>
@@ -550,8 +545,7 @@
                       <label for="input" class="col-sm-4 col-form-label">
                         Std Time</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 70%;">
+                        <mat-form-field appearance="outline" style="width: 70%;">
                           <input type="text" matInput formControlName="STD_TIME"
                             readonly />
                         </mat-form-field>
@@ -565,10 +559,8 @@
                       <label for="input" class="col-sm-4 col-form-label">Time
                         Taken</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 70%;">
-                          <input type="text" matInput
-                            formControlName="TIME_TAKEN_HRS"
+                        <mat-form-field appearance="outline" style="width: 70%;">
+                          <input type="text" matInput formControlName="TIME_TAKEN_HRS"
                             readonly />
                         </mat-form-field>
                         <!-- <datetime-picker [DateTimeModelData]="TimeTakenData"
@@ -583,8 +575,7 @@
                       <label for="input"
                         class="col-sm-4 col-form-label">Consumed</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 70%;">
+                        <mat-form-field appearance="outline" style="width: 70%;">
                           <input type="text" matInput
                             formControlName="consumed" readonly />
                           <datetime-picker class="masterSearch"
@@ -597,20 +588,17 @@
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <label for="input"
-                        class="col-sm-4 col-form-label">Variance
+                      <label for="input" class="col-sm-4 col-form-label">Variance
                         %</label>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variancePercentage"
                             class="text-right" AmountDecimalInput [max]="3" />
                         </mat-form-field>
                       </div>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variance"
                             class="text-right" />
@@ -622,11 +610,9 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="row mb-2">
-                      <label for="input" class="col-sm-4 col-form-label">Tree
-                        No</label>
+                      <label for="input" class="col-sm-4 col-form-label">Tree No</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="text" matInput formControlName="TREE_NO"
                             class="text-right" NumberOnly maxlength="10"
                             [readonly]="viewMode" />
@@ -636,8 +622,7 @@
                     <div class="row mb-2 justify-content-end">
                       <div class="col-md-7">
                         <div class="form-check">
-                          <label class="form-check-label"
-                            for="flexRadioDefault1">
+                          <label class="form-check-label" for="flexRadioDefault1">
                             Select All
                           </label>
                           <input class="form-check-input" type="checkbox"
@@ -675,7 +660,7 @@
 
           </mat-tab>
           <!--*** METAL TAB section starts ***-->
-          <mat-tab label="Metal Jewellery" *ngIf="designType == 'DIAMOND'">
+          <mat-tab label="Metal Jewellery" *ngIf="designType == 'METAL'">
             <div class="row">
               <div class="p-3">
                 <b>Transfer Details</b>
@@ -712,7 +697,7 @@
                               formControlName="METAL_FRM_PROCESS_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
-                              [MasterSearchData]="fromProcessMasterSearch"
+                              [MasterSearchData]="fromProcessMasterSearch"  
                               (newRowClick)="metalprocessCodeFromSelected($event)">
                             </master-search>
                           </mat-form-field>
@@ -1045,8 +1030,7 @@
                           <input type="date" matInput formControlName="startdate"
                             id="startdate" (change)="onStartDateChange()" />
                         </mat-form-field> -->
-                        <mat-form-field appearance="outline"
-                          style="width: 100%">
+                        <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
@@ -1062,8 +1046,7 @@
                       <label for="input" class="col-sm-4 col-form-label">End
                         Date</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%">
+                        <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
@@ -1073,10 +1056,8 @@
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
                       </div>
-                      <div
-                        *ngIf="processTransferdetailsForm.hasError('dateError')">
-                        <p class="error-message">End date cannot be before the
-                          start
+                      <div *ngIf="processTransferdetailsForm.hasError('dateError')">
+                        <p class="error-message">End date cannot be before the start
                           date.</p>
                       </div>
                     </div>
@@ -1086,8 +1067,7 @@
                       <label for="input" class="col-sm-4 col-form-label">
                         Std Time</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 70%;">
+                        <mat-form-field appearance="outline" style="width: 70%;">
                           <input type="text" matInput formControlName="STD_TIME"
                             readonly />
                         </mat-form-field>
@@ -1101,10 +1081,8 @@
                       <label for="input" class="col-sm-4 col-form-label">Time
                         Taken</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 70%;">
-                          <input type="text" matInput
-                            formControlName="TIME_TAKEN_HRS"
+                        <mat-form-field appearance="outline" style="width: 70%;">
+                          <input type="text" matInput formControlName="TIME_TAKEN_HRS"
                             readonly />
                         </mat-form-field>
                         <!-- <datetime-picker [DateTimeModelData]="TimeTakenData"
@@ -1114,7 +1092,7 @@
                       </div>
                     </div>
                   </div>
-
+                  
                 </div>
                 <div class="row">
                   <div class="col-md-6">
@@ -1122,8 +1100,7 @@
                       <label for="input"
                         class="col-sm-4 col-form-label">Consumed</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline"
-                          style="width: 70%;">
+                        <mat-form-field appearance="outline" style="width: 70%;">
                           <input type="text" matInput
                             formControlName="consumed" readonly />
                           <datetime-picker class="masterSearch"
@@ -1136,20 +1113,17 @@
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <label for="input"
-                        class="col-sm-4 col-form-label">Variance
+                      <label for="input" class="col-sm-4 col-form-label">Variance
                         %</label>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variancePercentage"
                             class="text-right" AmountDecimalInput [max]="3" />
                         </mat-form-field>
                       </div>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline"
-                          style="width: 100%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variance"
                             class="text-right" />

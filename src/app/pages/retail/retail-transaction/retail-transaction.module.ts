@@ -93,6 +93,7 @@ import { ConsignmentSelectionComponent } from './common/consignment-selection/co
 import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.component';
 
 
+import { PendingSalesOrdersComponent } from './repair-jewellery-receipt/pending-sales-orders/pending-sales-orders.component';
 
 @NgModule({
   declarations: [
@@ -189,6 +190,7 @@ import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.compo
     customerDetailsModal,
     ExchangeDetailModal,
     ConsignmentSelectionComponent,
+    PendingSalesOrdersComponent,
   ],
   imports: [
     CommonModule,

@@ -31,6 +31,7 @@ export class StoneReturnComponent implements OnInit {
   selectedKey: number[] = [];
   selectedIndexes: any = [];
   viewMode: boolean = false;
+  isloading: boolean = false;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
 
@@ -88,7 +89,8 @@ export class StoneReturnComponent implements OnInit {
     enteredByName: [''],
     process: [''],
     jobDesc: [''],
-    FLAG: [null]
+    FLAG: [null],
+    MAIN_VOCTYPE:['']
   });
   constructor(
     private activeModal: NgbActiveModal,
@@ -102,17 +104,24 @@ export class StoneReturnComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.userName = this.commonService.userName;
-  
+
     if (this.content?.FLAG) {
       this.setAllInitialValues()
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
       }
       if (this.content?.FLAG) {
         this.stonereturnFrom.controls.FLAG.setValue(this.content.FLAG)
       }
-    }else{
+    } else {
+      this.generateVocNo()
       this.setFormValues()
+      this.setvoucherTypeMaster()
     }
   }
   setFormValues() {
@@ -121,9 +130,56 @@ export class StoneReturnComponent implements OnInit {
     this.stonereturnFrom.controls.VOCDATE.setValue(this.commonService.currentDate)
     this.stonereturnFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.stonereturnFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.stonereturnFrom.controls.MAIN_VOCTYPE.setValue(
+      this.commonService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
 
     this.setCompanyCurrency()
     this.basesetCompanyCurrency()
+  }
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.stonereturnFrom.value
+    const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.stonereturnFrom.value.VOCNO}`
+    API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
+    API += `/${this.commonService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.stonereturnFrom.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
   }
 
   setAllInitialValues() {
