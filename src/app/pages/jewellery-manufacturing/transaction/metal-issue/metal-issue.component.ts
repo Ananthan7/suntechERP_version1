@@ -149,11 +149,15 @@ export class MetalIssueComponent implements OnInit {
       this.setvoucherTypeMaster()  
     }
   }
+  minDate:any;
+  maxDate: any;
   LOCKVOUCHERNO: boolean = true;
   setvoucherTypeMaster(){
     let frm = this.metalIssueForm.value
     const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
   }
   ValidatingVocNo() {
     if(this.content?.FLAG == 'VIEW') return

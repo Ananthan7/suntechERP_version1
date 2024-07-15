@@ -1266,7 +1266,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     console.log(this.content);
     console.log("====================================");
     // need to enable
-    // this.vocType = this.comFunc.getqueryParamVocType()
+    this.vocType = this.comFunc.getqueryParamVocType();
     if (this.content != undefined) this.posMode = this.content?.FLAG;
 
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
@@ -1332,13 +1332,21 @@ export class PointOfSalesOrderComponent implements OnInit {
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSalesOrder/GetRetailSalesOrderHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.VOCNO}/${data.YEARMONTH}`;
+    let API = `RetailSalesOrder/GetRetailSalesOrder/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`;
     console.log("getRetailSalesMaster vocno", data.VOCNO);
     this.suntechApi.getDynamicAPI(API).subscribe((res) => {
+      console.log(
+        "============================================================================="
+      );
+      console.log(res);
+      console.log(
+        "============================================================================="
+      );
+
       this.snackBar.dismiss();
       // console.log(res, 'getRetailSalesMaster');
       const posCustomer = res.response.customer;
-      const retailSaleData = res.response.retailSales;
+      const retailSaleData = res.response.salesOrder;
       const retailSReturnData = res.response.retailsReturn;
       const metalPurchaseData = res.response.metalPurchase;
       this.receiptDetailsList = res.response.retailReceipt;
@@ -1513,19 +1521,19 @@ export class PointOfSalesOrderComponent implements OnInit {
         );
 
         /**start set line item*/
-        if (retailSaleData != null && retailSaleData.RetailDetails != null)
-          retailSaleData.RetailDetails.forEach((data: any, index: any) => {
+        if (retailSaleData != null && retailSaleData.Details != null)
+          retailSaleData.Details.forEach((data: any, index: any) => {
             data.SRNO = index + 1;
           });
 
-        retailSaleData.RetailDetails.map((data: any, index: any) => {
+        retailSaleData.Details.map((data: any, index: any) => {
           console.log("===============retailSalesDetails=====================");
           console.log(data, index);
           console.log("====================================");
 
           this.newLineItem = data;
-          // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.RetailDetails?.[0]?.IGST_ACCODE ?? '';
-          // this.newLineItem.HSN_CODE = retailSaleData?.RetailDetails?.[0]?.HSN_CODE ?? '';
+          // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.Details?.[0]?.IGST_ACCODE ?? '';
+          // this.newLineItem.HSN_CODE = retailSaleData?.Details?.[0]?.HSN_CODE ?? '';
 
           const values: any = {
             ID: data.SRNO,
@@ -1589,7 +1597,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
 
         this.retailSalesDataPost = retailSaleData;
-        this.retailSalesDataPost.RetailDetails = [];
+        this.retailSalesDataPost.Details = [];
 
         if (this.ordered_items.length >= 0)
           this.comFunc.formControlSetReadOnlyByClass("karat_code", true);
@@ -3788,21 +3796,27 @@ export class PointOfSalesOrderComponent implements OnInit {
           posCustomer.CODE !== "" &&
           posCustomer.CODE.toString() !== "0"
         )
-        if (
-          posCustomer.CODE &&
-          posCustomer.CODE !== '' &&
-          posCustomer.CODE.toString() !== '0'
-        ) {
-          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
+          if (
+            posCustomer.CODE &&
+            posCustomer.CODE !== "" &&
+            posCustomer.CODE.toString() !== "0"
+          ) {
+            apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
 
-          // this.suntechApi.getDynamicAPICustom('AccountLookup/GetAccountLookupWithAccMode/R').subscribe
-          custResponse = this.suntechApi.putDynamicAPI(`PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`, posCustomer)
-        } else {
-          apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
-          custResponse = this.suntechApi.postDynamicAPI(`PosCustomerMaster/InsertCustomerMaster`, posCustomer)
+            // this.suntechApi.getDynamicAPICustom('AccountLookup/GetAccountLookupWithAccMode/R').subscribe
+            custResponse = this.suntechApi.putDynamicAPI(
+              `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`,
+              posCustomer
+            );
+          } else {
+            apiCtrl = "PosCustomerMaster/InsertCustomerMaster";
+            custResponse = this.suntechApi.postDynamicAPI(
+              `PosCustomerMaster/InsertCustomerMaster`,
+              posCustomer
+            );
 
-          // custResponse = this.suntechApi.postDynamicAPICustom(apiCtrl, posCustomer)
-}
+            // custResponse = this.suntechApi.postDynamicAPICustom(apiCtrl, posCustomer)
+          }
 
         custResponse?.subscribe(async (data) => {
           this.isCustProcessing = false;
@@ -6880,7 +6894,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       // this.currentLineItems[this.orderedItemEditId - 1] = temp_pos_item_data;
       this.orderedItemEditId = "";
     }
-    this.pos_main_data.RetailDetails = this.currentLineItems;
+    this.pos_main_data.Details = this.currentLineItems;
     console.log(this.pos_main_data);
   }
   setRetailSalesRowData(sno: any, data: any) {
@@ -8732,7 +8746,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
         metalPurchase: this.metalPurchaseDataPost,
         retailsReturn: this.retailSReturnDataPost,
-        retailSales: this.retailSalesDataPost,
+        salesOrder: this.retailSalesDataPost,
 
         additionalInfo: {
           giftInfo: [
@@ -11298,8 +11312,8 @@ export class PointOfSalesOrderComponent implements OnInit {
     }
   }
   setDetailsData() {
-    if (this.retailSalesDataPost.RetailDetails.length > 0)
-      this.retailSalesDataPost.RetailDetails.forEach((data: any) => {
+    if (this.retailSalesDataPost.Details.length > 0)
+      this.retailSalesDataPost.Details.forEach((data: any) => {
         data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || "";
         data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || "";
       });
@@ -11632,7 +11646,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       GROUPREF: "",
       NEWMID: 0,
 
-      RetailDetails: this.currentLineItems,
+      Details: this.currentLineItems,
     };
     console.log("====================================");
     console.log(this.retailSalesDataPost);
@@ -13379,7 +13393,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         }
       });
   }
-  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> { 
+  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> {
     // doubt
     const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${
       this.strBranchcode
@@ -13578,7 +13592,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     );
   }
 
-  openUserAttachmentModal():void {
+  openUserAttachmentModal(): void {
     this.modalReferenceUserAttachment = this.modalService.open(
       this.userAttachmentModal,
       {

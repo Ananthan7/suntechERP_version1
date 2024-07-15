@@ -47,7 +47,9 @@
                                         [max]="vocdate"
                                         formControlName="vocdate"
                                         placeholder="DD/MM/YYYY"
-                                        DateValidation readonly />
+                                        DateValidation readonly
+                                        [min]="minDate"
+                                        [max]="maxDate" />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocdate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate"
@@ -70,7 +72,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="meltingtype"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode" #codeInput1 />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="MeltingCodeData"

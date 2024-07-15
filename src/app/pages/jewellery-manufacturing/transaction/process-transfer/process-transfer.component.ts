@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessTransferDetailsComponent } from './process-transfer-details/process-transfer-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-process-transfer',
@@ -14,6 +15,7 @@ import { ProcessTransferDetailsComponent } from './process-transfer-details/proc
   styleUrls: ['./process-transfer.component.scss']
 })
 export class ProcessTransferComponent implements OnInit {
+  @ViewChild('salesmanOverlay') salesmanOverlay!: MasterSearchComponent;
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -92,7 +94,7 @@ export class ProcessTransferComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
   ) {
   }
 
@@ -281,6 +283,9 @@ export class ProcessTransferComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if(FORMNAME == 'salesman' && event.target.value == ''){
+      this.salesmanOverlay.showOverlayPanel(event)
+    }
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

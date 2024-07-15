@@ -70,7 +70,9 @@
                                                 formControlName="vocdate"
                                                 [readonly]="isSaved"
                                                 placeholder="DD/MM/YYYY"
-                                                DateValidation />
+                                                DateValidation 
+                                                [min]="minDate"
+                                                [max]="maxDate"/>
                                             <mat-datepicker-toggle matSuffix
                                                 [for]="vocdate"></mat-datepicker-toggle>
                                             <mat-datepicker [disabled]="isSaved"
