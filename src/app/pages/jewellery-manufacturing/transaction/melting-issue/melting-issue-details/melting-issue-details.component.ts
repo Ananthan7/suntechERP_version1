@@ -168,23 +168,32 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.stockdes.setValue(this.content.STOCK_DESCRIPTION)
     this.meltingIssuedetailsFrom.controls.tostock.setValue(this.content.TOSTOCKCODE)
     this.meltingIssuedetailsFrom.controls.mainstock.setValue(this.content.MAIN_STOCK_CODE)
-    this.meltingIssuedetailsFrom.controls.stoneweight.setValue(this.content.STONE_WT)
+    this.meltingIssuedetailsFrom.controls.stoneweight.setValue(this.content.STONE)
     this.meltingIssuedetailsFrom.controls.netweight.setValue(this.content.NET_WT)
     this.meltingIssuedetailsFrom.controls.grossweight.setValue(this.content.GROSS_WT)
     this.meltingIssuedetailsFrom.controls.topurity.setValue(this.content.TOPURITY)
     this.meltingIssuedetailsFrom.controls.pureweight.setValue(this.content.PUREWT)
     this.meltingIssuedetailsFrom.controls.purity.setValue(this.content.PURITY)
     this.meltingIssuedetailsFrom.controls.remarks.setValue(this.content.REMARKS)
+    this.meltingIssuedetailsFrom.controls.waxweight.setValue(this.content.WAX_WEIGHT)
+    this.meltingIssuedetailsFrom.controls.topurity.setValue(this.content.PURE_WT)
     this.meltingIssuedetailsFrom.controls.lossweight.setValue(this.content.LOSSWT)
+    this.setValueWithDecimal('topurity', this.content.PURE_WT, 'THREE')
+    this.setValueWithDecimal('grossweight', this.content.GROSS_WT, 'METAL')
+    this.setValueWithDecimal('purity', this.content.PURITY, 'PURITY')
+    this.setValueWithDecimal('netweight', this.content.NET_WT, 'THREE')
+    this.setValueWithDecimal('waxweight', this.content.WAX_WT, 'THREE')
+    this.setValueWithDecimal('stoneweight', this.content.STONE_WT, 'STONE')
+    this.setValueWithDecimal('diffgrwt', this.content.JOB_PURITY, 'PURITY')
 
 
   };
-  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-  //   this.meltingIssuedetailsFrom.controls[formControlName].setValue(
-  //     this.comService.setCommaSerperatedNumber(value, Decimal)
-  //   )
-  // }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.meltingIssuedetailsFrom.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     // this.activeModal.close(data);
@@ -423,7 +432,14 @@ setPostData() {
           this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.topurity.setValue(data[0].PURE_WT)
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
+          this.meltingIssuedetailsFrom.controls.stoneweight.setValue(data[0].STONE)
           this.meltingIssuedetailsFrom.controls.mainstock.setValue(data[0].MAIN_STOCK_CODE)
+          this.setValueWithDecimal('topurity', data[0].PURE_WT.toFixed(3), 'THREE')
+          this.setValueWithDecimal('grossweight', data[0].METAL, 'METAL')
+          this.setValueWithDecimal('purity', data[0].PURITY, 'PURITY')
+          this.setValueWithDecimal('waxweight', data[0].KARAT, 'THREE')
+          this.setValueWithDecimal('StoneWeight', data[0].STONE, 'STONE')
+          this.setValueWithDecimal('netweight', data[0].METAL - data[0].STONE, 'THREE')
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
 

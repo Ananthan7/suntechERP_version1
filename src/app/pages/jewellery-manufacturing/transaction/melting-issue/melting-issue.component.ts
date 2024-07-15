@@ -145,6 +145,7 @@ export class MeltingIssueComponent implements OnInit {
     process: [''],
     currency: [''],
     currencyrate: [''],
+    jobpurity: [''],
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
@@ -421,11 +422,12 @@ export class MeltingIssueComponent implements OnInit {
 
   openaddMeltingIssueDetails(dataToChild?: any) {
     if (dataToChild) {
-      dataToChild.FLAG = this.content?.FLAG || ''
+      dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
     } else {
       dataToChild = { HEADERDETAILS: this.meltingIssueFrom.value }
     }
+    console.log(dataToChild, 'dataToChild to parent');
     this.dataToDetailScreen = dataToChild //input variable to pass data to child
     this.modalReference = this.modalService.open(this.meltingissueDetailScreen, {
       size: 'xl',
@@ -797,7 +799,11 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.meltingIssueFrom.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
 
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -875,6 +881,8 @@ export class MeltingIssueComponent implements OnInit {
             console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
+            this.meltingIssueFrom.controls.jobpurity.setValue(data[0].STD_PURITY)
+            this.setValueWithDecimal('jobpurity', data[0].STD_PURITY, 'PURITY')
 
             this.subJobNumberValidate()
           } else {
