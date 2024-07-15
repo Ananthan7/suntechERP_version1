@@ -39,7 +39,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   branchCode?: any = localStorage.getItem("userbranch");
   vocMaxDate = new Date();
-  currentDate = new Date();
+    currentDate = new Date();
   repairDetailsData: any[] = [];
   companyName = this.comService.allbranchMaster["BRANCH_NAME"];
   private subscriptions: Subscription[] = [];

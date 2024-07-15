@@ -127,23 +127,6 @@ export class PendingSalesOrdersComponent implements OnInit {
     repairAmt: [""],
   });
 
-  salesManCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 1,
-    SEARCH_FIELD: "SALESPERSON_CODE",
-    SEARCH_HEADING: "Salesman type",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "SALESPERSON_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-  salesManCodeSelected(e: any) {
-    this.repairjewelleryreceiptFrom.controls.salesman.setValue(
-      e.SALESPERSON_CODE
-    );
-  }
-
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -157,10 +140,6 @@ export class PendingSalesOrdersComponent implements OnInit {
   };
   customerCodeSelected(e: any) {
     this.repairjewelleryreceiptFrom.controls.customer.setValue(e.CODE);
-    this.repairjewelleryreceiptFrom.controls.customerDesc.setValue(e.NAME);
-    this.repairjewelleryreceiptFrom.controls.email.setValue(e.EMAIL);
-    this.repairjewelleryreceiptFrom.controls.tel.setValue(e.TEL1);
-    this.repairjewelleryreceiptFrom.controls.mobile.setValue(e.MOBILE);
   }
 
   currencyData: MasterSearchModel = {
