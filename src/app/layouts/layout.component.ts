@@ -25,6 +25,7 @@ export class LayoutComponent implements OnInit {
   topbar!: string;
   sidebarcolor!: string;
   sidebarsize!: string;
+  isRTL = false;
 
   constructor(private eventService: EventService) { }
 
@@ -75,6 +76,12 @@ export class LayoutComponent implements OnInit {
       this.SidebarColor(this.sidebarcolor);
     });
 
+
+
+    this.eventService.changeAlignment.subscribe(() => {
+      this.isRTL = !this.isRTL;
+      // console.log('website alignment',this.isRTL)
+    });
   }
 
   /**

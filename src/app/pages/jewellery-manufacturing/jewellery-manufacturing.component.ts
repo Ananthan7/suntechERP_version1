@@ -6,6 +6,7 @@ import { JobVerificationComponent } from './favorites/job-verification/job-verif
 import { JobWorkAllocationComponent } from './favorites/job-work-allocation/job-work-allocation.component';
 import { SalesOrderAmendmentComponent } from './favorites/sales-order-amendment/sales-order-amendment.component';
 import { ProducationLossRecoveryComponent } from './favorites/producation-loss-recovery/producation-loss-recovery.component';
+import { EventService } from 'src/app/core/services/event.service';
 
 @Component({
   selector: 'app-jewellery-manufacturing',
@@ -21,17 +22,22 @@ export class JewelleryManufacturingComponent implements OnInit {
     private CommonService: CommonServiceService,
     private ChangeDetector: ChangeDetectorRef,
       private modalService: NgbModal,
+      private eventService: EventService
   ) {
   }
   data: any;
   dataPie: any;
 
   options: any;
-
+  isRTL: boolean = false;
   ngOnInit(): void {
     //use: to get menu title from queryparams
     this.menuTitle = this.CommonService.getTitleName()
 
+    this.eventService.changeAlignment.subscribe(() => {
+      this.isRTL = !this.isRTL;
+      console.log('website alignment',this.isRTL)
+    });
   }
 
   openJobVerification() {
