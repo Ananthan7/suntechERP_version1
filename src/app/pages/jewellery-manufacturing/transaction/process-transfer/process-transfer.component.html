@@ -80,7 +80,7 @@
                                         (focusout)="validateLookupField($event,SalesmanData,'salesman')" />
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="SalesmanData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode" #salesmanOverlay
                                         (newRowClick)="salesmanSelected($event)">
                                     </master-search>
                                 </mat-form-field>

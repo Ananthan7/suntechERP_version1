@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -14,7 +14,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
-  @ViewChild(MasterSearchComponent) MasterSearchComponent?: MasterSearchComponent;
+  @ViewChild('overlayToWorker') overlayToWorker!: MasterSearchComponent;
+  @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('fromProcessMasterOverlay') fromProcessMasterOverlay!: MasterSearchComponent;
+  @ViewChild('toProcessMasterOverlay') toProcessMasterOverlay!: MasterSearchComponent;
+  @ViewChild('fromWorkerMasterOverley') fromWorkerMasterOverley!: MasterSearchComponent;
+  @ViewChild('stockCodeOverlay') stockCodeOverlay!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
@@ -299,6 +304,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private modalService: NgbModal,
+    private renderer: Renderer2,
   ) {
   }
 
@@ -372,6 +378,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
       this.formatMetalDetailDataGrid()
     } else {// condition to load without saving
+      this.renderer.selectRootElement('#jobNoSearch')?.focus();
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID
     }
@@ -558,15 +565,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') return
-    // let postData = {
-    //   "SPID": "086",
-    //   "parameter": {
-    //     'strBranchCode': this.commonService.nullToString(this.branchCode),
-    //     'strJobNumber': this.commonService.nullToString(event.target.value),
-    //     'strCurrenctUser': this.commonService.nullToString(this.userName)
-    //   }
-    // }
+    if (event.target.value == '') {
+      this.showOverleyPanel(event,'JOB_NUMBER')
+      return
+    }
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -582,6 +584,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.overlayjobNoSearch.closeOverlayPanel()
             this.jobNumberDetailData = data
             this.nullToStringSetValue('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
             this.nullToStringSetValue('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
@@ -598,6 +601,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.getSequenceDetailData()
           } else {
             this.nullToStringSetValue('JOB_NUMBER', '')
+            this.renderer.selectRootElement('#jobNoSearch')?.focus();
             this.commonService.toastErrorByMsgId('MSG1531')
             return
           }
@@ -1217,6 +1221,152 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  /**USE:from porcesscode Validate API call */
+  fromProcesscodeValidate(event: any) {
+    if (event.target.value == '') {
+      this.fromProcessMasterOverlay.showOverlayPanel(event)
+      return
+    }
+    let form = this.processTransferdetailsForm.value
+    let postData = {
+      "SPID": "083",
+      "parameter": {
+        'StrCurrentUser': this.commonService.nullToString(this.commonService.userName),
+        'StrProcessCode': this.commonService.nullToString(event.target.value),
+        'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
+        'StrBranchCode': this.commonService.branchCode
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data.length==0) {
+            this.nullToStringSetValue('FRM_PROCESS_CODE','')
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          } 
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  // to processcode validate
+  toProcesscodeValidate(event: any) {
+    if (event.target.value == '') {
+      this.toProcessMasterOverlay.showOverlayPanel(event)
+      return
+    }
+    let form = this.processTransferdetailsForm.value
+    let postData = {
+      "SPID": "098",
+      "parameter": {
+        'JobNumber': this.commonService.nullToString(form.JOB_NUMBER),
+        'BranchCode': this.commonService.nullToString(form.BRANCH_CODE),
+        'CurrentUser': this.commonService.nullToString(this.commonService.userName),
+        'ToWorker': this.commonService.nullToString(form.TO_WORKER_CODE),
+        'EntStr': '',
+        'ToWorkerFocus': 1
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data.length==0) {
+            this.nullToStringSetValue('TO_PROCESS_CODE','')
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          } 
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  // from Workercode Validate
+  fromWorkercodeValidate(event: any) {
+    if (event.target.value == '') {
+      this.fromWorkerMasterOverley.showOverlayPanel(event)
+      return
+    }
+    let form = this.processTransferdetailsForm.value
+    let postData = {
+      "SPID": "084",
+      "parameter": {
+        'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
+        'StrFromProcess': this.commonService.nullToString(form.FRM_PROCESS_CODE),
+        'StrFromWorker': this.commonService.nullToString(form.FRM_WORKER_CODE),
+        'StrBranchCode': this.commonService.nullToString(form.BRANCH_CODE),
+        'blnProcessAuthroize': '',
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data.length==0) {
+            this.nullToStringSetValue('FRM_WORKER_CODE','')
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          } 
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  // to Workercode Validate
+  toWorkercodeValidate(event: any) {
+    if (event.target.value == '') {
+      this.overlayToWorker.showOverlayPanel(event)
+      return
+    }
+    let form = this.processTransferdetailsForm.value
+    let postData = {
+      "SPID": "085",
+      "parameter": {
+        'StrToProcess': this.commonService.nullToString(form.TO_PROCESS_CODE),
+        'StrToWorker': this.commonService.nullToString(form.TO_WORKER_CODE),
+        'blntoWorkerFocus': '1',
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data.length==0) {
+            this.nullToStringSetValue('TO_WORKER_CODE','')
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          } 
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   toggleSwitchChange(event: any) {
     if (this.processTransferdetailsForm.value.toggleSwitchtIssue) {
       this.MetalorProcessFlag = 'Process'
@@ -1245,11 +1395,26 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(response.DESCRIPTION)
     }
   }
+  showOverleyPanel(event: any,formControlName: string){
+    if(formControlName == 'TO_WORKER_CODE'){
+      this.overlayToWorker.showOverlayPanel(event)
+    }
+    if(formControlName == 'JOB_NUMBER'){
+      this.overlayjobNoSearch.showOverlayPanel(event)
+    }
+  }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    this.showOverleyPanel(event,FORMNAME)
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (FORMNAME == 'FRM_PROCESS_CODE') {
       this.setFromProcessWhereCondition()
     }
+   
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       "PAGENO": LOOKUPDATA.PAGENO,
@@ -2096,6 +2261,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     this.locationSearchFlag = false;//loaction flag
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (FORMNAME == 'stockCode' && event.target.value == '') {
+      this.stockCodeOverlay.showOverlayPanel(event)
+    }
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -2138,4 +2306,5 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
+
 }
