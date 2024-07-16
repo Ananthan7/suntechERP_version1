@@ -246,8 +246,7 @@ export class WaxProcessReturnComponent implements OnInit {
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
+          if(result && result.status == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -261,10 +260,9 @@ export class WaxProcessReturnComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -340,8 +338,7 @@ export class WaxProcessReturnComponent implements OnInit {
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
+          if(result && result.status == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -355,10 +352,10 @@ export class WaxProcessReturnComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+        
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
