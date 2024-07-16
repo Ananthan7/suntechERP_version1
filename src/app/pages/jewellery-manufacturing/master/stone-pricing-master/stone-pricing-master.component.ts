@@ -194,8 +194,8 @@ export class StonePricingMasterComponent implements OnInit {
     carat_wt: [0, [Validators.required]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from: [0, [Validators.required]],
-    wt_to: [0, [Validators.required]],
+    wt_from: [ 0,[Validators.required]],
+    wt_to: [ 0,[Validators.required]],
     size_to: [''],
     size_from: [''],
     issue_rate: [0, [Validators.required]],
@@ -377,12 +377,12 @@ export class StonePricingMasterComponent implements OnInit {
 
   private setInitialValues() {
 
-    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.stonePrizeMasterForm.controls.wt_from.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.stonePrizeMasterForm.controls.wt_to.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'));
-    this.stonePrizeMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0,'METAL'));
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.wt_from.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.wt_to.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'));
+    this.stonePrizeMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'));
 
   }
 
@@ -516,6 +516,7 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   formSubmit() {
+
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
@@ -543,26 +544,28 @@ export class StonePricingMasterComponent implements OnInit {
 
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.stonePrizeMasterForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
+
+          if (result && result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.stonePrizeMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
           }
-        }, err => alert(err))
+          else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
+        }, err => {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        })
       this.subscriptions.push(Sub)
     }
   }
@@ -581,7 +584,7 @@ export class StonePricingMasterComponent implements OnInit {
     if (priceCode === '') return;
     if (this.editMode || this.viewMode) return;
     //let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/'+this.userbranch+'?SieveSet='+this.stonePrizeMasterForm.value.sieve_set ;
-    let API = 'StonePriceMasterDJ/GetStonePriceMasterDJWithCode/'+this.userbranch+'?CODE='+event.target.value;
+    let API = 'StonePriceMasterDJ/GetStonePriceMasterDJWithCode/' + this.userbranch + '?CODE=' + event.target.value;
     let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe(
       (result) => {
         if (result.status == 'Success') {
@@ -635,10 +638,12 @@ export class StonePricingMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -729,7 +734,7 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
 
     // Construct the API URL with the selected sieve_set value
-    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/'+this.userbranch+'?SieveSet='+this.stonePrizeMasterForm.value.sieve_set ;
+    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
 
     let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
       if (result.response) {

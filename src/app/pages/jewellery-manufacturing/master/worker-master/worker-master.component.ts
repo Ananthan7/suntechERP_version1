@@ -270,11 +270,11 @@ export class WorkerMasterComponent implements OnInit {
           } else {
             this.showErrorDialog('Error please try again');
           }
-        } else {
-          this.toastr.error('Not deleted');
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network error')
+        this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub)
 
@@ -294,11 +294,11 @@ export class WorkerMasterComponent implements OnInit {
           } else {
             this.showErrorDialog('Error please try again');
           }
-        } else {
-          this.toastr.error('Not deleted');
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network error')
+        this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub)
   }

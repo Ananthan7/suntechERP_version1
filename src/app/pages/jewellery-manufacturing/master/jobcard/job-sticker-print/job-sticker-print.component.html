@@ -1,5 +1,12 @@
 
 <!-- header section starts -->
+<!-- <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Job Sticker Print </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div> -->
+  <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
     <h5 class="pos-modaltitle" id="modal-dia-metal">Job Sticker Print </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
@@ -34,7 +41,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
-                        <button type="button" id="ID003" class="btn btn-primary metal-issue-add-btn text-center"
+                        <button type="button" id="ID003" class="btn btn-primary metal-issue-add-btn text-center" (click)=" getfiltercode()"
                         >Filter</button>
                 
                     </div>
@@ -45,24 +52,21 @@
 
           <div class="row">
             <dx-data-grid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
-                            [showRowLines]="true"
-                            [allowColumnReordering]="true" height="200" [dataSource]="tableData" [allowColumnResizing]="true">
-                         
+                            [showRowLines]="true" [dataSource]="tableDataProcess"
+                            [allowColumnReordering]="true" height="200" [allowColumnResizing]="true">
+                            <dxo-selection mode="single"></dxo-selection>
                             <dxi-column caption>
-                                <dxi-column >
-                                    <dxo-selection mode="multiple"></dxo-selection> 
+                                <dxi-column alignment="center" caption="Job Number" dataField="JOB_NUMBER">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Number" dataField="Job Number">
+                                <dxi-column alignment="center" caption="Job Reff" dataField="SET_REF">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Reff" dataField="Job Reff">
+                                <dxi-column alignment="center" caption="Job Date" dataField="JOB_DATE">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Date" dataField="Job Date">
+                                <dxi-column alignment="center" caption="Design" dataField="DESIGN_CODE">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Design" dataField="Design">
+                                <dxi-column alignment="center" caption="M.Color" dataField="METAL_COLOR">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="M.Color" dataField="M.Color">
-                                </dxi-column>
-                                <dxi-column alignment="center" caption="Customer" dataField="Customer">
+                                <dxi-column alignment="center" caption="Customer" dataField="CUSTOMER_CODE">
                                 </dxi-column>
                             </dxi-column>
                         </dx-data-grid>
@@ -85,7 +89,7 @@
                         <div class="col-sm-3 pt-3">
                             <button type="button" id="ID006" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                                Destination
-                              </button> -->
+                              </button> 
                               <label for="input"
                               class="pt-1 col-form-label"><b>General</b></label>
                         </div>
@@ -157,7 +161,7 @@
                         <div class="col-sm-2 pt-1">
                             <button id="ID011" type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                               %
-                            </button> -->
+                            </button>
                             <label for="input"
                               class="pt-1 col-form-label"><b>%</b></label>
                             </div>
