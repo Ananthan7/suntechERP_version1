@@ -536,15 +536,13 @@ export class AlloyMasterComponent implements OnInit {
   fillPriceSchemeDetails() {
     this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
-    this.priceSchemeDetails.forEach((item: any, i: any) => {
+    this.priceSchemeDetails.forEach((item: any, i: any, strpriceLC:any) => {
       //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
       if (item.PRICE_NUMBER == 'PRICE1') {
         this.alloyMastereForm.controls.PRICE1.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
-        this.alloyMastereForm.controls.price1Fc.setValue(
-          this.commonService.CCToFC(form.price1Lc,form.currencyRate)
-        );
-        this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price1Lc))
+        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(form.price1Lc,form.currencyRate));
+        this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(strpriceLC))
       }
       if (item.PRICE_NUMBER == 'PRICE2') {
         this.alloyMastereForm.controls.PRICE2.setValue(item.PRICE_CODE)
@@ -1367,10 +1365,12 @@ export class AlloyMasterComponent implements OnInit {
         } else if (result.status == "Failed") {
           this.showErrorDialog('Code Already Exists')
         }
-        else {
-          this.toastr.error('Not saved')
+        else{
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1383,10 +1383,12 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 

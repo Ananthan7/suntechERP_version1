@@ -171,8 +171,13 @@ export class SequenceMasterComponent implements OnInit {
   }
 
   calculateProcessChange(event:any){
-    if(event.checked){
+    console.log(event)
+    if(event.target.checked == true){
       this.calculateProcessDisable = false;
+    }
+    else
+    {
+      this.calculateProcessDisable = true;
     }
   }
 
@@ -368,10 +373,12 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }  else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -397,10 +404,12 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }  else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {

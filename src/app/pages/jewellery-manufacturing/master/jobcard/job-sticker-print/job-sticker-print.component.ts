@@ -22,6 +22,7 @@ export class JobStickerPrintComponent implements OnInit {
   selectedTabIndex = 0;
   viewMode: boolean = false;
   tableData: any = [];
+  tableDataProcess: any[] = [];
   showHeaderFilter: boolean;
   currentFilter: any;
   showFilterRow: boolean;
@@ -87,6 +88,36 @@ export class JobStickerPrintComponent implements OnInit {
 
 
   }
+  
+  getfiltercode() {
+
+    // let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/'+ this.jobstickerpointForm.value.jobrange+'?DBBranch='+ this.branchCode;
+    let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/45353539'+'?DBBranch='+ this.branchCode;
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+        this.tableDataProcess.push(result.response);
+        console.log(this.tableDataProcess)
+        }
+        else{
+          this.commonService.toastErrorByMsgId(result.status)
+        }
+        // this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
+        // this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
+        // this.jobCardFrom.controls['subcat'].setValue(result.response.SUBCATEGORY_CODE);
+        // this.jobCardFrom.controls['prefix'].setValue(result.response.JOB_PREFIX);
+        // this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
+        // this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
+        // this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
+        // this.jobCardFrom.controls['purity'].setValue(result.response.PURITY);
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+
+  }
+
 
   priceSchemeValidate() {
 
