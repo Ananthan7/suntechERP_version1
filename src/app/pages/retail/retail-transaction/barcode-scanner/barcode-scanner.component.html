@@ -1,0 +1,30 @@
+<div class="scanner-container">
+    <div class="scanner-frame">
+      <barcode-scanner-livestream
+        type="code_128"
+        (valueChanges)="onValueChanges($event)"
+        (started)="onStarted($event)">
+      </barcode-scanner-livestream>
+      <div [hidden]="!barcodeValue">
+        {{ barcodeValue }}
+      </div>
+    </div>
+    <button class="close-button" (click)="closeScanner()">Close</button>
+  </div>
+  
+<!-- 
+
+  <div class="scanner-container">
+    <div class="scanner-frame">
+      <barcode-scanner-livestream
+        type="code_128"
+        (valueChanges)="onValueChanges($event)"
+        (started)="onStarted($event)">
+      </barcode-scanner-livestream>
+      <div [hidden]="!barcodeValue">
+        {{ barcodeValue }}
+      </div>
+    </div>
+    <button class="close-button" (click)="closeScanner()">Close</button>
+  </div> -->
+  

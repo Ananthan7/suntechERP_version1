@@ -136,11 +136,15 @@ export class MetalReturnComponent implements OnInit {
      this.setvoucherTypeMaster()  
     }
   }
+  minDate:any;
+  maxDate: any;
   LOCKVOUCHERNO: boolean = true;
   setvoucherTypeMaster(){
     let frm = this.metalReturnForm.value
     const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
   }
   setNewFormValue() {
     this.branchCode = this.commonService.branchCode;
