@@ -154,7 +154,7 @@ export class MeltingIssueComponent implements OnInit {
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
     MAIN_VOCTYPE: [''],
-    
+
 
   });
   @ViewChild('codeInput1') codeInput1!: ElementRef;
@@ -180,10 +180,10 @@ export class MeltingIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
-        this.LOCKVOUCHERNO=true;
+        this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'VIEW') {
-        this.LOCKVOUCHERNO=true;
+        this.LOCKVOUCHERNO = true;
       }
       this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
@@ -194,7 +194,7 @@ export class MeltingIssueComponent implements OnInit {
     } else {
       this.generateVocNo()
       this.setNewFormValues()
-      this.setvoucherTypeMaster() 
+      this.setvoucherTypeMaster()
       this.setCompanyCurrency()
     }
 
@@ -202,11 +202,10 @@ export class MeltingIssueComponent implements OnInit {
   ngAfterViewInit() {
     // Focus on the first input
     if (this.codeInput1) {
-      this.codeInput1.nativeElement.focus();
+      setTimeout(() => {
+        this.codeInput1.nativeElement.focus();
+      }, 2000); // Adjust the delay as needed
     }
-    setTimeout(() => {
-     
-    }, 2000); // Adjust the delay as needed
   }
   setNewFormValues() {
     this.branchCode = this.commonService.branchCode;
@@ -260,6 +259,8 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
           this.meltingIssueFrom.controls.processdes.setValue(data.PROCESS_DESC)
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
+          this.meltingIssueFrom.controls.meltingtype.setValue(data.MELTING_TYPE)
+          this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY)
 
           this.meltingISsueDetailsData = data.Details
           this.reCalculateSRNO() //set to main grid
@@ -286,7 +287,7 @@ export class MeltingIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
-  minDate:any;
+  minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
   setvoucherTypeMaster() {
@@ -372,8 +373,10 @@ export class MeltingIssueComponent implements OnInit {
   }
   MeltingCodeSelected(e: any) {
     console.log(e);
+    
     this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
     // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
+    this.meltingTypeValidate()
   }
   ProcessCodeSelected(e: any) {
     console.log(e);
@@ -421,6 +424,9 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   openaddMeltingIssueDetails(dataToChild?: any) {
+    if (!this.meltingIssueFrom.get('meltingtype')?.value) {
+      this.showErrorToast();
+    } else {
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
@@ -475,6 +481,10 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
+}
+  showErrorToast() {
+    throw new Error('Method not implemented.');
+  }
 
   setValuesToHeaderGrid(DATA: any) {
     console.log(DATA, 'detailDataToParent');
@@ -559,7 +569,7 @@ export class MeltingIssueComponent implements OnInit {
       "SALESPERSON_NAME": "",
       "DOCTIME": "2023-10-21T10:15:43.789Z",
       "TOTAL_GROSSWT": 0,
-      "MELTING_TYPE": "",
+      "MELTING_TYPE": this.meltingIssueFrom.value.meltingtype,
       "COLOR": "",
       "RET_STOCK_CODE": "",
       "RET_LOCATION_CODE": "",
@@ -622,24 +632,24 @@ export class MeltingIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status.trim() == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingIssueFrom.reset()
-                this.isSaved = true;
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status.trim() == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.meltingIssueFrom.reset()
+              this.isSaved = true;
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.toastr.error('Not saved')
@@ -672,24 +682,24 @@ export class MeltingIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingIssueFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.meltingIssueFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
@@ -878,8 +888,6 @@ export class MeltingIssueComponent implements OnInit {
             console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
-            this.meltingIssueFrom.controls.jobpurity.setValue(data[0].STD_PURITY)
-            this.setValueWithDecimal('jobpurity', data[0].STD_PURITY, 'PURITY')
 
             this.subJobNumberValidate()
           } else {
@@ -896,6 +904,38 @@ export class MeltingIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  meltingTypeValidate() {
+    const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;
+    console.log('Melting Type:', meltingTypeValue);
+
+    if (!meltingTypeValue) {
+      this.commonService.toastErrorByMsgId('MSG1531');
+      return;
+    }
+
+    const API = `MeltingType/GetMeltingTypeList/${meltingTypeValue}`;
+    console.log('API URL:', API);
+
+    const sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result: any) => {
+        this.commonService.closeSnackBarMsg();
+        if (result.response) {
+          const data = result.response;
+          console.log('API Response Data:', data);
+          this.meltingIssueFrom.controls.color.setValue(data.COLOR);
+          this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY);
+          this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      },
+      (err: any) => {
+        console.error('API Call Error:', err);
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('MSG1531');
+      }
+    );
+
+    this.subscriptions.push(sub);
+  }
 }
-
-
