@@ -460,10 +460,10 @@ export class StoneIssueComponent implements OnInit {
     let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.status == "Success") {
+        if (result && result.status == "Success") {
           this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
         } else {
-          this.showErrorDialog(result.message || 'Error please try again');
+          this.comService.toastErrorByMsgId('MSG3577')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -489,15 +489,12 @@ export class StoneIssueComponent implements OnInit {
     let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
-          } else {
-            this.showErrorDialog(result.message || 'Error please try again');
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+       
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }

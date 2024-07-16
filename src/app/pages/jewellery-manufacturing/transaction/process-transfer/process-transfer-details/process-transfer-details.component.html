@@ -43,6 +43,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput appNoEmptySpace
                     id="jobNoSearch"
+                    autocomplete="off"
                     (keypress)="lookupKeyPress($event)"
                     (focusout)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
@@ -425,9 +426,8 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput maxlength="15"
-                                (change)="stockCodeScrapValidate()"
                                 (keypress)="lookupKeyPress($event)"
-                                (focusout)="validateLookupField($event,stockCodeSearch,'stockCode')"
+                                (focusout)="stockCodeScrapValidate($event)"
                                 formControlName="stockCode" [readonly]="viewMode" />
                               <master-search class="masterSearch" *ngIf="!viewMode"
                                 [MasterSearchData]="stockCodeSearch" #stockCodeOverlay

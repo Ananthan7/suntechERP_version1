@@ -162,8 +162,7 @@ export class JobCreationComponent implements OnInit {
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+           if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -177,10 +176,9 @@ export class JobCreationComponent implements OnInit {
                   this.close("reloadMainGrid");
                 }
               });
+            }else {
+              this.comService.toastErrorByMsgId('MSG3577')
             }
-          } else {
-            this.toastr.error("Not saved");
-          }
         },
         (err) => alert(err)
       );
@@ -252,8 +250,7 @@ export class JobCreationComponent implements OnInit {
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+            if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -268,9 +265,9 @@ export class JobCreationComponent implements OnInit {
                 }
               });
             }
-          } else {
-            this.toastr.error("Not saved");
-          }
+            else {
+              this.comService.toastErrorByMsgId('MSG3577')
+            }
         },
         (err) => alert(err)
       );
