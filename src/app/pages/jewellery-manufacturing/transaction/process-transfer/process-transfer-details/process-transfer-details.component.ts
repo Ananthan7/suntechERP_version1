@@ -615,12 +615,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setSubJobSpPostData() {
+  setSubJobSpPostData(form:any) {
     if (this.designType.toUpperCase() == 'DIAMOND') {
       return {
         "SPID": "088",
         "parameter": {
-          'StrSubJobNo': this.processTransferdetailsForm.value.UNQ_JOB_ID,
+          'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
           'StrBranchCode': this.commonService.nullToString(this.branchCode),
         }
       }
@@ -639,7 +639,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   subJobDetailData: any[] = []
   /**USE: subjobnumber validate API call subjobvalidate */
   subJobNumberValidate(event?: any) {
-    let postData = this.setSubJobSpPostData() //set post data with designtype checking
+    let postData = this.setSubJobSpPostData(this.processTransferdetailsForm.value) //set post data with designtype checking
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {

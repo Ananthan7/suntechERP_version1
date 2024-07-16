@@ -111,7 +111,9 @@ export class BranchTransferRepairRtnComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    if(this.content?.FLAG != "VIEW" && this.content?.FLAG != "EDIT"){
     this.generateVocNo();
+    }
     this.yearMonth = this.comService.yearSelected;
     this.branchTransferRepairRtnForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
     if (this.content?.FLAG == 'VIEW') {
@@ -166,17 +168,22 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   }
 
   setFormValues() {
-    console.log('this.content', this.content);
-    if (!this.content) return
-    this.branchTransferRepairRtnForm.controls.branchCode.setValue(this.content.BRANCH_CODE);
-    this.branchTransferRepairRtnForm.controls.branchName.setValue(this.content.BRANCHTONAME);
-    this.branchTransferRepairRtnForm.controls.vocType.setValue(this.content.VOCTYPE);
-    this.branchTransferRepairRtnForm.controls.vocNo.setValue(this.content.VOCNO);
-    this.branchTransferRepairRtnForm.controls.vocDate.setValue(this.content.VOCDATE);
-    this.branchTransferRepairRtnForm.controls.yearMonth.setValue(this.content.YEARMONTH);
-    this.branchTransferRepairRtnForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
-    this.branchTransferRepairRtnForm.controls.branch.setValue(this.content.BRANCHTO);
-    this.branchTransferRepairRtnForm.controls.transferRemarks.setValue(this.content.REMARKS);
+    // console.log('this.content', this.content);
+    let values = this.content;
+    const dateParts =values.VOCDATE.split('T')[0].split('-').join('/');
+    const formattedDate = new Date(dateParts);
+    console.log(dateParts);
+    if (!values) return
+    this.branchTransferRepairRtnForm.controls.vocNo.setValue(values.VOCNO);
+    this.branchTransferRepairRtnForm.controls.branch.setValue(values.BRANCH_CODE);
+    this.branchTransferRepairRtnForm.controls.branchName.setValue(values.BRANCHTONAME);
+    this.branchTransferRepairRtnForm.controls.vocType.setValue(values.VOCTYPE);
+    this.branchTransferRepairRtnForm.controls.vocDate.setValue(formattedDate);
+    this.branchTransferRepairRtnForm.controls.partyCode.setValue(values.POSCUSTCODE);
+    this.branchTransferRepairRtnForm.controls.partyName.setValue(values.POSCUSTNAME);
+    this.branchTransferRepairRtnForm.controls.salesMan.setValue(values.SALESPERSON_CODE);
+    this.branchTransferRepairRtnForm.controls.branch.setValue(values.BRANCHTO);
+    this.branchTransferRepairRtnForm.controls.transferRemarks.setValue(values.REMARKS);
   }
 
   close(data?: any) {
@@ -206,34 +213,34 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
       "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
       "REMARKS": this.branchTransferRepairRtnForm.value.transferRemarks,
-      "SYSTEM_DATE": new Date().toISOString(),
+      "SYSTEM_DATE": new Date(),
       "NAVSEQNO": 0,
-      "STATUS": "string",
+      "STATUS": "",
       "METALVOCNO": 0,
       "METALWEIGHT": 0,
       "METALAMOUNT": 0,
       "METALMID": 0,
-      "METALVOCTYPE": "str",
-      "METALCODE": "string",
-      "DIAMONDCODE": "string",
+      "METALVOCTYPE": "",
+      "METALCODE": "",
+      "DIAMONDCODE": "",
       "DIAMONDVOCNO": 0,
-      "DIAMONDVOCTYPE": "str",
+      "DIAMONDVOCTYPE": "",
       "DIAMONDMID": 0,
       "DIAMONDWGT": 0,
       "DIAMONDAMOUNT": 0,
-      "SUPINVDATE": "2024-03-06T13:12:01.635Z",
-      "SUPINVNO": "string",
-      "TRANSFERBRANCH": "string",
+      "SUPINVDATE": new Date(),
+      "SUPINVNO": "",
+      "TRANSFERBRANCH": "",
       "AUTOPOSTING": true,
-      "BRANCHTONAME": "string",
-      "ISMETALDIAMOND": "string",
-      "HASJOBDONE": "string",
+      "BRANCHTONAME": this.branchTransferRepairRtnForm.value.branchName,
+      "ISMETALDIAMOND": "",
+      "HASJOBDONE": "",
       "PRINT_COUNT": 0,
-      "POSCUSTCODE": "string",
-      "POSCUSTNAME": "string",
+      "POSCUSTCODE": this.branchTransferRepairRtnForm.value.partyCode,
+      "POSCUSTNAME": this.branchTransferRepairRtnForm.value.partyName,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": "string",
+      "HTUSERNAME": "",
       "JOBDONE": 0,
       "METALANDDIAMOND": 0
     }
@@ -278,35 +285,35 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       "YEARMONTH": this.yearMonth,
       "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
       "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
-      "REMARKS": "string",
-      "SYSTEM_DATE": "2024-03-06T13:12:01.635Z",
+      "REMARKS":this.branchTransferRepairRtnForm.value.transferRemarks,
+      "SYSTEM_DATE": new Date(),
       "NAVSEQNO": 0,
-      "STATUS": "string",
+      "STATUS": "",
       "METALVOCNO": 0,
       "METALWEIGHT": 0,
       "METALAMOUNT": 0,
       "METALMID": 0,
-      "METALVOCTYPE": "str",
-      "METALCODE": "string",
-      "DIAMONDCODE": "string",
+      "METALVOCTYPE": "",
+      "METALCODE": "",
+      "DIAMONDCODE": "",
       "DIAMONDVOCNO": 0,
       "DIAMONDVOCTYPE": "str",
       "DIAMONDMID": 0,
       "DIAMONDWGT": 0,
       "DIAMONDAMOUNT": 0,
-      "SUPINVDATE": "2024-03-06T13:12:01.635Z",
-      "SUPINVNO": "string",
-      "TRANSFERBRANCH": "string",
+      "SUPINVDATE":new Date(),
+      "SUPINVNO": "",
+      "TRANSFERBRANCH": "",
       "AUTOPOSTING": true,
-      "BRANCHTONAME": "string",
-      "ISMETALDIAMOND": "string",
-      "HASJOBDONE": "string",
+      "BRANCHTONAME": this.branchTransferRepairRtnForm.value.branchName,
+      "ISMETALDIAMOND": "",
+      "HASJOBDONE": "",
       "PRINT_COUNT": 0,
-      "POSCUSTCODE": "string",
-      "POSCUSTNAME": "string",
+      "POSCUSTCODE": this.branchTransferRepairRtnForm.value.partyCode,
+      "POSCUSTNAME": this.branchTransferRepairRtnForm.value.partyName,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": "string",
+      "HTUSERNAME": "",
       "JOBDONE": 0,
       "METALANDDIAMOND": 0
     }
