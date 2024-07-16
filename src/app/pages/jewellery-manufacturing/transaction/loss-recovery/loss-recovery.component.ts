@@ -346,8 +346,7 @@ export class LossRecoveryComponent implements OnInit {
     .postDynamicAPI(API, postData)
     .subscribe(
       (result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || "Success",
               text: "",
@@ -360,10 +359,9 @@ export class LossRecoveryComponent implements OnInit {
                 this.close("reloadMainGrid");
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error("Not saved");
-        }
       },
       (err) => alert(err)
     );
@@ -383,8 +381,7 @@ export class LossRecoveryComponent implements OnInit {
         .putDynamicAPI(API, postData)
         .subscribe(
           (result) => {
-            if (result.response) {
-              if (result.status == "Success") {
+              if (result && result.status == "Success") {
                 Swal.fire({
                   title: result.message || "Success",
                   text: "",
@@ -397,10 +394,9 @@ export class LossRecoveryComponent implements OnInit {
                     this.close("reloadMainGrid");
                   }
                 });
-              }
-            } else {
-              this.toastr.error("Not saved");
-            }
+              }else {
+                this.comService.toastErrorByMsgId('MSG3577')
+              } 
           },
           (err) => alert(err)
         );

@@ -552,8 +552,7 @@ export class CastingTreeUpComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -567,10 +566,9 @@ export class CastingTreeUpComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.commonService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -630,8 +628,7 @@ export class CastingTreeUpComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -646,9 +643,9 @@ export class CastingTreeUpComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+          else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }

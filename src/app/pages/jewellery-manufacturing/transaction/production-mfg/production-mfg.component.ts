@@ -648,8 +648,7 @@ export class ProductionMfgComponent implements OnInit {
       .postDynamicAPI("JobProductionMaster/InsertJobProductionMaster", postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+            if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -663,10 +662,9 @@ export class ProductionMfgComponent implements OnInit {
                   this.close("reloadMainGrid");
                 }
               });
+            }else {
+              this.commonService.toastErrorByMsgId('MSG3577')
             }
-          } else {
-            this.toastr.error("Not saved");
-          }
         },
         (err) => alert(err)
       );
@@ -687,8 +685,7 @@ export class ProductionMfgComponent implements OnInit {
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+            if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -702,10 +699,9 @@ export class ProductionMfgComponent implements OnInit {
                   this.close("reloadMainGrid");
                 }
               });
+            }else {
+              this.commonService.toastErrorByMsgId('MSG3577')
             }
-          } else {
-            this.toastr.error("Not saved");
-          }
         },
         (err) => alert(err)
       );

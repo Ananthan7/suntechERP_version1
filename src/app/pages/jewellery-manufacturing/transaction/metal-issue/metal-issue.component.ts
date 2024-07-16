@@ -451,8 +451,7 @@ this.setvoucherTypeMaster()
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status.trim() == "Success") {
+          if (result && result.status.trim() == "Success") {
             this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
@@ -467,10 +466,9 @@ this.setvoucherTypeMaster()
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
-        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
@@ -487,8 +485,7 @@ this.setvoucherTypeMaster()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
@@ -503,10 +500,9 @@ this.setvoucherTypeMaster()
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
-        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')

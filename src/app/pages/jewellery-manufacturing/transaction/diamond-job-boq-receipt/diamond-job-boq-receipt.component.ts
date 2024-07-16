@@ -335,8 +335,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status.trim() == "Success") {
+          if (result && result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -350,14 +349,13 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+      
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
 
   update() {
     if (this.diamondJobBoqReceipt.invalid) {
@@ -507,8 +505,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -522,10 +519,9 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
