@@ -1,8 +1,7 @@
 <div>
     <!-- header section starts -->
     <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Stone Pricing
-            Master</h5>
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Stone Pricing Master</h5>
         <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
@@ -20,11 +19,11 @@
                             <div class="col-6">
                                 <br>
                                 <div class="row mb-1 head2">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID001"
                                         class="col-sm-4 col-form-label">Price
                                         Code * :</label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
+                                        <mat-form-field style="width: 90%" appearance="outline">
                                             <input type="text"
                                                 [readonly]="editPrice"
                                                 #codeInput matInput
@@ -36,195 +35,195 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID002"
                                         class="col-sm-4 col-form-label">Sieve
                                         Set : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
-                                            <input type="text"
+                                        <mat-form-field style="width: 90%" appearance="outline">
+                                            <input type="text" class="text-right"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="15"
                                                 formControlName="sieve_set" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="sieve_setData"
+                                                    (newRowClick)="sieve_setDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="sieve_setData"
-                                            (newRowClick)="sieve_setDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID003"
                                         class="col-sm-4 col-form-label">Shape *
                                         : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
+                                        <mat-form-field style="width: 90%" appearance="outline">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="shape" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,shapeData,'shape')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="shapeData"
+                                                    (newRowClick)="shapeDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="shapeData"
-                                            (newRowClick)="shapeDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID004"
                                         class="col-sm-4 col-form-label">Sieve
                                         From : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
-                                            <input type="text"
+                                        <mat-form-field style="width: 90%" appearance="outline">
+                                            <input type="text" class="text-right"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="sieve_form" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sievefromData,'sieve_form')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="sievefromData"
+                                                    (newRowClick)="sievefromDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="sievefromData"
-                                            (newRowClick)="sievefromDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID005"
                                         class="col-sm-4 col-form-label">Sieve To
                                         : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
-                                            <input type="text"
+                                        <mat-form-field style="width: 90%" appearance="outline">
+                                            <input type="text" class="text-right"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="sieve_to"
                                                (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sievetoData,'sieve_to')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="sievetoData"
+                                                    (newRowClick)="sievetoDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="sievetoData"
-                                            (newRowClick)="sievetoDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID006"
                                         class="col-sm-4 col-form-label">Color :
                                     </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
+                                        <mat-form-field style="width: 90%" appearance="outline">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="color" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,colorData,'color')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="colorData"
+                                                    (newRowClick)="colorDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="colorData"
-                                            (newRowClick)="colorDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID007"
                                         class="col-sm-4 col-form-label">Clarity
                                         * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
+                                        <mat-form-field style="width: 90%" appearance="outline">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="clarity" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,clarityData,'clarity')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="clarityData"
+                                                    (newRowClick)="clarityDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="clarityData"
-                                            (newRowClick)="clarityDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID008"
                                         class="col-sm-4 col-form-label"> Size
                                         From : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
-                                            <input type="text"
+                                        <mat-form-field style="width: 90%" appearance="outline">
+                                            <input type="text" class="text-right"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="size_from" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sizefromData,'size_from')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="sizefromData"
+                                                    (newRowClick)="sizefromDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="sizefromData"
-                                            (newRowClick)="sizefromDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID009"
                                         class="col-sm-4 col-form-label">Size To
                                         : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
-                                            <input type="text"
+                                        <mat-form-field style="width: 90%" appearance="outline">
+                                            <input type="text" class="text-right"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="size_to" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sizetoData,'size_to')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="sizetoData"
+                                                    (newRowClick)="sizetoDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="sizetoData"
-                                            (newRowClick)="sizetoDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 pt-5">
                                 <br>
                                 <div class="row mb-1 head2" style="margin-top: -46px;">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID010"
                                         class="col-sm-4 col-form-label">Currency
                                         * :</label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%">
+                                        <mat-form-field style="width: 90%" appearance="outline">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="6"
                                                 formControlName="currency" (input)="inputValidate($event)"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,currencyData,'currency')"/>
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="currencyData"
+                                                    (newRowClick)="currencyDataSelected($event)"
+                                                    *ngIf=" viewDisable == false">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="currencyData"
-                                            (newRowClick)="currencyDataSelected($event)"
-                                            *ngIf=" viewDisable == false">
-                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID011"
                                         class="col-sm-4 col-form-label">Carat
                                         Weight * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px; text-align: right;">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
@@ -237,39 +236,39 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID012"
                                         class="col-sm-4 col-form-label">Sieve
                                         From Desc :
                                     </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="text" matInput class="text-right"
                                                 [readonly]="viewMode"
                                                 formControlName="sieve_from_desc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID013"
                                         class="col-sm-4 col-form-label">Sieve to
                                         Desc : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text" matInput
-                                            (change)="onSievetto($event)"
+                                            (change)="onSievetto($event,'sieve_to_desc')"
                                                 formControlName="sieve_to_desc"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID014"
                                         class="col-sm-4 col-form-label">Weight
                                         From: </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
@@ -284,18 +283,18 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID015"
                                         class="col-sm-4 col-form-label">Weight
                                         To : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
                                                 matInput maxlength="15"
                                                 class="text-right"
                                                 formControlName="wt_to"
-                                                (change)="onweighttto($event)"
+                                                (change)="onweightto($event,'wt_to')"
                                                 StoneDecimalInput
                                                 (input)="onInputChange($event,'wt_to', 12)"
                                                 />
@@ -303,11 +302,11 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID016"
                                         class="col-sm-4 col-form-label">Issue
                                         Rate * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text"
                                                 [readonly]="viewModeAll"
@@ -321,11 +320,11 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID017"
                                         class="col-sm-4 col-form-label">Selling
                                         % * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text"
                                                 [readonly]="viewModeAll || viewselling"
@@ -341,11 +340,11 @@
                                 </div>
 
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
+                                    <label for="inputPassword" id="ID018"
                                         class="col-sm-4 col-form-label">Selling
                                         Rate * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field
+                                        <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text"       AmountDecimalInput
                                             CommaSeparatedNumber [max]="13"

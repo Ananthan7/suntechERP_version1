@@ -368,7 +368,7 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.brand.setValue(this.content.BRAND_CODE)
     this.alloyMastereForm.controls.category.setValue(this.content.CATEGORY_CODE)
     this.alloyMastereForm.controls.costCenter.setValue(this.content.COST_CODE)
-    this.alloyMastereForm.controls.brand.setValue(this.content.DESIGN_CODE)
+    //this.alloyMastereForm.controls.brand.setValue(this.content.DESIGN_CODE)
     this.alloyMastereForm.controls.color.setValue(this.content.COLOR)
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
@@ -547,7 +547,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price1Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE2') {
-        this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
+        this.alloyMastereForm.controls.PRICE2.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price2Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price2Fc.setValue(
           this.commonService.CCToFC(form.price2Lc,form.currencyRate)
@@ -1206,7 +1206,7 @@ export class AlloyMasterComponent implements OnInit {
       ADDITIONAL_RATELC: 0,
       WBOXWOUTBOX: 0,
       ALLOW_NEGATIVE: this.onchangeCheckBox(this.alloyMastereForm.value.silveralloy),
-      EXCLUDE_TRANSFER_WT: this.onchangeCheckBox(this.alloyMastereForm.value.allowpcs),
+      EXCLUDE_TRANSFER_WT: this.onchangeCheckBox(this.alloyMastereForm.value.excludeTransferWt),
       WT_VAR_PER: 0,
       HALLMARKING: this.commonService.nullToString(this.alloyMastereForm.value.hallmarking),
       WOO_CATEGORY_ID: 0,

@@ -491,7 +491,7 @@ export class ApprovalMasterComponent implements OnInit {
               });
             }
           } else {
-            this.toastr.error('User Name cannot be empty')
+            this.toastr.error('Not saved')
           }
         }, err => alert(err));
 

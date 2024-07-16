@@ -48,6 +48,7 @@ export class CustomerPricingMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content.FLAG);
+    this.setCompanyCurrency();
     if (this.content.FLAG == 'VIEW') {
 
     }
@@ -102,7 +103,7 @@ export class CustomerPricingMasterComponent implements OnInit {
     approvalby: [''],
     enteredBy: ['', [Validators.required]],
     price: ['', [Validators.required]],
-    currency: ['AED', [Validators.required]],
+    currency: ['', [Validators.required]],
     customercode: ['', [Validators.required]],
     labourtype: ['None', [Validators.required]],
     pricedesc: ['', [Validators.required]],
@@ -113,6 +114,11 @@ export class CustomerPricingMasterComponent implements OnInit {
     bypercentage: [''],
    
   })
+
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.customerpricemasterForm.controls.currency.setValue(CURRENCY_CODE);
+  }
 
 
   user: MasterSearchModel = {

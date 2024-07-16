@@ -335,8 +335,7 @@ deleteTableData(){
    
      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
        .subscribe((result) => {
-         if (result.response) {
-           if(result.status == "Success"){
+           if(result && result.status == "Success"){
              Swal.fire({
                title: result.message || 'Success',
                text: '',
@@ -350,10 +349,9 @@ deleteTableData(){
                  this.close('reloadMainGrid')
                }
              });
-           }
-         } else {
-           this.toastr.error('Not saved')
-         }
+           }else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
        }, err => alert(err))
      this.subscriptions.push(Sub)
    }
@@ -467,8 +465,7 @@ deleteTableData(){
    
      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
        .subscribe((result) => {
-         if (result.response) {
-           if(result.status == "Success"){
+           if(result && result.status == "Success"){
              Swal.fire({
                title: result.message || 'Success',
                text: '',
@@ -482,10 +479,9 @@ deleteTableData(){
                  this.close('reloadMainGrid')
                }
              });
-           }
-         } else {
-           this.toastr.error('Not saved')
-         }
+           }else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
        }, err => alert(err))
      this.subscriptions.push(Sub)
    }
