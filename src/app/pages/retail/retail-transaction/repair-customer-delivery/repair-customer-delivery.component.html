@@ -6,7 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (deleteClick)="deleteRepairCustomerDelivery()" (cancelClick)="close()"></modal-header>
+<modal-header 
+*ngIf="this.content?.FLAG !='VIEW'"
+(saveClick)="formSubmit()" (deleteClick)="deleteRepairCustomerDelivery()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid">
     <div class="pt-3">
@@ -165,7 +167,8 @@
                     </div> -->
                     <div class="col-md-12">
                         <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-                            <mat-tab label="Complete Jobs To be Delivered" id="get">
+                            <mat-tab *ngIf="this.content?.FLAG !='VIEW'"
+                            label="Complete Jobs To be Delivered" id="get">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
                                         <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
