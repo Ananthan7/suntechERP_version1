@@ -50,4 +50,12 @@ export class EventService {
         this.handler.unsubscribe()
         this.behaviorsubject.unsubscribe()
     }
+
+
+    private changeAlignmentSubject = new Subject<void>();
+    changeAlignment = this.changeAlignmentSubject.asObservable();
+    triggerChangeAlignment() {
+      this.changeAlignmentSubject.next();
+    }
+
 }

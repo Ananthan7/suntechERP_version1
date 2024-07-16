@@ -1,5 +1,7 @@
-<!-- Vertical layout -->
-<app-vertical *ngIf="isVerticalLayoutRequested()"></app-vertical>
+<div [ngClass]="{'siteAlignment': isRTL}">
+    <!-- Vertical layout -->
+    <app-vertical *ngIf="isVerticalLayoutRequested()"></app-vertical>
 
-<!-- horizontal layout -->
-<app-horizontal *ngIf="isHorizontalLayoutRequested()"></app-horizontal>
+    <!-- horizontal layout -->
+    <app-horizontal *ngIf="isHorizontalLayoutRequested()"></app-horizontal>
+</div>
