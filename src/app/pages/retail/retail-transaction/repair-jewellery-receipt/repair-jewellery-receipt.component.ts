@@ -14,6 +14,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
 import { RepairDetailsComponent } from "./repair-details/repair-details.component";
 import { DailyRatesOunceComponent } from "./daily-rates-ounce/daily-rates-ounce.component";
+import { PendingSalesOrdersComponent } from "./pending-sales-orders/pending-sales-orders.component";
 
 @Component({
   selector: "app-repair-jewellery-receipt",
@@ -559,15 +560,15 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   openNew(data: any = null) {
-    // const modalRef: NgbModalRef = this.modalService.open(
-    //   PendingSalesOrdersComponent,
-    //   {
-    //     size: "xl",
-    //     backdrop: true,
-    //     keyboard: false,
-    //     windowClass: "modal-full-width",
-    //   }
-    // );
+    const modalRef: NgbModalRef = this.modalService.open(
+      PendingSalesOrdersComponent,
+      {
+        size: "xl",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
     // modalRef.componentInstance.receiptData = { ...data };
     // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
 

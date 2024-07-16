@@ -91,6 +91,7 @@ import { ExchangeDetailModal } from '../common-retail/exchange-detail-modal/exch
 import { DailyRatesOunceComponent } from './repair-jewellery-receipt/daily-rates-ounce/daily-rates-ounce.component';
 import { ConsignmentSelectionComponent } from './common/consignment-selection/consignment-selection.component';
 import { QrcodeScannerComponent } from './qrcode-scanner/qrcode-scanner.component';
+import { PendingSalesOrdersComponent } from './repair-jewellery-receipt/pending-sales-orders/pending-sales-orders.component';
 
 
 @NgModule({
@@ -188,6 +189,7 @@ import { QrcodeScannerComponent } from './qrcode-scanner/qrcode-scanner.componen
     customerDetailsModal,
     ExchangeDetailModal,
     ConsignmentSelectionComponent,
+    PendingSalesOrdersComponent,
   ],
   imports: [
     CommonModule,

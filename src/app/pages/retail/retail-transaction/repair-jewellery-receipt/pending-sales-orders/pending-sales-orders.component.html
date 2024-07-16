@@ -1,131 +1,430 @@
-<!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">{{ title }}</h5>
-  <button type="button" class="btn btn-close close-btn" (click)="close()">
-    <i class="feather icon-x close-icon"></i>
-  </button>
-</div>
-<!-- modal header component -->
-<modal-header
-  *ngIf="viewOnly == false"
-  (saveClick)="formSubmit()"
-  (cancelClick)="close()"
-></modal-header>
-<!-- content section -->
-<div class="row">
-  <form [formGroup]="repairjewelleryreceiptFrom">
-    <div class="container-fluid pt-3">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="row mb-4">
-            <label for="inputPassword" class="col-sm-4 col-form-label"
-              >Branch To * :
-            </label>
-            <div class="col-md-4">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input
-                    [readonly]="viewOnly !== false"
-                    type="text"
-                    matInput
-                    formControlName="branchTo"
-                  />
-                </mat-form-field>
-              </div>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">{{title}}</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <modal-header
+    *ngIf="viewOnly == false"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+  ></modal-header>
+  <div class="row">
+    <form [formGroup]="repairjewelleryreceiptFrom">
+      <div class="container-fluid pt-3">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-1">
+            <h6>Customer</h6>
+          </div>
+          <div class="col-md-2">
+            <h6>Authorized Status</h6>
+          </div>
+          <div class="col-md-1">
+            <div class="p-1 bd-highlight">
+              <button type="button" class="btn btn-outline-primary add-btn">
+                Authorize/Post
+              </button>
             </div>
           </div>
-          <div class="row mb-4">
-            <label for="inputPassword" class="col-sm-4 col-form-label"
-              >Order No * :
-            </label>
-            <div class="col-md-4">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input
-                    [readonly]="viewOnly !== false"
-                    type="text"
-                    matInput
-                    formControlName="orderNo"
-                  />
-                </mat-form-field>
-              </div>
+          <div class="col-md-1"></div>
+          <div class="col-md-3">
+            <div class="boxed-label">
+              <h6>N/A</h6>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="row mb-4">
-            <label for="inputPassword" class="col-sm-4 col-form-label"
-              >Customer :
-            </label>
-            <div class="col-sm-6 mb-5">
-              <mat-form-field style="width: 70%">
-                <input
-                  [readonly]="viewOnly !== false"
-                  type="text"
-                  matInput
-                  formControlName="customer"
-                />
-              </mat-form-field>
-              <master-search
-                *ngIf="viewOnly == false"
-                [MasterSearchData]="customerCodeData"
-                (newRowClick)="customerCodeSelected($event)"
-              ></master-search>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mt-3 mb-5 ">
-        <div class="col-md-12">
-          <mat-tab-group>
-            <mat-tab>
-              <div class="row pt-2">
-                <div class="col-md-12">
-                  <dx-data-grid
-                    id="gridContainer"
-                    [showBorders]="true"
-                    [dataSource]="repairDetailsData"
-                    [showColumnLines]="true"
-                    (onRowRemoved)="removeLineItemsGrid($event)"
-                    (onSelectionChanged)="onSelectionChanged($event)"
-                    (onEditingStart)="onRowDoubleClicked($event)"
-                    [showRowLines]="true"
-                    class="mt-3"
-                  >
-                    <dxo-editing
-                      [allowUpdating]="true"
-                      [allowDeleting]="!viewOnly"
-                    >
-                      <dxo-texts
-                        alignment="right"
-                        [editRow]="viewOnly ? 'View' : 'Edit'"
-                        deleteRow="Remove"
-                      >
-                      </dxo-texts>
-                    </dxo-editing>
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxo-search-panel
-                      [visible]="true"
-                      [width]="240"
-                      placeholder="Search..."
-                    ></dxo-search-panel>
-
-                    <dxi-column
-                      *ngFor="let data of columnheadItemDetails"
-                      dataField="{{ data }}"
-                      caption="{{ data }}"
-                      [allowEditing]="true"
-                      alignment="center"
-                      backgroundcolor="#000"
-                    >
-                    </dxi-column>
-                  </dx-data-grid>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Voucher Type * :
+              </label>
+              <div class="col-md-3">
+                <div class="position-relative d-flex">
+                  <mat-form-field style="width: 100%">
+                    <input
+                      [readonly]="viewOnly !== false"
+                      type="text"
+                      matInput
+                      formControlName="vocType"
+                    />
+                  </mat-form-field>
                 </div>
               </div>
-            </mat-tab>
-          </mat-tab-group>
+              <div class="col-md-3">
+                <div class="position-relative d-flex">
+                  <mat-form-field style="width: 100%">
+                    <input
+                      [readonly]="viewOnly !== false"
+                      class="text-right"
+                      type="number"
+                      matInput
+                      readonly
+                      formControlName="vocno"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Voucher Date :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 72%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    matInput
+                    [matDatepicker]="vocDate"
+                    formControlName="vocDate"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="vocDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #vocDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >SalesMan :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 70%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="salesman"
+                  />
+                </mat-form-field>
+                <master-search
+                  *ngIf="viewOnly == false"
+                  [MasterSearchData]="salesManCodeData"
+                  (newRowClick)="salesManCodeSelected($event)"
+                ></master-search>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Customer :
+              </label>
+              <div class="col-sm-8">
+                <mat-form-field style="width: 40%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="customer"
+                  />
+                </mat-form-field>
+                <master-search
+                  *ngIf="viewOnly == false"
+                  [MasterSearchData]="customerCodeData"
+                  (newRowClick)="customerCodeSelected($event)"
+                ></master-search>
+                <mat-form-field style="width: 40%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="customerDesc"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                >Mobile :
+              </label>
+  
+              <div class="col-sm-4">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="mobile"
+                  />
+                </mat-form-field>
+              </div>
+  
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Tel :
+              </label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="tel"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Nationality :
+              </label>
+  
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="nationality"
+                  />
+                </mat-form-field>
+              </div>
+  
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Type :
+              </label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="type"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                >Remarks :
+              </label>
+              <div class="col-sm-8">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="remark"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col-md-2">
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-5 col-form-label"
+                >Currency :</label
+              >
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    [readonly]="isCurrencyUpdate || viewOnly"
+                    matInput
+                    formControlName="currency"
+                  />
+                </mat-form-field>
+                <master-search
+                  *ngIf="
+                    !viewOnly &&
+                    (!isCurrencyUpdate || (!viewOnly && !hideCurrecnySearch))
+                  "
+                  [MasterSearchData]="currencyData"
+                  (newRowClick)="CurrencySelected($event)"
+                ></master-search>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    class="st_txt_right"
+                    [readonly]="isCurrencyUpdate || viewOnly"
+                    matInput
+                    formControlName="currency_rate"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-5 col-form-label"
+                >Email :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly !== false"
+                    type="text"
+                    matInput
+                    formControlName="email"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-5 col-form-label"
+                >Address :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 100%">
+                  <textarea
+                    [readonly]="viewOnly !== false"
+                    matInput
+                    formControlName="address"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-5 col-form-label">
+                Repair Narration :
+              </label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 100%">
+                  <textarea
+                    [readonly]="viewOnly !== false"
+                    matInput
+                    formControlName="repair_narration"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-7 col-form-label"
+                >Customer Delivery Date :
+              </label>
+              <div class="col-sm-5">
+                <mat-form-field style="width: 72%">
+                  <input
+                    matInput
+                    [matDatepicker]="customer_delivery_date"
+                    formControlName="customer_delivery_date"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="customer_delivery_date"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #customer_delivery_date></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class="row mt-3">
+          <div *ngIf="viewOnly == false" class="col-md-3 d-flex">
+            <menu-buttons
+              [viewAddBtn]="true"
+              [viewDeleteBtn]="true"
+              [viewImportBtn]="false"
+              (addClick)="openRepairdetails()"
+              (deleteClick)="removedata()"
+            >
+            </menu-buttons>
+          </div>
+          <div class="col-md-12">
+            <mat-tab-group>
+              <mat-tab>
+                <div class="row pt-2">
+                  <div class="col-md-12">
+                    <dx-data-grid
+                      id="gridContainer"
+                      [showBorders]="true"
+                      [dataSource]="repairDetailsData"
+                      [showColumnLines]="true"
+                      (onRowRemoved)="removeLineItemsGrid($event)"
+                      (onSelectionChanged)="onSelectionChanged($event)"
+                      (onEditingStart)="onRowDoubleClicked($event)"
+                      [showRowLines]="true"
+                      class="mt-3"
+                    >
+                      <dxo-editing
+                        [allowUpdating]="true"
+                        [allowDeleting]="!viewOnly"
+                      >
+                        <dxo-texts
+                          alignment="right"
+                          [editRow]="viewOnly ? 'View' : 'Edit'"
+                          deleteRow="Remove"
+                        >
+                        </dxo-texts>
+                      </dxo-editing>
+                      <dxo-selection mode="single"></dxo-selection>
+  
+                      <dxi-column
+                        *ngFor="let data of columnheadItemDetails"
+                        dataField="{{ data }}"
+                        caption="{{ data }}"
+                        [allowEditing]="true"
+                        alignment="center"
+                        backgroundcolor="#000"
+                      >
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+  
+            <div class="row mt-3">
+              <div class="col-md-3"></div>
+  
+              <div class="col-md-6">
+                <div class="row align-items-baseline b-1">
+                  <div class="col-md-2 boxed-label">
+                    <h6>Repair POS</h6>
+                  </div>
+  
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        [readonly]="viewOnly !== false"
+                        type="text"
+                        matInput
+                        formControlName="vocType"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        [readonly]="viewOnly !== false"
+                        type="text"
+                        matInput
+                        formControlName="repairAmt"
+                      />
+                    </mat-form-field>
+                  </div>
+  
+                  <div class="col-sm-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        [readonly]="viewOnly !== false"
+                        type="text"
+                        matInput
+                        formControlName="repairAmt"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-md-3"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+  
