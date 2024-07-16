@@ -240,7 +240,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
   locationCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
-    this.setLookup201WhereCondition()
+    // this.setLookup201WhereCondition()
   }
   jobnoCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
@@ -490,7 +490,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-          this.setLookup201WhereCondition()
+          // this.setLookup201WhereCondition()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -529,7 +529,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            this.setLookup201WhereCondition()
+            // this.setLookup201WhereCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')

@@ -387,8 +387,7 @@ export class JobClosingComponent implements OnInit {
 
 let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status.trim() == "Success") {
+          if (result && result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -403,9 +402,9 @@ let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+          else {
+            this.comService.toastErrorByMsgId('MSG3577')
+          }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -602,8 +601,7 @@ update() {
     
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
     .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
+        if (result && result.status == "Success") {
           Swal.fire({
             title: result.message || 'Success',
             text: '',
@@ -617,9 +615,9 @@ update() {
             }
           });
         }
-      } else {
-        this.toastr.error('Not saved')
-      }
+        else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
     }, err => alert(err))
   this.subscriptions.push(Sub)
   }

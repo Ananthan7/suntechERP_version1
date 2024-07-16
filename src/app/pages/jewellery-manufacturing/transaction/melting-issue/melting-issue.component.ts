@@ -622,8 +622,7 @@ export class MeltingIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status.trim() == "Success") {
+          if (result && result.status.trim() == "Success") {
             Swal.fire({
               title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
@@ -638,9 +637,9 @@ export class MeltingIssueComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+          else {
+            this.comService.toastErrorByMsgId('MSG3577')
+          }
       }, err => {
         this.isloading = false;
         this.toastr.error('Not saved')
@@ -673,8 +672,7 @@ export class MeltingIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
@@ -689,10 +687,9 @@ export class MeltingIssueComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
-        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
