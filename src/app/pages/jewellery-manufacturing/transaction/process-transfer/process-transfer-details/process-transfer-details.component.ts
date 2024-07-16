@@ -1271,8 +1271,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         'BranchCode': this.commonService.nullToString(form.BRANCH_CODE),
         'CurrentUser': this.commonService.nullToString(this.commonService.userName),
         'ToWorker': this.commonService.nullToString(form.TO_WORKER_CODE),
-        'EntStr': '',
-        'ToWorkerFocus': 1
+        'ToProcesscode': this.commonService.nullToString(form.TO_PROCESS_CODE),
+        'ToWorkerFocus': '1'
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')

@@ -303,9 +303,9 @@ this.setvoucherTypeMaster()
   }
   dataToDetailScreen:any; //data to pass to child
   openAddMetalIssue(dataToChild?: any) {
-    if (this.submitValidations(this.metalIssueForm.value)) {
-      return
-    }
+    // if (this.submitValidations(this.metalIssueForm.value)) {
+    //   return
+    // }
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.metalIssueForm.value;
@@ -425,6 +425,14 @@ this.setvoucherTypeMaster()
     if (form.vocdate == '') {
       this.comService.toastErrorByMsgId('vocdate is required')
       return true
+    }
+    if (form.worker == '') {
+      this.comService.toastErrorByMsgId('worker is required')
+      return true
+    }
+    if (this.tableData?.length <= 0) {
+      this.comService.toastErrorByMsgId('MSG1200')
+      return true;
     }
     return false
   }

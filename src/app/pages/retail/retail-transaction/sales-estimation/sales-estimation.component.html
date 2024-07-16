@@ -2806,7 +2806,7 @@
                            [readonly]="viewOnly" />
                   </mat-form-field>
                 </div>
-                
+
                 <div class="col-md-1 d-flex align-items-center justify-content-center">
                   <i class="fas fa-camera fa-2x" (click)="openScanner()" style="cursor: pointer;"></i>
                 </div>
@@ -2827,7 +2827,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-2">
-                  <app-barcode-scanner *ngIf="scannerVisible" (barcodeDetected)="onBarcodeDetected($event)" (closeRequested)="onCloseRequested()"></app-barcode-scanner>
+                  <app-qrcode-scanner *ngIf="scannerVisible" (qrcodeDetected)="onQrcodeDetected($event)" (closeRequested)="onCloseRequested()"></app-qrcode-scanner>
                 </div>
 
               </div>

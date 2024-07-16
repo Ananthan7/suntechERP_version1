@@ -129,7 +129,7 @@ stockCodeData: MasterSearchModel = {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    
+    this.setCompanyCurrency();
     this.setvalues()
     this.setAllInitialValues()
   
@@ -157,6 +157,11 @@ stockCodeData: MasterSearchModel = {
     this.mouldMakingForm.controls.vocDate.setValue(this.comService.currentDate)
     this.mouldMakingForm.controls.itemCurrency.setValue(this.comService.compCurrency)
     this.mouldMakingForm.controls.itemCurrencyRate.setValue('1.000')
+  }
+
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.mouldMakingForm.controls.itemCurrency.setValue(CURRENCY_CODE);
   }
 
   userDataSelected(value: any) {
@@ -292,7 +297,7 @@ stockCodeData: MasterSearchModel = {
     toProcess : ['',[Validators.required]],
     toWorker : ['',[Validators.required]],
     designCode : ['',[Validators.required]],
-    itemCurrency : ['AED'],
+    itemCurrency : [''],
     itemCurrencyRate : [1.000000],
     location :[''],
 

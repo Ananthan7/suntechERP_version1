@@ -111,6 +111,18 @@
                     </div> -->
                 </div>
             </div>
+
+            <h6 class="mt-4 mb-3">Layout Alignment</h6>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fluid"
+                    [checked]="width === 'fluid'" (change)="changeAlignment('ltr')">
+                <label class="form-check-label" for="layout-width-fuild">rtl alignment</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed"
+                    [checked]="width === 'boxed'" (change)="changeAlignment('rtl')">
+                <label class="form-check-label" for="layout-width-boxed">ltr alignment</label>
+            </div>
         </div>
     </div> <!-- end slimscroll-menu-->
 </div>
