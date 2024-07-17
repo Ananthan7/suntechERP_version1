@@ -417,7 +417,7 @@
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ vocno_lbl }}</mat-label>
-            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="LOCKVOUCHERNO" class="st_txt_right" />
+            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO" class="st_txt_right" />
           </mat-form-field>
         </div>
 
@@ -453,8 +453,8 @@
               [matDatepicker]="dob"
               [readonly]="viewOnly"
               formControlName="vocdate"
-              [min]="minDate"
-              [max]="maxDate"
+              [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
+              [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null"
               placeholder="DD/MM/YYYY" />
           <mat-datepicker-toggle matSuffix [for]="dob"
               [disabled]="viewOnly"></mat-datepicker-toggle>

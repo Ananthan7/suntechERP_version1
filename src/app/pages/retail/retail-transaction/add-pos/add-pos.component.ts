@@ -80,6 +80,7 @@ export class AddPosComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
   LOCKVOUCHERNO: boolean = true;
+  voucherDetails:any;
   minDate:any;
   maxDate: any;
   RECEIPT_MODEL: any = {}
@@ -1239,7 +1240,8 @@ allowDescription:boolean=false;
     } else {
       this.getFinancialYear();
       this.generateVocNo();
-      this.setVoucherTypeMaster();
+      this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
+      // this.setVoucherTypeMaster();
 
     }
 
