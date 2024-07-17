@@ -615,7 +615,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setSubJobSpPostData(form:any) {
+  setSubJobSpPostData(form: any) {
     if (this.designType.toUpperCase() == 'DIAMOND') {
       return {
         "SPID": "088",
@@ -645,11 +645,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         try {
-          this.subJobDetailData = result.dynamicData[0] || []
           let job_salesorder = result.dynamicData[1] || []
           if (job_salesorder.length > 0) {
             this.setDataFromSalesOrderDj(job_salesorder)
           }
+          this.subJobDetailData = result.dynamicData[0] || []
           if (this.subJobDetailData.length > 0) {
             this.subJobDetailData.forEach((item: any, index: any) => {
               item.SRNO = index + 1
@@ -860,7 +860,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setValueWithDecimal('FRM_METAL_WT', nMWeight, 'METAL')
       this.setValueWithDecimal('TO_METAL_WT', nMWeight, 'METAL')
       this.setValueWithDecimal('GrossWeightTo', nMWeight + (nStWeight / 5), 'METAL')
-      this.CalculateLoss(this.processTransferdetailsForm.value)
+
     }
     catch (ex: any) {
       this.commonService.toastErrorByMsgId("MSG2100")
@@ -958,7 +958,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     });
   }
   //stockCode Scrap Validate
-  stockCodeScrapValidate(event?:any) {
+  stockCodeScrapValidate(event?: any) {
     if (this.processTransferdetailsForm.value.stockCode == '') {
       return
     }
@@ -2033,7 +2033,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   GrossWeightToChange(event: any) {
     // this.checkFromToValues('GrossWeightFrom', 'GrossWeightTo')
     let form = this.processTransferdetailsForm.value;
-    
+
     let scrapTot = (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.scrapWeight))
     if (this.commonService.emptyToZero(form.GrossWeightTo) > this.commonService.emptyToZero(form.GrossWeightFrom)) {
       let msg = this.commonService.getMsgByID('MSG1312')
@@ -2080,6 +2080,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     } else {
       this.Split_Loss(this.processTransferdetailsForm.value)
     }
+    if (blnLoss) {
+      this.renderer.selectRootElement('#txtLossQty')?.focus();
+    }
   }
   Split_Loss(form: any) {
     if (form.METAL_STOCK_CODE != '') {
@@ -2095,7 +2098,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (this.commonService.emptyToZero(form.lossQty) == 0) { this.metalDetailData[i].LOSS_QTY = 0; }
           if (form.METAL_STOCK_CODE?.toUpperCase().trim() == this.metalDetailData[i].STOCK_CODE?.toUpperCase().trim()) {
             dblMaster_Metal = this.commonService.emptyToZero(this.metalDetailData[i].GROSS_WT) + this.commonService.emptyToZero(this.metalDetailData[i].LOSS_QTY);
-            dblMaster_Metal = this.commonService.decimalQuantityFormat(dblMaster_Metal,'METAL')
+            dblMaster_Metal = this.commonService.decimalQuantityFormat(dblMaster_Metal, 'METAL')
             k = i;
             bFlag = true;
           } else {
@@ -2109,10 +2112,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.setValueWithDecimal('TO_METAL_WT', form.FRM_METAL_WT, 'METAL')
         this.setValueWithDecimal('GrossWeightTo', form.GrossWeightFrom, 'METAL')
         this.setValueWithDecimal('lossQty', 0, 'METAL')
-      }
-      console.log(this.processTransferdetailsForm.value.TO_METAL_WT);
 
+      }
       form = this.processTransferdetailsForm.value;
+      if (this.commonService.emptyToZero(form.GrossWeightFrom) == this.commonService.emptyToZero(form.GrossWeightTo)) {
+        this.setValueWithDecimal('Balance_WT', 0, 'METAL')
+      }
       if (bFlag) {
         let GROSS_WT = (this.commonService.emptyToZero(form.TO_METAL_WT) - dblSub_Metal);
         let NET_WT = this.commonService.emptyToZero(this.metalDetailData[k].GROSS_WT) - this.commonService.emptyToZero(this.metalDetailData[k].STONE_WT);
