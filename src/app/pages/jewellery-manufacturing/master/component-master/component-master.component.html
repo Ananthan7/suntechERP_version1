@@ -34,8 +34,8 @@
                                     <input type="text" matInput
                                         formControlName="codedes"
                                         UpperCaseDirective autocomplete="off"
-                                     
-                                        [readonly]="viewMode || editMode" />
+                                        (focusout)="validateLookupField($event,codeCodeData,'codedes')"
+                                        [readonly]="viewMode || editMode"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
                                             (newRowClick)="codeCodeSelected($event)"
                                             *ngIf="!editMode && !viewMode">
@@ -53,7 +53,7 @@
                                     <input type="text" matInput
                                         formControlName="sizeSet"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')" />
+                                        (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search class="mstrScrch"
                                             [MasterSearchData]="sizeSetCodeData"
                                             *ngIf="viewMode == false"
@@ -68,7 +68,7 @@
                                     <input type="text" matInput
                                         formControlName="type"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,typeCodeData,'type')" />
+                                        (focusout)="validateLookupField($event,typeCodeData,'type')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search [MasterSearchData]="typeCodeData"
                                         *ngIf="viewMode == false" class="mstrScrch"
                                         (newRowClick)="typeCodeSelected($event)"></master-search>
@@ -85,7 +85,7 @@
                                     <input type="text" matInput class="text-right"
                                         formControlName="size"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,typeCodeData,'type')" />
+                                        (focusout)="validateLookupField($event,typeCodeData,'type')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search [MasterSearchData]="sizeCodeData" class="mstrScrch"
                                             *ngIf="viewMode == false"
                                             (newRowClick)="sizeCodeSelected($event)">
@@ -100,7 +100,7 @@
                                     <input type="text" matInput
                                         formControlName="category"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,categoryCodeData,'category')" />
+                                        (focusout)="validateLookupField($event,categoryCodeData,'category')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="categoryCodeData"
                                         *ngIf="!viewMode"
@@ -117,7 +117,7 @@
                                     <input type="text" matInput
                                         formControlName="shape"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,shapeCodeData,'shape')" />
+                                        (focusout)="validateLookupField($event,shapeCodeData,'shape')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search class="mstrScrch"
                                             [MasterSearchData]="shapeCodeData"
                                             *ngIf="!viewMode"
@@ -133,7 +133,7 @@
                                     <input type="text" matInput
                                         formControlName="settingType"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')" />
+                                        (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="settingTypeCodeData"
                                         *ngIf="!viewMode"
@@ -219,7 +219,7 @@
                                     <input type="text" matInput
                                         formControlName="processSeq"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')" />
+                                        (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="processSeqCodeData"
                                         *ngIf="!viewMode"
@@ -238,7 +238,7 @@
                                     <input type="text" matInput
                                         formControlName="costCenter"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')" />
+                                        (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')"  (keypress)="lookupKeyPress($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="costCenterCodeData"
                                         *ngIf="!viewMode"

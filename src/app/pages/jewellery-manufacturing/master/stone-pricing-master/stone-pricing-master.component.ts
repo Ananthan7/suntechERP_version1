@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -191,14 +191,14 @@ export class StonePricingMasterComponent implements OnInit {
     clarity: ['', [Validators.required]],
     sieve_from: [''],
     currency: ['', [Validators.required]],
-    carat_wt: [0, [Validators.required]],
+    carat_wt: [0, [Validators.required, this.notZeroValidator()]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from: [ 0,[Validators.required]],
-    wt_to: [ 0,[Validators.required]],
+    wt_from: [ 0, [Validators.required, this.notZeroValidator()]],
+    wt_to: [ 0, [Validators.required, this.notZeroValidator()]],
     size_to: [''],
     size_from: [''],
-    issue_rate: [0, [Validators.required]],
+    issue_rate: [0, [Validators.required, this.notZeroValidator()]],
     selling: [0],
     selling_rate: [0],
     sieve_desc: [0],
@@ -234,6 +234,13 @@ export class StonePricingMasterComponent implements OnInit {
         this.setFormValues();
       }
     }
+  }
+
+  notZeroValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const isInvalid = control.value === 0 || control.value === '0' || control.value === '0.00' || control.value === '0.000';
+      return isInvalid ? { 'notZero': { value: control.value } } : null;
+    };
   }
 
   setCompanyCurrency() {
@@ -733,6 +740,7 @@ export class StonePricingMasterComponent implements OnInit {
 
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
 
+    //StonePriceMasterDJ/GetSeivesetLookupDatafill/DMCC?SieveSet=%2B14
     // Construct the API URL with the selected sieve_set value
     let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
 
@@ -839,5 +847,11 @@ export class StonePricingMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
+  }
+
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
   }
 }
