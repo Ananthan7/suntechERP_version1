@@ -63,6 +63,7 @@
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
                                                 (change)="OrderTypeChange($event)"
+                                                (keypress)="lookupKeyPress($event)"
                                                 formControlName="orderType" />
                                         </mat-form-field>
                                         <master-search
@@ -78,6 +79,7 @@
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
                                                 (change)="PartyCodeChange($event)"
+                                                (keypress)="lookupKeyPress($event)"
                                                 formControlName="PartyCode" />
                                         </mat-form-field>
                                         <master-search
@@ -93,7 +95,7 @@
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
-                                                readonly
+                                                readonly (keypress)="lookupKeyPress($event)"
                                                 formControlName="SalesmanCode" />
                                         </mat-form-field>
                                         <master-search
@@ -109,7 +111,7 @@
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
-                                                readonly
+                                                readonly (keypress)="lookupKeyPress($event)"
                                                 formControlName="Salesman" />
                                         </mat-form-field>
                                         <master-search
@@ -139,7 +141,7 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
-                                                SixDecimalInput
+                                                SixDecimalInput (keypress)="lookupKeyPress($event)"
                                                 class="text-right"
                                                 formControlName="wholeSaleRate" />
                                         </mat-form-field>
@@ -161,7 +163,7 @@
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput readonly
                                                 class="text-right"
-                                                SixDecimalInput
+                                                SixDecimalInput (keypress)="lookupKeyPress($event)"
                                                 (focusout)="partyCurrencyChange($event)"
                                                 formControlName="partyCurrencyRate" />
                                         </mat-form-field>
@@ -182,7 +184,7 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="number" matInput
-                                                SixDecimalInput
+                                                SixDecimalInput (keypress)="lookupKeyPress($event)"
                                                 class="text-right"
                                                 formControlName="ItemCurrencyRate" />
                                         </mat-form-field>
@@ -205,6 +207,7 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
+                                                (keypress)="lookupKeyPress($event)"
                                                 formControlName="DeliveryTypeDesc"
                                                 NumberOnly />
                                         </mat-form-field>
