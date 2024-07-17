@@ -43,6 +43,11 @@ export class JewelleryAssemblingComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   openjewelleryassemblingdetails() {
     const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingDetailsComponent, {

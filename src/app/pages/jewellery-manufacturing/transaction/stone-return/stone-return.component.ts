@@ -60,6 +60,17 @@ export class StoneReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  baseCurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'BaseCurrency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -375,7 +386,11 @@ export class StoneReturnComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
 
   removedata() {

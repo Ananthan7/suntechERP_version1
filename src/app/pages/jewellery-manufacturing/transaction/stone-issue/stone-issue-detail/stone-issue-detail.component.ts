@@ -378,6 +378,11 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     return false
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   setPostData() {
     let form: any = this.stoneIssueDetailsFrom.value;
     return {

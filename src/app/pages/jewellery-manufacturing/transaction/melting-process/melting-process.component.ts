@@ -434,6 +434,11 @@ export class MeltingProcessComponent implements OnInit {
       console.error('Invalid index');
     }
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   // deleteTableData(): void {
   //   this.tableRowCount = 0;

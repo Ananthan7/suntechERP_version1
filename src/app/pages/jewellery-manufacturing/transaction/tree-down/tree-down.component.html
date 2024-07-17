@@ -24,7 +24,8 @@
               <div class="col-sm-2">
                 <mat-form-field style="width: 100%;">
                   <input type="number" matInput formControlName="vocNo"
-                    style="text-align: right;" />
+                    style="text-align: right;" (focusout)="ValidatingVocNo()"
+                    [readonly]="LOCKVOUCHERNO" />
                 </mat-form-field>
               </div>
             </div>
@@ -57,7 +58,9 @@
                 <mat-form-field style="width: 100%">
                   <input matInput DateValidation
                     (dateChange)="formatDate($event)" [matDatepicker]="dob"
-                    formControlName="vocDate" placeholder="DD/MM/YYYY" />
+                    formControlName="vocDate" placeholder="DD/MM/YYYY"
+                    [min]="minDate"
+                    [max]="maxDate" />
                   <mat-datepicker-toggle matSuffix
                     [for]="dob"></mat-datepicker-toggle>
                   <mat-datepicker #dob></mat-datepicker>
@@ -85,7 +88,8 @@
                 class="col-sm-5 col-form-label">Cylinder: </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="cylinder" />
+                  <input type="text" matInput formControlName="cylinder"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="cylinderCodeData"
                   (newRowClick)="cylinderCodeSelected($event)">
@@ -142,7 +146,8 @@
                 * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="worker" />
+                  <input type="text" matInput formControlName="worker"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="WorkerCodeData"
                   (newRowClick)="WorkerCodeSelected($event)">
@@ -168,9 +173,9 @@
                 : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput 
+                  <input type="text" matInput
                     formControlName="waxWt"
-                    MetalDecimalInput max="13" class="text-right"/>
+                    MetalDecimalInput max="13" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -193,7 +198,8 @@
                 * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="toProcess" />
+                  <input type="text" matInput formControlName="toProcess"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"
                   (newRowClick)="processCode1Selected($event)">
@@ -209,7 +215,8 @@
                 By :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="enteredBy" />
+                  <input type="text" matInput formControlName="enteredBy"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="user"
                   (newRowClick)="userDataSelected($event)">
@@ -223,7 +230,8 @@
                 :</label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="karatCode" />
+                  <input type="text" matInput formControlName="karatCode"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="karatCodeData"
                   (newRowClick)="karatCodeSelected($event)">
@@ -262,7 +270,8 @@
                 * : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="toWorker" />
+                  <input type="text" matInput formControlName="toWorker"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="WorkerCodeData"
                   (newRowClick)="WorkerCode1Selected($event)">
@@ -278,7 +287,8 @@
                 : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="color" />
+                  <input type="text" matInput formControlName="color"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData"
                   (newRowClick)="colorDataSelected($event)">

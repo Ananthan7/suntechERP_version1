@@ -378,7 +378,11 @@ export class CastingTreeUpComponent implements OnInit {
     console.log(e);
     this.castingTreeUpFrom.controls.karatCode.setValue(e['Karat Code']);
   }
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   addTableData() {
     // let data = {
     //   "Job_Code": "str",

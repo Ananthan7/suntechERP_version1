@@ -337,7 +337,11 @@ export class JobClosingComponent implements OnInit {
    
   }
 
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   formSubmit(){
     if (this.content && this.content.FLAG == 'EDIT') {

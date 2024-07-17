@@ -27,7 +27,8 @@
                                         class="col-sm-4 col-form-label">Voucher
                                         Type * :</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="VOCTYPE"
                                                 readonly />
@@ -44,7 +45,8 @@
                                     <label for="inputPassword"
                                         class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline" style="width: 100%">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%">
                                             <!-- <input  type="datetime" matInput  formControlName="time"> -->
                                             <input type="datetime" matInput
                                                 formControlName="time" readonly
@@ -64,15 +66,16 @@
                                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="date" matInput  formControlName="vocdate"/>
                                         </mat-form-field> -->
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input matInput
                                                 [matDatepicker]="vocdate"
                                                 formControlName="vocdate"
                                                 [readonly]="isSaved"
                                                 placeholder="DD/MM/YYYY"
-                                                DateValidation 
+                                                DateValidation
                                                 [min]="minDate"
-                                                [max]="maxDate"/>
+                                                [max]="maxDate" />
                                             <mat-datepicker-toggle matSuffix
                                                 [for]="vocdate"></mat-datepicker-toggle>
                                             <mat-datepicker [disabled]="isSaved"
@@ -89,10 +92,12 @@
                                         By:</label>
                                     <div class="col-md-7">
                                         <span>
-                                            <mat-form-field appearance="outline" style="width: 80%;">
+                                            <mat-form-field appearance="outline"
+                                                style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="SALESPERSON_CODE"
-                                                    [readonly]="viewMode" />
+                                                    [readonly]="viewMode"
+                                                    (keypress)="lookupKeyPress($event)" />
                                             </mat-form-field>
                                             <master-search
                                                 [MasterSearchData]="SALESPERSON_CODEData"
@@ -111,7 +116,8 @@
                                         class="col-sm-4 col-form-label">Voucher
                                         No * :</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="number" matInput
                                                 class="text-right"
                                                 formControlName="VOCNO"
@@ -128,7 +134,8 @@
                                         :</label>
                                     <div class="col-md-7 d-flex">
                                         <span>
-                                            <mat-form-field appearance="outline" style="width: 20%;">
+                                            <mat-form-field appearance="outline"
+                                                style="width: 20%;">
                                                 <input type="text" matInput
                                                     formControlName="worker"
                                                     [readonly]="viewMode" />
@@ -137,7 +144,8 @@
                                                 style="width: 60%;margin-left: 4px;">
                                                 <input type="text" matInput
                                                     formControlName="workerDes"
-                                                    [readonly]="viewMode" />
+                                                    [readonly]="viewMode"
+                                                    (keypress)="lookupKeyPress($event)" />
                                             </mat-form-field>
                                             <master-search
                                                 [MasterSearchData]="workerCodeData"
@@ -163,8 +171,9 @@
                                     (deleteClick)="deleteRowClicked()">
                                 </menu-buttons>
                                 <div>
-                                    <mat-form-field appearance="outline" style="width: 70%;">
-                                        <input type="text" matInput />
+                                    <mat-form-field appearance="outline"
+                                        style="width: 70%;">
+                                        <input type="text" matInput (keypress)="lookupKeyPress($event)" />
                                     </mat-form-field>
                                     <master-search></master-search>
                                 </div>
@@ -188,16 +197,17 @@
                                         dataField="{{ data.field }}"
                                         caption="{{ data.title }}"
                                         [format]="data.format"
-                                        [allowEditing]="true" [alignment]="data.alignment"
+                                        [allowEditing]="true"
+                                        [alignment]="data.alignment"
                                         backgroundcolor="#000">
                                     </dxi-column>
                                     <dxo-summary>
-                                        <dxi-total-item column="GROSS_WT" 
+                                        <dxi-total-item column="GROSS_WT"
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="TOTAL_AMOUNTFC" 
+                                        <dxi-total-item column="TOTAL_AMOUNTFC"
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
@@ -231,6 +241,6 @@
 
 <ng-template #metalIssueDetailScreen>
     <app-metal-issue-details [content]="dataToDetailScreen"
-    (saveDetail)="setValuesToHeaderGrid($event)"
-    (closeDetail)="closeDetailScreen()"></app-metal-issue-details>
+        (saveDetail)="setValuesToHeaderGrid($event)"
+        (closeDetail)="closeDetailScreen()"></app-metal-issue-details>
 </ng-template>
