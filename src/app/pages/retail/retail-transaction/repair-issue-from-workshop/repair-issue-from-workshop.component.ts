@@ -27,6 +27,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   @Input()
   tableData: any[] = [];
   tableDatas: any[] = [];
+  PendingRepairJobsData:any;
   columnheadItemDetails: any[] = [
     "Rep Voc No.",
     "Stock Code",
@@ -65,18 +66,25 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.comService.getqueryParamVocType());
+    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
-    if(this.content?.FLAG == "VIEW" || this.content?.FLAG == "EDIT"){
-      this.getrepairreceiptbyid();
-    }
 
     this.repairReceiveForm.controls.voctype.setValue(
       this.comService.getqueryParamVocType()
     );
 
     this.generateVocNo();
+
+    this.getPendingRepairJobs();
+
+    if(this.content?.FLAG == "VIEW" || this.content?.FLAG == "EDIT"){
+      this.getrepairreceiptbyid();
+    }
+
+   
+
 
     // this.setvaluesdata()
     // if (this.content) {
@@ -95,13 +103,62 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
     // this.repairReceiveForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
   }
 
+  getPendingRepairJobs() {
+    let API = `ExecueteSPInterface`;
+    let bodyData = {
+      SPID: "95",
+      parameter: {
+        STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
+        STRBRANCHCODE: this.branchCode,
+        STRJOBSTATUS: "0",
+      },
+    };
+
+    let sub: Subscription = this.dataService
+      .postDynamicAPI(API, bodyData)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res.dynamicData);
+const uniqueItems = new Set();
+
+res.dynamicData[0].forEach((item: any) => {
+  const identifier = item.MID;
+
+  if (!uniqueItems.has(identifier)) {
+    uniqueItems.add(identifier);
+  }
+});
+
+this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
+  return res.dynamicData[0].find((item: any) => item.MID === identifier);
+}).map((item: any) => ({
+  ...item,
+  DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
+}));
+
+        console.log(this.PendingRepairJobsData);
+
+          console.log(this.PendingRepairJobsData.DELIVERYDATE);
+        }
+      });
+  }
+
   getrepairreceiptbyid(){
     console.log(this.content.VOCDATE);
-    const dateParts = this.content.VOCDATE.split('T')[0].split('-').reverse().join('/');
-    console.log(dateParts);    
+    // const dateParts = this.content.VOCDATE.split('-'); // Split by '-'
+    const dateParts = this.content.VOCDATE.split('-'); // Split by '-'
+    const formattedDate = new Date(
+        parseInt(dateParts[2]), // Year
+        parseInt(dateParts[1]) - 1, // Month (zero-indexed)
+        parseInt(dateParts[0]) // Day
+    );
+    console.log(formattedDate);
+    
+    // Format the date for display in the input field (optional)
+    const formattedDateString = formattedDate.toLocaleDateString('en-GB')
     this.repairReceiveForm.controls.voctype.setValue(this.content.VOCTYPE);
     this.repairReceiveForm.controls.vocNo.setValue(this.content.VOCNO);
-    this.repairReceiveForm.controls.vocDate.setValue(dateParts);
+    this.repairReceiveForm.controls.vocDate.setValue(formattedDate);
     this.repairReceiveForm.controls.customerCode.setValue(this.content.POSCUSTCODE);
     this.repairReceiveForm.controls.customerCodeDesc.setValue(this.content.POSCUSTNAME);
     this.repairReceiveForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
@@ -144,7 +201,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   // }
 
   repairReceiveForm: FormGroup = this.formBuilder.group({
-    voctype: [, ""],
+    voctype: [""],
     vocNo: [""],
     vocDate: [new Date()],
     salesMan: [""],
@@ -184,7 +241,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       VOCDATE: this.repairReceiveForm.value.vocDate,
       YEARMONTH: this.yearMonth,
       SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
-      BRANCHTO: this.repairReceiveForm.value.salesMan.partyCode,
+      BRANCHTO: this.repairReceiveForm.value.partyCode,
       REMARKS: "",
       SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
@@ -202,7 +259,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
       DIAMONDWGT: 0,
       DIAMONDAMOUNT: 0,
       SUPINVDATE: this.repairReceiveForm.value.date,
-      SUPINVNO:this.repairReceiveForm.value.salesMan.supplierInvNo,
+      SUPINVNO:this.repairReceiveForm.value.supplierInvNo,
       TRANSFERBRANCH: "",
       AUTOPOSTING: true,
       BRANCHTONAME: "",
@@ -258,7 +315,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
         VOCDATE: this.repairReceiveForm.value.vocDate,
         YEARMONTH: this.yearMonth,
         SALESPERSON_CODE: this.repairReceiveForm.value.salesMan,
-        BRANCHTO: this.repairReceiveForm.value.salesMan.partyCode,
+        BRANCHTO: this.repairReceiveForm.value.partyCode,
         REMARKS: "",
         SYSTEM_DATE: new Date().toISOString(),
         NAVSEQNO: 0,
@@ -276,7 +333,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
         DIAMONDWGT: 0,
         DIAMONDAMOUNT: 0,
         SUPINVDATE: this.repairReceiveForm.value.date,
-        SUPINVNO: this.repairReceiveForm.value.salesMan.supplierInvNo,
+        SUPINVNO: this.repairReceiveForm.value.supplierInvNo,
         TRANSFERBRANCH: "",
         AUTOPOSTING: true,
         BRANCHTONAME: "",

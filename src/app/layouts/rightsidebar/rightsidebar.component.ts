@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { EventService } from '../../core/services/event.service';
 import { LAYOUT_MODE, LAYOUT_WIDTH, TOPBAR, SIDEBAR_SIZE, SIDEBAR_COLOR, LAYOUT_POSITION } from '../layouts.model';
+import { LanguageService } from 'src/app/core/services/language.service';
 
 @Component({
   selector: 'app-rightsidebar',
@@ -22,7 +23,7 @@ export class RightsidebarComponent implements OnInit {
   sidebarcolor: string | undefined;
   sidebarsize: string | undefined;
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, public languageService: LanguageService) { }
 
   ngOnInit(): void {
     this.mode = LAYOUT_MODE;
@@ -118,5 +119,12 @@ export class RightsidebarComponent implements OnInit {
     else
       this.eventService.broadcast('changeLayout', 'horizontal');
   }
+
+  isRTL = false;
+  changeAlignment(event: any){
+    this.isRTL = !this.isRTL;
+    this.eventService.triggerChangeAlignment();
+  }
+
 
 }

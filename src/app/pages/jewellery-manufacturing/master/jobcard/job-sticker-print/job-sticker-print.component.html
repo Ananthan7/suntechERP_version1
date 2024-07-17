@@ -1,5 +1,12 @@
 
 <!-- header section starts -->
+<!-- <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Job Sticker Print </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div> -->
+  <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
     <h5 class="pos-modaltitle" id="modal-dia-metal">Job Sticker Print </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
@@ -15,13 +22,13 @@
             <div class="row">
                 <div class="col-md-1 mt-3"></div> 
                 <div class="col-md-4 mt-3">
-                    <mat-checkbox class="example-margin" [disabled]="viewMode"  formControlName="sgljobfltr">Single Job Filter</mat-checkbox> 
+                    <mat-checkbox class="example-margin" id="ID001" [disabled]="viewMode"  formControlName="sgljobfltr">Single Job Filter</mat-checkbox> 
                 </div> 
             </div>
           <div class="row">
             <div class="col-md-5 mt-3">
                 <div class="row mb-2">
-                    <label for="input" class="col-sm-3 col-form-label">Job Range
+                    <label for="input" id="ID002" class="col-sm-3 col-form-label">Job Range
                     </label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
@@ -34,7 +41,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
-                        <button type="button" [disabled]="viewMode" class="btn btn-primary metal-issue-add-btn text-center"
+                        <button type="button" id="ID003" class="btn btn-primary metal-issue-add-btn text-center" (click)=" getfiltercode()"
                         >Filter</button>
                 
                     </div>
@@ -45,24 +52,21 @@
 
           <div class="row">
             <dx-data-grid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
-                            [showRowLines]="true"
-                            [allowColumnReordering]="true" height="200" [dataSource]="tableData" [allowColumnResizing]="true">
-                         
+                            [showRowLines]="true" [dataSource]="tableDataProcess"
+                            [allowColumnReordering]="true" height="200" [allowColumnResizing]="true">
+                            <dxo-selection mode="single"></dxo-selection>
                             <dxi-column caption>
-                                <dxi-column >
-                                    <dxo-selection mode="multiple"></dxo-selection> 
+                                <dxi-column alignment="center" caption="Job Number" dataField="JOB_NUMBER">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Number" dataField="Job Number">
+                                <dxi-column alignment="center" caption="Job Reff" dataField="SET_REF">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Reff" dataField="Job Reff">
+                                <dxi-column alignment="center" caption="Job Date" dataField="JOB_DATE">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Date" dataField="Job Date">
+                                <dxi-column alignment="center" caption="Design" dataField="DESIGN_CODE">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Design" dataField="Design">
+                                <dxi-column alignment="center" caption="M.Color" dataField="METAL_COLOR">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="M.Color" dataField="M.Color">
-                                </dxi-column>
-                                <dxi-column alignment="center" caption="Customer" dataField="Customer">
+                                <dxi-column alignment="center" caption="Customer" dataField="CUSTOMER_CODE">
                                 </dxi-column>
                             </dxi-column>
                         </dx-data-grid>
@@ -73,19 +77,19 @@
                 <div class="col-md-5 pt-3">
                     <div class="row">
                         <div class="col-md-5">
-                            <mat-checkbox class="example-margin" [disabled]="viewMode" formControlName="blankjobpouch">Blank Job Pouch</mat-checkbox>
+                            <mat-checkbox class="example-margin" id="ID004" [disabled]="viewMode" formControlName="blankjobpouch">Blank Job Pouch</mat-checkbox>
                         </div>
                         <div class="col-md-2">
-                            <mat-checkbox class="example-margin" [disabled]="viewMode" formControlName="mrqprint">MRQ Print</mat-checkbox>
+                            <mat-checkbox id="ID005" class="example-margin" [disabled]="viewMode" formControlName="mrqprint">MRQ Print</mat-checkbox>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="row">
                         <div class="col-sm-3 pt-3">
-                            <!-- <button type="button" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            <button type="button" id="ID006" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                                Destination
-                              </button> -->
+                              </button> 
                               <label for="input"
                               class="pt-1 col-form-label"><b>General</b></label>
                         </div>
@@ -107,10 +111,10 @@
                 </div>
                 <div class="col-md-2 pt-3">
                     <div class="row">
-                            <button type="button" (click)="okClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn  mx-2" >
+                            <button type="button" id="ID007" (click)="okClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                               Ok
                             </button>
-                            <button type="button" (click)="cancelClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            <button type="button" id="ID008" (click)="cancelClick()" [disabled]="viewMode" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                               Cancel
                             </button>
                       </div>
@@ -140,10 +144,10 @@
                 <div class="col-md-8 pt-4">
                     <div class="row">
                         <div class="col-md-3 pt-2">
-                            <mat-checkbox class="example-margin" [disabled]="viewMode" formControlName="rftag">RF Tag</mat-checkbox>
+                            <mat-checkbox class="example-margin" id="ID009" [disabled]="viewMode" formControlName="rftag">RF Tag</mat-checkbox>
                         </div>
                         <div class="col-md-2 pt-2">
-                            <mat-checkbox class="example-margin" [disabled]="viewMode" formControlName="normaltag">Normal Tag</mat-checkbox>
+                            <mat-checkbox id="ID010" class="example-margin" [disabled]="viewMode" formControlName="normaltag">Normal Tag</mat-checkbox>
                         </div>
                         <div class="col-md-2">
                             <img class="image" src="/../assets/images/icons8-excel-144.png" style="height: 50px;width: 50px;" />
@@ -155,9 +159,9 @@
                 <div class="col-md-4 pt-4">
                     <div class="row">
                         <div class="col-sm-2 pt-1">
-                            <!-- <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            <button id="ID011" type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                               %
-                            </button> -->
+                            </button>
                             <label for="input"
                               class="pt-1 col-form-label"><b>%</b></label>
                             </div>
@@ -179,16 +183,16 @@
                 <div class="col-md-12 pt-2">
                     <div class="row">
                         <div class="col-md-3">
-                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="printjobpouch" >Print Job Pouch</mat-checkbox>
+                            <mat-checkbox class="example-margin" id="ID012" formControlName="printjobpouch" >Print Job Pouch</mat-checkbox>
                         </div>
                         <div class="col-md-4 ">
-                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="printjobpouchwithcomponents">Print Job Pouch With Components</mat-checkbox>
+                            <mat-checkbox class="example-margin" id="ID013" formControlName="printjobpouchwithcomponents">Print Job Pouch With Components</mat-checkbox>
                         </div>
                         <div class="col-md-3">
-                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="prtonelblperpge">Print One Label Per page</mat-checkbox>
+                            <mat- id="ID014" class="example-margin" formControlName="prtonelblperpge">Print One Label Per page</mat->
                         </div>
                         <div class="col-md-2">
-                            <mat-checkbox class="example-margin"  [disabled]="viewMode" formControlName="stones">Stones</mat-checkbox>
+                            <mat-checkbox class="example-margin" id="ID015" formControlName="stones">Stones</mat-checkbox>
                         </div>
                     </div>
                 </div>

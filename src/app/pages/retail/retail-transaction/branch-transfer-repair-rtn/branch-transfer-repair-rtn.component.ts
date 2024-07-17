@@ -19,14 +19,14 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 })
 export class BranchTransferRepairRtnComponent implements OnInit {
   selectedTabIndex = 0;
-  selectedTabIndexed =0;
-  columnheadDetails:any=['Rep Voc No','Voc Date', 'Stock Code','Bag No','Customer Name','Mobile No','Delivery Date','Status']
-  columnheadPendingItems:any=['Div','Stock Code','Description','Bag No','Remarks','Pcs','Rep Type','Delivery']
-  branchCode?: String;
-  yearMonth?: String;
+  selectedTabIndexed = 0;
+  columnheadDetails: any = ['Rep Voc No', 'Voc Date', 'Stock Code', 'Bag No', 'Customer Name', 'Mobile No', 'Delivery Date', 'Status']
+  columnheadPendingItems: any = ['Div', 'Stock Code', 'Description', 'Bag No', 'Remarks', 'Pcs', 'Rep Type', 'Delivery']
+  branchCode?: any = localStorage.getItem("userbranch");
+  yearMonth?: any = localStorage.getItem("YEAR") || "";
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
-  tableData: any[] = []; 
+  tableData: any[] = [];
   viewMode: boolean = false;
   currentDate = new Date();
   userbranch = localStorage.getItem('userbranch');
@@ -56,18 +56,38 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
- partyCodeData: MasterSearchModel = {
+  partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
     SEARCH_FIELD: 'accode',
     SEARCH_HEADING: 'PARTY CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "accode<>'' AND  AC_OnHold = 0 AND BRANCH_CODE = '"+ this.userbranch + "' AND Account_Mode='P'",
+    WHERECONDITION: "accode<>'' AND  AC_OnHold = 0 AND BRANCH_CODE = '" + this.userbranch + "' AND Account_Mode='P'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  columnhead: any[] = [
+    "Rep Voc No",
+    "Stock Code",
+    "Bag No",
+    "Customer Name",
+    "Mobile",
+    "Deliver Date",
+    "Status",
+  ];
+
+  columnheadDetailslist: any[] = [
+    "Div",
+    "Stock Code",
+    "Description",
+    "Bag No",
+    "Remarks",
+    "Pcs",
+    "Rep type",
+    "Delivery",
+  ];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -75,11 +95,11 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   branchTransferRepairRtnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
-    vocNo: ["1"],
+    vocNo: [""],
     vocDate: [new Date()],
     salesMan: [""],
     branch: [""],
@@ -91,6 +111,9 @@ export class BranchTransferRepairRtnComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    if(this.content?.FLAG != "VIEW" && this.content?.FLAG != "EDIT"){
+    this.generateVocNo();
+    }
     this.yearMonth = this.comService.yearSelected;
     this.branchTransferRepairRtnForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
     if (this.content?.FLAG == 'VIEW') {
@@ -106,35 +129,61 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     // }
   }
 
-  salesManSelected(e:any){
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res);
+
+          this.branchTransferRepairRtnForm.controls.vocNo.setValue(res.newvocno);
+        }
+      });
+  }
+
+  salesManSelected(e: any) {
     console.log(e);
     this.branchTransferRepairRtnForm.controls.salesMan.setValue(e.SALESPERSON_CODE);
   }
 
-  partyCodeSelected(e:any){
+  partyCodeSelected(e: any) {
     console.log(e);
     this.branchTransferRepairRtnForm.controls.partyCode.setValue(e.ACCODE);
     this.branchTransferRepairRtnForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
   }
-  
+
   branchCodeSelected(data: any) {
-    console.log(data); 
+    console.log(data);
     this.branchTransferRepairRtnForm.controls.branch.setValue(data.BRANCH_CODE);
-    this.branchTransferRepairRtnForm.controls.branchName.setValue(data.BRANCH_NAME);    
+    this.branchTransferRepairRtnForm.controls.branchName.setValue(data.BRANCH_NAME);
   }
 
-  setFormValues(){
-    console.log('this.content', this.content);
-    if (!this.content) return
-    this.branchTransferRepairRtnForm.controls.branchCode.setValue(this.content.BRANCH_CODE);
-    this.branchTransferRepairRtnForm.controls.branchName.setValue(this.content.BRANCHTONAME);
-    this.branchTransferRepairRtnForm.controls.vocType.setValue(this.content.VOCTYPE);    
-    this.branchTransferRepairRtnForm.controls.vocNo.setValue(this.content.VOCNO);
-    this.branchTransferRepairRtnForm.controls.vocDate.setValue(this.content.VOCDATE);
-    this.branchTransferRepairRtnForm.controls.yearMonth.setValue(this.content.YEARMONTH);
-    this.branchTransferRepairRtnForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
-    this.branchTransferRepairRtnForm.controls.branch.setValue(this.content.BRANCHTO);
-    this.branchTransferRepairRtnForm.controls.transferRemarks.setValue(this.content.REMARKS);
+  setFormValues() {
+    // console.log('this.content', this.content);
+    let values = this.content;
+    const dateParts =values.VOCDATE.split('T')[0].split('-').join('/');
+    const formattedDate = new Date(dateParts);
+    console.log(dateParts);
+    if (!values) return
+    this.branchTransferRepairRtnForm.controls.vocNo.setValue(values.VOCNO);
+    this.branchTransferRepairRtnForm.controls.branch.setValue(values.BRANCH_CODE);
+    this.branchTransferRepairRtnForm.controls.branchName.setValue(values.BRANCHTONAME);
+    this.branchTransferRepairRtnForm.controls.vocType.setValue(values.VOCTYPE);
+    this.branchTransferRepairRtnForm.controls.vocDate.setValue(formattedDate);
+    this.branchTransferRepairRtnForm.controls.partyCode.setValue(values.POSCUSTCODE);
+    this.branchTransferRepairRtnForm.controls.partyName.setValue(values.POSCUSTNAME);
+    this.branchTransferRepairRtnForm.controls.salesMan.setValue(values.SALESPERSON_CODE);
+    this.branchTransferRepairRtnForm.controls.branch.setValue(values.BRANCHTO);
+    this.branchTransferRepairRtnForm.controls.transferRemarks.setValue(values.REMARKS);
   }
 
   close(data?: any) {
@@ -142,7 +191,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updatebranchTransferRepairRTN()
@@ -164,34 +213,34 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
       "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
       "REMARKS": this.branchTransferRepairRtnForm.value.transferRemarks,
-      "SYSTEM_DATE": new Date().toISOString(),
+      "SYSTEM_DATE": new Date(),
       "NAVSEQNO": 0,
-      "STATUS": "string",
+      "STATUS": "",
       "METALVOCNO": 0,
       "METALWEIGHT": 0,
       "METALAMOUNT": 0,
       "METALMID": 0,
-      "METALVOCTYPE": "str",
-      "METALCODE": "string",
-      "DIAMONDCODE": "string",
+      "METALVOCTYPE": "",
+      "METALCODE": "",
+      "DIAMONDCODE": "",
       "DIAMONDVOCNO": 0,
-      "DIAMONDVOCTYPE": "str",
+      "DIAMONDVOCTYPE": "",
       "DIAMONDMID": 0,
       "DIAMONDWGT": 0,
       "DIAMONDAMOUNT": 0,
-      "SUPINVDATE": "2024-03-06T13:12:01.635Z",
-      "SUPINVNO": "string",
-      "TRANSFERBRANCH": "string",
+      "SUPINVDATE": new Date(),
+      "SUPINVNO": "",
+      "TRANSFERBRANCH": "",
       "AUTOPOSTING": true,
-      "BRANCHTONAME": "string",
-      "ISMETALDIAMOND": "string",
-      "HASJOBDONE": "string",
+      "BRANCHTONAME": this.branchTransferRepairRtnForm.value.branchName,
+      "ISMETALDIAMOND": "",
+      "HASJOBDONE": "",
       "PRINT_COUNT": 0,
-      "POSCUSTCODE": "string",
-      "POSCUSTNAME": "string",
+      "POSCUSTCODE": this.branchTransferRepairRtnForm.value.partyCode,
+      "POSCUSTNAME": this.branchTransferRepairRtnForm.value.partyName,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": "string",
+      "HTUSERNAME": "",
       "JOBDONE": 0,
       "METALANDDIAMOND": 0
     }
@@ -200,7 +249,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
         console.log(result)
 
         if (result.response) {
-          
+
           if (result.status.toString().trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
@@ -225,50 +274,50 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   }
 
   updatebranchTransferRepairRTN() {
-  console.log(this.branchCode,'working')
-  let API = `RepairTransfer/UpdateRepairTransfer/${this.branchCode}/${this.branchTransferRepairRtnForm.value.voctype}/${this.branchTransferRepairRtnForm.value.vocNo}/${this.comService.yearSelected}` ;
-  let postData = {
-    "MID": 0,
-    "BRANCH_CODE": this.branchCode,
-    "VOCTYPE": this.branchTransferRepairRtnForm.value.vocType,
-    "VOCNO": this.branchTransferRepairRtnForm.value.vocNo,
-    "VOCDATE": this.branchTransferRepairRtnForm.value.vocDate,
-    "YEARMONTH": this.yearMonth,
-    "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
-    "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
-    "REMARKS": "string",
-    "SYSTEM_DATE": "2024-03-06T13:12:01.635Z",
-    "NAVSEQNO": 0,
-    "STATUS": "string",
-    "METALVOCNO": 0,
-    "METALWEIGHT": 0,
-    "METALAMOUNT": 0,
-    "METALMID": 0,
-    "METALVOCTYPE": "str",
-    "METALCODE": "string",
-    "DIAMONDCODE": "string",
-    "DIAMONDVOCNO": 0,
-    "DIAMONDVOCTYPE": "str",
-    "DIAMONDMID": 0,
-    "DIAMONDWGT": 0,
-    "DIAMONDAMOUNT": 0,
-    "SUPINVDATE": "2024-03-06T13:12:01.635Z",
-    "SUPINVNO": "string",
-    "TRANSFERBRANCH": "string",
-    "AUTOPOSTING": true,
-    "BRANCHTONAME": "string",
-    "ISMETALDIAMOND": "string",
-    "HASJOBDONE": "string",
-    "PRINT_COUNT": 0,
-    "POSCUSTCODE": "string",
-    "POSCUSTNAME": "string",
-    "PRINT_COUNT_ACCOPY": 0,
-    "PRINT_COUNT_CNTLCOPY": 0,
-    "HTUSERNAME": "string",
-    "JOBDONE": 0,
-    "METALANDDIAMOND": 0
-  }    
-    
+    console.log(this.branchCode, 'working')
+    let API = `RepairTransfer/UpdateRepairTransfer/${this.branchCode}/${this.branchTransferRepairRtnForm.value.voctype}/${this.branchTransferRepairRtnForm.value.vocNo}/${this.comService.yearSelected}`;
+    let postData = {
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.branchTransferRepairRtnForm.value.vocType,
+      "VOCNO": this.branchTransferRepairRtnForm.value.vocNo,
+      "VOCDATE": this.branchTransferRepairRtnForm.value.vocDate,
+      "YEARMONTH": this.yearMonth,
+      "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
+      "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
+      "REMARKS":this.branchTransferRepairRtnForm.value.transferRemarks,
+      "SYSTEM_DATE": new Date(),
+      "NAVSEQNO": 0,
+      "STATUS": "",
+      "METALVOCNO": 0,
+      "METALWEIGHT": 0,
+      "METALAMOUNT": 0,
+      "METALMID": 0,
+      "METALVOCTYPE": "",
+      "METALCODE": "",
+      "DIAMONDCODE": "",
+      "DIAMONDVOCNO": 0,
+      "DIAMONDVOCTYPE": "str",
+      "DIAMONDMID": 0,
+      "DIAMONDWGT": 0,
+      "DIAMONDAMOUNT": 0,
+      "SUPINVDATE":new Date(),
+      "SUPINVNO": "",
+      "TRANSFERBRANCH": "",
+      "AUTOPOSTING": true,
+      "BRANCHTONAME": this.branchTransferRepairRtnForm.value.branchName,
+      "ISMETALDIAMOND": "",
+      "HASJOBDONE": "",
+      "PRINT_COUNT": 0,
+      "POSCUSTCODE": this.branchTransferRepairRtnForm.value.partyCode,
+      "POSCUSTNAME": this.branchTransferRepairRtnForm.value.partyName,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "HTUSERNAME": "",
+      "JOBDONE": 0,
+      "METALANDDIAMOND": 0
+    }
+
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -294,71 +343,71 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-    /**USE: delete Melting Type From Row */
-    
-deleteMeltingType() {
-  if (!this.content.branchCode) {
+  /**USE: delete Melting Type From Row */
+
+  deleteMeltingType() {
+    if (!this.content.branchCode) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
     Swal.fire({
-      title: '',
-      text: 'Please Select data to delete!',
-      icon: 'error',
-      confirmButtonColor: '#336699',
-      confirmButtonText: 'Ok'
-    }).then((result: any) => {
-      if (result.value) {
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'RepairTransfer/DeleteRepairTransfer/' + this.branchTransferRepairRtnForm.value.brnachCode + this.branchTransferRepairRtnForm.value.voctype + this.branchTransferRepairRtnForm.value.vocNo + this.branchTransferRepairRtnForm.value.yearMoth;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.branchTransferRepairRtnForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.branchTransferRepairRtnForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
       }
     });
-    return
   }
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      let API = 'RepairTransfer/DeleteRepairTransfer/' + this.branchTransferRepairRtnForm.value.brnachCode + this.branchTransferRepairRtnForm.value.voctype + this.branchTransferRepairRtnForm.value.vocNo + this.branchTransferRepairRtnForm.value.yearMoth;
-      let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-        .subscribe((result) => {
-          if (result) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.branchTransferRepairRtnForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            } else {
-              Swal.fire({
-                title: result.message || 'Error please try again',
-                text: '',
-                icon: 'error',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.branchTransferRepairRtnForm.reset()
-                  this.tableData = []
-                  this.close()
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not deleted')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
-  });
-}
 }

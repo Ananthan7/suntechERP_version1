@@ -74,6 +74,11 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.repairTransferForm.controls.voctype.setValue(
+      this.comService.getqueryParamVocType()
+    );
+    this.generateVocNo();
     // console.log(this.content);
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -82,10 +87,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
       this.getrepairtoissuebyid();
     }
 
-    this.repairTransferForm.controls.voctype.setValue(
-      this.comService.getqueryParamVocType()
-    );
-    this.generateVocNo();
+
   }
 
   getrepairtoissuebyid(){
@@ -122,7 +124,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   getPendingRepairJobs() {
     let API = `ExecueteSPInterface`;
     let bodyData = {
-      SPID: "095",
+      SPID: "95",
       parameter: {
         STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
         STRBRANCHCODE: this.branchCode,

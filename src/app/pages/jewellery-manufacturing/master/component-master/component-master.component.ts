@@ -127,6 +127,7 @@ export class ComponentMasterComponent implements OnInit {
     WHERECONDITION: "COMPSIZE_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK:true,
   }
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -205,6 +206,7 @@ export class ComponentMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.setInitialValues();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -505,15 +507,47 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
     this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
     this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
-    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
-    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
-    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
-    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+    // this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+    // this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+    // this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+    // this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
     this.componentmasterForm.controls.processSeq.setValue(this.content.SEQ_CODE)
     this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
     this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
     this.componentmasterForm.controls.remarks.setValue(this.content.PROD_INSTRUCTION)
+
+
+    this.componentmasterForm.controls.height.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.HEIGHT));
+
+        this.componentmasterForm.controls.length.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,
+            this.content.LENGTH));
+
+            this.componentmasterForm.controls.width.setValue(
+              this.commonService.transformDecimalVB(
+                this.commonService.allbranchMaster?.BMQTYDECIMALS,
+                this.content.WIDTH));
+
+
+                this.componentmasterForm.controls.radius.setValue(
+                  this.commonService.transformDecimalVB(
+                    this.commonService.allbranchMaster?.BMQTYDECIMALS,
+                    this.content.RADIUS));
+
+  }
+
+  
+  private setInitialValues() {
+
+    this.componentmasterForm.controls.height.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.length.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.width.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.radius.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'));
   }
 
   setPostData() {
@@ -1000,9 +1034,11 @@ export class ComponentMasterComponent implements OnInit {
           this.showErrorDialog('Code Already Exists')
         }
         else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1035,9 +1071,11 @@ export class ComponentMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
 
   }
@@ -1125,7 +1163,7 @@ export class ComponentMasterComponent implements OnInit {
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    LOOKUPDATA.SEARCH_FIELD = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

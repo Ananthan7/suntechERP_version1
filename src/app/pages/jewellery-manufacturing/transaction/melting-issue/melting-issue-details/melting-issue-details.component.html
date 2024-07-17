@@ -116,7 +116,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
-                                        formControlName="waxweight"
+                                        formControlName="waxweight" [max]="13"
                                         class="text-right" AmountDecimalInput [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
@@ -190,7 +190,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="stoneweight"
-                                        class="text-right" StoneDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" StoneDecimalInput [readonly]="viewMode" [max]="13"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -199,8 +199,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="netweight"
-                                        class="text-right" StoneDecimalInput [readonly]="viewMode"/>
+                                        formControlName="netweight" [max]="13"
+                                        class="text-right" MetalDecimalInput [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -211,8 +211,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="grossweight"
-                                        class="text-right" AmountDecimalInput [readonly]="viewMode"/>
+                                        formControlName="grossweight" [max]="6"
+                                        class="text-right" MetalDecimalInput [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -231,7 +231,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="pureweight"
+                                        formControlName="pureweight" [max]="13"
                                         class="text-right" MetalDecimalInput [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
