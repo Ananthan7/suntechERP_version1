@@ -252,7 +252,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status.trim() == " Success ") {
+          if (result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
