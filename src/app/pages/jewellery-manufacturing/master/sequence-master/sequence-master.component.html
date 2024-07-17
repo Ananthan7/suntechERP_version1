@@ -57,7 +57,7 @@
                                     (change)="PrefixCodeChange($event)"
                                     (focusout)="validateLookupField($event,sequenceMasterData,'sequencePrefixCode')"
                                     formControlName="sequencePrefixCode"
-                                    UpperCaseDirective />
+                                    UpperCaseDirective  (keypress)="lookupKeyPress($event)"/>
                                     <master-search *ngIf="!viewMode" class="masterSearch"
                                         [MasterSearchData]="sequenceMasterData"
                                         (newRowClick)="sequencePrefixCodeSelected($event)">

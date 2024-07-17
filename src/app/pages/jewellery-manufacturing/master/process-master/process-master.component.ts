@@ -1122,6 +1122,11 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
 
 }

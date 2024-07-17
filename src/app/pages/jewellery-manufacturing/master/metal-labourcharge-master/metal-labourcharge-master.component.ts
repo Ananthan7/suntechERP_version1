@@ -1350,4 +1350,10 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   }
 
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+
 }

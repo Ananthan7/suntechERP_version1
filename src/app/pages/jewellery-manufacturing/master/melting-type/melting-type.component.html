@@ -72,7 +72,7 @@
                             [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
                             UpperCaseDirective
                             (focusout)="validateLookupField($event,colorData,'color')" appNoEmptySpace
-                            />
+                            (keypress)="lookupKeyPress($event)"  />
                     </mat-form-field>
                     <master-search [MasterSearchData]="colorData"
                         (newRowClick)="colorDataSelected($event)"
@@ -91,7 +91,7 @@
                         <input type="text" [readonly]="viewMode || codeEnable"
                             matInput formControlName="karat"      (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace/>
+                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace  (keypress)="lookupKeyPress($event)"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="karatcodeData"
                         (newRowClick)="karatcodeSelected($event)"
@@ -134,7 +134,7 @@
                         <input type="text" matInput formControlName="stockCode"
                             [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace/>
+                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace  (keypress)="lookupKeyPress($event)"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="stockCodeData"
                         (newRowClick)="StockCodeSelected($event)"
