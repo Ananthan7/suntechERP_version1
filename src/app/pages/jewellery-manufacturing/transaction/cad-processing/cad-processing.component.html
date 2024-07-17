@@ -55,7 +55,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Process * : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="process" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="process" [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="processCodeData" *ngIf="!viewMode"
                                     (newRowClick)="processSelected($event)"></master-search>
@@ -65,7 +65,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Worker * : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="worker" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="worker" [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="workerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="workedSelected($event)"></master-search>
@@ -113,7 +113,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="toWorker" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="toWorker" [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="workerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="toWorkedSelected($event)"></master-search>
@@ -123,7 +123,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label ">To Process * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="toProcess" [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="toProcess" [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="toprocessCodeData" *ngIf="!viewMode"
                                     (newRowClick)="toProcessSelected($event)"></master-search>
@@ -210,7 +210,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="divisionMaster"
                                                         (newRowClick)="DivisionSelected($event,data)">
@@ -223,7 +223,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
                                                         (newRowClick)="stoneTypeSelected($event,data)">
@@ -239,7 +239,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="stockCode"
                                                         (newRowClick)="stockCodeSelected($event,data)">
@@ -254,7 +254,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="karatCodeData"
                                                         (newRowClick)="karatCodeSelected($event,data)">
@@ -269,7 +269,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
                                                         (newRowClick)="colorCodeSelected($event,data)">
@@ -284,7 +284,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
                                                         (newRowClick)="shapeSelected($event,data)">
@@ -299,7 +299,7 @@
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a href="javascript:void(0)" class="mx-1"
-                                                            [innerHTML]="data.value"></a>
+                                                            [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                     </div>
                                                     <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
                                                         (newRowClick)="sieveSelected($event,data)">
@@ -420,7 +420,7 @@
                                                         class="d-flex justify-content-between">
                                                         <div>
                                                             <a href="javascript:void(0)" class="mx-1"
-                                                                [innerHTML]="data.value"></a>
+                                                                [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                         </div>
                                                         <master-search *ngIf="!viewMode"
                                                             [MasterSearchData]="generalMaster"
@@ -435,7 +435,7 @@
                                                         class="d-flex justify-content-between">
                                                         <div>
                                                             <a href="javascript:void(0)" class="mx-1"
-                                                                [innerHTML]="data.value"></a>
+                                                                [innerHTML]="data.value" (keypress)="lookupKeyPress($event)" ></a>
                                                         </div>
                                                         <master-search *ngIf="!viewMode"
                                                             [MasterSearchData]="generalMaster"

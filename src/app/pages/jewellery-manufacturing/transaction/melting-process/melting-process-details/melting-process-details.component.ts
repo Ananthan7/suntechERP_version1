@@ -368,6 +368,11 @@ export class MeltingProcessDetailsComponent implements OnInit {
   //   });
   // }
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   formatMetalDetailDataGrid() {
     this.metalDetailData.forEach((element: any) => {

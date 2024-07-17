@@ -422,10 +422,15 @@ export class MeltingIssueComponent implements OnInit {
   close1(data: any = null) {
     this.modalService.dismissAll(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   openaddMeltingIssueDetails(dataToChild?: any) {
     if (!this.meltingIssueFrom.get('meltingtype')?.value) {
-      this.showErrorToast();
+      // this.showErrorToast();
     } else {
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
@@ -481,9 +486,6 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
-}
-  showErrorToast() {
-    throw new Error('Method not implemented.');
   }
 
   setValuesToHeaderGrid(DATA: any) {

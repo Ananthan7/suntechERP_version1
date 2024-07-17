@@ -25,8 +25,9 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         formControlName="stockcode"
-                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')" 
-                                        [readonly]="viewMode" />
+                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')"
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
@@ -307,9 +308,9 @@
                         <div class="row">
                             <div class="p-2 bd-highlight t-a1">
                                 <span class="bold-text">Tag Details</span>
-                             
-                              </div>
-                              
+
+                            </div>
+
                         </div>
                         <div>
                             <div class="icon">
@@ -362,8 +363,7 @@
                                         [allowColumnResizing]="true"
                                         [dataSource]="tableData"
                                         [showBorders]="true"
-                                        [showRowLines]="true"
-                                        >
+                                        [showRowLines]="true">
                                         <dxo-paging
                                             [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell"
@@ -407,7 +407,8 @@
                                             *dxTemplate="let data of 'Locationtemp'">
                                             <a href="javascript:void(0)"
                                                 class="mx-1"
-                                                [innerHTML]="data.value"></a>
+                                                [innerHTML]="data.value"
+                                                (keypress)="lookupKeyPress($event)"></a>
                                             <master-search
                                                 [MasterSearchData]="locationCodeData"
                                                 *ngIf="!viewMode"
@@ -469,9 +470,10 @@
                         class="col-sm-2 col-form-label text-center">Cost(LC)</label>
                 </div>
                 <div class="col-md-6">
-                    <div class="price_box">
-                        <a>PriceScheme</a>
-                        <master-search [MasterSearchData]="priceSchemeData" *ngIf="!viewMode"
+                    <div class="price_box" (keypress)="lookupKeyPress($event)">
+                        <a>PriceScheme </a>
+                        <master-search [MasterSearchData]="priceSchemeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="priceSchemeValidate($event)"></master-search>
                         <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
                     </div>
@@ -486,8 +488,10 @@
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
-                        <mat-form-field style="width: 77px; margin-left: -23px; text-align: right;">
-                            <input type="text" matInput formControlName="currencyrate"/>
+                        <mat-form-field
+                            style="width: 77px; margin-left: -23px; text-align: right;">
+                            <input type="text" matInput
+                                formControlName="currencyrate" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
@@ -501,7 +505,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                 <!-- <div class="row"> 
+                <!-- <div class="row"> 
                  <div class="col-md-6">
                         <div class="price_box">
                             <a>PriceScheme</a>
@@ -518,7 +522,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
                                 formControlName="price1PER"
-                                [readonly]="viewMode" />
+                                [readonly]="viewMode"
+                                (keypress)="lookupKeyPress($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="price1CodeData"
                             *ngIf="!viewMode"
@@ -556,7 +561,8 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="price2PER" />
+                                formControlName="price2PER"
+                                (keypress)="lookupKeyPress($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="price2CodeData"
                             *ngIf="!viewMode"
@@ -594,7 +600,8 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="price3PER" />
+                                formControlName="price3PER"
+                                (keypress)="lookupKeyPress($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="price3CodeData"
                             *ngIf="!viewMode"
@@ -632,7 +639,8 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="price4PER" />
+                                formControlName="price4PER"
+                                (keypress)="lookupKeyPress($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="price4CodeData"
                             *ngIf="!viewMode"
@@ -670,7 +678,8 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="price5PER" />
+                                formControlName="price5PER"
+                                (keypress)="lookupKeyPress($event)" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="price5CodeData"
                             *ngIf="!viewMode"
@@ -786,7 +795,7 @@
                         </mat-form-field>
                     </div>
                     <!-- <div class="col-md-3"> -->
-                        <!-- <mat-form-field style="width: 100%;">
+                    <!-- <mat-form-field style="width: 100%;">
                             <input type="number" matInput readonly
                                 formControlName="rhodiumAMTCC"
                                 class="text-right" />

@@ -25,7 +25,9 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="jobNumber"
-                                        [readonly]="viewMode" />
+                                        (focusout)="jobNumberValidate($event)"
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="jobnoCodeData"
@@ -67,7 +69,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="processCode"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="ProcessCodeData"
@@ -90,7 +93,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="workerCode"
-                                        [readonly]="viewMode">
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)">
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"
@@ -156,7 +160,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        readonly>
+                                        readonly
+                                        (keypress)="lookupKeyPress($event)">
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="locationCodeData"
@@ -174,7 +179,8 @@
                                     <input type="text" matInput
                                         formControlName="stockCode"
                                         (focusout)="stockCodeValidate($event)"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
@@ -197,7 +203,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="ReturnToStockCode"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
@@ -230,27 +237,29 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Gross Weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Gross Weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
-                                        formControlName="NET_WT"
-                                        class="text-right" [max]="13"
-                                        readonly MetalDecimalInput />
+                                            formControlName="NET_WT"
+                                            class="text-right" [max]="13"
+                                            readonly MetalDecimalInput />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Net Weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Net Weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
-                                        formControlName="GROSS_WT"
-                                        class="text-right" 
-                                        (focusout)="grossValidate()"
-                                        [readonly]="viewMode"
-                                        MetalDecimalInput [max]="13" />
+                                            formControlName="GROSS_WT"
+                                            class="text-right"
+                                            (focusout)="grossValidate()"
+                                            [readonly]="viewMode"
+                                            MetalDecimalInput [max]="13" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -260,7 +269,8 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Stone weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Stone weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
@@ -274,7 +284,8 @@
                             </div>
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Pure Weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Pure Weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
@@ -287,7 +298,8 @@
                             </div>
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Job Pcs
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Job Pcs
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
@@ -303,7 +315,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div>
-                                    <label style="width: 30%;" for="col-form-label">
+                                    <label style="width: 30%;"
+                                        for="col-form-label">
                                         Remarks:</label>
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput

@@ -122,7 +122,11 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   onFileChanged(event:any) {
     this.url = event.target.files[0].name

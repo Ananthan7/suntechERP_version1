@@ -260,6 +260,11 @@ export class WaxProcessComponent implements OnInit {
   removedata() {
     this.tableDataJob.pop();
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   formSubmit() {
 

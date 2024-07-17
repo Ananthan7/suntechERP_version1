@@ -1,6 +1,7 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Assembling Details</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Assembling
+        Details</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -15,16 +16,19 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3">Stock : </label>
+                        <label for="inputPassword" class="col-sm-3">Stock :
+                        </label>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3">Desc : </label>
+                        <label for="inputPassword" class="col-sm-3">Desc :
+                        </label>
                         <div class="col-sm-9">
                             <mat-form-field style="width: 80%;">
                                 <input type="text" matInput />
@@ -33,182 +37,247 @@
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Location :</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Location :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Type :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Type :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">OC :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Design :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Brand :</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">OC :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Set Ref :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Design :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Category :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Country :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Sub Category :</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Brand :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Color :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Set Ref :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Pieces :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Clarity :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Vender :</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Category :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Grade :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Country :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Vender Ref :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Shape :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Size :</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Sub Category
+                            :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Range :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Color :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
-                            </mat-form-field>
-                            <master-search></master-search>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Time :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Fluoresce :</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Pieces :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
                             </mat-form-field>
                             <master-search></master-search>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Gross Wt:</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Clarity :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Vender :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Grade :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Vender Ref :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Shape :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Size :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Range :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Style :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Time :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="toworker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Fluoresce :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="worker"
+                                    (keypress)="lookupKeyPress($event)" />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Gross Wt:</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput
+                                    formControlName="toworker" />
                             </mat-form-field>
 
                         </div>
                     </div>
-
 
                 </div>
 
@@ -220,7 +289,9 @@
                         <div class="col-2"><label>LC</label></div>
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Price Scheme:</label>
+                        <label for="inputPassword"
+                            class="col-sm-4 col-form-label">Price
+                            Scheme:</label>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -234,7 +305,8 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Price 1 :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Price 1 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -253,7 +325,8 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Price 2 :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Price 2 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -272,7 +345,8 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Price 3 :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Price 3 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -291,7 +365,8 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Price 4 :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Price 4 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -310,7 +385,8 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Price 5 :</label>
+                        <label for="inputPassword"
+                            class="col-sm-2 col-form-label">Price 5 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -335,7 +411,8 @@
                         <div class="col-3"><label>Amount-FC</label></div>
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Metal Total:</label>
+                        <label for="inputPassword"
+                            class="col-sm-4 col-form-label">Metal Total:</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -354,7 +431,9 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Stone Total :</label>
+                        <label for="inputPassword"
+                            class="col-sm-4 col-form-label">Stone Total
+                            :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -373,7 +452,9 @@
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Other Total :</label>
+                        <label for="inputPassword"
+                            class="col-sm-6 col-form-label">Other Total
+                            :</label>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -384,14 +465,15 @@
                                 <input type="text" matInput />
                             </mat-form-field>
                         </div>
-
 
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Remarks :</label>
+                        <label for="inputPassword"
+                            class="col-sm-4 col-form-label">Remarks :</label>
                         <div class="col-md-7">
                             <div class="text-area">
-                                <textarea matInput style="height: 100px;"></textarea>
+                                <textarea matInput
+                                    style="height: 100px;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -412,7 +494,8 @@
                     </div>
                     <div class="row">
                         <div class="p-2 bd-highlight t-a2">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn">
+                            <button type="button"
+                                class="btn btn-primary metal-issue-add-btn">
                                 Tag Details
                             </button>
                         </div>
@@ -425,7 +508,6 @@
                     </div>
                 </div>
 
-
             </div>
         </div>
         <div class="col-md-12">
@@ -435,31 +517,40 @@
                         <div class="row d-flex">
                             <div class="col-12 d-flex">
                                 <div class="p-2 bd-highlight">
-                                    <button type="button" class="btn btn-primary metal-issue-add-btn">
+                                    <button type="button"
+                                        class="btn btn-primary metal-issue-add-btn">
                                         Add
                                     </button>
                                 </div>
                                 <div class="p-2 bd-highlight">
-                                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                    <button type="button"
+                                        class="btn btn-outline-primary metal-issue-del-btn">
                                         Delete
                                     </button>
                                 </div>
-
 
                             </div>
                         </div>
 
                         <div class="row m-2">
                             <div class="col">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="ID" [allowColumnResizing]="true"
+                                    [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of column1" dataField="{{ data }}" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                                    <dxi-column *ngFor="let data of column1"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}"
+                                        [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
@@ -470,7 +561,5 @@
                 </mat-tab-group>
             </div>
         </div>
-
-
 
     </form>

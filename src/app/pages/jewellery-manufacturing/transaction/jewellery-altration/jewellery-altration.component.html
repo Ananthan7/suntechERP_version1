@@ -61,7 +61,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 72%;">
                   <input type="text" matInput formControlName="enteredby"
-                    [readonly]="viewMode" />
+                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="user" *ngIf="!viewMode"
                   (newRowClick)="userDataSelected($event)">
@@ -98,7 +98,8 @@
                   <input type="ext" matInput
                     SixDecimalInput
                     class="text-right"
-                    formControlName="itemcurrencycc" [readonly]="viewMode" />
+                    formControlName="itemcurrencycc" [readonly]="viewMode"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search
                   [MasterSearchData]="itemCodeData" *ngIf="!viewMode"
@@ -114,7 +115,8 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="metalrate"
-                    [readonly]="viewMode" placeholder="Rate type" />
+                    [readonly]="viewMode" placeholder="Rate type"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="rateTypeMasterData"
                   *ngIf="!viewMode"
@@ -137,7 +139,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="costcode"
-                    [readonly]="viewMode" />
+                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="costCodeData"
                   *ngIf="!viewMode"
@@ -186,7 +188,8 @@
           </menu-buttons>
           <div class="col-sm-3">
             <mat-form-field style="width: 80%;">
-              <input type="text" matInput [readonly]="viewMode" />
+              <input type="text" matInput [readonly]="viewMode"
+                (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search *ngIf="!viewMode">
             </master-search>

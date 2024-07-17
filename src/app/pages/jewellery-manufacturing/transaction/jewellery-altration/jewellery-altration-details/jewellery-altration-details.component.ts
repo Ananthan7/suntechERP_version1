@@ -860,6 +860,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
 //     this.subscriptions.push(Sub)
 //   }
 // }
+lookupKeyPress(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+  }
+}
 onFileChangedimage(event: any) {
   this.imageurl = event.target.files[0]
   console.log(this.imageurl)
