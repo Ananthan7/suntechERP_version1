@@ -416,13 +416,12 @@ basesetCurrencyRate() {
               }
             });
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
-        console.log(err);
+        this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub)
   }

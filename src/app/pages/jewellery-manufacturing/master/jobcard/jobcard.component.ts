@@ -620,8 +620,25 @@ export class JobcardComponent implements OnInit {
     };
 
     this.getDesigncode();
+    this.getDesignimagecode();
 
   }
+
+  getDesignimagecode() {
+
+    let API = 'ImageforJobCad/CDB000112';
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+
+        this.urls = result.response[0].imagepath;
+        console.log(this.urls)
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+
+  }
+
 
   getDesigncode() {
 
@@ -639,8 +656,8 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['purity'].setValue(result.response.PURITY);
 
         //this.jobCardFrom.controls['picture_name'].setValue(result.response.ITEM_IMAGE);
-        this.urls = result.response.PICTURE_NAME;
-        console.log(this.urls)
+        // this.urls = result.response.PICTURE_NAME;
+        // console.log(this.urls)
 
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
@@ -1076,10 +1093,12 @@ export class JobcardComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1337,10 +1356,12 @@ export class JobcardComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 

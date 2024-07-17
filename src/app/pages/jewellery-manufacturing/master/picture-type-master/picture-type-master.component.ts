@@ -142,9 +142,11 @@ subscriptions: any;
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
   update(){
@@ -178,10 +180,12 @@ subscriptions: any;
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }  else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 

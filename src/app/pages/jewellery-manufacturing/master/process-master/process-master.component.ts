@@ -690,12 +690,12 @@ export class ProcessMasterComponent implements OnInit {
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
           }
-        } else {
-          this.commonService.emptyToZero('Not deleted');
+        }  else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
-        this.commonService.emptyToZero('network error occurred ');
-      });
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub);
   }
 
@@ -714,11 +714,11 @@ export class ProcessMasterComponent implements OnInit {
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
           }
-        } else {
-          this.toastr.error('Not deleted');
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
-        this.toastr.error('network error occurred ');
+        this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub)
   }

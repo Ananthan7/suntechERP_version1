@@ -88,6 +88,8 @@ import { DatetimePickerComponent } from './common/datetime-picker/datetime-picke
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { NgxBarcodeScannerModule } from '@eisberg-labs/ngx-barcode-scanner';
 import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
+import { PurityDecimalDirective } from './directives/format-purity-decimal.directive ';
+import { FormatRateDecimalDirective } from './directives/format-rate-decimal.directive';
 
 
 @NgModule({
@@ -117,6 +119,8 @@ import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    FormatRateDecimalDirective,
+    PurityDecimalDirective,
     NumericFilterDirective,
     FormatSixDecimalDirective,
     UppercaseDirective,
@@ -211,6 +215,8 @@ import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    FormatRateDecimalDirective,
+    PurityDecimalDirective,
     NumericFilterDirective,
     FormatSixDecimalDirective,
     FormatThreeDecimalDirective,

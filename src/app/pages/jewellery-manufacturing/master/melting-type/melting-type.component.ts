@@ -350,11 +350,11 @@ export class MeltingTypeComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('The Code Already Exists');
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      },
-      (err) => alert(err)
-    );
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub);
   }
 
@@ -469,9 +469,11 @@ export class MeltingTypeComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 

@@ -115,12 +115,52 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     }
   }
   
+  // setFormValues() {
+  //   console.log('this.content', this.content);
+  //   const dateParts =this.content.VOCDATE.split('T')[0].split('-').join('/');
+  //   const formatteddate = new Date(dateParts);
+  //   console.log(dateParts);
+  //   if (!this.content) return
+  //   this.repairCustomerDeliveryForm.controls.voctype.setValue(this.content.VOCTYPE);
+  //   this.repairCustomerDeliveryForm.controls.vocNo.setValue(this.content.VOCNO);
+  //   this.repairCustomerDeliveryForm.controls['vocDate'].setValue(this.content.VOCDATE);
+  //   this.repairCustomerDeliveryForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
+  //   this.repairCustomerDeliveryForm.controls.customer.setValue(this.content.CUSCODE);
+  //   this.repairCustomerDeliveryForm.controls.remarks.setValue(this.content.REMARKS);
+  //   this.repairCustomerDeliveryForm.controls.posVocType.setValue(this.content.POSVOCTYPE);
+  //   this.repairCustomerDeliveryForm.controls.repairAmt.setValue(this.content.POSAMOUNT);
+  //   this.repairCustomerDeliveryForm.controls.subTotal.setValue(this.content.SUBTOTAL);
+  //   this.repairCustomerDeliveryForm.controls.netTotal.setValue(this.content.NETTOTAL);
+  //   this.repairCustomerDeliveryForm.controls.customerDesc.setValue(this.content.PARTYNAME);
+  //   this.repairCustomerDeliveryForm.controls.tel.setValue(this.content.TEL1);
+  //   this.repairCustomerDeliveryForm.controls.mobile.setValue(this.content.MOBILE);
+  //   this.repairCustomerDeliveryForm.controls.nationality.setValue(this.content.NATIONALITY);
+  //   this.repairCustomerDeliveryForm.controls.email.setValue(this.content.EMAIL);
+  //   this.repairCustomerDeliveryForm.controls.type.setValue(this.content.TYPE);
+  //   this.repairCustomerDeliveryForm.controls.address.setValue(this.content.ADDRESS);
+  // }
+
   setFormValues() {
     console.log('this.content', this.content);
-    if (!this.content) return
+
+    if (!this.content) return;
+
+    // Split the date string and create a Date object
+    const dateParts = this.content.VOCDATE.split('-'); // Split by '-'
+    const formattedDate = new Date(
+        parseInt(dateParts[2]), // Year
+        parseInt(dateParts[1]) - 1, // Month (zero-indexed)
+        parseInt(dateParts[0]) // Day
+    );
+    console.log(formattedDate);
+    
+    // Format the date for display in the input field (optional)
+    const formattedDateString = formattedDate.toLocaleDateString('en-GB'); // Example: "16/07/2024"
+
+    // Set form values
     this.repairCustomerDeliveryForm.controls.voctype.setValue(this.content.VOCTYPE);
     this.repairCustomerDeliveryForm.controls.vocNo.setValue(this.content.VOCNO);
-    this.repairCustomerDeliveryForm.controls.vocDate.setValue(this.content.VOCDATE);
+    this.repairCustomerDeliveryForm.controls['vocDate'].setValue(formattedDate); // Set the Date object
     this.repairCustomerDeliveryForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
     this.repairCustomerDeliveryForm.controls.customer.setValue(this.content.CUSCODE);
     this.repairCustomerDeliveryForm.controls.remarks.setValue(this.content.REMARKS);
@@ -135,7 +175,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     this.repairCustomerDeliveryForm.controls.email.setValue(this.content.EMAIL);
     this.repairCustomerDeliveryForm.controls.type.setValue(this.content.TYPE);
     this.repairCustomerDeliveryForm.controls.address.setValue(this.content.ADDRESS);
-  }
+}
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -181,7 +221,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       "SALESPERSON_CODE": this.repairCustomerDeliveryForm.value.salesMan,
       "CUSCODE": this.repairCustomerDeliveryForm.value.customer,
       "REMARKS": this.repairCustomerDeliveryForm.value.remarks,
-      "SYSTEM_DATE": "2024-03-05T11:16:28.124Z",
+      "SYSTEM_DATE": new Date(),
       "NAVSEQNO": 0,
       "POSMID": 0,
       "POSVOCNO": 0,
@@ -194,24 +234,25 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       "DAMAGED": 0,
       "RECEIPT": 0,
       "PARTYNAME": this.repairCustomerDeliveryForm.value.customerDesc,
-      "TEL1": this.repairCustomerDeliveryForm.value.tel,
+      "TEL1": this.repairCustomerDeliveryForm.value.tel.toString(),
       "MOBILE": this.repairCustomerDeliveryForm.value.mobile,
       "NATIONALITY": this.repairCustomerDeliveryForm.value.nationality,
       "EMAIL": this.repairCustomerDeliveryForm.value.email,
       "TYPE": this.repairCustomerDeliveryForm.value.type,
       "ADDRESS": this.repairCustomerDeliveryForm.value.address,
-      "POBOX": "string",
-      "SALESREFERENCE": "string",
+      "POBOX": "",
+      "SALESREFERENCE": "",
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": "string",
-      "CUSTMOBILE": "string"
+      "HTUSERNAME": "",
+      "CUSTMOBILE": ""
     }
+    console.log(postData.TEL1);
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == " Success ") {
+          if (result.status.trim() == " Success ") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -278,7 +319,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
         .subscribe((result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {
               Swal.fire({
                 title: result.message || 'Success',
                 text: '',

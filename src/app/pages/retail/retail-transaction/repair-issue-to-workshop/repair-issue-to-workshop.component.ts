@@ -124,7 +124,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   getPendingRepairJobs() {
     let API = `ExecueteSPInterface`;
     let bodyData = {
-      SPID: "095",
+      SPID: "95",
       parameter: {
         STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
         STRBRANCHCODE: this.branchCode,
