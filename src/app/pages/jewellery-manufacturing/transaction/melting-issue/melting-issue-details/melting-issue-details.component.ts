@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,EventEmitter, Output  } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-melting-issue-details',
@@ -16,6 +17,12 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 export class MeltingIssueDetailsComponent implements OnInit {
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
+  @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
+  @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocess') overlayprocess!: MasterSearchComponent;
+  @ViewChild('overlaystockcodeSearch') overlaystockcodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaylocationSearch') overlaylocationSearch!: MasterSearchComponent;
+
   @Input() content!: any;
   tableData: any[] = [];
   branchCode?: String;
@@ -27,7 +34,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
   viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
 
- 
+
 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -40,7 +47,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -58,7 +65,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
+    SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
@@ -91,40 +98,40 @@ export class MeltingIssueDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  StockCodeSelected(e:any){
+  StockCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
     this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DESCRIPTION);
     this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DIVISION_CODE);
-    
+
   }
 
-  WorkerCodeSelected(e:any){
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.worker.setValue(e.WORKER_CODE);
     this.meltingIssuedetailsFrom.controls.workerdes.setValue(e.DESCRIPTION);
   }
 
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.process.setValue(e.Process_Code);
     this.meltingIssuedetailsFrom.controls.processdes.setValue(e.Description);
     //
   }
 
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.location.setValue(e.LOCATION_CODE);
   }
 
-  jobnoCodeSelected(e:any){
+  jobnoCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.jobno.setValue(e.job_number);
     this.meltingIssuedetailsFrom.controls.jobdes.setValue(e.job_description)
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
 
-  constructor(    private activeModal: NgbActiveModal,
+  constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
@@ -132,7 +139,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     private comService: CommonServiceService,
     private commonService: CommonServiceService,) { }
 
-    
+
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     if (this.content && this.content.FLAG) {
@@ -140,7 +147,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       this.meltingIssuedetailsFrom.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
-      
+
       }
     }
   }
@@ -193,7 +200,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
-  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     // this.activeModal.close(data);
@@ -208,38 +215,38 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
 
   meltingIssuedetailsFrom: FormGroup = this.formBuilder.group({
-    jobno:[''],
-    subjobno:[''],
-    voctype:[''],
-    subJobDescription:[''],
-    jobdes:[''],
-    jobpurity:[''],
-    process:['',[Validators.required]],
-    processdes:['',[Validators.required]],
-    worker:['',[Validators.required]],
-    workerdes:['',[Validators.required]],
-    treeno:[''],
-    stockcode:[''],
-    stockdes:[''],
-    tostock:[''],
-    mainstock:[''],
-    grossweight:['',[Validators.required]],
-    purity:['',[Validators.required]],
-    lossweight:['',[Validators.required]],
-    diffgrwt:[''],
-    waxweight:['',[Validators.required]],
-    stoneweight:[''],
-    remarks:[''],
-    lotno:['',[Validators.required]],
-    tgold:[''],
-    silver:[''],
-    ticketno:['',[Validators.required]],
-    barno:['',[Validators.required]],
-    location:[''],
-    pcs:[''],
-    netweight:[''],
-    pureweight:['',[Validators.required]],
-    topurity:['',[Validators.required]],
+    jobno: [''],
+    subjobno: [''],
+    voctype: [''],
+    subJobDescription: [''],
+    jobdes: [''],
+    jobpurity: [''],
+    process: ['', [Validators.required]],
+    processdes: ['', [Validators.required]],
+    worker: ['', [Validators.required]],
+    workerdes: ['', [Validators.required]],
+    treeno: [''],
+    stockcode: [''],
+    stockdes: [''],
+    tostock: [''],
+    mainstock: [''],
+    grossweight: ['', [Validators.required]],
+    purity: ['', [Validators.required]],
+    lossweight: ['', [Validators.required]],
+    diffgrwt: [''],
+    waxweight: ['', [Validators.required]],
+    stoneweight: [''],
+    remarks: [''],
+    lotno: ['', [Validators.required]],
+    tgold: [''],
+    silver: [''],
+    ticketno: ['', [Validators.required]],
+    barno: ['', [Validators.required]],
+    location: [''],
+    pcs: [''],
+    netweight: [''],
+    pureweight: ['', [Validators.required]],
+    topurity: ['', [Validators.required]],
     FLAG: [null]
   });
   submitValidations() {
@@ -264,10 +271,10 @@ export class MeltingIssueDetailsComponent implements OnInit {
     }
   }
 
-setPostData() {
-  let form = this.meltingIssuedetailsFrom.value
-  let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
-    return  {
+  setPostData() {
+    let form = this.meltingIssuedetailsFrom.value
+    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+    return {
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_BRANCH_CODE": this.branchCode,
@@ -297,7 +304,7 @@ setPostData() {
       "IRON_PER": 0,
       "STONEDIFF": 0,
       "WAX_WT": this.meltingIssuedetailsFrom.value.waxweight,
-      "TREE_NO":this.comService.nullToString(this.meltingIssuedetailsFrom.value.treeno),
+      "TREE_NO": this.comService.nullToString(this.meltingIssuedetailsFrom.value.treeno),
       "WIP_ACCODE": "string",
       "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,
@@ -329,7 +336,7 @@ setPostData() {
     }
   }
 
-  
+
   // deleteRecord() {
   //   if (!this.content.WORKER_CODE) {
   //     Swal.fire({
@@ -395,10 +402,57 @@ setPostData() {
   //     }
   //   });
   // }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.meltingIssuedetailsFrom.value[formControlName] != '') return
+
+    if (formControlName == 'jobno') {
+      this.overlayjobNoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'process') {
+      this.overlayprocess.showOverlayPanel(event)
+    }
+    if (formControlName == 'worker') {
+      this.overlayworkercode.showOverlayPanel(event)
+    }
+    if (formControlName == 'location') {
+      this.overlaylocationSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'stockcode') {
+      this.overlaystockcodeSearch.showOverlayPanel(event)
+    }
+  }
   lookupKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
     }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    this.showOverleyPanel(event, FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.meltingIssuedetailsFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location' || FORMNAME === 'stockcode') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
@@ -422,7 +476,7 @@ setPostData() {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0],'datapassing')
+          console.log(data[0], 'datapassing')
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
@@ -473,6 +527,7 @@ setPostData() {
 
 
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event, 'jobno')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -497,9 +552,13 @@ setPostData() {
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.meltingIssuedetailsFrom.controls.jobno.setValue('')
+            this.showOverleyPanel(event, 'jobno')
             return
           }
         } else {
+          this.overlayjobNoSearch.closeOverlayPanel()
+          this.meltingIssuedetailsFrom.controls.jobno.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
