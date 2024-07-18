@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-issue-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+
 
 
 @Component({
@@ -17,6 +19,10 @@ import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-is
 })
 export class MeltingIssueComponent implements OnInit {
   @ViewChild('meltingissueDetailScreen') public meltingissueDetailScreen!: NgbModal;
+  @ViewChild('overlayMeltingType') overlayMeltingType! : MasterSearchComponent;
+  @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
+  @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
@@ -64,7 +70,7 @@ export class MeltingIssueComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
+    SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
@@ -238,6 +244,37 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
     );
   }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+   this.showOverleyPanel(event,FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.meltingIssueFrom.controls[FORMNAME].setValue('')
+         
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'processcode') {
+            this.showOverleyPanel(event, 'processcode');
+          } else if (FORMNAME === 'worker') {
+            this.showOverleyPanel(event, 'worker');
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   setAllInitialValues() {
     if (!this.content?.FLAG) return
@@ -286,6 +323,27 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
 
+  }
+  toWorkercodeValidate(event: any){
+    if (event.target.value == '') {
+      this.overlayMeltingType.showOverlayPanel(event)
+      return
+    }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if(this.meltingIssueFrom.value[formControlName] != '')return
+    if (formControlName == 'meltingtype') {
+      this.overlayMeltingType.showOverlayPanel(event)
+    }
+    if (formControlName == 'jobno') {
+      this.overlayjobNoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'processcode') {
+      this.overlayprocesscode.showOverlayPanel(event)
+    }
+    if (formControlName == 'worker') {
+      this.overlayworkercode.showOverlayPanel(event)
+    }
   }
   minDate: any;
   maxDate: any;
@@ -869,6 +927,7 @@ export class MeltingIssueComponent implements OnInit {
 
 
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event,'jobno')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -886,7 +945,7 @@ export class MeltingIssueComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.jobNumberDetailData = data
+            this.jobNumberDetailData = data 
             console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
@@ -894,9 +953,13 @@ export class MeltingIssueComponent implements OnInit {
             this.subJobNumberValidate()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
+            this.meltingIssueFrom.controls.jobno.setValue('')
+            this.showOverleyPanel(event,'jobno')
             return
           }
         } else {
+          this.overlayjobNoSearch.closeOverlayPanel()
+          this.meltingIssueFrom.controls.jobno.setValue('')
           this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -906,10 +969,11 @@ export class MeltingIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  meltingTypeValidate() {
+  meltingTypeValidate(event?: any) {
     const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;
     console.log('Melting Type:', meltingTypeValue);
-
+   this.showOverleyPanel(event,'meltingtype')
+  
     if (!meltingTypeValue) {
       this.commonService.toastErrorByMsgId('MSG1531');
       return;
@@ -929,6 +993,9 @@ export class MeltingIssueComponent implements OnInit {
           this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
         } else {
           this.commonService.toastErrorByMsgId('MSG1531');
+          this.meltingIssueFrom.controls.meltingtype.setValue('')
+          this.showOverleyPanel(event,'meltingtype')
+
         }
       },
       (err: any) => {

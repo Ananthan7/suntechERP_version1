@@ -73,10 +73,11 @@
                                     <input type="text" matInput
                                         formControlName="meltingtype"
                                         [readonly]="viewMode" #codeInput1
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)" 
+                                        (focusout)="meltingTypeValidate($event)"/>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="MeltingCodeData"
+                                <master-search class="masterSearch"
+                                    [MasterSearchData]="MeltingCodeData" #overlayMeltingType
                                     *ngIf="!viewMode"
                                     (newRowClick)="MeltingCodeSelected($event)"></master-search>
                             </div>
@@ -92,11 +93,12 @@
                                     <input type="text" matInput
                                         formControlName="jobno"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)" 
+                                        (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
-                                <master-search
+                                <master-search class="masterSearch"
                                     [MasterSearchData]="jobnoCodeData"
-                                    *ngIf="!viewMode"
+                                    *ngIf="!viewMode"  #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
@@ -116,10 +118,11 @@
                                     <input type="text" matInput
                                         formControlName="processcode"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)" 
+                                        (focusout)="validateLookupField($event,ProcessCodeData,'processcode')" />
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="ProcessCodeData"
+                                <master-search class="masterSearch"
+                                    [MasterSearchData]="ProcessCodeData" #overlayprocesscode
                                     *ngIf="!viewMode"
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
@@ -139,10 +142,11 @@
                                     <input type="text" matInput
                                         formControlName="worker"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)" 
+                                        (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="WorkerCodeData"
+                                <master-search class="masterSearch"
+                                    [MasterSearchData]="WorkerCodeData" #overlayworkercode
                                     *ngIf="!viewMode"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
