@@ -27,6 +27,9 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
+  PendingRepairJobsData: any;
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
   viewMode: boolean = false;
   currentDate = new Date();
   userbranch = localStorage.getItem('userbranch');
@@ -127,6 +130,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     //   this.setFormValues();
     // this.viewMode = true;
     // }
+    this.getPendingRepairJobs();
   }
 
   convertDateToYMD(str: any) {
@@ -149,6 +153,47 @@ export class BranchTransferRepairRtnComponent implements OnInit {
         }
       });
   }
+
+  getPendingRepairJobs() {
+    let API = `ExecueteSPInterface`;
+    let bodyData = {
+      SPID: "095",
+      parameter: {
+        STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
+        STRBRANCHCODE: this.branchCode,
+        STRJOBSTATUS: "0",
+      },
+    };
+
+    let sub: Subscription = this.dataService
+      .postDynamicAPI(API, bodyData)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res.dynamicData);
+const uniqueItems = new Set();
+
+res.dynamicData[0].forEach((item: any) => {
+  const identifier = item.MID;
+
+  if (!uniqueItems.has(identifier)) {
+    uniqueItems.add(identifier);
+  }
+});
+
+this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
+  return res.dynamicData[0].find((item: any) => item.MID === identifier);
+}).map((item: any) => ({
+  ...item,
+  DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
+}));
+
+        console.log(this.PendingRepairJobsData);
+
+          console.log(this.PendingRepairJobsData.DELIVERYDATE);
+        }
+      });
+  }
+
 
   salesManSelected(e: any) {
     console.log(e);
@@ -274,8 +319,8 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   }
 
   updatebranchTransferRepairRTN() {
-    console.log(this.branchCode, 'working')
-    let API = `RepairTransfer/UpdateRepairTransfer/${this.branchCode}/${this.branchTransferRepairRtnForm.value.voctype}/${this.branchTransferRepairRtnForm.value.vocNo}/${this.comService.yearSelected}`;
+    console.log(this.branchCode, 'working');
+    let API = `RepairTransfer/UpdateRepairTransfer/${this.branchCode}/${this.branchTransferRepairRtnForm.value.vocType}/${this.branchTransferRepairRtnForm.value.vocNo}/${this.comService.yearSelected}`;
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -322,7 +367,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if (result.status.trim()   == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -410,4 +455,15 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       }
     });
   }
+
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+
 }
