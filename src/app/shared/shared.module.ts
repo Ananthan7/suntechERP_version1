@@ -90,6 +90,7 @@ import { NgxBarcodeScannerModule } from '@eisberg-labs/ngx-barcode-scanner';
 import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 import { PurityDecimalDirective } from './directives/format-purity-decimal.directive ';
 import { FormatRateDecimalDirective } from './directives/format-rate-decimal.directive';
+import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
 
 
 @NgModule({
@@ -124,6 +125,7 @@ import { FormatRateDecimalDirective } from './directives/format-rate-decimal.dir
     NumericFilterDirective,
     FormatSixDecimalDirective,
     UppercaseDirective,
+    AlphabetsOnlyDirective,
     DurationPickerComponent,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
@@ -222,6 +224,7 @@ import { FormatRateDecimalDirective } from './directives/format-rate-decimal.dir
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
     UppercaseDirective,
+    AlphabetsOnlyDirective,
     DecimalInputDirective,
     //Modules exports
     FormsModule,

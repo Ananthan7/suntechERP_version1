@@ -6117,7 +6117,7 @@ allowDescription:boolean=false;
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount), this.vocDataForm.value.txtCurRate
       ), // metal amount
-      RATE_TYPE: '',
+      RATE_TYPE: this.newLineItem.RATE_TYPE ?? "",
       //  data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
       METAL_RATE: this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
 
@@ -12765,7 +12765,7 @@ checkAdvanceReciept(vocNo: any) {
 
 
   saveAttachment() {
-    if (!this.attachmentForm.invalid) {
+    if (!this.attachmentForm.invalid && this.attachedImageList.length) {
       const formData = new FormData();
 
       formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);
