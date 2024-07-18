@@ -86,31 +86,29 @@ export class RepairDiamondPurchaseComponent implements OnInit {
   }
 
   partycurCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 9,
-    SEARCH_FIELD: 'Currency',
-    SEARCH_HEADING: 'Party Currency Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "Currency<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    PAGENO:1,
+    RECORDS:10,
+    LOOKUPID:8,
+    WHERECONDITION:"CURRENCY_CODE <>''",
+    SEARCH_FIELD:"Currency",
+    SEARCH_VALUE:"",
+    SEARCH_HEADING:"'Party Currency Code'"
   }
   partycurCodeSelected(e: any) {
     console.log(e);
-    this.repairdiapurchaseForm.controls.partycur.setValue(e['Currency']);
+    this.repairdiapurchaseForm.controls.partycur.setValue(e['CURRENCY_CODE']);
+    this.repairdiapurchaseForm.controls.partycurrate.setValue(e['CONV_RATE']);
+
   }
 
   subledgerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 180,
-    SEARCH_FIELD: 'SUBLEDGER_CODE',
-    SEARCH_HEADING: 'Sub Ledger Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "SUBLEDGER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    WHERECONDITION:"@SLACCODE = '' ",
+    SEARCH_FIELD: "SUBLEDGER_CODE",
+    SEARCH_VALUE: "",
+    SEARCH_HEADING: "Sub Ledger Code"
   }
   subledgerCodeSelected(e: any) {
     console.log(e);

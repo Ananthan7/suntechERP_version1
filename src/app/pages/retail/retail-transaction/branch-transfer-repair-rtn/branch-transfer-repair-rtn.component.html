@@ -107,17 +107,73 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-12">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                            <dx-data-grid
+                            [dataSource]="PendingRepairJobsData"
+                            #dataGrid
+                             id="gridContainer" 
+                            keyExpr="MID"
+                            [showBorders]="true"
+                            (onSelectionChanged)="onSelectionChanged($event)"
+                            >
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                 </dxo-editing>
                                 <dxo-selection mode="multiple"></dxo-selection>
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                <dxi-column *ngFor="let data of columnheadDetails" dataField="{{ data }}"
+                                <!-- <dxi-column *ngFor="let data of columnheadDetails" dataField="{{ data }}"
                                     caption="{{ data }}" [allowEditing]="true" alignment="center"
                                     backgroundcolor="#000">
-                                </dxi-column>
+                                </dxi-column> -->
+
+                                <dxi-column
+                  dataField="VOCNO"
+                  caption="Rep Voc No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                dataField="VOCDATE"
+                caption="Voc Date"
+                [allowEditing]="true"
+                alignment="center"
+              ></dxi-column>
+                <dxi-column
+                  dataField="STOCK_CODE"
+                  caption="Stock Code"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="REPAIRBAGNO"
+                  caption="Bag No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="PARTYNAME"
+                  caption="Customer Name"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="MOBILE"
+                  caption="Mobile"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="DELIVERYDATE"
+                  caption="Deliver Date"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STATUS"
+                  caption="Status"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
                             </dx-data-grid>
                         </div>
                     </div>
@@ -145,17 +201,77 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-12">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                            <dx-data-grid 
+                            [dataSource]="rowData"
+                            #dataGrid id="gridContainer" keyExpr="MID" [showBorders]="true">
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                 </dxo-editing>
                                 <dxo-selection mode="multiple"></dxo-selection>
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                <dxi-column *ngFor="let data of columnheadPendingItems" dataField="{{ data }}"
+                                <!-- <dxi-column *ngFor="let data of columnheadPendingItems" dataField="{{ data }}"
                                     caption="{{ data }}" [allowEditing]="true" alignment="center"
                                     backgroundcolor="#000">
-                                </dxi-column>
+                                </dxi-column> -->
+
+                                <dxi-column
+                                dataField="DIVISION_CODE"
+                                caption="Div"
+                                [allowEditing]="true"
+                                alignment="center"
+                              ></dxi-column>
+
+                              <dxi-column
+                              dataField="STOCK_CODE"
+                              caption="Stock Code"
+                              [allowEditing]="true"
+                              alignment="center"
+                            ></dxi-column>
+                  
+                              <dxi-column
+                                dataField="ITEM_DESCRIPTION"
+                                caption="Description"
+                                [allowEditing]="true"
+                                alignment="center"
+                              ></dxi-column>
+                  
+                              <dxi-column
+                                dataField="REPAIRBAGNO"
+                                caption="Bag No"
+                                [allowEditing]="true"
+                                alignment="center"
+                              ></dxi-column>
+                  
+                              <dxi-column
+                                dataField="DT_REMARKS"
+                                caption="Remarks"
+                                [allowEditing]="true"
+                                alignment="center"
+                              ></dxi-column>
+                  
+                              <dxi-column
+                                dataField="PCS"
+                                caption="Pcs"
+                                [allowEditing]="true"
+                                alignment="center"
+                              ></dxi-column>
+                  
+                              <dxi-column
+                                dataField="REPAIR_TYPE"
+                                caption="Rep type"
+                                [allowEditing]="true"
+                                alignment="center"
+                              ></dxi-column>
+                  
+                              <dxi-column
+                                dataField="DELIVERY_DATE"
+                                caption="Delivery"
+                                [allowEditing]="true"
+                                alignment="center"
+                                dataType ="date"
+                              ></dxi-column>
+
                             </dx-data-grid>
                         </div>
                     </div>

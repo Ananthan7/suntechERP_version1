@@ -111,11 +111,22 @@ export class RepairIssueToWorkshopComponent implements OnInit {
 
     }
 
+  // onSelectionChanged(selectionInfo: any) {
+  //   console.log(selectionInfo);    
+  //   const selectedRows = selectionInfo.selectedRowsData;  
+  //   selectedRows.forEach((row:any) => {
+  //     if (!this.selectedRowKeys.some((selected:any) => selected.UNIQUEID === row.UNIQUEID)) {
+  //       this.selectedRowKeys.push(row);       
+  //     }
+  //   });
+  //   // console.log(this.rowData.length);
+  //   console.log('Selection changed:', this.selectedRowKeys);
+  // }
   onSelectionChanged(selectionInfo: any) {
     console.log(selectionInfo);    
     const selectedRows = selectionInfo.selectedRowsData;  
     selectedRows.forEach((row:any) => {
-      if (!this.selectedRowKeys.some((selected:any) => selected.UNIQUEID === row.UNIQUEID)) {
+      if (!this.selectedRowKeys.some(selected => selected.UNIQUEID === row.UNIQUEID)) {
         this.selectedRowKeys.push(row);       
       }
     });
@@ -128,7 +139,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
     let bodyData = {
       SPID: "95",
       parameter: {
-        STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
+        STRMAINVOCTYPE: "RET",//this.comService.getqueryParamVocType(),
         STRBRANCHCODE: this.branchCode,
         STRJOBSTATUS: "0",
       },
@@ -496,4 +507,5 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
     });
     }
   }
+  
 }
