@@ -216,6 +216,11 @@ this.setvoucherTypeMaster()
     this.subscriptions.push(Sub)
 
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing

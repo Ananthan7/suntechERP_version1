@@ -49,40 +49,31 @@ export class FormatRateDecimalDirective {
       value = '0';
     }
 
-    // Remove non-numeric characters except the decimal point
     value = value.replace(/[^0-9.]/g, '');
 
-    // Apply the custom format string
     value = this.applyFormat(value, formatString);
     
-    // Set the formatted value back to the input field
     this.renderer.setProperty(input, 'value', value);
   }
 
   private applyFormat(value: string, formatString: string): string {
-    // Extract the number of decimal places from the format string
     const match = formatString.match(/\.(0+)/);
     const decimalPlaces = match ? match[1].length : 0;
 
-    // Split the value into integer and fractional parts
     const parts = value.split('.');
     let integerPart = parts[0];
     let fractionalPart = parts[1] || '';
 
-    // Limit the fractional part to the specified decimal places
     if (fractionalPart.length > decimalPlaces) {
       fractionalPart = fractionalPart.slice(0, decimalPlaces);
     }
 
-    // Add trailing zeros if necessary
     while (fractionalPart.length < decimalPlaces) {
       fractionalPart += '0';
     }
 
-    // Format the integer part with commas
     integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-    // Reconstruct the formatted value
     let formattedValue = integerPart;
     if (decimalPlaces > 0) {
       formattedValue += '.' + fractionalPart;

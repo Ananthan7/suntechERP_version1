@@ -838,7 +838,11 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   //data settings
   OrderTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.orderType.setValue(event.CODE)

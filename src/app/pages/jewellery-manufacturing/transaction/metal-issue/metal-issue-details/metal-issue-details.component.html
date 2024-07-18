@@ -25,7 +25,8 @@
                                         Job Number * :
                                     </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumber"
                                                 (focusout)="jobNumberValidate($event)"
@@ -33,9 +34,11 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumDes"
+                                                (keypress)="lookupKeyPress($event)"
                                                 readonly />
                                         </mat-form-field>
                                         <master-search
@@ -50,7 +53,8 @@
                                         class="col-sm-4 col-form-label">Sub Job
                                         No : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="subJobNo"
                                                 (focusout)="subJobNumberValidate($event)"
@@ -60,7 +64,8 @@
                                             (newRowClick)="subJobNoCodeSelected($event)"></master-search> -->
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="subJobNoDes"
                                                 readonly />
@@ -72,7 +77,8 @@
                                         class="col-sm-4 col-form-label">Process
                                         Code * :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 90%;">
                                             <input type="text" matInput
                                                 UpperCaseDirective
                                                 formControlName="processCode"
@@ -80,9 +86,11 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="processCodeDesc"
+                                                (keypress)="lookupKeyPress($event)"
                                                 readonly>
                                         </mat-form-field>
                                         <master-search
@@ -97,16 +105,19 @@
                                         class="col-sm-4 col-form-label">
                                         Worker Code * : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="workerCode"
                                                 readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="workerCodeDes"
+                                                (keypress)="lookupKeyPress($event)"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                         <master-search
@@ -159,7 +170,8 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-12">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="DESIGN_CODE"
                                                 readonly />
@@ -188,7 +200,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="PART_CODE"
                                                 readonly />
@@ -205,7 +218,8 @@
                                         class="col-sm-3 col-form-label">Tree
                                         Number :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="treeNumber"
                                                 [readonly]="viewMode"
@@ -217,7 +231,8 @@
                                         class="col-sm-3 col-form-label">Job
                                         Purity :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="jobPurity"
                                                 class="text-right"
@@ -230,7 +245,8 @@
                                         class="col-sm-3 col-form-label">
                                         Stock Code * :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 60%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 60%;">
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
                                                 placeholder="divcode"
@@ -243,12 +259,14 @@
                                             </master-search> -->
                                     </div>
                                     <div class="col-md-6">
-                                        <mat-form-field appearance="outline" style="width: 70%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="stockCode"
                                                 placeholder="stockcode"
                                                 (focusout)="stockCodeValidate($event)"
-                                                [readonly]="viewMode || masterMetalChecked" />
+                                                [readonly]="viewMode || masterMetalChecked"
+                                                (keypress)="lookupKeyPress($event)" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="stockCodeData"
@@ -261,7 +279,8 @@
                                         class="col-sm-3 col-form-label">Pcs
                                         :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="pcs"
                                                 [readonly]="viewMode"
@@ -274,7 +293,8 @@
                                         class="col-sm-3 col-form-label">Purity :
                                     </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="PURITY"
                                                 readonly class="text-right"
@@ -287,7 +307,8 @@
                                         class="col-sm-3 col-form-label">Gross
                                         Weight :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="GROSS_WT"
                                                 [readonly]="viewMode"
@@ -300,7 +321,8 @@
                                         class="col-sm-3 col-form-label">Net
                                         Weight : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="NET_WT"
                                                 readonly class="text-right"
@@ -313,7 +335,8 @@
                                         class="col-sm-3 col-form-label">Stone
                                         Weight : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="STONE_WT"
                                                 [readonly]="viewMode"
@@ -326,7 +349,8 @@
                                         class="col-sm-3 col-form-label">Pure
                                         Weight : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="PURE_WT"
                                                 readonly class="text-right"
@@ -339,7 +363,8 @@
                                         class="col-sm-3 col-form-label">To Stock
                                         Code : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toDIVCODE"
                                                 placeholder="divcode"
@@ -347,7 +372,8 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
                                                 placeholder="stockcode"
@@ -355,7 +381,8 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCodeDes"
                                                 placeholder="description"
@@ -371,10 +398,12 @@
                                         class="col-sm-3 col-form-label">Location
                                         * : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 70%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="location"
-                                                [readonly]="viewMode" />
+                                                [readonly]="viewMode"
+                                                (keypress)="lookupKeyPress($event)" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="locationCodeData"
@@ -384,7 +413,8 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-6">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="stockCodeDes"
                                                 placeholder="description"
@@ -397,7 +427,8 @@
                                         class="col-sm-3 col-form-label">Purity
                                         Diff : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="number" matInput
                                                 formControlName="purityDiff"
                                                 readonly class="text-right"
@@ -410,7 +441,8 @@
                                         class="col-sm-3 col-form-label">Job Pcs
                                         : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="JOB_PCS"
                                                 readonly class="text-right"

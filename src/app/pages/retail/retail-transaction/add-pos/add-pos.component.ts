@@ -80,6 +80,7 @@ export class AddPosComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
   LOCKVOUCHERNO: boolean = true;
+  voucherDetails:any;
   minDate:any;
   maxDate: any;
   RECEIPT_MODEL: any = {}
@@ -1239,7 +1240,8 @@ allowDescription:boolean=false;
     } else {
       this.getFinancialYear();
       this.generateVocNo();
-      this.setVoucherTypeMaster();
+      this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
+      // this.setVoucherTypeMaster();
 
     }
 
@@ -9326,8 +9328,10 @@ printReceiptDetailsWeb() {
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
+        //Changes as per Jebraj's Input on 17/07/2024
+
       if (this.divisionMS == 'S') {
-        if (this.lineItemModalForSalesReturn || (this.lineItemForm.value.fcn_li_rate) >= parseFloat(this.newLineItem.STOCK_COST)) {
+        if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)) >=this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
 
           this.rateFunc(value);
         }
@@ -9336,12 +9340,20 @@ printReceiptDetailsWeb() {
           this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
-              this.lineItemForm.controls.fcn_li_net_amount.setValue(
+
+              this.lineItemForm.controls.fcn_li_rate.setValue(
                 this.comFunc.transformDecimalVB(
                   this.comFunc.allbranchMaster?.BAMTDECIMALS,
                   preVal
                 )
               );
+
+              // this.lineItemForm.controls.fcn_li_net_amount.setValue(
+              //   this.comFunc.transformDecimalVB(
+              //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              //     preVal
+              //   )
+              // );
             }
           });
         }

@@ -43,9 +43,29 @@ export class RepairDiamondPurchaseComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    this.generateVocNo();
     this.repairdiapurchaseForm.controls.Voc_date.setValue(this.currentDate)
     this.repairdiapurchaseForm.controls.voc_type.setValue(this.comService.getqueryParamVocType())
+  }
+
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
+      this.branchCode
+    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.repairdiapurchaseForm.controls.voc_no.setValue(res.newvocno);
+        }
+      });
   }
 
   partyCodeData: MasterSearchModel = {
@@ -315,12 +335,12 @@ openaddalloyallocation() {
       "GROSS_VALUE_FC": this.repairdiapurchaseForm.value.gross_total_fc,
       "GROSS_VALUE_CC": this.repairdiapurchaseForm.value.gross_total_cc,
       "REMARKS": this.repairdiapurchaseForm.value.remarks,
-      "SYSTEM_DATE": "2024-03-21T10:29:43.637Z",
+      "SYSTEM_DATE": new Date(),
       "CONSIGNMENTID": 0,
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SUPINVNO": "string",
-      "SUPINVDATE": "2024-03-21T10:29:43.637Z",
+      "SUPINVDATE": new Date(),
       "SALESORDERREF": "string",
       "HHACCOUNT_HEAD": "string",
       "OUSTATUSNEW": 0,
