@@ -106,7 +106,7 @@
                                             (change)="checkAccodeSelected($event,'WIPaccount')"
                                             (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
                                             [readonly]="viewMode"
-                                            tabindex="4" />
+                                            tabindex="4"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="WipACCODEData"
                                                 *ngIf="viewMode == false"
@@ -177,7 +177,7 @@
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,approvalCodeData,'approvalCode')"
                                             [readonly]="viewMode"
-                                            tabindex="7" />
+                                            tabindex="7"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="approvalCodeData"
                                                 *ngIf="viewMode == false"
@@ -200,7 +200,7 @@
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,approvalProcessData,'approvalProcess')"
                                             [readonly]="viewMode"
-                                            tabindex="8" />
+                                            tabindex="8"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="approvalProcessData"
                                                 *ngIf="viewMode == false"
@@ -223,7 +223,7 @@
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
                                             [readonly]="viewMode"
-                                            tabindex="9" />
+                                            tabindex="9"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="StockProcessData"
                                                 (newRowClick)="StockProcesSelected($event)"
@@ -240,7 +240,7 @@
                                             formControlName="ADJUST_ACCODE"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,adjustAccodeData,'ADJUST_ACCODE')"
-                                            [readonly]="viewMode" />
+                                            [readonly]="viewMode"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="adjustAccodeData"
                                                 *ngIf="viewMode == false"
@@ -394,7 +394,7 @@
                                             (change)="checkAccodeSelected($event,'LOSS_ACCODE')"
                                             (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
                                             [readonly]="islossReadOnly"
-                                            tabindex="15" />
+                                            tabindex="15"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="LossACCODEData"
                                                 *ngIf="!viewMode && searchModeLoss"
@@ -410,7 +410,7 @@
                                             (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
                                             [readonly]="isRecovReadOnly || lossDisable"   
-                                            tabindex="19" />
+                                            tabindex="19"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="RecovACCODEData"
                                                 *ngIf="!viewMode && searchModeRecov && searchModeLoss"
@@ -426,7 +426,7 @@
                                             (change)="checkAccodeSelected($event,'GAIN_ACCODE')"
                                             (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
                                             [readonly]="isAlloWGainReadOnly"
-                                            tabindex="21" />
+                                            tabindex="21"  (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="WipACCODEData"
                                                 *ngIf="!viewMode && searchModeAllow"

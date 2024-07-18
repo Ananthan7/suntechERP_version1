@@ -616,5 +616,9 @@ export class MeltingTypeComponent implements OnInit {
 
   }
 
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 }

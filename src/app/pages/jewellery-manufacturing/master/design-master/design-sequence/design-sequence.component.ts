@@ -114,4 +114,10 @@ export class DesignSequenceComponent implements OnInit {
       );
 
   }
+
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 }

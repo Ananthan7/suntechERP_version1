@@ -45,7 +45,7 @@
                                                 matInput maxlength="15"
                                                 formControlName="sieve_set" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"/>
+                                                (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="sieve_setData"
                                                     (newRowClick)="sieve_setDataSelected($event)"
@@ -65,7 +65,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="shape" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,shapeData,'shape')"/>
+                                                (focusout)="validateLookupField($event,shapeData,'shape')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="shapeData"
                                                     (newRowClick)="shapeDataSelected($event)"
@@ -85,7 +85,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="sieve_form" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sievefromData,'sieve_form')"/>
+                                                (focusout)="validateLookupField($event,sievefromData,'sieve_form')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="sievefromData"
                                                     (newRowClick)="sievefromDataSelected($event)"
@@ -106,7 +106,7 @@
                                                 formControlName="sieve_to"
                                                (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sievetoData,'sieve_to')"/>
+                                                (focusout)="validateLookupField($event,sievetoData,'sieve_to')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="sievetoData"
                                                     (newRowClick)="sievetoDataSelected($event)"
@@ -126,7 +126,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="color" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,colorData,'color')"/>
+                                                (focusout)="validateLookupField($event,colorData,'color')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="colorData"
                                                     (newRowClick)="colorDataSelected($event)"
@@ -146,7 +146,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="clarity" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,clarityData,'clarity')"/>
+                                                (focusout)="validateLookupField($event,clarityData,'clarity')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="clarityData"
                                                     (newRowClick)="clarityDataSelected($event)"
@@ -166,7 +166,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="size_from" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sizefromData,'size_from')"/>
+                                                (focusout)="validateLookupField($event,sizefromData,'size_from')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="sizefromData"
                                                     (newRowClick)="sizefromDataSelected($event)"
@@ -186,7 +186,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="size_to" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sizetoData,'size_to')"/>
+                                                (focusout)="validateLookupField($event,sizetoData,'size_to')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="sizetoData"
                                                     (newRowClick)="sizetoDataSelected($event)"
@@ -209,7 +209,7 @@
                                                 matInput maxlength="6"
                                                 formControlName="currency" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,currencyData,'currency')"/>
+                                                (focusout)="validateLookupField($event,currencyData,'currency')"  (keypress)="lookupKeyPress($event)"/>
                                                 <master-search class="masterSearch"
                                                     [MasterSearchData]="currencyData"
                                                     (newRowClick)="currencyDataSelected($event)"
