@@ -160,7 +160,11 @@ export class JewelleryAltrationComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   setAllInitialValues() {
     console.log(this.content)
     if (!this.content) return

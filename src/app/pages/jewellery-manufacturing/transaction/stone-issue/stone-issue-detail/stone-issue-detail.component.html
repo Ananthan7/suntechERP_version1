@@ -22,7 +22,8 @@
             <mat-form-field style="width: 80%;">
               <input type="text" matInput formControlName="jobNumber"
                 [readonly]="viewMode"
-                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')" />
+                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')"
+                (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search [MasterSearchData]="jobNumberCodeData"
               (newRowClick)="jobNumberCodeSelected($event)"
@@ -88,7 +89,8 @@
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="process"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="SPvalidateLookupField($event,processCodeData,'process')" />
+                (focusout)="SPvalidateLookupField($event,processCodeData,'process')"
+                (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search [MasterSearchData]="processCodeData"
               (newRowClick)="processCodeSelected($event)"
@@ -108,7 +110,8 @@
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="worker"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')" />
+                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')"
+                (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search [MasterSearchData]="workerCodeData"
               (newRowClick)="workerCodeSelected($event)"
@@ -136,6 +139,7 @@
               <input type="text" matInput formControlName="stockCode"
                 placeholder="stockcode"
                 (focusout)="stockCodeValidate($event)"
+                (keypress)="lookupKeyPress($event)"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="stockCodeData"
@@ -170,6 +174,7 @@
           <div class="col-md-5">
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="LOCTYPE_CODE"
+                (keypress)="lookupKeyPress($event)"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="locationCodeData"

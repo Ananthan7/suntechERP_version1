@@ -14,76 +14,95 @@
                 <div class="row mb-2">
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Voucher * :</label>
+                            <label for="inputPassword" class="col-sm-6">Voucher
+                                * :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="voctype" />
+                                    <input type="text" matInput
+                                        formControlName="voctype" />
                                 </mat-form-field>
                             </div>
 
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="vocno" />
+                                    <input type="text" matInput
+                                        formControlName="vocno" />
                                 </mat-form-field>
                             </div>
-
 
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Voucher Date : </label>
+                            <label for="inputPassword" class="col-sm-6">Voucher
+                                Date : </label>
                             <div class="col-sm-6 ">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="vocdate" />
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 100%">
-                                    <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
-                                      placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
-                                  </mat-form-field>
+                                    <input matInput [matDatepicker]="vocdate"
+                                        name="vocdate" formControlName="vocdate"
+                                        placeholder="DD/MM/YYYY"
+                                        DateValidation />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="vocdate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate"
+                                        #vocdate></mat-datepicker>
+                                </mat-form-field>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Document Type : </label>
+                            <label for="inputPassword" class="col-sm-6">Document
+                                Type : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="documentype" />
+                                    <input type="text" matInput
+                                        formControlName="documentype" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Salesman * : </label>
+                            <label for="inputPassword" class="col-sm-6">Salesman
+                                * : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="salesman" />
+                                    <input type="text" matInput
+                                        formControlName="salesman"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="salesCodeData"
-                                (newRowClick)="salesCodeSelected($event)">
-                            </master-search>
+                                <master-search
+                                    [MasterSearchData]="salesCodeData"
+                                    (newRowClick)="salesCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">As On : </label>
+                            <label for="inputPassword" class="col-sm-6">As On :
+                            </label>
                             <div class="col-sm-6 ">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="ason" />
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 100%">
-                                    <input matInput [matDatepicker]="ason" name="ason" formControlName="ason"
-                                      placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="ason"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #ason></mat-datepicker>
-                                  </mat-form-field>
+                                    <input matInput [matDatepicker]="ason"
+                                        name="ason" formControlName="ason"
+                                        placeholder="DD/MM/YYYY"
+                                        DateValidation />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="ason"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate"
+                                        #ason></mat-datepicker>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2 text-right">
                             <div class="col-md-12">
                                 <div class="p-1 bd-highlight">
-                                    <button type="button" class="btn btn-outline-primary  add-btn">
+                                    <button type="button"
+                                        class="btn btn-outline-primary  add-btn">
                                         Collection Data
                                     </button>
                                 </div>
@@ -92,10 +111,12 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Doc.Ref : </label>
+                            <label for="inputPassword" class="col-sm-6">Doc.Ref
+                                : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="docref" />
+                                    <input type="text" matInput
+                                        formControlName="docref" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -104,23 +125,34 @@
                 <div class="row mt-3">
 
                     <div class="col-md-12">
-                        <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+                        <mat-tab-group
+                            [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                             <mat-tab label="Vocher Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        [columnAutoWidth]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                        <dx-data-grid #dataGrid
+                                            id="gridContainer" keyExpr="ID"
+                                            [showBorders]="true"
+                                            [allowColumnReordering]="true"
+                                            [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging
+                                                [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell"
+                                                [allowUpdating]="true">
                                             </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection
+                                                mode="multiple"></dxo-selection>
+                                            <dxo-scrolling
+                                                mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
+                                            <dxi-column
+                                                *ngFor="let data of columnheadItemDetails"
+                                                dataField="{{ data }}"
+                                                caption="{{ data }}"
+                                                [allowEditing]="true"
+                                                alignment="center"
+                                                backgroundcolor="#000">
                                             </dxi-column>
                                         </dx-data-grid>
                                     </div>
@@ -128,17 +160,22 @@
                                 <div class="row align-items-center pt-1">
                                     <div class="col-md-6">
                                         <div class="row my-2">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label">Narration * :</label>
+                                            <label for="inputPassword"
+                                                class="col-sm-4 col-form-label">Narration
+                                                * :</label>
                                             <div class="col-md-8">
-                                                <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="narration" />
+                                                <mat-form-field
+                                                    style="width: 100%;">
+                                                    <input type="text" matInput
+                                                        formControlName="narration" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="p-1 bd-highlight">
-                                            <button type="button" class="btn btn-outline-primary  add-btn">
+                                            <button type="button"
+                                                class="btn btn-outline-primary  add-btn">
                                                 Get Compontents
                                             </button>
                                         </div>
@@ -148,19 +185,29 @@
                             <mat-tab label="Item Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        [columnAutoWidth]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                        <dx-data-grid #dataGrid
+                                            id="gridContainer" keyExpr="ID"
+                                            [showBorders]="true"
+                                            [allowColumnReordering]="true"
+                                            [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging
+                                                [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell"
+                                                [allowUpdating]="true">
                                             </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection
+                                                mode="multiple"></dxo-selection>
+                                            <dxo-scrolling
+                                                mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
+                                            <dxi-column
+                                                *ngFor="let data of columnheadItemDetails"
+                                                dataField="{{ data }}"
+                                                caption="{{ data }}"
+                                                [allowEditing]="true"
+                                                alignment="center"
+                                                backgroundcolor="#000">
                                             </dxi-column>
                                         </dx-data-grid>
                                     </div>

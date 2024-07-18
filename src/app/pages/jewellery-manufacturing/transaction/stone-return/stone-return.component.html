@@ -55,7 +55,7 @@
                 :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 75%;">
-                  <input type="text" matInput formControlName="enterdBy"
+                  <input type="text" matInput formControlName="enterdBy" (keypress)="lookupKeyPress($event)"
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="user"
@@ -89,10 +89,10 @@
                 :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="basecurrency"
+                  <input type="text" matInput formControlName="basecurrency" (keypress)="lookupKeyPress($event)"
                     [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="CurrencyCodeData"
+                <master-search [MasterSearchData]="baseCurrencyCodeData"
                   (newRowClick)="baseCurrencyCodeSelected($event)"
                   *ngIf="!viewMode"></master-search>
               </div>
@@ -108,7 +108,7 @@
                 :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="currency"
+                  <input type="text" matInput formControlName="currency" (keypress)="lookupKeyPress($event)"
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"

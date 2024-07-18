@@ -72,7 +72,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="meltingtype"
-                                        [readonly]="viewMode" #codeInput1 />
+                                        [readonly]="viewMode" #codeInput1
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="MeltingCodeData"
@@ -90,7 +91,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="jobno"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="jobnoCodeData"
@@ -113,7 +115,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="processcode"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="ProcessCodeData"
@@ -135,7 +138,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"

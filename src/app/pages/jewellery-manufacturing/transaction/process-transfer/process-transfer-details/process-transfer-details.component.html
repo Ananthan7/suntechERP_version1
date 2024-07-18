@@ -280,7 +280,7 @@
                           style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
-                            NumberOnly maxlength="10"
+                          NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
                         </mat-form-field>
@@ -468,7 +468,7 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput [readonly]="viewMode"
-                                class="text-right"
+                                class="text-right" id="txtLossQty"
                                 MetalDecimalInput [max]="10"
                                 (focusout)="lossQtyChange($event)"
                                 formControlName="lossQty" />

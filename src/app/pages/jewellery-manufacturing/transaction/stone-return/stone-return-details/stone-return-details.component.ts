@@ -275,6 +275,11 @@ export class StoneReturnDetailsComponent implements OnInit {
     // this.activeModal.close(data);
     this.closeDetail.emit()
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   setPostData(form: any) {
     return {
