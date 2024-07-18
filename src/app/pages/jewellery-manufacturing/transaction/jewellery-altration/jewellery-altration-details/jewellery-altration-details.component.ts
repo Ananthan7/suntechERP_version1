@@ -342,26 +342,25 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     });
 
   }
-  reCalculateSRNO(): void {
-    this.tableData.forEach((element: any, index: any) => {
-      element.SRNO = index + 1
-      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
-    })
-  }
+  // reCalculateSRNO(): void {
+  //   this.tableData.forEach((element: any, index: any) => {
+  //     element.SRNO = index + 1
+  //     element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+  //   })
+  // }
+
   deleteTableData(): void {
-    if (!this.selectRowIndex) {
+    if (this.selectRowIndex === null) {
       Swal.fire({
         title: '',
-        text: 'Please select row to remove from grid!',
+        text: 'Please select a row to remove from grid!',
         icon: 'error',
         confirmButtonColor: '#336699',
         confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
       });
-      return
+      return;
     }
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -371,13 +370,20 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
-        if (result.isConfirmed) {
-          this.tableData = this.tableData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-          this.reCalculateSRNO()
-        }
+      if (result.isConfirmed) {
+        this.tableData = this.tableData.filter((item: any, index: any) => index !== this.selectRowIndex);
+        this.reCalculateSRNO();
+        this.selectRowIndex = null; // Reset the selected row index
       }
-    )
+    });
   }
+
+  reCalculateSRNO(): void {
+    this.tableData.forEach((item, index) => {
+      item.SRNO = index + 1;
+    });
+  }
+
 
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
     stockcode: ['',[Validators.required]],
@@ -967,4 +973,5 @@ stockCodeValidate() {
     })
   this.subscriptions.push(Sub)
 }
+
 }
