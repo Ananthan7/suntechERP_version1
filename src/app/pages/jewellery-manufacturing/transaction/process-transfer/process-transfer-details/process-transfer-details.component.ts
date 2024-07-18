@@ -1246,7 +1246,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
-            this.Calc_Totals(1)
+            if(this.processTransferdetailsForm.value.METALSTONE == 'M'){
+              this.metal_Calc_Totals(1)
+            }else{
+              this.Calc_Totals(1)
+            }
             this.formatMetalDetailDataGrid()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
