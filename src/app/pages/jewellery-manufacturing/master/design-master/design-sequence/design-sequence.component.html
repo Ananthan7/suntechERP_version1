@@ -14,9 +14,9 @@
             <label for="inputPassword" id="ID001" class="col-sm-1 col-form-label">Process</label>
             <div class="col-md-3">
                 <mat-form-field style="width: 80%">
-                    <input type="text" matInput formControlName="processCode"  (keypress)="lookupKeyPress($event)"/>
+                    <input type="text" matInput formControlName="processCode"  (keypress)="lookupKeyPress($event)" (focusout)="processValidate($event)"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData"
+                <master-search [MasterSearchData]="processCodeData" #overlayprocessSearch
                     (newRowClick)="processCodeSelected($event)"></master-search>
             </div>
             <div class="col-md-3">
