@@ -75,7 +75,8 @@
                                 <mat-form-field style="width: 85%;">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="user"
                                     (newRowClick)="userDataSelected($event)"
@@ -92,7 +93,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="process"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="ProcessCodeData"
@@ -108,7 +110,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"
@@ -124,7 +127,8 @@
                                 <mat-form-field style="width: 70%">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="locationCodeData"

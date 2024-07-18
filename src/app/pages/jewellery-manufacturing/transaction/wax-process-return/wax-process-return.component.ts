@@ -168,6 +168,11 @@ export class WaxProcessReturnComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
     removedata(){
       this.tableData.pop();

@@ -2602,6 +2602,11 @@ onFileChangedimage(event: any) {
   this.tableDataFinishingRange.push(datas);
   }
 
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   
   removedataAttributesFinishingRange(){
 

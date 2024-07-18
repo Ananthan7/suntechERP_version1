@@ -239,6 +239,11 @@ export class CADProcessingComponent implements OnInit {
     });
     
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;
     // this.yourContent.standardTime.totalHours = duration[1] || 0;

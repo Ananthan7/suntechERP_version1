@@ -326,6 +326,11 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
     this.tableData[0].STOCK_CODE = ''
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   setPostData() {
     let form = this.metalIssueDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)

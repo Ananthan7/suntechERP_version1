@@ -1078,6 +1078,10 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
       this.toastr.error('Select Either Selling % or Selling Rate');
       return true
     }
+    if (this.diamondlabourMasterForm.value.ctWtFrom == 0 && this.diamondlabourMasterForm.value.ctWtTo == 0) {
+      this.toastr.error('Select ctWtFrom & ctWtTo Value');
+      return true
+    }
     if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
       this.toastr.error('Size From should be lesser than Size To')
       return true
@@ -1512,4 +1516,9 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
 
   }
 
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 }

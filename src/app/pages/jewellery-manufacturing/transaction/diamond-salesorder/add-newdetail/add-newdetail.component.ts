@@ -376,6 +376,11 @@ export class AddNewdetailComponent implements OnInit {
       item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
     })
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   // search data change in BOM details grid starts==========
   colorCodeSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;

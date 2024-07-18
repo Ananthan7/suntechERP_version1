@@ -14,7 +14,7 @@
             <label for="inputPassword" id="ID001" class="col-sm-1 col-form-label">Process</label>
             <div class="col-md-3">
                 <mat-form-field style="width: 80%">
-                    <input type="text" matInput formControlName="processCode" />
+                    <input type="text" matInput formControlName="processCode"  (keypress)="lookupKeyPress($event)"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"
                     (newRowClick)="processCodeSelected($event)"></master-search>

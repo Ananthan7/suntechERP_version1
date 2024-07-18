@@ -62,4 +62,9 @@ export class CompanyDetailComponent implements OnInit {
   close(data?: any) {
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 }

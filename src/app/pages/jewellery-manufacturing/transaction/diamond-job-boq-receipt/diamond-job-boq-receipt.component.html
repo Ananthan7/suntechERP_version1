@@ -20,90 +20,126 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Voucher
+                                Date</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 72%;">
-                                    <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
-                                    placeholder="DD/MM/YYYY"  DateValidation />
-                                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                                  </mat-form-field>
+                                    <input matInput [matDatepicker]="vocDate"
+                                        formControlName="vocDate"
+                                        placeholder="DD/MM/YYYY"
+                                        DateValidation />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="vocDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate"
+                                        #vocDate></mat-datepicker>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher No * </label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Voucher No *
+                            </label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="voctype" />
+                                    <input type="text" matInput
+                                        formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%">
-                                    <input type="text"  matInput formControlName="vocno"  style="text-align: right;" />
+                                    <input type="text" matInput
+                                        formControlName="vocno"
+                                        style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Entered By</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Entered
+                                By</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 80%">
-                                    <input type="text" matInput formControlName="enteredBy" />
+                                    <input type="text" matInput
+                                        formControlName="enteredBy"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="enteredByCodeData" (newRowClick)="enteredByDataSelected($event)">
+                                <master-search
+                                    [MasterSearchData]="enteredByCodeData"
+                                    (newRowClick)="enteredByDataSelected($event)">
                                 </master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Time</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Time</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%">
-                                    <input type="time" matInput formControlName="time" />
+                                    <input type="time" matInput
+                                        formControlName="time" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Karigger</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Karigger</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="karigger" />
+                                    <input type="text" matInput
+                                        formControlName="karigger" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="kariggerDesc" />
+                                    <input type="text" matInput
+                                        formControlName="kariggerDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Currency</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Currency</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 80%">
-                                    <input type="text" matInput formControlName="currency" />
+                                    <input type="text" matInput
+                                        formControlName="currency"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="currencyDataSelected($event)">
+                                <master-search
+                                    [MasterSearchData]="CurrencyCodeData"
+                                    (newRowClick)="currencyDataSelected($event)">
                                 </master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput  formControlName="currencyDesc" SixDecimalInput class="text-right" />
+                                    <input type="text" matInput
+                                        formControlName="currencyDesc"
+                                        SixDecimalInput class="text-right" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Base Currency</label>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Base
+                                Currency</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 80%">
-                                    <input type="text" matInput formControlName="baseCurrency"/>
+                                    <input type="text" matInput
+                                        formControlName="baseCurrency"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
-                                    <master-search [MasterSearchData]="CurrencyCodeData"
+                                <master-search
+                                    [MasterSearchData]="CurrencyCodeData"
                                     (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
-                               
+
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="baseCurrencyDesc"   SixDecimalInput class="text-right"/>
+                                    <input type="text" matInput
+                                        formControlName="baseCurrencyDesc"
+                                        SixDecimalInput class="text-right" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -113,21 +149,25 @@
             <div class="col-md-4">
                 <div class="row justify-content-end mt-2">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                            [allowColumnResizing]="true" [showBorders]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                            <dxi-column *ngFor="let data of columnhead"
+                                dataField="{{ data }}" caption="{{ data }}"
+                                [allowEditing]="true" alignment="center"
+                                backgroundcolor="#000">
                             </dxi-column>
                         </dx-data-grid>
-                      
+
                     </div>
                     <div class="col-md-6 text-right mt-2">
-                        <button type="button" mat-flat-button color="primary">Select
+                        <button type="button" mat-flat-button
+                            color="primary">Select
                         </button>
                     </div>
                 </div>
@@ -135,95 +175,137 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <mat-tab-group [selectedIndex]="">
+                <mat-tab-group [selectedIndex]>
                     <mat-tab label="Job Details">
                         <div class="row mt-2">
                             <div class="col-md-8">
-                                <h6 class="bg-light p-2 mb-0">Components Details</h6>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
+                                <h6 class="bg-light p-2 mb-0">Components
+                                    Details</h6>
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="ID" [allowColumnResizing]="true"
+                                    [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-                         
-                                   
-                                    <dxi-column *ngFor="let data of columnheadJobDetails" dataField="{{ data }}" 
-                                      caption="{{ data }}" [width]="100" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
+
+                                    <dxi-column
+                                        *ngFor="let data of columnheadJobDetails"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}" [width]="100"
+                                        [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
                                     </dxi-column>
-                                  </dx-data-grid>
+                                </dx-data-grid>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="border">
-                                    <h6 class="bg-light p-2 mb-0">Labour Details</h6>
+                                    <h6 class="bg-light p-2 mb-0">Labour
+                                        Details</h6>
                                     <div class="row p-1">
                                         <div class="col-md-7">
                                             <div class="row">
-                                                
+
                                                 <label for="inputPassword"
                                                     class="col-sm-6 col-form-label pt-4">Gross
                                                     Wt</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text"  matInput formControlName="grossWt"  style="text-align: right;" [max]="13" StoneDecimalInput/>
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="grossWt"
+                                                            style="text-align: right;"
+                                                            [max]="13"
+                                                            StoneDecimalInput />
                                                     </mat-form-field>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Job Number</label>
+                                                    class="col-sm-6 col-form-label pt-4">Job
+                                                    Number</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="jobNumber" class="text-right" NumberOnly/>
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="jobNumber"
+                                                            class="text-right"
+                                                            NumberOnly
+                                                            (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
-                                            
-                                                <master-search>
-                                                </master-search>
+
+                                                    <master-search>
+                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Design Id</label>
+                                                    class="col-sm-6 col-form-label pt-4">Design
+                                                    Id</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="designId" />
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="designId"
+                                                            (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
-                                               
-                                                <master-search>
-                                                </master-search>
+
+                                                    <master-search>
+                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
                                                     class="col-sm-6 col-form-label pt-4">Process</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="process" />
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="process"
+                                                            (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
-                                                
-                                                <master-search>
-                                                </master-search>
+
+                                                    <master-search>
+                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
                                                     class="col-sm-6 col-form-label pt-4">Worker</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="worker" />
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="worker"
+                                                            (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
-                                               
-                                                <master-search>
-                                                </master-search>
+
+                                                    <master-search>
+                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Labour Chrg</label>
+                                                    class="col-sm-6 col-form-label pt-4">Labour
+                                                    Chrg</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="number"  matInput formControlName="labourchrg" [dir]="'rtl'" style="text-align: right;" />
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="number"
+                                                            matInput
+                                                            formControlName="labourchrg"
+                                                            [dir]="'rtl'"
+                                                            style="text-align: right;"
+                                                            (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
                                                     <master-search>
                                                     </master-search>
@@ -231,10 +313,15 @@
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Labour A/c</label>
+                                                    class="col-sm-6 col-form-label pt-4">Labour
+                                                    A/c</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="labourAC" />
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="labourAC"
+                                                            (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
                                                     <master-search>
                                                     </master-search>
@@ -242,15 +329,22 @@
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-3">Wastage Wt</label>
+                                                    class="col-sm-6 col-form-label pt-3">Wastage
+                                                    Wt</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%">
-                                                        <input type="text" matInput formControlName="wastageWt" AmountDecimalInput class="text-right"/>
+                                                    <mat-form-field
+                                                        style="width: 70%">
+                                                        <input type="text"
+                                                            matInput
+                                                            formControlName="wastageWt"
+                                                            AmountDecimalInput
+                                                            class="text-right" />
                                                     </mat-form-field>
-                                                    
+
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-end">
+                                            <div
+                                                class="row justify-content-end">
                                                 <div class="col-md-4">
                                                     <button type="button"
                                                         class="btn add-btn btn-outline-primary">Apply</button>
@@ -259,11 +353,17 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="upload-btn-wrapper">
-                                                <button class="btn btnnew border-dark">
-                                                    <img src={{urls}} style="width:130px;height:185px">
-                                                    
+                                                <button
+                                                    class="btn btnnew border-dark">
+                                                    <img src={{urls}}
+                                                        style="width:130px;height:185px">
+
                                                 </button>
-                                                <input type="file"  accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
+                                                <input type="file"
+                                                    accept=".png, .jpg, .jpeg"
+                                                    #fileInput
+                                                    class="uploadproduct"
+                                                    (change)="onFileChanged($event)">
                                             </div>
                                         </div>
                                     </div>
@@ -275,32 +375,49 @@
                         <div class="row my-2">
                             <div class="col-md-8">
                                 <h6 class="bg-light p-2 mb-0">Stock Details</h6>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true"
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="ID" [allowColumnResizing]="true"
+                                    [showBorders]="true"
                                     width="100%">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnheadSummary" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="center" [width]="100"
+                                    <dxi-column
+                                        *ngFor="let data of columnheadSummary"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}"
+                                        [allowEditing]="true" alignment="center"
+                                        [width]="100"
                                         backgroundcolor="#000">
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
                             <div class="col-md-4">
                                 <h6 class="bg-light p-2 mb-0">Labour</h6>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true"
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="ID" [allowColumnResizing]="true"
+                                    [showBorders]="true"
                                     width="100%">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnheadSummaryLabour" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                    <dxi-column
+                                        *ngFor="let data of columnheadSummaryLabour"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}"
+                                        [allowEditing]="true" alignment="center"
                                         backgroundcolor="#000">
                                     </dxi-column>
                                 </dx-data-grid>
@@ -310,17 +427,27 @@
                     <mat-tab label="Labour Charges">
                         <div class="row my-2">
                             <div class="col-md-12">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true"
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="ID" [allowColumnResizing]="true"
+                                    [showBorders]="true"
                                     width="100%">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnheadSummaryLabourCharges" [width]="100"
-                                        dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                        alignment="center" backgroundcolor="#000">
+                                    <dxi-column
+                                        *ngFor="let data of columnheadSummaryLabourCharges"
+                                        [width]="100"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}"
+                                        [allowEditing]="true"
+                                        alignment="center"
+                                        backgroundcolor="#000">
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>

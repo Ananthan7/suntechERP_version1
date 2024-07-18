@@ -400,6 +400,11 @@ export class StoneIssueComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   setPostData(form: any) {
     return {
       "MID": 0,

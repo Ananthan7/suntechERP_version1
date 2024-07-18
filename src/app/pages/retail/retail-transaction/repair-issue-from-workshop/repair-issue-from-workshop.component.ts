@@ -49,6 +49,8 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   ];
   columnheadItemDetails2: any[] = ["Receive from Workshop Remarks"];
   currentDate = new Date();
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   selectedTabIndex = 0;
@@ -504,4 +506,16 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
   }
 
   deleteTableData() {}
+
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+
+
 }

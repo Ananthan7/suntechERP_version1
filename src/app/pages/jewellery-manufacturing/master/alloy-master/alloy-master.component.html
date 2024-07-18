@@ -28,7 +28,7 @@
                                             (focusout)="validateLookupField($event,codeData,'code')"
                                             formControlName="code"
                                             [readonly]="editableMode || viewMode"
-                                            UpperCaseDirective autocomplete="off" />
+                                            UpperCaseDirective autocomplete="off" (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="mstrScrch"
                                             *ngIf="!editMode && !viewMode"
                                             [MasterSearchData]="codeData"
@@ -47,7 +47,7 @@
                                             formControlName="costCenter"
                                             [readonly]=" viewMode"
                                             UpperCaseDirective
-                                            (focusout)="validateLookupField($event,costCenterData,'costCenter')" />
+                                            (focusout)="validateLookupField($event,costCenterData,'costCenter')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="mstrScrch" *ngIf="!viewMode"
                                             [MasterSearchData]="costCenterData"
                                             (newRowClick)="costCenterSelected($event)"></master-search>
@@ -60,11 +60,11 @@
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput class="text-right"
+                                        <input type="text" matInput
                                             formControlName="type"
                                             UpperCaseDirective
                                             [readonly]="viewMode"
-                                            (focusout)="validateLookupField($event,typeCodeData,'type')" />
+                                            (focusout)="validateLookupField($event,typeCodeData,'type')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="mstrScrch" *ngIf="!viewMode"
                                             [MasterSearchData]="typeCodeData"
                                             (newRowClick)="typeCodeSelected($event)"></master-search>
@@ -77,11 +77,11 @@
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput class="text-right"
+                                        <input type="text" matInput
                                             formControlName="category"
                                             UpperCaseDirective
                                             [readonly]="viewMode"
-                                            (focusout)="validateLookupField($event,categoryCodeData,'category')" />
+                                            (focusout)="validateLookupField($event,categoryCodeData,'category')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="categoryCodeData"
                                             (newRowClick)="categoryCodeSelected($event)"></master-search>
@@ -94,11 +94,11 @@
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput class="text-right"
+                                        <input type="text" matInput 
                                             formControlName="subCategory"
                                             UpperCaseDirective
                                             [readonly]="viewMode"
-                                            (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')" />
+                                            (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search class="mstrScrch" *ngIf="!viewMode"
                                             [MasterSearchData]="subcategoryCodeData"
                                             (newRowClick)="subcategoryCodeSelected($event)"></master-search>
@@ -115,7 +115,7 @@
                                             formControlName="brand"
                                             UpperCaseDirective
                                             [readonly]="viewMode"
-                                            (focusout)="validateLookupField($event,BrandCodeData,'brand')" />
+                                            (focusout)="validateLookupField($event,BrandCodeData,'brand')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="BrandCodeData"
                                             (newRowClick)="brandCodeSelected($event)"></master-search>
@@ -132,7 +132,7 @@
                                             formControlName="color"
                                             [readonly]="viewMode"
                                             UpperCaseDirective
-                                            (focusout)="validateLookupField($event,colorData,'color')" />
+                                            (focusout)="validateLookupField($event,colorData,'color')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                                 [MasterSearchData]="colorData"
                                                 (newRowClick)="colorDataSelected($event)">
@@ -174,7 +174,7 @@
                                         <input type="text" matInput
                                             formControlName="description"
                                             [readonly]="viewMode"
-                                            UpperCaseDirective autocomplete="off"/>
+                                            UpperCaseDirective autocomplete="off" (keypress)="lookupKeyPress($event)"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                                             maxlength="50"
                                             [readonly]="viewMode"
                                             UpperCaseDirective
-                                            (focusout)="validateLookupField($event,vendorCodeData,'vendor')" />
+                                            (focusout)="validateLookupField($event,vendorCodeData,'vendor')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="vendorCodeData"
                                             (newRowClick)="vendorCodeSelected($event)"></master-search>
@@ -298,7 +298,7 @@
                                         class="stretch">
                                         <input type="text" matInput readonly
                                             formControlName="currency"
-                                            [readonly]="viewMode" />
+                                            [readonly]="viewMode" (keypress)="lookupKeyPress($event)"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="currencyCodeData"
                                             (newRowClick)="currencyDataSelected($event)">
@@ -379,11 +379,11 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
                                         <input type="text" matInput
-                                            formControlName="PRICE1"
+                                            formControlName="price1code"
                                             UpperCaseDirective autocomplete="off"
                                             [readonly]="!isWeightAvgCost"
                                             (change)="priceCodeone($event)"
-                                            (focusout)="validateLookupField($event,priceCodeData,'PRICE1')" />
+                                            (focusout)="validateLookupField($event,priceCodeData,'price1code')" (keypress)="lookupKeyPress($event)"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                         [MasterSearchData]="priceCodeData"
@@ -427,7 +427,7 @@
                                             formControlName="price2code"
                                             [readonly]="!isWeightAvgCost"
                                             (change)="priceTwoCode($event)"
-                                            (focusout)="validateLookupField($event,priceCodeData,'price2code')" />
+                                            (focusout)="validateLookupField($event,priceCodeData,'price2code')" (keypress)="lookupKeyPress($event)"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                         [MasterSearchData]="priceCodeData"
@@ -473,7 +473,7 @@
                                             formControlName="price3code"
                                             [readonly]="!isWeightAvgCost"
                                             (change)="priceThreeCode($event)"
-                                            (focusout)="validateLookupField($event,priceCodeData,'price3code')" />
+                                            (focusout)="validateLookupField($event,priceCodeData,'price3code')" (keypress)="lookupKeyPress($event)"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                         [MasterSearchData]="priceCodeData"
@@ -518,7 +518,7 @@
                                             formControlName="price4code"
                                             [readonly]="!isWeightAvgCost"
                                             (change)="priceFourCode($event)"
-                                            (focusout)="validateLookupField($event,priceCodeData,'price4code')" />
+                                            (focusout)="validateLookupField($event,priceCodeData,'price4code')" (keypress)="lookupKeyPress($event)"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                         [MasterSearchData]="priceCodeData"
@@ -563,7 +563,7 @@
                                             formControlName="price5code"
                                             [readonly]="!isWeightAvgCost"
                                             (change)="priceFiveCode($event)"
-                                            (focusout)="validateLookupField($event,priceCodeData,'price5code')" />
+                                            (focusout)="validateLookupField($event,priceCodeData,'price5code')" (keypress)="lookupKeyPress($event)"/>
                                     </mat-form-field>
                                     <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                         [MasterSearchData]="priceCodeData"
@@ -608,7 +608,7 @@
                                             formControlName="hsncode"
                                             [readonly]="viewMode"
                                             UpperCaseDirective
-                                            (focusout)="validateLookupField($event,HSNCodeData,'hsncode')" />
+                                            (focusout)="validateLookupField($event,HSNCodeData,'hsncode')" (keypress)="lookupKeyPress($event)"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="HSNCodeData"
                                             (newRowClick)="HSNCenterSelected($event)"></master-search>

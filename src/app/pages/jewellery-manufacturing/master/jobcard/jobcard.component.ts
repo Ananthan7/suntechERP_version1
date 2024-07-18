@@ -360,6 +360,7 @@ export class JobcardComponent implements OnInit {
     srewFiled: [''],
     instruction: [''],
     picture_name: [''],
+
   });
 
 
@@ -448,9 +449,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
-    //this.commonService.getqueryParamVocType()
-
-
+      //this.jobCardFrom.controls.purity.setValue(this.commonService.transformDecimalVB(6,'PURITY'));
   }
   inputValidate(event: any) {
     if (event.target.value != '') {
@@ -646,6 +645,8 @@ export class JobcardComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
 
+        let formattedPurity = parseFloat(result.response.PURITY).toFixed(6);
+        this.jobCardFrom.controls['purity'].setValue(formattedPurity);
         this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
         this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
         this.jobCardFrom.controls['subcat'].setValue(result.response.SUBCATEGORY_CODE);
@@ -653,12 +654,6 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
         this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
-        this.jobCardFrom.controls['purity'].setValue(result.response.PURITY);
-
-        //this.jobCardFrom.controls['picture_name'].setValue(result.response.ITEM_IMAGE);
-        // this.urls = result.response.PICTURE_NAME;
-        // console.log(this.urls)
-
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
 
@@ -788,7 +783,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
     this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.jobCardFrom.controls.picture_name.setValue(this.url)
+   // this.jobCardFrom.controls.picture_name.setValue(this.url)
     this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
     this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
     this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
@@ -817,9 +812,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.purity.setValue(
       this.commonService.transformDecimalVB(6, this.content.JOB_PURITY));
 
-
-    // this.jobCardFrom.controls.purity.setValue(this.content.JOB_PURITY)
-
+      this.urls = this.content.PICTURE_NAME
   }
 
 
@@ -851,7 +844,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.url || "",
+      "PICTURE_NAME": this.urls || "",
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
@@ -1568,6 +1561,12 @@ export class JobcardComponent implements OnInit {
     if (FORMNAME === 'designcode') {
         this.jobCardFrom.controls.designtype.setValue('');
     }
+}
+
+lookupKeyPress(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+  }
 }
 
   ngOnDestroy() {

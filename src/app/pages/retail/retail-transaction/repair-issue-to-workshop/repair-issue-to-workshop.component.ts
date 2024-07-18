@@ -27,9 +27,11 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   @Input()
   selectedIndex!: number | null;
   PendingRepairJobsData:any;
-  selectedRowKeys:any;
+  //selectedRowKeys:any;
   tableData: any[] = [];
   tableDatas: any[] = [];
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
   branchCode?: any = localStorage.getItem("userbranch");
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   currentDate = new Date();
@@ -86,7 +88,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
     if(this.content.FLAG === "EDIT" || this.content.FLAG === "VIEW"){
       this.getrepairtoissuebyid();
     }
-
+    this.getPendingRepairJobs();
 
   }
 
@@ -482,5 +484,16 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
         this.subscriptions.push(Sub);
       }
     });
+  }
+
+  
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
   }
 }

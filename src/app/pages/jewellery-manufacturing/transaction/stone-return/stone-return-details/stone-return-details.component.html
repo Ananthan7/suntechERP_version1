@@ -21,8 +21,8 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobNumber"
-                  [readonly]="viewMode" 
-                  (focusout)="jobNumberValidate($event)"/>
+                  [readonly]="viewMode" (keypress)="lookupKeyPress($event)"
+                  (focusout)="jobNumberValidate($event)" />
               </mat-form-field>
               <master-search [MasterSearchData]="JobNoCodeData"
                 (newRowClick)="JobNumberSelected($event)"></master-search>&nbsp;
@@ -40,6 +40,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobno"
+                  (keypress)="lookupKeyPress($event)"
                   [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
@@ -61,6 +62,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="designcode"
+                  (keypress)="lookupKeyPress($event)"
                   [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData"
@@ -99,6 +101,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="process"
+                  (keypress)="lookupKeyPress($event)"
                   [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="processCodeData"
@@ -118,6 +121,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="worker"
+                  (keypress)="lookupKeyPress($event)"
                   [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="workerCodeData"
@@ -137,6 +141,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stockCode"
+                  (keypress)="lookupKeyPress($event)"
                   [readonly]="viewMode" />
               </mat-form-field>
               <master-search [MasterSearchData]="stockCodeData"

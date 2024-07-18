@@ -717,4 +717,10 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+
 }
