@@ -21,8 +21,8 @@
                   <div class="col-md-7">
                     <mat-form-field style="width: 100%;" appearance="outline">
                       <input type="text" matInput formControlName="customercode" id="customercode" class="text-right"
-                        [readonly]="editableMode || viewMode"   (input)="inputValidate($event)"  (focusout)="validateLookupField($event,customerCodeData,'customercode')"  (keypress)="lookupKeyPress($event)"/>
-                        <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
+                        [readonly]="editableMode || viewMode"   (input)="inputValidate($event)"  (focusout)="validateLookupField($event,customerCodeData,'customercode')"  (keypress)="lookupKeyPress($event)"  (focusout)="codeValidate($event)"/>
+                        <master-search [MasterSearchData]="customerCodeData" class="masterSearch"  #overlaycodeSearch
                         (newRowClick)="customerCodeScpSelected($event)" *ngIf="viewMode == false"></master-search>
                       </mat-form-field>
                   </div>

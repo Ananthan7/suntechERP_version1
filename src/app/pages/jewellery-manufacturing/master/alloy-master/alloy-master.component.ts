@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -15,6 +16,27 @@ import Swal from 'sweetalert2';
   styleUrls: ['./alloy-master.component.scss']
 })
 export class AlloyMasterComponent implements OnInit {
+  @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaysubCategorySearch') overlaysubCategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaybrandSearch') overlaybrandSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlayhsncodeSearch') overlayhsncodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayvendorSearch') overlayvendorSearch!: MasterSearchComponent;
+
+  @ViewChild('overlayprice1codeSearch') overlayprice1codeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprice2codeSearch') overlayprice2codeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprice3codeSearch') overlayprice3codeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprice4codeSearch') overlayprice4codeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprice5codeSearch') overlayprice5codeSearch!: MasterSearchComponent;
+  
+
+  
+  
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
 
@@ -462,7 +484,6 @@ export class AlloyMasterComponent implements OnInit {
   }
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -485,6 +506,11 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
+
+    // if (event.target.value == '') {
+    //   this.showOverleyPanel(event, 'hsncode')
+    //   return
+    // }
   }
   /**use: for checking form validations */
   alloyMasterFormChecks(FORMNAME: string) {
@@ -1548,6 +1574,175 @@ export class AlloyMasterComponent implements OnInit {
   lookupKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
+    }
+  }
+
+  codeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'code')
+        return
+      }
+    }
+
+    costcenterValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'costCenter')
+        return
+      }
+    }
+
+    typeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'type')
+        return
+      }
+    }
+
+    categoryValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'category')
+        return
+      }
+    }
+
+    subCategoryValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'subCategory')
+        return
+      }
+    }
+
+    brandValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'brand')
+        return
+      }
+    }
+
+    colorValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'color')
+        return
+      }
+    }
+
+    currencyValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'currency')
+        return
+      }
+    }
+
+    hsncodeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'hsncode')
+        return
+      }
+    }
+
+    vendorValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'type')
+        return
+      }
+    }
+
+
+    price1codeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'price1code')
+        return
+      }
+    }
+
+    price2codeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'price2code')
+        return
+      }
+    }
+
+    price3codeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'price3code')
+        return
+      }
+    }
+
+    price4codeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'price4code')
+        return
+      }
+    }
+
+    price5codeValidate(event: any) {
+      if (this.viewMode) return
+      if (event.target.value == '') {
+        this.showOverleyPanel(event, 'price5code')
+        return
+      }
+    }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'code') {
+      this.overlaycodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'costCenter' ) {
+      this.overlaycostCenterSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'type' ) {
+      this.overlaytypeSearch.showOverlayPanel(event)
+    }
+
+    if (formControlName == 'category' ) {
+      this.overlaycategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'subCategory' ) {
+      this.overlaysubCategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'brand' ) {
+      this.overlaybrandSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color' ) {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency' ) {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'hsncode' ) {
+      this.overlayhsncodeSearch.showOverlayPanel(event)
+    }
+
+    if (formControlName == 'price1code' ) {
+      this.overlayprice1codeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'price2code' ) {
+      this.overlayprice2codeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'price3code' ) {
+      this.overlayprice3codeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'price4code' ) {
+      this.overlayprice4codeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'price5code' ) {
+      this.overlayprice5codeSearch.showOverlayPanel(event)
     }
   }
 }

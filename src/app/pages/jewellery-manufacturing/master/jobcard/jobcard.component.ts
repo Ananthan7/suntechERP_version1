@@ -71,7 +71,7 @@ export class JobcardComponent implements OnInit {
     WHERECONDITION: "TYPES ='COMMENTS MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
 
   lengthCodeData: MasterSearchModel = {
@@ -384,7 +384,7 @@ export class JobcardComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setCompanyCurrency();
-    if(this.content == undefined){
+    if (this.content == undefined) {
       this.priceSchemeValidate();
     }
     this.setFormValues();
@@ -402,7 +402,7 @@ export class JobcardComponent implements OnInit {
     //   this.priceSchemeValidate();
     // }
     // this.jobCardFrom.controls['date'].disable()
-   
+
     // if (this.content) {
     //   this.setFormValues()
     //   this.setInitialValues()
@@ -431,10 +431,10 @@ export class JobcardComponent implements OnInit {
     SEARCH_HEADING: 'Size ',
     SEARCH_VALUE: '',
     WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
-   // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+    // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
 
 
@@ -449,7 +449,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
-      //this.jobCardFrom.controls.purity.setValue(this.commonService.transformDecimalVB(6,'PURITY'));
+    //this.jobCardFrom.controls.purity.setValue(this.commonService.transformDecimalVB(6,'PURITY'));
   }
   inputValidate(event: any) {
     if (event.target.value != '') {
@@ -593,7 +593,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.size.setValue(e.ATTR_CODE);
   }
 
-  
+
 
   designCodeSelected(e: any) {
     console.log(e);
@@ -654,9 +654,18 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
         this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
+        this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
+        this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
+
+
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
 
+        this.tableData[0].Pcs = result.response.PCS
+        this.tableData[0].metal_color = result.response.COLOR
+        this.tableData[0].metal_wt = result.response.METAL_WT
+        this.tableData[0].stone_wt = result.response.STONE_WT
+        this.tableData[0].gross_wt = result.response.GROSS_WT
 
 
 
@@ -783,7 +792,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
     this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-   // this.jobCardFrom.controls.picture_name.setValue(this.url)
+    // this.jobCardFrom.controls.picture_name.setValue(this.url)
     this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
     this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
     this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
@@ -812,7 +821,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.purity.setValue(
       this.commonService.transformDecimalVB(6, this.content.JOB_PURITY));
 
-      this.urls = this.content.PICTURE_NAME
+    this.urls = this.content.PICTURE_NAME
   }
 
 
@@ -916,7 +925,7 @@ export class JobcardComponent implements OnInit {
       "SIZE_DESC": "",
       "LENGTH_DESC": "",
       "TIME_DESC": "",
-      "RANGE_DESC":"",
+      "RANGE_DESC": "",
       "JOB_MATERIAL_BOQ_DJ": [
         {
           "SRNO": 0,
@@ -1086,7 +1095,7 @@ export class JobcardComponent implements OnInit {
               }
             });
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1191,7 +1200,7 @@ export class JobcardComponent implements OnInit {
       "SIZE_DESC": "",
       "LENGTH_DESC": "",
       "TIME_DESC": "",
-      "RANGE_DESC":this.tableData,
+      "RANGE_DESC": this.tableData,
       "JOB_MATERIAL_BOQ_DJ": [
         {
           "SRNO": 0,
@@ -1349,7 +1358,7 @@ export class JobcardComponent implements OnInit {
               }
             });
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1437,7 +1446,7 @@ export class JobcardComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-         //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+          //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
           this.jobCardFrom.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
@@ -1488,20 +1497,20 @@ export class JobcardComponent implements OnInit {
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
         if (matchedItem2) {
-            this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
-            if (FORMNAME === 'designcode') {
-                this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
-                this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
-                this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
-                this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
-                this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
-                this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
-                this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
-                this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
-                this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
-            }
+          this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
+          if (FORMNAME === 'designcode') {
+            this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
+            this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
+            this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
+            this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
+            this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
+            this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
+            this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
+            this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
+            this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+          }
         } else {
-            this.handleLookupError(FORMNAME, LOOKUPDATA);
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
 
         // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
@@ -1530,7 +1539,7 @@ export class JobcardComponent implements OnInit {
         // if (matchedItem1) {
         //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem1.DESIGN_CODE);
         //   if (FORMNAME === 'designcode') {
-     
+
         //     this.jobCardFrom.controls.designtype.setValue(matchedItem1.DESIGN_DESCRIPTION);
         //   }
 
@@ -1559,15 +1568,15 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls[FORMNAME].setValue('');
     LOOKUPDATA.SEARCH_VALUE = '';
     if (FORMNAME === 'designcode') {
-        this.jobCardFrom.controls.designtype.setValue('');
+      this.jobCardFrom.controls.designtype.setValue('');
     }
-}
-
-lookupKeyPress(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
   }
-}
+
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

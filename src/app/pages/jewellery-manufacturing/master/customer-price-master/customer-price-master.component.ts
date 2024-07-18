@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 
@@ -17,6 +18,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./customer-price-master.component.scss']
 })
 export class CustomerPriceMasterComponent implements OnInit {
+  @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
   viewMode: boolean = false;
   editableMode: boolean = false;
   editMode: boolean = false;
@@ -720,6 +722,21 @@ export class CustomerPriceMasterComponent implements OnInit {
   lookupKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
+    }
+  }
+
+  codeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'customercode')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'customercode') {
+      this.overlaycodeSearch.showOverlayPanel(event)
     }
   }
 
