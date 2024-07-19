@@ -77,9 +77,11 @@
               <div class="col-sm-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="meltingType"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
+                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)"
+                    (focusout)="validateLookupField($event,MeltingCodeData,'meltingType')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="MeltingCodeData"
+                  #overlaymeltingTypecode
                   *ngIf="!viewMode"
                   (newRowClick)="MeltingCodeSelected($event)"></master-search>
               </div>
@@ -93,10 +95,11 @@
                 <mat-form-field style="width: 40%">
                   <input type="text" matInput maxlength="6"
                     formControlName="process" [readonly]="viewMode"
-                    (keypress)="lookupKeyPress($event)" />
+                    (keypress)="lookupKeyPress($event)"
+                    (focusout)="validateLookupField($event,processCodeData,'process')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"
-                  *ngIf="!viewMode"
+                  *ngIf="!viewMode" #overlayprocesscode
                   (newRowClick)="processCodeScpSelected($event)"></master-search>
                 <mat-form-field style="width: 40%; margin-left: 7px;">
                   <input type="text" matInput class="text-right"
@@ -356,9 +359,11 @@
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="stockcodeRet"
                       (keypress)="lookupKeyPress($event)"
-                      [readonly]="viewMode" />
+                      [readonly]="viewMode"
+                      (focusout)="validateLookupField($event,stockCodeData,'stockcodeRet')" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="stockCodeData"
+                    #overlaystockcodeRet
                     *ngIf="!viewMode"
                     (newRowClick)="stockCodeSelected($event)"></master-search>
                 </div>
@@ -401,9 +406,11 @@
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="locationRet"
                       (keypress)="lookupKeyPress($event)"
-                      [readonly]="viewMode" />
+                      [readonly]="viewMode"
+                      (focusout)="validateLookupField($event,locationCodeData,'locationRet')" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="locationCodeData"
+                    #overlaylocationRet
                     *ngIf="!viewMode"
                     (newRowClick)="locationCodeSelected($event)"></master-search>
                 </div>
@@ -417,9 +424,11 @@
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="stockCodeScp"
                       (keypress)="lookupKeyPress($event)"
-                      [readonly]="viewMode" />
+                      [readonly]="viewMode"
+                      (focusout)="validateLookupField($event,stockCodeData,'stockCodeScp')" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="stockCodeData"
+                    #overlaylstockCodeScp
                     *ngIf="!viewMode"
                     (newRowClick)="stockCodeScpSelected($event)"></master-search>
                 </div>
@@ -495,9 +504,11 @@
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="locationScp"
                       (keypress)="lookupKeyPress($event)"
-                      [readonly]="viewMode" />
+                      [readonly]="viewMode"
+                      (focusout)="validateLookupField($event,locationCodeData,'locationScp')" />
                   </mat-form-field>
                   <master-search [MasterSearchData]="locationCodeData"
+                    #overlayllocationScp
                     *ngIf="!viewMode"
                     (newRowClick)="locationCodeScpSelected($event)"></master-search>
                 </div>

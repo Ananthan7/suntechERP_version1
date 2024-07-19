@@ -22,10 +22,11 @@
             <mat-form-field style="width: 80%;">
               <input type="text" matInput formControlName="jobNumber"
                 [readonly]="viewMode"
-                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')"
+                (focusout)="jobNumberValidate($event)"
                 (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search [MasterSearchData]="jobNumberCodeData"
+              #overlayjobNumberSearch
               (newRowClick)="jobNumberCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -93,6 +94,7 @@
                 (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search [MasterSearchData]="processCodeData"
+              #overlayprocessSearch
               (newRowClick)="processCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -114,6 +116,7 @@
                 (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
             <master-search [MasterSearchData]="workerCodeData"
+              #overlayworkerSearch
               (newRowClick)="workerCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -143,6 +146,7 @@
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="stockCodeData"
+              #overlaystockCodeSearch
               (newRowClick)="stockCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -174,10 +178,11 @@
           <div class="col-md-5">
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="LOCTYPE_CODE"
-                (keypress)="lookupKeyPress($event)"
+                (keypress)="lookupKeyPress($event)" (focusout)="validateLookupField($event,locationCodeData,'LOCTYPE_CODE')"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="locationCodeData"
+              #overlaylocationSearch
               (newRowClick)="locationCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>

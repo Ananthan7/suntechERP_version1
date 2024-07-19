@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,13 +7,21 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-tree-down',
   templateUrl: './tree-down.component.html',
   styleUrls: ['./tree-down.component.scss']
 })
 export class TreeDownComponent implements OnInit {
+  @ViewChild('overlayprocessCodeSearch') overlayprocessCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycylinderSearch') overlaycylinderSearch!: MasterSearchComponent;
+  @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlaytoProcessSearch') overlaytoProcessSearch!: MasterSearchComponent;
+  @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
+  @ViewChild('overlaykaratCodeSearch') overlaykaratCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaytoWorkerSearch') overlaytoWorkerSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
 
   divisionMS: any = 'ID';
   branchCode?: String;
@@ -437,7 +445,7 @@ export class TreeDownComponent implements OnInit {
     )
     this.setvoucherTypeMaster()
   }
- 
+
 
   update() {
     if (this.treeDownFrom.invalid) {
@@ -627,6 +635,63 @@ export class TreeDownComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.treeDownFrom.value[formControlName] != '') return
+    if (formControlName == 'processCode') {
+      this.overlayprocessCodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'cylinder') {
+      this.overlaycylinderSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'worker') {
+      this.overlayworkerSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'toProcess') {
+      this.overlaytoProcessSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'enteredBy') {
+      this.overlayenteredBySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'karatCode') {
+      this.overlaykaratCodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'toWorker') {
+      this.overlaytoWorkerSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color') {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    this.showOverleyPanel(event, FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.treeDownFrom.controls[FORMNAME].setValue('')
+
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'processCode' || FORMNAME === 'cylinder' || FORMNAME === 'worker' || FORMNAME === 'toProcess' || FORMNAME === 'enteredBy' || FORMNAME === 'karatCode' || FORMNAME === 'toWorker' || FORMNAME === 'color') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 
   ngOnDestroy() {

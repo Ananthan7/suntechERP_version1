@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -10,9 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { MeltingProcessDetailsComponent } from './melting-process-details/melting-process-details.component';
 import { JobAllocationComponent } from '../job-allocation/job-allocation.component';
 import { JobAllocationMeltingComponent } from './job-allocation-melting/job-allocation-melting.component';
-
-
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -21,6 +19,13 @@ import { JobAllocationMeltingComponent } from './job-allocation-melting/job-allo
   styleUrls: ['./melting-process.component.scss']
 })
 export class MeltingProcessComponent implements OnInit {
+  @ViewChild('meltingissueDetailScreen') public meltingissueDetailScreen!: NgbModal;
+  @ViewChild('overlayllocationScp') overlayllocationScp!: MasterSearchComponent;
+  @ViewChild('overlaylstockCodeScp') overlaylstockCodeScp!: MasterSearchComponent;
+  @ViewChild('overlaylocationRet') overlaylocationRet!: MasterSearchComponent;
+  @ViewChild('overlaystockcodeRet') overlaystockcodeRet!: MasterSearchComponent;
+  @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
+  @ViewChild('overlaymeltingTypecode') overlaymeltingTypecode!: MasterSearchComponent;
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -52,12 +57,13 @@ export class MeltingProcessComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 94,
-    SEARCH_FIELD: 'Melting Type',
+    SEARCH_FIELD: 'MELTING_TYPE',
     SEARCH_HEADING: 'Melting Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Melting Type<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+
   }
 
 
@@ -322,7 +328,7 @@ export class MeltingProcessComponent implements OnInit {
     )
     this.setvoucherTypeMaster()
   }
-  minDate:any;
+  minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
   setvoucherTypeMaster() {
@@ -438,6 +444,72 @@ export class MeltingProcessComponent implements OnInit {
     if (event.key === 'Enter') {
       event.preventDefault();
     }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.meltingProcessFrom.value[formControlName] != '') return
+    if (formControlName == 'meltingType') {
+      this.overlaymeltingTypecode.showOverlayPanel(event)
+    }
+    if (formControlName == 'process') {
+      this.overlayprocesscode.showOverlayPanel(event)
+    }
+    if (formControlName == 'stockcodeRet') {
+      this.overlaystockcodeRet.showOverlayPanel(event)
+    }
+    if (formControlName == 'locationRet') {
+      this.overlaylocationRet.showOverlayPanel(event)
+    }
+    if (formControlName == 'stockCodeScp') {
+      this.overlaylstockCodeScp.showOverlayPanel(event)
+    }
+    if (formControlName == 'locationScp') {
+      this.overlayllocationScp.showOverlayPanel(event)
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    this.showOverleyPanel(event, FORMNAME);
+
+    if (event.target.value == '' || this.viewMode) return;
+
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+
+    this.commonService.showSnackBarMsg('MSG81447');
+
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result: any) => {
+        this.commonService.closeSnackBarMsg();
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.meltingProcessFrom.controls[FORMNAME].setValue('');
+          LOOKUPDATA.SEARCH_VALUE = '';
+
+          if (FORMNAME === 'meltingType') {
+            this.meltingProcessFrom.controls.meltingType.setValue('');
+            this.showOverleyPanel(event, 'meltingType');
+          }
+
+          if (FORMNAME === 'process' || FORMNAME === 'stockcodeRet' || FORMNAME === 'locationRet' || FORMNAME === 'stockCodeScp' || FORMNAME === 'locationScp') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+
+          return;
+        } else {
+          // If data is found, you might want to update the form controls with the fetched data
+          this.meltingProcessFrom.controls[FORMNAME].setValue(data);
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong');
+      }
+    );
+
+    this.subscriptions.push(Sub);
   }
 
   // deleteTableData(): void {
@@ -569,23 +641,23 @@ export class MeltingProcessComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status.trim() == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingProcessFrom.reset()
-                this.isSaved = true;
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status.trim() == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.meltingProcessFrom.reset()
+              this.isSaved = true;
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.toastr.error('Not saved')
@@ -609,24 +681,24 @@ export class MeltingProcessComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingProcessFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.meltingProcessFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')

@@ -108,9 +108,9 @@
                       <mat-form-field style="width: 70%">
                         <input type="text" matInput formControlName="enteredBy"
                           (keypress)="lookupKeyPress($event)"
-                          [readonly]="viewMode" />
+                          [readonly]="viewMode"  (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
                       </mat-form-field>
-                      <master-search [MasterSearchData]="user"
+                      <master-search [MasterSearchData]="SALESPERSON_CODEData" #overlayenteredBySearch
                         (newRowClick)="userDataSelected($event)"
                         *ngIf="!viewMode">
                       </master-search>
@@ -125,9 +125,9 @@
                       <mat-form-field style="width: 80%">
                         <input type="text" matInput formControlName="worker"
                           (keypress)="lookupKeyPress($event)"
-                          [readonly]="viewMode" />
+                          [readonly]="viewMode" (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                       </mat-form-field>
-                      <master-search [MasterSearchData]="WorkerCodeData"
+                      <master-search [MasterSearchData]="WorkerCodeData" #overlayworkerSearch
                         (newRowClick)="WorkerCodeSelected($event)"
                         *ngIf="!viewMode">
                       </master-search>

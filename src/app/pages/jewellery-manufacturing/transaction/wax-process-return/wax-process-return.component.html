@@ -61,9 +61,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="process"
-                    (keypress)="lookupKeyPress($event)" />
+                    (keypress)="lookupKeyPress($event)" (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="ProcessCodeData"
+                <master-search [MasterSearchData]="ProcessCodeData" #overlayprocessCodeSearch
                   (newRowClick)="ProcessCodeSelected($event)">
                 </master-search>
               </div>
@@ -72,9 +72,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="toprocess"
-                    (keypress)="lookupKeyPress($event)" />
+                    (keypress)="lookupKeyPress($event)" (focusout)="validateLookupField($event,ToProcessCodeData,'toprocess')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="ToProcessCodeData"
+                <master-search [MasterSearchData]="ToProcessCodeData" #overlaytoprocessSearch
                   (newRowClick)="ToProcessCodeSelected($event)">
                 </master-search>
               </div>
@@ -85,9 +85,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="worker"
-                    (keypress)="lookupKeyPress($event)" />
+                    (keypress)="lookupKeyPress($event)" (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData"
+                <master-search [MasterSearchData]="WorkerCodeData" #overlayworkerSearch
                   (newRowClick)="WorkerCodeSelected($event)">
                 </master-search>
               </div>
@@ -95,10 +95,10 @@
                 Worker :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="toworker"
-                    (keypress)="lookupKeyPress($event)" />
+                  <input type="text" matInput formControlName="toworker" 
+                    (keypress)="lookupKeyPress($event)" (focusout)="validateLookupField($event,ToWorkerCodeData,'toworker')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="ToWorkerCodeData"
+                <master-search [MasterSearchData]="ToWorkerCodeData" #overlaytoworkerSearch
                   (newRowClick)="ToWorkerCodeSelected($event)">
                 </master-search>
               </div>
@@ -108,10 +108,10 @@
                 By :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="enteredBy"
-                  (keypress)="lookupKeyPress($event)"/>
+                  <input type="text" matInput formControlName="enteredBy" 
+                  (keypress)="lookupKeyPress($event)"  (focusout)="validateLookupField($event,user,'enteredBy')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="user"
+                <master-search [MasterSearchData]="user" #overlayenteredBySearch
                   (newRowClick)="userDataSelected($event)">
                 </master-search>
               </div>
@@ -120,9 +120,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="waxcode"
-                    (keypress)="lookupKeyPress($event)" />
+                    (keypress)="lookupKeyPress($event)" (focusout)="validateLookupField($event,WaxCodeData,'waxcode')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WaxCodeData"
+                <master-search [MasterSearchData]="WaxCodeData" #overlaywaxcodeSearch
                   (newRowClick)="WaxCodeSelected($event)">
                 </master-search>
               </div>

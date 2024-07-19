@@ -9,6 +9,7 @@ import { MetalReturnDetailsComponent } from './metal-return-details/metal-return
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import themes from 'devextreme/ui/themes';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-metal-return',
@@ -17,6 +18,10 @@ import themes from 'devextreme/ui/themes';
 })
 export class MetalReturnComponent implements OnInit {
   @ViewChild('metalReturnDetailScreen') public MetalReturnDetailScreen!: NgbModal;
+  @ViewChild('overlayenteredBy') overlayenteredBy! : MasterSearchComponent;
+   @ViewChild('overlayprocess') overlayprocess! : MasterSearchComponent;
+   @ViewChild('overlayworker') overlayworker! : MasterSearchComponent;
+   @ViewChild('overlaylocation') overlaylocation! : MasterSearchComponent;
   @Input() content!: any;
   modalReference!: NgbModalRef;
   dataToDetailScreen: any;
@@ -39,17 +44,16 @@ export class MetalReturnComponent implements OnInit {
   };
   private subscriptions: Subscription[] = [];
 
-  user: MasterSearchModel = {
+  SALESPERSON_CODEData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User',
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entered by',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACTIVE = 1",
+    WHERECONDITION: "ACTIVE=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -545,5 +549,56 @@ this.setvoucherTypeMaster()
       })
     this.subscriptions.push(Sub)
   }
-
+  showOverleyPanel(event: any, formControlName: string) {
+    if(this.metalReturnForm.value[formControlName] != '')return
+    if (formControlName == 'enteredBy') {
+      this.overlayenteredBy.showOverlayPanel(event)
+    }
+    if (formControlName == 'process') {
+      this.overlayprocess.showOverlayPanel(event)
+    }
+    if (formControlName == 'worker') {
+      this.overlayworker.showOverlayPanel(event)
+    }
+    if (formControlName == 'location') {
+      this.overlaylocation.showOverlayPanel(event)
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    this.showOverleyPanel(event, FORMNAME);
+  
+    if (event.target.value == '' || this.viewMode) return;
+  
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+  
+    this.commonService.showSnackBarMsg('MSG81447');
+  
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg();
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+  
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.metalReturnForm.controls[FORMNAME].setValue('');
+          LOOKUPDATA.SEARCH_VALUE = '';
+  
+          // Conditionally call showOverleyPanel based on FORMNAME
+          if (FORMNAME === 'enteredBy' ||  FORMNAME === 'process' || FORMNAME === 'worker'  || FORMNAME === 'location') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+  
+          return;
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong');
+      });
+  
+    this.subscriptions.push(Sub);
+  }
 }
