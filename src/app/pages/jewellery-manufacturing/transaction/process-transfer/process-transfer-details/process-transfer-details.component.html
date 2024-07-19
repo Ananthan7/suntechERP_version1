@@ -233,7 +233,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode"
+                          <input type="text" matInput readonly
                             class="text-right"
                             NumberOnly maxlength="12"
                             formControlName="TO_METAL_PCS" />
@@ -331,7 +331,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode"
+                          <input type="text" matInput readonly
                             class="text-right"
                             formControlName="TO_STONE_PCS" NumberOnly
                             (focusout)="checkFromToValues('FRM_STONE_PCS','TO_STONE_PCS')"
@@ -364,7 +364,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 110px;">
-                          <input type="text" matInput [readonly]="viewMode"
+                          <input type="text" matInput readonly
                             class="text-right"
                             StoneDecimalInput [max]="10"
                             (focusout)="checkFromToValues('FRM_STONE_WT','TO_STONE_WT')"
