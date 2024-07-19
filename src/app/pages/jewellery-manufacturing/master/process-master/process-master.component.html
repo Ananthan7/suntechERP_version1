@@ -106,10 +106,10 @@
                                             (change)="checkAccodeSelected($event,'WIPaccount')"
                                             (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
                                             [readonly]="viewMode"
-                                            tabindex="4"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="4"  (keypress)="lookupKeyPress($event)"  (focusout)="WIPaccountValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="WipACCODEData"
-                                                *ngIf="viewMode == false"
+                                                *ngIf="viewMode == false"  #overlayWIPaccountSearch
                                                 (newRowClick)="WIPaccountSelected($event)">
                                             </master-search>
                                     </mat-form-field>
@@ -177,10 +177,10 @@
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,approvalCodeData,'approvalCode')"
                                             [readonly]="viewMode"
-                                            tabindex="7"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="7"  (keypress)="lookupKeyPress($event)"  (focusout)="approvalCodeValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="approvalCodeData"
-                                                *ngIf="viewMode == false"
+                                                *ngIf="viewMode == false" #overlayapprovalCodeSearch
                                                 (newRowClick)="ApprovalCodeSelected($event)">
                                             </master-search>
                                     </mat-form-field>
@@ -200,10 +200,10 @@
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,approvalProcessData,'approvalProcess')"
                                             [readonly]="viewMode"
-                                            tabindex="8"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="8"  (keypress)="lookupKeyPress($event)"  (focusout)="approvalProcessValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="approvalProcessData"
-                                                *ngIf="viewMode == false"
+                                                *ngIf="viewMode == false" #overlayapprovalProcessSearch
                                                 (newRowClick)="ApprovalProcessSelected($event)">
                                             </master-search>
                                     </mat-form-field>
@@ -223,9 +223,9 @@
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
                                             [readonly]="viewMode"
-                                            tabindex="9"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="9"  (keypress)="lookupKeyPress($event)"  (focusout)="recStockCodeValidate($event)"/>
                                             <master-search class="masterSearch"
-                                                [MasterSearchData]="StockProcessData"
+                                                [MasterSearchData]="StockProcessData"  #overlayrecStockCodeSearch
                                                 (newRowClick)="StockProcesSelected($event)"
                                                 *ngIf="!viewMode">
                                             </master-search>
@@ -240,10 +240,10 @@
                                             formControlName="ADJUST_ACCODE"
                                             (focus)="showAlertIfCodeIsEmpty()"
                                             (focusout)="validateLookupField($event,adjustAccodeData,'ADJUST_ACCODE')"
-                                            [readonly]="viewMode"  (keypress)="lookupKeyPress($event)"/>
+                                            [readonly]="viewMode"  (keypress)="lookupKeyPress($event)"  (focusout)="adjustaccodeValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="adjustAccodeData"
-                                                *ngIf="viewMode == false"
+                                                *ngIf="viewMode == false"  #overlayadjustaccodeSearch
                                                 (newRowClick)="adjustAccodeSelected($event)">
                                             </master-search>
                                     </mat-form-field>
@@ -394,10 +394,10 @@
                                             (change)="checkAccodeSelected($event,'LOSS_ACCODE')"
                                             (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
                                             [readonly]="islossReadOnly"
-                                            tabindex="15"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="15"  (keypress)="lookupKeyPress($event)"  (focusout)="lossaccodeValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="LossACCODEData"
-                                                *ngIf="!viewMode && searchModeLoss"
+                                                *ngIf="!viewMode && searchModeLoss"   #overlaylossaccodeSearch
                                                 (newRowClick)="LOSS_ACCODESelected($event)">
                                             </master-search>
                                     </mat-form-field>
@@ -410,10 +410,10 @@
                                             (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
                                             [readonly]="isRecovReadOnly || lossDisable"   
-                                            tabindex="19"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="19"  (keypress)="lookupKeyPress($event)"  (focusout)="recoveaccodeValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="RecovACCODEData"
-                                                *ngIf="!viewMode && searchModeRecov && searchModeLoss"
+                                                *ngIf="!viewMode && searchModeRecov && searchModeLoss"  #overlayrecoveaccodeSearch
                                                 (newRowClick)="RECOV_ACCODESelected($event)">
                                             </master-search>
                                     </mat-form-field>
@@ -426,10 +426,10 @@
                                             (change)="checkAccodeSelected($event,'GAIN_ACCODE')"
                                             (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
                                             [readonly]="isAlloWGainReadOnly"
-                                            tabindex="21"  (keypress)="lookupKeyPress($event)"/>
+                                            tabindex="21"  (keypress)="lookupKeyPress($event)"  (focusout)="gainaccodeValidate($event)"/>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="WipACCODEData"
-                                                *ngIf="!viewMode && searchModeAllow"
+                                                *ngIf="!viewMode && searchModeAllow"  #overlaygainaccodeSearch
                                                 (newRowClick)="GAIN_ACCODESelected($event)">
                                             </master-search>
                                     </mat-form-field>

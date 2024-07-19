@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -14,6 +15,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-pricing-master.component.scss']
 })
 export class StonePricingMasterComponent implements OnInit {
+  @ViewChild('overlaysizesetSearch') overlaysizesetSearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysievefromSearch') overlaysievefromSearch!: MasterSearchComponent;
+  @ViewChild('overlaysievetoSearch') overlaysievetoSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild('overlayclaritySearch') overlayclaritySearch!: MasterSearchComponent;
+  @ViewChild('overlaysizefromSearch') overlaysizefromSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizetoSearch') overlaysizetoSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+
+
 
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
@@ -854,4 +866,110 @@ export class StonePricingMasterComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  sizesetValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve_set')
+      return
+    }
+  }
+
+  shapeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'shape')
+      return
+    }
+  }
+  
+  sievefromValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve_form')
+      return
+    }
+  }
+    
+  sievetoValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve_to')
+      return
+    }
+  }
+    
+  colorValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'color')
+      return
+    }
+  }
+      
+  clarityValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'clarity')
+      return
+    }
+  }
+      
+  sizefromValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'size_from')
+      return
+    }
+  }
+      
+  sizetoValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'size_to')
+      return
+    }
+  }
+  currencyValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'currency')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'sieve_set') {
+      this.overlaysizesetSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_form') {
+      this.overlaysievefromSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_to') {
+      this.overlaysievetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_to') {
+      this.overlaysievetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color') {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'clarity') {
+      this.overlayclaritySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size_from') {
+      this.overlaysizefromSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size_to') {
+      this.overlaysizetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency') {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+  }
+
 }
