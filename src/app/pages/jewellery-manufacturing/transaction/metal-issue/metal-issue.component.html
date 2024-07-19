@@ -97,10 +97,11 @@
                                                 <input type="text" matInput
                                                     formControlName="SALESPERSON_CODE"
                                                     [readonly]="viewMode"
-                                                    (keypress)="lookupKeyPress($event)" />
+                                                    (keypress)="lookupKeyPress($event)" 
+                                                    (focusout)="validateLookupField($event,SALESPERSON_CODEData,'SALESPERSON_CODE')"/>
                                             </mat-form-field>
                                             <master-search
-                                                [MasterSearchData]="SALESPERSON_CODEData"
+                                                [MasterSearchData]="SALESPERSON_CODEData" #overlaysalesperson
                                                 (newRowClick)="SALESPERSON_CODESelected($event)"
                                                 *ngIf="!viewMode">
                                             </master-search>
@@ -145,10 +146,11 @@
                                                 <input type="text" matInput
                                                     formControlName="workerDes"
                                                     [readonly]="viewMode"
-                                                    (keypress)="lookupKeyPress($event)" />
+                                                    (keypress)="lookupKeyPress($event)" 
+                                                    (focusout)="validateLookupField($event,workerCodeData,'workerDes')"/>
                                             </mat-form-field>
                                             <master-search
-                                                [MasterSearchData]="workerCodeData"
+                                                [MasterSearchData]="workerCodeData" #overlayworkerDes
                                                 (newRowClick)="workerCodeSelected($event)"
                                                 *ngIf="!viewMode">
                                             </master-search>

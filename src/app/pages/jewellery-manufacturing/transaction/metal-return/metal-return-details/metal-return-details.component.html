@@ -31,6 +31,7 @@
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="jobnoCodeData"
+                                    #overlayjobNumberSearch
                                     (newRowClick)="jobnoCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -70,10 +71,12 @@
                                     <input type="text" matInput
                                         formControlName="processCode"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)"
+                                        (focusout)="processCodeValidate($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="ProcessCodeData"
+                                    #overlayprocessCodeSearch
                                     (newRowClick)="ProcessCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -94,10 +97,12 @@
                                     <input type="text" matInput
                                         formControlName="workerCode"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)">
+                                        (keypress)="lookupKeyPress($event)"
+                                        (focusout)=WorkerCodeValidate($event)>
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"
+                                    #overlayworkerCodeSearch
                                     (newRowClick)="WorkerCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -161,10 +166,12 @@
                                     <input type="text" matInput
                                         formControlName="location"
                                         readonly
-                                        (keypress)="lookupKeyPress($event)">
+                                        (keypress)="lookupKeyPress($event)"
+                                        (focusout)="validateLookupField($event,locationCodeData,'location')" >
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="locationCodeData"
+                                    #overlaylocationSearch
                                     (newRowClick)="locationCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -184,6 +191,7 @@
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
+                                    #overlaystockCodeSearch
                                     (newRowClick)="stockCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -204,10 +212,11 @@
                                     <input type="text" matInput
                                         formControlName="ReturnToStockCode"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)"   (focusout)="validateLookupField($event,stockCodeData,'ReturnToStockCode')" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
+                                    #overlayReturnToStockCodeSearch
                                     (newRowClick)="ReturnTostockCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>

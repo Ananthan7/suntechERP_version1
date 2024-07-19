@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-metal-issue',
@@ -16,6 +17,8 @@ import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-de
 })
 export class MetalIssueComponent implements OnInit {
   @ViewChild('metalIssueDetailScreen') public MetalIssueDetailScreen!: NgbModal;
+  @ViewChild('overlayworkerDes') overlayworkerDes! : MasterSearchComponent;
+  @ViewChild('overlaysalesperson') overlaysalesperson!: MasterSearchComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   modalReference!: NgbModalRef;
@@ -583,6 +586,46 @@ this.setvoucherTypeMaster()
         this.subscriptions.push(Sub)
       }
     });
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if(this.metalIssueForm.value[formControlName] != '')return
+    if (formControlName == 'SALESPERSON_CODE') {
+      this.overlaysalesperson.showOverlayPanel(event)
+    }
+    if (formControlName == 'workerDes') {
+      this.overlayworkerDes.showOverlayPanel(event)
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+   this.showOverleyPanel(event,FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.metalIssueForm.controls[FORMNAME].setValue('')
+         
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'SALESPERSON_CODE') {
+            this.showOverleyPanel(event, 'SALESPERSON_CODE');
+          } else if (FORMNAME === 'workerDes') {
+            this.showOverleyPanel(event, 'workerDes');
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 
   ngOnDestroy() {
