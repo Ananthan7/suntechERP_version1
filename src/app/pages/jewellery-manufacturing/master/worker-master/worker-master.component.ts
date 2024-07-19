@@ -8,6 +8,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-worker-master',
@@ -16,6 +17,11 @@ import { ChangeDetectorRef } from '@angular/core';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
+  @ViewChild('overlayWorkerAcCodeSearch') overlayWorkerAcCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayNameOfSupervisorSearch') overlayNameOfSupervisorSearch!: MasterSearchComponent;
+
+
+
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
@@ -644,7 +650,33 @@ export class WorkerMasterComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  WorkerAcCodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'WorkerAcCode')
+      return
+    }
+  }
   
+  NameOfSupervisorValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'NameOfSupervisor')
+      return
+    }
+  }
+  
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'WorkerAcCode') {
+      this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'NameOfSupervisor') {
+      this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
+    }
+  }
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

@@ -68,11 +68,11 @@ export class JobStickerPrintComponent implements OnInit {
 
     console.log(this.content?.FLAG)
     this.branchCode = this.commonService.branchCode;
-   // this.priceSchemeValidate();
+    // this.priceSchemeValidate();
 
-   if(this.content == undefined){
-    this.priceSchemeValidate();
-  }
+    if (this.content == undefined) {
+      this.priceSchemeValidate();
+    }
 
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -80,6 +80,7 @@ export class JobStickerPrintComponent implements OnInit {
 
     } else if (this.content.FLAG == 'EDIT') {
       console.log("edit")
+      this.priceSchemeValidate();
 
     } else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -88,18 +89,18 @@ export class JobStickerPrintComponent implements OnInit {
 
 
   }
-  
+
   getfiltercode() {
 
-    // let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/'+ this.jobstickerpointForm.value.jobrange+'?DBBranch='+ this.branchCode;
-    let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/45353539'+'?DBBranch='+ this.branchCode;
+    let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/' + this.branchCode + '/' + this.jobstickerpointForm.value.jobrange + '?DBBranch=' + this.branchCode;
+    // let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/45353539'+'?DBBranch='+ this.branchCode;
     let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-        this.tableDataProcess.push(result.response);
-        console.log(this.tableDataProcess)
+          this.tableDataProcess.push(result.response);
+          console.log(this.tableDataProcess)
         }
-        else{
+        else {
           this.commonService.toastErrorByMsgId(result.status)
         }
         // this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
@@ -120,27 +121,28 @@ export class JobStickerPrintComponent implements OnInit {
 
 
   priceSchemeValidate() {
-
+    this.jobstickerpointForm.controls.jobrange.setValue(this.content.JOB_NUMBER);
+    this.jobstickerpointForm.controls.jobrangeDesc.setValue(this.content.JOB_NUMBER);
     // this.jobCardFrom.controls.jobCardFrom.setValue(e.PRICE_CODE)
-    let postData = {
-      "SPID": "096",
-      "parameter": {
-        STRBRANCHCODE: this.branchCode
-      }
-    }
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        if (result.status == "Success") {
-          //this.jobNumber = result.dynamicData[0][0].JOB_NO || []
-       
+    // let postData = {
+    //   "SPID": "096",
+    //   "parameter": {
+    //     STRBRANCHCODE: this.branchCode
+    //   }
+    // }
+    // let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    //   .subscribe((result) => {
+    //     if (result.status == "Success") {
+    //       //this.jobNumber = result.dynamicData[0][0].JOB_NO || []
 
-          this.jobstickerpointForm.controls.jobrange.setValue(result.dynamicData[0][0].JOB_NO)
-          this.jobstickerpointForm.controls.jobrangeDesc.setValue(result.dynamicData[0][0].JOB_NO)
-          console.log(this.jobstickerpointForm.value.jobrange)
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
-      })
+
+    //       this.jobstickerpointForm.controls.jobrange.setValue(result.dynamicData[0][0].JOB_NO)
+    //       this.jobstickerpointForm.controls.jobrangeDesc.setValue(result.dynamicData[0][0].JOB_NO)
+    //       console.log(this.jobstickerpointForm.value.jobrange)
+    //     }
+    //   }, err => {
+    //     this.commonService.toastErrorByMsgId('Server Error')
+    //   })
     //  this.jobstickerpointForm.push(Sub)
   }
 

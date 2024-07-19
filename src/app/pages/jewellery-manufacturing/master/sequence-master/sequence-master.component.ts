@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -8,12 +8,14 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { CdkDragDrop, CdkDragStart, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-sequence-master',
   templateUrl: './sequence-master.component.html',
   styleUrls: ['./sequence-master.component.scss']
 })
 export class SequenceMasterComponent implements OnInit {
+  @ViewChild('overlaysequencePrefixCodeSearch') overlaysequencePrefixCodeSearch!: MasterSearchComponent;
   @Input() content!: any; //use: To get clicked row details from master grid
 
   dataSource: any[] = [];
@@ -716,6 +718,21 @@ export class SequenceMasterComponent implements OnInit {
   lookupKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
+    }
+  }
+
+  sequencePrefixCodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sequencePrefix')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'sequencePrefix') {
+      this.overlaysequencePrefixCodeSearch.showOverlayPanel(event)
     }
   }
 }

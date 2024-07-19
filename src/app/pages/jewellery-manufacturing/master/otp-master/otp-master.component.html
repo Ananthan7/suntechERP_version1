@@ -19,9 +19,9 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Branch * :</label>
                                     <div class="col-md-3">
                                       <mat-form-field style="width: 80%;">
-                                        <input type="text" matInput formControlName="branch"  (keypress)="lookupKeyPress($event)"/>
+                                        <input type="text" matInput formControlName="branch"  (keypress)="lookupKeyPress($event)" (focusout)="branchValidate($event)"/>
                                       </mat-form-field>
-                                      <master-search [MasterSearchData]="branchCodeData"
+                                      <master-search [MasterSearchData]="branchCodeData"   #overlaybranchSearch
                                          (newRowClick)="branchSelected($event)"></master-search>
                                     </div>
                                     <div class="col-md-4">

@@ -1201,6 +1201,14 @@ export class ComponentMasterComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+    if (this.editMode && FORMNAME === 'code') {
+      return;
+    }
+    if (this.editMode && FORMNAME === 'codedes') {
+      return;
+    }
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

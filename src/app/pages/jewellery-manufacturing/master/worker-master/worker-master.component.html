@@ -56,10 +56,10 @@
                                     UpperCaseDirective
                                     (focusout)="validateLookupField($event,accountMasterData,'WorkerAcCode')"
                                     formControlName="WorkerAcCode" 
-                                    autocomplete="off"  (keypress)="lookupKeyPress($event)"/>
+                                    autocomplete="off"  (keypress)="lookupKeyPress($event)"  (focusout)="WorkerAcCodeValidate($event)"/>
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="accountMasterData"
-                                        *ngIf="viewMode == false"
+                                        *ngIf="viewMode == false"  #overlayWorkerAcCodeSearch
                                         (newRowClick)="WorkerAcCodeSelected($event)">
                                     </master-search>
                             </mat-form-field>
@@ -76,9 +76,9 @@
                                     (focusout)="validateLookupField($event,supervisorData,'NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable"
                                     formControlName="NameOfSupervisor" 
-                                    autocomplete="off"  (keypress)="lookupKeyPress($event)"/>
+                                    autocomplete="off"  (keypress)="lookupKeyPress($event)"  (focusout)="NameOfSupervisorValidate($event)"/>
                                     <master-search [MasterSearchData]="supervisorData"
-                                        *ngIf="viewMode == false" class="masterSearch"
+                                        *ngIf="viewMode == false" class="masterSearch"  #overlayNameOfSupervisorSearch
                                         (newRowClick)="supervisorSelected($event)">
                                     </master-search>
                             </mat-form-field>

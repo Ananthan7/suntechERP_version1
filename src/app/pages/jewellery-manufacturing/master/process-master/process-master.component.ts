@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -14,6 +15,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-master.component.scss']
 })
 export class ProcessMasterComponent implements OnInit {
+  @ViewChild('overlayWIPaccountSearch') overlayWIPaccountSearch!: MasterSearchComponent;
+  @ViewChild('overlayapprovalCodeSearch') overlayapprovalCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayapprovalProcessSearch') overlayapprovalProcessSearch!: MasterSearchComponent;
+  @ViewChild('overlayrecStockCodeSearch') overlayrecStockCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayadjustaccodeSearch') overlayadjustaccodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaylossaccodeSearch') overlaylossaccodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayrecoveaccodeSearch') overlayrecoveaccodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaygainaccodeSearch') overlaygainaccodeSearch!: MasterSearchComponent;
 
   @Input() content!: any;
   viewMode: boolean = false;
@@ -1128,5 +1137,95 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
+  WIPaccountValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'WIPaccount')
+      return
+    }
+  }
 
+  approvalCodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'approvalCode')
+      return
+    }
+  }
+  
+  approvalProcessValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'approvalProcess')
+      return
+    }
+  }
+
+  recStockCodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'recStockCode')
+      return
+    }
+  }
+  
+  adjustaccodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'ADJUST_ACCODE')
+      return
+    }
+  }
+  
+  lossaccodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'LOSS_ACCODE')
+      return
+    }
+  }
+  
+  recoveaccodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'RECOV_ACCODE')
+      return
+    }
+  }
+    
+  gainaccodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'GAIN_ACCODE')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'WIPaccount') {
+      this.overlayWIPaccountSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'approvalCode') {
+      this.overlayapprovalCodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'approvalProcess') {
+      this.overlayapprovalProcessSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'recStockCode') {
+      this.overlayrecStockCodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'ADJUST_ACCODE') {
+      this.overlayadjustaccodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'LOSS_ACCODE') {
+      this.overlaylossaccodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'RECOV_ACCODE') {
+      this.overlayrecoveaccodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'GAIN_ACCODE') {
+      this.overlaygainaccodeSearch.showOverlayPanel(event)
+    }
+  }
 }
