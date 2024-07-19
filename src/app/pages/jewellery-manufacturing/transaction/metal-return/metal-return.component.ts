@@ -44,17 +44,16 @@ export class MetalReturnComponent implements OnInit {
   };
   private subscriptions: Subscription[] = [];
 
-  user: MasterSearchModel = {
+  SALESPERSON_CODEData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User',
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entered by',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACTIVE = 1",
+    WHERECONDITION: "ACTIVE=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,

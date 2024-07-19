@@ -77,9 +77,9 @@
                                         formControlName="enteredBy"
                                         [readonly]="viewMode"
                                         (keypress)="lookupKeyPress($event)" 
-                                        (focusout)="validateLookupField($event,user,'enteredBy')"/>
+                                        (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="user" #overlayenteredBy
+                                <master-search [MasterSearchData]="SALESPERSON_CODEData" #overlayenteredBy
                                     (newRowClick)="userDataSelected($event)"
                                     *ngIf="!viewMode">
                                 </master-search>
