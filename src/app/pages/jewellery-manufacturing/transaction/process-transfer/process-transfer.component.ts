@@ -203,6 +203,21 @@ export class ProcessTransferComponent implements OnInit {
         }
       });
   }
+  showOverleyPanel(event: any, formControlName: string) {
+    if(event.target.value != '') return
+    if (formControlName == 'salesman') {
+      this.salesmanOverlay.showOverlayPanel(event)
+    }
+  }
+  lookupKeyPress(event: any,form?:any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+    if (event.key === 'Enter') {
+      if(event.target.value == '') this.showOverleyPanel(event,form)
+      event.preventDefault();
+    }
+  }
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
@@ -283,9 +298,6 @@ export class ProcessTransferComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if(FORMNAME == 'salesman' && event.target.value == ''){
-      this.salesmanOverlay.showOverlayPanel(event)
-    }
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

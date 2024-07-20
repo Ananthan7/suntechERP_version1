@@ -440,36 +440,38 @@ export class MeltingProcessComponent implements OnInit {
       console.error('Invalid index');
     }
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.meltingProcessFrom.value[formControlName] != '') return
-    if (formControlName == 'meltingType') {
-      this.overlaymeltingTypecode.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlayprocesscode.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockcodeRet') {
-      this.overlaystockcodeRet.showOverlayPanel(event)
-    }
-    if (formControlName == 'locationRet') {
-      this.overlaylocationRet.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockCodeScp') {
-      this.overlaylstockCodeScp.showOverlayPanel(event)
-    }
-    if (formControlName == 'locationScp') {
-      this.overlayllocationScp.showOverlayPanel(event)
+    if (this.meltingProcessFrom.value[formControlName] != '') return;
+    switch (formControlName) {
+      case 'meltingType':
+        this.overlaymeltingTypecode.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocesscode.showOverlayPanel(event);
+        break;
+      case 'stockcodeRet':
+        this.overlaystockcodeRet.showOverlayPanel(event);
+        break;
+      case 'locationRet':
+        this.overlaylocationRet.showOverlayPanel(event);
+        break;
+      case 'stockCodeScp':
+        this.overlaylstockCodeScp.showOverlayPanel(event);
+        break;
+      case 'locationScp':
+        this.overlayllocationScp.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    this.showOverleyPanel(event, FORMNAME);
-
     if (event.target.value == '' || this.viewMode) return;
 
     let param = {
@@ -490,12 +492,7 @@ export class MeltingProcessComponent implements OnInit {
           this.meltingProcessFrom.controls[FORMNAME].setValue('');
           LOOKUPDATA.SEARCH_VALUE = '';
 
-          if (FORMNAME === 'meltingType') {
-            this.meltingProcessFrom.controls.meltingType.setValue('');
-            this.showOverleyPanel(event, 'meltingType');
-          }
-
-          if (FORMNAME === 'process' || FORMNAME === 'stockcodeRet' || FORMNAME === 'locationRet' || FORMNAME === 'stockCodeScp' || FORMNAME === 'locationScp') {
+          if ( FORMNAME === 'meltingType' || FORMNAME === 'process' || FORMNAME === 'stockcodeRet' || FORMNAME === 'locationRet' || FORMNAME === 'stockCodeScp' || FORMNAME === 'locationScp') {
             this.showOverleyPanel(event, FORMNAME);
           }
 

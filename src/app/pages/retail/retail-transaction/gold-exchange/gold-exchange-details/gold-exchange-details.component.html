@@ -40,6 +40,8 @@
           />
         </mat-form-field>
         <master-search
+          (focusout)="openTab($event, 'stockCode')"
+          #overlayStockCode
           *ngIf="!viewOnly"
           [MasterSearchData]="stockCodeData"
           (newRowClick)="stockCodeSelected($event)"
@@ -63,6 +65,8 @@
           />
         </mat-form-field>
         <master-search
+          (focusout)="openTab($event, 'goldType')"
+          #overlayOutsideCode
           *ngIf="!viewOnly"
           [MasterSearchData]="outSideGoldCodeData"
           (newRowClick)="outSideGoldSelected($event)"
@@ -101,6 +105,8 @@
               />
             </mat-form-field>
             <master-search
+              (focusout)="openTab($event, 'locCode')"
+              #overlayLocationCode
               *ngIf="!viewOnly"
               [MasterSearchData]="locCodeData"
               (newRowClick)="locCodeSelected($event)"
@@ -126,7 +132,6 @@
                   [readonly]="viewOnly"
                   style="text-align: right"
                   matInput
-                  ThreeDecimalInput
                   formControlName="pieces"
                 />
               </mat-form-field>
@@ -144,7 +149,6 @@
                   [readonly]="viewOnly"
                   style="text-align: right"
                   matInput
-                  ThreeDecimalInput
                   formControlName="grossWeight"
                 />
               </mat-form-field>

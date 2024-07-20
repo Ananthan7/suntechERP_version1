@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-job-closing',
@@ -14,24 +15,30 @@ import Swal from 'sweetalert2';
   styleUrls: ['./job-closing.component.scss']
 })
 export class JobClosingComponent implements OnInit {
-  
-  tableData: any[] = [];  
-  tableDatas: any[] = []; 
-  columnheadItemDetails:any[] = ['UNIQUEID','SRNO','DT_BRANCH_CODE','DT_VOCTYPE','DT_VOCNO','DT_YEARMOTH','JOB_NUMBER','JOB_SO_NUMBER','UNQ_JOB_ID','JOB_DESCRIPTION','DESIGN_CODE','JOB_PCS','UNQ_DESIGN_ID','PICTURE_NAME','PART_CODE','JOB_DATE','JOB_SO_MID'];
-  columnheadItemDetails1:any[] = ['SRNO','Job Number','Unq.Job Id','DESIGN','METALSTONE','DIVCODE','Stock_Code','Batch_Id','STOCK_DESCRIPTION','COLOR','CLARITY','SHAPE','SIZE','SIEVE','PCS','GROSS_WT','RATE','AMOUNTLC','AMOUNTFC','PROCESS_CODE','WORKER_CODE','RATEFC','PUREWT','PURITY','STONE_WT','NET_WT','NET_WT','KARAT_CODE','Job Pcs'];
-  columnheadItemDetails2:any[] = ['METALSTONE','DIVCODE','Stock_Code','Sub_stock','Karat_code','Color','Clarity','Size','Sieve','Shape','Sieve_set','Pcs','GROSS_WT'];
+  @ViewChild('overlayusernamecode') overlayusernamecode!: MasterSearchComponent;
+  @ViewChild('overlaypartycode') overlaypartycode!: MasterSearchComponent;
+  @ViewChild('overlayjobnumbercode') overlayjobnumbercode!: MasterSearchComponent;
+  @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
+  @ViewChild('overlayreasoncode') overlayreasoncode!: MasterSearchComponent;
+  @ViewChild('overlaymetallocationcode') overlaymetallocationcode!: MasterSearchComponent;
+  @ViewChild('overlaystonelocationcode') overlaystonelocationcode!: MasterSearchComponent;
+
+  tableData: any[] = [];
+  tableDatas: any[] = [];
+  columnheadItemDetails: any[] = ['UNIQUEID', 'SRNO', 'DT_BRANCH_CODE', 'DT_VOCTYPE', 'DT_VOCNO', 'DT_YEARMOTH', 'JOB_NUMBER', 'JOB_SO_NUMBER', 'UNQ_JOB_ID', 'JOB_DESCRIPTION', 'DESIGN_CODE', 'JOB_PCS', 'UNQ_DESIGN_ID', 'PICTURE_NAME', 'PART_CODE', 'JOB_DATE', 'JOB_SO_MID'];
+  columnheadItemDetails1: any[] = ['SRNO', 'Job Number', 'Unq.Job Id', 'DESIGN', 'METALSTONE', 'DIVCODE', 'Stock_Code', 'Batch_Id', 'STOCK_DESCRIPTION', 'COLOR', 'CLARITY', 'SHAPE', 'SIZE', 'SIEVE', 'PCS', 'GROSS_WT', 'RATE', 'AMOUNTLC', 'AMOUNTFC', 'PROCESS_CODE', 'WORKER_CODE', 'RATEFC', 'PUREWT', 'PURITY', 'STONE_WT', 'NET_WT', 'NET_WT', 'KARAT_CODE', 'Job Pcs'];
+  columnheadItemDetails2: any[] = ['METALSTONE', 'DIVCODE', 'Stock_Code', 'Sub_stock', 'Karat_code', 'Color', 'Clarity', 'Size', 'Sieve', 'Shape', 'Sieve_set', 'Pcs', 'GROSS_WT'];
   content!: any;
   jobNumberDetailData: any[] = [];
   divisionMS: any = 'ID';
   currentDate = new FormControl(new Date());
-  text="Sales Order";
-  checked:boolean = true
+  text = "Sales Order";
+  checked: boolean = true
   userName: any;
-  branchCode: any;
-  yearMonth: any;
-  subscriptions: any []=[];
-
-  
+  subscriptions: any[] = [];
+  viewMode: boolean = false;
+  branchCode: String = this.commonService.branchCode;
+  yearMonth: String = this.commonService.yearSelected;
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -41,12 +48,12 @@ export class JobClosingComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,) { }
 
-    
+
   ngOnInit(): void {
-  
-  this.branchCode = this.commonService.branchCode;
-  this.yearMonth = this.commonService.yearSelected;
-  // this.voctype = this.commonService.getqueryParamMainVocType()
+
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
+    // this.voctype = this.commonService.getqueryParamMainVocType()
     this.setvalues()
   }
   setAllInitialValues() {
@@ -57,35 +64,35 @@ export class JobClosingComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(this.content.REMARKS,'working')
-          data.Details.forEach((element:any) => {
+          console.log(this.content.REMARKS, 'working')
+          data.Details.forEach((element: any) => {
             this.tableData.push({
               Srno: element.SRNO,
-              Division:element.DIVCODE,
-              
+              Division: element.DIVCODE,
+
             })
           });
           console.log(this.tableDatas)
-          data.Components.forEach((element:any) => {
+          data.Components.forEach((element: any) => {
             this.tableDatas.push({
-              Srno:element.SRNO,
-              CompCode:element.COMP_CODE,
-              Description:element.COMP_DESCRIPTION,
-              Pcs:element.PCS,
-              SizeSet:element.COMPSIZE_CODE,
-              SizeCode:element.COMPSET_CODE,
-              Type:element.TYPE_CODE,
-              Category:element.CATEGORY_CODE,
-              Shape:element.COMP_SHAPE,
-              Height:element.HEIGHT,
-              Width:element.WIDTH,
-              Length:element.LENGTH,
-              Radius:element.RADIUS,
-              Remarks:element.REMARKS
+              Srno: element.SRNO,
+              CompCode: element.COMP_CODE,
+              Description: element.COMP_DESCRIPTION,
+              Pcs: element.PCS,
+              SizeSet: element.COMPSIZE_CODE,
+              SizeCode: element.COMPSET_CODE,
+              Type: element.TYPE_CODE,
+              Category: element.CATEGORY_CODE,
+              Shape: element.COMP_SHAPE,
+              Height: element.HEIGHT,
+              Width: element.WIDTH,
+              Length: element.LENGTH,
+              Radius: element.RADIUS,
+              Remarks: element.REMARKS
 
-            
+
             })
-          }); 
+          });
           this.jobCloseingFrom.controls.vocNo.setValue(data.VOCNO)
           this.jobCloseingFrom.controls.voctype.setValue(data.VOCTYPE)
           this.jobCloseingFrom.controls.design.setValue(data.DESIGN_CODE)
@@ -95,8 +102,8 @@ export class JobClosingComponent implements OnInit {
           this.jobCloseingFrom.controls.soNumber.setValue(data.JOB_SO_NUMBER)
           this.jobCloseingFrom.controls.subJobId.setValue(data.JOB_SO_MID)
           this.jobCloseingFrom.controls.narration.setValue(data.REMARKS)
-         
-          
+
+
         } else {
           this.comService.toastErrorByMsgId('MSG1531')
         }
@@ -106,23 +113,23 @@ export class JobClosingComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-            
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
 
-  change(event:any){
+  change(event: any) {
     console.log(event);
     this.text = event.target.value;
-    if(event.target.checked == true){
-       this.text="Non Sales Order";
-    }else{
-      this.text="Sales Order";
+    if (event.target.checked == true) {
+      this.text = "Non Sales Order";
+    } else {
+      this.text = "Sales Order";
     }
   }
- 
+
   partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -134,7 +141,7 @@ export class JobClosingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  partyCodeSelected(e:any){
+  partyCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.party_code.setValue(e.ACCODE);
   }
@@ -150,11 +157,11 @@ export class JobClosingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  jobCodeSelected(e:any){
+  jobCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.job_no.setValue(e.job_number);
     this.jobNumberValidate({ target: { value: e.job_number } })
-    
+
   }
 
   workerCodeData: MasterSearchModel = {
@@ -168,7 +175,7 @@ export class JobClosingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  workerCodeSelected(e:any){
+  workerCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.worker.setValue(e.WORKER_CODE);
   }
@@ -184,7 +191,7 @@ export class JobClosingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  reasonCodeSelected(e:any){
+  reasonCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.reason.setValue(e.DESCRIPTION);
   }
@@ -196,11 +203,15 @@ export class JobClosingComponent implements OnInit {
     SEARCH_FIELD: 'Location',
     SEARCH_HEADING: 'Metal Location',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Location<>''",
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strUserCode='${this.comService.userName}' ,     
+ @strAvoidFORSALES='',
+ @strFrom=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-  MetalLocCodeSelected(e:any){
+  MetalLocCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.metal_loc.setValue(e.Location);
   }
@@ -212,11 +223,15 @@ export class JobClosingComponent implements OnInit {
     SEARCH_FIELD: 'Location',
     SEARCH_HEADING: 'Stone Location',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Location<>''",
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strUserCode='${this.comService.userName}' ,     
+    @strAvoidFORSALES='',
+    @strFrom=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
-  StoneLocCodeSelected(e:any){
+  StoneLocCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.stone_loc.setValue(e.Location);
   }
@@ -232,67 +247,67 @@ export class JobClosingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  UserCodeSelected(e:any){
+  UserCodeSelected(e: any) {
     console.log(e);
     this.jobCloseingFrom.controls.user_name.setValue(e.SALESPERSON_CODE);
   }
 
   jobCloseingFrom: FormGroup = this.formBuilder.group({
-      vocType: ['', [Validators.required]],
-      vocNo: ['', [Validators.required]],
-      vocdate: [''],
-      user_name: ['',],
-      party_code: ['',],
-      job_no: ['',],
-      worker: ['',],
-      reason : ['',],
-      stone_loc: ['', [Validators.required]],
-      metal_loc: ['', [Validators.required]], 
-      doc_ref: ['',], 
-      remarks: ['',], 
+    vocType: ['', [Validators.required]],
+    vocNo: ['', [Validators.required]],
+    vocdate: [''],
+    user_name: ['',],
+    party_code: ['',],
+    job_no: ['',],
+    worker: ['',],
+    reason: ['',],
+    stone_loc: ['', [Validators.required]],
+    metal_loc: ['', [Validators.required]],
+    doc_ref: ['',],
+    remarks: ['',],
   });
 
-  setDetaills(){
-    let Details:any=[]
-    this.tableData.forEach((Element: any)=> {
+  setDetaills() {
+    let Details: any = []
+    this.tableData.forEach((Element: any) => {
       Details.push(
         {
-            "UNIQUEID": 0,
-            "SRNO": Element.SRNO,
-            "DT_BRANCH_CODE": Element.BRANCH_CODE,
-            "DT_VOCTYPE": this.jobCloseingFrom.value.vocType,
-            "DT_VOCNO": 0,
-            "DT_YEARMONTH": this.yearMonth,
-            "JOB_NUMBER": this.jobCloseingFrom.value.job,
-            "JOB_SO_NUMBER": this.jobCloseingFrom.value.JOB_SO_NUMBER,
-            "UNQ_JOB_ID": "string",
-            "JOB_DESCRIPTION": "string",
-            "DESIGN_CODE": this.jobCloseingFrom.value.job_description,
-            "JOB_PCS": 0,
-            "UNQ_DESIGN_ID": "string",
-            "PICTURE_NAME": "string",
-            "PART_CODE": "string",
-            "JOB_DATE": "2024-02-02T23:49:41.431Z",
-            "JOB_SO_MID": 0
+          "UNIQUEID": 0,
+          "SRNO": Element.SRNO,
+          "DT_BRANCH_CODE": Element.BRANCH_CODE,
+          "DT_VOCTYPE": this.jobCloseingFrom.value.vocType,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth,
+          "JOB_NUMBER": this.jobCloseingFrom.value.job,
+          "JOB_SO_NUMBER": this.jobCloseingFrom.value.JOB_SO_NUMBER,
+          "UNQ_JOB_ID": "string",
+          "JOB_DESCRIPTION": "string",
+          "DESIGN_CODE": this.jobCloseingFrom.value.job_description,
+          "JOB_PCS": 0,
+          "UNQ_DESIGN_ID": "string",
+          "PICTURE_NAME": "string",
+          "PART_CODE": "string",
+          "JOB_DATE": "2024-02-02T23:49:41.431Z",
+          "JOB_SO_MID": 0
         }
       )
-      
+
     }
     )
-    return Details  
+    return Details
   }
-  componentSet(){
-    let Components:any=[]
-    this.tableDatas.forEach((item: any)=>{
+  componentSet() {
+    let Components: any = []
+    this.tableDatas.forEach((item: any) => {
       Components.push(
-         {
+        {
           "REFMID": 0,
           "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCTYPE": this.jobCloseingFrom.value.vocType,
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth,
           "SRNO": item.Srno,
-          "JOB_NUMBER":item.job,
+          "JOB_NUMBER": item.job,
           "JOB_SO_NUMBER": 0,
           "UNQ_JOB_ID": "string",
           "DESIGN_CODE": item.designCode,
@@ -323,27 +338,27 @@ export class JobClosingComponent implements OnInit {
           "KARAT_CODE": "string",
           "JOB_PCS": 0,
           "JOB_SO_MID": 0
-          }
-  
-      ) 
+        }
+
+      )
     }
     )
     return Components
   }
-  setvalues(){
+  setvalues() {
     this.jobCloseingFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
     this.jobCloseingFrom.controls.vocNo.setValue(this.commonService.popMetalValueOnNet)
     this.jobCloseingFrom.controls.vocdate.setValue(this.commonService.currentDate)
-   
+
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
-  formSubmit(){
+  formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
@@ -353,62 +368,62 @@ export class JobClosingComponent implements OnInit {
       return
     }
 
-  let API = 'JobClosingMaster/InsertJobClosingMasterDJ'
-  let postData = {
-  "MID": 0,
-  "BRANCH_CODE": this.comService.nullToString(this.branchCode),
-  "VOCTYPE":this.comService.nullToString(this.jobCloseingFrom.value.vocType),
-  "VOCNO": 0,
-  "YEARMONTH": this.yearMonth,
-  "VOCDATE": "2024-02-02T23:49:41.431Z",
-  "PARTYCODE": this.comService.nullToString(this.jobCloseingFrom.value.party_code),
-  "SALESPERSON_CODE": "string",
-  "SYSTEM_DATE": "2024-02-02T23:49:41.431Z",
-  "MACHINEID": "string",
-  "DOC_REF": this.comService.nullToString(this.jobCloseingFrom.value.doc_ref),
-  "REMARKS": this.comService.nullToString(this.jobCloseingFrom.value.remarks),
-  "NAVSEQNO": 0,
-  "WORKER_CODE": this.comService.nullToString(this.jobCloseingFrom.value.worker),
-  "MLOCTYPE_CODE": "string",
-  "SLOCTYPE_CODE": "string",
-  "DSO_VOCTYPE": "str",
-  "DSO_VOCNO": 0,
-  "DSO_YEARMONTH": "stri",
-  "DSO_VOCDATE": "2024-02-02T23:49:41.431Z",
-  "APPR_CODE": "string",
-  "APPR_TYPE": 0,
-  "TRANS_REF": "string",
-  "USER_ID": "string",
-  "REASON_TYPE": "string",
-  "POSTDATE": "string",
-  "AUTOPOSTING": true,
-  "WIP_TYPE": "s",
-  "JOB_NUMBER": "string",
-  "HTUSERNAME": "string",
-  "JOB_CLOSING_DETAIL_DJ": this.setDetaills(),
-  "JOB_CLOSING_STNMTL_dj": this.componentSet(),
-}
+    let API = 'JobClosingMaster/InsertJobClosingMasterDJ'
+    let postData = {
+      "MID": 0,
+      "BRANCH_CODE": this.comService.nullToString(this.branchCode),
+      "VOCTYPE": this.comService.nullToString(this.jobCloseingFrom.value.vocType),
+      "VOCNO": 0,
+      "YEARMONTH": this.yearMonth,
+      "VOCDATE": "2024-02-02T23:49:41.431Z",
+      "PARTYCODE": this.comService.nullToString(this.jobCloseingFrom.value.party_code),
+      "SALESPERSON_CODE": "string",
+      "SYSTEM_DATE": "2024-02-02T23:49:41.431Z",
+      "MACHINEID": "string",
+      "DOC_REF": this.comService.nullToString(this.jobCloseingFrom.value.doc_ref),
+      "REMARKS": this.comService.nullToString(this.jobCloseingFrom.value.remarks),
+      "NAVSEQNO": 0,
+      "WORKER_CODE": this.comService.nullToString(this.jobCloseingFrom.value.worker),
+      "MLOCTYPE_CODE": "string",
+      "SLOCTYPE_CODE": "string",
+      "DSO_VOCTYPE": "str",
+      "DSO_VOCNO": 0,
+      "DSO_YEARMONTH": "stri",
+      "DSO_VOCDATE": "2024-02-02T23:49:41.431Z",
+      "APPR_CODE": "string",
+      "APPR_TYPE": 0,
+      "TRANS_REF": "string",
+      "USER_ID": "string",
+      "REASON_TYPE": "string",
+      "POSTDATE": "string",
+      "AUTOPOSTING": true,
+      "WIP_TYPE": "s",
+      "JOB_NUMBER": "string",
+      "HTUSERNAME": "string",
+      "JOB_CLOSING_DETAIL_DJ": this.setDetaills(),
+      "JOB_CLOSING_STNMTL_dj": this.componentSet(),
+    }
 
-let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status.trim() == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.jobCloseingFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status.trim() == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jobCloseingFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -461,10 +476,11 @@ let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-    
+
   }
-  
+
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event, 'job_no')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -473,7 +489,7 @@ let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         'strJobNumber': this.commonService.nullToString(event.target.value),
         'strCurrenctUser': this.commonService.nullToString(this.userName)
       }
-    } 
+    }
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
@@ -487,11 +503,15 @@ let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
 
             this.subJobNumberValidate()
           } else {
-            this.commonService.toastErrorByMsgId('MSG1531')
+            this.comService.toastErrorByMsgId('MSG1531')
+            this.jobCloseingFrom.controls.job_no.setValue('')
+            this.showOverleyPanel(event, 'job_no')
             return
           }
         } else {
-          this.commonService.toastErrorByMsgId('MSG1747')
+          this.overlayjobnumbercode.closeOverlayPanel()
+          this.jobCloseingFrom.controls.job_no.setValue('')
+          this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -500,15 +520,15 @@ let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
     this.subscriptions.push(Sub)
   }
 
-update() {
-  console.log(this.update)
-  if (this.jobCloseingFrom.invalid) {
-    this.toastr.error('select all required fields')
-    return
-  }
+  update() {
+    console.log(this.update)
+    if (this.jobCloseingFrom.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
 
-  let API = `JobClosingMasterDJ/UpdateJobClosingMasterDJ/${this.branchCode}/${this.jobCloseingFrom.value.voctype}/${this.jobCloseingFrom.value.vocno}/${this.commonService.yearSelected}`
-  let postData = {
+    let API = `JobClosingMasterDJ/UpdateJobClosingMasterDJ/${this.branchCode}/${this.jobCloseingFrom.value.voctype}/${this.jobCloseingFrom.value.vocno}/${this.commonService.yearSelected}`
+    let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.jobCloseingFrom.value.vocType,
@@ -602,9 +622,9 @@ update() {
         }
       ]
     }
-    
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-    .subscribe((result) => {
+      .subscribe((result) => {
         if (result && result.status == "Success") {
           Swal.fire({
             title: result.message || 'Success',
@@ -622,7 +642,93 @@ update() {
         else {
           this.comService.toastErrorByMsgId('MSG3577')
         }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.jobCloseingFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'user_name':
+        this.overlayusernamecode.showOverlayPanel(event);
+        break;
+      case 'party_code':
+        this.overlaypartycode.showOverlayPanel(event);
+        break;
+      case 'job_no':
+        this.overlayjobnumbercode.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkercode.showOverlayPanel(event);
+        break;
+      case 'reason':
+        this.overlayreasoncode.showOverlayPanel(event);
+        break;
+      case 'metal_loc':
+        this.overlaymetallocationcode.showOverlayPanel(event);
+        break;
+      case 'stone_loc':
+        this.overlaystonelocationcode.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.jobCloseingFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'user_name' || FORMNAME === 'party_code' || FORMNAME === 'job_no' || FORMNAME === 'worker' || FORMNAME === 'reason' || FORMNAME === 'metal_loc' || FORMNAME === 'stone_loc') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  metalLocationValidate(event: any) {
+    this.showOverleyPanel(event, 'metal_loc')
+    let form = this.jobCloseingFrom.value;
+    let postData = {
+      "SPID": "057",
+      "parameter": {
+        strBranch_Code: this.commonService.nullToString(this.branchCode),
+        strUserCode: '',
+        strUserName: '',
+        strAvoidFORSALES: '',
+        strFrom:'',
+      }
+    };
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+
+        } else {
+          this.overlayjobnumbercode.showOverlayPanel(event)
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  
 }

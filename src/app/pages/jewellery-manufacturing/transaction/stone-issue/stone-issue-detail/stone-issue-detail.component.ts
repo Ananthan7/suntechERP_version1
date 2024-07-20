@@ -300,9 +300,9 @@ export class StoneIssueDetailComponent implements OnInit {
     }
   }
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
-    if (event.target.value == '' || this.viewMode == true) return
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    if (event.target.value == '' || this.viewMode == true) return;
+  
     let param = {
       "PAGENO": LOOKUPDATA.PAGENO,
       "RECORDS": LOOKUPDATA.RECORDS,
@@ -311,59 +311,68 @@ export class StoneIssueDetailComponent implements OnInit {
       "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
       "searchField": LOOKUPDATA.SEARCH_FIELD,
       "searchValue": LOOKUPDATA.SEARCH_VALUE
-    }
+    };
+  
     this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        let data = result.dynamicData[0]
+        this.comService.closeSnackBarMsg();
+        let data = result.dynamicData[0];
         if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
-            let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
-            console.log(result, 'result');
-            if (result && result.length == 0) {
-              this.comService.toastErrorByMsgId('No data found')
-              this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-              if (FORMNAME === 'worker') {
-                this.showOverleyPanel(event, 'worker');
-              } else if (FORMNAME === 'process') {
-                this.showOverleyPanel(event, 'process');
+            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+            console.log(searchResult, 'result');
+            if (searchResult && searchResult.length == 0) {
+              this.comService.toastErrorByMsgId('No data found');
+              this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              switch (FORMNAME) {
+                case 'worker':
+                  this.showOverleyPanel(event, 'worker');
+                  break;
+                case 'process':
+                  this.showOverleyPanel(event, 'process');
+                  break;
+                default:
+                  
               }
-              return
+              return;
             }
-        } else {
-          this.comService.toastErrorByMsgId('No data found')
-          this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
+          } 
         }
-      }
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
+        this.comService.toastErrorByMsgId('Error Something went wrong');
+      });
+    this.subscriptions.push(Sub);
   }
+  
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.stoneIssueDetailsFrom.value[formControlName] != '')return
-    if (formControlName == 'jobNumber') {
-      this.overlayjobNumberSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlayprocessSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockCode') {
-      this.overlaystockCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'LOCTYPE_CODE') {
-      this.overlaylocationSearch.showOverlayPanel(event)
+    if (this.stoneIssueDetailsFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'jobNumber':
+        this.overlayjobNumberSearch.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocessSearch.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaystockCodeSearch.showOverlayPanel(event);
+        break;
+      case 'LOCTYPE_CODE':
+        this.overlaylocationSearch.showOverlayPanel(event);
+        break;
+      default:
+        
     }
   }
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -408,9 +417,9 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     return false
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
   setPostData() {

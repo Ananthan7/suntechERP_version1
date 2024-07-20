@@ -44,7 +44,7 @@
                   <input type="text" matInput appNoEmptySpace
                     id="jobNoSearch"
                     autocomplete="off"
-                    (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'JOB_NUMBER')"
                     (focusout)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
@@ -96,7 +96,7 @@
               <div class="col-sm-6">
                 <mat-form-field appearance="outline" style="width: 76%;">
                   <input type="text" matInput UpperCaseDirective
-                    (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'APPROVED_USER')"
                     (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
                     formControlName="APPROVED_USER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
@@ -152,7 +152,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 110px;">
                             <input type="text" matInput UpperCaseDirective
-                              (keypress)="lookupKeyPress($event)"
+                              (keydown)="lookupKeyPress($event,'FRM_PROCESS_CODE')"
                               (focusout)="fromProcesscodeValidate($event)"
                               formControlName="FRM_PROCESS_CODE"
                               [readonly]="viewMode" />
@@ -170,7 +170,7 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                              (keypress)="lookupKeyPress($event)"
+                              (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
                               (focusout)="toProcesscodeValidate($event)"
                               formControlName="TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
@@ -190,7 +190,7 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                              (keypress)="lookupKeyPress($event)"
+                              (keydown)="lookupKeyPress($event,'FRM_WORKER_CODE')"
                               (focusout)="fromWorkercodeValidate($event)"
                               formControlName="FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
@@ -207,7 +207,7 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                              (keypress)="lookupKeyPress($event)"
+                               (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
                               (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
                             <master-search class="masterSearch"
@@ -426,7 +426,7 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput maxlength="15"
-                                (keypress)="lookupKeyPress($event)"
+                                 (keydown)="lookupKeyPress($event,'stockCode')"
                                 (focusout)="stockCodeScrapValidate($event)"
                                 formControlName="stockCode" [readonly]="viewMode" />
                               <master-search class="masterSearch" *ngIf="!viewMode"
@@ -454,10 +454,10 @@
                               style="width: 100px;">
                               <input type="text" matInput
                                 maxlength="15"
-                                (keypress)="lookupKeyPress($event)"
+                                 (keydown)="lookupKeyPress($event,'location')"
                                 formControlName="location" readonly />
                               <master-search class="masterSearch"
-                                *ngIf="locationSearchFlag"
+                                *ngIf="locationSearchFlag" #overleyLocation
                                 [MasterSearchData]="locationSearch"
                                 (newRowClick)="locationSelected($event)">
                               </master-search>
@@ -695,7 +695,7 @@
                             <input type="text" matInput readonly
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
                               formControlName="METAL_FRM_PROCESS_CODE" 
-                              (keypress)="lookupKeyPress($event)"/>
+                               (keydown)="lookupKeyPress($event,'METAL_FRM_PROCESS_CODE')">
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
                               [MasterSearchData]="fromProcessMasterSearch"  
@@ -710,7 +710,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput [readonly]="viewMode"
-                              (keypress)="lookupKeyPress($event)"
+                               (keydown)="lookupKeyPress($event,'METAL_TO_PROCESS_CODE')"
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
@@ -737,7 +737,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
-                              (keypress)="lookupKeyPress($event)"
+                               (keydown)="lookupKeyPress($event,'METAL_FRM_WORKER_CODE')"
                               formControlName="METAL_FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
@@ -753,7 +753,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
-                              (keypress)="lookupKeyPress($event)"
+                               (keydown)="lookupKeyPress($event,'METAL_TO_WORKER_CODE')"
                               formControlName="METAL_TO_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
@@ -795,7 +795,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             UpperCaseDirective 
-                            (keypress)="lookupKeyPress($event)"
+                             (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
                             (focusout)="stockCodeScrapValidate($event)"
                             formControlName="METAL_ToStockCode" />
                             <master-search class="masterSearch"

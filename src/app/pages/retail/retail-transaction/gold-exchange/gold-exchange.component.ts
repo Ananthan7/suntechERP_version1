@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import { GoldExchangeDetailsComponent } from './gold-exchange-details/gold-exchange-details.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+
 
 @Component({
   selector: 'app-gold-exchange',
@@ -17,6 +19,14 @@ import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-cu
   styleUrls: ['./gold-exchange.component.scss']
 })
 export class GoldExchangeComponent implements OnInit {
+
+  @ViewChild('overlayPartyCode') overlayPartyCode!: MasterSearchComponent;
+  @ViewChild('overlayCustomerCode') overlayCustomerCode!: MasterSearchComponent;
+  @ViewChild('overlaySalesmanCode') overlaySalesmanCode!: MasterSearchComponent;
+
+
+
+
 
   @Input() content!: any;
 
@@ -1144,6 +1154,31 @@ export class GoldExchangeComponent implements OnInit {
         console.log(`Dismissed ${reason}`);
       }
     );
+  }
+
+
+  openTab(event: any, formControlName: string) {
+    console.log(event);
+    
+    if (event.target.value === '') {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'partyCode':
+        this.overlayPartyCode.showOverlayPanel(event);
+        break;
+      case 'customer':
+        this.overlayCustomerCode.showOverlayPanel(event);
+        break;
+      case 'salesMan':
+        this.overlaySalesmanCode.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
   }
 
 

@@ -25,7 +25,7 @@
                                         formControlName="jobno"
                                         class="text-right" NumberOnly
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'jobno')"
                                         (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
                                 <master-search
@@ -61,7 +61,7 @@
                                     <input type="text" matInput
                                         formControlName="process"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
                                 </mat-form-field>
                                 <master-search
@@ -100,7 +100,7 @@
                                     <input type="text" matInput
                                         formControlName="worker"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'worker')" 
                                         (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                                 </mat-form-field>
                                 <master-search
@@ -147,7 +147,7 @@
                                     <input type="text" matInput
                                         formControlName="location"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'location')" 
                                         (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                                 </mat-form-field>
                                 <master-search
@@ -169,7 +169,7 @@
                                     <input type="text" matInput
                                         formControlName="stockcode"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'stockcode')" 
                                         (focusout)="validateLookupField($event,stockCodeData,'stockcode')"/>
                                 </mat-form-field>
                                 <master-search

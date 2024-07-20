@@ -77,6 +77,7 @@
                                         [readonly]="viewMode"
                                         UpperCaseDirective
                                         formControlName="salesman"
+                                        (keydown)="lookupKeyPress($event,'salesman')"
                                         (focusout)="validateLookupField($event,SalesmanData,'salesman')" />
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="SalesmanData"
