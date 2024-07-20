@@ -72,7 +72,7 @@
                             [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
                             UpperCaseDirective
                             (focusout)="validateLookupField($event,colorData,'color')" appNoEmptySpace
-                            (keypress)="lookupKeyPress($event)"  (focusout)="colorValidate($event)" />
+                            (keydown)="lookupKeyPress($event,'color')"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="colorData"
                         (newRowClick)="colorDataSelected($event)"  #overlaycolorSearch
@@ -91,7 +91,7 @@
                         <input type="text" [readonly]="viewMode || codeEnable"
                             matInput formControlName="karat"      (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace  (keypress)="lookupKeyPress($event)"  (focusout)="karatValidate($event)" />
+                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace (keydown)="lookupKeyPress($event,'karat')" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="karatcodeData"
                         (newRowClick)="karatcodeSelected($event)"   #overlaykaratSearch
@@ -134,7 +134,7 @@
                         <input type="text" matInput formControlName="stockCode"
                             [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace  (keypress)="lookupKeyPress($event)"  (focusout)="stockCodeValidate($event)" />
+                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace (keydown)="lookupKeyPress($event,'stockCode')" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="stockCodeData"
                         (newRowClick)="StockCodeSelected($event)"   #overlaystockCodeSearch

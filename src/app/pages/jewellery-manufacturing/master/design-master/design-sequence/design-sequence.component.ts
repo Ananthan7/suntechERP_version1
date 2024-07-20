@@ -117,8 +117,12 @@ export class DesignSequenceComponent implements OnInit {
 
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }

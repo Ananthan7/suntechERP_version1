@@ -60,7 +60,7 @@
                             <div class="col-sm-3 ">
                                 <mat-form-field style="width: 95%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="stockcodediv"  (keypress)="lookupKeyPress($event)" (focusout)="stockcodedivValidate($event)"/>
+                                        formControlName="stockcodediv" (keydown)="lookupKeyPress($event,'stockcodediv')"/>
                                         <master-search class="masterSearch"
                                             [MasterSearchData]="stockCodeData"  #overlaystockcodedivSearch
                                             (newRowClick)="stockcodeSelected($event)">
@@ -96,7 +96,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="itemcurrency"  (keypress)="lookupKeyPress($event)"  (focusout)="itemcurrencyValidate($event)"/>
+                                        formControlName="itemcurrency"  (keydown)="lookupKeyPress($event,'itemcurrency')"/>
                                         <master-search class="masterSearch"
                                             [MasterSearchData]="itemcurrencyCodeData"   #overlayitemcurrencySearch
                                             (newRowClick)="itemcurrencySelected($event)">
@@ -117,7 +117,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="basecurrency"  (keypress)="lookupKeyPress($event)"   (focusout)="basecurrencyValidate($event)"/>
+                                        formControlName="basecurrency"   (keydown)="lookupKeyPress($event,'basecurrency')"/>
                                         <master-search class="masterSearch"
                                         [MasterSearchData]="CurrencyCodeData"    #overlaybasecurrencySearch
                                         (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
@@ -267,7 +267,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="shape"  (keypress)="lookupKeyPress($event)" (focusout)="shapeValidate($event)"/>
+                                        formControlName="shape"  (keydown)="lookupKeyPress($event,'shape')"/>
                                         <master-search class="masterSearch"
                                             [MasterSearchData]="shapeCodeData"  #overlayshapeSearch
                                             (newRowClick)="shapeSelected($event)">
@@ -281,7 +281,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="size"  (keypress)="lookupKeyPress($event)" (focusout)="sizeValidate($event)"/>
+                                        formControlName="size"   (keydown)="lookupKeyPress($event,'size')"/>
                                         <master-search class="masterSearch" [MasterSearchData]="sizeCodeData"  #overlaysizeSearch
                                             (newRowClick)="sizeSelected($event)">
                                         </master-search>
@@ -294,7 +294,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="sieve"  (keypress)="lookupKeyPress($event)" (focusout)="sieveValidate($event)"/>
+                                        formControlName="sieve"    (keydown)="lookupKeyPress($event,'sieve')"/>
                                         <master-search class="masterSearch" 
                                             [MasterSearchData]="sieveCodeData"  #overlaysieveSearch
                                             (newRowClick)="sieveSelected($event)">
@@ -311,7 +311,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="color"  (keypress)="lookupKeyPress($event)"  (focusout)="colorValidate($event)"/>
+                                        formControlName="color"    (keydown)="lookupKeyPress($event,'color')"/>
                                         <master-search class="masterSearch"
                                             [MasterSearchData]="colorCodeData"  #overlaycolorSearch
                                             (newRowClick)="colorSelected($event)">
@@ -325,7 +325,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="clarity"  (keypress)="lookupKeyPress($event)"   (focusout)="clarityValidate($event)"/>
+                                        formControlName="clarity"  (keydown)="lookupKeyPress($event,'clarity')"/>
                                         <master-search class="masterSearch"
                                             [MasterSearchData]="clarityCodeData"  #overlayclaritySearch
                                             (newRowClick)="claritySelected($event)">
@@ -339,7 +339,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="sieve_set"  (keypress)="lookupKeyPress($event)"   (focusout)="sievesetValidate($event)"/>
+                                        formControlName="sieve_set"   (keydown)="lookupKeyPress($event,'sieve_set')"/>
                                         <master-search class="masterSearch"
                                             [MasterSearchData]="sievesetCodeData"  #overlaysievesetSearch
                                             (newRowClick)="sievesetSelected($event)">
