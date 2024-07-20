@@ -270,9 +270,9 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.DESCRIPTION);
     this.setLookup201WhereCondition()
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -487,11 +487,13 @@ export class MetalReturnDetailsComponent implements OnInit {
 
           } else {
             this.overlayworkerCodeSearch.showOverlayPanel(event)
-            this.comService.toastErrorByMsgId('MSG1747')
+            this.showOverleyPanel(event, 'workerCode')
+            this.metalReturnDetailsForm.controls.workerCode.setValue('')
+            this.comService.toastErrorByMsgId('MSG1531')
           }
         }, err => {
           this.comService.closeSnackBarMsg()
-          this.comService.toastErrorByMsgId('MSG1531')
+          this.comService.toastErrorByMsgId('MSG1747')
         })
       this.subscriptions.push(Sub)
     }
@@ -521,12 +523,13 @@ export class MetalReturnDetailsComponent implements OnInit {
 
         } else {
           this.overlayprocessCodeSearch.showOverlayPanel(event)
-          this.comService.toastErrorByMsgId('MSG1747')
           this.showOverleyPanel(event, 'processCode')
+          this.metalReturnDetailsForm.controls.processCode.setValue('')
+          this.comService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.comService.toastErrorByMsgId('MSG1747')
       })
     this.subscriptions.push(Sub)
   }
@@ -661,7 +664,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             return
           }
         } else {
-          this.overlayjobNumberSearch.closeOverlayPanel()
+          this.overlaystockCodeSearch.closeOverlayPanel()
           this.metalReturnDetailsForm.controls.stockCode.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -672,29 +675,34 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.metalReturnDetailsForm.value[formControlName] != '') return
-    if (formControlName == 'jobNumber') {
-      this.overlayjobNumberSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'processCode') {
-      this.overlayprocessCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'workerCode') {
-      this.overlayworkerCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'location') {
-      this.overlaylocationSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockCode') {
-      this.overlaystockCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'ReturnToStockCode') {
-      this.overlayReturnToStockCodeSearch.showOverlayPanel(event)
+    if (this.metalReturnDetailsForm.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'jobNumber':
+        this.overlayjobNumberSearch.showOverlayPanel(event);
+        break;
+      case 'processCode':
+        this.overlayprocessCodeSearch.showOverlayPanel(event);
+        break;
+      case 'workerCode':
+        this.overlayworkerCodeSearch.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocationSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaystockCodeSearch.showOverlayPanel(event);
+        break;
+      case 'ReturnToStockCode':
+        this.overlayReturnToStockCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+       
     }
   }
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

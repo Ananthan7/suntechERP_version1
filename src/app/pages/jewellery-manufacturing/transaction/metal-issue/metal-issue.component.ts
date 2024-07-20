@@ -17,7 +17,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class MetalIssueComponent implements OnInit {
   @ViewChild('metalIssueDetailScreen') public MetalIssueDetailScreen!: NgbModal;
-  @ViewChild('overlayworkerDes') overlayworkerDes! : MasterSearchComponent;
+  @ViewChild('overlayworkerDes') overlayworkerDes!: MasterSearchComponent;
   @ViewChild('overlaysalesperson') overlaysalesperson!: MasterSearchComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
@@ -27,25 +27,29 @@ export class MetalIssueComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
-    { title: 'SRNO', field: 'SRNO', format: '',alignment: 'center' },
-    { title: 'Job Id', field: 'JOB_NUMBER', format: '',alignment: 'left' },
-    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '',alignment: 'left' },
-    { title: 'Design', field: 'DESIGN_CODE', format: '',alignment: 'left' },
-    { title: 'Stock Code', field: 'STOCK_CODE', format: '',alignment: 'left' },
-    { title: 'Division', field: 'DIVCODE', format: '',alignment: 'left' },
-    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '',alignment: 'left' },
-    { title: 'Gross WT', field: 'GROSS_WT', format: {
-      type: 'fixedPoint',
-      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
-      currency: this.comService.compCurrency
-    },alignment: 'right' },
-    { title: 'Process', field: 'PROCESS_CODE', format: '',alignment: 'left' },
-    { title: 'Worker', field: 'WORKER_CODE', format: '',alignment: 'left' },
-    { title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
-      type: 'fixedPoint',
-      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
-      currency: this.comService.compCurrency
-    },alignment: 'right'},
+    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
+    { title: 'Job Id', field: 'JOB_NUMBER', format: '', alignment: 'left' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
+    { title: 'Design', field: 'DESIGN_CODE', format: '', alignment: 'left' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '', alignment: 'left' },
+    { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '', alignment: 'left' },
+    {
+      title: 'Gross WT', field: 'GROSS_WT', format: {
+        type: 'fixedPoint',
+        precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+        currency: this.comService.compCurrency
+      }, alignment: 'right'
+    },
+    { title: 'Process', field: 'PROCESS_CODE', format: '', alignment: 'left' },
+    { title: 'Worker', field: 'WORKER_CODE', format: '', alignment: 'left' },
+    {
+      title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
+        type: 'fixedPoint',
+        precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+        currency: this.comService.compCurrency
+      }, alignment: 'right'
+    },
   ];
   // workerCodeData: MasterSearchModel = {
   //   PAGENO: 1,
@@ -97,7 +101,7 @@ export class MetalIssueComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
-  gridAmountDecimalFormat:any;
+  gridAmountDecimalFormat: any;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     VOCTYPE: ['', [Validators.required]],
@@ -135,13 +139,13 @@ export class MetalIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
-        this.LOCKVOUCHERNO=true;
+        this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'EDIT') {
-        this.LOCKVOUCHERNO=true;
+        this.LOCKVOUCHERNO = true;
       }
       this.isSaved = true;
-      if(this.content.FLAG == 'DELETE'){
+      if (this.content.FLAG == 'DELETE') {
         this.deleteRecord()
       }
       this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
@@ -149,13 +153,13 @@ export class MetalIssueComponent implements OnInit {
     } else {
       this.generateVocNo()
       this.setNewFormValues()
-      this.setvoucherTypeMaster()  
+      this.setvoucherTypeMaster()
     }
   }
-  minDate:any;
+  minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
-  setvoucherTypeMaster(){
+  setvoucherTypeMaster() {
     let frm = this.metalIssueForm.value
     const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
@@ -163,7 +167,7 @@ export class MetalIssueComponent implements OnInit {
     this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
   }
   ValidatingVocNo() {
-    if(this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'VIEW') return
     this.comService.showSnackBarMsg('MSG81447');
     let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.metalIssueForm.value.VOCNO}`
     API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
@@ -195,7 +199,7 @@ export class MetalIssueComponent implements OnInit {
         }
       });
   }
- 
+
   setNewFormValues() {
     this.metalIssueForm.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
@@ -204,7 +208,7 @@ export class MetalIssueComponent implements OnInit {
     this.metalIssueForm.controls.MAIN_VOCTYPE.setValue(
       this.comService.getqueryParamMainVocType()
     )
-this.setvoucherTypeMaster()
+    this.setvoucherTypeMaster()
   }
 
   setAllInitialValues() {
@@ -265,9 +269,9 @@ this.setvoucherTypeMaster()
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -294,11 +298,11 @@ this.setvoucherTypeMaster()
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
-        if (result.isConfirmed) {
-          this.metalIssueDetailsData = this.metalIssueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-          this.reCalculateSRNO()
-        }
+      if (result.isConfirmed) {
+        this.metalIssueDetailsData = this.metalIssueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
       }
+    }
     )
   }
   onRowClickHandler(event: any) {
@@ -310,7 +314,7 @@ this.setvoucherTypeMaster()
     let selectedData = event.data
     this.openAddMetalIssue(selectedData)
   }
-  dataToDetailScreen:any; //data to pass to child
+  dataToDetailScreen: any; //data to pass to child
   openAddMetalIssue(dataToChild?: any) {
     // if (this.submitValidations(this.metalIssueForm.value)) {
     //   return
@@ -347,12 +351,12 @@ this.setvoucherTypeMaster()
       this.metalIssueDetailsData.push(detailDataToParent);
     }
     this.tableData.push(detailDataToParent)
-    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
-    if(DATA.FLAG == 'CONTINUE'){
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE') {
       this.comService.showSnackBarMsg('Details added successfully')
     };
   }
-  closeDetailScreen(){
+  closeDetailScreen() {
     this.modalReference.close()
   }
 
@@ -453,31 +457,31 @@ this.setvoucherTypeMaster()
       this.update()
       return
     }
-  
+
     let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status.trim() == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.metalIssueForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status.trim() == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.metalIssueForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
@@ -494,24 +498,24 @@ this.setvoucherTypeMaster()
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.metalIssueForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.metalIssueForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
@@ -544,9 +548,9 @@ this.setvoucherTypeMaster()
     }).then((result) => {
       if (result.isConfirmed) {
         let form = this.metalIssueForm.value
-        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + 
-        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
-        this.content.VOCNO+ '/' + this.content.YEARMONTH
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -588,17 +592,22 @@ this.setvoucherTypeMaster()
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.metalIssueForm.value[formControlName] != '')return
-    if (formControlName == 'SALESPERSON_CODE') {
-      this.overlaysalesperson.showOverlayPanel(event)
+    if (this.metalIssueForm.value[formControlName] != '') return
+    switch (formControlName) {
+      case 'SALESPERSON_CODE':
+        this.overlaysalesperson.showOverlayPanel(event)
+        break;
+      case 'workerDes':
+        this.overlayworkerDes.showOverlayPanel(event)
+        break;
+
+      default:
+        break;
     }
-    if (formControlName == 'workerDes') {
-      this.overlayworkerDes.showOverlayPanel(event)
-    }
+
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-   this.showOverleyPanel(event,FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -613,7 +622,7 @@ this.setvoucherTypeMaster()
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.metalIssueForm.controls[FORMNAME].setValue('')
-         
+
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'SALESPERSON_CODE') {
             this.showOverleyPanel(event, 'SALESPERSON_CODE');

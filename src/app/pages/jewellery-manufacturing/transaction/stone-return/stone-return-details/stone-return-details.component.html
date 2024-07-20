@@ -21,7 +21,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobNumber"
-                  [readonly]="viewMode" (keypress)="lookupKeyPress($event)"
+                  [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'jobNumber')" 
                   (focusout)="jobNumberValidate($event)" />
               </mat-form-field>
               <master-search [MasterSearchData]="JobNoCodeData" #overlayjobNumberSearch
@@ -40,7 +40,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobno"
-                  (keypress)="lookupKeyPress($event)"
+                (keydown)="lookupKeyPress($event,'subjobno')" 
                   [readonly]="viewMode" (focusout)="validateLookupField($event,subJobNoCodeData,'subjobno')"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
@@ -62,7 +62,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="designcode"
-                  (keypress)="lookupKeyPress($event)"
+                (keydown)="lookupKeyPress($event,'designcode')" 
                   [readonly]="viewMode" (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')"/>
               </mat-form-field>
               <master-search [MasterSearchData]="subJobNoCodeData" #overlaydesigncodeSearch
@@ -101,7 +101,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="process"
-                  (keypress)="lookupKeyPress($event)"
+                (keydown)="lookupKeyPress($event,'process')" 
                   [readonly]="viewMode" (focusout)="processCodeValidate($event)"/>
               </mat-form-field>
               <master-search [MasterSearchData]="processCodeData" #overlayprocessSearch
@@ -121,7 +121,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="worker"
-                  (keypress)="lookupKeyPress($event)"
+                (keydown)="lookupKeyPress($event,'worker')" 
                   [readonly]="viewMode" (focusout)="WorkerCodeValidate($event)"/>
               </mat-form-field>
               <master-search [MasterSearchData]="workerCodeData" #overlayworkerSearch
@@ -141,7 +141,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stockCode"
-                  (keypress)="lookupKeyPress($event)"
+                (keydown)="lookupKeyPress($event,'stockCode')" 
                   [readonly]="viewMode" 
                   (focusout)="validateLookupField($event,stockCodeData,'stockCode')"/>
               </mat-form-field>

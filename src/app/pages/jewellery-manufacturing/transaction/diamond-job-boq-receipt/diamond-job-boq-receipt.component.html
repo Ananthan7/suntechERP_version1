@@ -62,10 +62,11 @@
                                 <mat-form-field style="width: 80%">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keypress)="lookupKeyPress($event)" 
+                                        (focusout)="validateLookupField($event,enteredByCodeData,'enteredBy')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="enteredByCodeData"
+                                    [MasterSearchData]="enteredByCodeData"  #overlayenteredBy
                                     (newRowClick)="enteredByDataSelected($event)">
                                 </master-search>
                             </div>
@@ -237,10 +238,13 @@
                                                             formControlName="jobNumber"
                                                             class="text-right"
                                                             NumberOnly
-                                                            (keypress)="lookupKeyPress($event)" />
+                                                            (keypress)="lookupKeyPress($event)" 
+                                                            (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')"/>
                                                     </mat-form-field>
 
-                                                    <master-search>
+                                                    <master-search  [MasterSearchData]="jobNumberCodeData" 
+                                                    *ngIf="!viewMode"
+                                                    (newRowClick)="jobNumberCodeSelected($event) "#overlayjobNumber>
                                                     </master-search>
                                                 </div>
                                             </div>
@@ -254,10 +258,11 @@
                                                         <input type="text"
                                                             matInput
                                                             formControlName="designId"
-                                                            (keypress)="lookupKeyPress($event)" />
+                                                            (keypress)="lookupKeyPress($event)" 
+                                                            (focusout)="validateLookupField($event,designCodeData,'designId')"/>
                                                     </mat-form-field>
 
-                                                    <master-search>
+                                                    <master-search [MasterSearchData]="designCodeData" (newRowClick)="designSelected($event)" #overlaydesignId>
                                                     </master-search>
                                                 </div>
                                             </div>
@@ -270,10 +275,12 @@
                                                         <input type="text"
                                                             matInput
                                                             formControlName="process"
-                                                            (keypress)="lookupKeyPress($event)" />
+                                                            (keypress)="lookupKeyPress($event)" 
+                                                            (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
                                                     </mat-form-field>
 
-                                                    <master-search>
+                                                    <master-search [MasterSearchData]="ProcessCodeData"
+                                                    (newRowClick)="ProcessCodeSelected($event)" #overlayprocess >
                                                     </master-search>
                                                 </div>
                                             </div>
@@ -286,10 +293,12 @@
                                                         <input type="text"
                                                             matInput
                                                             formControlName="worker"
-                                                            (keypress)="lookupKeyPress($event)" />
+                                                            (keypress)="lookupKeyPress($event)" 
+                                                            (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                                                     </mat-form-field>
 
-                                                    <master-search>
+                                                    <master-search [MasterSearchData]="WorkerCodeData"
+                                                    (newRowClick)="WorkerCodeSelected($event)" #overlayworker>
                                                     </master-search>
                                                 </div>
                                             </div>
@@ -305,9 +314,10 @@
                                                             formControlName="labourchrg"
                                                             [dir]="'rtl'"
                                                             style="text-align: right;"
-                                                            (keypress)="lookupKeyPress($event)" />
+                                                            (keypress)="lookupKeyPress($event)" 
+                                                            >
                                                     </mat-form-field>
-                                                    <master-search>
+                                                    <master-search #overlaylabourchrg>
                                                     </master-search>
                                                 </div>
                                             </div>
@@ -323,7 +333,7 @@
                                                             formControlName="labourAC"
                                                             (keypress)="lookupKeyPress($event)" />
                                                     </mat-form-field>
-                                                    <master-search>
+                                                    <master-search #overlaylabourAC>
                                                     </master-search>
                                                 </div>
                                             </div>
