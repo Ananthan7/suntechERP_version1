@@ -25,22 +25,22 @@
         <div class="row border-bottom">
           <div class="col-md-5">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Type :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID001">Voucher Type :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" matInput readonly formControlName="vocType" />
                 </mat-form-field>
               </div>
               <div class="col-md-5">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="number" matInput readonly formControlName="vocNo" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Date :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID002">Voucher Date :</label>
               <div class="col-md-4">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <!-- <mat-label></mat-label> -->
                   <input matInput [matDatepicker]="vocDate" [max]="vocMaxDate" name="vocDate" formControlName="vocDate"
                     placeholder="DD/MM/YYYY" DateValidation />
@@ -50,25 +50,25 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Party Code :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID003">Party Code :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 70%">
+                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="partyCode"
                     (change)="partyCodeChange($event)" />
+                    <master-search *ngIf="!viewOnly" [MasterSearchData]="partyCodeData" class="retailMasterSearch"
+                    (newRowClick)="partyCodeSelected($event)"></master-search>
                 </mat-form-field>
-                <master-search *ngIf="!viewOnly" [MasterSearchData]="partyCodeData"
-                  (newRowClick)="partyCodeSelected($event)"></master-search>
               </div>
               <div class="col-md-5">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="partyCodeDesc" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Party currency :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID004">Party currency :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 70%">
+                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                   <input type="text" [readonly]="true" matInput formControlName="partyCurrency"
                     readonly />
                 </mat-form-field>
@@ -80,38 +80,38 @@
                                 (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
               </div>
               <div class="col-md-5">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="number" [readonly]="viewOnly||isCurrencyUpdate" matInput
                     formControlName="partyCurrencyRate" readonly />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Entered By :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID005">Entered By :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 70%">
+                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="enteredby" />
-                </mat-form-field>
-                <master-search *ngIf="!viewOnly" [MasterSearchData]="enteredByCode"
+                  <master-search *ngIf="!viewOnly" [MasterSearchData]="enteredByCode" class="retailMasterSearch"
                   (newRowClick)="enteredBySelected($event)"></master-search>
+                </mat-form-field>
               </div>
               <div class="col-md-5">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="enteredbyuser" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Due Days :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID006">Due Days :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput type="number" [readonly]="viewOnly" class="text-right" [min]="0" [max]="365"
                     (keyup)="this.comService.enforceMinMax($event.target)" matInput formControlName="dueDaysdesc"
                     (change)="updateDueDays($event)" />
                 </mat-form-field>
               </div>
               <div class="col-md-5">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput [matDatepicker]="dueDays" [readonly]="viewOnly" name="dueDays"
                     formControlName="dueDays" placeholder="DD/MM/YYYY" DateValidation
                     (dateChange)="changeDueDate($event)" />
@@ -123,17 +123,16 @@
           </div>
           <div class="col-md-6">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID007">Customer Code :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%">
+                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                   <input type="text" matInput [readonly]="viewOnly" formControlName="customerCode" />
-                </mat-form-field>
-                <master-search *ngIf="!viewOnly" [MasterSearchData]="customerCodeData"
+                  <master-search *ngIf="!viewOnly" [MasterSearchData]="customerCodeData" class="retailMasterSearch"
                   (newRowClick)="customerCodeSelected($event)"></master-search>
-
+                </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="customerName" />
                 </mat-form-field>
               </div>
@@ -146,38 +145,38 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Mobile :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID008">Mobile :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput type="text" [readonly]="viewOnly" formControlName="mobile" inputmode="numeric"
-                    appAllowLeadingZero />
+                    appAllowLeadingZero  class="text-right"/>
                 </mat-form-field>
               </div>
-              <label for="inputPassword" class="col-sm-3 col-form-label">Email :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID009">Email :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="email" [readonly]="viewOnly" matInput formControlName="email" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Party Address :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID010">Party Address :</label>
               <div class="col-md-9">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="partyAddress" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Scheme Code :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID011">Scheme Code :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="schemaCode" />
                 </mat-form-field>
               </div>
-              <label for="inputPassword" class="col-sm-3 col-form-label">Scheme Id :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label" id="ID012">Scheme Id :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%" appearance="outline">
                   <input type="text" [readonly]="viewOnly" matInput formControlName="schemaId" />
                 </mat-form-field>
               </div>
@@ -209,14 +208,14 @@
               </div>
               <div class="col-sm-4">
                 <div class="row mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Party Amount :</label>
+                  <label for="inputPassword" class="col-sm-4 col-form-label" id="ID013">Party Amount :</label>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field style="width: 100%" appearance="outline">
                       <input type="text" class="st_txt_right" [readonly]="viewOnly" matInput formControlName="partyCurr" readonly />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field style="width: 100%" appearance="outline">
                       <input type="text" [readonly]="viewOnly" matInput formControlName="partyAmountFC" />
                     </mat-form-field>
                   </div>
@@ -268,9 +267,9 @@
             <div class="row my-2 justify-content-between align-items-center">
               <div class="col-md-4">
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Narration :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label" id="ID014">Narration :</label>
                   <div class="col-md-9">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field style="width: 100%" appearance="outline">
                       <input [readonly]="viewOnly" type="text" matInput formControlName="narration" />
                     </mat-form-field>
                   </div>
@@ -278,17 +277,17 @@
               </div>
               <div class="col-md-3">
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Total Tax :</label>
+                  <label for="inputPassword" class="col-sm-4 col-form-label" id="ID015">Total Tax :</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field style="width: 100%" appearance="outline">
                       <input [readonly]="viewOnly" class="st_txt_right" type="number" matInput formControlName formControlName="totalTax" />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Total :</label>
+                  <label for="inputPassword" class="col-sm-4 col-form-label" id="ID016">Total :</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field style="width: 100%" appearance="outline">
                       <input [readonly]="viewOnly" class="st_txt_right" type="number" matInput formControlName="total" />
                     </mat-form-field>
                   </div>
