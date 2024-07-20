@@ -18,7 +18,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1" id="ID001">Issue</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [allowColumnResizing]="true" [dataSource]="tableDataProcess" >
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [allowColumnResizing]="true" [dataSource]="tableDataProcess" >
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -47,7 +47,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 id="ID002" class="p-l1">Return</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDataProcessMetalReturn"
                       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" [allowColumnResizing]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
@@ -66,7 +66,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1" id="ID001">Issue</h6>
-                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true" [allowColumnResizing]="true">
+                    <dx-data-grid id="gridContainer" [dataSource]="tableDataProcessStoneIssue" [showBorders]="true" [allowColumnResizing]="true">
                       <dxo-selection mode="single"></dxo-selection>
 
                       <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
@@ -115,7 +115,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1" id="ID002">Return</h6>
-                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true" [allowColumnResizing]="true">
+                    <dx-data-grid id="gridContainer" [dataSource]="tableDataProcessStoneReturn"  [showBorders]="true" [allowColumnResizing]="true">
                       <dxo-selection mode="single"></dxo-selection>
 
                       <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
@@ -166,7 +166,7 @@
                 </div>
 
               </mat-tab>
-              <mat-tab label="Process Transaction">
+              <mat-tab label="Process Transfer">
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDataProcesstransaction"
@@ -187,7 +187,7 @@
               <mat-tab label="Production">
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableDataproduction"
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDataproduction"
                       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">

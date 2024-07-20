@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -16,8 +17,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./component-master.component.scss']
 })
 export class ComponentMasterComponent implements OnInit {
+  @ViewChild('overlaycodedescSearch') overlaycodedescSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSetSearch') overlaysizeSetSearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSearch') overlaysizeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysettingTypeSearch') overlaysettingTypeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSeqSearch') overlayprocessSeqSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
 
   @Input() content!: any;
+  isPCSDisabled: boolean = false;
+  iskaratDisabled: boolean = false;
   tableData: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
@@ -58,7 +70,8 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "division='M'",
+    WHERECONDITION: "DIVISION_CODE<>''",
+   // WHERECONDITION: "division='M'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -175,6 +188,18 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
   componentmasterForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
     codedes: ["", [Validators.required]],
@@ -189,8 +214,8 @@ export class ComponentMasterComponent implements OnInit {
     length: [""],
     width: [""],
     radius: [""],
-    processSeq: [""],
-    costCenter: [""],
+    processSeq: ["", [Validators.required]],
+    costCenter: ["", [Validators.required]],
     currencyCode: [""],
     currencyRate: [""],
   });
@@ -230,6 +255,18 @@ export class ComponentMasterComponent implements OnInit {
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
+
+    console.log(value.DIVISION)
+    if (value.DIVISION === 'M') {
+      this.isPCSDisabled = true;
+    } else {
+      this.isPCSDisabled = false;
+    }
+    if (value.DIVISION === 'S') {
+      this.iskaratDisabled = true;
+    } else {
+      this.iskaratDisabled = false;
+    }
   }
 
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
@@ -1164,6 +1201,14 @@ export class ComponentMasterComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+    if (this.editMode && FORMNAME === 'code') {
+      return;
+    }
+    if (this.editMode && FORMNAME === 'codedes') {
+      return;
+    }
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -1331,6 +1376,110 @@ export class ComponentMasterComponent implements OnInit {
 lookupKeyPress(event: KeyboardEvent) {
   if (event.key === 'Enter') {
     event.preventDefault();
+  }
+}
+
+codedescValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'codedes')
+    return
+  }
+}
+
+sizeSetValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'sizeSet')
+    return
+  }
+}
+
+typeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'type')
+    return
+  }
+}
+
+sizeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'size')
+    return
+  }
+}
+
+categoryValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'category')
+    return
+  }
+}
+
+shapeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'shape')
+    return
+  }
+}
+
+settingTypeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'settingType')
+    return
+  }
+}
+
+processSeqValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'processSeq')
+    return
+  }
+}
+costCenterValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'costCenter')
+    return
+  }
+}
+
+
+
+showOverleyPanel(event: any, formControlName: string) {
+
+  if (formControlName == 'codedes') {
+    this.overlaycodedescSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'sizeSet') {
+    this.overlaysizeSetSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'type') {
+    this.overlaytypeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'size') {
+    this.overlaysizeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'category') {
+    this.overlaycategorySearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'shape') {
+    this.overlayshapeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'settingType') {
+    this.overlaysettingTypeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'processSeq') {
+    this.overlayprocessSeqSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'costCenter') {
+    this.overlaycostCenterSearch.showOverlayPanel(event)
   }
 }
 }

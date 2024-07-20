@@ -280,7 +280,7 @@
                           style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
-                            NumberOnly maxlength="10"
+                          NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
                         </mat-form-field>
@@ -468,7 +468,7 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput [readonly]="viewMode"
-                                class="text-right"
+                                class="text-right" id="txtLossQty"
                                 MetalDecimalInput [max]="10"
                                 (focusout)="lossQtyChange($event)"
                                 formControlName="lossQty" />
@@ -694,7 +694,8 @@
                             style="width: 130px;">
                             <input type="text" matInput readonly
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
-                              formControlName="METAL_FRM_PROCESS_CODE" />
+                              formControlName="METAL_FRM_PROCESS_CODE" 
+                              (keypress)="lookupKeyPress($event)"/>
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
                               [MasterSearchData]="fromProcessMasterSearch"  
@@ -709,6 +710,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput [readonly]="viewMode"
+                              (keypress)="lookupKeyPress($event)"
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
@@ -735,6 +737,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
+                              (keypress)="lookupKeyPress($event)"
                               formControlName="METAL_FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
@@ -750,6 +753,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
+                              (keypress)="lookupKeyPress($event)"
                               formControlName="METAL_TO_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
@@ -782,7 +786,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            readonly
                             formControlName="METAL_FromStockCode" />
                         </mat-form-field>
                       </td>
@@ -790,8 +794,15 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            UpperCaseDirective 
+                            (keypress)="lookupKeyPress($event)"
+                            (focusout)="stockCodeScrapValidate($event)"
                             formControlName="METAL_ToStockCode" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="stockCodeSearch"
+                              (newRowClick)="metalworkerCodeToSelected($event)">
+                            </master-search>
                         </mat-form-field>
                       </td>
                       <td>
@@ -810,7 +821,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="number" matInput class="text-right"
-                            NumberOnly
+                            NumberOnly readonly
                             formControlName="METAL_FromPCS" />
                         </mat-form-field>
                       </td>

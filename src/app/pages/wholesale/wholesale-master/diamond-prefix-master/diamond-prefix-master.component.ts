@@ -61,8 +61,9 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
     this.diamondprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
     this.diamondprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
+    this.diamondprefixForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.SCHEME_PREFIX))
     this.diamondprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
-    this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
+    //this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
     this.diamondprefixForm.controls.Country.setValue(this.content.COUNTRY_CODE)
     this.diamondprefixForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
@@ -304,7 +305,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     "SETREF_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.setrefprefix),
     "BRANCH_CODE": this.commonService.branchCode,
     "BOIL_PREFIX": true,
-    "SCHEME_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.schemeprefix),
+    "SCHEME_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.Componentprefix),
     "UDF1": this.diamondprefixForm.value.userdefined_1 || "",
     "UDF2": this.diamondprefixForm.value.userdefined_2 || "",
     "UDF3": this.diamondprefixForm.value.userdefined_3 || "",

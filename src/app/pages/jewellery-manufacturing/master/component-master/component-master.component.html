@@ -35,9 +35,9 @@
                                         formControlName="codedes"
                                         UpperCaseDirective autocomplete="off"
                                         (focusout)="validateLookupField($event,codeCodeData,'codedes')"
-                                        [readonly]="viewMode || editMode"  (keypress)="lookupKeyPress($event)"/>
+                                        [readonly]="viewMode || editMode"  (keypress)="lookupKeyPress($event)" (focusout)="codedescValidate($event)"/>
                                         <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
-                                            (newRowClick)="codeCodeSelected($event)"
+                                            (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
                                             *ngIf="!editMode && !viewMode">
                                         </master-search>
                                 </mat-form-field>
@@ -53,10 +53,10 @@
                                     <input type="text" matInput
                                         formControlName="sizeSet"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')"  (keypress)="lookupKeyPress($event)"  (focusout)="sizeSetValidate($event)"/>
                                         <master-search class="mstrScrch"
                                             [MasterSearchData]="sizeSetCodeData"
-                                            *ngIf="viewMode == false"
+                                            *ngIf="viewMode == false"  #overlaysizeSetSearch
                                             (newRowClick)="sizeSetCodeSelected($event)">
                                         </master-search>
                                 </mat-form-field>
@@ -68,9 +68,9 @@
                                     <input type="text" matInput
                                         formControlName="type"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,typeCodeData,'type')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,typeCodeData,'type')"  (keypress)="lookupKeyPress($event)"  (focusout)="typeValidate($event)"/>
                                         <master-search [MasterSearchData]="typeCodeData"
-                                        *ngIf="viewMode == false" class="mstrScrch"
+                                        *ngIf="viewMode == false" class="mstrScrch"   #overlaytypeSearch
                                         (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </mat-form-field>
                                 
@@ -85,9 +85,9 @@
                                     <input type="text" matInput class="text-right"
                                         formControlName="size"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,typeCodeData,'type')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,typeCodeData,'size')"  (keypress)="lookupKeyPress($event)"  (focusout)="sizeValidate($event)"/>
                                         <master-search [MasterSearchData]="sizeCodeData" class="mstrScrch"
-                                            *ngIf="viewMode == false"
+                                            *ngIf="viewMode == false"    #overlaysizeSearch
                                             (newRowClick)="sizeCodeSelected($event)">
                                         </master-search>
                                 </mat-form-field>
@@ -100,10 +100,10 @@
                                     <input type="text" matInput
                                         formControlName="category"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,categoryCodeData,'category')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,categoryCodeData,'category')"  (keypress)="lookupKeyPress($event)" (focusout)="categoryValidate($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="categoryCodeData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode"   #overlaycategorySearch
                                         (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
@@ -117,10 +117,10 @@
                                     <input type="text" matInput
                                         formControlName="shape"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,shapeCodeData,'shape')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,shapeCodeData,'shape')"  (keypress)="lookupKeyPress($event)" (focusout)="shapeValidate($event)"/>
                                         <master-search class="mstrScrch"
                                             [MasterSearchData]="shapeCodeData"
-                                            *ngIf="!viewMode"
+                                            *ngIf="!viewMode" #overlayshapeSearch
                                             (newRowClick)="shapeCodeSelected($event)">
                                         </master-search>
                                 </mat-form-field>
@@ -133,10 +133,10 @@
                                     <input type="text" matInput
                                         formControlName="settingType"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"  (keypress)="lookupKeyPress($event)" (focusout)="settingTypeValidate($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="settingTypeCodeData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode" #overlaysettingTypeSearch
                                         (newRowClick)="settingTypeCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -219,10 +219,10 @@
                                     <input type="text" matInput
                                         formControlName="processSeq"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')"  (keypress)="lookupKeyPress($event)"  (focusout)="processSeqValidate($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="processSeqCodeData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode"  #overlayprocessSeqSearch
                                         (newRowClick)="processSeqCodeSelected($event)">
                                 </master-search>
                                 </mat-form-field>
@@ -238,10 +238,10 @@
                                     <input type="text" matInput
                                         formControlName="costCenter"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')"  (keypress)="lookupKeyPress($event)"/>
+                                        (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')"  (keypress)="lookupKeyPress($event)"  (focusout)="costCenterValidate($event)"/>
                                         <master-search class="mstrScrch"
                                         [MasterSearchData]="costCenterCodeData"
-                                        *ngIf="!viewMode"
+                                        *ngIf="!viewMode"  #overlaycostCenterSearch
                                         (newRowClick)="costCenterCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -434,6 +434,7 @@
                                             class="mx-1"
                                             [innerHTML]="data.value"></a>
                                         <master-search
+                                        *ngIf="!iskaratDisabled"
                                             [MasterSearchData]="karatCodeData"
                                             (newRowClick)="karatCodeSelected($event,data,'karattemp')">
                                         </master-search>
@@ -444,15 +445,26 @@
                                         <input type="text"
                                             (change)="stockType($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required [disabled]="isPCSDisabled"/>
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">
                                         <input type="text"
                                             (change)="pcstemp($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required  />
                                     </div>
+
+                                    <!-- <div
+                                    *dxTemplate="let data of 'pcstemp'">
+                                    <a href="javascript:void(0)"
+                                        class="mx-1"
+                                        [innerHTML]="data.value"></a>
+                                    <master-search
+                                        [MasterSearchData]="divisionCode"
+                                        (newRowClick)="divisionCodeSelected($event,data,'pcstemp')">
+                                    </master-search>
+                                </div> -->
 
                                     <div *dxTemplate="let data of 'wtCttemp'">
                                         <input type="text"
@@ -473,21 +485,21 @@
                                         <input type="text"
                                             (change)="clarity($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required [disabled]="isPCSDisabled"/>
                                     </div>
 
                                     <div *dxTemplate="let data of 'shapetemp'">
                                         <input type="text"
                                             (change)="shape($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required [disabled]="isPCSDisabled"/>
                                     </div>
 
                                     <div *dxTemplate="let data of 'sievetemp'">
                                         <input type="text"
                                             (change)="sieve($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required [disabled]="isPCSDisabled"/>
                                     </div>
 
                                     <div
@@ -495,14 +507,14 @@
                                         <input type="text"
                                             (change)="description($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required [disabled]="isPCSDisabled"/>
                                     </div>
 
                                     <div *dxTemplate="let data of 'sizetemp'">
                                         <input type="text"
                                             (change)="size($event,data)"
                                             [value]="data.value"
-                                            style="width: 100%;" required />
+                                            style="width: 100%;" required [disabled]="isPCSDisabled"/>
                                     </div>
 
                                     <div

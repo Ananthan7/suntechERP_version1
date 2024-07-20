@@ -27,9 +27,11 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   @Input()
   selectedIndex!: number | null;
   PendingRepairJobsData:any;
-  selectedRowKeys:any;
+  //selectedRowKeys:any;
   tableData: any[] = [];
   tableDatas: any[] = [];
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
   branchCode?: any = localStorage.getItem("userbranch");
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   currentDate = new Date();
@@ -86,7 +88,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
     if(this.content.FLAG === "EDIT" || this.content.FLAG === "VIEW"){
       this.getrepairtoissuebyid();
     }
-
+    this.getPendingRepairJobs();
 
   }
 
@@ -109,11 +111,22 @@ export class RepairIssueToWorkshopComponent implements OnInit {
 
     }
 
+  // onSelectionChanged(selectionInfo: any) {
+  //   console.log(selectionInfo);    
+  //   const selectedRows = selectionInfo.selectedRowsData;  
+  //   selectedRows.forEach((row:any) => {
+  //     if (!this.selectedRowKeys.some((selected:any) => selected.UNIQUEID === row.UNIQUEID)) {
+  //       this.selectedRowKeys.push(row);       
+  //     }
+  //   });
+  //   // console.log(this.rowData.length);
+  //   console.log('Selection changed:', this.selectedRowKeys);
+  // }
   onSelectionChanged(selectionInfo: any) {
     console.log(selectionInfo);    
     const selectedRows = selectionInfo.selectedRowsData;  
     selectedRows.forEach((row:any) => {
-      if (!this.selectedRowKeys.some((selected:any) => selected.UNIQUEID === row.UNIQUEID)) {
+      if (!this.selectedRowKeys.some(selected => selected.UNIQUEID === row.UNIQUEID)) {
         this.selectedRowKeys.push(row);       
       }
     });
@@ -126,7 +139,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
     let bodyData = {
       SPID: "95",
       parameter: {
-        STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
+        STRMAINVOCTYPE: "RET",//this.comService.getqueryParamVocType(),
         STRBRANCHCODE: this.branchCode,
         STRJOBSTATUS: "0",
       },
@@ -483,4 +496,16 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
       }
     });
   }
+
+  
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+  
 }

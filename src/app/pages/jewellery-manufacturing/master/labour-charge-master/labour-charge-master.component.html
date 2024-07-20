@@ -23,8 +23,8 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput maxlength="1"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"
-                formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
+                formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace  (keypress)="lookupKeyPress($event)"  (focusout)="divisionsValidate($event)"/>
+                <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"   #overlaydivisionsSearch
                 *ngIf=" viewDisable == false && editMode == false " class="masterSearch"></master-search>
               </mat-form-field>
           </div>
@@ -92,8 +92,8 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,currencyCodeData,'currency')"
-                [readonly]="viewMode || codeEnableDiamond" formControlName="currency"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyCodeSelected($event)"
+                [readonly]="viewMode || codeEnableDiamond" formControlName="currency"  (keypress)="lookupKeyPress($event)"  (focusout)="currencyValidate($event)"/>
+                <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyCodeSelected($event)" #overlaycurrencySearch
                 *ngIf=" viewDisable == false" class="masterSearch" ></master-search>
             </mat-form-field>
           </div>
@@ -104,8 +104,8 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,shapeCodeData,'shape')"
-                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="shape"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)"
+                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="shape"  (keypress)="lookupKeyPress($event)"  (focusout)="shapeValidate($event)"/>
+                <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)"  #overlayshapeSearch
                 *ngIf=" viewDisable == false" class="masterSearch" ></master-search>
             </mat-form-field>
           </div>
@@ -115,8 +115,8 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,processCodeData,'process')"
-                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="process"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)"
+                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="process"  (keypress)="lookupKeyPress($event)"  (focusout)="processValidate($event)"/>
+                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)"  #overlayprocessSearch
                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
             </mat-form-field>
           </div>
@@ -128,8 +128,8 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode ||codeEnableDiamond" maxlength="6"
                 formControlName="size_from" (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')"
-                (change)="sizeFromToValidate('size_from')" class="text-right"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"
+                (change)="sizeFromToValidate('size_from')" class="text-right"  (keypress)="lookupKeyPress($event)"  (focusout)="sizefromValidate($event)"/>
+                <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"   #overlaysizefromSearch
                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
             </mat-form-field>
           </div>
@@ -139,8 +139,8 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond"
                 (focusout)="validateLookupField($event,labouracCodeData,'labour_ac')" maxlength="6"
-                formControlName="labour_ac" class="text-right"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labouracSelected($event)" class="masterSearch"
+                formControlName="labour_ac" class="text-right"  (keypress)="lookupKeyPress($event)"  (focusout)="labouracValidate($event)"/>
+                <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labouracSelected($event)" class="masterSearch"  #overlaylabouracSearch
                 *ngIf=" viewDisable == false"></master-search>
             </mat-form-field>
           </div>
@@ -152,8 +152,8 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
-                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode" class="text-right"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"
+                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode" class="text-right"  (keypress)="lookupKeyPress($event)"  (focusout)="sizetoValidate($event)"/>
+                <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"   #overlaysizetoSearch
                 *ngIf="!viewDisable" class="masterSearch"></master-search>
             </mat-form-field>
           </div>
@@ -186,8 +186,8 @@
               <input type="text" matInput [readonly]="viewMode" 
                 oninput="this.value = this.value.toUpperCase()"
                 (focusout)="validateLookupField($event, sieveCodeData, 'sieve')" maxlength="6"
-                formControlName="sieve" class="text-right"  (keypress)="lookupKeyPress($event)"/>
-                <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)" class="masterSearch"
+                formControlName="sieve" class="text-right"  (keypress)="lookupKeyPress($event)"  (focusout)="sieveValidate($event)"/>
+                <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)" class="masterSearch"  #overlaysieveSearch
                 *ngIf="!viewDisable"></master-search>
             </mat-form-field>
           </div>

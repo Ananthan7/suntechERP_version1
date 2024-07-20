@@ -43,9 +43,29 @@ export class RepairDiamondPurchaseComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    this.generateVocNo();
     this.repairdiapurchaseForm.controls.Voc_date.setValue(this.currentDate)
     this.repairdiapurchaseForm.controls.voc_type.setValue(this.comService.getqueryParamVocType())
+  }
+
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
+      this.branchCode
+    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.repairdiapurchaseForm.controls.voc_no.setValue(res.newvocno);
+        }
+      });
   }
 
   partyCodeData: MasterSearchModel = {
@@ -66,31 +86,29 @@ export class RepairDiamondPurchaseComponent implements OnInit {
   }
 
   partycurCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 9,
-    SEARCH_FIELD: 'Currency',
-    SEARCH_HEADING: 'Party Currency Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "Currency<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    PAGENO:1,
+    RECORDS:10,
+    LOOKUPID:8,
+    WHERECONDITION:"CURRENCY_CODE <>''",
+    SEARCH_FIELD:"Currency",
+    SEARCH_VALUE:"",
+    SEARCH_HEADING:"'Party Currency Code'"
   }
   partycurCodeSelected(e: any) {
     console.log(e);
-    this.repairdiapurchaseForm.controls.partycur.setValue(e['Currency']);
+    this.repairdiapurchaseForm.controls.partycur.setValue(e['CURRENCY_CODE']);
+    this.repairdiapurchaseForm.controls.partycurrate.setValue(e['CONV_RATE']);
+
   }
 
   subledgerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 180,
-    SEARCH_FIELD: 'SUBLEDGER_CODE',
-    SEARCH_HEADING: 'Sub Ledger Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "SUBLEDGER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    WHERECONDITION:"@SLACCODE = '' ",
+    SEARCH_FIELD: "SUBLEDGER_CODE",
+    SEARCH_VALUE: "",
+    SEARCH_HEADING: "Sub Ledger Code"
   }
   subledgerCodeSelected(e: any) {
     console.log(e);
@@ -315,12 +333,12 @@ openaddalloyallocation() {
       "GROSS_VALUE_FC": this.repairdiapurchaseForm.value.gross_total_fc,
       "GROSS_VALUE_CC": this.repairdiapurchaseForm.value.gross_total_cc,
       "REMARKS": this.repairdiapurchaseForm.value.remarks,
-      "SYSTEM_DATE": "2024-03-21T10:29:43.637Z",
+      "SYSTEM_DATE": new Date(),
       "CONSIGNMENTID": 0,
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SUPINVNO": "string",
-      "SUPINVDATE": "2024-03-21T10:29:43.637Z",
+      "SUPINVDATE": new Date(),
       "SALESORDERREF": "string",
       "HHACCOUNT_HEAD": "string",
       "OUSTATUSNEW": 0,

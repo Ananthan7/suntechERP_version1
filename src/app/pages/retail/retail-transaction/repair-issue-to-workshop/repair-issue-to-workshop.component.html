@@ -306,15 +306,15 @@
                 <div class="row pt-2">
                   <div class="col-md-12">
                     <dx-data-grid
+                    [dataSource]="rowData"
                       id="gridContainer"
-                      [dataSource]="tableData"
                       [showBorders]="true"
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       class="mt-3"
                     >
                       <dxo-editing mode="cell"> </dxo-editing>
-                      <dxi-column
+                      <!-- <dxi-column
                         *ngFor="let data of columnheadItemDetails1"
                         dataField="{{ data }}"
                         caption="{{ data }}"
@@ -322,7 +322,65 @@
                         alignment="center"
                         backgroundcolor="#000"
                       >
-                      </dxi-column>
+                      </dxi-column> -->
+
+                      <dxi-column
+                      dataField="DIVISION_CODE"
+                      caption="Div"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+
+                    <dxi-column
+                    dataField="STOCK_CODE"
+                    caption="Stock Code"
+                    [allowEditing]="true"
+                    alignment="center"
+                  ></dxi-column>
+        
+                    <dxi-column
+                      dataField="ITEM_DESCRIPTION"
+                      caption="Description"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="REPAIRBAGNO"
+                      caption="Bag No"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="DT_REMARKS"
+                      caption="Remarks"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="PCS"
+                      caption="Pcs"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="REPAIR_TYPE"
+                      caption="Rep type"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="DELIVERY_DATE"
+                      caption="Delivery"
+                      [allowEditing]="true"
+                      alignment="center"
+                      dataType ="date"
+                    ></dxi-column>
+
                     </dx-data-grid>
                   </div>
                 </div>
@@ -374,7 +432,7 @@
           <div class="col-md-4"></div>
           <div class="col-md-2">
             <div class="p-1 bd-highlight">
-              <button type="button" class="btn btn-outline-primary add-btn">
+              <button type="button" class="btn btn-outline-primary add-btn" (click)="addTopos()">
                 Add To Transfer
               </button>
             </div>

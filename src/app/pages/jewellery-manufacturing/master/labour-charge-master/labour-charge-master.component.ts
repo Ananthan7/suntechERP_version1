@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 
@@ -16,6 +17,15 @@ import Swal from 'sweetalert2';
   styleUrls: ['./labour-charge-master.component.scss']
 })
 export class LabourChargeMasterComponent implements OnInit {
+  @ViewChild('overlaydivisionsSearch') overlaydivisionsSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizefromSearch') overlaysizefromSearch!: MasterSearchComponent;
+  @ViewChild('overlaylabouracSearch') overlaylabouracSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizetoSearch') overlaysizetoSearch!: MasterSearchComponent;
+  @ViewChild('overlaysieveSearch') overlaysieveSearch!: MasterSearchComponent;
+  
   @Input() content!: any;
   viewMode: boolean = false;
   buttonField: boolean = true;
@@ -1521,4 +1531,98 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
       event.preventDefault();
     }
   }
+
+  divisionsValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'divisions')
+      return
+    }
+  }
+
+  currencyValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'currency')
+      return
+    }
+  }
+
+  shapeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'shape')
+      return
+    }
+  }
+
+  processValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'process')
+      return
+    }
+  }
+
+  sizefromValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sizefrom')
+      return
+    }
+  }
+
+  labouracValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'labourac')
+      return
+    }
+  }
+
+  sizetoValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sizeto')
+      return
+    }
+  }
+  
+  sieveValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'divisions') {
+      this.overlaydivisionsSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency') {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'process') {
+      this.overlayprocessSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sizefrom') {
+      this.overlaysizefromSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'labourac') {
+      this.overlaylabouracSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sizeto') {
+      this.overlaysizetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve') {
+      this.overlaysieveSearch.showOverlayPanel(event)
+    }
+    
+  }
+
 }

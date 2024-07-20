@@ -49,6 +49,8 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   ];
   columnheadItemDetails2: any[] = ["Receive from Workshop Remarks"];
   currentDate = new Date();
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   selectedTabIndex = 0;
@@ -108,7 +110,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
     let bodyData = {
       SPID: "95",
       parameter: {
-        STRMAINVOCTYPE: this.comService.getqueryParamVocType(),
+        STRMAINVOCTYPE: "RET" ,//this.comService.getqueryParamVocType(),
         STRBRANCHCODE: this.branchCode,
         STRJOBSTATUS: "0",
       },
@@ -141,6 +143,18 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
           console.log(this.PendingRepairJobsData.DELIVERYDATE);
         }
       });
+  }
+
+  onSelectionChanged(selectionInfo: any) {
+    console.log(selectionInfo);    
+    const selectedRows = selectionInfo.selectedRowsData;  
+    selectedRows.forEach((row:any) => {
+      if (!this.selectedRowKeys.some(selected => selected.UNIQUEID === row.UNIQUEID)) {
+        this.selectedRowKeys.push(row);       
+      }
+    });
+    // console.log(this.rowData.length);
+    console.log('Selection changed:', this.selectedRowKeys);
   }
 
   getrepairreceiptbyid(){
@@ -504,4 +518,16 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
   }
 
   deleteTableData() {}
+
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+
+
 }

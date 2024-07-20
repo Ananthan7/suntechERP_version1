@@ -11,6 +11,7 @@ import { ComponentsComponent } from './components/components.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { JobStickerPrintComponent } from './job-sticker-print/job-sticker-print.component';
 import themes from 'devextreme/ui/themes';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-jobcard',
@@ -18,6 +19,29 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./jobcard.component.scss']
 })
 export class JobcardComponent implements OnInit {
+  @ViewChild('overlayorderTypeSearch') overlayorderTypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaydesigncodeSearch') overlaydesigncodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycustomerSearch') overlaycustomerSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostcodeSearch') overlaycostcodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprefixSearch') overlayprefixSearch!: MasterSearchComponent;
+  @ViewChild('overlaykaratSearch') overlaykaratSearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaysubcatSearch') overlaysubcatSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorearch') overlaycolorearch!: MasterSearchComponent;
+  @ViewChild('overlaybrandSearch') overlaybrandSearch!: MasterSearchComponent;
+  @ViewChild('overlaycountrySearch') overlaycountrySearch!: MasterSearchComponent;
+  @ViewChild('overlaycommentsSearch') overlaycommentsSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSearch') overlaysizeSearch!: MasterSearchComponent;
+  @ViewChild('overlaylengthSearch') overlaylengthSearch!: MasterSearchComponent;
+  @ViewChild('overlaysalesmanSearch') overlaysalesmanSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlaymainmetalSearch') overlaymainmetalSearch!: MasterSearchComponent;
+  @ViewChild('overlaytimeSearch') overlaytimeSearch!: MasterSearchComponent;
+  @ViewChild('overlayrangeSearch') overlayrangeSearch!: MasterSearchComponent;
+  @ViewChild('overlayseqcodeSearch') overlayseqcodeSearch!: MasterSearchComponent;
+
+  
   //variables
   jobnumber: any[] = []
   viewMode: boolean = false;
@@ -71,7 +95,7 @@ export class JobcardComponent implements OnInit {
     WHERECONDITION: "TYPES ='COMMENTS MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
 
   lengthCodeData: MasterSearchModel = {
@@ -384,7 +408,7 @@ export class JobcardComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setCompanyCurrency();
-    if(this.content == undefined){
+    if (this.content == undefined) {
       this.priceSchemeValidate();
     }
     this.setFormValues();
@@ -402,7 +426,7 @@ export class JobcardComponent implements OnInit {
     //   this.priceSchemeValidate();
     // }
     // this.jobCardFrom.controls['date'].disable()
-   
+
     // if (this.content) {
     //   this.setFormValues()
     //   this.setInitialValues()
@@ -431,10 +455,10 @@ export class JobcardComponent implements OnInit {
     SEARCH_HEADING: 'Size ',
     SEARCH_VALUE: '',
     WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
-   // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+    // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
 
 
@@ -449,7 +473,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
-      //this.jobCardFrom.controls.purity.setValue(this.commonService.transformDecimalVB(6,'PURITY'));
+    //this.jobCardFrom.controls.purity.setValue(this.commonService.transformDecimalVB(6,'PURITY'));
   }
   inputValidate(event: any) {
     if (event.target.value != '') {
@@ -593,7 +617,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.size.setValue(e.ATTR_CODE);
   }
 
-  
+
 
   designCodeSelected(e: any) {
     console.log(e);
@@ -625,7 +649,7 @@ export class JobcardComponent implements OnInit {
 
   getDesignimagecode() {
 
-    let API = 'ImageforJobCad/CDB000112';
+    let API = 'ImageforJobCad/'+this.jobCardFrom.value.designcode;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
 
@@ -654,9 +678,18 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
         this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
+        this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
+        this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
+
+
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
 
+        this.tableData[0].Pcs = result.response.PCS
+        this.tableData[0].metal_color = result.response.COLOR
+        this.tableData[0].metal_wt = result.response.METAL_WT
+        this.tableData[0].stone_wt = result.response.STONE_WT
+        this.tableData[0].gross_wt = result.response.GROSS_WT
 
 
 
@@ -686,6 +719,7 @@ export class JobcardComponent implements OnInit {
 
   karatCodeSelected(e: any) {
     console.log(e);
+    this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${e.KARAT_CODE}' and PURITY = '${e.STD_PURITY}'`;
     this.jobCardFrom.controls.karat.setValue(e.KARAT_CODE);
     this.jobCardFrom.controls.purity.setValue(e.STD_PURITY);
 
@@ -783,7 +817,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
     this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-   // this.jobCardFrom.controls.picture_name.setValue(this.url)
+    // this.jobCardFrom.controls.picture_name.setValue(this.url)
     this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
     this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
     this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
@@ -812,7 +846,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.purity.setValue(
       this.commonService.transformDecimalVB(6, this.content.JOB_PURITY));
 
-      this.urls = this.content.PICTURE_NAME
+    this.urls = this.content.PICTURE_NAME
   }
 
 
@@ -916,7 +950,7 @@ export class JobcardComponent implements OnInit {
       "SIZE_DESC": "",
       "LENGTH_DESC": "",
       "TIME_DESC": "",
-      "RANGE_DESC":"",
+      "RANGE_DESC": "",
       "JOB_MATERIAL_BOQ_DJ": [
         {
           "SRNO": 0,
@@ -1070,23 +1104,22 @@ export class JobcardComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.jobCardFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        }else {
+
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jobCardFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1104,9 +1137,9 @@ export class JobcardComponent implements OnInit {
 
     let API = `JobMasterDj/UpdateJobMasterDJ/${this.branchCode}/${this.jobCardFrom.value.jobno}`;
     let postData = {
-      "JOB_NUMBER": this.jobCardFrom.value.jobno || "",
+      "JOB_NUMBER": this.commonService.nullToString(this.jobCardFrom.value.jobno) || "",
       "BRANCH_CODE": this.branchCode,
-      "JOB_DATE": "2024-04-11T11:09:31.277Z",
+      "JOB_DATE": this.jobCardFrom.value.jobdate || "",
       "JOB_DESCRIPTION": "",
       "JOB_PREFIX": "",
       "CURRENCY_CODE": this.jobCardFrom.value.currency || "",
@@ -1117,9 +1150,9 @@ export class JobcardComponent implements OnInit {
       "CATEGORY_CODE": this.jobCardFrom.value.category || "",
       "SUBCATEGORY_CODE": this.jobCardFrom.value.subcat || "",
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
-      "DESIGN_CODE": this.commonService.nullToString(this.jobCardFrom.value.designcode),
+      "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": "",
+      "PICTURE_NAME": this.urls || "",
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
@@ -1134,7 +1167,7 @@ export class JobcardComponent implements OnInit {
       "LABOUR_AMOUNTFC": 0,
       "LABOUR_AMOUNTLC": 0,
       "LOSS_QTY_CHARGED": 0,
-      "LOSS_QTY_BOOKED": this.jobCardFrom.value.LOSS_QTY_BOOKED,
+      "LOSS_QTY_BOOKED": 0,
       "LOSS_QTY_TOTAL": 0,
       "LOSS_AMOUNT_CHARGED": 0,
       "LOSS_AMOUNT_BOOKED": 0,
@@ -1156,10 +1189,10 @@ export class JobcardComponent implements OnInit {
       "JOB_PCS_PENDING": 0,
       "OUTSIDEJOB": true,
       "TREE_CODE": "",
-      "DEL_DATE": "2024-04-11T11:09:31.277Z",
+      "DEL_DATE": this.jobCardFrom.value.deldate || "",
       "REP_STOCK_CODE": "",
       "REPAIRJOB": 0,
-      "METAL_STOCK_CODE": "",
+      "METAL_STOCK_CODE": this.jobCardFrom.value.lossbooking || "",
       "METALLAB_TYPE": 0,
       "TIME_CODE": this.jobCardFrom.value.time || "",
       "RANGE_CODE": this.jobCardFrom.value.range || "",
@@ -1170,13 +1203,13 @@ export class JobcardComponent implements OnInit {
       "LENGTH": this.jobCardFrom.value.length || "",
       "SCREW_FIELD": "string",
       "ORDER_TYPE": this.jobCardFrom.value.orderType || "",
-      "DESIGN_TYPE": this.jobCardFrom.value.designtype || "",
+      "DESIGN_TYPE": this.jobCardFrom.value.jobtype || "",
       "SO_VOCNO": 0,
       "SO_VOCDATE": "2023-10-26T05:59:21.735Z",
       "JOB_PURITY": this.jobCardFrom.value.purity || "",
-      "DESIGN_DESC": "string",
+      "DESIGN_DESC": this.jobCardFrom.value.designtype || "",
       "CUSTOMER_NAME": this.jobCardFrom.value.customername || "",
-      "COST_CENTER_DESC": "",
+      "COST_CENTER_DESC": this.jobCardFrom.value.mainmetal || "",
       "KARAT_DESC": "",
       "SEQ_DESC": "",
       "SALESPERSON_NAME": "",
@@ -1191,58 +1224,58 @@ export class JobcardComponent implements OnInit {
       "SIZE_DESC": "",
       "LENGTH_DESC": "",
       "TIME_DESC": "",
-      "RANGE_DESC":this.tableData,
+      "RANGE_DESC": "",
       "JOB_MATERIAL_BOQ_DJ": [
         {
           "SRNO": 0,
-          "JOB_NUMBER": "string",
-          "JOB_DATE": "2024-04-11T11:09:31.277Z",
+          "JOB_NUMBER": "",
+          "JOB_DATE": "2023-10-26T05:59:21.735Z",
           "JOB_SO_NUMBER": 0,
           "UNQ_JOB_ID": "string",
           "JOB_SO_MID": 0,
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
-          "METALSTONE": "s",
-          "DIVCODE": "s",
-          "PRICEID": "string",
-          "KARAT_CODE": "stri",
+          "BRANCH_CODE": "",
+          "DESIGN_CODE": "",
+          "METALSTONE": "",
+          "DIVCODE": "",
+          "PRICEID": "",
+          "KARAT_CODE": "",
           "CARAT": 0,
           "GROSS_WT": 0,
           "PCS": 0,
-          "RATE_TYPE": "string",
-          "CURRENCY_CODE": "stri",
+          "RATE_TYPE": "",
+          "CURRENCY_CODE": "",
           "RATE": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,
           "MAKINGRATE": 0,
           "MAKINGAMOUNT": 0,
-          "SIEVE": "string",
-          "COLOR": "string",
-          "CLARITY": "string",
-          "SHAPE": "string",
-          "SIZE_FROM": "string",
-          "SIZE_TO": "string",
-          "UNQ_DESIGN_ID": "string",
+          "SIEVE": "",
+          "COLOR": "",
+          "CLARITY": "",
+          "SHAPE": "",
+          "SIZE_FROM": "",
+          "SIZE_TO": "",
+          "UNQ_DESIGN_ID": "",
           "UNIQUEID": 0,
-          "STOCK_CODE": "string",
-          "SIEVE_SET": "string",
-          "PROCESS_TYPE": "string",
+          "STOCK_CODE": "",
+          "SIEVE_SET": "",
+          "PROCESS_TYPE": "",
           "PURITY": 0
         }
       ],
       "JOB_SALESORDER_DETAIL_DJ": [
         {
           "SRNO": 0,
-          "JOB_NUMBER": "string",
-          "JOB_DATE": "2024-04-11T11:09:31.277Z",
+          "JOB_NUMBER": "",
+          "JOB_DATE": "2023-10-26T05:59:21.735Z",
           "JOB_SO_NUMBER": 0,
-          "JOB_SO_DATE": "2024-04-11T11:09:31.277Z",
-          "DELIVERY_DATE": "2024-04-11T11:09:31.277Z",
-          "PARTYCODE": "string",
-          "PARTYNAME": "string",
-          "DESIGN_CODE": "string",
-          "KARAT": "stri",
-          "METAL_COLOR": "string",
+          "JOB_SO_DATE": "2023-10-26T05:59:21.735Z",
+          "DELIVERY_DATE": "2023-10-26T05:59:21.735Z",
+          "PARTYCODE": "",
+          "PARTYNAME": "",
+          "DESIGN_CODE": "",
+          "KARAT": "",
+          "METAL_COLOR": "",
           "PCS": 0,
           "METAL_WT": 0,
           "STONE_WT": 0,
@@ -1254,35 +1287,47 @@ export class JobcardComponent implements OnInit {
           "RATECC": 0,
           "VALUEFC": 0,
           "VALUECC": 0,
-          "SEQ_CODE": "string",
+          "SEQ_CODE": "",
           "STD_TIME": 0,
           "MAX_TIME": 0,
           "ACT_TIME": 0,
-          "DESCRIPTION": "string",
-          "UNQ_DESIGN_ID": "string",
-          "UNQ_JOB_ID": "string",
+          "DESCRIPTION": "",
+          "UNQ_DESIGN_ID": "",
+          "UNQ_JOB_ID": "",
           "JOB_SO_MID": 0,
           "UNIQUEID": 0,
-          "PROD_DATE": "2024-04-11T11:09:31.277Z",
+          "PROD_DATE": "2023-10-26T05:59:21.735Z",
           "PROD_REF": 0,
-          "PROD_STOCK_CODE": "string",
+          "PROD_STOCK_CODE": "",
           "PROD_PCS": 0,
-          "LOCTYPE_CODE": "string",
-          "PICTURE_PATH": "string",
-          "PART_CODE": "string",
-          "TREE_NO": "string",
-          "VOCTYPE": "str",
+          "LOCTYPE_CODE": "",
+          "PICTURE_PATH": "",
+          "PART_CODE": "",
+
+          // "SINO": sn,
+          // "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
+          // "part_code": e.Design_Code,
+          // "Description": e.Design_Description,
+          // "Pcs": "",
+          // "metal_color": "",
+          // "metal_wt": "",
+          // "stone_wt": "",
+          // "gross_wt": "",
+
+
+          "TREE_NO": "",
+          "VOCTYPE": "",
           "VOCNO": 0,
-          "YEARMONTH": "string",
-          "BRANCH_CODE": "string",
-          "KARIGAR_CODE": "string",
-          "WAX_STATUS": "s",
-          "SIZE": "string",
-          "LENGTH": "string",
-          "SCREW_FIELD": "string",
-          "ORDER_TYPE": "string",
-          "DESIGN_TYPE": "string",
-          "CLOSE_TYPE": "string",
+          "YEARMONTH": "",
+          "BRANCH_CODE": "",
+          "KARIGAR_CODE": "",
+          "WAX_STATUS": "",
+          "SIZE": "",
+          "LENGTH": "",
+          "SCREW_FIELD": "",
+          "ORDER_TYPE": "",
+          "DESIGN_TYPE": "",
+          "CLOSE_TYPE": "",
           "JOB_PURITY": 0,
           "ADD_STEEL": true
         }
@@ -1290,41 +1335,41 @@ export class JobcardComponent implements OnInit {
       "JOB_SALESORDER_DJ": [
         {
           "SRNO": 0,
-          "JOB_NUMBER": "string",
-          "JOB_DATE": "2024-04-11T11:09:31.277Z",
+          "JOB_NUMBER": "",
+          "JOB_DATE": "2023-10-26T05:59:21.735Z",
           "JOB_SO_NUMBER": 0,
-          "JOB_SO_DATE": "2024-04-11T11:09:31.277Z",
+          "JOB_SO_DATE": "2023-10-26T05:59:21.735Z",
           "JOB_SO_MID": 0,
-          "PARTYCODE": "string",
-          "PARTYNAME": "string",
+          "PARTYCODE": "",
+          "PARTYNAME": "",
           "PCS": 0,
           "WIP_PCS": 0,
           "FINI_PCS": 0,
           "UNIQUEID": 0,
           "SELECTED_SO": true,
           "PARTS": 0,
-          "SIZE": "string",
-          "LENGTH": "string",
-          "SCREW_FIELD": "string",
-          "ORDER_TYPE": "string"
+          "SIZE": "",
+          "LENGTH": "",
+          "SCREW_FIELD": "",
+          "ORDER_TYPE": ""
         }
       ],
       "JOB_LABOUR_BOQ_DJ": [
         {
-          "JOB_NUMBER": "string",
-          "JOB_DATE": "2024-04-11T11:09:31.277Z",
+          "JOB_NUMBER": "",
+          "JOB_DATE": "2023-10-26T05:59:21.735Z",
           "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "string",
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
-          "CODE": "string",
-          "DESCRIPTION": "string",
-          "UNIT": "string",
+          "UNQ_JOB_ID": "",
+          "BRANCH_CODE": "",
+          "DESIGN_CODE": "",
+          "CODE": "",
+          "DESCRIPTION": "",
+          "UNIT": "",
           "RATEFC": 0,
           "RATELC": 0,
           "STD_TIME": 0,
           "MAX_TIME": 0,
-          "UNQ_DESIGN_ID": "string",
+          "UNQ_DESIGN_ID": "",
           "UNIQUEID": 0,
           "JOB_SO_MID": 0
         }
@@ -1333,7 +1378,7 @@ export class JobcardComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+      
           if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
@@ -1349,7 +1394,7 @@ export class JobcardComponent implements OnInit {
               }
             });
           }
-        }else {
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1437,7 +1482,7 @@ export class JobcardComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-         //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+          //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
           this.jobCardFrom.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
@@ -1488,20 +1533,20 @@ export class JobcardComponent implements OnInit {
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
         if (matchedItem2) {
-            this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
-            if (FORMNAME === 'designcode') {
-                this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
-                this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
-                this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
-                this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
-                this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
-                this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
-                this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
-                this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
-                this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
-            }
+          this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
+          if (FORMNAME === 'designcode') {
+            this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
+            this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
+            this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
+            this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
+            this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
+            this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
+            this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
+            this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
+            this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+          }
         } else {
-            this.handleLookupError(FORMNAME, LOOKUPDATA);
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
 
         // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
@@ -1530,7 +1575,7 @@ export class JobcardComponent implements OnInit {
         // if (matchedItem1) {
         //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem1.DESIGN_CODE);
         //   if (FORMNAME === 'designcode') {
-     
+
         //     this.jobCardFrom.controls.designtype.setValue(matchedItem1.DESIGN_DESCRIPTION);
         //   }
 
@@ -1559,15 +1604,249 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls[FORMNAME].setValue('');
     LOOKUPDATA.SEARCH_VALUE = '';
     if (FORMNAME === 'designcode') {
-        this.jobCardFrom.controls.designtype.setValue('');
+      this.jobCardFrom.controls.designtype.setValue('');
     }
-}
-
-lookupKeyPress(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
   }
-}
+
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+  orderTypeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'orderType')
+      return
+    }
+  }
+
+  designcodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'designcode')
+      return
+    }
+  }
+
+  customerValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'customer')
+      return
+    }
+  }
+
+  costcodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'costcode')
+      return
+    }
+  }
+  prefixValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'prefix')
+      return
+    }
+  }
+
+  karatValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'karat')
+      return
+    }
+  }
+
+  typeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'type')
+      return
+    }
+  }
+
+  categoryValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'category')
+      return
+    }
+  }
+
+  subcatValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'subcat')
+      return
+    }
+  }
+
+  colorValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'color')
+      return
+    }
+  }
+  
+  brandValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'brand')
+      return
+    }
+  }
+
+  countryValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'country')
+      return
+    }
+  }
+
+
+  commentsValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'comments')
+      return
+    }
+  }
+  
+  sizeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'size')
+      return
+    }
+  }
+  lengthValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'length')
+      return
+    }
+  }
+  
+  salesmanValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'salesman')
+      return
+    }
+  }
+  currencyValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'currency')
+      return
+    }
+  }
+
+  mainmetalValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'mainmetal')
+      return
+    }
+  }
+
+  timeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'time')
+      return
+    }
+  }
+
+  rangeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'range')
+      return
+    }
+  }
+
+  seqcodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'seqcode')
+      return
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'orderType') {
+      this.overlayorderTypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'designcode') {
+      this.overlaydesigncodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'customer') {
+      this.overlaycustomerSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'costcode') {
+      this.overlaycostcodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'prefix') {
+      this.overlayprefixSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'karat') {
+      this.overlaykaratSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'type') {
+      this.overlaytypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'category') {
+      this.overlaycategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'subcat') {
+      this.overlaysubcatSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color') {
+      this.overlaycolorearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'brand') {
+      this.overlaybrandSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'country') {
+      this.overlaycountrySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'comments') {
+      this.overlaycommentsSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size') {
+      this.overlaysizeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'length') {
+      this.overlaylengthSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'salesman') {
+      this.overlaysalesmanSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency') {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'mainmetal') {
+      this.overlaymainmetalSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'time') {
+      this.overlaytimeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'range') {
+      this.overlayrangeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'seqcode') {
+      this.overlayseqcodeSearch.showOverlayPanel(event)
+    }
+    
+  }
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
