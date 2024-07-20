@@ -41,7 +41,7 @@ export class JobcardComponent implements OnInit {
   @ViewChild('overlayrangeSearch') overlayrangeSearch!: MasterSearchComponent;
   @ViewChild('overlayseqcodeSearch') overlayseqcodeSearch!: MasterSearchComponent;
 
-  
+
   //variables
   jobnumber: any[] = []
   viewMode: boolean = false;
@@ -114,7 +114,7 @@ export class JobcardComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 10,
-    SEARCH_FIELD: 'btnOrderType',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Order type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'ORDERTYPE MASTER'",
@@ -649,7 +649,7 @@ export class JobcardComponent implements OnInit {
 
   getDesignimagecode() {
 
-    let API = 'ImageforJobCad/'+this.jobCardFrom.value.designcode;
+    let API = 'ImageforJobCad/' + this.jobCardFrom.value.designcode;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
 
@@ -1378,22 +1378,22 @@ export class JobcardComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-      
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.jobCardFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jobCardFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
         else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
@@ -1492,6 +1492,15 @@ export class JobcardComponent implements OnInit {
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+
+    // if (event && event.target.value == '') {
+    //   this.showOverleyPanel(event, FORMNAME)
+    //   return
+    // }
+
+    // this.showOverleyPanel(event, FORMNAME)
+
+
     const inputValue = event.target.value.toUpperCase();
     //  this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1548,6 +1557,7 @@ export class JobcardComponent implements OnInit {
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
+
 
         // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
         // if (matchedItem) {
@@ -1608,14 +1618,25 @@ export class JobcardComponent implements OnInit {
     }
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
+
   orderTypeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'orderType')
       return
     }
@@ -1623,7 +1644,7 @@ export class JobcardComponent implements OnInit {
 
   designcodeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'designcode')
       return
     }
@@ -1631,7 +1652,7 @@ export class JobcardComponent implements OnInit {
 
   customerValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'customer')
       return
     }
@@ -1639,14 +1660,14 @@ export class JobcardComponent implements OnInit {
 
   costcodeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event && event.target.value == '') {
       this.showOverleyPanel(event, 'costcode')
       return
     }
   }
   prefixValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'prefix')
       return
     }
@@ -1654,7 +1675,7 @@ export class JobcardComponent implements OnInit {
 
   karatValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'karat')
       return
     }
@@ -1662,7 +1683,7 @@ export class JobcardComponent implements OnInit {
 
   typeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'type')
       return
     }
@@ -1670,7 +1691,7 @@ export class JobcardComponent implements OnInit {
 
   categoryValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'category')
       return
     }
@@ -1678,7 +1699,7 @@ export class JobcardComponent implements OnInit {
 
   subcatValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'subcat')
       return
     }
@@ -1686,15 +1707,15 @@ export class JobcardComponent implements OnInit {
 
   colorValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'color')
       return
     }
   }
-  
+
   brandValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'brand')
       return
     }
@@ -1702,7 +1723,7 @@ export class JobcardComponent implements OnInit {
 
   countryValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'country')
       return
     }
@@ -1711,37 +1732,37 @@ export class JobcardComponent implements OnInit {
 
   commentsValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'comments')
       return
     }
   }
-  
+
   sizeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'size')
       return
     }
   }
   lengthValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'length')
       return
     }
   }
-  
+
   salesmanValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'salesman')
       return
     }
   }
   currencyValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'currency')
       return
     }
@@ -1749,7 +1770,7 @@ export class JobcardComponent implements OnInit {
 
   mainmetalValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'mainmetal')
       return
     }
@@ -1757,7 +1778,7 @@ export class JobcardComponent implements OnInit {
 
   timeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'time')
       return
     }
@@ -1765,7 +1786,7 @@ export class JobcardComponent implements OnInit {
 
   rangeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'range')
       return
     }
@@ -1773,7 +1794,7 @@ export class JobcardComponent implements OnInit {
 
   seqcodeValidate(event: any) {
     if (this.viewMode) return
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'seqcode')
       return
     }
@@ -1781,8 +1802,10 @@ export class JobcardComponent implements OnInit {
 
 
   showOverleyPanel(event: any, formControlName: string) {
+    if (event.target.value != '') return
 
     if (formControlName == 'orderType') {
+
       this.overlayorderTypeSearch.showOverlayPanel(event)
     }
     if (formControlName == 'designcode') {
@@ -1845,7 +1868,7 @@ export class JobcardComponent implements OnInit {
     if (formControlName == 'seqcode') {
       this.overlayseqcodeSearch.showOverlayPanel(event)
     }
-    
+
   }
 
   ngOnDestroy() {

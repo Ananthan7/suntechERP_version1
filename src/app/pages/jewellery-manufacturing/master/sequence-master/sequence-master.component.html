@@ -239,7 +239,8 @@
                                     <input type="checkbox"
                                         (change)="calculateProcessChange($event)"
                                         [(ngModel)]="data['TIMEON_PROCESS']"
-                                        [disabled]="!data['isChecked'] || viewMode" />
+                                        [disabled]="!data['isChecked'] || viewMode"
+                                         />
                                 </td>
                                 <!-- Preview -->
                                 <div *cdkDragPreview matchSize="true"

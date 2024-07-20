@@ -82,6 +82,15 @@ export class SequenceMasterComponent implements OnInit {
         this.editMode = true
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+
+        if(this.content.TIMEON_PROCESS == true){
+          this.calculateProcessDisable = false;
+        }
+        else
+        {
+          this.calculateProcessDisable = false;
+        }
+        
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteSequenceMaster()
@@ -129,15 +138,33 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
   }
 
+  // searchFromGrid(event: any) {
+  //   if (event.target.value == '') {
+  //     this.dataSource = this.tableData
+  //   }
+  //   const results: any = []
+  //   this.dataSource = this.dataSource.filter(obj =>
+  //     obj.PROCESS_CODE.toLowerCase().startsWith(event.target.value.toLowerCase())
+  //   );
+  //   this.dataSource = this.dataSource.filter(results =>
+  //     results.DESCRIPTION.toLowerCase().startsWith(event.target.value.toLowerCase())
+  //   );
+ 
+  // }
   searchFromGrid(event: any) {
-    if (event.target.value == '') {
-      this.dataSource = this.tableData
+    const searchValue = event.target.value.toLowerCase();
+    
+    if (searchValue === '') {
+      this.dataSource = this.tableData;
+      return;
     }
-    const results: any = []
-    this.dataSource = this.dataSource.filter(obj =>
-      obj.PROCESS_CODE.toLowerCase().startsWith(event.target.value.toLowerCase())
+  
+    this.dataSource = this.tableData.filter(obj =>
+      obj.PROCESS_CODE.toLowerCase().startsWith(searchValue) ||
+      obj.DESCRIPTION.toLowerCase().startsWith(searchValue)
     );
   }
+  
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
@@ -174,7 +201,7 @@ export class SequenceMasterComponent implements OnInit {
 
   calculateProcessChange(event:any){
     console.log(event)
-    if(event.target.checked == true){
+    if(event.target.checked == true ){
       this.calculateProcessDisable = false;
     }
     else
@@ -360,7 +387,7 @@ export class SequenceMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+       
           if (result.status == "Success") {
             Swal.fire({
               title: this.commonService.getMsgByID('MSG2443') || 'Success',
@@ -375,7 +402,7 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
-        }  else {
+          else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -386,12 +413,13 @@ export class SequenceMasterComponent implements OnInit {
 
 
   updateWorkerMaster() {
+   // if (this.submitValidation()) return;
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = this.setPostData(this.sequenceMasterForm.value)
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+       
           if (result.status == "Success") {
             Swal.fire({
               title: this.commonService.getMsgByID('MSG2443') || result.message,
@@ -406,7 +434,7 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
-        }  else {
+         else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -414,6 +442,7 @@ export class SequenceMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
