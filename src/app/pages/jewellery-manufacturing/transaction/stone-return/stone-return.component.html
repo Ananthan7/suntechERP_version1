@@ -57,11 +57,11 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 75%;">
                   <input type="text" matInput formControlName="enterdBy"
-                    (keypress)="lookupKeyPress($event)"
-                    (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enterdBy')"
+                  (keydown)="lookupKeyPress($event,'enterdBy')" 
+                    (focusout)="validateLookupField($event,user,'enterdBy')"
                     [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="SALESPERSON_CODEData" #overlayenterdBySearch
+                <master-search [MasterSearchData]="user" #overlayenterdBySearch
                   (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
@@ -93,7 +93,7 @@
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="basecurrency"
-                    (keypress)="lookupKeyPress($event)"
+                  (keydown)="lookupKeyPress($event,'basecurrency')" 
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="baseCurrencyCodeData"
@@ -113,7 +113,7 @@
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="currency"
-                    (keypress)="lookupKeyPress($event)"
+                  (keydown)="lookupKeyPress($event,'currency')"
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"

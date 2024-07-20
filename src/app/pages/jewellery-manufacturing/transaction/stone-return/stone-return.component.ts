@@ -36,16 +36,17 @@ export class StoneReturnComponent implements OnInit {
   modalReference!: NgbModalRef;
 
   private subscriptions: Subscription[] = [];
-  SALESPERSON_CODEData: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 1,
-    SEARCH_FIELD: 'SALESPERSON_CODE',
-    SEARCH_HEADING: 'Entered by',
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACTIVE=1",
+    WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   CurrencyCodeData: MasterSearchModel = {
@@ -385,9 +386,9 @@ export class StoneReturnComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -562,15 +563,19 @@ export class StoneReturnComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.stonereturnFrom.value[formControlName] != '')return
-    if (formControlName == 'enterdBy') {
-      this.overlayenterdBySearch.showOverlayPanel(event)
+    if (this.stonereturnFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayenterdBySearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unexpected form control name: ${formControlName}`);
     }
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-   this.showOverleyPanel(event,FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

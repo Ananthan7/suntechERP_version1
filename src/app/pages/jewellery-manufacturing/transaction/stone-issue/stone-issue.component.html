@@ -90,7 +90,7 @@
                       <input type="text" matInput formControlName="currencyrate"
                         style="text-align: right;" readonly
                         SixDecimalInput [readonly]="viewMode"
-                        (keypress)="lookupKeyPress($event)" />
+                        (keydown)="lookupKeyPress($event,'currencyrate')"  />
                     </mat-form-field>
                     <master-search [MasterSearchData]="CurrencyCodeData"
                       (newRowClick)="CurrencyCodeSelected($event)"
@@ -107,7 +107,7 @@
                     <div class="col-md-8">
                       <mat-form-field style="width: 70%">
                         <input type="text" matInput formControlName="enteredBy"
-                          (keypress)="lookupKeyPress($event)"
+                        (keydown)="lookupKeyPress($event,'enteredBy')" 
                           [readonly]="viewMode"  (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="SALESPERSON_CODEData" #overlayenteredBySearch
@@ -124,7 +124,7 @@
                     <div class="col-md-4">
                       <mat-form-field style="width: 80%">
                         <input type="text" matInput formControlName="worker"
-                          (keypress)="lookupKeyPress($event)"
+                        (keydown)="lookupKeyPress($event,'worker')" 
                           [readonly]="viewMode" (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                       </mat-form-field>
                       <master-search [MasterSearchData]="WorkerCodeData" #overlayworkerSearch

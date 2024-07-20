@@ -58,9 +58,10 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="user_name"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'user_name')" 
+                                        (focusout)="validateLookupField($event,UserCodeData,'user_name')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="UserCodeData"
+                                <master-search [MasterSearchData]="UserCodeData" #overlayusernamecode
                                     (newRowClick)="UserCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -82,10 +83,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="party_code"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'party_code')" 
+                                        (focusout)="validateLookupField($event,partyCodeData,'party_code')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="partyCodeData"
+                                    [MasterSearchData]="partyCodeData"  #overlaypartycode
                                     (newRowClick)="partyCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -96,9 +98,10 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="job_no"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'job_no')" 
+                                        (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobCodeData"
+                                <master-search [MasterSearchData]="jobCodeData" #overlayjobnumbercode
                                     (newRowClick)="jobCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -111,10 +114,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'worker')" 
+                                        (focusout)="validateLookupField($event,workerCodeData,'worker')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="workerCodeData"
+                                    [MasterSearchData]="workerCodeData" #overlayworkercode
                                     (newRowClick)="workerCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -125,10 +129,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="reason"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'reason')" 
+                                        (focusout)="validateLookupField($event,reasonCodeData,'reason')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="reasonCodeData"
+                                    [MasterSearchData]="reasonCodeData" #overlayreasoncode
                                     (newRowClick)="reasonCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -151,10 +156,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="metal_loc"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'metal_loc')" 
+                                        (focusout)="metalLocationValidate($event)"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="MetalLocCodeData"
+                                    [MasterSearchData]="MetalLocCodeData" #overlaymetallocationcode
                                     (newRowClick)="MetalLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -165,10 +171,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="stone_loc"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'stone_loc')" 
+                                        (focusout)="validateLookupField($event,StoneLocCodeData,'stone_loc')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="StoneLocCodeData"
+                                    [MasterSearchData]="StoneLocCodeData" #overlaystonelocationcode
                                     (newRowClick)="StoneLocCodeSelected($event)"></master-search>
                             </div>
                         </div>

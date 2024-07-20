@@ -281,11 +281,12 @@ export class StoneReturnDetailsComponent implements OnInit {
     // this.activeModal.close(data);
     this.closeDetail.emit()
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
+
 
   setPostData(form: any) {
     return {
@@ -554,29 +555,32 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.stonereturndetailsFrom.value[formControlName] != '')return
-    if (formControlName == 'jobNumber') {
-      this.overlayjobNumberSearch.showOverlayPanel(event)
+    if (this.stonereturndetailsFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'jobNumber':
+        this.overlayjobNumberSearch.showOverlayPanel(event);
+        break;
+      case 'subjobno':
+        this.overlaysubjobnoSearch.showOverlayPanel(event);
+        break;
+      case 'designcode':
+        this.overlaydesigncodeSearch.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocessSearch.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaywstockCodeSearch.showOverlayPanel(event);
+        break;
+      default:
     }
-    if (formControlName == 'subjobno') {
-      this.overlaysubjobnoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'designcode') {
-      this.overlaydesigncodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlayprocessSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockCode') {
-      this.overlaywstockCodeSearch.showOverlayPanel(event)
-    }
-  }
+  }  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-   this.showOverleyPanel(event,FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
