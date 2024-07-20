@@ -20,6 +20,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   @ViewChild('toProcessMasterOverlay') toProcessMasterOverlay!: MasterSearchComponent;
   @ViewChild('fromWorkerMasterOverley') fromWorkerMasterOverley!: MasterSearchComponent;
   @ViewChild('stockCodeOverlay') stockCodeOverlay!: MasterSearchComponent;
+  @ViewChild('overleyLocation') overleyLocation!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
@@ -570,7 +571,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   jobNumberValidate(event?: any) {
     if (this.viewMode) return
     if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'JOB_NUMBER')
       return
     }
     let postData = {
@@ -1345,7 +1345,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   /**USE:from porcesscode Validate API call */
   fromProcesscodeValidate(event: any) {
     if (event.target.value == '') {
-      this.fromProcessMasterOverlay.showOverlayPanel(event)
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1381,7 +1380,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   // to processcode validate
   toProcesscodeValidate(event: any) {
     if (event.target.value == '') {
-      this.toProcessMasterOverlay.showOverlayPanel(event)
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1419,7 +1417,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   // from Workercode Validate
   fromWorkercodeValidate(event: any) {
     if (event.target.value == '') {
-      this.fromWorkerMasterOverley.showOverlayPanel(event)
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1516,21 +1513,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(response.DESCRIPTION)
     }
   }
-  showOverleyPanel(event: any, formControlName: string) {
-    if (formControlName == 'TO_WORKER_CODE') {
-      this.overlayToWorker.showOverlayPanel(event)
-    }
-    if (formControlName == 'JOB_NUMBER') {
-      this.overlayjobNoSearch.showOverlayPanel(event)
-    }
-  }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  }
+  
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    this.showOverleyPanel(event, FORMNAME)
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (FORMNAME == 'FRM_PROCESS_CODE') {
       this.setFromProcessWhereCondition()
@@ -2390,9 +2374,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     this.locationSearchFlag = false;//loaction flag
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (FORMNAME == 'stockCode' && event.target.value == '') {
-      this.stockCodeOverlay.showOverlayPanel(event)
-    }
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -2424,6 +2405,44 @@ export class ProcessTransferDetailsComponent implements OnInit {
     console.log(event.data);
     console.log(this.metalDetailData);
     this.metalDetailData[event.data.SRNO - 1].SETTED_FLAG = !event.data.SETTED_FLAG;
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if(event.target.value != '') return
+    switch (formControlName) {
+      case 'JOB_NUMBER':
+        this.overlayjobNoSearch.showOverlayPanel(event);
+        break;
+      case 'FRM_PROCESS_CODE':
+        this.fromProcessMasterOverlay.showOverlayPanel(event);
+        break;
+      case 'TO_PROCESS_CODE':
+        this.toProcessMasterOverlay.showOverlayPanel(event);
+        break;
+      case 'FRM_WORKER_CODE':
+        this.fromWorkerMasterOverley.showOverlayPanel(event);
+        break;
+      case 'TO_WORKER_CODE':
+        this.overlayToWorker.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.stockCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overleyLocation.showOverlayPanel(event);
+        break;
+      default:
+        // Optionally handle the default case if needed
+        break;
+    }
+  }
+  lookupKeyPress(event: any,form?:any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+    if (event.key === 'Enter') {
+      if(event.target.value == '') this.showOverleyPanel(event,form)
+      event.preventDefault();
+    }
   }
   close(data?: any) {
     // this.activeModal.close(data);
