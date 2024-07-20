@@ -25,10 +25,13 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="jobNumber"
-                                        [readonly]="viewMode" />
+                                        (focusout)="jobNumberValidate($event)"
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="jobnoCodeData"
+                                    #overlayjobNumberSearch
                                     (newRowClick)="jobnoCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -67,10 +70,13 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="processCode"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)"
+                                        (focusout)="processCodeValidate($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="ProcessCodeData"
+                                    #overlayprocessCodeSearch
                                     (newRowClick)="ProcessCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -90,10 +96,13 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="workerCode"
-                                        [readonly]="viewMode">
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)"
+                                        (focusout)=WorkerCodeValidate($event)>
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"
+                                    #overlayworkerCodeSearch
                                     (newRowClick)="WorkerCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -156,10 +165,13 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        readonly>
+                                        readonly
+                                        (keypress)="lookupKeyPress($event)"
+                                        (focusout)="validateLookupField($event,locationCodeData,'location')" >
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="locationCodeData"
+                                    #overlaylocationSearch
                                     (newRowClick)="locationCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -174,10 +186,12 @@
                                     <input type="text" matInput
                                         formControlName="stockCode"
                                         (focusout)="stockCodeValidate($event)"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
+                                    #overlaystockCodeSearch
                                     (newRowClick)="stockCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -197,10 +211,12 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="ReturnToStockCode"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keypress)="lookupKeyPress($event)"   (focusout)="validateLookupField($event,stockCodeData,'ReturnToStockCode')" />
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"
+                                    #overlayReturnToStockCodeSearch
                                     (newRowClick)="ReturnTostockCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -230,27 +246,29 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Gross Weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Gross Weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
-                                        formControlName="NET_WT"
-                                        class="text-right" [max]="13"
-                                        readonly MetalDecimalInput />
+                                            formControlName="NET_WT"
+                                            class="text-right" [max]="13"
+                                            readonly MetalDecimalInput />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Net Weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Net Weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
-                                        formControlName="GROSS_WT"
-                                        class="text-right" 
-                                        (focusout)="grossValidate()"
-                                        [readonly]="viewMode"
-                                        MetalDecimalInput [max]="13" />
+                                            formControlName="GROSS_WT"
+                                            class="text-right"
+                                            (focusout)="grossValidate()"
+                                            [readonly]="viewMode"
+                                            MetalDecimalInput [max]="13" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -260,7 +278,8 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Stone weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Stone weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
@@ -274,7 +293,8 @@
                             </div>
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Pure Weight
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Pure Weight
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
@@ -287,7 +307,8 @@
                             </div>
                             <div class="col-sm-3">
                                 <div>
-                                    <label style="width: 40%;" for="col-form-label">Job Pcs
+                                    <label style="width: 40%;"
+                                        for="col-form-label">Job Pcs
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
@@ -303,7 +324,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div>
-                                    <label style="width: 30%;" for="col-form-label">
+                                    <label style="width: 30%;"
+                                        for="col-form-label">
                                         Remarks:</label>
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput

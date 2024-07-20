@@ -2,7 +2,7 @@
 <app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle"
     (subMenuChange)="menuClicked($event)"></app-menubar>
 <!-- content section starts -->
-<div class="row d-flex justify-content-between"
+<div class="row d-flex justify-content-between" [ngClass]="{'siteAlignment': isRTL}"
     style="min-height: 100vh !important;">
     <div class="col-md-3 col-sm-12">
         <div class="card p-3">

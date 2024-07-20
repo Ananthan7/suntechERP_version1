@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-stone-cost-updation',
@@ -14,7 +15,18 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./stone-cost-updation.component.scss']
 })
 export class StoneCostUpdationComponent implements OnInit {
+  @ViewChild('overlaystockcodedivSearch') overlaystockcodedivSearch!: MasterSearchComponent;
+  @ViewChild('overlayitemcurrencySearch') overlayitemcurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlaybasecurrencySearch') overlaybasecurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSearch') overlaysizeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysieveSearch') overlaysieveSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild('overlaysievesetSearch') overlaysievesetSearch!: MasterSearchComponent;
+  @ViewChild('overlayclaritySearch') overlayclaritySearch!: MasterSearchComponent;
 
+
+  
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Customer', 'So Number', 'Job Number', 'Job Ref#', 'Pcs', 'Weight', 'Rate', 'Amount', 'New Rate LC', 'New Amount LC', 'New Rate FC', 'New Amount FC',];
   divisionMS: any = 'ID';
@@ -416,13 +428,12 @@ basesetCurrencyRate() {
               }
             });
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
-        console.log(err);
+        this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub)
   }
@@ -537,6 +548,117 @@ basesetCurrencyRate() {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  stockcodedivValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'stockcodediv')
+      return
+    }
+  }
+
+  itemcurrencyValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, ' itemcurrency')
+      return
+    }
+  }
+
+  basecurrencyValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, ' basecurrency')
+      return
+    }
+  }
+
+  shapeValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'shape')
+      return
+    }
+  }
+  
+  sizeValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'size')
+      return
+    }
+  }
+    
+  sieveValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve')
+      return
+    }
+  }
+
+  sievesetValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve_set')
+      return
+    }
+  }
+    
+    
+  colorValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'color')
+      return
+    }
+  }
+      
+  clarityValidate(event: any) {
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'clarity')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'stockcodediv') {
+      this.overlaystockcodedivSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'itemcurrency') {
+      this.overlayitemcurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'basecurrency') {
+      this.overlaybasecurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size') {
+      this.overlaysizeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve') {
+      this.overlaysieveSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color') {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_set') {
+      this.overlaysievesetSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'clarity') {
+      this.overlayclaritySearch.showOverlayPanel(event)
+    }
   }
   
   ngOnDestroy() {

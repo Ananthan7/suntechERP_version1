@@ -239,6 +239,11 @@ export class CADProcessingComponent implements OnInit {
     });
     
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;
     // this.yourContent.standardTime.totalHours = duration[1] || 0;
@@ -598,8 +603,8 @@ componentSet(){
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+       
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -614,9 +619,10 @@ componentSet(){
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+          else {
+            this.comService.toastErrorByMsgId('MSG3577')
+          }
+        
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -669,8 +675,7 @@ componentSet(){
   
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
         .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+          if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || 'Success',
                 text: '',
@@ -684,9 +689,9 @@ componentSet(){
                   this.close('reloadMainGrid')
                 }
               });
-            }
+            
           } else {
-            this.toastr.error('Not saved')
+            this.comService.toastErrorByMsgId('MSG3577')
           }
         }, err => alert(err))
       this.subscriptions.push(Sub)

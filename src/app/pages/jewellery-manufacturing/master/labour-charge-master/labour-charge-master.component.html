@@ -18,19 +18,19 @@
             <div class="card-body sales-card-body p-2"> -->
       <form [formGroup]="diamondlabourMasterForm">
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Division *
+          <label for="input" id="ID001" class="col-sm-2 col-form-label">Division *
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput maxlength="1"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"
-                formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace />
-                <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
-                *ngIf=" viewDisable == false && editMode == false " class="masterSearch"    ></master-search>
+                formControlName="divisions" (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')"  (input)="inputValidate($event)" appNoEmptySpace   (keydown)="lookupKeyPress($event,'divisions')"/>
+                <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"   #overlaydivisionsSearch
+                *ngIf=" viewDisable == false && editMode == false " class="masterSearch"></master-search>
               </mat-form-field>
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
+          <label for="input" id="ID002" class="col-sm-2 col-form-label">Labour Code * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" id="code" [readonly]="editMode || viewMode"
@@ -39,7 +39,7 @@
                 />
             </mat-form-field>
           </div>
-          <label for="input" class="col-sm-2 col-form-label">Description * :</label>
+          <label for="input" class="col-sm-2 col-form-label" id="ID003">Description * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput maxlength="75" [readonly]="viewMode || codeEnableDiamond"
@@ -50,7 +50,7 @@
         </div>
 
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Labour Type *
+          <label for="input" id="ID004" class="col-sm-2 col-form-label">Labour Type *
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
@@ -63,7 +63,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <label for="input" class="col-sm-2 col-form-label">Unit * :</label>
+          <label for="input" id="ID005" class="col-sm-2 col-form-label">Unit * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <!-- <mat-label>Select</mat-label> -->
@@ -76,7 +76,7 @@
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Method
+          <label for="input" id="ID006" class="col-sm-2 col-form-label">Method
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
@@ -88,76 +88,76 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <label for="input" class="col-sm-2 col-form-label">Currency * :</label>
+          <label for="input" class="col-sm-2 col-form-label" id="ID007">Currency * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,currencyCodeData,'currency')"
-                [readonly]="viewMode || codeEnableDiamond" formControlName="currency" />
-                <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyCodeSelected($event)"
+                [readonly]="viewMode || codeEnableDiamond" formControlName="currency"   (keydown)="lookupKeyPress($event,'currency')"/>
+                <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyCodeSelected($event)" #overlaycurrencySearch
                 *ngIf=" viewDisable == false" class="masterSearch" ></master-search>
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Shape
+          <label for="input" id="ID008" class="col-sm-2 col-form-label">Shape
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,shapeCodeData,'shape')"
-                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="shape" />
-                <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)"
+                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="shape"   (keydown)="lookupKeyPress($event,'shape')"/>
+                <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)"  #overlayshapeSearch
                 *ngIf=" viewDisable == false" class="masterSearch" ></master-search>
             </mat-form-field>
           </div>
 
-          <label for="input" class="col-sm-2 col-form-label">Process *
+          <label for="input" class="col-sm-2 col-form-label" id="ID009">Process *
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" (focusout)="validateLookupField($event,processCodeData,'process')"
-                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="process" />
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)"
+                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="process" (keydown)="lookupKeyPress($event,'process')"/>
+                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)"  #overlayprocessSearch
                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Size From
+          <label for="input" id="ID010" class="col-sm-2 col-form-label">Size From
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode ||codeEnableDiamond" maxlength="6"
                 formControlName="size_from" (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')"
-                (change)="sizeFromToValidate('size_from')" class="text-right"/>
-                <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"
+                (change)="sizeFromToValidate('size_from')" class="text-right"  (keydown)="lookupKeyPress($event,'size_from')"/>
+                <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"   #overlaysizefromSearch
                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
             </mat-form-field>
           </div>
-          <label for="input" class="col-sm-2 col-form-label">Labour A/C *
+          <label for="input" id="ID011" class="col-sm-2 col-form-label">Labour A/C *
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond"
                 (focusout)="validateLookupField($event,labouracCodeData,'labour_ac')" maxlength="6"
-                formControlName="labour_ac" class="text-right"/>
-                <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labouracSelected($event)" class="masterSearch"
+                formControlName="labour_ac" class="text-right"  (keydown)="lookupKeyPress($event,'labour_ac')"/>
+                <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labouracSelected($event)" class="masterSearch"  #overlaylabouracSearch
                 *ngIf=" viewDisable == false"></master-search>
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Size To
+          <label id="ID012" for="input" class="col-sm-2 col-form-label">Size To
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
-                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode" class="text-right" />
-                <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"
+                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode" class="text-right"  (keydown)="lookupKeyPress($event,'size_to')"/>
+                <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"   #overlaysizetoSearch
                 *ngIf="!viewDisable" class="masterSearch"></master-search>
             </mat-form-field>
           </div>
-          <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
+          <label for="input" id="ID013" class="col-sm-2 col-form-label">Cost Rate :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput AmountDecimalInput [max]="13"
@@ -180,19 +180,19 @@
               (newRowClick)="sieveSelected($event)"
               *ngIf=" viewDisable == false"></master-search>
           </div> -->
-          <label for="input" class="col-sm-2 col-form-label">Sieve:</label>
+          <label id="ID014" for="input" class="col-sm-2 col-form-label">Sieve:</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput [readonly]="viewMode" 
                 oninput="this.value = this.value.toUpperCase()"
                 (focusout)="validateLookupField($event, sieveCodeData, 'sieve')" maxlength="6"
-                formControlName="sieve" class="text-right"/>
-                <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)" class="masterSearch"
+                formControlName="sieve" class="text-right" (keydown)="lookupKeyPress($event,'sieve')"/>
+                <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)" class="masterSearch"  #overlaysieveSearch
                 *ngIf="!viewDisable"></master-search>
             </mat-form-field>
           </div>
 
-          <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
+          <label for="input" id="ID015" class="col-sm-2 col-form-label">Selling Rate * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput [max]="10" class="text-right"
@@ -201,14 +201,14 @@
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Sieve Desc :</label>
+          <label for="input" class="col-sm-2 col-form-label" id="ID016">Sieve Desc :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" readonly formControlName="sieve_desc" 
               class="text-right"/>
             </mat-form-field>
           </div>
-          <label for="input" class="col-sm-2 col-form-label">Selling % *:</label>
+          <label for="input" id="ID017" class="col-sm-2 col-form-label">Selling % *:</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput [readonly]="viewMode || codeEnableDiamond" [max]="3" AmountDecimalInput
@@ -217,7 +217,7 @@
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
+          <label id="ID018" for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput [readonly]="viewMode || codeEnableDiamond" class="text-right"
@@ -226,7 +226,7 @@
             </mat-form-field>
           </div>
 
-          <label for="input" class="col-sm-2 col-form-label">Setting Type :</label>
+          <label for="input" id="ID019" class="col-sm-2 col-form-label">Setting Type :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <!-- <mat-label>Select</mat-label> -->
@@ -239,7 +239,7 @@
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
+          <label id="ID020" for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput [readonly]="viewMode  || codeEnable2 || codeEnableDiamond" matInput
@@ -247,7 +247,7 @@
             </mat-form-field>
           </div>
           <div class="col-sm-6">
-            <mat-checkbox class="example-margin" [disabled]="viewMode "
+            <mat-checkbox id="ID021" class="example-margin" [disabled]="viewMode "
               formControlName="accessories">Accessories</mat-checkbox>
           </div>
         </div>

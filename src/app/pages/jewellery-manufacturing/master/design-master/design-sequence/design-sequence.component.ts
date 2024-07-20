@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-design-sequence',
@@ -17,9 +18,10 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./design-sequence.component.scss']
 })
 export class DesignSequenceComponent implements OnInit {
-
+  @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
   tableDataProcess: any[] = [];
 
+  viewMode: boolean = false;
   columnhead: any[] = ['SRNO', 'PROCESS_CODE', 'POINTS', 'STD_LOSS', 'MAX_LOSS', 'STD_TIME', 'LOSS_ACCODE', 'WIP_ACCODE', 'TIMEON_PROCESS']
   designSequenceForm: FormGroup = this.formBuilder.group({
     processCode: [''],
@@ -113,5 +115,30 @@ export class DesignSequenceComponent implements OnInit {
         }
       );
 
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  processValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'processCode')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'processCode') {
+      this.overlayprocessSearch.showOverlayPanel(event)
+    }
   }
 }

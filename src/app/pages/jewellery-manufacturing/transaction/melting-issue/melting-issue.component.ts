@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-issue-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+
 
 
 @Component({
@@ -17,6 +19,10 @@ import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-is
 })
 export class MeltingIssueComponent implements OnInit {
   @ViewChild('meltingissueDetailScreen') public meltingissueDetailScreen!: NgbModal;
+  @ViewChild('overlayMeltingType') overlayMeltingType! : MasterSearchComponent;
+  @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
+  @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
@@ -64,7 +70,7 @@ export class MeltingIssueComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
+    SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
@@ -123,7 +129,7 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   meltingIssueFrom: FormGroup = this.formBuilder.group({
-    vocno: [1],
+    vocno: [''],
     meltingtype: [''],
     jobno: [''],
     jobdes: [''],
@@ -145,6 +151,7 @@ export class MeltingIssueComponent implements OnInit {
     process: [''],
     currency: [''],
     currencyrate: [''],
+    jobpurity: [''],
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
@@ -152,9 +159,11 @@ export class MeltingIssueComponent implements OnInit {
     MID: [0],
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
+    MAIN_VOCTYPE: [''],
 
 
   });
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
   router: any;
   onClose: any;
   modalRef: NgbModalRef | null = null
@@ -169,7 +178,7 @@ export class MeltingIssueComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.setNewFormValues()
+    // this.setNewFormValues()
     // this.voctype = this.commonService.getqueryParamMainVocType();
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType());
     this.setAllInitialValues()
@@ -177,6 +186,10 @@ export class MeltingIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'VIEW') {
+        this.LOCKVOUCHERNO = true;
       }
       this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
@@ -185,10 +198,20 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingIssueFrom.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
     } else {
+      this.generateVocNo()
       this.setNewFormValues()
+      this.setvoucherTypeMaster()
       this.setCompanyCurrency()
     }
 
+  }
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      setTimeout(() => {
+        this.codeInput1.nativeElement.focus();
+      }, 2000); // Adjust the delay as needed
+    }
   }
   setNewFormValues() {
     this.branchCode = this.commonService.branchCode;
@@ -196,6 +219,11 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.meltingIssueFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.meltingIssueFrom.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
+
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -216,6 +244,37 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
     );
   }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+   this.showOverleyPanel(event,FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.meltingIssueFrom.controls[FORMNAME].setValue('')
+         
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'processcode') {
+            this.showOverleyPanel(event, 'processcode');
+          } else if (FORMNAME === 'worker') {
+            this.showOverleyPanel(event, 'worker');
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   setAllInitialValues() {
     if (!this.content?.FLAG) return
@@ -225,7 +284,7 @@ export class MeltingIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.meltingISsueDetailsData = data.Details
-          console.log(data,'data')
+          console.log(data, 'data')
           this.meltingIssueFrom.controls.MID.setValue(data.MID)
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
           this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
@@ -237,6 +296,8 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
           this.meltingIssueFrom.controls.processdes.setValue(data.PROCESS_DESC)
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
+          this.meltingIssueFrom.controls.meltingtype.setValue(data.MELTING_TYPE)
+          this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY)
 
           this.meltingISsueDetailsData = data.Details
           this.reCalculateSRNO() //set to main grid
@@ -262,6 +323,70 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
 
+  }
+  toWorkercodeValidate(event: any){
+    if (event.target.value == '') {
+      this.overlayMeltingType.showOverlayPanel(event)
+      return
+    }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if(this.meltingIssueFrom.value[formControlName] != '')return
+    if (formControlName == 'meltingtype') {
+      this.overlayMeltingType.showOverlayPanel(event)
+    }
+    if (formControlName == 'jobno') {
+      this.overlayjobNoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'processcode') {
+      this.overlayprocesscode.showOverlayPanel(event)
+    }
+    if (formControlName == 'worker') {
+      this.overlayworkercode.showOverlayPanel(event)
+    }
+  }
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.meltingIssueFrom.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.meltingIssueFrom.value.vocno}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.meltingIssueFrom.controls.vocno.setValue(resp.newvocno);
+        }
+      });
   }
 
   /**USE: to set currency from company parameter */
@@ -306,8 +431,10 @@ export class MeltingIssueComponent implements OnInit {
   }
   MeltingCodeSelected(e: any) {
     console.log(e);
+    
     this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
     // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
+    this.meltingTypeValidate()
   }
   ProcessCodeSelected(e: any) {
     console.log(e);
@@ -353,14 +480,23 @@ export class MeltingIssueComponent implements OnInit {
   close1(data: any = null) {
     this.modalService.dismissAll(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   openaddMeltingIssueDetails(dataToChild?: any) {
+    if (!this.meltingIssueFrom.get('meltingtype')?.value) {
+      // this.showErrorToast();
+    } else {
     if (dataToChild) {
-      dataToChild.FLAG = this.content?.FLAG || ''
+      dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
     } else {
       dataToChild = { HEADERDETAILS: this.meltingIssueFrom.value }
     }
+    console.log(dataToChild, 'dataToChild to parent');
     this.dataToDetailScreen = dataToChild //input variable to pass data to child
     this.modalReference = this.modalService.open(this.meltingissueDetailScreen, {
       size: 'xl',
@@ -408,6 +544,7 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
+  }
 
   setValuesToHeaderGrid(DATA: any) {
     console.log(DATA, 'detailDataToParent');
@@ -492,7 +629,7 @@ export class MeltingIssueComponent implements OnInit {
       "SALESPERSON_NAME": "",
       "DOCTIME": "2023-10-21T10:15:43.789Z",
       "TOTAL_GROSSWT": 0,
-      "MELTING_TYPE": "",
+      "MELTING_TYPE": this.meltingIssueFrom.value.meltingtype,
       "COLOR": "",
       "RET_STOCK_CODE": "",
       "RET_LOCATION_CODE": "",
@@ -555,24 +692,23 @@ export class MeltingIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status.trim() == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingIssueFrom.reset()
-                this.isSaved = true;
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
+        if (result && result.status.trim() == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.meltingIssueFrom.reset()
+              this.isSaved = true;
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.comService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.isloading = false;
@@ -606,25 +742,23 @@ export class MeltingIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingIssueFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.meltingIssueFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
-          this.comService.toastErrorByMsgId('Not saved')
+          this.comService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.isloading = false;
@@ -645,7 +779,7 @@ export class MeltingIssueComponent implements OnInit {
       });
       return;
     }
-  
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -659,15 +793,15 @@ export class MeltingIssueComponent implements OnInit {
         console.log('User confirmed deletion');
         let form = this.meltingIssueFrom.value;
         const API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
-            this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
-            this.content.VOCNO + '/' + this.content.YEARMONTH;
-        
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH;
+
         console.log('API endpoint:', API);
-        
+
         const Sub: Subscription = this.dataService.deleteDynamicAPICustom(API)
           .subscribe((result) => {
             console.log('API response:', result);
-            
+
             if (result) {
               if (result.status === "Success") {
                 Swal.fire({
@@ -701,12 +835,12 @@ export class MeltingIssueComponent implements OnInit {
             console.error('API call failed:', err);
             this.toastr.error('Deletion failed');
           });
-  
+
         this.subscriptions.push(Sub);
       }
     });
   }
-  
+
 
 
 
@@ -732,7 +866,11 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.meltingIssueFrom.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
 
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -789,6 +927,7 @@ export class MeltingIssueComponent implements OnInit {
 
 
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event,'jobno')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -806,17 +945,21 @@ export class MeltingIssueComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.jobNumberDetailData = data
-            console.log(data,'data')
+            this.jobNumberDetailData = data 
+            console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
 
             this.subJobNumberValidate()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
+            this.meltingIssueFrom.controls.jobno.setValue('')
+            this.showOverleyPanel(event,'jobno')
             return
           }
         } else {
+          this.overlayjobNoSearch.closeOverlayPanel()
+          this.meltingIssueFrom.controls.jobno.setValue('')
           this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -826,6 +969,42 @@ export class MeltingIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  meltingTypeValidate(event?: any) {
+    const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;
+    console.log('Melting Type:', meltingTypeValue);
+   this.showOverleyPanel(event,'meltingtype')
+  
+    if (!meltingTypeValue) {
+      this.commonService.toastErrorByMsgId('MSG1531');
+      return;
+    }
+
+    const API = `MeltingType/GetMeltingTypeList/${meltingTypeValue}`;
+    console.log('API URL:', API);
+
+    const sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result: any) => {
+        this.commonService.closeSnackBarMsg();
+        if (result.response) {
+          const data = result.response;
+          console.log('API Response Data:', data);
+          this.meltingIssueFrom.controls.color.setValue(data.COLOR);
+          this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY);
+          this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.meltingIssueFrom.controls.meltingtype.setValue('')
+          this.showOverleyPanel(event,'meltingtype')
+
+        }
+      },
+      (err: any) => {
+        console.error('API Call Error:', err);
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('MSG1531');
+      }
+    );
+
+    this.subscriptions.push(sub);
+  }
 }
-
-

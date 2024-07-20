@@ -474,7 +474,6 @@ export class ApprovalMasterComponent implements OnInit {
 
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
-          if (result.response) {
             if (result.status == "Success") {
               Swal.fire({
                 title: result.message || 'Success',
@@ -490,16 +489,34 @@ export class ApprovalMasterComponent implements OnInit {
                 }
               });
             }
-          } else {
-            this.toastr.error('User Name cannot be empty')
-          }
-        }, err => alert(err));
-
+            else {
+              this.commonService.toastErrorByMsgId('MSG3577')
+            }
+        }, err => {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        })
       this.subscriptions.push(Sub);
     }
   }
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
 
-
+  afterSave(value:any){
+    if (value) {
+      this.approvalMasterForm.reset()
+      this.tableData = []
+      this.close('reloadMainGrid')
+    }
+  }
 
 
   // formSubmit() {
@@ -658,9 +675,11 @@ export class ApprovalMasterComponent implements OnInit {
               });
             }
           } else {
-            this.toastr.error('Not saved')
+            this.commonService.toastErrorByMsgId('MSG3577')
           }
-        }, err => alert(err))
+        }, err => {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        })
       this.subscriptions.push(Sub)
     }
   }

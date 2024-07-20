@@ -79,6 +79,10 @@ export class AddPosComponent implements OnInit {
   private cssFilePath = '../../../assets/estimation_pdf.scss';
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
+  LOCKVOUCHERNO: boolean = true;
+  voucherDetails:any;
+  minDate:any;
+  maxDate: any;
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
@@ -1137,6 +1141,15 @@ allowDescription:boolean=false;
       this.comFunc.VocTypeMasterData = data;
     });
   }
+
+  setVoucherTypeMaster(){
+    let frm = this.vocDataForm.value
+    const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+
   // async getAllCompanyParameters() {
   //   let map = new Map();
   //   this.suntechApi.getCompanyParameters().subscribe(async (resp) => {
@@ -1203,7 +1216,7 @@ allowDescription:boolean=false;
       this.posMode = this.content?.FLAG;
 
     if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
-
+      this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
       this.getFinancialYear();
@@ -1227,6 +1240,8 @@ allowDescription:boolean=false;
     } else {
       this.getFinancialYear();
       this.generateVocNo();
+      this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
+      // this.setVoucherTypeMaster();
 
     }
 
@@ -1254,6 +1269,20 @@ allowDescription:boolean=false;
     //   }
     // });
   }
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.vocDataForm.controls.vocdate.setValue(new Date(date))
+    }
+  }
+
+
   getRetailSalesMaster(data: any) {
 
     this.snackBar.open('Loading...');
@@ -6088,7 +6117,7 @@ allowDescription:boolean=false;
         this.vocDataForm.value.txtCurrency,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount), this.vocDataForm.value.txtCurRate
       ), // metal amount
-      RATE_TYPE: '',
+      RATE_TYPE: this.newLineItem.RATE_TYPE ?? "",
       //  data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
       METAL_RATE: this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
 
@@ -9299,8 +9328,10 @@ printReceiptDetailsWeb() {
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) /
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
+        //Changes as per Jebraj's Input on 17/07/2024
+
       if (this.divisionMS == 'S') {
-        if (this.lineItemModalForSalesReturn || (this.lineItemForm.value.fcn_li_rate) >= parseFloat(this.newLineItem.STOCK_COST)) {
+        if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)) >=this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
 
           this.rateFunc(value);
         }
@@ -9309,12 +9340,20 @@ printReceiptDetailsWeb() {
           this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
-              this.lineItemForm.controls.fcn_li_net_amount.setValue(
+
+              this.lineItemForm.controls.fcn_li_rate.setValue(
                 this.comFunc.transformDecimalVB(
                   this.comFunc.allbranchMaster?.BAMTDECIMALS,
                   preVal
                 )
               );
+
+              // this.lineItemForm.controls.fcn_li_net_amount.setValue(
+              //   this.comFunc.transformDecimalVB(
+              //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              //     preVal
+              //   )
+              // );
             }
           });
         }
@@ -12726,7 +12765,7 @@ checkAdvanceReciept(vocNo: any) {
 
 
   saveAttachment() {
-    if (!this.attachmentForm.invalid) {
+    if (!this.attachmentForm.invalid && this.attachedImageList.length) {
       const formData = new FormData();
 
       formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);

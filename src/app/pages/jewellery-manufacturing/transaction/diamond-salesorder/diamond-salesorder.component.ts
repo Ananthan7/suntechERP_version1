@@ -757,7 +757,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave[0])
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        if (result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
+        if (result && result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
           Swal.fire({
             title: result.message || 'Success',
             text: '',
@@ -767,8 +767,8 @@ export class DiamondSalesorderComponent implements OnInit {
           }).then((result: any) => {
             this.close('reloadMainGrid');
           });
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -838,7 +838,11 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
   //data settings
   OrderTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.orderType.setValue(event.CODE)

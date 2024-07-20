@@ -17,8 +17,8 @@
               <mat-tab label="Metal Transaction">
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <h6 class="p-l1">Issue</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [allowColumnResizing]="true" [dataSource]="tableDataProcess" >
+                    <h6 class="p-l1" id="ID001">Issue</h6>
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [allowColumnResizing]="true" [dataSource]="tableDataProcess" >
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -46,8 +46,8 @@
                 </div>
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <h6 class="p-l1">Return</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                    <h6 id="ID002" class="p-l1">Return</h6>
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDataProcessMetalReturn"
                       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" [allowColumnResizing]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
@@ -55,9 +55,9 @@
                       <dxo-selection mode="multiple"></dxo-selection>
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                      <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
+                      </dxi-column> -->
                     </dx-data-grid>
                   </div>
                 </div>
@@ -65,8 +65,8 @@
               <mat-tab label="Stone Transaction">
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <h6 class="p-l1">Issue</h6>
-                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true" [allowColumnResizing]="true">
+                    <h6 class="p-l1" id="ID001">Issue</h6>
+                    <dx-data-grid id="gridContainer" [dataSource]="tableDataProcessStoneIssue" [showBorders]="true" [allowColumnResizing]="true">
                       <dxo-selection mode="single"></dxo-selection>
 
                       <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
@@ -114,8 +114,8 @@
                 </div>
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <h6 class="p-l1">Return</h6>
-                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true" [allowColumnResizing]="true">
+                    <h6 class="p-l1" id="ID002">Return</h6>
+                    <dx-data-grid id="gridContainer" [dataSource]="tableDataProcessStoneReturn"  [showBorders]="true" [allowColumnResizing]="true">
                       <dxo-selection mode="single"></dxo-selection>
 
                       <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
@@ -166,10 +166,10 @@
                 </div>
 
               </mat-tab>
-              <mat-tab label="Process Transaction">
+              <mat-tab label="Process Transfer">
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDataProcesstransaction"
                       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
@@ -177,9 +177,9 @@
                       <dxo-selection mode="multiple"></dxo-selection>
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      <dxi-column *ngFor="let data of columnhead3" dataField="{{ data }}" caption="{{ data }}"
+                      <!-- <dxi-column *ngFor="let data of columnhead3" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
+                      </dxi-column> -->
                     </dx-data-grid>
                   </div>
                 </div>
@@ -187,7 +187,7 @@
               <mat-tab label="Production">
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDataproduction"
                       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
@@ -195,9 +195,9 @@
                       <dxo-selection mode="multiple"></dxo-selection>
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      <dxi-column *ngFor="let data of columnhead4" dataField="{{ data }}" caption="{{ data }}"
+                      <!-- <dxi-column *ngFor="let data of columnhead4" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
+                      </dxi-column> -->
                     </dx-data-grid>
                   </div>
                 </div>

@@ -137,6 +137,11 @@ export class MfgGridComponent implements OnInit {
     return this.branchCode
   }
   setCustomParamFilters() {
+    if (this.mainVocType == 'MASCMP') {// diamondlabourchargemaster
+      return {
+        "DESIGN_TYPE": 'COMP',
+      }
+    }
     if (this.mainVocType == 'MASLBR') {// diamondlabourchargemaster
       return {
         "YEARMONTH": this.CommonService.yearSelected,

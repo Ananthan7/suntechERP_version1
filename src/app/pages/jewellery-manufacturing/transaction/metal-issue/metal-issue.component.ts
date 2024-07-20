@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-metal-issue',
@@ -16,6 +17,8 @@ import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-de
 })
 export class MetalIssueComponent implements OnInit {
   @ViewChild('metalIssueDetailScreen') public MetalIssueDetailScreen!: NgbModal;
+  @ViewChild('overlayworkerDes') overlayworkerDes! : MasterSearchComponent;
+  @ViewChild('overlaysalesperson') overlaysalesperson!: MasterSearchComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   modalReference!: NgbModalRef;
@@ -109,6 +112,7 @@ export class MetalIssueComponent implements OnInit {
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
+    MAIN_VOCTYPE: [''],
   });
 
   constructor(
@@ -131,6 +135,10 @@ export class MetalIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO=true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.LOCKVOUCHERNO=true;
       }
       this.isSaved = true;
       if(this.content.FLAG == 'DELETE'){
@@ -139,8 +147,53 @@ export class MetalIssueComponent implements OnInit {
       this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
     } else {
+      this.generateVocNo()
       this.setNewFormValues()
+      this.setvoucherTypeMaster()  
     }
+  }
+  minDate:any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster(){
+    let frm = this.metalIssueForm.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if(this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.metalIssueForm.value.VOCNO}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.metalIssueForm.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
   }
  
   setNewFormValues() {
@@ -148,6 +201,10 @@ export class MetalIssueComponent implements OnInit {
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
     this.metalIssueForm.controls.YEARMONTH.setValue(this.comService.yearSelected)
     this.metalIssueForm.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+    this.metalIssueForm.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+this.setvoucherTypeMaster()
   }
 
   setAllInitialValues() {
@@ -208,6 +265,12 @@ export class MetalIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+
   deleteRowClicked(): void {
     if (!this.selectRowIndex) {
       Swal.fire({
@@ -249,9 +312,9 @@ export class MetalIssueComponent implements OnInit {
   }
   dataToDetailScreen:any; //data to pass to child
   openAddMetalIssue(dataToChild?: any) {
-    if (this.submitValidations(this.metalIssueForm.value)) {
-      return
-    }
+    // if (this.submitValidations(this.metalIssueForm.value)) {
+    //   return
+    // }
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.metalIssueForm.value;
@@ -372,6 +435,14 @@ export class MetalIssueComponent implements OnInit {
       this.comService.toastErrorByMsgId('vocdate is required')
       return true
     }
+    if (form.worker == '') {
+      this.comService.toastErrorByMsgId('worker is required')
+      return true
+    }
+    if (this.tableData?.length <= 0) {
+      this.comService.toastErrorByMsgId('MSG1200')
+      return true;
+    }
     return false
   }
   formSubmit() {
@@ -389,8 +460,7 @@ export class MetalIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status.trim() == "Success") {
+          if (result && result.status.trim() == "Success") {
             this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
@@ -405,10 +475,9 @@ export class MetalIssueComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
-        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
@@ -425,8 +494,7 @@ export class MetalIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             this.isSaved = true;
             Swal.fire({
               title: this.comService.getMsgByID('MSG2443') || 'Success',
@@ -441,10 +509,9 @@ export class MetalIssueComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.comService.toastErrorByMsgId('Not saved')
-        }
       }, err => {
         this.isloading = false;
         this.comService.toastErrorByMsgId('Not saved')
@@ -519,6 +586,46 @@ export class MetalIssueComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if(this.metalIssueForm.value[formControlName] != '')return
+    if (formControlName == 'SALESPERSON_CODE') {
+      this.overlaysalesperson.showOverlayPanel(event)
+    }
+    if (formControlName == 'workerDes') {
+      this.overlayworkerDes.showOverlayPanel(event)
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+   this.showOverleyPanel(event,FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.metalIssueForm.controls[FORMNAME].setValue('')
+         
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'SALESPERSON_CODE') {
+            this.showOverleyPanel(event, 'SALESPERSON_CODE');
+          } else if (FORMNAME === 'workerDes') {
+            this.showOverleyPanel(event, 'workerDes');
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 
   ngOnDestroy() {

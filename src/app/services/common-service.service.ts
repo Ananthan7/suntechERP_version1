@@ -77,7 +77,9 @@ export class CommonServiceService {
     private datePipe: DatePipe,
   ) {
   }
-
+  grossWtCalculate(MetalWeight: any, stoneWeight: any) {
+    return (this.emptyToZero(MetalWeight) + (this.emptyToZero(stoneWeight) / 5))
+  }
   getCurrecnyRate(currencyCode:string){
     let currdata = this.allBranchCurrency.filter((item:any)=> item.CURRENCY_CODE == currencyCode)
     return this.setCommaSerperatedNumber(currdata[0].CONV_RATE,'RATE')

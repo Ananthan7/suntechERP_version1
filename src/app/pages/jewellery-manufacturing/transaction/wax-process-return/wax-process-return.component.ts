@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,7 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-wax-process-return',
   templateUrl: './wax-process-return.component.html',
@@ -15,7 +15,12 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class WaxProcessReturnComponent implements OnInit {
   currentFilter: any;
-
+  @ViewChild('overlayprocessCodeSearch') overlayprocessCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaytoprocessSearch') overlaytoprocessSearch!: MasterSearchComponent;
+  @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlaytoworkerSearch') overlaytoworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
+  @ViewChild('overlaywaxcodeSearch') overlaywaxcodeSearch!: MasterSearchComponent;
 
   columnhead:any[] = ['Sr No','Job No','Design','Party','S.O','S.O Date', 'Del Date','Gross Weight','Metal Weight','Stone Weight','Wax Weight','Issue Pcs','Return Pcs','Karat'];
   @Input() content!: any; 
@@ -23,6 +28,7 @@ export class WaxProcessReturnComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  viewMode: boolean = false;
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
@@ -45,7 +51,7 @@ export class WaxProcessReturnComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
+    SEARCH_FIELD: 'PROCESS_CODE',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
@@ -168,6 +174,11 @@ export class WaxProcessReturnComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
     removedata(){
       this.tableData.pop();
@@ -246,8 +257,7 @@ export class WaxProcessReturnComponent implements OnInit {
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
+          if(result && result.status == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -261,10 +271,9 @@ export class WaxProcessReturnComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -340,8 +349,7 @@ export class WaxProcessReturnComponent implements OnInit {
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
+          if(result && result.status == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -355,10 +363,10 @@ export class WaxProcessReturnComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+        
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -428,7 +436,57 @@ export class WaxProcessReturnComponent implements OnInit {
       }
     });
   }
-  
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.waxprocessFrom.value[formControlName] != '') return
+    if (formControlName == 'process') {
+      this.overlayprocessCodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'toprocess') {
+      this.overlaytoprocessSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'worker') {
+      this.overlayworkerSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'toworker') {
+      this.overlaytoworkerSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'enteredBy') {
+      this.overlayenteredBySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'waxcode') {
+      this.overlaywaxcodeSearch.showOverlayPanel(event)
+    }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    this.showOverleyPanel(event, FORMNAME)
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.waxprocessFrom.controls[FORMNAME].setValue('')
+
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'process' || FORMNAME === 'toprocess' || FORMNAME === 'worker' || FORMNAME === 'toworker' || FORMNAME === 'enteredBy' || FORMNAME === 'waxcode') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

@@ -59,6 +59,12 @@ export class QuotationProcessComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+
 
   salesCodeSelected(e:any){
     console.log(e);

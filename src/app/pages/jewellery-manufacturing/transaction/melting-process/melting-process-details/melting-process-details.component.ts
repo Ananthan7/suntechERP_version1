@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-melting-process-details',
@@ -14,6 +15,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./melting-process-details.component.scss']
 })
 export class MeltingProcessDetailsComponent implements OnInit {
+  @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
   @Input() content!: any;
   tableData: any[] = [];
   designType: string = 'DIAMOND';
@@ -24,6 +27,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
   vocMaxDate = new Date();
   jobNumberDetailData: any[] = [];
   currentDate = new Date();
+  viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -69,6 +73,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
   jobnoCodeSelected(e: any) {
     console.log(e);
     this.meltingprocessdetailsForm.controls.jobno.setValue(e.job_number);
@@ -368,6 +373,11 @@ export class MeltingProcessDetailsComponent implements OnInit {
   //   });
   // }
   }
+  lookupKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 
   formatMetalDetailDataGrid() {
     this.metalDetailData.forEach((element: any) => {
@@ -428,10 +438,19 @@ export class MeltingProcessDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.meltingprocessdetailsForm.value[formControlName] != '') return
 
-
+    if (formControlName == 'jobno') {
+      this.overlayjobNoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'location') {
+      this.overlaylocation.showOverlayPanel(event)
+    }
+  }
 
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event, 'jobno')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -456,9 +475,13 @@ export class MeltingProcessDetailsComponent implements OnInit {
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.meltingprocessdetailsForm.controls.jobno.setValue('')
+            this.showOverleyPanel(event, 'jobno')
             return
           }
         } else {
+          this.overlayjobNoSearch.closeOverlayPanel()
+          this.meltingprocessdetailsForm.controls.jobno.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -466,6 +489,46 @@ export class MeltingProcessDetailsComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    this.showOverleyPanel(event, FORMNAME);
+  
+    if (event.target.value == '' || this.viewMode) return;
+  
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+  
+    this.comService.showSnackBarMsg('MSG81447');
+  
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result: any) => {
+        this.comService.closeSnackBarMsg();
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);
+  
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531');
+          this.meltingprocessdetailsForm.controls[FORMNAME].setValue('');
+          LOOKUPDATA.SEARCH_VALUE = '';
+  
+          if (FORMNAME === 'location') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+  
+          return;
+        } else {
+          // If data is found, you might want to update the form controls with the fetched data
+          this.meltingprocessdetailsForm.controls[FORMNAME].setValue(data);
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong');
+      }
+    );
+  
+    this.subscriptions.push(Sub);
   }
 }
 

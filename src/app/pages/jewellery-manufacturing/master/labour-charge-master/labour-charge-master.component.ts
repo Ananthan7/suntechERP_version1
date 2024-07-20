@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 
@@ -16,6 +17,15 @@ import Swal from 'sweetalert2';
   styleUrls: ['./labour-charge-master.component.scss']
 })
 export class LabourChargeMasterComponent implements OnInit {
+  @ViewChild('overlaydivisionsSearch') overlaydivisionsSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizefromSearch') overlaysizefromSearch!: MasterSearchComponent;
+  @ViewChild('overlaylabouracSearch') overlaylabouracSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizetoSearch') overlaysizetoSearch!: MasterSearchComponent;
+  @ViewChild('overlaysieveSearch') overlaysieveSearch!: MasterSearchComponent;
+  
   @Input() content!: any;
   viewMode: boolean = false;
   buttonField: boolean = true;
@@ -960,7 +970,18 @@ handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
 }
 validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+  // Check if the input value is empty or in view mode
   if (event.target.value === '' || this.viewMode === true) return;
+
+  // Check if the input value is numeric using regex
+  if (/^\d+$/.test(event.target.value)) {
+    // Show error message and clear the input field
+    this.commonService.toastErrorByMsgId('MSG1531'); // Display an appropriate error message for numeric values
+    this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    return;
+  }
 
   let param = {
     LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -980,10 +1001,14 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
         LOOKUPDATA.SEARCH_VALUE = '';
         return;
       }
-    }, 
-  );
+    }, err => {
+      this.commonService.toastErrorByMsgId('network issue found');
+    });
+
   this.subscriptions.push(Sub);
 }
+
+
 
 
   // validateLookupField(event: any, LOOKUPDATA: any, FORMNAME: string) {
@@ -1061,6 +1086,10 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
 
     if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
       this.toastr.error('Select Either Selling % or Selling Rate');
+      return true
+    }
+    if (this.diamondlabourMasterForm.value.ctWtFrom == 0 && this.diamondlabourMasterForm.value.ctWtTo == 0) {
+      this.toastr.error('Select ctWtFrom & ctWtTo Value');
       return true
     }
     if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
@@ -1158,11 +1187,11 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }
-        , err => alert('save ' + err)
-      )
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1197,10 +1226,12 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert('update ' + err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1493,6 +1524,113 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
       this.viewsellingrate = false;
     }
 
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  divisionsValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'divisions')
+      return
+    }
+  }
+
+  currencyValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'currency')
+      return
+    }
+  }
+
+  shapeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'shape')
+      return
+    }
+  }
+
+  processValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'process')
+      return
+    }
+  }
+
+  sizefromValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sizefrom')
+      return
+    }
+  }
+
+  labouracValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'labourac')
+      return
+    }
+  }
+
+  sizetoValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sizeto')
+      return
+    }
+  }
+  
+  sieveValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'sieve')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'divisions') {
+      this.overlaydivisionsSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency') {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'process') {
+      this.overlayprocessSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sizefrom') {
+      this.overlaysizefromSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'labourac') {
+      this.overlaylabouracSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sizeto') {
+      this.overlaysizetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve') {
+      this.overlaysieveSearch.showOverlayPanel(event)
+    }
+    
   }
 
 }

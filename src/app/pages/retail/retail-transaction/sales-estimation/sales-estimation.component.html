@@ -509,27 +509,28 @@
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ vocno_lbl }}</mat-label>
-              <input type="text" matInput formControlName="fcn_voc_no" [readonly]="true" class="st_txt_right" />
+              <input type="text" matInput formControlName="fcn_voc_no" 
+              [readonly]="voucherDetails?.LOCKVOUCHERNO" class="st_txt_right" />
             </mat-form-field>
           </div>
 
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>Currency</mat-label>
-              <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" [readonly]="viewOnly"
+              <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readOnly
                 [matAutocomplete]="currencyList" />
               <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
                 (optionSelected)="changeCurrency($event)">
-                <mat-option *ngFor="let option of currencyMasterOptions | async" [value]="option.CURRENCY_CODE">
+                <!-- <mat-option *ngFor="let option of currencyMasterOptions | async" [value]="option.CURRENCY_CODE">
                   {{ option.CURRENCY_CODE }}
-                </mat-option>
+                </mat-option> -->
               </mat-autocomplete>
             </mat-form-field>
           </div>
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>Cur. Rate</mat-label>
-              <input class="st_txt_right" type="text" matInput id="txtCurRate" formControlName="txtCurRate" [readonly]="
+              <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" [readonly]="
                   viewOnly ||
                   this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
                 " (change)="changeCurRate($event)" />
@@ -537,9 +538,24 @@
           </div>
 
           <div class="col-md-2 m-t-10 pt-2">
-            <mat-form-field>
+
+            <mat-form-field 
+            style="width: 100%">
+            <input matInput DateValidation
+                (dateChange)="formatDate($event)"
+                [matDatepicker]="dob"
+                [readonly]="viewOnly"
+                formControlName="vocdate"
+                [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
+                [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null"
+                placeholder="DD/MM/YYYY" />
+            <mat-datepicker-toggle matSuffix [for]="dob"
+                [disabled]="viewOnly"></mat-datepicker-toggle>
+            <mat-datepicker #dob></mat-datepicker>
+        </mat-form-field>
+
+            <!-- <mat-form-field>
               <mat-label>{{ date_lbl }}</mat-label>
-              <!-- [matDatepicker]="vocDate" -->
               <input matInput type="text" name="vocdate" [matDatepicker]="vocDate" formControlName="vocdate"
                 value="{{ currentDate }}" placeholder="DD/MM/YYYY" [max]="currentDate"
                 [readonly]="viewOnly || this.ordered_items.length > 0" (dateChange)="getFinancialYear()" />
@@ -549,7 +565,7 @@
               <mat-error *ngIf="vocDataForm.controls.vocdate.hasError('required')">
                 Voc Date is <strong>required</strong>
               </mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
 
           <div class="col-md-2 m-t-10 pt-2">
@@ -2784,27 +2800,35 @@
                         </master-search> -->
                 </div>
                 <div class="col-md-2">
-                  <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
                   <mat-form-field>
-                    <mat-label>Item Code </mat-label>
-                    <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code" #fcn_li_item_code
-                      id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
+                    <mat-label>Item Code</mat-label>
+                    <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code"
+                           #fcn_li_item_code id="fcn_li_item_code" autofocus (change)="getStockDesc($event)"
+                           [readonly]="viewOnly" />
                   </mat-form-field>
-                  <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)"></master-search> -->
                 </div>
+
+                <div class="col-md-1 d-flex align-items-center justify-content-center">
+                  <i class="fas fa-camera fa-2x" (click)="openScanner()" style="cursor: pointer;"></i>
+                </div>
+                
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>Item Description </mat-label>
                     <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
-                      [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
+                           [readonly]="viewOnly || !this.newLineItem.ALLOWEDITDESCRIPTION" />
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Location </mat-label>
                     <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
                       [readonly]="viewOnly" />
                   </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <app-qrcode-scanner *ngIf="scannerVisible" (qrcodeDetected)="onQrcodeDetected($event)" (closeRequested)="onCloseRequested()"></app-qrcode-scanner>
                 </div>
 
               </div>
@@ -3248,3 +3272,4 @@
     </div>
   </div>
 </ng-template>
+

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -16,8 +17,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./component-master.component.scss']
 })
 export class ComponentMasterComponent implements OnInit {
+  @ViewChild('overlaycodedescSearch') overlaycodedescSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSetSearch') overlaysizeSetSearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSearch') overlaysizeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysettingTypeSearch') overlaysettingTypeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSeqSearch') overlayprocessSeqSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
 
   @Input() content!: any;
+  isPCSDisabled: boolean = false;
+  iskaratDisabled: boolean = false;
   tableData: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
@@ -58,7 +70,8 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "division='M'",
+    WHERECONDITION: "DIVISION_CODE<>''",
+   // WHERECONDITION: "division='M'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -127,6 +140,7 @@ export class ComponentMasterComponent implements OnInit {
     WHERECONDITION: "COMPSIZE_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK:true,
   }
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -174,6 +188,18 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
   componentmasterForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
     codedes: ["", [Validators.required]],
@@ -188,8 +214,8 @@ export class ComponentMasterComponent implements OnInit {
     length: [""],
     width: [""],
     radius: [""],
-    processSeq: [""],
-    costCenter: [""],
+    processSeq: ["", [Validators.required]],
+    costCenter: ["", [Validators.required]],
     currencyCode: [""],
     currencyRate: [""],
   });
@@ -205,6 +231,7 @@ export class ComponentMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.setInitialValues();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -228,6 +255,18 @@ export class ComponentMasterComponent implements OnInit {
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
+
+    console.log(value.DIVISION)
+    if (value.DIVISION === 'M') {
+      this.isPCSDisabled = true;
+    } else {
+      this.isPCSDisabled = false;
+    }
+    if (value.DIVISION === 'S') {
+      this.iskaratDisabled = true;
+    } else {
+      this.iskaratDisabled = false;
+    }
   }
 
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
@@ -505,15 +544,47 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
     this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
     this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
-    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
-    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
-    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
-    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+    // this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+    // this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+    // this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+    // this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
     this.componentmasterForm.controls.processSeq.setValue(this.content.SEQ_CODE)
     this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
     this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
     this.componentmasterForm.controls.remarks.setValue(this.content.PROD_INSTRUCTION)
+
+
+    this.componentmasterForm.controls.height.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.HEIGHT));
+
+        this.componentmasterForm.controls.length.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,
+            this.content.LENGTH));
+
+            this.componentmasterForm.controls.width.setValue(
+              this.commonService.transformDecimalVB(
+                this.commonService.allbranchMaster?.BMQTYDECIMALS,
+                this.content.WIDTH));
+
+
+                this.componentmasterForm.controls.radius.setValue(
+                  this.commonService.transformDecimalVB(
+                    this.commonService.allbranchMaster?.BMQTYDECIMALS,
+                    this.content.RADIUS));
+
+  }
+
+  
+  private setInitialValues() {
+
+    this.componentmasterForm.controls.height.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.length.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.width.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.radius.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'));
   }
 
   setPostData() {
@@ -1000,9 +1071,11 @@ export class ComponentMasterComponent implements OnInit {
           this.showErrorDialog('Code Already Exists')
         }
         else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1035,9 +1108,11 @@ export class ComponentMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
 
   }
@@ -1126,13 +1201,21 @@ export class ComponentMasterComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+    if (this.editMode && FORMNAME === 'code') {
+      return;
+    }
+    if (this.editMode && FORMNAME === 'codedes') {
+      return;
+    }
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
     this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -1148,6 +1231,31 @@ export class ComponentMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg()
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   onFileChangedimage(event: any) {
 
@@ -1265,4 +1373,123 @@ export class ComponentMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
 }
 
+// lookupKeyPress(event: KeyboardEvent) {
+//   if (event.key === 'Enter') {
+//     event.preventDefault();
+//   }
+// }
+
+lookupKeyPress(event: any, form?: any) {
+  if (event.key == 'Tab' && event.target.value == '') {
+    this.showOverleyPanel(event, form)
+  }
+  if (event.key === 'Enter') {
+    if (event.target.value == '') this.showOverleyPanel(event, form)
+    event.preventDefault();
+  }
+}
+
+codedescValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'codedes')
+    return
+  }
+}
+
+sizeSetValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'sizeSet')
+    return
+  }
+}
+
+typeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'type')
+    return
+  }
+}
+
+sizeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'size')
+    return
+  }
+}
+
+categoryValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'category')
+    return
+  }
+}
+
+shapeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'shape')
+    return
+  }
+}
+
+settingTypeValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'settingType')
+    return
+  }
+}
+
+processSeqValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'processSeq')
+    return
+  }
+}
+costCenterValidate(event: any) {
+  if (this.viewMode) return
+  if (event.target.value == '') {
+    this.showOverleyPanel(event,'costCenter')
+    return
+  }
+}
+
+
+
+showOverleyPanel(event: any, formControlName: string) {
+
+  if (formControlName == 'codedes') {
+    this.overlaycodedescSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'sizeSet') {
+    this.overlaysizeSetSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'type') {
+    this.overlaytypeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'size') {
+    this.overlaysizeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'category') {
+    this.overlaycategorySearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'shape') {
+    this.overlayshapeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'settingType') {
+    this.overlaysettingTypeSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'processSeq') {
+    this.overlayprocessSeqSearch.showOverlayPanel(event)
+  }
+  if (formControlName == 'costCenter') {
+    this.overlaycostCenterSearch.showOverlayPanel(event)
+  }
+}
 }

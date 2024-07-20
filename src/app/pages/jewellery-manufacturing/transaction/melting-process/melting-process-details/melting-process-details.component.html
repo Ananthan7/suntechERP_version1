@@ -17,9 +17,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Job Number * :</label>
                             <div class="col-sm-9 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobno" />
+                                    <input type="text" matInput formControlName="jobno"   (keypress)="lookupKeyPress($event)"
+                                    (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobnoCodeData"
+                                <master-search [MasterSearchData]="jobnoCodeData" #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>&nbsp;    
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="jobdes" />
@@ -209,9 +210,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Location:</label>
                             <div class="col-sm-8 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="location" />
+                                    <input type="text" matInput formControlName="location"   (keypress)="lookupKeyPress($event)" 
+                                    (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="locationCodeData"
+                                <master-search [MasterSearchData]="locationCodeData"  #overlaylocation
                                     (newRowClick)="locationCodeSelected($event)"></master-search>
                                
                             </div>

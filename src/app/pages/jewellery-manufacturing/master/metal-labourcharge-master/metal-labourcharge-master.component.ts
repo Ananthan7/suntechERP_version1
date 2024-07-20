@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-metal-labourcharge-master',
@@ -14,6 +15,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./metal-labourcharge-master.component.scss']
 })
 export class MetalLabourchargeMasterComponent implements OnInit {
+  @ViewChild('overlaymetalDivisionSearch') overlaymetalDivisionSearch!: MasterSearchComponent;
+  @ViewChild('overlaystockcodeSearch') overlaystockcodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaymetalcurrencySearch') overlaymetalcurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlaykaratSearch') overlaykaratSearch!: MasterSearchComponent;
+  @ViewChild('overlaylabourAcSearch') overlaylabourAcSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaysubCategorySearch') overlaysubCategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaybrandSearch') overlaybrandSearch!: MasterSearchComponent;
+
   @Input() content!: any;
   viewMode: boolean = false;
   buttonField: boolean = true;
@@ -1004,12 +1016,12 @@ export class MetalLabourchargeMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }
-        , err => alert('save ' + err)
-      )
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1035,10 +1047,12 @@ export class MetalLabourchargeMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }   else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert('update ' + err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1348,4 +1362,134 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   }
 
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  metalDivisionValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'metalDivision')
+      return
+    }
+  }
+
+  stockcodeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'stock_code')
+      return
+    }
+  }
+
+  metalcurrencyValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'metalcurrency')
+      return
+    }
+  }
+
+  karatValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'karat')
+      return
+    }
+  }
+  
+  labourAcValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'labourAc')
+      return
+    }
+  }
+
+  colorValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'color')
+      return
+    }
+  }
+
+  typeValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'typecode')
+      return
+    }
+  }
+
+  categoryValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'category')
+      return
+    }
+  }
+
+  subCategoryValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'subCategory')
+      return
+    }
+  }
+
+
+  brandValidate(event: any) {
+    if (this.viewMode) return
+    if (event.target.value == '') {
+      this.showOverleyPanel(event, 'brand')
+      return
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'metalDivision') {
+      this.overlaymetalDivisionSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'stock_code') {
+      this.overlaystockcodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'metalcurrency') {
+      this.overlaymetalcurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'karat') {
+      this.overlaykaratSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'labourAc') {
+      this.overlaylabourAcSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color') {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'typecode') {
+      this.overlaytypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'category') {
+      this.overlaycategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'subCategory') {
+      this.overlaysubCategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'brand') {
+      this.overlaybrandSearch.showOverlayPanel(event)
+    }
+  }
 }

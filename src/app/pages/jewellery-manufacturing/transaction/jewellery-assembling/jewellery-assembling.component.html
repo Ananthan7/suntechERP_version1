@@ -22,16 +22,18 @@
                     <label for="inputPassword" class="col-sm-5">Branch: </label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput formControlName="branch" />
+                        <input type="text" matInput formControlName="branch"
+                          (keypress)="lookupKeyPress($event)" />
                       </mat-form-field>
                       <master-search></master-search>
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-5">Voucher: </label>
+                    <label for="inputPassword" class="col-sm-5">Voucher:
+                    </label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput formControlName="vocType"/>
+                        <input type="text" matInput formControlName="vocType" />
                       </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -41,38 +43,47 @@
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-5">Voucher Date: </label>
+                    <label for="inputPassword" class="col-sm-5">Voucher Date:
+                    </label>
                     <div class="col-sm-7">
                       <!-- <mat-form-field style="width: 80%;">
                         <input type="date" matInput />
                       </mat-form-field> -->
                       <mat-form-field style="width: 100%">
-                        <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
+                        <input matInput [matDatepicker]="vocdate" name="vocdate"
+                          formControlName="vocdate"
                           placeholder="YYYY/MM/DD" DateValidation />
-                        <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                        <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                        <mat-datepicker-toggle matSuffix
+                          [for]="vocdate"></mat-datepicker-toggle>
+                        <mat-datepicker [startAt]="currentDate"
+                          #vocdate></mat-datepicker>
                       </mat-form-field>
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-5">Party Code: </label>
+                    <label for="inputPassword" class="col-sm-5">Party Code:
+                    </label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput formControlName="partyCode" />
+                        <input type="text" matInput formControlName="partyCode"
+                          (keypress)="lookupKeyPress($event)" />
                       </mat-form-field>
                       <master-search></master-search>
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-5">Item Currency: </label>
+                    <label for="inputPassword" class="col-sm-5">Item Currency:
+                    </label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput formControlName="itemCurrency" />
+                        <input type="text" matInput
+                          formControlName="itemCurrency" />
                       </mat-form-field>
                     </div>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput formControlName="itemcurrencDesc" />
+                        <input type="text" matInput
+                          formControlName="itemcurrencDesc" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -83,34 +94,42 @@
                   <div class="row">
                     <div class="col-md-8">
                       <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-2">Rate: </label>
+                        <label for="inputPassword" class="col-sm-2">Rate:
+                        </label>
                         <div class="col-sm-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="rate" />
+                            <input type="text" matInput
+                              formControlName="rate" />
                           </mat-form-field>
                         </div>
                         <div class="col-sm-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="rateTwo" />
+                            <input type="text" matInput
+                              formControlName="rateTwo" />
                           </mat-form-field>
                         </div>
                         <div class="col-sm-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="retaThree" />
+                            <input type="text" matInput
+                              formControlName="retaThree" />
                           </mat-form-field>
                         </div>
                       </div>
                       <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-2">Entered: </label>
+                        <label for="inputPassword" class="col-sm-2">Entered:
+                        </label>
                         <div class="col-sm-5">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="enteredBy" />
+                            <input type="text" matInput
+                              formControlName="enteredBy"
+                              (keypress)="lookupKeyPress($event)" />
                           </mat-form-field>
                           <master-search></master-search>
                         </div>
                         <div class="col-sm-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyCode" />
+                            <input type="text" matInput
+                              formControlName="partyCode" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -124,17 +143,20 @@
                       </div>
                       <div class="col-12 d-flex">
                         <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-primary metal-issue-add-btn">
+                          <button type="button"
+                            class="btn btn-primary metal-issue-add-btn">
                             Metal
                           </button>
                         </div>
                         <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-primary metal-issue-add-btn">
+                          <button type="button"
+                            class="btn btn-primary metal-issue-add-btn">
                             Stone
                           </button>
                         </div>
                         <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-primary metal-issue-add-btn">
+                          <button type="button"
+                            class="btn btn-primary metal-issue-add-btn">
                             Show Pulled
                           </button>
                         </div>
@@ -145,7 +167,8 @@
 
                     <div class="col-md-4 pt-5">
                       <div class=" bd-highlight">
-                        <button type="button" class="btn btn-primary metal-issue-add-btn">
+                        <button type="button"
+                          class="btn btn-primary metal-issue-add-btn">
                           Apply Chargess Acs
                         </button>
                       </div>
@@ -185,10 +208,12 @@
                   </div>
 
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-5">Status Code:</label>
+                    <label for="inputPassword" class="col-sm-5">Status
+                      Code:</label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput />
+                        <input type="text" matInput
+                          (keypress)="lookupKeyPress($event)" />
                       </mat-form-field>
                       <master-search></master-search>
                     </div>
@@ -197,7 +222,8 @@
                     <label for="inputPassword" class="col-sm-5">No:</label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 70%;">
-                        <input type="number" matInput [dir]="'rtl'" style="text-align: right;" />
+                        <input type="number" matInput [dir]="'rtl'"
+                          style="text-align: right;" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -206,17 +232,9 @@
               </div>
             </div>
 
-
-
-
-
           </mat-tab>
-          <mat-tab label=""></mat-tab>
+          <mat-tab label></mat-tab>
         </mat-tab-group>
-
-
-
-
 
         <div class="row">
           <div class="col-md-12">
@@ -236,30 +254,33 @@
                       </button>
                     </div> -->
                     <div class="p-1">
-                      <button type="button" mat-flat-button color="primary" (click)="openjewelleryassemblingdetails()">
-                          <i class="fa fa-plus" style="font-size: 11px;"></i>
+                      <button type="button" mat-flat-button color="primary"
+                        (click)="openjewelleryassemblingdetails()">
+                        <i class="fa fa-plus" style="font-size: 11px;"></i>
                       </button>
-                  </div>
-                  <div class="p-1">
+                    </div>
+                    <div class="p-1">
                       <button type="button" mat-flat-button color="primary">
-                          <i class="fa fa-trash" style="font-size: 11px;"></i>
-                      </button>
-                  </div>
-                  <div class="p-1">
-                    <button type="button" mat-flat-button color="primary">
                         <i class="fa fa-trash" style="font-size: 11px;"></i>
-                    </button>
-                </div>
+                      </button>
+                    </div>
+                    <div class="p-1">
+                      <button type="button" mat-flat-button color="primary">
+                        <i class="fa fa-trash" style="font-size: 11px;"></i>
+                      </button>
+                    </div>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput />
+                        <input type="text" matInput
+                          (keypress)="lookupKeyPress($event)" />
                       </mat-form-field>
                       <master-search>
                       </master-search>
                     </div>
                     <div class="col-sm-5">
                       <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3">Customer:</label>
+                        <label for="inputPassword"
+                          class="col-sm-3">Customer:</label>
                         <div class="col-sm-7">
                           <mat-form-field style="width: 100%;">
                             <input type="text" matInput />
@@ -273,15 +294,18 @@
 
                 <div class="row m-2">
                   <div class="col">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                      [allowColumnResizing]="true" [showBorders]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
                       <dxo-selection mode="multiple"></dxo-selection>
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      <dxi-column *ngFor="let data of column1" dataField="{{ data }}" caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      <dxi-column *ngFor="let data of column1"
+                        dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center"
+                        backgroundcolor="#000">
                       </dxi-column>
                     </dx-data-grid>
                   </div>
@@ -295,7 +319,8 @@
               <div class="row">
                 <div class="col-md-11 p-l1">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-4">Net Amount:</label>
+                    <label for="inputPassword" class="col-sm-4">Net
+                      Amount:</label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -309,7 +334,8 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-3">Total TRN:</label>
+                    <label for="inputPassword" class="col-sm-3">Total
+                      TRN:</label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -329,7 +355,8 @@
                 </div>
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-3">Total Consumed:</label>
+                    <label for="inputPassword" class="col-sm-3">Total
+                      Consumed:</label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -354,7 +381,8 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2">Narration:</label>
+                    <label for="inputPassword"
+                      class="col-sm-2">Narration:</label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -387,10 +415,12 @@
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2">Entered: </label>
+                    <label for="inputPassword" class="col-sm-2">Entered:
+                    </label>
                     <div class="col-sm-5">
                       <mat-form-field style="width: 70%;">
-                        <input type="text" matInput />
+                        <input type="text" matInput
+                          (keypress)="lookupKeyPress($event)" />
                       </mat-form-field>
                       <master-search></master-search>
                     </div>
@@ -410,17 +440,20 @@
                   </div>
                   <div class="col-12 d-flex">
                     <div class="p-2 bd-highlight">
-                      <button type="button" class="btn btn-primary metal-issue-add-btn">
+                      <button type="button"
+                        class="btn btn-primary metal-issue-add-btn">
                         Metal
                       </button>
                     </div>
                     <div class="p-2 bd-highlight">
-                      <button type="button" class="btn btn-primary metal-issue-add-btn">
+                      <button type="button"
+                        class="btn btn-primary metal-issue-add-btn">
                         Stone
                       </button>
                     </div>
                     <div class="p-2 bd-highlight">
-                      <button type="button" class="btn btn-primary metal-issue-add-btn">
+                      <button type="button"
+                        class="btn btn-primary metal-issue-add-btn">
                         Show Pulled
                       </button>
                     </div>
@@ -431,7 +464,8 @@
 
                 <div class="col-md-4 pt-5">
                   <div class=" bd-highlight">
-                    <button type="button" class="btn btn-primary metal-issue-add-btn">
+                    <button type="button"
+                      class="btn btn-primary metal-issue-add-btn">
                       Apply Chargess Acs
                     </button>
                   </div>
@@ -474,7 +508,8 @@
                 <label for="inputPassword" class="col-sm-5">Status Code:</label>
                 <div class="col-sm-7">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput />
+                    <input type="text" matInput
+                      (keypress)="lookupKeyPress($event)" />
                   </mat-form-field>
                   <master-search></master-search>
                 </div>
@@ -483,7 +518,8 @@
                 <label for="inputPassword" class="col-sm-5">No:</label>
                 <div class="col-sm-7">
                   <mat-form-field style="width: 70%;">
-                    <input type="number" matInput [dir]="'rtl'" style="text-align: right;" />
+                    <input type="number" matInput [dir]="'rtl'"
+                      style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -509,7 +545,8 @@
                       </button>
                     </div> -->
                     <div class="p-1">
-                      <button type="button" mat-flat-button color="primary" (click)="openjewelleryassemblingdetails()">
+                      <button type="button" mat-flat-button color="primary"
+                        (click)="openjewelleryassemblingdetails()">
                         <i class="fa fa-plus" style="font-size: 11px;"></i>
                       </button>
                     </div>
@@ -520,14 +557,16 @@
                     </div>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput />
+                        <input type="text" matInput
+                          (keypress)="lookupKeyPress($event)" />
                       </mat-form-field>
                       <master-search>
                       </master-search>
                     </div>
                     <div class="col-sm-5">
                       <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3">Customer:</label>
+                        <label for="inputPassword"
+                          class="col-sm-3">Customer:</label>
                         <div class="col-sm-7">
                           <mat-form-field style="width: 100%;">
                             <input type="text" matInput />
@@ -541,15 +580,18 @@
 
                 <div class="row m-2">
                   <div class="col">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                      [allowColumnResizing]="true" [showBorders]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
                       <dxo-selection mode="multiple"></dxo-selection>
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      <dxi-column *ngFor="let data of column1" dataField="{{ data }}" caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      <dxi-column *ngFor="let data of column1"
+                        dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center"
+                        backgroundcolor="#000">
                       </dxi-column>
                     </dx-data-grid>
                   </div>
@@ -563,7 +605,8 @@
               <div class="row">
                 <div class="col-md-11 p-l1">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-4">Net Amount:</label>
+                    <label for="inputPassword" class="col-sm-4">Net
+                      Amount:</label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -577,7 +620,8 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-3">Total TRN:</label>
+                    <label for="inputPassword" class="col-sm-3">Total
+                      TRN:</label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -597,7 +641,8 @@
                 </div>
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-3">Total Consumed:</label>
+                    <label for="inputPassword" class="col-sm-3">Total
+                      Consumed:</label>
                     <div class="col-sm-3">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />
@@ -622,7 +667,8 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2">Narration:</label>
+                    <label for="inputPassword"
+                      class="col-sm-2">Narration:</label>
                     <div class="col-sm-7">
                       <mat-form-field style="width: 70%;">
                         <input type="text" matInput />

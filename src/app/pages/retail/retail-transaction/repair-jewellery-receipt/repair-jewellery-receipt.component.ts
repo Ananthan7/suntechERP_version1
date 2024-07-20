@@ -14,6 +14,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
 import { RepairDetailsComponent } from "./repair-details/repair-details.component";
 import { DailyRatesOunceComponent } from "./daily-rates-ounce/daily-rates-ounce.component";
+import { PendingSalesOrdersComponent } from "./pending-sales-orders/pending-sales-orders.component";
 
 @Component({
   selector: "app-repair-jewellery-receipt",
@@ -38,7 +39,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   branchCode?: any = localStorage.getItem("userbranch");
   vocMaxDate = new Date();
-  currentDate = new Date();
+    currentDate = new Date();
   repairDetailsData: any[] = [];
   companyName = this.comService.allbranchMaster["BRANCH_NAME"];
   private subscriptions: Subscription[] = [];
@@ -558,6 +559,27 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     this.openRepairdetails(e.data);
   }
 
+  openNew(data: any = null) {
+    const modalRef: NgbModalRef = this.modalService.open(
+      PendingSalesOrdersComponent,
+      {
+        size: "xl",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+    // modalRef.componentInstance.receiptData = { ...data };
+    // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
+
+    // modalRef.result.then((postData) => {
+    //   if (postData) {
+    //     console.log("Data from modal:", postData);
+    //     this.handlePostData(postData);
+    //   }
+    // });
+  }
+
   open(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(
       DailyRatesOunceComponent,
@@ -568,15 +590,15 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
-    modalRef.componentInstance.receiptData = { ...data };
-    modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
+    // modalRef.componentInstance.receiptData = { ...data };
+    // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
 
-    modalRef.result.then((postData) => {
-      if (postData) {
-        console.log("Data from modal:", postData);
-        this.handlePostData(postData);
-      }
-    });
+    // modalRef.result.then((postData) => {
+    //   if (postData) {
+    //     console.log("Data from modal:", postData);
+    //     this.handlePostData(postData);
+    //   }
+    // });
   }
 
   openRepairdetails(data: any = null) {

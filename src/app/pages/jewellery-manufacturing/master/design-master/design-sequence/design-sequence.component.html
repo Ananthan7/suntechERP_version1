@@ -11,12 +11,12 @@
 <div class="container-fluid">
     <form [formGroup]="designSequenceForm">
         <div class="row mb-2">
-            <label for="inputPassword" class="col-sm-1 col-form-label">Process</label>
+            <label for="inputPassword" id="ID001" class="col-sm-1 col-form-label">Process</label>
             <div class="col-md-3">
                 <mat-form-field style="width: 80%">
-                    <input type="text" matInput formControlName="processCode" />
+                    <input type="text" matInput formControlName="processCode" (keydown)="lookupKeyPress($event,'processCode')"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData"
+                <master-search [MasterSearchData]="processCodeData" #overlayprocessSearch
                     (newRowClick)="processCodeSelected($event)"></master-search>
             </div>
             <div class="col-md-3">
@@ -25,7 +25,7 @@
                 </mat-form-field>
             </div>
             <div class="col-md-3">
-                <button type="button" class="btn add-btn btn-primary" (click)="sequenceSearch()">Add</button>
+                <button type="button" id="ID002" class="btn add-btn btn-primary" (click)="sequenceSearch()">Add</button>
             </div>
         </div>
         <div class="row">
