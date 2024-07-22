@@ -38,7 +38,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" matInput formControlName="vocNo" readonly />
+              <input type="text" matInput formControlName="vocNo" readonly class="text-right"/>
             </mat-form-field>
           </div>
         </div>
@@ -68,8 +68,7 @@
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input
                 type="text"
-                [readonly]="viewOnly"
-                matInput
+                [readonly]="viewOnly" matInput
                 formControlName="partyCode"
                 (change)="partyCodeChange($event)"/>
                 <master-search class="retailMasterSearch" (focusout)="openTab($event, 'partyCode')"
@@ -108,7 +107,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-              <input type="text" matInput formControlName="partyCurrencyRate" readonly />
+              <input type="text" matInput formControlName="partyCurrencyRate" readonly  class="text-right"/>
             </mat-form-field>
             <!-- <master-search [MasterSearchData]="partyCurrencyCodeData"
                         (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
