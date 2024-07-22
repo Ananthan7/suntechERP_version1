@@ -27,7 +27,7 @@ export class SequenceMasterComponent implements OnInit {
   showHeaderFilter!: boolean;
   selectAll: boolean = false;
   viewMode: boolean = false;
-  calculateProcessDisable: boolean = true;
+  calculateProcessDisable: boolean = false;
   codeEnable: boolean = true;
   editMode: boolean = false;
   checkCondtion: boolean = false;
@@ -82,14 +82,6 @@ export class SequenceMasterComponent implements OnInit {
         this.editMode = true
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
-
-        if(this.content.TIMEON_PROCESS == true){
-          this.calculateProcessDisable = false;
-        }
-        else
-        {
-          this.calculateProcessDisable = false;
-        }
         
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -757,14 +749,6 @@ export class SequenceMasterComponent implements OnInit {
     if (event.key === 'Enter') {
       if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
-    }
-  }
-
-  sequencePrefixCodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sequencePrefix')
-      return
     }
   }
 

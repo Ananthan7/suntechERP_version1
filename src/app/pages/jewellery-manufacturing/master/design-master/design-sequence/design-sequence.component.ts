@@ -127,13 +127,7 @@ export class DesignSequenceComponent implements OnInit {
     }
   }
 
-  processValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'processCode')
-      return
-    }
-  }
+
 
   showOverleyPanel(event: any, formControlName: string) {
 

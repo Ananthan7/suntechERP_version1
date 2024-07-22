@@ -1149,70 +1149,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
 
-  WIPaccountValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'WIPaccount')
-      return
-    }
-  }
-
-  approvalCodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'approvalCode')
-      return
-    }
-  }
-  
-  approvalProcessValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'approvalProcess')
-      return
-    }
-  }
-
-  recStockCodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'recStockCode')
-      return
-    }
-  }
-  
-  adjustaccodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'ADJUST_ACCODE')
-      return
-    }
-  }
-  
-  lossaccodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'LOSS_ACCODE')
-      return
-    }
-  }
-  
-  recoveaccodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'RECOV_ACCODE')
-      return
-    }
-  }
-    
-  gainaccodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'GAIN_ACCODE')
-      return
-    }
-  }
-
+ 
   showOverleyPanel(event: any, formControlName: string) {
 
     if (formControlName == 'WIPaccount') {

@@ -639,29 +639,7 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-  colorValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'color')
-      return
-    }
-  }
-
-  karatValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'karat')
-      return
-    }
-  }
-
-  stockCodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'stockCode')
-      return
-    }
-  }
+  
 
 
   showOverleyPanel(event: any, formControlName: string) {

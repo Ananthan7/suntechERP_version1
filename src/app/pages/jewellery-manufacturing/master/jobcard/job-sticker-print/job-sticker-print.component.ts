@@ -65,15 +65,15 @@ export class JobStickerPrintComponent implements OnInit {
   });
 
   ngOnInit(): void {
+  
+      this.priceSchemeValidate();
+    
 
     console.log(this.content?.FLAG)
     this.branchCode = this.commonService.branchCode;
     // this.priceSchemeValidate();
 
-    if (this.content == undefined) {
-      this.priceSchemeValidate();
-    }
-
+  
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       console.log("view")
@@ -121,8 +121,10 @@ export class JobStickerPrintComponent implements OnInit {
 
 
   priceSchemeValidate() {
-    this.jobstickerpointForm.controls.jobrange.setValue(this.content.JOB_NUMBER);
-    this.jobstickerpointForm.controls.jobrangeDesc.setValue(this.content.JOB_NUMBER);
+    console.log(this.content)
+    this.jobstickerpointForm.controls.jobrange.setValue(this.content);
+    this.jobstickerpointForm.controls.jobrangeDesc.setValue(this.content);
+
     // this.jobCardFrom.controls.jobCardFrom.setValue(e.PRICE_CODE)
     // let postData = {
     //   "SPID": "096",

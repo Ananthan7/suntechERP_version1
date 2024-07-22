@@ -29,6 +29,7 @@ export class TransactionDetailsComponent implements OnInit {
   orders: any = [];
   viewOnly: boolean = false;
   branchCode?: String;
+  @Input() content!: any;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -52,6 +53,10 @@ export class TransactionDetailsComponent implements OnInit {
 
   }
 
+  transactionDetailsForm: FormGroup = this.formBuilder.group({
+    jobNumber:[]
+  });
+
   close(data?: any) {
     this.activeModal.close(data);
   }
@@ -70,10 +75,25 @@ export class TransactionDetailsComponent implements OnInit {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
 
+  jobnoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Number',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
+
   transactionDetails(){
     this.commonService.toastSuccessByMsgId('MSG81447');
+    console.log(this.content)
     //let API = 'JobTransactionsGrid/GetJobTransaction/' + this.branchCode + '/' + 524;
-    let API = 'JobTransactionsGrid/GetJobTransaction/'+this.branchCode+'/'+14480;
+   // let API = 'JobTransactionsGrid/GetJobTransaction/'+this.branchCode+'/'+14480;
+    let API = 'JobTransactionsGrid/GetJobTransaction/'+this.branchCode+'/'+this.content;
    
    let Sub: Subscription = this.dataService.getDynamicAPI(API)
      .subscribe(
