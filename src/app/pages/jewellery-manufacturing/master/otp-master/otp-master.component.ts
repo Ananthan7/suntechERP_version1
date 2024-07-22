@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-otp-master',
@@ -14,6 +15,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['./otp-master.component.scss']
 })
 export class OtpMasterComponent implements OnInit {
+  @ViewChild('overlaybranchSearch') overlaybranchSearch!: MasterSearchComponent;
+
+  
 
   columnheader:any[] = ['S.No','Level','User', 'Mobile Number','Mobile Number','Email'];
 
@@ -217,4 +221,26 @@ export class OtpMasterComponent implements OnInit {
     });
   }
 
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'branch') {
+      this.overlaybranchSearch.showOverlayPanel(event)
+    }
+  }
 }

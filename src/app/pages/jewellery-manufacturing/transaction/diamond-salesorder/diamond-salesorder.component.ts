@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -8,13 +8,18 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AddNewdetailComponent } from './add-newdetail/add-newdetail.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-diamond-salesorder',
   templateUrl: './diamond-salesorder.component.html',
   styleUrls: ['./diamond-salesorder.component.scss']
 })
 export class DiamondSalesorderComponent implements OnInit {
+  @ViewChild('overlayorderType') overlayorderType!: MasterSearchComponent;
+  @ViewChild('overlayPartyCode') overlayPartyCode!: MasterSearchComponent;
+  @ViewChild('overlaySalesmanCode') overlaySalesmanCode!: MasterSearchComponent;
+  @ViewChild('overlaywholeSaleRate') overlaywholeSaleRate!: MasterSearchComponent;
+  @ViewChild('overlayDeliveryTypeDesc') overlayDeliveryTypeDesc!: MasterSearchComponent;
   @Input() content!: any; //use: To get clicked row details from master grid
   private subscriptions: Subscription[] = [];
 
@@ -31,6 +36,7 @@ export class DiamondSalesorderComponent implements OnInit {
   labourDetailsListToSave: any[] = []
   postDataToSave: any[] = [];
   componentPartDetailsToSave: any[] = [];
+  viewMode: boolean = false;
 
   Narration: string = '';
   labourDetailGrid: any[] = [];
@@ -751,13 +757,13 @@ export class DiamondSalesorderComponent implements OnInit {
       return
     }
     this.commonService.showSnackBarMsg('Loading....')
-    console.log(this.postDataToSave,'this.postDataToSave');
-    
+    console.log(this.postDataToSave, 'this.postDataToSave');
+
     let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave[0])
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        if (result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
+        if (result && result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
           Swal.fire({
             title: result.message || 'Success',
             text: '',
@@ -768,7 +774,7 @@ export class DiamondSalesorderComponent implements OnInit {
             this.close('reloadMainGrid');
           });
         } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -838,7 +844,11 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+  }
   //data settings
   OrderTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.orderType.setValue(event.CODE)
@@ -970,6 +980,57 @@ export class DiamondSalesorderComponent implements OnInit {
 
   close(data?: string) {
     this.activeModal.close(data);
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.PartyDetailsOrderForm.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'orderType':
+        this.overlayorderType.showOverlayPanel(event);
+        break;
+      case 'PartyCode':
+        this.overlayPartyCode.showOverlayPanel(event);
+        break;
+      case 'SalesmanCode':
+        this.overlaySalesmanCode.showOverlayPanel(event);
+        break;
+      case 'wholeSaleRate':
+        this.overlaywholeSaleRate.showOverlayPanel(event);
+        break;
+      case 'DeliveryTypeDesc':
+        this.overlayDeliveryTypeDesc.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.PartyDetailsOrderForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'orderType' || FORMNAME === 'PartyCode' || FORMNAME === 'SalesmanCode' || FORMNAME === 'wholeSaleRate' || FORMNAME === 'DeliveryTypeDesc') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

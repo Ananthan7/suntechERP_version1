@@ -61,9 +61,12 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 72%;">
                   <input type="text" matInput formControlName="enteredby"
-                    [readonly]="viewMode" />
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'enteredby')" 
+                    (focusout)="validateLookupField($event,rateTypeMasterData,'enteredby')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="user" *ngIf="!viewMode"
+                  #overlayenteredby
                   (newRowClick)="userDataSelected($event)">
                 </master-search>
               </div>
@@ -98,7 +101,8 @@
                   <input type="ext" matInput
                     SixDecimalInput
                     class="text-right"
-                    formControlName="itemcurrencycc" [readonly]="viewMode" />
+                    formControlName="itemcurrencycc" [readonly]="viewMode"
+                    (keypress)="lookupKeyPress($event)" />
                 </mat-form-field>
                 <master-search
                   [MasterSearchData]="itemCodeData" *ngIf="!viewMode"
@@ -114,9 +118,12 @@
               <div class="col-sm-3">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="metalrate"
-                    [readonly]="viewMode" placeholder="Rate type" />
+                    [readonly]="viewMode" placeholder="Rate type"
+                    (keydown)="lookupKeyPress($event,'metalrate')" 
+                    (focusout)="validateLookupField($event,rateTypeMasterData,'metalrate')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="rateTypeMasterData"
+                  #overlaymetalrate
                   *ngIf="!viewMode"
                   (newRowClick)="rateTypeSelected($event)"> </master-search>
               </div>
@@ -137,9 +144,11 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="costcode"
-                    [readonly]="viewMode" />
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'costcode')" 
+                    (focusout)="validateLookupField($event,costCodeData,'costcode')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="costCodeData"
+                  #overlaycostcode
                   *ngIf="!viewMode"
                   (newRowClick)="costCodeSelected($event)">
                 </master-search>
@@ -186,9 +195,10 @@
           </menu-buttons>
           <div class="col-sm-3">
             <mat-form-field style="width: 80%;">
-              <input type="text" matInput [readonly]="viewMode" />
+              <input type="text" matInput [readonly]="viewMode"
+                (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
-            <master-search *ngIf="!viewMode">
+            <master-search *ngIf="!viewMode" #overlaycostcodelist>
             </master-search>
           </div>
         </div>

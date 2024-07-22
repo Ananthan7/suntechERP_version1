@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -7,13 +7,17 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-diamond-job-boq-issue',
   templateUrl: './diamond-job-boq-issue.component.html',
   styleUrls: ['./diamond-job-boq-issue.component.scss']
 })
 export class DiamondJobBoqIssueComponent implements OnInit {
-
+  @ViewChild('overlayenteredBy') overlayenteredBy!: MasterSearchComponent;
+  @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
+  @ViewChild('overlaymetalRateType') overlaymetalRateType!: MasterSearchComponent;
+  @ViewChild('overlaykariggerType') overlaykariggerType!: MasterSearchComponent;
   divisionMS: any = 'ID';
   orders: any = [];
   @Input() content!: any;
@@ -25,6 +29,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   vocMaxDate = new Date();
+  viewMode: boolean = false;
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
 
@@ -244,6 +249,11 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+  }
 
   userDataSelected(value: any) {
     console.log(value);
@@ -335,8 +345,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -351,9 +360,9 @@ export class DiamondJobBoqIssueComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+          else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -364,8 +373,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
         .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+            if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || 'Success',
                 text: '',
@@ -379,10 +387,9 @@ export class DiamondJobBoqIssueComponent implements OnInit {
                   this.close('reloadMainGrid')
                 }
               });
+            }else {
+              this.commonService.toastErrorByMsgId('MSG3577')
             }
-          } else {
-            this.toastr.error('Not saved')
-          }
         }, err => alert(err))
       this.subscriptions.push(Sub)
     }
@@ -486,6 +493,53 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     console.log(e);
     this.diamondJobBoqIssue.controls.worker.setValue(e.WORKER_CODE);
   }
-
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.diamondJobBoqIssue.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayenteredBy.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocation.showOverlayPanel(event);
+        break;
+      case 'metalRateType':
+        this.overlaymetalRateType.showOverlayPanel(event);
+        break;
+      case 'kariggerType':
+        this.overlaykariggerType.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+  
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.diamondJobBoqIssue.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'enteredBy' || FORMNAME === 'location' || FORMNAME === 'metalRateType' || FORMNAME === 'kariggerType') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
 
 }

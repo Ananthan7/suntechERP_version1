@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 interface dataToSave {
   BOMDETAILS:any[]
@@ -20,6 +21,12 @@ interface dataToSave {
 })
 export class AddNewdetailComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
+  @ViewChild('overlydesignDescription') overlydesignDescription!: MasterSearchComponent;
+  @ViewChild('overlayStockCodeDesc') overlayStockCodeDesc!: MasterSearchComponent;
+  @ViewChild('overlayCOLOR') overlayCOLOR!: MasterSearchComponent;
+  @ViewChild('overlaykaratcode') overlaykaratcode!: MasterSearchComponent;
+  @ViewChild('overlaySIZE') overlaySIZE!: MasterSearchComponent;
+
   diamondSalesDetailForm!: FormGroup;
   favoriteSeason: string = ''
   seasons: string[] = ['Metal', 'Stones'];
@@ -45,7 +52,7 @@ export class AddNewdetailComponent implements OnInit {
     ItemRateFC: true,
     AmountValueFC: true
   };
-
+  viewMode: boolean = false;
   BOMDetailsArray: any[] = [];
   BOMDetailsDataToGroup: any[] = [];
   groupedBOMDetails: any[] = [];
@@ -375,6 +382,11 @@ export class AddNewdetailComponent implements OnInit {
       item.WASTAGE_WT = this.commonService.decimalQuantityFormat(item.WASTAGE_WT, 'METAL')
       item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
     })
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
   }
   // search data change in BOM details grid starts==========
   colorCodeSelected(event: any, value: any) {
@@ -898,6 +910,57 @@ export class AddNewdetailComponent implements OnInit {
   /**USE: close activeModal */
   close(data?: any) {
     this.activeModal.close(data);
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.diamondSalesDetailForm.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'designDescription':
+        this.overlydesignDescription.showOverlayPanel(event);
+        break;
+      case 'StockCodeDesc':
+        this.overlayStockCodeDesc.showOverlayPanel(event);
+        break;
+      case 'COLOR':
+        this.overlayCOLOR.showOverlayPanel(event);
+        break;
+      case 'KARAT_CODE':
+        this.overlaykaratcode.showOverlayPanel(event);
+        break;
+        case 'SIZE':
+          this.overlaySIZE.showOverlayPanel(event);
+          break;
+      default:
+    }
+  }
+
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.diamondSalesDetailForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'designDescription' || FORMNAME === 'StockCodeDesc' || FORMNAME === 'COLOR' || FORMNAME === 'KARAT_CODE' || FORMNAME === 'SIZE') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

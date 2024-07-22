@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 // import { StoneIssueDetailComponent } from './stone-issue-detail/stone-issue-detail.component';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -18,6 +18,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class StoneIssueComponent implements OnInit {
   @ViewChild('stoneIssueDetailScreen') public stoneIssueDetailComponent!: NgbModal;
+  @ViewChild('overlayenteredBySearch') overlayenteredBySearch! : MasterSearchComponent;
+  @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
   modalReference!: NgbModalRef;
 
   currentFilter: any;
@@ -31,7 +33,7 @@ export class StoneIssueComponent implements OnInit {
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   private subscriptions: Subscription[] = [];
-  currentDate = new FormControl(new Date());
+  currentDate: any = this.comService.currentDate;
   vocMaxDate = new Date();
   tableRowCount: number = 0;
   detailData: any[] = [];
@@ -40,18 +42,18 @@ export class StoneIssueComponent implements OnInit {
   selectedIndexes: any = [];
   viewMode: boolean = false;
   editMode: boolean = false;
+  isloading: boolean = false;
   dataToDetailScreen: any;
-  user: MasterSearchModel = {
+  SALESPERSON_CODEData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User',
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entered by',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACTIVE = 1",
+    WHERECONDITION: "ACTIVE=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   CurrencyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -68,7 +70,7 @@ export class StoneIssueComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
+    SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
@@ -79,9 +81,9 @@ export class StoneIssueComponent implements OnInit {
   stoneissueFrom: FormGroup = this.formBuilder.group({
     VOCTYPE: ['', [Validators.required]],
     VOCNO: ['', [Validators.required]],
-    VOCDATE: [],
-    YEARMONTH: [],
-    BRANCH_CODE: [],
+    VOCDATE: [''],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
     enteredBy: [''],
     currency: [''],
     currencyrate: [''],
@@ -92,6 +94,7 @@ export class StoneIssueComponent implements OnInit {
     amountTotal: [''],
     total: [''],
     FLAG: [''],
+    MAIN_VOCTYPE: ['']
   });
   constructor(
     private activeModal: NgbActiveModal,
@@ -100,7 +103,6 @@ export class StoneIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
-    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -111,9 +113,11 @@ export class StoneIssueComponent implements OnInit {
       switch (this.content.FLAG) {
         case 'VIEW':
           this.viewMode = true;
+          this.LOCKVOUCHERNO = true;
           break;
         case 'EDIT':
           this.editMode = true;
+          this.LOCKVOUCHERNO = true;
           break;
         case 'DELETE':
           this.viewMode = true;
@@ -126,7 +130,9 @@ export class StoneIssueComponent implements OnInit {
       }
       return
     }
+    this.generateVocNo()
     this.setvalues()
+    this.setvoucherTypeMaster()
     this.setCompanyCurrency()
     // this.gridAmountDecimalFormat = {
     //   type: 'fixedPoint',
@@ -141,8 +147,13 @@ export class StoneIssueComponent implements OnInit {
     this.stoneissueFrom.controls.VOCDATE.setValue(this.comService.currentDate)
     this.stoneissueFrom.controls.BRANCH_CODE.setValue(this.comService.branchCode)
     this.stoneissueFrom.controls.YEARMONTH.setValue(this.comService.yearSelected)
-
+    this.stoneissueFrom.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
   }
+
+
   setInitialValues() {
     console.log(this.content)
     if (!this.content) return
@@ -195,15 +206,58 @@ export class StoneIssueComponent implements OnInit {
 
 
         } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
+          this.comService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
 
   }
 
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.stoneissueFrom.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.stoneissueFrom.value.VOCNO}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.stoneissueFrom.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -338,7 +392,7 @@ export class StoneIssueComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')
+      this.comService.showSnackBarMsg('Details added successfully')
     };
   }
   closeDetailScreen() {
@@ -346,6 +400,11 @@ export class StoneIssueComponent implements OnInit {
   }
   removedata() {
     this.tableData.pop();
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
   }
   setPostData(form: any) {
     return {
@@ -407,10 +466,10 @@ export class StoneIssueComponent implements OnInit {
     let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.status == "Success") {
+        if (result && result.status == "Success") {
           this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
         } else {
-          this.showErrorDialog(result.message || 'Error please try again');
+          this.comService.toastErrorByMsgId('MSG3577')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -436,15 +495,12 @@ export class StoneIssueComponent implements OnInit {
     let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
-          } else {
-            this.showErrorDialog(result.message || 'Error please try again');
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+       
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -480,7 +536,7 @@ export class StoneIssueComponent implements OnInit {
               this.toastr.error('Not deleted');
             }
           }, err => {
-            this.commonService.toastErrorByMsgId('network error')
+            this.comService.toastErrorByMsgId('network error')
           });
         this.subscriptions.push(Sub);
       }
@@ -531,6 +587,49 @@ export class StoneIssueComponent implements OnInit {
     }).then((result: any) => {
       // this.afterSave(result.value)
     });
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.stoneissueFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'enteredBy':
+        this.overlayenteredBySearch.showOverlayPanel(event);
+        break;
+      default:
+       
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.stoneissueFrom.controls[FORMNAME].setValue('')
+         
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'worker' || FORMNAME === 'enteredBy') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

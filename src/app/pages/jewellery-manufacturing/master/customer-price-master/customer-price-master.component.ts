@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 
@@ -17,6 +18,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./customer-price-master.component.scss']
 })
 export class CustomerPriceMasterComponent implements OnInit {
+  @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
   viewMode: boolean = false;
   editableMode: boolean = false;
   editMode: boolean = false;
@@ -40,11 +42,12 @@ export class CustomerPriceMasterComponent implements OnInit {
   { title: 'SELLING_RATE', field: 'SELLING_RATE' },
   ];
   columnheader2: any[] = ['DESIGN_CODE', 'LABOUR_CODE', 'LABTYPE', 'METHOD', 'DIVISION', 'CURRENCY_CODE', 'UNITCODE', 'COST_RATE', 'SELLING_PER', 'CRACCODE', 'DIVISION_CODE', 'SELLING_RATE', 'CUSTOMER_CODE', 'REFMID', 'DT_VALID_FROM'];
-  subscriptions: any;
+  subscriptions: any=[];
   @Input() content!: any;
   tableData: any[] = [];
   tableDatalabour: any[] = [];
   tableDatastone: any[] = [];
+  designChanges: any[] = [];
   currentDate: any = this.commonService.currentDate;
   value: any;
   rateInput: any;
@@ -59,7 +62,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 6,
-    SEARCH_FIELD: 'ACCODE',
+    SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Customer Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "account_mode in ('B','R','P')",
@@ -115,9 +118,11 @@ export class CustomerPriceMasterComponent implements OnInit {
         this.deleteRecord()
       }
     }
-    
-    this.getStonePriceData()
-    this.getLabourChargeMasterList()
+    this.stonepricing();
+    this.labourcharge();
+    this.designcharge();
+  //  this.getStonePriceData()
+  //  this.getLabourChargeMasterList()
   }
   setInitialValues(){
     this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
@@ -141,6 +146,92 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   }
 
+  stonepricing() {
+  
+    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "097",
+      "parameter": {
+        "strCode": this.customerpricemasterForm.value.customercode,
+        "strType": 'STON',
+        "strVocDate ": this.customerpricemasterForm.value.date,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.tableDatastone = result.dynamicData[0] || []
+          if (this.tableDatastone?.length > 0) {
+           // this.fillPriceSchemeDetails()
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+  labourcharge() {
+    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "097",
+      "parameter": {
+        "strCode": this.customerpricemasterForm.value.customercode,
+        "strType": 'LABO',
+        "strVocDate ": this.customerpricemasterForm.value.date,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+
+          this.tableDatalabour = result.dynamicData[0] || []
+          if (this.tableDatalabour?.length > 0) {
+            console.log(result.dynamicData[0]);
+           // this.fillPriceSchemeDetails()
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  designcharge() {
+  
+    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "097",
+      "parameter": {
+        "strCode": this.customerpricemasterForm.value.customercode,
+        "strType": 'DESN',
+        "strVocDate ": this.customerpricemasterForm.value.date,
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.designChanges = result.dynamicData[0] || []
+          if (this.designChanges?.length > 0) {
+           // this.fillPriceSchemeDetails()
+          } else {
+            this.commonService.toastErrorByMsgId('price sheme not found')
+          }
+
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   getLabourChargeMasterList() {
     // this.commonService.toastSuccessByMsgId('MSG81447');
@@ -159,6 +250,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
   }
+
   getStonePriceData() {
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
@@ -179,6 +271,8 @@ export class CustomerPriceMasterComponent implements OnInit {
       })
 
   }
+
+  
   selectRow(rowKey: any) {
     if (!this.selectedKeys.includes(rowKey)) {
       this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
@@ -271,7 +365,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   customerCodeScpSelected(e: any) {
     console.log(e);
     this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
-    this.customerpricemasterForm.controls.desc.setValue(e['ACCOUNT HEAD']);
+    this.customerpricemasterForm.controls.desc.setValue(e.ACCOUNT_HEAD);
   }
 
   setFormValues() {
@@ -559,6 +653,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
@@ -575,13 +670,78 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.customerpricemasterForm.controls[FORMNAME].setValue('')
+          this.customerpricemasterForm.controls.desc.setValue('');
+          // this.jobCardFrom.controls.designtype.setValue('');
+          this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+
+        // if (data == '') {
+        //   this.commonService.toastErrorByMsgId('MSG1531')
+        //   this.customerpricemasterForm.controls[FORMNAME].setValue('')
+        //   LOOKUPDATA.SEARCH_VALUE = ''
+        //   if (FORMNAME === 'customercode') {
+        //     if (FORMNAME === 'customercode') {
+        //       console.log(FORMNAME)
+        //       this.customerpricemasterForm.controls.desc.setValue('');
+        //     }
+        //   }
+        //   return
+        // }
+
+        // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
+        // if (matchedItem) {
+        //   this.customerpricemasterForm.controls[FORMNAME].setValue(matchedItem.ACCODE);
+        //   if (FORMNAME === 'customercode') {
+        //     this.customerpricemasterForm.controls.desc.setValue(matchedItem.ACCOUNT_HEAD);
+
+        //   }
+
+        // } else {
+        //   this.commonService.toastErrorByMsgId('MSG1531');
+        //   this.customerpricemasterForm.controls[FORMNAME].setValue('');
+        //   this.customerpricemasterForm.controls.desc.setValue('');
+
+        //   if (FORMNAME === 'customercode') {
+        //     this.customerpricemasterForm.controls.desc.setValue('');
+        //   }
+
+        //   this.renderer.selectRootElement(FORMNAME).focus();
+        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
+
+        // }
+
+
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
+  }
+
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+ 
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'customercode') {
+      this.overlaycodeSearch.showOverlayPanel(event)
+    }
   }
 
 }

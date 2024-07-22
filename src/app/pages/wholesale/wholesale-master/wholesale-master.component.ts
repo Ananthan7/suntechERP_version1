@@ -27,6 +27,7 @@ import { CustomerPricingMasterComponent } from './customer-pricing-master/custom
 import { CustomerPriceSettingComponent } from './customer-price-setting/customer-price-setting.component';
 import { CostCentreDiamondComponent } from './cost-centre-diamond/cost-centre-diamond.component';
 import { PriceschemesMasterComponent } from './priceschemes-master/priceschemes-master.component';
+import { OunceRateMasterComponent } from './ounce-rate-master/ounce-rate-master.component';
 
 @Component({
   selector: 'app-wholesale-master',
@@ -70,6 +71,7 @@ export class WholesaleMasterComponent implements OnInit {
     'CostCentreDiamondComponent': CostCentreDiamondComponent,
     'PriceschemesMasterComponent': PriceschemesMasterComponent,
     'ComponentSizeSetComponent': ComponentSizeSetComponent,
+    'OunceRateMasterComponent': OunceRateMasterComponent,
 
     /*add components here and update in form component name menu updation in operationals */
   }

@@ -72,10 +72,10 @@
                             [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
                             UpperCaseDirective
                             (focusout)="validateLookupField($event,colorData,'color')" appNoEmptySpace
-                            />
+                            (keydown)="lookupKeyPress($event,'color')"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="colorData"
-                        (newRowClick)="colorDataSelected($event)"
+                        (newRowClick)="colorDataSelected($event)"  #overlaycolorSearch
                         *ngIf="SearchDisable == viewMode">
                     </master-search>
                 </div>
@@ -91,10 +91,10 @@
                         <input type="text" [readonly]="viewMode || codeEnable"
                             matInput formControlName="karat"      (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace/>
+                            (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace (keydown)="lookupKeyPress($event,'karat')" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="karatcodeData"
-                        (newRowClick)="karatcodeSelected($event)"
+                        (newRowClick)="karatcodeSelected($event)"   #overlaykaratSearch
                         *ngIf="SearchDisable == viewMode">
                     </master-search>
                 </div>
@@ -134,10 +134,10 @@
                         <input type="text" matInput formControlName="stockCode"
                             [readonly]="viewMode || codeEnable"      (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace/>
+                            (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace (keydown)="lookupKeyPress($event,'stockCode')" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="stockCodeData"
-                        (newRowClick)="StockCodeSelected($event)"
+                        (newRowClick)="StockCodeSelected($event)"   #overlaystockCodeSearch
                         *ngIf="SearchDisable == viewMode">
                     </master-search>
                 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessTransferNewDetailComponent } from './process-transfer-new-detail/process-transfer-new-detail.component';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-process-transfer-new',
@@ -15,6 +15,7 @@ import { ProcessTransferNewDetailComponent } from './process-transfer-new-detail
   styleUrls: ['./process-transfer-new.component.scss']
 })
 export class ProcessTransferNewComponent implements OnInit {
+  @ViewChild('overlaysalesman') public overlaysalesman!: MasterSearchComponent;
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -24,6 +25,7 @@ export class ProcessTransferNewComponent implements OnInit {
   yearMonth?: String;
   tableRowCount: number = 0;
   PTFDetailsToSave: any[] = [];
+  viewMode: boolean = false;
   metalGridDataToSave: any[] = [];
   labourChargeDetailsToSave: any[] = [];
   currentDate: any = this.commonService.currentDate;
@@ -205,6 +207,11 @@ export class ProcessTransferNewComponent implements OnInit {
 
   removedata() {
     this.tableData.pop();
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
   }
 
   setLabourChargeDetails() {
@@ -750,5 +757,44 @@ export class ProcessTransferNewComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.processTransferFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'salesman':
+        this.overlaysalesman.showOverlayPanel(event);
+        break;
+      default:
+      
+    }
+  }
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.processTransferFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'salesman') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 }

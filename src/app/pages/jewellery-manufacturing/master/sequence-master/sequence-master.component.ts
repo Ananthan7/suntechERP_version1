@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -8,12 +8,14 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { CdkDragDrop, CdkDragStart, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-sequence-master',
   templateUrl: './sequence-master.component.html',
   styleUrls: ['./sequence-master.component.scss']
 })
 export class SequenceMasterComponent implements OnInit {
+  @ViewChild('overlaysequencePrefixCodeSearch') overlaysequencePrefixCodeSearch!: MasterSearchComponent;
   @Input() content!: any; //use: To get clicked row details from master grid
 
   dataSource: any[] = [];
@@ -25,7 +27,7 @@ export class SequenceMasterComponent implements OnInit {
   showHeaderFilter!: boolean;
   selectAll: boolean = false;
   viewMode: boolean = false;
-  calculateProcessDisable: boolean = true;
+  calculateProcessDisable: boolean = false;
   codeEnable: boolean = true;
   editMode: boolean = false;
   checkCondtion: boolean = false;
@@ -80,6 +82,7 @@ export class SequenceMasterComponent implements OnInit {
         this.editMode = true
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteSequenceMaster()
@@ -127,15 +130,33 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
   }
 
+  // searchFromGrid(event: any) {
+  //   if (event.target.value == '') {
+  //     this.dataSource = this.tableData
+  //   }
+  //   const results: any = []
+  //   this.dataSource = this.dataSource.filter(obj =>
+  //     obj.PROCESS_CODE.toLowerCase().startsWith(event.target.value.toLowerCase())
+  //   );
+  //   this.dataSource = this.dataSource.filter(results =>
+  //     results.DESCRIPTION.toLowerCase().startsWith(event.target.value.toLowerCase())
+  //   );
+ 
+  // }
   searchFromGrid(event: any) {
-    if (event.target.value == '') {
-      this.dataSource = this.tableData
+    const searchValue = event.target.value.toLowerCase();
+    
+    if (searchValue === '') {
+      this.dataSource = this.tableData;
+      return;
     }
-    const results: any = []
-    this.dataSource = this.dataSource.filter(obj =>
-      obj.PROCESS_CODE.toLowerCase().startsWith(event.target.value.toLowerCase())
+  
+    this.dataSource = this.tableData.filter(obj =>
+      obj.PROCESS_CODE.toLowerCase().startsWith(searchValue) ||
+      obj.DESCRIPTION.toLowerCase().startsWith(searchValue)
     );
   }
+  
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
@@ -171,8 +192,13 @@ export class SequenceMasterComponent implements OnInit {
   }
 
   calculateProcessChange(event:any){
-    if(event.checked){
+    console.log(event)
+    if(event.target.checked == true ){
       this.calculateProcessDisable = false;
+    }
+    else
+    {
+      this.calculateProcessDisable = true;
     }
   }
 
@@ -353,7 +379,7 @@ export class SequenceMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+       
           if (result.status == "Success") {
             Swal.fire({
               title: this.commonService.getMsgByID('MSG2443') || 'Success',
@@ -368,21 +394,24 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+          else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
 
   updateWorkerMaster() {
+   // if (this.submitValidation()) return;
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = this.setPostData(this.sequenceMasterForm.value)
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+       
           if (result.status == "Success") {
             Swal.fire({
               title: this.commonService.getMsgByID('MSG2443') || result.message,
@@ -397,12 +426,15 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+         else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
@@ -701,6 +733,29 @@ export class SequenceMasterComponent implements OnInit {
       this.sequenceMasterForm.controls['calculatetime'].enable();
 
 
+    }
+  }
+
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'sequencePrefix') {
+      this.overlaysequencePrefixCodeSearch.showOverlayPanel(event)
     }
   }
 }

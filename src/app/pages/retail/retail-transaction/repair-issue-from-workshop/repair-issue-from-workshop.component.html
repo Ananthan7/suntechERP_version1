@@ -7,6 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header
+  *ngIf="this.content?.FLAG != 'VIEW'"
   (saveClick)="formSubmit()"
   (cancelClick)="close()"
   (deleteClick)="deleteRepairReceive()"
@@ -165,19 +166,19 @@
                 <mat-form-field style="width: 100%">
                   <input
                     matInput
-                    [matDatepicker]="vocDate"
-                    formControlName="Date"
+                    [matDatepicker]="date"
+                    formControlName="date"
                     [readonly]="viewMode"
                     placeholder="DD/MM/YYYY"
                     DateValidation
                   />
                   <mat-datepicker-toggle
                     matSuffix
-                    [for]="vocDate"
+                    [for]="date"
                   ></mat-datepicker-toggle>
                   <mat-datepicker
                     [startAt]="currentDate"
-                    #vocDate
+                    #date
                   ></mat-datepicker>
                 </mat-form-field>
               </div>
@@ -235,21 +236,30 @@
           </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row mt-3"
+        *ngIf="this.content?.FLAG != 'VIEW'"
+        >
           <div class="col-md-12">
             <mat-tab-group [(selectedIndex)]="selectedTabIndex">
               <mat-tab label="Sent Jobs To Workshop" id="get">
                 <div class="row pt-2">
                   <div class="col-md-12">
-                    <dx-data-grid
+                    <!-- <dx-data-grid
                       id="gridContainer"
-                      [dataSource]="tableData"
+                      keyExpr="MID"
+                      [dataSource]="PendingRepairJobsData"
                       [showBorders]="true"
                       [showColumnLines]="true"
                       [showRowLines]="true"
+                      (onSelectionChanged)="onSelectionChanged($event)"
                       class="mt-3"
                     >
                       <dxo-editing mode="cell" [allowUpdating]="!viewMode">
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+                        <dxo-selection mode="multiple"></dxo-selection>
+                        
+
                       </dxo-editing>
                       <dxi-column
                         *ngFor="let data of columnheadItemDetails"
@@ -260,7 +270,112 @@
                         backgroundcolor="#000"
                       >
                       </dxi-column>
-                    </dx-data-grid>
+
+                      <dxi-column
+                  dataField="VOCNO"
+                  caption="Rep Voc No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STOCK_CODE"
+                  caption="Stock Code"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="REPAIRBAGNO"
+                  caption="Bag No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="PARTYNAME"
+                  caption="Customer Name"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="MOBILE"
+                  caption="Mobile"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="DELIVERYDATE"
+                  caption="Deliver Date"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STATUS"
+                  caption="Status"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                    </dx-data-grid> -->
+                    <dx-data-grid
+                [dataSource]="PendingRepairJobsData"
+                #dataGrid
+                id="gridContainer"
+                keyExpr="MID"
+                [showBorders]="true"
+                (onSelectionChanged)="onSelectionChanged($event)"
+                >
+
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column
+                  dataField="VOCNO"
+                  caption="Rep Voc No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STOCK_CODE"
+                  caption="Stock Code"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="REPAIRBAGNO"
+                  caption="Bag No"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="PARTYNAME"
+                  caption="Customer Name"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="MOBILE"
+                  caption="Mobile"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="DELIVERYDATE"
+                  caption="Deliver Date"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+                <dxi-column
+                  dataField="STATUS"
+                  caption="Status"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+
+                <dxi-column type="buttons">
+                  <dxi-button name="edit"></dxi-button>
+                  <dxi-button name="delete"></dxi-button>
+                </dxi-column>
+              </dx-data-grid>
                   </div>
                 </div>
               </mat-tab>
@@ -309,12 +424,14 @@
         <div class="row mt-3">
           <div class="col-md-12">
             <mat-tab-group [(selectedIndex)]="selectedTabIndex1">
-              <mat-tab label="Pending Repair Items" id="get">
+              <mat-tab
+              *ngIf="this.content?.FLAG != 'VIEW'"
+              label="Pending Repair Items" id="get">
                 <div class="row pt-2">
                   <div class="col-md-12">
                     <dx-data-grid
                       id="gridContainer"
-                      [dataSource]="tableData"
+                      [dataSource]="rowData"
                       [showBorders]="true"
                       [showColumnLines]="true"
                       [showRowLines]="true"
@@ -322,7 +439,8 @@
                     >
                       <dxo-editing mode="cell" [allowUpdating]="!viewMode">
                       </dxo-editing>
-                      <dxi-column
+
+                      <!-- <dxi-column
                         *ngFor="let data of columnheadItemDetails1"
                         dataField="{{ data }}"
                         caption="{{ data }}"
@@ -330,7 +448,65 @@
                         alignment="center"
                         backgroundcolor="#000"
                       >
-                      </dxi-column>
+                      </dxi-column> -->
+
+                      <dxi-column
+                      dataField="DIVISION_CODE"
+                      caption="Div"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+
+                    <dxi-column
+                    dataField="STOCK_CODE"
+                    caption="Stock Code"
+                    [allowEditing]="true"
+                    alignment="center"
+                  ></dxi-column>
+        
+                    <dxi-column
+                      dataField="ITEM_DESCRIPTION"
+                      caption="Description"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="REPAIRBAGNO"
+                      caption="Bag No"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="DT_REMARKS"
+                      caption="Remarks"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="PCS"
+                      caption="Pcs"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="REPAIR_TYPE"
+                      caption="Rep type"
+                      [allowEditing]="true"
+                      alignment="center"
+                    ></dxi-column>
+        
+                    <dxi-column
+                      dataField="DELIVERY_DATE"
+                      caption="Delivery"
+                      [allowEditing]="true"
+                      alignment="center"
+                      dataType ="date"
+                    ></dxi-column>
+
                     </dx-data-grid>
                   </div>
                 </div>
@@ -396,7 +572,15 @@
               >Stock Code : <span>n/a</span></label
             >
           </div>
-          <div class="col-md-3"></div>
+          <div class="col-md-3">
+
+            <div class="p-1 bd-highlight">
+              <button type="button" class="btn btn-outline-primary add-btn" (click)="addTopos()">
+                Add To Transfer
+              </button>
+            </div>
+
+          </div>
         </div>
       </div>
     </form>

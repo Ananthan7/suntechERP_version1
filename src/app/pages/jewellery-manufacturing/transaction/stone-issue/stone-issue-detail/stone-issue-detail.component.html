@@ -22,9 +22,11 @@
             <mat-form-field style="width: 80%;">
               <input type="text" matInput formControlName="jobNumber"
                 [readonly]="viewMode"
-                (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')" />
+                (focusout)="jobNumberValidate($event)"
+                (keydown)="lookupKeyPress($event,'jobNumber')" />
             </mat-form-field>
             <master-search [MasterSearchData]="jobNumberCodeData"
+              #overlayjobNumberSearch
               (newRowClick)="jobNumberCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -88,9 +90,11 @@
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="process"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="SPvalidateLookupField($event,processCodeData,'process')" />
+                (focusout)="SPvalidateLookupField($event,processCodeData,'process')"
+                (keydown)="lookupKeyPress($event,'process')" />
             </mat-form-field>
             <master-search [MasterSearchData]="processCodeData"
+              #overlayprocessSearch
               (newRowClick)="processCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -108,9 +112,11 @@
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="worker"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')" />
+                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')"
+                (keydown)="lookupKeyPress($event,'worker')" />
             </mat-form-field>
             <master-search [MasterSearchData]="workerCodeData"
+              #overlayworkerSearch
               (newRowClick)="workerCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -136,9 +142,11 @@
               <input type="text" matInput formControlName="stockCode"
                 placeholder="stockcode"
                 (focusout)="stockCodeValidate($event)"
+                (keydown)="lookupKeyPress($event,'stockcode')"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="stockCodeData"
+              #overlaystockCodeSearch
               (newRowClick)="stockCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>
@@ -170,9 +178,12 @@
           <div class="col-md-5">
             <mat-form-field style="width: 90%;">
               <input type="text" matInput formControlName="LOCTYPE_CODE"
+                (keydown)="lookupKeyPress($event,'LOCTYPE_CODE')"
+                (focusout)="validateLookupField($event,locationCodeData,'LOCTYPE_CODE')"
                 [readonly]="viewMode" />
             </mat-form-field>
             <master-search [MasterSearchData]="locationCodeData"
+              #overlaylocationSearch
               (newRowClick)="locationCodeSelected($event)"
               *ngIf="!viewMode"></master-search>
           </div>

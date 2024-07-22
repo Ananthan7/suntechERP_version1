@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,6 +16,12 @@ import Swal from 'sweetalert2';
 export class MetalReturnDetailsComponent implements OnInit {
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
+  @ViewChild('overlayjobNumberSearch') overlayjobNumberSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessCodeSearch') overlayprocessCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayworkerCodeSearch') overlayworkerCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaylocationSearch') overlaylocationSearch!: MasterSearchComponent;
+  @ViewChild('overlaystockCodeSearch') overlaystockCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayReturnToStockCodeSearch') overlayReturnToStockCodeSearch!: MasterSearchComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
@@ -34,10 +41,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 201,
-    SEARCH_FIELD: 'process_code',
+    SEARCH_FIELD: 'PROCESS_CODE',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PROCESS_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -50,7 +57,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -240,7 +247,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
   locationCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
-    this.setLookup201WhereCondition()
+    // this.setLookup201WhereCondition()
   }
   jobnoCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
@@ -262,6 +269,11 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.DESCRIPTION);
     this.setLookup201WhereCondition()
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
   }
 
   close(data?: any) {
@@ -449,7 +461,77 @@ export class MetalReturnDetailsComponent implements OnInit {
   jobNumberSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.PREFIX_CODE);
+  }
+    WorkerCodeValidate(event ?: any) {
+      this.showOverleyPanel(event, 'workerCode')
+      let form = this.metalReturnDetailsForm.value;
+      let postData = {
+        "SPID": "103",
+        "parameter": {
+          strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
+          strJob_Number: '',
+          strUnq_Job_Id: '',
+          strMetalStone: '',
+          strProcess_Code: '',
+          strWorker_Code: '',
+          strStock_Code: '',
+          strUserName: '',
+        }
+      }
 
+      this.comService.showSnackBarMsg('MSG81447')
+      let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+        .subscribe((result) => {
+          this.comService.closeSnackBarMsg()
+          if (result.dynamicData && result.dynamicData[0].length > 0) {
+
+          } else {
+            this.overlayworkerCodeSearch.showOverlayPanel(event)
+            this.showOverleyPanel(event, 'workerCode')
+            this.metalReturnDetailsForm.controls.workerCode.setValue('')
+            this.comService.toastErrorByMsgId('MSG1531')
+          }
+        }, err => {
+          this.comService.closeSnackBarMsg()
+          this.comService.toastErrorByMsgId('MSG1747')
+        })
+      this.subscriptions.push(Sub)
+    }
+  
+  processCodeValidate(event?: any) {
+    this.showOverleyPanel(event, 'processCode')// this
+    let form = this.metalReturnDetailsForm.value;
+    let postData = {
+      "SPID": "103",
+      "parameter": {
+        strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
+        strJob_Number: '',
+        strUnq_Job_Id: '',
+        strMetalStone: '',
+        strProcess_Code: '',
+        strWorker_Code: '',
+        strStock_Code: '',
+        strUserName: '',
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+
+        } else {
+          this.overlayprocessCodeSearch.showOverlayPanel(event)
+          this.showOverleyPanel(event, 'processCode')
+          this.metalReturnDetailsForm.controls.processCode.setValue('')
+          this.comService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1747')
+      })
+    this.subscriptions.push(Sub)
   }
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -490,7 +572,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-          this.setLookup201WhereCondition()
+          // this.setLookup201WhereCondition()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -501,6 +583,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
     // let postData = {
     //   "SPID": "064",
@@ -529,13 +612,17 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-            this.setLookup201WhereCondition()
+            // this.setLookup201WhereCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.metalReturnDetailsForm.controls.jobNumber.setValue('')
+            this.showOverleyPanel(event, 'jobNumber')
             return
           }
         } else {
+          this.overlayjobNumberSearch.closeOverlayPanel()
+          this.metalReturnDetailsForm.controls.jobNumber.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -544,8 +631,10 @@ export class MetalReturnDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
- 
+
+
   stockCodeValidate(event: any) {
+    this.showOverleyPanel(event, 'stockCode')
     if (event.target.value == '') return
     let postData = {
       "SPID": "046",
@@ -568,12 +657,15 @@ export class MetalReturnDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data) {
             console.log(data, 'data');
-
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.metalReturnDetailsForm.controls.stockCode.setValue('')
+            this.showOverleyPanel(event, 'stockCode')
             return
           }
         } else {
+          this.overlaystockCodeSearch.closeOverlayPanel()
+          this.metalReturnDetailsForm.controls.stockCode.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -582,5 +674,58 @@ export class MetalReturnDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.metalReturnDetailsForm.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'jobNumber':
+        this.overlayjobNumberSearch.showOverlayPanel(event);
+        break;
+      case 'processCode':
+        this.overlayprocessCodeSearch.showOverlayPanel(event);
+        break;
+      case 'workerCode':
+        this.overlayworkerCodeSearch.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocationSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaystockCodeSearch.showOverlayPanel(event);
+        break;
+      case 'ReturnToStockCode':
+        this.overlayReturnToStockCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+       
+    }
+  }
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'processCode' || FORMNAME === 'workerCode' || FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
 }

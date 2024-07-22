@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -16,8 +17,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./component-master.component.scss']
 })
 export class ComponentMasterComponent implements OnInit {
+  @ViewChild('overlaycodedescSearch') overlaycodedescSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSetSearch') overlaysizeSetSearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSearch') overlaysizeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysettingTypeSearch') overlaysettingTypeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSeqSearch') overlayprocessSeqSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
 
   @Input() content!: any;
+  isPCSDisabled: boolean = false;
+  iskaratDisabled: boolean = false;
   tableData: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
@@ -33,9 +45,12 @@ export class ComponentMasterComponent implements OnInit {
   editableMode: boolean = false;
   viewDisable: boolean = false;
   prefixMasterDetail: any;
+  PICTURE_NAME: string | null = null;
 
-  images: any[] = [];
+  // /images: any[] = [];
   private subscriptions: Subscription[] = [];
+  images: string[] = [];
+  imageNames: string[] = [];
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -57,18 +72,19 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "division='M'",
+    WHERECONDITION: "DIVISION_CODE<>''",
+    // WHERECONDITION: "division='M'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'TYPES',
     SEARCH_HEADING: 'Category type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'CATEGORY MASTER'",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -101,7 +117,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SETTING TYPE MASTER'",
+    WHERECONDITION: "TYPES ='TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -126,23 +142,28 @@ export class ComponentMasterComponent implements OnInit {
     WHERECONDITION: "COMPSIZE_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
+
+
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'TYPES',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
     WHERECONDITION: " TYPES='SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+
   settingTypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'TYPES',
     SEARCH_HEADING: 'Setting Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
@@ -173,6 +194,154 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  stocktypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'btnColor',
+    SEARCH_HEADING: 'Color Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  clarityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 37,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sieveCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'btnSieve',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  descriptionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  pointerWtCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  extColorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  extClarityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sieveFromCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sieveToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
   componentmasterForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
     codedes: ["", [Validators.required]],
@@ -187,8 +356,8 @@ export class ComponentMasterComponent implements OnInit {
     length: [""],
     width: [""],
     radius: [""],
-    processSeq: [""],
-    costCenter: [""],
+    processSeq: ["", [Validators.required]],
+    costCenter: ["", [Validators.required]],
     currencyCode: [""],
     currencyRate: [""],
   });
@@ -201,9 +370,13 @@ export class ComponentMasterComponent implements OnInit {
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
     private comService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
+    console.log(this.content)
+    this.setInitialValues();
+    this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -227,6 +400,18 @@ export class ComponentMasterComponent implements OnInit {
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
+
+    console.log(value.DIVISION)
+    if (value.DIVISION === 'M') {
+      this.isPCSDisabled = true;
+    } else {
+      this.isPCSDisabled = false;
+    }
+    if (value.DIVISION === 'S') {
+      this.iskaratDisabled = true;
+    } else {
+      this.iskaratDisabled = false;
+    }
   }
 
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
@@ -261,7 +446,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           this.prefixMasterDetail = result.response;
-          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO,1)
+          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
           this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
@@ -274,33 +459,99 @@ export class ComponentMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  incrementAndPadNumber(input:any, incrementBy:any) {
+  incrementAndPadNumber(input: any, incrementBy: any) {
     // Convert the input to an integer and increment it
     let incrementedValue = parseInt(input, 10) + incrementBy;
-  
+
     // Convert the incremented value back to a string and pad with leading zeros
     let paddedValue = incrementedValue.toString().padStart(input.length, '0');
-  
+
     return paddedValue;
   }
   updatePrefixMaster() {
     if (!this.prefixMasterDetail) {
     }
     let API = 'PrefixMaster/UpdatePrefixMaster/' + this.prefixMasterDetail.PREFIX_CODE
-    let postData =this.prefixMasterDetail
+    let postData = this.prefixMasterDetail
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-         this.commonService.toastSuccessByText('Last number updated')
-        
+            this.commonService.toastSuccessByText('Last number updated')
+
           }
         } else {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+
+  sieveToCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  sieveFromCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  extClarityCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  extColorCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  pointerWtCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  processCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  descriptionCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  sieveCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  clarityCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  colorCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  shapegridCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  
+  sizegridCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+  }
+
+  stocktypeCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
   }
 
   categoryCodeSelected(e: any) {
@@ -504,15 +755,49 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
     this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
     this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
-    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
-    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
-    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
-    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+    // this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+    // this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+    // this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+    // this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
     this.componentmasterForm.controls.processSeq.setValue(this.content.SEQ_CODE)
     this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
     this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
     this.componentmasterForm.controls.remarks.setValue(this.content.PROD_INSTRUCTION)
+
+
+    this.componentmasterForm.controls.height.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.HEIGHT));
+
+    this.componentmasterForm.controls.length.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.LENGTH));
+
+    this.componentmasterForm.controls.width.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.WIDTH));
+
+
+    this.componentmasterForm.controls.radius.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.RADIUS));
+
+        this.PICTURE_NAME = this.content.PICTURE_NAME
+
+  }
+
+
+  private setInitialValues() {
+
+    this.componentmasterForm.controls.height.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.length.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.width.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.componentmasterForm.controls.radius.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'));
   }
 
   setPostData() {
@@ -531,7 +816,7 @@ export class ComponentMasterComponent implements OnInit {
       "SUPPLIER_CODE": "",
       "SUPPLIER_REF": "",
       "SET_REF": form.settingType,
-      "PICTURE_NAME": "",
+      "PICTURE_NAME": this.PICTURE_NAME,
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
@@ -665,7 +950,7 @@ export class ComponentMasterComponent implements OnInit {
       "MAX_TIME": 0,
       "MODEL_MAKER": "",
       "SKETCH_NAME": "",
-      "PROD_INSTRUCTION":form.remarks,
+      "PROD_INSTRUCTION": form.remarks,
       "LABOUR_FCCOST": 0,
       "MATERIAL_FCCOST": 0,
       "GROSS_WT": 0,
@@ -989,7 +1274,7 @@ export class ComponentMasterComponent implements OnInit {
 
     let postData = this.setPostData()
     console.log('firedsssss');
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
@@ -999,9 +1284,11 @@ export class ComponentMasterComponent implements OnInit {
           this.showErrorDialog('Code Already Exists')
         }
         else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1017,7 +1304,7 @@ export class ComponentMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
+
           if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
@@ -1033,10 +1320,12 @@ export class ComponentMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+         else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
 
   }
@@ -1125,13 +1414,21 @@ export class ComponentMasterComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+    if (this.editMode && FORMNAME === 'code') {
+      return;
+    }
+    if (this.editMode && FORMNAME === 'codedes') {
+      return;
+    }
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
     this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -1147,24 +1444,80 @@ export class ComponentMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg()
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
-  onFileChangedimage(event: any) {
+  // onFileChangedimage(event: any) {
 
+  //   this.images = [];
+
+  //   if (event.target.files && event.target.files.length > 0) {
+
+  //     for (let i = 0; i < event.target.files.length; i++) {
+  //       let reader = new FileReader();
+
+  //       let file = event.target.files[i];
+  //       reader.readAsDataURL(file);
+  //       reader.onload = () => {
+  //         this.images.push(reader.result as string);
+  //       };
+  //     }
+  //   }
+
+  // }
+  onFileChangedimage(event: any): void {
     this.images = [];
+    this.imageNames = [];
 
     if (event.target.files && event.target.files.length > 0) {
+      const files = event.target.files;
+      const totalFiles = files.length;
+      let loadedFiles = 0;
 
-      for (let i = 0; i < event.target.files.length; i++) {
-        let reader = new FileReader();
+      for (let i = 0; i < totalFiles; i++) {
+        const reader = new FileReader();
+        const file = files[i];
 
-        let file = event.target.files[i];
+        // Save file names or other metadata instead of the entire base64 data
+        this.imageNames.push(file.name);
+
         reader.readAsDataURL(file);
         reader.onload = () => {
           this.images.push(reader.result as string);
+          loadedFiles++;
+
+          // Update PICTURE_NAME after all files are loaded
+          if (loadedFiles === totalFiles) {
+            this.PICTURE_NAME = this.imageNames.join(',') || "";
+          }
         };
       }
+    } else {
+      this.PICTURE_NAME = "";  // Clear PICTURE_NAME if no files are selected
     }
-
   }
 
   stockType(data: any, value: any) {
@@ -1220,8 +1573,8 @@ export class ComponentMasterComponent implements OnInit {
     let postData = {
       "SPID": "082",
       "parameter": {
-        "strDivision": this.componentmasterForm.value.divisionCode|| '',
-         "StockCode": event.STOCK_CODE,
+        "strDivision": this.componentmasterForm.value.divisionCode || '',
+        "StockCode": event.STOCK_CODE,
 
       }
     }
@@ -1229,39 +1582,100 @@ export class ComponentMasterComponent implements OnInit {
 
     this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-        .subscribe((result) => {
-            this.comService.closeSnackBarMsg();
-            console.log('API response:', result); // Debugging statement
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        console.log('API response:', result); // Debugging statement
 
-            if (result.status == "Success" && result.dynamicData[0]) {
-                let data = result.dynamicData[0];
-                if (data) {
-                  this.tableData[event.SRNO - 1].CARAT=data[0].KARAT_CODE
-                  this.tableData[event.SRNO - 1].DIVCODE=data[0].DIVISION
-                  this.tableData[event.SRNO - 1].DESCRIPTION=data[0].DESCRIPTION
-                  this.tableData[event.SRNO - 1].SIEVE=data[0].SIEVE
-                  this.tableData[event.SRNO - 1].COLOR=data[0].DIVISIONMS
-                  this.tableData[event.SRNO - 1].CLARITY=data[0].CLARITY
-                  this.tableData[event.SRNO - 1].SHAPE=data[0].SHAPE
-                  this.tableData[event.SRNO - 1].DSIZE=data[0].SIZE
-                  this.tableData[event.SRNO - 1].SHAPE=data[0].SHAPE
-                  this.tableData[event.SRNO - 1].SIEVE_FROM=data[0].SIEVE_SET
-                  
-                    console.log('Dynamic data:', data[0]); // Debugging statement
-                } else {
-                    this.comService.toastErrorByMsgId('MSG1531');
-                    return;
-                }
-            } else {
-                this.comService.toastErrorByMsgId('MSG1747');
-            }
-        }, (err) => {
-            console.error('API error:', err); // Debugging statement
-            this.comService.closeSnackBarMsg();
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0];
+          if (data) {
+            this.tableData[event.SRNO - 1].CARAT = data[0].KARAT_CODE
+            this.tableData[event.SRNO - 1].DIVCODE = data[0].DIVISION
+            this.tableData[event.SRNO - 1].DESCRIPTION = data[0].DESCRIPTION
+            this.tableData[event.SRNO - 1].SIEVE = data[0].SIEVE
+            this.tableData[event.SRNO - 1].COLOR = data[0].DIVISIONMS
+            this.tableData[event.SRNO - 1].CLARITY = data[0].CLARITY
+            this.tableData[event.SRNO - 1].SHAPE = data[0].SHAPE
+            this.tableData[event.SRNO - 1].DSIZE = data[0].SIZE
+            this.tableData[event.SRNO - 1].SHAPE = data[0].SHAPE
+            this.tableData[event.SRNO - 1].SIEVE_FROM = data[0].SIEVE_SET
+
+            console.log('Dynamic data:', data[0]); // Debugging statement
+          } else {
             this.comService.toastErrorByMsgId('MSG1531');
-        });
+            return;
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747');
+        }
+      }, (err) => {
+        console.error('API error:', err); // Debugging statement
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('MSG1531');
+      });
 
     this.subscriptions.push(Sub);
-}
+  }
 
+  onFileChanged(event: any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result;
+      };
+    }
+  }
+
+
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'codedes') {
+      this.overlaycodedescSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sizeSet') {
+      this.overlaysizeSetSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'type') {
+      this.overlaytypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size') {
+      this.overlaysizeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'category') {
+      this.overlaycategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'settingType') {
+      this.overlaysettingTypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'processSeq') {
+      this.overlayprocessSeqSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'costCenter') {
+      this.overlaycostCenterSearch.showOverlayPanel(event)
+    }
+  }
 }

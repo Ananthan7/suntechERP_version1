@@ -136,6 +136,55 @@ export class MfgGridComponent implements OnInit {
     if(this.vocType == 'MASSCH') return '';
     return this.branchCode
   }
+  setCustomParamFilters() {
+    if (this.mainVocType == 'MASCMP') {// diamondlabourchargemaster
+      return {
+        "DESIGN_TYPE": 'COMP',
+      }
+    }
+    if (this.mainVocType == 'MASLBR') {// diamondlabourchargemaster
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "METALSTONE": 'S',
+      }
+    }
+    if (this.mainVocType == 'MASLBM') {// metallabourchargemaster
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "METALSTONE": 'M',
+      }
+    }
+    if (this.mainVocType == 'MASDPX') {
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        // "BRANCH_CODE": this.validateBranchCode(),
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "DIVISION": 'M'
+      }
+    }
+    if (this.mainVocType == 'MSDPM') {
+      return {
+        "YEARMONTH": this.CommonService.yearSelected,
+        // "BRANCH_CODE": this.validateBranchCode(),
+        "VOCTYPE": this.CommonService.nullToString(this.vocType),
+        "DIVISION": 'S'
+      }
+    }
+    return {
+      "YEARMONTH": this.CommonService.yearSelected,
+      "BRANCH_CODE": this.validateBranchCode(),
+      "VOCTYPE": this.CommonService.nullToString(this.vocType),
+    }
+  }
+  setCustomParamTransactions() {
+    return {
+      "VOCTYPE": this.CommonService.nullToString(this.vocType),
+      "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+      "FILTERVAL": this.CommonService.nullToString(this.tableName),
+    }
+  }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     this.resetGridAction()
@@ -168,16 +217,8 @@ export class MfgGridComponent implements OnInit {
       "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
       "TABLE_NAME": this.tableName || '',
       "CUSTOM_PARAM": {
-        "FILTER": {
-          "YEARMONTH": this.CommonService.nullToString(this.yearSelected),
-          "BRANCH_CODE": this.validateBranchCode(),
-          "VOCTYPE": this.CommonService.nullToString(this.vocType),
-        },
-        "TRANSACTION": {
-          "VOCTYPE": this.CommonService.nullToString(this.vocType),
-          "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          "FILTERVAL": this.CommonService.nullToString(this.tableName),
-        },
+        "FILTER": this.setCustomParamFilters(),
+        "TRANSACTION": this.setCustomParamTransactions(),
         "SEARCH": {
           "SEARCH_VALUE": this.CommonService.nullToString(this.SEARCH_VALUE)
         }

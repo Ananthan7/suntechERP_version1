@@ -48,6 +48,7 @@ export class CustomerPricingMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content.FLAG);
+    this.setCompanyCurrency();
     if (this.content.FLAG == 'VIEW') {
 
     }
@@ -102,17 +103,22 @@ export class CustomerPricingMasterComponent implements OnInit {
     approvalby: [''],
     enteredBy: ['', [Validators.required]],
     price: ['', [Validators.required]],
-    currency: ['AED', [Validators.required]],
-    customername: ['', [Validators.required]],
+    currency: ['', [Validators.required]],
     customercode: ['', [Validators.required]],
-    labourtype: ['', [Validators.required]],
-    pricedesc: [''],
+    labourtype: ['None', [Validators.required]],
+    pricedesc: ['', [Validators.required]],
     defaultCustomer: [''],
     defaultVendor: [''],
     customercodeDesc: [''],
     byValue: ['1'],
     bypercentage: [''],
+   
   })
+
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.customerpricemasterForm.controls.currency.setValue(CURRENCY_CODE);
+  }
 
 
   user: MasterSearchModel = {
@@ -197,6 +203,7 @@ export class CustomerPricingMasterComponent implements OnInit {
   priceCodeSelected(e: any) {
     console.log(e);
     this.customerpricemasterForm.controls.price.setValue(e.PRICE_CODE);
+    this.customerpricemasterForm.controls.pricedesc.setValue(e.DESCRIPTION);
   }
 
   currencyCodeData: MasterSearchModel = {
@@ -254,8 +261,8 @@ export class CustomerPricingMasterComponent implements OnInit {
       "GROUP3": "string",
       "IS_ACTIVE": true,
       "BRANCH_CODE": "string",
-      "DEFAULT_CUST": this.customerpricemasterForm.value.defaultCustomer,
-      "DEFAULT_SUPP": this.customerpricemasterForm.value.defaultVendor,
+      "DEFAULT_CUST": this.customerpricemasterForm.value.defaultCustomer || false,
+      "DEFAULT_SUPP": this.customerpricemasterForm.value.defaultVendor || false,
       "GROUP4": "string",
       "GROUP5": "string",
       "GROUP6": "string",

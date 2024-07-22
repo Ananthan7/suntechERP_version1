@@ -1,4 +1,4 @@
-import { Component, ComponentFactory, Input, OnInit } from '@angular/core';
+import { Component, ComponentFactory, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { Code } from 'angular-feather/icons';
 
 @Component({
@@ -16,6 +17,10 @@ import { Code } from 'angular-feather/icons';
   styleUrls: ['./cad-processing.component.scss']
 })
 export class CADProcessingComponent implements OnInit {
+  @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
+  @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
+  @ViewChild('overlaytoworkercode') overlaytoworkercode!: MasterSearchComponent;
+  @ViewChild('overlaytoProcesscode') overlaytoProcesscode!: MasterSearchComponent;
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
@@ -91,7 +96,7 @@ export class CADProcessingComponent implements OnInit {
     vocNo: [''],
     vocDate: [''],
     process: ['',''],
-    worker: ['PARIMA',''],
+    worker: [''],
     narration: [''],
     soNumber: [''],    //no
     design:['', [Validators.required]],
@@ -238,6 +243,11 @@ export class CADProcessingComponent implements OnInit {
       }
     });
     
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
   }
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;
@@ -598,8 +608,8 @@ componentSet(){
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+       
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -614,9 +624,10 @@ componentSet(){
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+          else {
+            this.comService.toastErrorByMsgId('MSG3577')
+          }
+        
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -669,8 +680,7 @@ componentSet(){
   
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
         .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
+          if (result && result.status == "Success") {
               Swal.fire({
                 title: result.message || 'Success',
                 text: '',
@@ -684,9 +694,9 @@ componentSet(){
                   this.close('reloadMainGrid')
                 }
               });
-            }
+            
           } else {
-            this.toastr.error('Not saved')
+            this.comService.toastErrorByMsgId('MSG3577')
           }
         }, err => alert(err))
       this.subscriptions.push(Sub)
@@ -874,6 +884,54 @@ componentSet(){
   deleteTableData(){
  
     
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.cadProcessingForm.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'process':
+        this.overlayprocesscode.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkercode.showOverlayPanel(event);
+        break;
+      case 'toWorker':
+        this.overlaytoworkercode.showOverlayPanel(event);
+        break;
+      case 'toProcess':
+        this.overlaytoProcesscode.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+  
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.cadProcessingForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'toWorker' || FORMNAME === 'toProcess') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 
 }

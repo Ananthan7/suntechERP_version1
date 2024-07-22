@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-diamond-job-boq-receipt',
@@ -14,6 +15,13 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./diamond-job-boq-receipt.component.scss']
 })
 export class DiamondJobBoqReceiptComponent implements OnInit {
+  @ViewChild('overlayenteredBy') overlayenteredBy!: MasterSearchComponent;
+  @ViewChild('overlaylabourchrg') overlaylabourchrg!: MasterSearchComponent;
+  @ViewChild('overlayworker') overlayworker!: MasterSearchComponent;
+  @ViewChild('overlayprocess') overlayprocess!: MasterSearchComponent;
+  @ViewChild('overlaydesignId') overlaydesignId!: MasterSearchComponent;
+  @ViewChild('overlayjobNumber') overlayjobNumber!: MasterSearchComponent;
+  @ViewChild('overlaylabourAC') overlaylabourAC!: MasterSearchComponent;
   @Input() content!: any;
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
@@ -122,7 +130,11 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+  }
 
   onFileChanged(event:any) {
     this.url = event.target.files[0].name
@@ -335,8 +347,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status.trim() == "Success") {
+          if (result && result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -350,14 +361,13 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
+      
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
 
   update() {
     if (this.diamondJobBoqReceipt.invalid) {
@@ -507,8 +517,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
+          if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -522,10 +531,9 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.comService.toastErrorByMsgId('MSG3577')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -594,6 +602,126 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+  jobNumberCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  jobNumberCodeSelected(e: any) {
+    this.diamondJobBoqReceipt.controls.jobNumber.setValue(e.job_number);
+  }
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: "DESIGN_CODE",
+    SEARCH_HEADING: "Design Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  designSelected(value: any) {
+    console.log(value);
+    this.diamondJobBoqReceipt.controls.designId.setValue(value.DESIGN_CODE);
+  }
+
+  ProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'PROCESS_CODE',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+}
+
+  WorkerCodeSelected(e: any) {
+    console.log(e);
+    this.diamondJobBoqReceipt.controls.worker.setValue(e.WORKER_CODE);
+  }
+
+  ProcessCodeSelected(e: any) {
+    console.log(e);
+    this.diamondJobBoqReceipt.controls.process.setValue(e.Process_Code);
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.diamondJobBoqReceipt.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayenteredBy.showOverlayPanel(event);
+        break;
+      case 'jobNumber':
+        this.overlaylabourchrg.showOverlayPanel(event);
+        break;
+      case 'designId':
+        this.overlayworker.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlaydesignId.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayprocess.showOverlayPanel(event);
+        break;
+      case 'labourchrg':
+        this.overlayjobNumber.showOverlayPanel(event);
+        break;
+      case 'overlaylabourAC':
+        this.overlaylabourAC.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+  
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.diamondJobBoqReceipt.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'enteredBy' || FORMNAME === 'jobNumber' || FORMNAME === 'designId' || FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'labourchrg' || FORMNAME === 'overlaylabourAC') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 
 }

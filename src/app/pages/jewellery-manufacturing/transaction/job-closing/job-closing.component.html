@@ -14,48 +14,62 @@
                 <div class="row mb-2">
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Voucher * :</label>
+                            <label for="inputPassword" class="col-sm-6">Voucher
+                                * :</label>
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="vocType"/>
+                                        <input type="text" matInput
+                                            formControlName="vocType" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="vocNo"   style="text-align: right;" />
+                                        <input type="text" matInput
+                                            formControlName="vocNo"
+                                            style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
 
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Voucher Date:</label>
+                            <label for="inputPassword" class="col-sm-6">Voucher
+                                Date:</label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 72%;">
-                                    <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
-                                    placeholder="DD/MM/YYYY"  DateValidation />
-                                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                  <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
-                                  </mat-form-field>
+                                    <input matInput [matDatepicker]="vocdate"
+                                        formControlName="vocdate"
+                                        placeholder="DD/MM/YYYY"
+                                        DateValidation />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="vocdate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate"
+                                        #vocdate></mat-datepicker>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="inputPassword" class="col-sm-6">User Name : </label>
+                            <label for="inputPassword" class="col-sm-6">User
+                                Name : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="user_name" />
+                                    <input type="text" matInput
+                                        formControlName="user_name"
+                                        (keydown)="lookupKeyPress($event,'user_name')" 
+                                        (focusout)="validateLookupField($event,UserCodeData,'user_name')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="UserCodeData"
-                                (newRowClick)="UserCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="UserCodeData" #overlayusernamecode
+                                    (newRowClick)="UserCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Job As On :</label>
+                            <label for="inputPassword" class="col-sm-6">Job As
+                                On :</label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
                                     <input type="date" matInput />
@@ -63,51 +77,71 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5">Party Code:</label>
+                            <label for="inputPassword" class="col-sm-5">Party
+                                Code:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="party_code" />
+                                    <input type="text" matInput
+                                        formControlName="party_code"
+                                        (keydown)="lookupKeyPress($event,'party_code')" 
+                                        (focusout)="validateLookupField($event,partyCodeData,'party_code')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="partyCodeData"
+                                <master-search
+                                    [MasterSearchData]="partyCodeData"  #overlaypartycode
                                     (newRowClick)="partyCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="inputPassword" class="col-sm-5">Job No: </label>
+                            <label for="inputPassword" class="col-sm-5">Job No:
+                            </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="job_no" />
+                                    <input type="text" matInput
+                                        formControlName="job_no"
+                                        (keydown)="lookupKeyPress($event,'job_no')" 
+                                        (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobCodeData"
-                                (newRowClick)="jobCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="jobCodeData" #overlayjobnumbercode
+                                    (newRowClick)="jobCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-5">Worker :</label>
+                            <label for="inputPassword" class="col-sm-5">Worker
+                                :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="worker" />
+                                    <input type="text" matInput
+                                        formControlName="worker"
+                                        (keydown)="lookupKeyPress($event,'worker')" 
+                                        (focusout)="validateLookupField($event,workerCodeData,'worker')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="workerCodeData"
-                                (newRowClick)="workerCodeSelected($event)"></master-search>
+                                <master-search
+                                    [MasterSearchData]="workerCodeData" #overlayworkercode
+                                    (newRowClick)="workerCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5">Reason : </label>
+                            <label for="inputPassword" class="col-sm-5">Reason :
+                            </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="reason" />
+                                    <input type="text" matInput
+                                        formControlName="reason"
+                                        (keydown)="lookupKeyPress($event,'reason')" 
+                                        (focusout)="validateLookupField($event,reasonCodeData,'reason')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="reasonCodeData"
-                                (newRowClick)="reasonCodeSelected($event)"></master-search>
+                                <master-search
+                                    [MasterSearchData]="reasonCodeData" #overlayreasoncode
+                                    (newRowClick)="reasonCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2 text-right">
                             <div class="col-md-12">
                                 <div class="p-1 bd-highlight">
-                                    <button type="button" class="btn btn-outline-primary  add-btn">
+                                    <button type="button"
+                                        class="btn btn-outline-primary  add-btn">
                                         Get Data
                                     </button>
                                 </div>
@@ -116,30 +150,42 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Metal Location * :</label>
+                            <label for="inputPassword" class="col-sm-6">Metal
+                                Location * :</label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="metal_loc"/>
+                                    <input type="text" matInput
+                                        formControlName="metal_loc"
+                                        (keydown)="lookupKeyPress($event,'metal_loc')" 
+                                        (focusout)="metalLocationValidate($event)"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="MetalLocCodeData"
-                                (newRowClick)="MetalLocCodeSelected($event)"></master-search>
+                                <master-search
+                                    [MasterSearchData]="MetalLocCodeData" #overlaymetallocationcode
+                                    (newRowClick)="MetalLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Stone Location * : </label>
+                            <label for="inputPassword" class="col-sm-6">Stone
+                                Location * : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="stone_loc"/>
+                                    <input type="text" matInput
+                                        formControlName="stone_loc"
+                                        (keydown)="lookupKeyPress($event,'stone_loc')" 
+                                        (focusout)="validateLookupField($event,StoneLocCodeData,'stone_loc')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="StoneLocCodeData"
-                                (newRowClick)="StoneLocCodeSelected($event)"></master-search>
+                                <master-search
+                                    [MasterSearchData]="StoneLocCodeData" #overlaystonelocationcode
+                                    (newRowClick)="StoneLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Doc.Ref : </label>
+                            <label for="inputPassword" class="col-sm-6">Doc.Ref
+                                : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="doc_ref" />
+                                    <input type="text" matInput
+                                        formControlName="doc_ref" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -152,47 +198,66 @@
                     <div class="col-md-12 mb-1">
                         <div class="d-flex">
                             <div class="form-check">
-                                <mat-radio-button value="1" [checked]=true>All</mat-radio-button>
+                                <mat-radio-button value="1"
+                                    [checked]=true>All</mat-radio-button>
                             </div>
                             <div class="form-check ">
-                                <mat-radio-button value="1">WIP</mat-radio-button>
+                                <mat-radio-button
+                                    value="1">WIP</mat-radio-button>
                             </div>
                             <div class="form-check ">
-                                <mat-radio-button value="1">Non WIP </mat-radio-button>
+                                <mat-radio-button value="1">Non WIP
+                                </mat-radio-button>
                             </div>
                             <div class="form-check ">
-                                <mat-radio-button value="1">No Job Created </mat-radio-button>
+                                <mat-radio-button value="1">No Job Created
+                                </mat-radio-button>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-check form-switch ms-3">
-                            <input class="form-check-input" type="checkbox" id="salesOrder" [(ngModel)]="text" (click)="change($event)">
-                            <label class="form-check-label" for="salesOrder">{{text}} </label>
+                            <input class="form-check-input" type="checkbox"
+                                id="salesOrder" [(ngModel)]="text"
+                                (click)="change($event)">
+                            <label class="form-check-label"
+                                for="salesOrder">{{text}} </label>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-3">
 
                     <div class="col-md-12">
-                        <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+                        <mat-tab-group
+                            [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                             <mat-tab label="Pending Job Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableData"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        [columnAutoWidth]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                        <dx-data-grid #dataGrid
+                                            id="gridContainer" keyExpr="ID"
+                                            [showBorders]="true"
+                                            [dataSource]="tableData"
+                                            [allowColumnReordering]="true"
+                                            [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging
+                                                [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell"
+                                                [allowUpdating]="true">
                                             </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection
+                                                mode="multiple"></dxo-selection>
+                                            <dxo-scrolling
+                                                mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
+                                            <dxi-column
+                                                *ngFor="let data of columnheadItemDetails"
+                                                dataField="{{ data }}"
+                                                caption="{{ data }}"
+                                                [allowEditing]="true"
+                                                alignment="center"
+                                                backgroundcolor="#000">
                                             </dxi-column>
                                         </dx-data-grid>
                                     </div>
@@ -200,17 +265,21 @@
                                 <div class="row align-items-center pt-1">
                                     <div class="col-md-6">
                                         <div class="row my-2">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label">Remarks:</label>
+                                            <label for="inputPassword"
+                                                class="col-sm-4 col-form-label">Remarks:</label>
                                             <div class="col-md-8">
-                                                <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="remarks" />
+                                                <mat-form-field
+                                                    style="width: 100%;">
+                                                    <input type="text" matInput
+                                                        formControlName="remarks" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="p-1 bd-highlight">
-                                            <button type="button" class="btn btn-outline-primary  add-btn">
+                                            <button type="button"
+                                                class="btn btn-outline-primary  add-btn">
                                                 Get Compontents
                                             </button>
                                         </div>
@@ -220,19 +289,30 @@
                             <mat-tab label="Component Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableDatas"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        [columnAutoWidth]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                        <dx-data-grid #dataGrid
+                                            id="gridContainer" keyExpr="ID"
+                                            [showBorders]="true"
+                                            [dataSource]="tableDatas"
+                                            [allowColumnReordering]="true"
+                                            [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging
+                                                [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell"
+                                                [allowUpdating]="true">
                                             </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection
+                                                mode="multiple"></dxo-selection>
+                                            <dxo-scrolling
+                                                mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails1"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
+                                            <dxi-column
+                                                *ngFor="let data of columnheadItemDetails1"
+                                                dataField="{{ data }}"
+                                                caption="{{ data }}"
+                                                [allowEditing]="true"
+                                                alignment="center"
+                                                backgroundcolor="#000">
                                             </dxi-column>
                                         </dx-data-grid>
                                     </div>
@@ -241,19 +321,29 @@
                             <mat-tab label="Component Summary">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        [columnAutoWidth]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                        <dx-data-grid #dataGrid
+                                            id="gridContainer" keyExpr="ID"
+                                            [showBorders]="true"
+                                            [allowColumnReordering]="true"
+                                            [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging
+                                                [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell"
+                                                [allowUpdating]="true">
                                             </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection
+                                                mode="multiple"></dxo-selection>
+                                            <dxo-scrolling
+                                                mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails2"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
+                                            <dxi-column
+                                                *ngFor="let data of columnheadItemDetails2"
+                                                dataField="{{ data }}"
+                                                caption="{{ data }}"
+                                                [allowEditing]="true"
+                                                alignment="center"
+                                                backgroundcolor="#000">
                                             </dxi-column>
                                         </dx-data-grid>
                                     </div>

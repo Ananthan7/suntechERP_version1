@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,7 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-stone-issue-detail',
   templateUrl: './stone-issue-detail.component.html',
@@ -19,6 +19,11 @@ export class StoneIssueDetailComponent implements OnInit {
   @Input() data!: any;
   @Input() isViewChangeJob: boolean = true;
   @Input() content!: any;
+  @ViewChild('overlayjobNumberSearch') public overlayjobNumberSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSearch') public overlayprocessSearch!: MasterSearchComponent;
+  @ViewChild('overlayworkerSearch') public overlayworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlaystockCodeSearch') public overlaystockCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaylocationSearch') public overlaylocationSearch!: MasterSearchComponent;
   columnhead1: any[] = [];
   serialNo: any;
   subJobNo: any;
@@ -295,8 +300,9 @@ export class StoneIssueDetailComponent implements OnInit {
     }
   }
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    if (event.target.value == '' || this.viewMode == true) return;
+  
     let param = {
       "PAGENO": LOOKUPDATA.PAGENO,
       "RECORDS": LOOKUPDATA.RECORDS,
@@ -305,35 +311,68 @@ export class StoneIssueDetailComponent implements OnInit {
       "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
       "searchField": LOOKUPDATA.SEARCH_FIELD,
       "searchValue": LOOKUPDATA.SEARCH_VALUE
-    }
+    };
+  
     this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        let data = result.dynamicData[0]
+        this.comService.closeSnackBarMsg();
+        let data = result.dynamicData[0];
         if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
-            let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
-            console.log(result, 'result');
-            if (result && result.length == 0) {
-              this.comService.toastErrorByMsgId('No data found')
-              this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
+            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+            console.log(searchResult, 'result');
+            if (searchResult && searchResult.length == 0) {
+              this.comService.toastErrorByMsgId('No data found');
+              this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              switch (FORMNAME) {
+                case 'worker':
+                  this.showOverleyPanel(event, 'worker');
+                  break;
+                case 'process':
+                  this.showOverleyPanel(event, 'process');
+                  break;
+                default:
+                  
+              }
+              return;
             }
-            return
-          }
-        } else {
-          this.comService.toastErrorByMsgId('No data found')
-          this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
+          } 
         }
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
+        this.comService.toastErrorByMsgId('Error Something went wrong');
+      });
+    this.subscriptions.push(Sub);
   }
+  
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.stoneIssueDetailsFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'jobNumber':
+        this.overlayjobNumberSearch.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocessSearch.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaystockCodeSearch.showOverlayPanel(event);
+        break;
+      case 'LOCTYPE_CODE':
+        this.overlaylocationSearch.showOverlayPanel(event);
+        break;
+      default:
+        
+    }
+  }
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -349,13 +388,13 @@ export class StoneIssueDetailComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'stockCode' || FORMNAME === 'LOCTYPE_CODE') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
           return
         }
-        if (FORMNAME == 'jobNumber') {
-          this.jobNumberValidate({ target: { value: event.target.value } })
-        }
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.comService.toastErrorByMsgId('Error Something went wrong')
       })
     this.subscriptions.push(Sub)
   }
@@ -377,6 +416,11 @@ export class StoneIssueDetailComponent implements OnInit {
       return true
     }
     return false
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
   }
   setPostData() {
     let form: any = this.stoneIssueDetailsFrom.value;
@@ -464,6 +508,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.tableData[0].STOCK_CODE = ''
   }
   stockCodeValidate(event: any) {
+    this.showOverleyPanel(event, 'stockCode')
     if (event.target.value == '') return
     let postData = {
       "SPID": "046",
@@ -487,6 +532,7 @@ export class StoneIssueDetailComponent implements OnInit {
           let stockDetails = result.dynamicData[1]
           if(data.RESULT_TYPE == "Failed"){
             this.comService.toastErrorByMsgId("MSG1464")
+          
             return
           }
           if (stockDetails) {
@@ -502,9 +548,13 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails[0].SHAPE)
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
+            this.showOverleyPanel(event, 'stockCode')
             return
           }
         } else {
+          this.overlaystockCodeSearch.closeOverlayPanel()
+          this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -568,6 +618,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -586,6 +637,7 @@ export class StoneIssueDetailComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data && data[0]?.UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
+            console.log(this.jobNumberDetailData )
             this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
@@ -600,9 +652,13 @@ export class StoneIssueDetailComponent implements OnInit {
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.stoneIssueDetailsFrom.controls.jobNumber.setValue('')
+            this.showOverleyPanel(event, 'jobNumber')
             return
           }
         } else {
+          this.overlayjobNumberSearch.closeOverlayPanel()
+          this.stoneIssueDetailsFrom.controls.jobNumber.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -611,6 +667,7 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

@@ -26,8 +26,12 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
+  PendingRepairJobsData:any;
+  //selectedRowKeys:any;
   tableData: any[] = [];
   tableDatas: any[] = [];
+  selectedRowKeys: any[] = [];
+  rowData: any[] = [];
   branchCode?: any = localStorage.getItem("userbranch");
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   currentDate = new Date();
@@ -72,13 +76,102 @@ export class RepairIssueToWorkshopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
 
     this.repairTransferForm.controls.voctype.setValue(
       this.comService.getqueryParamVocType()
     );
     this.generateVocNo();
+    // console.log(this.content);
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+    this.getPendingRepairJobs();
+    if(this.content.FLAG === "EDIT" || this.content.FLAG === "VIEW"){
+      this.getrepairtoissuebyid();
+    }
+    this.getPendingRepairJobs();
+
+  }
+
+  getrepairtoissuebyid(){
+    console.log(this.content.VOCDATE);
+    const parts = this.content.VOCDATE.split('-');
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+
+    const dateObject = new Date(year, month - 1, day);
+
+    this.repairTransferForm.controls.vocDate.setValue(dateObject);
+
+    this.repairTransferForm.controls.voctype.setValue(this.content.VOCTYPE);
+    this.repairTransferForm.controls.vocNo.setValue(this.content.VOCNO);
+    this.repairTransferForm.controls.partyCode.setValue(this.content.POSCUSTCODE);
+    this.repairTransferForm.controls.partyName.setValue(this.content.POSCUSTNAME);
+    this.repairTransferForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
+
+    }
+
+  // onSelectionChanged(selectionInfo: any) {
+  //   console.log(selectionInfo);    
+  //   const selectedRows = selectionInfo.selectedRowsData;  
+  //   selectedRows.forEach((row:any) => {
+  //     if (!this.selectedRowKeys.some((selected:any) => selected.UNIQUEID === row.UNIQUEID)) {
+  //       this.selectedRowKeys.push(row);       
+  //     }
+  //   });
+  //   // console.log(this.rowData.length);
+  //   console.log('Selection changed:', this.selectedRowKeys);
+  // }
+  onSelectionChanged(selectionInfo: any) {
+    console.log(selectionInfo);    
+    const selectedRows = selectionInfo.selectedRowsData;  
+    selectedRows.forEach((row:any) => {
+      if (!this.selectedRowKeys.some(selected => selected.UNIQUEID === row.UNIQUEID)) {
+        this.selectedRowKeys.push(row);       
+      }
+    });
+    // console.log(this.rowData.length);
+    console.log('Selection changed:', this.selectedRowKeys);
+  }
+
+  getPendingRepairJobs() {
+    let API = `ExecueteSPInterface`;
+    let bodyData = {
+      SPID: "95",
+      parameter: {
+        STRMAINVOCTYPE: "RET",//this.comService.getqueryParamVocType(),
+        STRBRANCHCODE: this.branchCode,
+        STRJOBSTATUS: "0",
+      },
+    };
+
+    let sub: Subscription = this.dataService
+      .postDynamicAPI(API, bodyData)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res.dynamicData);
+const uniqueItems = new Set();
+
+res.dynamicData[0].forEach((item: any) => {
+  const identifier = item.MID;
+
+  if (!uniqueItems.has(identifier)) {
+    uniqueItems.add(identifier);
+  }
+});
+
+this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
+  return res.dynamicData[0].find((item: any) => item.MID === identifier);
+}).map((item: any) => ({
+  ...item,
+  DELIVERYDATE: new Date(item.DELIVERYDATE).toLocaleDateString(),
+}));
+
+        console.log(this.PendingRepairJobsData);
+
+          console.log(this.PendingRepairJobsData.DELIVERYDATE);
+        }
+      });
   }
 
   convertDateToYMD(str: any) {
@@ -179,42 +272,42 @@ export class RepairIssueToWorkshopComponent implements OnInit {
     let API = "RepairTransfer/InsertRepairTransfer";
     let postData = {
       MID: 0,
-      BRANCH_CODE: this.repairTransferForm.value.branch,
+      BRANCH_CODE: this.branchCode,
       VOCTYPE: this.repairTransferForm.value.voctype,
       VOCNO: this.repairTransferForm.value.vocNo,
-      VOCDATE: "2024-03-07T10:58:49.153Z",
-      YEARMONTH: "string",
+      VOCDATE:  this.repairTransferForm.value.vocDate,
+      YEARMONTH: this.yearMonth,
       SALESPERSON_CODE: this.repairTransferForm.value.salesMan,
-      BRANCHTO: "string",
-      REMARKS: "string",
-      SYSTEM_DATE: "2024-03-07T10:58:49.153Z",
+      BRANCHTO: "",
+      REMARKS: "",
+      SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
-      STATUS: "string",
+      STATUS: "",
       METALVOCNO: 0,
       METALWEIGHT: 0,
       METALAMOUNT: 0,
       METALMID: 0,
-      METALVOCTYPE: "str",
-      METALCODE: "string",
-      DIAMONDCODE: "string",
+      METALVOCTYPE: "",
+      METALCODE: "",
+      DIAMONDCODE: "",
       DIAMONDVOCNO: 0,
-      DIAMONDVOCTYPE: "str",
+      DIAMONDVOCTYPE: "",
       DIAMONDMID: 0,
       DIAMONDWGT: 0,
       DIAMONDAMOUNT: 0,
-      SUPINVDATE: "2024-03-07T10:58:49.153Z",
-      SUPINVNO: "string",
-      TRANSFERBRANCH: "string",
+      SUPINVDATE: new Date(),
+      SUPINVNO: "",
+      TRANSFERBRANCH: "",
       AUTOPOSTING: true,
-      BRANCHTONAME: this.repairTransferForm.value.branchName,
-      ISMETALDIAMOND: "string",
-      HASJOBDONE: "string",
+      BRANCHTONAME: "",
+      ISMETALDIAMOND: "",
+      HASJOBDONE: "",
       PRINT_COUNT: 0,
-      POSCUSTCODE: "string",
-      POSCUSTNAME: "string",
+      POSCUSTCODE: this.repairTransferForm.value.partyCode,
+      POSCUSTNAME: this.repairTransferForm.value.partyName,
       PRINT_COUNT_ACCOPY: 0,
       PRINT_COUNT_CNTLCOPY: 0,
-      HTUSERNAME: "string",
+      HTUSERNAME: "",
       JOBDONE: 0,
       METALANDDIAMOND: 0,
     };
@@ -224,7 +317,7 @@ export class RepairIssueToWorkshopComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -255,60 +348,56 @@ export class RepairIssueToWorkshopComponent implements OnInit {
     }
 
     let API =
-      "RepairTransfer/UpdateRepairTransfer/" +
-      this.content.BRANCH_CODE +
-      this.content.VOCTYPE +
-      this.content.VOCNO +
-      this.content.YEARMONTH;
+      `RepairTransfer/UpdateRepairTransfer/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
 
-    let postData = {
-      MID: 0,
-      BRANCH_CODE: this.repairTransferForm.value.branch,
-      VOCTYPE: this.repairTransferForm.value.voctype,
-      VOCNO: this.repairTransferForm.value.vocNo,
-      VOCDATE: "2024-03-07T10:58:49.153Z",
-      YEARMONTH: "string",
-      SALESPERSON_CODE: this.repairTransferForm.value.salesMan,
-      BRANCHTO: "string",
-      REMARKS: "string",
-      SYSTEM_DATE: "2024-03-07T10:58:49.153Z",
-      NAVSEQNO: 0,
-      STATUS: "string",
-      METALVOCNO: 0,
-      METALWEIGHT: 0,
-      METALAMOUNT: 0,
-      METALMID: 0,
-      METALVOCTYPE: "str",
-      METALCODE: "string",
-      DIAMONDCODE: "string",
-      DIAMONDVOCNO: 0,
-      DIAMONDVOCTYPE: "str",
-      DIAMONDMID: 0,
-      DIAMONDWGT: 0,
-      DIAMONDAMOUNT: 0,
-      SUPINVDATE: "2024-03-07T10:58:49.153Z",
-      SUPINVNO: "string",
-      TRANSFERBRANCH: "string",
-      AUTOPOSTING: true,
-      BRANCHTONAME: this.repairTransferForm.value.branchName,
-      ISMETALDIAMOND: "string",
-      HASJOBDONE: "string",
-      PRINT_COUNT: 0,
-      POSCUSTCODE: "string",
-      POSCUSTNAME: "string",
-      PRINT_COUNT_ACCOPY: 0,
-      PRINT_COUNT_CNTLCOPY: 0,
-      HTUSERNAME: "string",
-      JOBDONE: 0,
-      METALANDDIAMOND: 0,
-    };
+      let postData = {
+        MID: 0,
+        BRANCH_CODE: this.branchCode,
+        VOCTYPE: this.repairTransferForm.value.voctype,
+        VOCNO: this.repairTransferForm.value.vocNo,
+        VOCDATE:  this.repairTransferForm.value.vocDate,
+        YEARMONTH: this.yearMonth,
+        SALESPERSON_CODE: this.repairTransferForm.value.salesMan,
+        BRANCHTO: "",
+        REMARKS: "",
+        SYSTEM_DATE: new Date(),
+        NAVSEQNO: 0,
+        STATUS: "",
+        METALVOCNO: 0,
+        METALWEIGHT: 0,
+        METALAMOUNT: 0,
+        METALMID: 0,
+        METALVOCTYPE: "",
+        METALCODE: "",
+        DIAMONDCODE: "",
+        DIAMONDVOCNO: 0,
+        DIAMONDVOCTYPE: "",
+        DIAMONDMID: 0,
+        DIAMONDWGT: 0,
+        DIAMONDAMOUNT: 0,
+        SUPINVDATE: new Date(),
+        SUPINVNO: "",
+        TRANSFERBRANCH: "",
+        AUTOPOSTING: true,
+        BRANCHTONAME: "",
+        ISMETALDIAMOND: "",
+        HASJOBDONE: "",
+        PRINT_COUNT: 0,
+        POSCUSTCODE: this.repairTransferForm.value.partyCode,
+        POSCUSTNAME: this.repairTransferForm.value.partyName,
+        PRINT_COUNT_ACCOPY: 0,
+        PRINT_COUNT_CNTLCOPY: 0,
+        HTUSERNAME: "",
+        JOBDONE: 0,
+        METALANDDIAMOND: 0,
+      };
 
     let Sub: Subscription = this.dataService
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status.trim() == "Success") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",
@@ -407,4 +496,16 @@ export class RepairIssueToWorkshopComponent implements OnInit {
       }
     });
   }
+
+  
+  addTopos(){
+    this.rowData =[];
+    if(this.selectedRowKeys.length > 0){
+    //this.rowData = this.selectedRowKeys;
+    this.selectedRowKeys.forEach(element => {
+      this.rowData.push(element);      
+    });
+    }
+  }
+  
 }

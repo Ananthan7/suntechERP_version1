@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-metal-issue',
@@ -16,6 +17,8 @@ import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-de
 })
 export class MetalIssueComponent implements OnInit {
   @ViewChild('metalIssueDetailScreen') public MetalIssueDetailScreen!: NgbModal;
+  @ViewChild('overlayworkerDes') overlayworkerDes!: MasterSearchComponent;
+  @ViewChild('overlaysalesperson') overlaysalesperson!: MasterSearchComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   modalReference!: NgbModalRef;
@@ -24,25 +27,29 @@ export class MetalIssueComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
-    { title: 'SRNO', field: 'SRNO', format: '',alignment: 'center' },
-    { title: 'Job Id', field: 'JOB_NUMBER', format: '',alignment: 'left' },
-    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '',alignment: 'left' },
-    { title: 'Design', field: 'DESIGN_CODE', format: '',alignment: 'left' },
-    { title: 'Stock Code', field: 'STOCK_CODE', format: '',alignment: 'left' },
-    { title: 'Division', field: 'DIVCODE', format: '',alignment: 'left' },
-    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '',alignment: 'left' },
-    { title: 'Gross WT', field: 'GROSS_WT', format: {
-      type: 'fixedPoint',
-      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
-      currency: this.comService.compCurrency
-    },alignment: 'right' },
-    { title: 'Process', field: 'PROCESS_CODE', format: '',alignment: 'left' },
-    { title: 'Worker', field: 'WORKER_CODE', format: '',alignment: 'left' },
-    { title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
-      type: 'fixedPoint',
-      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
-      currency: this.comService.compCurrency
-    },alignment: 'right'},
+    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
+    { title: 'Job Id', field: 'JOB_NUMBER', format: '', alignment: 'left' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
+    { title: 'Design', field: 'DESIGN_CODE', format: '', alignment: 'left' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '', alignment: 'left' },
+    { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '', alignment: 'left' },
+    {
+      title: 'Gross WT', field: 'GROSS_WT', format: {
+        type: 'fixedPoint',
+        precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+        currency: this.comService.compCurrency
+      }, alignment: 'right'
+    },
+    { title: 'Process', field: 'PROCESS_CODE', format: '', alignment: 'left' },
+    { title: 'Worker', field: 'WORKER_CODE', format: '', alignment: 'left' },
+    {
+      title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
+        type: 'fixedPoint',
+        precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+        currency: this.comService.compCurrency
+      }, alignment: 'right'
+    },
   ];
   // workerCodeData: MasterSearchModel = {
   //   PAGENO: 1,
@@ -94,7 +101,7 @@ export class MetalIssueComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
-  gridAmountDecimalFormat:any;
+  gridAmountDecimalFormat: any;
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     VOCTYPE: ['', [Validators.required]],
@@ -109,6 +116,7 @@ export class MetalIssueComponent implements OnInit {
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
+    MAIN_VOCTYPE: [''],
   });
 
   constructor(
@@ -131,23 +139,76 @@ export class MetalIssueComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.LOCKVOUCHERNO = true;
       }
       this.isSaved = true;
-      if(this.content.FLAG == 'DELETE'){
+      if (this.content.FLAG == 'DELETE') {
         this.deleteRecord()
       }
       this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
     } else {
+      this.generateVocNo()
       this.setNewFormValues()
+      this.setvoucherTypeMaster()
     }
   }
- 
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.metalIssueForm.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.metalIssueForm.value.VOCNO}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.metalIssueForm.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
+  }
+
   setNewFormValues() {
     this.metalIssueForm.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
     this.metalIssueForm.controls.YEARMONTH.setValue(this.comService.yearSelected)
     this.metalIssueForm.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+    this.metalIssueForm.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
   }
 
   setAllInitialValues() {
@@ -208,6 +269,12 @@ export class MetalIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+  }
+
   deleteRowClicked(): void {
     if (!this.selectRowIndex) {
       Swal.fire({
@@ -231,11 +298,11 @@ export class MetalIssueComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
-        if (result.isConfirmed) {
-          this.metalIssueDetailsData = this.metalIssueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-          this.reCalculateSRNO()
-        }
+      if (result.isConfirmed) {
+        this.metalIssueDetailsData = this.metalIssueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
       }
+    }
     )
   }
   onRowClickHandler(event: any) {
@@ -247,11 +314,11 @@ export class MetalIssueComponent implements OnInit {
     let selectedData = event.data
     this.openAddMetalIssue(selectedData)
   }
-  dataToDetailScreen:any; //data to pass to child
+  dataToDetailScreen: any; //data to pass to child
   openAddMetalIssue(dataToChild?: any) {
-    if (this.submitValidations(this.metalIssueForm.value)) {
-      return
-    }
+    // if (this.submitValidations(this.metalIssueForm.value)) {
+    //   return
+    // }
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.metalIssueForm.value;
@@ -284,12 +351,12 @@ export class MetalIssueComponent implements OnInit {
       this.metalIssueDetailsData.push(detailDataToParent);
     }
     this.tableData.push(detailDataToParent)
-    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
-    if(DATA.FLAG == 'CONTINUE'){
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE') {
       this.comService.showSnackBarMsg('Details added successfully')
     };
   }
-  closeDetailScreen(){
+  closeDetailScreen() {
     this.modalReference.close()
   }
 
@@ -372,6 +439,14 @@ export class MetalIssueComponent implements OnInit {
       this.comService.toastErrorByMsgId('vocdate is required')
       return true
     }
+    if (form.worker == '') {
+      this.comService.toastErrorByMsgId('worker is required')
+      return true
+    }
+    if (this.tableData?.length <= 0) {
+      this.comService.toastErrorByMsgId('MSG1200')
+      return true;
+    }
     return false
   }
   formSubmit() {
@@ -382,32 +457,30 @@ export class MetalIssueComponent implements OnInit {
       this.update()
       return
     }
-  
+
     let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status.trim() == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.metalIssueForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result && result.status.trim() == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.metalIssueForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
-          this.comService.toastErrorByMsgId('Not saved')
+          this.comService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.isloading = false;
@@ -425,25 +498,23 @@ export class MetalIssueComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-        if (result.response) {
-          if (result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.metalIssueForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.metalIssueForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
-          this.comService.toastErrorByMsgId('Not saved')
+          this.comService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
         this.isloading = false;
@@ -477,9 +548,9 @@ export class MetalIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let form = this.metalIssueForm.value
-        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + 
-        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
-        this.content.VOCNO+ '/' + this.content.YEARMONTH
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -519,6 +590,51 @@ export class MetalIssueComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.metalIssueForm.value[formControlName] != '') return
+    switch (formControlName) {
+      case 'SALESPERSON_CODE':
+        this.overlaysalesperson.showOverlayPanel(event)
+        break;
+      case 'workerDes':
+        this.overlayworkerDes.showOverlayPanel(event)
+        break;
+
+      default:
+        break;
+    }
+
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.metalIssueForm.controls[FORMNAME].setValue('')
+
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'SALESPERSON_CODE') {
+            this.showOverleyPanel(event, 'SALESPERSON_CODE');
+          } else if (FORMNAME === 'workerDes') {
+            this.showOverleyPanel(event, 'workerDes');
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
   }
 
   ngOnDestroy() {

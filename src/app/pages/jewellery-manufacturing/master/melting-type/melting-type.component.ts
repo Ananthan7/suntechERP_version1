@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { retry } from 'rxjs/operators';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 
@@ -19,6 +20,12 @@ import { retry } from 'rxjs/operators';
   styleUrls: ['./melting-type.component.scss']
 })
 export class MeltingTypeComponent implements OnInit {
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild('overlaykaratSearch') overlaykaratSearch!: MasterSearchComponent;
+  @ViewChild('overlaystockCodeSearch') overlaystockCodeSearch!: MasterSearchComponent;
+
+
+  
   @Input() content!: any;
 
   tableData: any[] = [];
@@ -350,11 +357,11 @@ export class MeltingTypeComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('The Code Already Exists');
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      },
-      (err) => alert(err)
-    );
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub);
   }
 
@@ -469,9 +476,11 @@ export class MeltingTypeComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -614,5 +623,35 @@ export class MeltingTypeComponent implements OnInit {
 
   }
 
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
 
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'color') {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'karat') {
+      this.overlaykaratSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'stockCode') {
+      this.overlaystockCodeSearch.showOverlayPanel(event)
+    }
+  }
 }

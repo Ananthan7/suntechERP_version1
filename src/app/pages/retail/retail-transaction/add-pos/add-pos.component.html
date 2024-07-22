@@ -417,27 +417,27 @@
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ vocno_lbl }}</mat-label>
-            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="true" class="st_txt_right" />
+            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO" class="st_txt_right" />
           </mat-form-field>
         </div>
 
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>Currency</mat-label>
-            <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" [readonly]="viewOnly"
+            <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readonly
               [matAutocomplete]="currencyList" />
             <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
               (optionSelected)="changeCurrency($event)">
-              <mat-option *ngFor="let option of currencyMasterOptions | async" [value]="option.CURRENCY_CODE">
+              <!-- <mat-option *ngFor="let option of currencyMasterOptions | async" [value]="option.CURRENCY_CODE">
                 {{ option.CURRENCY_CODE }}
-              </mat-option>
+              </mat-option> -->
             </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>Cur. Rate</mat-label>
-            <input class="st_txt_right" type="text" matInput id="txtCurRate" formControlName="txtCurRate" [readonly]="
+            <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" [readonly]="
                 viewOnly ||
                 this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
               " (change)="changeCurRate($event)" />
@@ -445,9 +445,25 @@
         </div>
 
         <div class="col-md-2 m-t-10 pt-2">
-          <mat-form-field>
+
+          <mat-form-field 
+          style="width: 100%">
+          <input matInput DateValidation
+              (dateChange)="formatDate($event)"
+              [matDatepicker]="dob"
+              [readonly]="viewOnly"
+              formControlName="vocdate"
+              [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
+              [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null"
+              placeholder="DD/MM/YYYY" />
+          <mat-datepicker-toggle matSuffix [for]="dob"
+              [disabled]="viewOnly"></mat-datepicker-toggle>
+          <mat-datepicker #dob></mat-datepicker>
+      </mat-form-field>
+
+
+          <!-- <mat-form-field>
             <mat-label>{{ date_lbl }}</mat-label>
-            <!-- [matDatepicker]="vocDate" -->
             <input matInput type="text" name="vocdate" [matDatepicker]="vocDate" formControlName="vocdate"
               value="{{ currentDate }}" placeholder="DD/MM/YYYY" [max]="currentDate"
               [readonly]="viewOnly || this.ordered_items.length > 0" (dateChange)="getFinancialYear()" />
@@ -457,7 +473,7 @@
             <mat-error *ngIf="vocDataForm.controls.vocdate.hasError('required')">
               Voc Date is <strong>required</strong>
             </mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
 
         <div class="col-md-2 m-t-10 pt-2">
@@ -2384,7 +2400,7 @@
               <mat-form-field>
                 <mat-label>Name</mat-label>
                 <input type="text" matInput formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
-                  (change)="nameChange($event)" [readonly]="viewOnly" appNoEmptySpace />
+                  (change)="nameChange($event)" [readonly]="viewOnly" appAlphabetsOnly appNoEmptySpace />
                 <!-- <input type="text" matInput [pattern]="noWhiteSpacePattern" formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
                     (change)="nameChange($event)" [readonly]="viewOnly" /> -->
                 <mat-error *ngIf="
@@ -2713,7 +2729,7 @@
                 <mat-label>Expiry Date</mat-label>
                 <input matInput [matDatepicker]="expDateCust" name="fcn_customer_exp_date"
                   formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
-                  [readonly]="viewOnly" />
+                  [readonly]="viewOnly" DateValidation/>
                 <mat-datepicker-toggle matSuffix [for]="expDateCust"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #expDateCust></mat-datepicker>
 
@@ -3503,7 +3519,7 @@
           <dx-data-grid #dataGrid id="gridContainer" keyExpr="REFMID" [dataSource]="transAttachmentList"
             [showBorders]="true">
             <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+            <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
 
             <dxi-column *ngFor="let data of transColumnList" dataField="{{ data.field }}" caption="{{ data.title }}"
               [allowEditing]="true" alignment="center" backgroundcolor="#000">

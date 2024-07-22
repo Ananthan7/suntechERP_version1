@@ -10,6 +10,7 @@ import {
     AfterViewInit,
     Input,
     ElementRef,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map, pairwise, startWith } from 'rxjs/operators';
@@ -47,8 +48,7 @@ export class SalesEstimationComponent implements OnInit {
     @Input() content!: any;
 
     @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
-
-
+    voucherDetails:any;
     @ViewChild('mymodal') public mymodal!: NgbModal;
     @ViewChild('adjust_sale_return_modal')
     public adjust_sale_return_modal_ref!: NgbModalRef;
@@ -72,6 +72,7 @@ export class SalesEstimationComponent implements OnInit {
     private cssFilePath = '../../../assets/estimation_pdf.scss';
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
     // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
+    scannerVisible = false;
     RECEIPT_MODEL: any = {}
     disableSaveBtn: boolean = false;
     isRateCannotLessCost: boolean = false;
@@ -83,6 +84,7 @@ export class SalesEstimationComponent implements OnInit {
     gridWeghtDecimalFormat: any;
     sourceOfFundList: any[] = [];
     posMode: string = 'ADD';
+    allowDescription:boolean=false;
     accountHeadDetails = '';
     sourceOfFundListOptions!: Observable<any[]>;
     estMode: string = 'ADD';
@@ -104,12 +106,17 @@ export class SalesEstimationComponent implements OnInit {
 
     private onChangeCallback: (_: any) => void = noop;
 
+
+
     viewOnly: boolean = false;
     editOnly: boolean = false;
     isNewCustomer: boolean = false;
     public isCustProcessing = false;
     isNoDiscountAllowed: boolean = false;
 
+    LOCKVOUCHERNO: boolean = true;
+    minDate:any;
+    maxDate: any;
 
     isNetAmountChange: boolean = false;
     lineItemModalForSalesReturn: boolean = false;
@@ -761,7 +768,8 @@ export class SalesEstimationComponent implements OnInit {
         private inDb: IndexedDbService,
         private datePipe: DatePipe,
         private planetService:PlanetService,
-        public lineItemService: ItemDetailService
+        public lineItemService: ItemDetailService,
+        private cdr: ChangeDetectorRef
 
     ) {
         this.strBranchcode = localStorage.getItem('userbranch');
@@ -832,7 +840,6 @@ export class SalesEstimationComponent implements OnInit {
             fcn_customer_code: ['',],
             fcn_customer_id_number: ['', Validators.required],
             fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
-            // fcn_customer_id_type: ['', Validators.required],
             fcn_customer_exp_date: ['',],
             tourVatRefuncYN: ['',],
             tourVatRefundNo: ['',],
@@ -962,8 +969,7 @@ export class SalesEstimationComponent implements OnInit {
             fcn_cust_detail_dob: ['',
               [Validators.required]
             ],
-            
-            fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
+            fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
             fcn_cust_detail_phone: ['', Validators.required],
             fcn_cust_detail_phone2: [''],
             fcn_cust_detail_email: ['', [Validators.email]],
@@ -1199,7 +1205,7 @@ export class SalesEstimationComponent implements OnInit {
           this.posMode = this.content?.FLAG;
     
         if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
-    
+          this.LOCKVOUCHERNO = true;
           this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
           this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
           this.getFinancialYear();
@@ -1223,7 +1229,8 @@ export class SalesEstimationComponent implements OnInit {
         } else {
           this.getFinancialYear();
           this.generateVocNo();
-    
+           this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
+          console.log(this.voucherDetails);
         }
     
         if (!this.viewOnly && !this.editOnly)
@@ -1235,7 +1242,8 @@ export class SalesEstimationComponent implements OnInit {
     getRetailEstimationMaster(data: any) {
         this.snackBar.open('Loading...');
         //   this.suntechApi.getRetailEstimationMaster(data)
-        let API = `RetailEstimationNet/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}/Mid=${data.MID}`
+        
+        let API = `RetailEstimationNet/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`
         this.suntechApi.getDynamicAPI(API).subscribe((res) => {
             this.snackBar.dismiss();
             const posCustomer = res.response.posCustomer;
@@ -1611,7 +1619,7 @@ export class SalesEstimationComponent implements OnInit {
 
     getBranchList() {
         //   this.suntechApi.getUserBranch(this.strUser).subscribe((resp) => {
-        this.suntechApi.getDynamicAPI('UseBranchNetMaster/' + this.strUser).subscribe((resp) => {
+        this.suntechApi.getDynamicAPICustom('UseBranchNetMaster/' + this.strUser).subscribe((resp) => {
 
             this.all_branch = resp.response;
             // this.all_branch = resp.Result;
@@ -1802,7 +1810,10 @@ export class SalesEstimationComponent implements OnInit {
     
         this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
     
-        this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
+        
+    this.vocDataForm.controls.txtCurRate.setValue(
+      this.comFunc.decimalQuantityFormat(this.comFunc.getCurrRate(this.comFunc.compCurrency), 'RATE'))
+   
 
 
 
@@ -1828,7 +1839,7 @@ export class SalesEstimationComponent implements OnInit {
     
         this.snackBar.open('Loading...');
         // TransAttachments/GetTransAttachments
-        let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&CUSTOMER_CODE=${custCode}`
+        let API = `TransAttachments/GetTransAttachments/${this.vocType}/${this.comFunc.nullToString(custCode)}`
         // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
         // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
         this.suntechApi.getDynamicAPI(API)
@@ -2539,11 +2550,14 @@ export class SalesEstimationComponent implements OnInit {
         console.log(this.currentLineItems)
       }
 
-    getAccountHead(parameterValue: string) {
+      getAccountHead(parameterValue: string) {
 
-        const API = `AccountMaster/${parameterValue}`;
-        this.suntechApi.getDynamicAPI(API)
-          .subscribe((res: any) => {
+        // const API = `AccountMaster/${parameterValue}`;
+        // this.suntechApi.getDynamicAPI(API)
+    
+        const API = `AccountMaster`;
+        // let sub: Subscription = this.suntechApi.getDynamicAPI(`AccountMaster`)
+        this.suntechApi.getDynamicAPI(API).subscribe((res: any) => {
             if (res.status == "Success") {
               console.log('res', res);
               this.accountHeadDetails = res.response.ACCOUNT_HEAD;
@@ -2551,6 +2565,19 @@ export class SalesEstimationComponent implements OnInit {
             }
           });
       }
+
+    // getAccountHead(parameterValue: string) {
+
+    //     const API = `AccountMaster/${parameterValue}`;
+    //     this.suntechApi.getDynamicAPI(API)
+    //       .subscribe((res: any) => {
+    //         if (res.status == "Success") {
+    //           console.log('res', res);
+    //           this.accountHeadDetails = res.response.ACCOUNT_HEAD;
+    
+    //         }
+    //       });
+    //   }
 
       removeSalesReturnGrid(event: any) {
         // this.currentsalesReturnItems.splice(event.data.sn_no, 1);
@@ -2643,12 +2670,15 @@ export class SalesEstimationComponent implements OnInit {
         this.snackBar.open('Loading...');
     
         this.disableSaveBtn = true;
+
+        let API = `RetailSalesStockValidation/${value.STOCK_CODE}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
+
     
-        let API = 'RetailSalesStockValidation?strStockCode=' + value.STOCK_CODE
-          +
-          '&strBranchCode=' + this.strBranchcode +
-          '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
-          '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+        // let API = 'RetailSalesStockValidation?strStockCode=' + value.STOCK_CODE
+        //   +
+        //   '&strBranchCode=' + this.strBranchcode +
+        //   '&strVocType=' + this.vocType + '&strUserName=' + this.strUser +
+        //   '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
         await
           this.suntechApi.getDynamicAPI(API)
             .subscribe(async (resp: any) => {
@@ -2665,7 +2695,9 @@ export class SalesEstimationComponent implements OnInit {
                   this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
                   this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
                   this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
-                  this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
+                  this.allowDescription=stockInfos.ALLOWEDITDESCRIPTION;
+
+                  // this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
                   this.disableSaveBtn = false;
                   this.validatePCS = stockInfos.VALIDATE_PCS;
                   this.enablePieces = stockInfos.ENABLE_PCS;
@@ -3511,7 +3543,7 @@ export class SalesEstimationComponent implements OnInit {
               posCustomer.CODE !== '' &&
               posCustomer.CODE.toString() !== '0'
             ) {
-              apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
+              apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
               custResponse = this.suntechApi.putDynamicAPI(apiCtrl, posCustomer)
             } else {
               apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
@@ -3743,7 +3775,7 @@ export class SalesEstimationComponent implements OnInit {
                 fcn_mob_code: mobCode,
             });
             // }
-            this.suntechApi.getDynamicAPI('PosCustomerMaster/GetCustomerMaster/Mobile=' + _cust_mobile_no)
+            this.suntechApi.getDynamicAPI(`PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}`)
                 .subscribe((resp) => {
                     console.log(resp);
                     // console.log(resp.Message);
@@ -3767,6 +3799,10 @@ export class SalesEstimationComponent implements OnInit {
 
                         this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
                             result.MOBILE
+                        );
+                        this.customerDetailForm.controls['fcn_cust_detail_idType'].setValue(
+                          result.IDCATEGORY
+                          // result.CUST_TYPE
                         );
                         this.customerDetailForm.controls['fcn_customer_id_type'].setValue(
                             result.IDCATEGORY
@@ -4068,26 +4104,25 @@ export class SalesEstimationComponent implements OnInit {
         );
     }
 
+  
     getExchangeStockCodes() {
-        // this.suntechApi
-        // .getRetailsalesExchangeLookup(this.strBranchcode)
-        let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.strBranchcode}&STOCK_CODE=`
-        this.suntechApi
-            .getDynamicAPI(API)
-            .subscribe((resp) => {
-                console.log(resp);
-                console.log(resp.Message);
-                let _data = resp.response;
 
-                // this.all_sales_person = resp;
-                var data = _data.map((t: any) => t.STOCK_CODE);
-                this.exStockCodeOptions = data;
-                this.exStockCodeFilteredOptions =
-                    this.exchangeForm.controls.fcn_exchange_item_code.valueChanges.pipe(
-                        startWith(''),
-                        map((value) => this._filterExStockCodes(value))
-                    );
-            });
+      let API = `RetailsalesExchangeLookup/${this.strBranchcode}`
+      this.suntechApi
+        .getDynamicAPI(API)
+        .subscribe((resp) => {
+          console.log(resp);
+          let _data = resp.response;
+  
+          // this.all_sales_person = resp;
+          var data = _data.map((t: any) => t.STOCK_CODE);
+          this.exStockCodeOptions = data;
+          this.exStockCodeFilteredOptions =
+            this.exchangeForm.controls.fcn_exchange_item_code.valueChanges.pipe(
+              startWith(''),
+              map((value) => this._filterExStockCodes(value))
+            );
+        });
     }
 
     private _filterExStockCodes(value: string): string[] {
@@ -5818,7 +5853,7 @@ export class SalesEstimationComponent implements OnInit {
         let _exchangeItem: any;
         let _karatRateRec: any;
         let _karatCode: any;
-        let API = `RetailsalesExchangeLookup?BRANCH_CODE=${this.strBranchcode}&STOCK_CODE=${_exchangeCode}`
+        let API = `RetailsalesExchangeLookup/${this.strBranchcode}/${_exchangeCode}`
         this.suntechApi.getDynamicAPI(API)
           .subscribe((resp) => {
             if (resp.status == "Success") {
@@ -7063,10 +7098,13 @@ export class SalesEstimationComponent implements OnInit {
             }
           }
           try {
-            let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
-            '&strBranchCode=' + this.strBranchcode +
-            '&strVocType=POS' + '&strUserName=' + this.strUser +
-            '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
+            let API = `RetailSalesStockValidation/${event.target.value}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
+
+
+            // let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
+            // '&strBranchCode=' + this.strBranchcode +
+            // '&strVocType=POS' + '&strUserName=' + this.strUser +
+            // '&strLocation=%27%27&strPartyCode=%27%27&strVocDate=' + this.convertDateToYMD(this.vocDataForm.value.vocdate)
     
             // let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
             //   '&strBranchCode=' + this.strBranchcode +
@@ -7352,8 +7390,11 @@ export class SalesEstimationComponent implements OnInit {
             let voc_no = this.salesReturnForm.value.fcn_returns_voc_no;
 
             if (event.target.value != '') {
-                let API = 'RetailSReturnLookUp?strBranchCode=' + branch + '&strVoctype=' + voc_type +
-                    '&intVocNo=' + voc_no + '&stryearmonth=' + fin_year
+
+                let API = `RetailSReturnLookUp/${branch}/${voc_type}/${voc_no}/${fin_year}`
+
+                // let API = 'RetailSReturnLookUp?strBranchCode=' + branch + '&strVoctype=' + voc_type +
+                //     '&intVocNo=' + voc_no + '&stryearmonth=' + fin_year
                 this.suntechApi.getDynamicAPI(API)
                     .subscribe((resp: any) => {
                         if (resp.status == 'Failed') {
@@ -8127,7 +8168,7 @@ export class SalesEstimationComponent implements OnInit {
     
     
           if (this.editOnly) {
-            let API = `RetailEstimationNet/BranchCode=${this.content.BRANCH_CODE}/VocType=${this.content.VOCTYPE}/YearMonth=${this.content.YEARMONTH}/VocNo=${this.content.VOCNO}`
+            let API = `RetailEstimationNet/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`
             this.suntechApi.putDynamicAPI(API, postData)
               .subscribe(
                 (res) => {
@@ -8420,7 +8461,7 @@ export class SalesEstimationComponent implements OnInit {
       }
 
       AccountPosting(mid: any) {
-        // if (!this.content) return
+        if (!this.content) return
         let params = {
           BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
           VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -8431,8 +8472,13 @@ export class SalesEstimationComponent implements OnInit {
           USERNAME: this.comFunc.userName,
           MAINVOCTYPE: this.comFunc.getqueryParamMainVocType(),
           HEADER_TABLE: this.comFunc.getqueryParamTable(),
+    
+    
         }
-        let Sub: Subscription = this.suntechApi.getDynamicAPIwithParams('AccountPosting', params)
+        let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.YEARMONTH}/${params.VOCNO}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}`;
+    
+    
+        let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
           .subscribe((result) => {
             if (result.status == "Success") {
               this.comFunc.toastSuccessByMsgId(result.message || 'Posting Done')
@@ -8444,6 +8490,8 @@ export class SalesEstimationComponent implements OnInit {
           );
         // this.subscriptions.push(Sub);
       }
+
+    
 
     addNew() {
         this.modalService.dismissAll('OpenModal');
@@ -9719,8 +9767,16 @@ export class SalesEstimationComponent implements OnInit {
     let grossAmtValue = parseFloat(localStorage.getItem('fcn_li_net_amount')?.replace(/,/g, '') || '0');
     
     if (inputAmount > grossAmtValue) {
-      this.lineItemForm.controls.fcn_li_total_amount.setValue(this.lineItemForm.value.fcn_li_gross_amount);
-      this.lineItemForm.controls.fcn_li_rate.setValue(this.lineItemForm.value.fcn_li_gross_amount);
+      // this.lineItemForm.controls.fcn_li_total_amount.setValue(this.lineItemForm.value.fcn_li_gross_amount);
+
+      this.lineItemForm.controls.fcn_li_total_amount.setValue( this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BAMTDECIMALS,this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)-
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)+this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount)) )
+     
+      this.lineItemForm.controls.fcn_li_rate.setValue(this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)/
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt))
+    )
+      // this.lineItemForm.controls.fcn_li_rate.setValue(this.lineItemForm.value.fcn_li_gross_amount);
       this.lineItemForm.controls.fcn_li_discount_amount.setValue(this.zeroAmtVal);
       this.lineItemForm.controls.fcn_li_discount_percentage.setValue(this.zeroAmtVal);
     }
@@ -10196,6 +10252,28 @@ export class SalesEstimationComponent implements OnInit {
         if (this.divisionMS == 'M') this.getAllTotalAmt();
         else this.setTotalAmount();
       }
+
+      setVoucherTypeMaster(){
+        let frm = this.vocDataForm.value
+        const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, frm.voc_type, this.mainVocType)
+        this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+        this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+        this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+      }
+
+      formatDate(event: any) {
+        const inputValue = event.target.value;
+        let date = new Date(inputValue)
+        let yr = date.getFullYear()
+        let dt = date.getDate()
+        let dy = date.getMonth()
+        if (yr.toString().length > 4) {
+          let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+          this.vocDataForm.controls.vocdate.setValue(new Date(date))
+        }
+      }
+    
+
       setMetalAmt() {
         this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
           this.comFunc.transformDecimalVB(
@@ -10837,7 +10915,7 @@ export class SalesEstimationComponent implements OnInit {
           PURCHASEFIXINGPUREWT: 0,
           PURCHASEFIXINGRATE: '',
           D2DTRANSFER: 'F', //need_input
-          HHACCOUNT_HEAD: this.accountHeadDetails,
+          HHACCOUNT_HEAD: this.accountHeadDetails?this.accountHeadDetails:'',
           OUSTATUS: true,
           OUSTATUSNEW: 1, //need_input
           CURRRECMID: 0, //NEED_INPUT
@@ -11482,7 +11560,7 @@ export class SalesEstimationComponent implements OnInit {
         );
     }
     getYearList() {
-        let API = `FinancialYear?branchcode=${this.strBranchcode}&strusername=${this.strUser}`
+        let API = `FinancialYear/${this.strBranchcode}/${this.strUser}`
         this.suntechApi.getDynamicAPI(API)
             .subscribe((resp) => {
                 var data = resp.response.map((t: any) => t.fyearcode);
@@ -11922,7 +12000,10 @@ export class SalesEstimationComponent implements OnInit {
     }
 
     generateVocNo() {
-        const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
+      const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.vocType}/${this.strBranchcode}/${this.baseYear}/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`;
+
+
+        // const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
         this.suntechApi.getDynamicAPI(API)
             .subscribe((resp) => {
                 if (resp.status == "Success") {
@@ -11935,7 +12016,7 @@ export class SalesEstimationComponent implements OnInit {
     async getFinancialYear() {
         console.log(' this.vocDataForm.value.vocdate ', this.vocDataForm.value.vocdate);
     
-        const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
+        const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
         const res = await this.suntechApi.getDynamicAPI(API).toPromise()
         // .subscribe((resp) => {
         console.log(res);
@@ -12185,19 +12266,29 @@ export class SalesEstimationComponent implements OnInit {
           // }
     
           if (parseFloat(value) <= parseFloat(this.selectedCurrencyData.MIN_CONV_RATE)) {
-            this.vocDataForm.controls.txtCurRate.setValue(this.selectedCurrencyData.MIN_CONV_RATE);
+    
+            this.vocDataForm.controls.txtCurRate.setValue(
+              this.comFunc.decimalQuantityFormat(this.selectedCurrencyData.MIN_CONV_RATE, 'RATE'))
           }
           if (parseFloat(value) >= parseFloat(this.selectedCurrencyData.MAX_CONV_RATE)) {
-            this.vocDataForm.controls.txtCurRate.setValue(this.selectedCurrencyData.MAX_CONV_RATE);
+    
+            this.vocDataForm.controls.txtCurRate.setValue(
+              this.comFunc.decimalQuantityFormat(this.selectedCurrencyData.MAX_CONV_RATE, 'RATE'))
+    
           }
     
     
         } else {
           // e.target.value = this.selectedCurrencyData.CONV_RATE;
-          this.vocDataForm.controls.txtCurRate.setValue(this.selectedCurrencyData.CONV_RATE);
+          this.vocDataForm.controls.txtCurRate.setValue(
+            this.comFunc.decimalQuantityFormat(this.selectedCurrencyData.CONV_RATE, 'RATE'))
+    
+    
         }
         return true;
       }
+
+     
 
       changeExStoneAmount(event: any) {
         const value = event.target.value;
@@ -12246,6 +12337,22 @@ export class SalesEstimationComponent implements OnInit {
           return null;
         };
       }
+
+      openScanner(): void {
+        this.lineItemForm.controls.fcn_li_item_code.setValue('');
+        this.scannerVisible = true;
+      }
+      
+      onCloseRequested() {
+        this.scannerVisible = false;
+      }
+      
+      onQrcodeDetected(qrCode: string) {
+        this.lineItemForm.controls.fcn_li_item_code.setValue(qrCode);
+        this.scannerVisible = false;
+        this.getStockDesc({ target: { value: qrCode } });
+      }
+      
     
 
 }

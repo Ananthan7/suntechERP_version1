@@ -56,10 +56,10 @@
                                     UpperCaseDirective
                                     (focusout)="validateLookupField($event,accountMasterData,'WorkerAcCode')"
                                     formControlName="WorkerAcCode" 
-                                    autocomplete="off"/>
+                                    autocomplete="off" (keydown)="lookupKeyPress($event,'WorkerAcCode')"/>
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="accountMasterData"
-                                        *ngIf="viewMode == false"
+                                        *ngIf="viewMode == false"  #overlayWorkerAcCodeSearch
                                         (newRowClick)="WorkerAcCodeSelected($event)">
                                     </master-search>
                             </mat-form-field>
@@ -76,9 +76,9 @@
                                     (focusout)="validateLookupField($event,supervisorData,'NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable"
                                     formControlName="NameOfSupervisor" 
-                                    autocomplete="off"/>
+                                    autocomplete="off"  (keydown)="lookupKeyPress($event,'NameOfSupervisor')"/>
                                     <master-search [MasterSearchData]="supervisorData"
-                                        *ngIf="viewMode == false" class="masterSearch"
+                                        *ngIf="viewMode == false" class="masterSearch"  #overlayNameOfSupervisorSearch
                                         (newRowClick)="supervisorSelected($event)">
                                     </master-search>
                             </mat-form-field>
@@ -242,7 +242,7 @@
                         </div>
                         <div class="col-md-6">
                             <!-- <button type="button" [disabled]="viewModeBtn" -->
-                            <button type="button" [disabled]="true" id="ID016"
+                            <button type="button"  id="ID016"
                                 mat-flat-button color="primary"
                                 (click)="printBarcode()">Print Barcode
                             </button>

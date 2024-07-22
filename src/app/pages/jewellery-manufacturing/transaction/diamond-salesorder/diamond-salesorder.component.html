@@ -63,10 +63,13 @@
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
                                                 (change)="OrderTypeChange($event)"
-                                                formControlName="orderType" />
+                                                (keydown)="lookupKeyPress($event,'orderType')"
+                                                formControlName="orderType"
+                                                (focusout)="validateLookupField($event,OrderTypeData,'orderType')" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="OrderTypeData"
+                                            #overlayorderType
                                             (newRowClick)="OrderTypeSelected($event)">
                                         </master-search>
                                     </span>
@@ -78,10 +81,13 @@
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
                                                 (change)="PartyCodeChange($event)"
-                                                formControlName="PartyCode" />
+                                                (keydown)="lookupKeyPress($event,'PartyCode')"
+                                                formControlName="PartyCode"
+                                                (focusout)="validateLookupField($event,PartyCodeData,'PartyCode')" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="PartyCodeData"
+                                            #overlayPartyCode
                                             (newRowClick)="PartyCodeSelected($event)">
                                         </master-search>
                                     </span>
@@ -94,10 +100,13 @@
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
                                                 readonly
-                                                formControlName="SalesmanCode" />
+                                                formControlName="SalesmanCode"
+                                                (keydown)="lookupKeyPress($event,'SalesmanCode')"
+                                                (focusout)="validateLookupField($event,SalesmanData,'SalesmanCode')" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="SalesmanData"
+                                            #overlaySalesmanCode
                                             (newRowClick)="SalesmanSelected($event)">
                                         </master-search>
                                     </span>
@@ -110,10 +119,13 @@
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
                                                 readonly
-                                                formControlName="Salesman" />
+                                                formControlName="Salesman"
+                                                (keydown)="lookupKeyPress($event,'Salesman')"
+                                                (focusout)="validateLookupField($event,OrderTypeData,'Salesman')" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="OrderTypeData"
+                                            #overlaySalesman
                                             (newRowClick)="SalesmanSelected($event)">
                                         </master-search>
                                     </span>
@@ -141,10 +153,13 @@
                                             <input type="text" matInput
                                                 SixDecimalInput
                                                 class="text-right"
-                                                formControlName="wholeSaleRate" />
+                                                formControlName="wholeSaleRate"
+                                                (keydown)="lookupKeyPress($event,'wholeSaleRate')"
+                                                (focusout)="validateLookupField($event,rateTypeMasterData,'wholeSaleRate')" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="rateTypeMasterData"
+                                            #overlaywholeSaleRate
                                             (newRowClick)="rateTypeSelected($event)">
                                         </master-search>
                                     </span>
@@ -162,6 +177,7 @@
                                             <input type="text" matInput readonly
                                                 class="text-right"
                                                 SixDecimalInput
+                                                (keydown)="lookupKeyPress($event,'partyCurrencyRate')"
                                                 (focusout)="partyCurrencyChange($event)"
                                                 formControlName="partyCurrencyRate" />
                                         </mat-form-field>
@@ -183,6 +199,7 @@
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="number" matInput
                                                 SixDecimalInput
+                                                (keydown)="lookupKeyPress($event,'ItemCurrencyRate')"
                                                 class="text-right"
                                                 formControlName="ItemCurrencyRate" />
                                         </mat-form-field>
@@ -206,10 +223,13 @@
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
                                                 formControlName="DeliveryTypeDesc"
-                                                NumberOnly />
+                                                (keydown)="lookupKeyPress($event,'DeliveryTypeDesc')"
+                                                NumberOnly
+                                                (focusout)="validateLookupField($event,deliveryTypeMaster,'DeliveryTypeDesc')" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="deliveryTypeMaster"
+                                            #overlayDeliveryTypeDesc
                                             (newRowClick)="deliveryTypeSelected($event)">
                                         </master-search>
                                     </span>

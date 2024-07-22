@@ -21,10 +21,10 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobNumber"
-                  [readonly]="viewMode" 
-                  (focusout)="jobNumberValidate($event)"/>
+                  [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'jobNumber')" 
+                  (focusout)="jobNumberValidate($event)" />
               </mat-form-field>
-              <master-search [MasterSearchData]="JobNoCodeData"
+              <master-search [MasterSearchData]="JobNoCodeData" #overlayjobNumberSearch
                 (newRowClick)="JobNumberSelected($event)"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobno"
@@ -40,9 +40,10 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobno"
-                  [readonly]="viewMode" />
+                (keydown)="lookupKeyPress($event,'subjobno')" 
+                  [readonly]="viewMode" (focusout)="validateLookupField($event,subJobNoCodeData,'subjobno')"/>
               </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData"
+              <master-search [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>
               &nbsp;
@@ -61,9 +62,10 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="designcode"
-                  [readonly]="viewMode" />
+                (keydown)="lookupKeyPress($event,'designcode')" 
+                  [readonly]="viewMode" (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')"/>
               </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData"
+              <master-search [MasterSearchData]="subJobNoCodeData" #overlaydesigncodeSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>
             </div>
@@ -99,9 +101,10 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="process"
-                  [readonly]="viewMode" />
+                (keydown)="lookupKeyPress($event,'process')" 
+                  [readonly]="viewMode" (focusout)="processCodeValidate($event)"/>
               </mat-form-field>
-              <master-search [MasterSearchData]="processCodeData"
+              <master-search [MasterSearchData]="processCodeData" #overlayprocessSearch
                 (newRowClick)="processCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
@@ -118,9 +121,10 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="worker"
-                  [readonly]="viewMode" />
+                (keydown)="lookupKeyPress($event,'worker')" 
+                  [readonly]="viewMode" (focusout)="WorkerCodeValidate($event)"/>
               </mat-form-field>
-              <master-search [MasterSearchData]="workerCodeData"
+              <master-search [MasterSearchData]="workerCodeData" #overlayworkerSearch
                 (newRowClick)="workerCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
@@ -137,9 +141,11 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stockCode"
-                  [readonly]="viewMode" />
+                (keydown)="lookupKeyPress($event,'stockCode')" 
+                  [readonly]="viewMode" 
+                  (focusout)="validateLookupField($event,stockCodeData,'stockCode')"/>
               </mat-form-field>
-              <master-search [MasterSearchData]="stockCodeData"
+              <master-search [MasterSearchData]="stockCodeData" #overlaywstockCodeSearch
                 (newRowClick)="stockCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">

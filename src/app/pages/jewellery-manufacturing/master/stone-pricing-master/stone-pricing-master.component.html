@@ -45,9 +45,9 @@
                                                 matInput maxlength="15"
                                                 formControlName="sieve_set" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"/>
+                                                (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"  (keydown)="lookupKeyPress($event,'sieve_set')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="sieve_setData"
+                                                    [MasterSearchData]="sieve_setData"  #overlaysizesetSearch
                                                     (newRowClick)="sieve_setDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -65,9 +65,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="shape" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,shapeData,'shape')"/>
+                                                (focusout)="validateLookupField($event,shapeData,'shape')" (keydown)="lookupKeyPress($event,'shape')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="shapeData"
+                                                    [MasterSearchData]="shapeData"    #overlayshapeSearch
                                                     (newRowClick)="shapeDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -85,9 +85,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="sieve_form" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sievefromData,'sieve_form')"/>
+                                                (focusout)="validateLookupField($event,sievefromData,'sieve_form')"  (keydown)="lookupKeyPress($event,'sieve_form')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="sievefromData"
+                                                    [MasterSearchData]="sievefromData" #overlaysievefromSearch
                                                     (newRowClick)="sievefromDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -106,9 +106,9 @@
                                                 formControlName="sieve_to"
                                                (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sievetoData,'sieve_to')"/>
+                                                (focusout)="validateLookupField($event,sievetoData,'sieve_to')"   (keydown)="lookupKeyPress($event,'sieve_to')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="sievetoData"
+                                                    [MasterSearchData]="sievetoData" #overlaysievetoSearch
                                                     (newRowClick)="sievetoDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -126,9 +126,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="color" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,colorData,'color')"/>
+                                                (focusout)="validateLookupField($event,colorData,'color')"   (keydown)="lookupKeyPress($event,'color')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="colorData"
+                                                    [MasterSearchData]="colorData" #overlaycolorSearch
                                                     (newRowClick)="colorDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -146,9 +146,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="clarity" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,clarityData,'clarity')"/>
+                                                (focusout)="validateLookupField($event,clarityData,'clarity')"  (keydown)="lookupKeyPress($event,'clarity')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="clarityData"
+                                                    [MasterSearchData]="clarityData" #overlayclaritySearch
                                                     (newRowClick)="clarityDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -166,9 +166,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="size_from" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sizefromData,'size_from')"/>
+                                                (focusout)="validateLookupField($event,sizefromData,'size_from')"  (keydown)="lookupKeyPress($event,'size_from')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="sizefromData"
+                                                    [MasterSearchData]="sizefromData" #overlaysizefromSearch
                                                     (newRowClick)="sizefromDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -186,9 +186,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="size_to" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sizetoData,'size_to')"/>
+                                                (focusout)="validateLookupField($event,sizetoData,'size_to')"  (keydown)="lookupKeyPress($event,'size_to')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="sizetoData"
+                                                    [MasterSearchData]="sizetoData" #overlaysizetoSearch
                                                     (newRowClick)="sizetoDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -209,9 +209,9 @@
                                                 matInput maxlength="6"
                                                 formControlName="currency" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,currencyData,'currency')"/>
-                                                <master-search class="masterSearch"
-                                                    [MasterSearchData]="currencyData"
+                                                (focusout)="validateLookupField($event,currencyData,'currency')"  (keydown)="lookupKeyPress($event,'currency')"/>
+                                                <master-search class="masterSearch"currency
+                                                    [MasterSearchData]="currencyData" #overlaycurrencySearch
                                                     (newRowClick)="currencyDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>
@@ -256,8 +256,8 @@
                                     <div class="col-sm-8">
                                         <mat-form-field appearance="outline"
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput class="text-right"
-                                            (change)="onSievetto($event)"
+                                            <input type="text" matInput
+                                            (change)="onSievetto($event,'sieve_to_desc')"
                                                 formControlName="sieve_to_desc"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
@@ -294,7 +294,7 @@
                                                 matInput maxlength="15"
                                                 class="text-right"
                                                 formControlName="wt_to"
-                                                (change)="onweighttto($event)"
+                                                (change)="onweightto($event,'wt_to')"
                                                 StoneDecimalInput
                                                 (input)="onInputChange($event,'wt_to', 12)"
                                                 />

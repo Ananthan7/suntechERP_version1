@@ -42,6 +42,7 @@
                     <div class="col-md-5">
                         <mat-form-field style="width: 80%;">
                             <input type="text" matInput
+                                (keypress)="lookupKeyPress($event)"
                                 readonly formControlName="StockCodeDesc" />
                         </mat-form-field>
                         <master-search

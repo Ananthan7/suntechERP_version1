@@ -18,36 +18,51 @@
         <div class="row mb-2">
           <div class="col-md-5">
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Voucher * :</label>
+              <label for="input" class="col-sm-3 col-form-label">Voucher *
+                :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="VOCTYPE" [readonly]="viewMode" />
+                  <input type="text" matInput formControlName="VOCTYPE"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="VOCNO" [readonly]="viewMode" class="text-right"/>
+                  <input type="number" matInput formControlName="VOCNO"
+                    [readonly]="viewMode" class="text-right"
+                    (focusout)="ValidatingVocNo()"
+                    [readonly]="LOCKVOUCHERNO" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Voucher Date :</label>
+              <label for="input" class="col-sm-3 col-form-label">Voucher Date
+                :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input matInput [matDatepicker]="vocdate" formControlName="VOCDATE" placeholder="DD/MM/YYYY"
-                    DateValidation [readonly]="viewMode"/>
-                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocdate"
+                    formControlName="VOCDATE" placeholder="DD/MM/YYYY"
+                    DateValidation [readonly]="viewMode" [min]="minDate"
+                    [max]="maxDate" />
+                  <mat-datepicker-toggle matSuffix
+                    [for]="vocdate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate"
+                    #vocdate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Entered By :</label>
+              <label for="input" class="col-sm-3 col-form-label">Entered By
+                :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 75%;">
-                  <input type="text" matInput formControlName="enterdBy" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="enterdBy"
+                  (keydown)="lookupKeyPress($event,'enterdBy')" 
+                    (focusout)="validateLookupField($event,user,'enterdBy')"
+                    [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
+                <master-search [MasterSearchData]="user" #overlayenterdBySearch
+                  (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
               <!-- <div class="col-sm-4">
@@ -73,38 +88,49 @@
           </div>
           <div class="col-md-5">
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Base Currency :</label>
+              <label for="input" class="col-sm-3 col-form-label">Base Currency
+                :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="basecurrency" [readonly]="viewMode" />
+                  <input type="text" matInput formControlName="basecurrency"
+                  (keydown)="lookupKeyPress($event,'basecurrency')" 
+                    [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="CurrencyCodeData"
-                  (newRowClick)="baseCurrencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                <master-search [MasterSearchData]="baseCurrencyCodeData"
+                  (newRowClick)="baseCurrencyCodeSelected($event)"
+                  *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="basecurrencyrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
+                  <input type="text" matInput formControlName="basecurrencyrate"
+                    [readonly]="viewMode" SixDecimalInput class="text-right" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Currency * :</label>
+              <label for="input" class="col-sm-3 col-form-label">Currency *
+                :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="currency" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="currency"
+                  (keydown)="lookupKeyPress($event,'currency')"
+                    [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
-                  (newRowClick)="currencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                  (newRowClick)="currencyCodeSelected($event)"
+                  *ngIf="!viewMode"></master-search>
               </div>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="currencyrate" [readonly]="viewMode" SixDecimalInput class="text-right"/>
+                  <input type="text" matInput formControlName="currencyrate"
+                    [readonly]="viewMode" SixDecimalInput class="text-right" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
               <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-primary metal-issue-add-btn">
+                <button type="button"
+                  class="btn btn-primary metal-issue-add-btn">
                   Pending Jobs
                 </button>
               </div>
@@ -117,7 +143,8 @@
             </div>
             <div class="row pt-5">
               <div class="p-2 bd-highlight" style="text-align: end;">
-                <button type="button" class="btn btn-primary metal-issue-add-btn">
+                <button type="button"
+                  class="btn btn-primary metal-issue-add-btn">
                   Authorize/Post
                 </button>
               </div>
@@ -126,8 +153,10 @@
           <div class="row my-4">
             <div class="col-md-12">
               <div class="d-flex justify-content-start text-start">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openStoneReturnDetails()" (deleteClick)="deleteTableData()">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                  [viewImportBtn]="false"
+                  (addClick)="openStoneReturnDetails()"
+                  (deleteClick)="deleteTableData()">
                 </menu-buttons>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
@@ -138,18 +167,23 @@
                 </div>
               </div>
               <div class="row mt-1 pt-3">
-                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="stoneReturnData"
-                  [selectedRowKeys]="selectedKey" (onRowClick)="onRowClickHandler($event)"
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
+                  [dataSource]="stoneReturnData"
+                  [selectedRowKeys]="selectedKey"
+                  (onRowClick)="onRowClickHandler($event)"
                   [allowColumnReordering]="true" [allowColumnResizing]="true"
-                  (onSelectionChanged)="onSelectionChanged($event)" [columnAutoWidth]="true">
+                  (onSelectionChanged)="onSelectionChanged($event)"
+                  [columnAutoWidth]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing> -->
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  <dxi-column *ngFor="let data of columnhead"
+                    dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center"
+                    backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
               </div>
@@ -161,7 +195,8 @@
             <div class="row">
               <div class="col-md-8">
                 <div class="row">
-                  <label for="input" class="col-sm-2 col-form-label">Remarks : </label>
+                  <label for="input" class="col-sm-2 col-form-label">Remarks :
+                  </label>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="remark" />
@@ -171,9 +206,7 @@
               </div>
             </div>
 
-
           </div>
-
 
         </div>
       </div>

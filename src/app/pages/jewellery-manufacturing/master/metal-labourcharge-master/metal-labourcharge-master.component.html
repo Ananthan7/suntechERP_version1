@@ -26,9 +26,9 @@
                             <input type="text" matInput [readonly]="viewMode" maxlength="1"
                                 formControlName="metalDivision"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
-                                (input)="inputValidate($event)" UpperCaseDirective />
+                                (input)="inputValidate($event)" UpperCaseDirective  (keydown)="lookupKeyPress($event,'metalDivision')"/>
                                 <master-search [MasterSearchData]="metalDivisionCodeData" class="masterSearch"
-                                (newRowClick)="metaldivisionCodeSelected($event)"
+                                (newRowClick)="metaldivisionCodeSelected($event)"  #overlaymetalDivisionSearch
                                 *ngIf="viewDisable == false"></master-search>
                         </mat-form-field>
                     </div>
@@ -39,9 +39,9 @@
                             <input type="text" matInput [readonly]="viewMode  || stockcodeDisable"
                                 (focusout)="validateLookupField($event,stockCodeData,'stock_code')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
-                                formControlName="stock_code" appNoEmptySpace />
-                                <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"
-                                *ngIf="viewDisable  == false || stockcodeDisable  == false" class="masterSearch"   ></master-search>
+                                formControlName="stock_code" appNoEmptySpace   (keydown)="lookupKeyPress($event,'stock_code')"/>
+                                <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"  #overlaystockcodeSearch
+                                *ngIf="viewDisable  == false " class="masterSearch"   ></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -86,10 +86,10 @@
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal" maxlength="6"
                                 formControlName="metalcurrency" oninput="this.value = this.value.toUpperCase()"
-                                (focusout)="validateLookupField($event,currencyCodeData,'currency')"
-                                (input)="inputValidate($event)" />
+                                (focusout)="validateLookupField($event,currencyCodeData,'metalcurrency')"
+                                (input)="inputValidate($event)"   (keydown)="lookupKeyPress($event,'metalcurrency')"/>
                                 <master-search [MasterSearchData]="currencyCodeData" class="masterSearch"   
-                                (newRowClick)="metalcurrencyCodeSelected($event)"
+                                (newRowClick)="metalcurrencyCodeSelected($event)"   #overlaymetalcurrencySearch
                                 *ngIf="viewDisable == false"></master-search>
                         </mat-form-field>
                     </div>
@@ -102,8 +102,8 @@
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
                                 (focusout)="validateLookupField($event,karatCodeData,'karat')" maxlength="6"
                                 formControlName="karat" oninput="this.value = this.value.toUpperCase()"
-                                (input)="inputValidate($event)" class="text-right"/>
-                                <master-search [MasterSearchData]="karatCodeData" (newRowClick)="karatCodeSelected($event)"
+                                (input)="inputValidate($event)" class="text-right" (keydown)="lookupKeyPress($event,'karat')"/>
+                                <master-search [MasterSearchData]="karatCodeData" (newRowClick)="karatCodeSelected($event)"   #overlaykaratSearch
                                 *ngIf="viewDisable == false" class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -115,8 +115,8 @@
                             <input matInput type="text" [readonly]="viewMode || codeEnableMetal"
                                 formControlName="labourAc"
                                 (focusout)="validateLookupField($event,labouracCodeData,'labourAc')"
-                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)" />
-                                <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labourAcSelected($event)"
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'labourAc')"/>
+                                <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labourAcSelected($event)"   #overlaylabourAcSearch
                                 *ngIf="viewDisable == false" class="masterSearch"  ></master-search>
                         </mat-form-field>
                     </div>
@@ -129,8 +129,8 @@
                             <input type="text" matInput [readonly]="viewMode  || stockcodeDisable || codeEnableMetal"
                                 maxlength="6" formControlName="color"
                                 (focusout)="validateLookupField($event,colorData,'color')"
-                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)" />
-                                <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'color')"/>
+                                <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"   #overlaycolorSearch
                                 *ngIf=" viewDisable == false" class="masterSearch"  ></master-search>
                         </mat-form-field>
                     </div>
@@ -153,8 +153,8 @@
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal" maxlength="6"
                                 formControlName="typecode"
                                 (focusout)="validateLookupField($event,typeCodeData,'typecode')"
-                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)" />
-                                <master-search [MasterSearchData]="typeCodeData" (newRowClick)="typeCodeSelected($event)"
+                                oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"   (keydown)="lookupKeyPress($event,'typecode')"/>
+                                <master-search [MasterSearchData]="typeCodeData" (newRowClick)="typeCodeSelected($event)"   #overlaytypeSearch
                                 *ngIf=" viewDisable == false" class="masterSearch" ></master-search>
                         </mat-form-field>
                     </div>
@@ -178,8 +178,8 @@
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
                                 (focusout)="validateLookupField($event,categoryCodeData,'category')" maxlength="6"
                                 formControlName="category" oninput="this.value = this.value.toUpperCase()"
-                                (input)="inputValidate($event)" />
-                                <master-search [MasterSearchData]="categoryCodeData" (newRowClick)="categorySelected($event)"
+                                (input)="inputValidate($event)"    (keydown)="lookupKeyPress($event,'category')"/>
+                                <master-search [MasterSearchData]="categoryCodeData" (newRowClick)="categorySelected($event)"   #overlaycategorySearch
                                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -203,8 +203,8 @@
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
                                 (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')" maxlength="6"
                                 formControlName="subCategory" oninput="this.value = this.value.toUpperCase()"
-                                (input)="inputValidate($event)" />
-                                <master-search [MasterSearchData]="subcategoryCodeData" class="masterSearch" 
+                                (input)="inputValidate($event)"    (keydown)="lookupKeyPress($event,'subCategory')"/>
+                                <master-search [MasterSearchData]="subcategoryCodeData" class="masterSearch"  #overlaysubCategorySearch
                                 (newRowClick)="subcategorySelected($event)" *ngIf=" viewDisable == false"></master-search>
                         </mat-form-field>
                     </div>
@@ -226,8 +226,8 @@
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
                                 (focusout)="validateLookupField($event,brandCodeData,'brand')" maxlength="6"
                                 formControlName="brand" oninput="this.value = this.value.toUpperCase()"
-                                (input)="inputValidate($event)" />
-                                <master-search [MasterSearchData]="brandCodeData" (newRowClick)="brandSelected($event)"
+                                (input)="inputValidate($event)"  (keydown)="lookupKeyPress($event,'brand')"/>
+                                <master-search [MasterSearchData]="brandCodeData" (newRowClick)="brandSelected($event)"  #overlaybrandSearch
                                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>

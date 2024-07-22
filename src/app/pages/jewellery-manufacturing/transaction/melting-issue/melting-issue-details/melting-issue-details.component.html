@@ -23,16 +23,21 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="jobno"
-                                        class="text-right" NumberOnly [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'jobno')"
+                                        (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="jobnoCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="jobnoCodeData" #overlayjobNoSearch
+                                    *ngIf="!viewMode"
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="jobdes" [readonly]="viewMode"/>
+                                        formControlName="jobdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -42,7 +47,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="jobpurity"
-                                        class="text-right" MetalDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" PurityDecimal
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -53,16 +59,21 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="process" [readonly]="viewMode"/>
+                                        formControlName="process"
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'process')"
+                                        (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="ProcessCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="ProcessCodeData" #overlayprocess
+                                    *ngIf="!viewMode"
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="processdes" [readonly]="viewMode"/>
+                                        formControlName="processdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -72,7 +83,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="diffgrwt"
-                                        class="text-right" AmountDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -86,16 +98,21 @@
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="worker" [readonly]="viewMode"/>
+                                        formControlName="worker"
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'worker')" 
+                                        (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="WorkerCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="WorkerCodeData" #overlayworkercode
+                                    *ngIf="!viewMode"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="workerdes" [readonly]="viewMode"/>
+                                        formControlName="workerdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -107,7 +124,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="treeno"
-                                        class="text-right" NumberOnly [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -116,8 +134,9 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
-                                        formControlName="waxweight"
-                                        class="text-right" AmountDecimalInput [readonly]="viewMode"/>
+                                        formControlName="waxweight" [max]="13"
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -126,10 +145,14 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="location" [readonly]="viewMode"/>
+                                        formControlName="location"
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'location')" 
+                                        (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="locationCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="locationCodeData" #overlaylocationSearch
+                                    *ngIf="!viewMode"
                                     (newRowClick)="locationCodeSelected($event)">
                                 </master-search>
                             </div>
@@ -144,22 +167,28 @@
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
-                                        formControlName="stockcode" [readonly]="viewMode"/>
+                                        formControlName="stockcode"
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'stockcode')" 
+                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="stockCodeData" *ngIf="!viewMode"
+                                    [MasterSearchData]="stockCodeData" #overlaystockcodeSearch
+                                    *ngIf="!viewMode"
                                     (newRowClick)="StockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="stockdes" [readonly]="viewMode"/>
+                                        formControlName="stockdes"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="tostock" [readonly]="viewMode"/>
+                                        formControlName="tostock"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -169,7 +198,8 @@
                                     <input type="number" matInput
                                         formControlName="pcs"
                                         style="text-align: right;"
-                                        class="text-right" NumberOnly [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -180,7 +210,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="mainstock" [readonly]="viewMode"/>
+                                        formControlName="mainstock"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -190,7 +221,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="stoneweight"
-                                        class="text-right" StoneDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" [max]="13" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -199,8 +231,9 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="netweight"
-                                        class="text-right" StoneDecimalInput [readonly]="viewMode"/>
+                                        formControlName="netweight" [max]="13"
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -211,8 +244,9 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="grossweight"
-                                        class="text-right" AmountDecimalInput [readonly]="viewMode"/>
+                                        formControlName="grossweight" [max]="6"
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -222,7 +256,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="topurity"
-                                        class="text-right" SixDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" AmountDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -231,8 +266,9 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="pureweight"
-                                        class="text-right" MetalDecimalInput [readonly]="viewMode"/>
+                                        formControlName="pureweight" [max]="13"
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -244,7 +280,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="purity"
-                                        class="text-right" SixDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" PurityDecimal
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -254,7 +291,8 @@
                                 <div class="text-area">
                                     <textarea class="border-bottom" rows="3"
                                         matInput
-                                        formControlName="remarks" [readonly]="viewMode"></textarea>
+                                        formControlName="remarks"
+                                        [readonly]="viewMode"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -266,7 +304,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="lossweight"
-                                        class="text-right" AmountDecimalInput [readonly]="viewMode"/>
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -276,7 +315,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="ticketno"
-                                        class="text-right" NumberOnly [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -299,7 +339,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="lotno"
-                                        class="text-right" NumberOnly [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -309,7 +350,8 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="barno"
-                                        class="text-right" NumberOnly [readonly]="viewMode"/>
+                                        class="text-right" NumberOnly
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -319,7 +361,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="tgold" [readonly]="viewMode"/>
+                                        formControlName="tgold"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -328,7 +371,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="silver" [readonly]="viewMode"/>
+                                        formControlName="silver"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>

@@ -6,7 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewDelete]="false" [isViewSave]="!viewMode"  [isloading]="isloading"
+    [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"></modal-header>
 <!-- content section -->
 <div class="row">
@@ -29,7 +29,9 @@
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="VOCNO" readonly
+                                        formControlName="VOCNO"
+                                        (focusout)="ValidatingVocNo()"
+                                        [readonly]="LOCKVOUCHERNO"
                                         style="text-align: right;" />
                                 </mat-form-field>
                             </div>
@@ -48,7 +50,9 @@
                                         [matDatepicker]="vocDate"
                                         formControlName="vocDate"
                                         readonly
-                                        placeholder="DD/MM/YYYY" />
+                                        placeholder="DD/MM/YYYY"
+                                        [min]="minDate"
+                                        [max]="maxDate" />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocDate"></mat-datepicker-toggle>
                                     <mat-datepicker #vocDate
@@ -71,9 +75,11 @@
                                 <mat-form-field style="width: 85%;">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'enteredBy')"  
+                                        (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="user"
+                                <master-search [MasterSearchData]="SALESPERSON_CODEData" #overlayenteredBy
                                     (newRowClick)="userDataSelected($event)"
                                     *ngIf="!viewMode">
                                 </master-search>
@@ -88,10 +94,12 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="process"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'process')" 
+                                        (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="ProcessCodeData"
+                                    [MasterSearchData]="ProcessCodeData" #overlayprocess
                                     (newRowClick)="ProcessCodeSelected($event)"
                                     *ngIf="!viewMode">
                                 </master-search>
@@ -104,10 +112,12 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'worker')" 
+                                        (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="WorkerCodeData"
+                                    [MasterSearchData]="WorkerCodeData" #overlayworker
                                     (newRowClick)="WorkerCodeSelected($event)"
                                     *ngIf="!viewMode">
                                 </master-search>
@@ -120,10 +130,12 @@
                                 <mat-form-field style="width: 70%">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'location')" 
+                                        (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="locationCodeData"
+                                    [MasterSearchData]="locationCodeData"  #overlaylocation
                                     (newRowClick)="locationCodeSelected($event)"
                                     *ngIf="!viewMode"></master-search>
                             </div>
@@ -199,7 +211,8 @@
                             <dxi-column dataField="RATE_TYPE"
                                 caption="Rate"></dxi-column>
                             <dxi-column dataField="GROSS_WT"
-                                caption="Carat" [format]="gridAmountDecimalFormat"></dxi-column>
+                                caption="Carat"
+                                [format]="gridAmountDecimalFormat"></dxi-column>
                             <dxo-summary>
                                 <dxi-total-item column="Amount"
                                     summaryType="sum"
@@ -219,7 +232,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="REMARKS"
-                                        [readonly]="viewMode" maxlength="40" />
+                                        [readonly]="viewMode" maxlength="100" />
                                 </mat-form-field>
                             </div>
                         </div>

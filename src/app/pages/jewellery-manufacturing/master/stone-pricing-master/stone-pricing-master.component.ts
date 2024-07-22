@@ -1,10 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -14,6 +15,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-pricing-master.component.scss']
 })
 export class StonePricingMasterComponent implements OnInit {
+  @ViewChild('overlaysizesetSearch') overlaysizesetSearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysievefromSearch') overlaysievefromSearch!: MasterSearchComponent;
+  @ViewChild('overlaysievetoSearch') overlaysievetoSearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild('overlayclaritySearch') overlayclaritySearch!: MasterSearchComponent;
+  @ViewChild('overlaysizefromSearch') overlaysizefromSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizetoSearch') overlaysizetoSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+
+
 
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
@@ -33,7 +45,8 @@ export class StonePricingMasterComponent implements OnInit {
   sieveSet: any;
   editMode: boolean = false;
   isDisableSaveBtn: boolean = false;
-
+  isCurrencySelected: boolean = false;
+  currencyDt: any;
 
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
@@ -189,19 +202,18 @@ export class StonePricingMasterComponent implements OnInit {
     color: [''],
     clarity: ['', [Validators.required]],
     sieve_from: [''],
-    currency: ['AED', [Validators.required]],
-    carat_wt: [0, [Validators.required]],
+    currency: ['', [Validators.required]],
+    carat_wt: [0, [Validators.required, this.notZeroValidator()]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from: [0, [Validators.required]],
-    wt_to: [0, [Validators.required]],
+    wt_from: [ 0, [Validators.required, this.notZeroValidator()]],
+    wt_to: [ 0, [Validators.required, this.notZeroValidator()]],
     size_to: [''],
     size_from: [''],
-    issue_rate: [0, [Validators.required]],
+    issue_rate: [0, [Validators.required, this.notZeroValidator()]],
     selling: [0],
     selling_rate: [0],
     sieve_desc: [0],
-
   });
 
 
@@ -214,9 +226,12 @@ export class StonePricingMasterComponent implements OnInit {
     private renderer: Renderer2,
   ) {
     this.branchCode = this.commonService.branchCode;
+    // this.currencyDt = this.commonService.compCurrency;
   }
 
   ngOnInit(): void {
+    this.setCompanyCurrency();
+    this.setInitialValues();
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW') {
         this.viewFormValues();
@@ -233,6 +248,18 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
+  notZeroValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const isInvalid = control.value === 0 || control.value === '0' || control.value === '0.00' || control.value === '0.000';
+      return isInvalid ? { 'notZero': { value: control.value } } : null;
+    };
+  }
+
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.stonePrizeMasterForm.controls.currency.setValue(CURRENCY_CODE);
+  }
+
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -241,29 +268,77 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-  onweighttto(event: any) {
-    if (this.stonePrizeMasterForm.value.wt_from > this.stonePrizeMasterForm.value.wt_to) {
-      Swal.fire({
-        title: event.message || 'Weight From should be lesser than Weight To',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+  // onweighttto(event: any) {
+  //   if (this.stonePrizeMasterForm.value.wt_from > this.stonePrizeMasterForm.value.wt_to) {
+  //     Swal.fire({
+  //       title: event.message || 'Weight From should be lesser than Weight To',
+  //       text: '',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     })
+  //   }
+  // }
+
+  onweightto(event: any, data: string) {
+    // Retrieve the values of Wt From and Wt To from the form
+    const wtf: number = parseFloat(this.stonePrizeMasterForm.value.wt_from);
+    const wtt: number = parseFloat(this.stonePrizeMasterForm.value.wt_to);
+
+    // Check if the data parameter is not 'wtfrom'
+    if (data == 'wt_to') {
+      // Check if Wt From is greater than Wt To
+      if (wtf > wtt) {
+        // Display an error message
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        });
+
+        // Clear the value of Wt To input field
+        this.stonePrizeMasterForm.controls.wt_to.setValue('');
+      }
     }
   }
 
-  onSievetto(event: any) {
-    if (this.stonePrizeMasterForm.value.sieve_from_desc > this.stonePrizeMasterForm.value.sieve_to_desc) {
-      Swal.fire({
-        title: event.message || ' Sieve To Should be greater than the Sieve From',
-        text: '',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+  onSievetto(event: any, data: string) {
+    // Retrieve the values of Wt From and Wt To from the form
+    const wtf: number = parseFloat(this.stonePrizeMasterForm.value.sieve_from_desc);
+    const wtt: number = parseFloat(this.stonePrizeMasterForm.value.sieve_to_desc);
+
+    // Check if the data parameter is not 'wtfrom'
+    if (data == 'sieve_to_desc') {
+      // Check if Wt From is greater than Wt To
+      if (wtf > wtt) {
+        // Display an error message
+        Swal.fire({
+          title: event.message || 'Weight From should be lesser than Weight To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        });
+
+        // Clear the value of Wt To input field
+        this.stonePrizeMasterForm.controls.sieve_to_desc.setValue('');
+      }
     }
   }
+
+  // onSievetto(event: any) {
+  //   if (this.stonePrizeMasterForm.value.sieve_from_desc > this.stonePrizeMasterForm.value.sieve_to_desc) {
+  //     Swal.fire({
+  //       title: event.message || ' Sieve To Should be greater than the Sieve From',
+  //       text: '',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     })
+  //   }
+  // }
 
 
   setFormValues() {
@@ -317,6 +392,17 @@ export class StonePricingMasterComponent implements OnInit {
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.SELLING_RATE));
+  }
+
+  private setInitialValues() {
+
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.wt_from.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.wt_to.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'));
+    this.stonePrizeMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'));
+
   }
 
 
@@ -449,6 +535,7 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   formSubmit() {
+
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
@@ -464,7 +551,7 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
 
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to ) {
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.toastr.error('Sieve From Should not be Greater than Sieve To');
       return;
     }
@@ -476,37 +563,48 @@ export class StonePricingMasterComponent implements OnInit {
 
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.stonePrizeMasterForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
+
+          if (result && result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.stonePrizeMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
           }
-        }, err => alert(err))
+          else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
+        }, err => {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        })
       this.subscriptions.push(Sub)
     }
   }
   checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+
+
     let priceCode = event.target.value;
 
     if (priceCode === '') return;
     if (this.editMode || this.viewMode) return;
-
-    let API = `StonePriceMasterDJ/GetStonePriceMasterDJWithCode?CODE=${priceCode}`
-    let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+    //let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/'+this.userbranch+'?SieveSet='+this.stonePrizeMasterForm.value.sieve_set ;
+    let API = 'StonePriceMasterDJ/GetStonePriceMasterDJWithCode/' + this.userbranch + '?CODE=' + event.target.value;
+    let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe(
       (result) => {
         if (result.status == 'Success') {
           this.commonService.toastErrorByMsgId('Code already exists')
@@ -530,7 +628,7 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to ) {
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.toastr.error('Sieve From Should not be Greater than Sieve To');
       return;
     }
@@ -559,10 +657,12 @@ export class StonePricingMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -652,15 +752,16 @@ export class StonePricingMasterComponent implements OnInit {
 
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
 
+    //StonePriceMasterDJ/GetSeivesetLookupDatafill/DMCC?SieveSet=%2B14
     // Construct the API URL with the selected sieve_set value
-    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + encodeURIComponent(this.stonePrizeMasterForm.value.sieve_set);
+    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
 
-    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
+    let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
       if (result.response) {
         console.log(result.response);
         // Assign values to variables
         // let sieve_form, sieve_to;
-       
+
         const responseData = result.response[0];
         const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
         const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
@@ -687,14 +788,14 @@ export class StonePricingMasterComponent implements OnInit {
   sievefromDataSelected(data: any) {
     console.log(data);
     const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
-   
+
     this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   sievetoDataSelected(data: any) {
     console.log(data);
     const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
-   
+
     this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
@@ -739,7 +840,7 @@ export class StonePricingMasterComponent implements OnInit {
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
@@ -759,4 +860,56 @@ export class StonePricingMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+ 
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'sieve_set') {
+      this.overlaysizesetSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_form') {
+      this.overlaysievefromSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_to') {
+      this.overlaysievetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'sieve_to') {
+      this.overlaysievetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'color') {
+      this.overlaycolorSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'clarity') {
+      this.overlayclaritySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size_from') {
+      this.overlaysizefromSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size_to') {
+      this.overlaysizetoSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency') {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+  }
+
 }

@@ -84,6 +84,15 @@ import { ImageSliderComponent } from './common/image-slider/image-slider.compone
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FavoriteMenusComponent } from './common/favorite-menus/favorite-menus.component';
 import { DatetimePickerComponent } from './common/datetime-picker/datetime-picker.component';
+// import { BarcodeScannerLivestreamComponent } from "ngx-barcode-scanner";
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { NgxBarcodeScannerModule } from '@eisberg-labs/ngx-barcode-scanner';
+import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
+import { PurityDecimalDirective } from './directives/format-purity-decimal.directive ';
+import { FormatRateDecimalDirective } from './directives/format-rate-decimal.directive';
+import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
+
+
 @NgModule({
   declarations: [
     //pipes declarations
@@ -111,9 +120,12 @@ import { DatetimePickerComponent } from './common/datetime-picker/datetime-picke
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    FormatRateDecimalDirective,
+    PurityDecimalDirective,
     NumericFilterDirective,
     FormatSixDecimalDirective,
     UppercaseDirective,
+    AlphabetsOnlyDirective,
     DurationPickerComponent,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
@@ -169,12 +181,15 @@ import { DatetimePickerComponent } from './common/datetime-picker/datetime-picke
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, NgbCarouselModule,
-    MatRadioModule, MatCardModule
+    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule
   ],
   exports: [
     //component exports
     LoaderComponent,
+    BarcodeScannerLivestreamModule,
     MenubarComponent,
+    ZXingScannerModule,
+    NgxBarcodeScannerModule,
     ModalHeaderComponent,
     DialogboxComponent,
     CardboxComponent,
@@ -202,11 +217,14 @@ import { DatetimePickerComponent } from './common/datetime-picker/datetime-picke
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    FormatRateDecimalDirective,
+    PurityDecimalDirective,
     NumericFilterDirective,
     FormatSixDecimalDirective,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
     UppercaseDirective,
+    AlphabetsOnlyDirective,
     DecimalInputDirective,
     //Modules exports
     FormsModule,
@@ -250,7 +268,7 @@ import { DatetimePickerComponent } from './common/datetime-picker/datetime-picke
     MatCheckboxModule, MatProgressSpinnerModule,
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
-    MatTableModule, CalendarModule
+    MatTableModule, CalendarModule 
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

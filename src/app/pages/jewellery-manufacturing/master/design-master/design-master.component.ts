@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { DesignSequenceComponent } from './design-sequence/design-sequence.component';
 import { LabourChargesDetailsComponent } from './labour-charges-details/labour-charges-details.component';
 import { DesignTransactionComponent } from './design-transaction/design-transaction.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 
 @Component({
@@ -18,6 +19,41 @@ import { DesignTransactionComponent } from './design-transaction/design-transact
   styleUrls: ['./design-master.component.scss']
 })
 export class DesignMasterComponent implements OnInit {
+  @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprefixSearch') overlayprefixSearch!: MasterSearchComponent;
+  @ViewChild('overlayparentDesignSearch') overlayparentDesignSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostcenterSearch') overlaycostcenterSearch!: MasterSearchComponent;
+  @ViewChild('overlaykaratSearch') overlaykaratSearch!: MasterSearchComponent;
+  @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaysubcategorySearch') overlaysubcategorySearch!: MasterSearchComponent;
+  @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaybrandSearch') overlaybrandSearch!: MasterSearchComponent;
+  @ViewChild('overlaycountrySearch') overlaycountrySearch!: MasterSearchComponent;
+  @ViewChild('overlaystyleSearch') overlaystyleSearch!: MasterSearchComponent;
+  @ViewChild('overlayvendCustSearch') overlayvendCustSearch!: MasterSearchComponent;
+  @ViewChild('overlayrangeSearch') overlayrangeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+  @ViewChild('overlayprice1Search') overlayprice1Search!: MasterSearchComponent;
+  @ViewChild('overlayprice2Search') overlayprice2Search!: MasterSearchComponent;
+  @ViewChild('overlayprice3Search') overlayprice3Search!: MasterSearchComponent;
+  @ViewChild('overlayprice4Search') overlayprice4Search!: MasterSearchComponent;
+  @ViewChild('overlayprice5Search') overlayprice5Search!: MasterSearchComponent;
+  @ViewChild('overlaysizesetSearch') overlaysizesetSearch!: MasterSearchComponent;
+  @ViewChild('overlaysizeSearch') overlaysizeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycollectionSearch') overlaycollectionSearch!: MasterSearchComponent;
+  @ViewChild('overlaysubCollectionSearch') overlaysubCollectionSearch!: MasterSearchComponent;
+  @ViewChild('overlaystoneTypeSearch') overlaystoneTypeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysettingSearch') overlaysettingSearch!: MasterSearchComponent;
+  @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
+  @ViewChild('overlayincCatSearch') overlayincCatSearch!: MasterSearchComponent;
+  @ViewChild('overlayorderRefSearch') overlayorderRefSearch!: MasterSearchComponent;
+  
+  
+  
+  
+  
+  
+  
   @Input() content!: any; 
   favoriteSeason: string = "";
   urls: string | ArrayBuffer | null | undefined;
@@ -1129,10 +1165,12 @@ onFileChangedimage(event: any) {
               }
             });
           }
-        } else {
-          this.toastr.error('Not saved')
+        }else {
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -1698,9 +1736,11 @@ onFileChangedimage(event: any) {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -2583,7 +2623,9 @@ onFileChangedimage(event: any) {
   removedataAttributesStockCode(){
 
   }
+  removedataAttributesFinishingRange(){
 
+  }
  
   adddataAttributeFinishingRange(){
     let length = this.tableDataFinishingRange.length;
@@ -2598,8 +2640,110 @@ onFileChangedimage(event: any) {
   this.tableDataFinishingRange.push(datas);
   }
 
-  
-  removedataAttributesFinishingRange(){
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
 
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+  
+ 
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'code') {
+      this.overlaycodeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'prefix') {
+      this.overlayprefixSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'parentDesign') {
+      this.overlayparentDesignSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'costcenter') {
+      this.overlaycostcenterSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'karat') {
+      this.overlaykaratSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'category') {
+      this.overlaycategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'subcategory') {
+      this.overlaysubcategorySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'type') {
+      this.overlaytypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'country') {
+      this.overlaycountrySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'style') {
+      this.overlaystyleSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'brand') {
+      this.overlaybrandSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'vendCust') {
+      this.overlayvendCustSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'range') {
+      this.overlayrangeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'currency') {
+      this.overlaycurrencySearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'price1') {
+      this.overlayprice1Search.showOverlayPanel(event)
+    }
+    if (formControlName == 'price2') {
+      this.overlayprice2Search.showOverlayPanel(event)
+    }
+    if (formControlName == 'price3') {
+      this.overlayprice3Search.showOverlayPanel(event)
+    }
+    if (formControlName == 'price4') {
+      this.overlayprice4Search.showOverlayPanel(event)
+    }
+    if (formControlName == 'price5') {
+      this.overlayprice5Search.showOverlayPanel(event)
+    }
+    if (formControlName == 'sizeset') {
+      this.overlaysizesetSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'size') {
+      this.overlaysizeSearch.showOverlayPanel(event)
+    }
+
+    if (formControlName == 'collection') {
+      this.overlaycollectionSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'subCollection') {
+      this.overlaysubCollectionSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'stoneType') {
+      this.overlaystoneTypeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'setting') {
+      this.overlaysettingSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'shape') {
+      this.overlayshapeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'incCat') {
+      this.overlayincCatSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'orderRef') {
+      this.overlayorderRefSearch.showOverlayPanel(event)
+    }
   }
 }
