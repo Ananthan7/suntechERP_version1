@@ -143,6 +143,7 @@ export class RepairDiamondPurchaseDetailComponent implements OnInit {
     IGST_cc : [''],
     round : [''],
     total : [''], 
+    remarks : [''],
   });
 
   
