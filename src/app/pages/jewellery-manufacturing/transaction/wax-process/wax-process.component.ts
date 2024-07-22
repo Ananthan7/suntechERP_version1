@@ -30,6 +30,7 @@ export class WaxProcessComponent implements OnInit {
   vocMaxDate = new Date();
   viewMode: boolean = false;
   currentDate = new Date();
+  isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   //waxprocessFrom!: FormGroup
 
