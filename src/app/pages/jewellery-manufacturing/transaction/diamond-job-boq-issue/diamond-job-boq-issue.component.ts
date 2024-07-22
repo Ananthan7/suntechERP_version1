@@ -249,9 +249,9 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -494,25 +494,28 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     this.diamondJobBoqIssue.controls.worker.setValue(e.WORKER_CODE);
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.diamondJobBoqIssue.value[formControlName] != '') return
+    if (this.diamondJobBoqIssue.value[formControlName] != '') return;
   
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBy.showOverlayPanel(event)
-    }
-    if (formControlName == 'location') {
-      this.overlaylocation.showOverlayPanel(event)
-    }
-    if (formControlName == 'metalRateType') {
-      this.overlaymetalRateType.showOverlayPanel(event)
-    }
-    if (formControlName == 'kariggerType') {
-      this.overlaykariggerType.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayenteredBy.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocation.showOverlayPanel(event);
+        break;
+      case 'metalRateType':
+        this.overlaymetalRateType.showOverlayPanel(event);
+        break;
+      case 'kariggerType':
+        this.overlaykariggerType.showOverlayPanel(event);
+        break;
+      default:
     }
   }
   
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
