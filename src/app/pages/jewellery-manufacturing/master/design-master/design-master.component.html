@@ -37,7 +37,7 @@
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput formControlName="code"
                           UpperCaseDirective autocomplete="off"
-                          (focusout)="checkCodeExists($event)"  (keypress)="lookupKeyPress($event)"  (focusout)="codeValidate($event)"/>
+                          (focusout)="checkCodeExists($event)"  (keydown)="lookupKeyPress($event,'code')"/>
                           <master-search [MasterSearchData]="designCodeData" class="masterSearch"  #overlaycodeSearch
                           (newRowClick)="designCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -55,7 +55,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput formControlName="prefix" 
-                        (focusout)="validateLookupField($event,prefixCodeData,'prefix')"  (keypress)="lookupKeyPress($event)"  (focusout)="prefixValidate($event)"/>
+                        (focusout)="validateLookupField($event,prefixCodeData,'prefix')"  (keydown)="lookupKeyPress($event,'prefix')"/>
                         <master-search [MasterSearchData]="prefixCodeData" class="masterSearch"  #overlayprefixSearch
                         (newRowClick)="prefixCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -65,7 +65,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput
-                          formControlName="parentDesign" (focusout)="validateLookupField($event,parentDesignCodeData,'parentDesign')"  (keypress)="lookupKeyPress($event)"  (focusout)="parentDesignValidate($event)"/>
+                          formControlName="parentDesign" (focusout)="validateLookupField($event,parentDesignCodeData,'parentDesign')"   (keydown)="lookupKeyPress($event,'parentDesign')"/>
                           <master-search [MasterSearchData]="parentDesignCodeData" class="masterSearch" #overlayparentDesignSearch
                           (newRowClick)="parentDesignCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -97,7 +97,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput
-                          formControlName="costcenter" (focusout)="validateLookupField($event,costCenterData,'costcenter')"  (keypress)="lookupKeyPress($event)"  (focusout)="costcenterValidate($event)"/>
+                          formControlName="costcenter" (focusout)="validateLookupField($event,costCenterData,'costcenter')"   (keydown)="lookupKeyPress($event,'costcenter')"/>
                           <master-search [MasterSearchData]="costCenterData" class="masterSearch" #overlaycostcenterSearch
                           (newRowClick)="costCenterSelected($event)"></master-search>
                       </mat-form-field>
@@ -115,7 +115,7 @@
                       class="col-sm-3 col-form-label">Karat * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="karat" (focusout)="validateLookupField($event,karatCodeData,'karat')"  (keypress)="lookupKeyPress($event)"  (focusout)="karatValidate($event)"/>
+                        <input type="text" matInput formControlName="karat" (focusout)="validateLookupField($event,karatCodeData,'karat')"   (keydown)="lookupKeyPress($event,'karat')"/>
                         <master-search [MasterSearchData]="karatCodeData" class="masterSearch" #overlaykaratSearch
                         (newRowClick)="karatCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -134,7 +134,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput
-                          formControlName="category" (focusout)="validateLookupField($event,categoryCodeData,'category')"  (keypress)="lookupKeyPress($event)"  (focusout)="categoryValidate($event)"/>
+                          formControlName="category" (focusout)="validateLookupField($event,categoryCodeData,'category')"  (keydown)="lookupKeyPress($event,'category')"/>
                           <master-search [MasterSearchData]="categoryCodeData" class="masterSearch"  #overlaycategorySearch
                         (newRowClick)="categoryCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -153,7 +153,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput
-                          formControlName="subcategory" (focusout)="validateLookupField($event,subcategoryCodeData,'subcategory')"  (keypress)="lookupKeyPress($event)"  (focusout)="subcategoryValidate($event)"/>
+                          formControlName="subcategory" (focusout)="validateLookupField($event,subcategoryCodeData,'subcategory')"   (keydown)="lookupKeyPress($event,'subcategory')"/>
                           <master-search [MasterSearchData]="subcategoryCodeData" class="masterSearch"  #overlaysubcategorySearch
                           (newRowClick)="subcategoryCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -171,7 +171,7 @@
                       class="col-sm-3 col-form-label">Type :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="type" (focusout)="validateLookupField($event,typeCodeData,'type')"  (keypress)="lookupKeyPress($event)"  (focusout)="typeValidate($event)"/>
+                        <input type="text" matInput formControlName="type" (focusout)="validateLookupField($event,typeCodeData,'type')"    (keydown)="lookupKeyPress($event,'type')"/>
                         <master-search [MasterSearchData]="typeCodeData" class="masterSearch"  #overlaytypeSearch
                         (newRowClick)="typeCodeSelected($event)"></master-search>
                       </mat-form-field> 
@@ -193,7 +193,7 @@
                       class="col-sm-3 col-form-label">Brand :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="brand" (focusout)="validateLookupField($event,BrandCodeData,'brand')"  (keypress)="lookupKeyPress($event)"  (focusout)="brandValidate($event)"/>
+                        <input type="text" matInput formControlName="brand" (focusout)="validateLookupField($event,BrandCodeData,'brand')"   (keydown)="lookupKeyPress($event,'brand')"/>
                         <master-search [MasterSearchData]="BrandCodeData" class="masterSearch"  #overlaybrandSearch
                         (newRowClick)="brandCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -202,7 +202,7 @@
                       class="col-sm-3 col-form-label">Country:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="country"  (focusout)="validateLookupField($event,countryCodeData,'country')"  (keypress)="lookupKeyPress($event)"  (focusout)="countryValidate($event)"/>
+                        <input type="text" matInput formControlName="country"  (focusout)="validateLookupField($event,countryCodeData,'country')"   (keydown)="lookupKeyPress($event,'country')"/>
                         <master-search [MasterSearchData]="countryCodeData" class="masterSearch"  #overlaycountrySearch
                         (newRowClick)="countryCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -214,7 +214,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput formControlName="style" (focusout)="validateLookupField($event,StyleCodeData,'style')"
-                        class="text-right"  (keypress)="lookupKeyPress($event)"  (focusout)="styleValidate($event)"/>
+                        class="text-right"   (keydown)="lookupKeyPress($event,'style')"/>
                         <master-search [MasterSearchData]="StyleCodeData" class="masterSearch"  #overlaystyleSearch
                         (newRowClick)="StyleCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -224,7 +224,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput
-                          formControlName="vendCust" (focusout)="validateLookupField($event,vendCustCodeData,'vendCust')"  (keypress)="lookupKeyPress($event)" (focusout)="vendCustValidate($event)"/>
+                          formControlName="vendCust" (focusout)="validateLookupField($event,vendCustCodeData,'vendCust')"   (keydown)="lookupKeyPress($event,'vendCust')"/>
                           <master-search [MasterSearchData]="vendCustCodeData" class="masterSearch" #overlayvendCustSearch
                           (newRowClick)="vendCustCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -235,7 +235,7 @@
                       class="col-sm-3 col-form-label">Range :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="range" (focusout)="validateLookupField($event,RangeCodeData,'range')"  (keypress)="lookupKeyPress($event)" (focusout)="rangeValidate($event)"/>
+                        <input type="text" matInput formControlName="range" (focusout)="validateLookupField($event,RangeCodeData,'range')"   (keydown)="lookupKeyPress($event,'range')"/>
                         <master-search [MasterSearchData]="RangeCodeData" class="masterSearch" #overlayrangeSearch
                         (newRowClick)="RangeCodeSelected($event)"></master-search>
                       </mat-form-field>
@@ -333,7 +333,7 @@
                                 <input type="text" matInput
                                   formControlName="currency" 
                                   (focusout)="validateLookupField($event,currencyMasterData,'currency')"
-                                  (keypress)="lookupKeyPress($event)" (focusout)="currencyValidate($event)"/>
+                                  (keydown)="lookupKeyPress($event,'currency')"/>
                                   <master-search class="masterSearch"
                                   [MasterSearchData]="currencyMasterData"  #overlaycurrencySearch
                                   (newRowClick)="currencyCodeSelected($event)"></master-search>
@@ -420,7 +420,7 @@
                               <input type="text" matInput
                                 formControlName="price1" 
                                 (focusout)="validateLookupField($event,price1CodeData,'price1')"
-                                (keypress)="lookupKeyPress($event)"  (focusout)="price1Validate($event)"/>
+                                (keydown)="lookupKeyPress($event,'price1')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price1CodeData"  #overlayprice1Search
                               (newRowClick)="price1CodeSelected($event)"></master-search>
@@ -433,7 +433,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price2" (focusout)="validateLookupField($event,price2CodeData,'price2')"  (keypress)="lookupKeyPress($event)" (focusout)="price2Validate($event)"/>
+                                formControlName="price2" (focusout)="validateLookupField($event,price2CodeData,'price2')"  (keydown)="lookupKeyPress($event,'price2')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price2CodeData"  #overlayprice2Search
                               (newRowClick)="price2CodeSelected($event)"></master-search>
@@ -446,7 +446,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price3" (focusout)="validateLookupField($event,price3CodeData,'price3')"  (keypress)="lookupKeyPress($event)" (focusout)="price3Validate($event)"/>
+                                formControlName="price3" (focusout)="validateLookupField($event,price3CodeData,'price3')"  (keydown)="lookupKeyPress($event,'price3')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price3CodeData"  #overlayprice3Search
                               (newRowClick)="price3CodeSelected($event)"></master-search>
@@ -459,7 +459,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price4"  (focusout)="validateLookupField($event,price4CodeData,'price4')"  (keypress)="lookupKeyPress($event)" (focusout)="price4Validate($event)"/>
+                                formControlName="price4"  (focusout)="validateLookupField($event,price4CodeData,'price4')"  (keydown)="lookupKeyPress($event,'price4')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price4CodeData"  #overlayprice4Search
                               (newRowClick)="price4CodeSelected($event)"></master-search>
@@ -472,7 +472,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
                               <input type="text" matInput
-                                formControlName="price5" (focusout)="validateLookupField($event,price5CodeData,'price5')"  (keypress)="lookupKeyPress($event)" (focusout)="price5Validate($event)"/>
+                                formControlName="price5" (focusout)="validateLookupField($event,price5CodeData,'price5')"   (keydown)="lookupKeyPress($event,'price5')"/>
                             </mat-form-field>
                             <master-search [MasterSearchData]="price5CodeData"  #overlayprice5Search
                               (newRowClick)="price5CodeSelected($event)"></master-search>
@@ -665,7 +665,7 @@
                   <mat-form-field style="width: 100%;" appearance="outline" >
                     <input type="text" matInput formControlName="sizeset" 
                     (focusout)="validateLookupField($event,sizesetCodeData,'sizeset')"
-                    (keypress)="lookupKeyPress($event)"  (focusout)="sizesetValidate($event)"/>
+                    (keydown)="lookupKeyPress($event,'sizeset')"/>
                     <master-search [MasterSearchData]="sizesetCodeData" class="masterSearch"  #overlaysizesetSearch
                     (newRowClick)="sizesetCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -676,7 +676,7 @@
                 <div class="col-md-6">
                   <mat-form-field style="width: 100%;" appearance="outline">
                     <input type="text" matInput formControlName="size" (focusout)="validateLookupField($event,sizeCodeData,'size')"
-                    class="text-right"  (keypress)="lookupKeyPress($event)"  (focusout)="sizeValidate($event)"/>
+                    class="text-right"    (keydown)="lookupKeyPress($event,'size')"/>
                     <master-search [MasterSearchData]="sizeCodeData" class="masterSearch"  #overlaysizeSearch
                     (newRowClick)="sizeCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1681,7 +1681,7 @@
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
                     <input type="text" matInput formControlName="collection" 
-                    (focusout)="validateLookupField($event,collectionCodeData,'collection')"  (keypress)="lookupKeyPress($event)" (focusout)="collectionValidate($event)"/>
+                    (focusout)="validateLookupField($event,collectionCodeData,'collection')"   (keydown)="lookupKeyPress($event,'collection')"/>
                     <master-search [MasterSearchData]="collectionCodeData" class="masterSearch"  #overlaycollectionSearch
                     (newRowClick)="collectionCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1693,7 +1693,7 @@
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
                     <input type="text" matInput
-                      formControlName="subCollection"  (focusout)="validateLookupField($event,subCollectionCodeData,'subCollection')"  (keypress)="lookupKeyPress($event)" (focusout)="subCollectionCodeDataValidate($event)"/>
+                      formControlName="subCollection"  (focusout)="validateLookupField($event,subCollectionCodeData,'subCollection')"  (keydown)="lookupKeyPress($event,'subCollection')"/>
                       <master-search [MasterSearchData]="subCollectionCodeData" class="masterSearch"  #overlaysubCollectionSearch
                       (newRowClick)="subCollectionCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1704,7 +1704,7 @@
                   Type/Lo :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="stoneType" (focusout)="validateLookupField($event,stoneTypeCodeData,'stoneType')"  (keypress)="lookupKeyPress($event)" (focusout)="stoneTypeValidate($event)"/>
+                    <input type="text" matInput formControlName="stoneType" (focusout)="validateLookupField($event,stoneTypeCodeData,'stoneType')"  (keydown)="lookupKeyPress($event,'stoneType')"/>
                     <master-search [MasterSearchData]="stoneTypeCodeData" class="masterSearch"   #overlaystoneTypeSearch
                     (newRowClick)="stoneTypeCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1715,7 +1715,7 @@
                   class="col-sm-4 col-form-label">Setting :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="setting" (focusout)="validateLookupField($event,settingCodeData,'setting')"  (keypress)="lookupKeyPress($event)" (focusout)="settingValidate($event)"/>
+                    <input type="text" matInput formControlName="setting" (focusout)="validateLookupField($event,settingCodeData,'setting')"  (keydown)="lookupKeyPress($event,'setting')"/>
                     <master-search [MasterSearchData]="settingCodeData" class="masterSearch" #overlaysettingSearch
                     (newRowClick)="settingCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1726,7 +1726,7 @@
                   :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="shape" (focusout)="validateLookupField($event,shapeCodeData,'shape')"  (keypress)="lookupKeyPress($event)"  (focusout)="shapeValidate($event)"/>
+                    <input type="text" matInput formControlName="shape" (focusout)="validateLookupField($event,shapeCodeData,'shape')"  (keydown)="lookupKeyPress($event,'shape')"/>
                     <master-search [MasterSearchData]="shapeCodeData" class="masterSearch"  #overlayshapeSearch
                     (newRowClick)="shapeCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1737,7 +1737,7 @@
                   class="col-sm-4 col-form-label">Inc.Cat :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="incCat" (focusout)="validateLookupField($event,incCatCodeData,'incCat')"  (keypress)="lookupKeyPress($event)"   (focusout)="incCatValidate($event)"/>
+                    <input type="text" matInput formControlName="incCat" (focusout)="validateLookupField($event,incCatCodeData,'incCat')" (keydown)="lookupKeyPress($event,'incCat')"/>
                     <master-search [MasterSearchData]="incCatCodeData" class="masterSearch"  #overlayincCatSearch
                     (newRowClick)="incCatCodeSelected($event)"></master-search>
                   </mat-form-field>
@@ -1747,7 +1747,7 @@
                 <label for="inputPassword" id="ID072" class="col-sm-4 col-form-label">Order Ref :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="orderRef" (focusout)="validateLookupField($event,orderRefCodeData,'orderRef')"  (keypress)="lookupKeyPress($event)"   (focusout)="orderRefValidate($event)"/>
+                    <input type="text" matInput formControlName="orderRef" (focusout)="validateLookupField($event,orderRefCodeData,'orderRef')"  (keydown)="lookupKeyPress($event,'orderRef')"/>
                     <master-search [MasterSearchData]="orderRefCodeData" class="masterSearch"  #overlayorderRefSearch
                     (newRowClick)="orderRefCodeSelected($event)"></master-search>
                   </mat-form-field>

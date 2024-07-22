@@ -624,7 +624,7 @@ export class ProcessMasterComponent implements OnInit {
       "LOSS_ACCODE": form.LOSS_ACCODE,
       "WIP_ACCODE": form.WIPaccount,
       "CURRENCY_CODE": "",
-      "PROCESS_TYPE": form.processType || '',
+      "PROCESS_TYPE":this.commonService.nullToString(form.processType),
       "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
@@ -1131,11 +1131,23 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
+
 
   WIPaccountValidate(event: any) {
     if (this.viewMode) return
