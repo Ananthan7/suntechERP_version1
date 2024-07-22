@@ -61,9 +61,12 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 72%;">
                   <input type="text" matInput formControlName="enteredby"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'enteredby')" 
+                    (focusout)="validateLookupField($event,rateTypeMasterData,'enteredby')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="user" *ngIf="!viewMode"
+                  #overlayenteredby
                   (newRowClick)="userDataSelected($event)">
                 </master-search>
               </div>
@@ -116,9 +119,11 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="metalrate"
                     [readonly]="viewMode" placeholder="Rate type"
-                    (keypress)="lookupKeyPress($event)" />
+                    (keydown)="lookupKeyPress($event,'metalrate')" 
+                    (focusout)="validateLookupField($event,rateTypeMasterData,'metalrate')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="rateTypeMasterData"
+                  #overlaymetalrate
                   *ngIf="!viewMode"
                   (newRowClick)="rateTypeSelected($event)"> </master-search>
               </div>
@@ -139,9 +144,11 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="costcode"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" />
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'costcode')" 
+                    (focusout)="validateLookupField($event,costCodeData,'costcode')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="costCodeData"
+                  #overlaycostcode
                   *ngIf="!viewMode"
                   (newRowClick)="costCodeSelected($event)">
                 </master-search>
@@ -191,7 +198,7 @@
               <input type="text" matInput [readonly]="viewMode"
                 (keypress)="lookupKeyPress($event)" />
             </mat-form-field>
-            <master-search *ngIf="!viewMode">
+            <master-search *ngIf="!viewMode" #overlaycostcodelist>
             </master-search>
           </div>
         </div>

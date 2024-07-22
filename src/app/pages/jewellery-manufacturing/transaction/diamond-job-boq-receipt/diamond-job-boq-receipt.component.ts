@@ -130,9 +130,9 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -667,34 +667,37 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     this.diamondJobBoqReceipt.controls.process.setValue(e.Process_Code);
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.diamondJobBoqReceipt.value[formControlName] != '') return
+    if (this.diamondJobBoqReceipt.value[formControlName] != '') return;
   
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBy.showOverlayPanel(event)
-    }
-    if (formControlName == 'jobNumber') {
-      this.overlaylabourchrg.showOverlayPanel(event)
-    }
-    if (formControlName == 'designId') {
-      this.overlayworker.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlaydesignId.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayprocess.showOverlayPanel(event)
-    }
-    if (formControlName == 'labourchrg') {
-      this.overlayjobNumber.showOverlayPanel(event)
-    }
-    if (formControlName == 'overlaylabourAC') {
-      this.overlaylabourAC.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayenteredBy.showOverlayPanel(event);
+        break;
+      case 'jobNumber':
+        this.overlaylabourchrg.showOverlayPanel(event);
+        break;
+      case 'designId':
+        this.overlayworker.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlaydesignId.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayprocess.showOverlayPanel(event);
+        break;
+      case 'labourchrg':
+        this.overlayjobNumber.showOverlayPanel(event);
+        break;
+      case 'overlaylabourAC':
+        this.overlaylabourAC.showOverlayPanel(event);
+        break;
+      default:
     }
   }
   
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
