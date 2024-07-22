@@ -69,7 +69,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="salesman"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'salesman')"
                                         (focusout)="validateLookupField($event,salesCodeData,'salesman')"/>
                                 </mat-form-field>
                                 <master-search

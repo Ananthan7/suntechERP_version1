@@ -27,10 +27,10 @@
                                         formControlName="stockcode"
                                         (focusout)="validateLookupField($event,stockCodeData,'stockcode')"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'stockcode')" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="stockCodeData"
+                                    [MasterSearchData]="stockCodeData" #overlaystockcode
                                     *ngIf="!viewMode"
                                     (newRowClick)="codeSelected($event)"
                                     jewelleryaltrationdetailsFrom>
@@ -523,10 +523,10 @@
                             <input type="text" matInput
                                 formControlName="price1PER"
                                 [readonly]="viewMode"
-                                (keypress)="lookupKeyPress($event)" 
+                                (keydown)="lookupKeyPress($event,'price1PER')"
                                 (focusout)="validateLookupField($event,price1CodeData,'price1PER')"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price1CodeData"
+                        <master-search [MasterSearchData]="price1CodeData" #overlayprice1per
                             *ngIf="!viewMode"
                             (newRowClick)="price1CodeSelected($event)">
                         </master-search>
@@ -563,10 +563,10 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price2PER"
-                                (keypress)="lookupKeyPress($event)" 
+                                (keydown)="lookupKeyPress($event,'price2PER')" 
                                 (focusout)="validateLookupField($event,price2CodeData,'price2PER')"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price2CodeData"
+                        <master-search [MasterSearchData]="price2CodeData" #overlayprice2per
                             *ngIf="!viewMode"
                             (newRowClick)="price2CodeSelected($event)">
                         </master-search>
@@ -601,12 +601,12 @@
                         class="col-sm-3 col-form-label">Price 3 :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput [readonly]="viewMode" 
                                 formControlName="price3PER"
-                                (keypress)="lookupKeyPress($event)"
+                                (keydown)="lookupKeyPress($event,'price3PER')" 
                                 (focusout)="validateLookupField($event,price3CodeData,'price3PER')"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price3CodeData"
+                        <master-search [MasterSearchData]="price3CodeData" #overlayprice3per
                             *ngIf="!viewMode"
                             (newRowClick)="price3CodeSelected($event)">
                         </master-search>
@@ -643,10 +643,10 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price4PER"
-                                (keypress)="lookupKeyPress($event)" 
+                                (keydown)="lookupKeyPress($event,'price4PER')"  
                                 (focusout)="validateLookupField($event,price4CodeData,'price4PER')"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price4CodeData"
+                        <master-search [MasterSearchData]="price4CodeData" #overlayprice4per
                             *ngIf="!viewMode"
                             (newRowClick)="price4CodeSelected($event)">
                         </master-search>
@@ -683,10 +683,10 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="price5PER"
-                                (keypress)="lookupKeyPress($event)" 
+                                (keydown)="lookupKeyPress($event,'price5PER')"
                                 (focusout)="validateLookupField($event,price5CodeData,'price5PER')"/>
                         </mat-form-field>
-                        <master-search [MasterSearchData]="price5CodeData"
+                        <master-search [MasterSearchData]="price5CodeData" #overlayprice5per
                             *ngIf="!viewMode"
                             (newRowClick)="price5CodeSelected($event)">
                         </master-search>

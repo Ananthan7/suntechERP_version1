@@ -61,9 +61,11 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 85%;">
                                     <input type="text" matInput
-                                        formControlName="salesman" />
+                                        formControlName="salesman" 
+                                        (keydown)="lookupKeyPress($event,'salesman')"
+                                        (focusout)="validateLookupField($event,SalesmanData,'salesman')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="SalesmanData"
+                                <master-search [MasterSearchData]="SalesmanData" #overlaysalesman
                                     (newRowClick)="salesmanSelected($event)">
                                 </master-search>
                             </div>
