@@ -1148,33 +1148,64 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-
- 
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'WIPaccount') {
-      this.overlayWIPaccountSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'approvalCode') {
-      this.overlayapprovalCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'approvalProcess') {
-      this.overlayapprovalProcessSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'recStockCode') {
-      this.overlayrecStockCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'ADJUST_ACCODE') {
-      this.overlayadjustaccodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'LOSS_ACCODE') {
-      this.overlaylossaccodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'RECOV_ACCODE') {
-      this.overlayrecoveaccodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'GAIN_ACCODE') {
-      this.overlaygainaccodeSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'WIPaccount':
+        this.overlayWIPaccountSearch.showOverlayPanel(event);
+        break;
+      case 'approvalCode':
+        this.overlayapprovalCodeSearch.showOverlayPanel(event);
+        break;
+      case 'approvalProcess':
+        this.overlayapprovalProcessSearch.showOverlayPanel(event);
+        break;
+      case 'recStockCode':
+        this.overlayrecStockCodeSearch.showOverlayPanel(event);
+        break;
+      case 'ADJUST_ACCODE':
+        this.overlayadjustaccodeSearch.showOverlayPanel(event);
+        break;
+      case 'LOSS_ACCODE':
+        this.overlaylossaccodeSearch.showOverlayPanel(event);
+        break;
+      case 'RECOV_ACCODE':
+        this.overlayrecoveaccodeSearch.showOverlayPanel(event);
+        break;
+      case 'GAIN_ACCODE':
+        this.overlaygainaccodeSearch.showOverlayPanel(event);
+        break;
+      default:
+        // Optional: handle the case where formControlName does not match any case
+        console.warn(`No overlay found for form control: ${formControlName}`);
     }
   }
+  
+ 
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'WIPaccount') {
+  //     this.overlayWIPaccountSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'approvalCode') {
+  //     this.overlayapprovalCodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'approvalProcess') {
+  //     this.overlayapprovalProcessSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'recStockCode') {
+  //     this.overlayrecStockCodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'ADJUST_ACCODE') {
+  //     this.overlayadjustaccodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'LOSS_ACCODE') {
+  //     this.overlaylossaccodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'RECOV_ACCODE') {
+  //     this.overlayrecoveaccodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'GAIN_ACCODE') {
+  //     this.overlaygainaccodeSearch.showOverlayPanel(event)
+  //   }
+  // }
 }

@@ -2656,94 +2656,183 @@ onFileChangedimage(event: any) {
     }
   }
   
- 
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'code') {
-      this.overlaycodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'prefix') {
-      this.overlayprefixSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'parentDesign') {
-      this.overlayparentDesignSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'costcenter') {
-      this.overlaycostcenterSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'karat') {
-      this.overlaykaratSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'category') {
-      this.overlaycategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'subcategory') {
-      this.overlaysubcategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'type') {
-      this.overlaytypeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'country') {
-      this.overlaycountrySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'style') {
-      this.overlaystyleSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'brand') {
-      this.overlaybrandSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'vendCust') {
-      this.overlayvendCustSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'range') {
-      this.overlayrangeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'currency') {
-      this.overlaycurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'price1') {
-      this.overlayprice1Search.showOverlayPanel(event)
-    }
-    if (formControlName == 'price2') {
-      this.overlayprice2Search.showOverlayPanel(event)
-    }
-    if (formControlName == 'price3') {
-      this.overlayprice3Search.showOverlayPanel(event)
-    }
-    if (formControlName == 'price4') {
-      this.overlayprice4Search.showOverlayPanel(event)
-    }
-    if (formControlName == 'price5') {
-      this.overlayprice5Search.showOverlayPanel(event)
-    }
-    if (formControlName == 'sizeset') {
-      this.overlaysizesetSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'size') {
-      this.overlaysizeSearch.showOverlayPanel(event)
-    }
-
-    if (formControlName == 'collection') {
-      this.overlaycollectionSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'subCollection') {
-      this.overlaysubCollectionSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stoneType') {
-      this.overlaystoneTypeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'setting') {
-      this.overlaysettingSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'shape') {
-      this.overlayshapeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'incCat') {
-      this.overlayincCatSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'orderRef') {
-      this.overlayorderRefSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'code':
+        this.overlaycodeSearch.showOverlayPanel(event);
+        break;
+      case 'prefix':
+        this.overlayprefixSearch.showOverlayPanel(event);
+        break;
+      case 'parentDesign':
+        this.overlayparentDesignSearch.showOverlayPanel(event);
+        break;
+      case 'costcenter':
+        this.overlaycostcenterSearch.showOverlayPanel(event);
+        break;
+      case 'karat':
+        this.overlaykaratSearch.showOverlayPanel(event);
+        break;
+      case 'category':
+        this.overlaycategorySearch.showOverlayPanel(event);
+        break;
+      case 'subcategory':
+        this.overlaysubcategorySearch.showOverlayPanel(event);
+        break;
+      case 'type':
+        this.overlaytypeSearch.showOverlayPanel(event);
+        break;
+      case 'country':
+        this.overlaycountrySearch.showOverlayPanel(event);
+        break;
+      case 'style':
+        this.overlaystyleSearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.overlaybrandSearch.showOverlayPanel(event);
+        break;
+      case 'vendCust':
+        this.overlayvendCustSearch.showOverlayPanel(event);
+        break;
+      case 'range':
+        this.overlayrangeSearch.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlaycurrencySearch.showOverlayPanel(event);
+        break;
+      case 'price1':
+        this.overlayprice1Search.showOverlayPanel(event);
+        break;
+      case 'price2':
+        this.overlayprice2Search.showOverlayPanel(event);
+        break;
+      case 'price3':
+        this.overlayprice3Search.showOverlayPanel(event);
+        break;
+      case 'price4':
+        this.overlayprice4Search.showOverlayPanel(event);
+        break;
+      case 'price5':
+        this.overlayprice5Search.showOverlayPanel(event);
+        break;
+      case 'sizeset':
+        this.overlaysizesetSearch.showOverlayPanel(event);
+        break;
+      case 'size':
+        this.overlaysizeSearch.showOverlayPanel(event);
+        break;
+      case 'collection':
+        this.overlaycollectionSearch.showOverlayPanel(event);
+        break;
+      case 'subCollection':
+        this.overlaysubCollectionSearch.showOverlayPanel(event);
+        break;
+      case 'stoneType':
+        this.overlaystoneTypeSearch.showOverlayPanel(event);
+        break;
+      case 'setting':
+        this.overlaysettingSearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.overlayshapeSearch.showOverlayPanel(event);
+        break;
+      case 'incCat':
+        this.overlayincCatSearch.showOverlayPanel(event);
+        break;
+      case 'orderRef':
+        this.overlayorderRefSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'code') {
+  //     this.overlaycodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'prefix') {
+  //     this.overlayprefixSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'parentDesign') {
+  //     this.overlayparentDesignSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'costcenter') {
+  //     this.overlaycostcenterSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'karat') {
+  //     this.overlaykaratSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'category') {
+  //     this.overlaycategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'subcategory') {
+  //     this.overlaysubcategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'type') {
+  //     this.overlaytypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'country') {
+  //     this.overlaycountrySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'style') {
+  //     this.overlaystyleSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'brand') {
+  //     this.overlaybrandSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'vendCust') {
+  //     this.overlayvendCustSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'range') {
+  //     this.overlayrangeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'currency') {
+  //     this.overlaycurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price1') {
+  //     this.overlayprice1Search.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price2') {
+  //     this.overlayprice2Search.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price3') {
+  //     this.overlayprice3Search.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price4') {
+  //     this.overlayprice4Search.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price5') {
+  //     this.overlayprice5Search.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sizeset') {
+  //     this.overlaysizesetSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'size') {
+  //     this.overlaysizeSearch.showOverlayPanel(event)
+  //   }
+
+  //   if (formControlName == 'collection') {
+  //     this.overlaycollectionSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'subCollection') {
+  //     this.overlaysubCollectionSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'stoneType') {
+  //     this.overlaystoneTypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'setting') {
+  //     this.overlaysettingSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'shape') {
+  //     this.overlayshapeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'incCat') {
+  //     this.overlayincCatSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'orderRef') {
+  //     this.overlayorderRefSearch.showOverlayPanel(event)
+  //   }
+  // }
 }

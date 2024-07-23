@@ -109,6 +109,7 @@ export class ComponentMasterComponent implements OnInit {
     WHERECONDITION: "DIVISION='S' AND COMP_PREFIX='1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK:true,
   }
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -816,7 +817,7 @@ export class ComponentMasterComponent implements OnInit {
       "SUPPLIER_CODE": "",
       "SUPPLIER_REF": "",
       "SET_REF": form.settingType,
-      "PICTURE_NAME": this.PICTURE_NAME,
+      "PICTURE_NAME": this.PICTURE_NAME || "",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
@@ -1270,10 +1271,7 @@ export class ComponentMasterComponent implements OnInit {
     //   this.toastr.error('select all required fields')
     //   return
     // }
-    console.log('firedsssss');
-
     let postData = this.setPostData()
-    console.log('firedsssss');
 
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
       .subscribe((result) => {
@@ -1647,35 +1645,69 @@ export class ComponentMasterComponent implements OnInit {
     }
   }
 
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'codedes') {
-      this.overlaycodedescSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sizeSet') {
-      this.overlaysizeSetSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'type') {
-      this.overlaytypeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'size') {
-      this.overlaysizeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'category') {
-      this.overlaycategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'shape') {
-      this.overlayshapeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'settingType') {
-      this.overlaysettingTypeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'processSeq') {
-      this.overlayprocessSeqSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'costCenter') {
-      this.overlaycostCenterSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'codedes':
+        this.overlaycodedescSearch.showOverlayPanel(event);
+        break;
+      case 'sizeSet':
+        this.overlaysizeSetSearch.showOverlayPanel(event);
+        break;
+      case 'type':
+        this.overlaytypeSearch.showOverlayPanel(event);
+        break;
+      case 'size':
+        this.overlaysizeSearch.showOverlayPanel(event);
+        break;
+      case 'category':
+        this.overlaycategorySearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.overlayshapeSearch.showOverlayPanel(event);
+        break;
+      case 'settingType':
+        this.overlaysettingTypeSearch.showOverlayPanel(event);
+        break;
+      case 'processSeq':
+        this.overlayprocessSeqSearch.showOverlayPanel(event);
+        break;
+      case 'costCenter':
+        this.overlaycostCenterSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
+
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'codedes') {
+  //     this.overlaycodedescSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sizeSet') {
+  //     this.overlaysizeSetSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'type') {
+  //     this.overlaytypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'size') {
+  //     this.overlaysizeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'category') {
+  //     this.overlaycategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'shape') {
+  //     this.overlayshapeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'settingType') {
+  //     this.overlaysettingTypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'processSeq') {
+  //     this.overlayprocessSeqSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'costCenter') {
+  //     this.overlaycostCenterSearch.showOverlayPanel(event)
+  //   }
+  // }
 }

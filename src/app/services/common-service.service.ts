@@ -439,6 +439,7 @@ export class CommonServiceService {
     return result.length > 0 ? result[0]?.CONV_RATE : 0;
   }
   CCToFC(currency: any, amount: any, rate: any = null) {
+    console.log(this.allBranchCurrency);
     rate = rate || this.getCurrRate(currency);
     currency = currency;
     rate = typeof (rate) == 'number' ? this.emptyToZero(rate) : this.emptyToZero(rate);

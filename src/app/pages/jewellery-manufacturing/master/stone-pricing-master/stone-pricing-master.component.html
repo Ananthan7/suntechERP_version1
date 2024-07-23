@@ -47,7 +47,7 @@
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"  (keydown)="lookupKeyPress($event,'sieve_set')"/>
                                                 <master-search class="masterSearch"
-                                                    [MasterSearchData]="sieve_setData"  #overlaysizesetSearch
+                                                    [MasterSearchData]="sieve_setData"  #overlaysievesetSearch
                                                     (newRowClick)="sieve_setDataSelected($event)"
                                                     *ngIf=" viewDisable == false">
                                                 </master-search>

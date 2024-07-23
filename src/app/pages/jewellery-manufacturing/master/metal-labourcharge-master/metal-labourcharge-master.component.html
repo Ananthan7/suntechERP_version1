@@ -102,7 +102,7 @@
                             <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
                                 (focusout)="validateLookupField($event,karatCodeData,'karat')" maxlength="6"
                                 formControlName="karat" oninput="this.value = this.value.toUpperCase()"
-                                (input)="inputValidate($event)" class="text-right" (keydown)="lookupKeyPress($event,'karat')"/>
+                                (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'karat')"/>
                                 <master-search [MasterSearchData]="karatCodeData" (newRowClick)="karatCodeSelected($event)"   #overlaykaratSearch
                                 *ngIf="viewDisable == false" class="masterSearch"></master-search>
                         </mat-form-field>
