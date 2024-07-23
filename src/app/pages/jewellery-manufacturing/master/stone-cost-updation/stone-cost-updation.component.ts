@@ -566,38 +566,72 @@ basesetCurrencyRate() {
     }
   }
 
- 
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'stockcodediv') {
-      this.overlaystockcodedivSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'itemcurrency') {
-      this.overlayitemcurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'basecurrency') {
-      this.overlaybasecurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'shape') {
-      this.overlayshapeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'size') {
-      this.overlaysizeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sieve') {
-      this.overlaysieveSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'color') {
-      this.overlaycolorSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sieve_set') {
-      this.overlaysievesetSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'clarity') {
-      this.overlayclaritySearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'stockcodediv':
+        this.overlaystockcodedivSearch.showOverlayPanel(event);
+        break;
+      case 'itemcurrency':
+        this.overlayitemcurrencySearch.showOverlayPanel(event);
+        break;
+      case 'basecurrency':
+        this.overlaybasecurrencySearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.overlayshapeSearch.showOverlayPanel(event);
+        break;
+      case 'size':
+        this.overlaysizeSearch.showOverlayPanel(event);
+        break;
+      case 'sieve':
+        this.overlaysieveSearch.showOverlayPanel(event);
+        break;
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'sieve_set':
+        this.overlaysievesetSearch.showOverlayPanel(event);
+        break;
+      case 'clarity':
+        this.overlayclaritySearch.showOverlayPanel(event);
+        break;
+      default:
+        // Optional: handle the case where formControlName does not match any case
+        console.warn(`No overlay found for form control: ${formControlName}`);
     }
   }
+  
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'stockcodediv') {
+  //     this.overlaystockcodedivSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'itemcurrency') {
+  //     this.overlayitemcurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'basecurrency') {
+  //     this.overlaybasecurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'shape') {
+  //     this.overlayshapeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'size') {
+  //     this.overlaysizeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sieve') {
+  //     this.overlaysieveSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'color') {
+  //     this.overlaycolorSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sieve_set') {
+  //     this.overlaysievesetSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'clarity') {
+  //     this.overlayclaritySearch.showOverlayPanel(event)
+  //   }
+  // }
   
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

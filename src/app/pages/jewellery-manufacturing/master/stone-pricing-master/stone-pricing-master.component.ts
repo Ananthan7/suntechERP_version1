@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-pricing-master.component.scss']
 })
 export class StonePricingMasterComponent implements OnInit {
-  @ViewChild('overlaysizesetSearch') overlaysizesetSearch!: MasterSearchComponent;
+  @ViewChild('overlaysievesetSearch') overlaysievesetSearch!: MasterSearchComponent;
   @ViewChild('overlayshapeSearch') overlayshapeSearch!: MasterSearchComponent;
   @ViewChild('overlaysievefromSearch') overlaysievefromSearch!: MasterSearchComponent;
   @ViewChild('overlaysievetoSearch') overlaysievetoSearch!: MasterSearchComponent;
@@ -754,7 +754,9 @@ export class StonePricingMasterComponent implements OnInit {
 
     //StonePriceMasterDJ/GetSeivesetLookupDatafill/DMCC?SieveSet=%2B14
     // Construct the API URL with the selected sieve_set value
-    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
+   // let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
+    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
+
 
     let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
       if (result.response) {
@@ -877,39 +879,72 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
- 
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'sieve_set') {
-      this.overlaysizesetSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'shape') {
-      this.overlayshapeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sieve_form') {
-      this.overlaysievefromSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sieve_to') {
-      this.overlaysievetoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sieve_to') {
-      this.overlaysievetoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'color') {
-      this.overlaycolorSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'clarity') {
-      this.overlayclaritySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'size_from') {
-      this.overlaysizefromSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'size_to') {
-      this.overlaysizetoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'currency') {
-      this.overlaycurrencySearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'sieve_set':
+        this.overlaysievesetSearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.overlayshapeSearch.showOverlayPanel(event);
+        break;
+      case 'sieve_form':
+        this.overlaysievefromSearch.showOverlayPanel(event);
+        break;
+      case 'sieve_to':
+        this.overlaysievetoSearch.showOverlayPanel(event);
+        break;
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'clarity':
+        this.overlayclaritySearch.showOverlayPanel(event);
+        break;
+      case 'size_from':
+        this.overlaysizefromSearch.showOverlayPanel(event);
+        break;
+      case 'size_to':
+        this.overlaysizetoSearch.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlaycurrencySearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
+ 
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'sieve_set') {
+  //     this.overlaysizesetSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'shape') {
+  //     this.overlayshapeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sieve_form') {
+  //     this.overlaysievefromSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sieve_to') {
+  //     this.overlaysievetoSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sieve_to') {
+  //     this.overlaysievetoSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'color') {
+  //     this.overlaycolorSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'clarity') {
+  //     this.overlayclaritySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'size_from') {
+  //     this.overlaysizefromSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'size_to') {
+  //     this.overlaysizetoSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'currency') {
+  //     this.overlaycurrencySearch.showOverlayPanel(event)
+  //   }
+  // }
 
 }

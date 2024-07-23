@@ -737,11 +737,20 @@ export class CustomerPriceMasterComponent implements OnInit {
 
  
 
-  showOverleyPanel(event: any, formControlName: string) {
+  // showOverleyPanel(event: any, formControlName: string) {
 
-    if (formControlName == 'customercode') {
-      this.overlaycodeSearch.showOverlayPanel(event)
+  //   if (formControlName == 'customercode') {
+  //     this.overlaycodeSearch.showOverlayPanel(event)
+  //   }
+  // }
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'customercode':
+        this.overlaycodeSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
 
 }

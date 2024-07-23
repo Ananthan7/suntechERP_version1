@@ -661,16 +661,28 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'WorkerAcCode') {
-      this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'NameOfSupervisor') {
-      this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'WorkerAcCode':
+        this.overlayWorkerAcCodeSearch.showOverlayPanel(event);
+        break;
+      case 'NameOfSupervisor':
+        this.overlayNameOfSupervisorSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'WorkerAcCode') {
+  //     this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'NameOfSupervisor') {
+  //     this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
+  //   }
+  // }
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

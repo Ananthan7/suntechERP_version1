@@ -572,14 +572,14 @@ export class AlloyMasterComponent implements OnInit {
         console.log('Setting values for PRICE1');
         this.alloyMastereForm.controls.price1code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
-        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(form.price1Lc,form.currencyRate));
+        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(this.alloyMastereForm.controls.price1Lc.value,form.currencyRate));
         this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(form.price1Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE2') {
         console.log('Setting values for PRICE2');
         this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price2Lc.setValue(this.TagPrice_Calculation(item));
-        this.alloyMastereForm.controls.price2Fc.setValue(this.commonService.CCToFC(form.price2Lc,form.currencyRate));
+        this.alloyMastereForm.controls.price2Fc.setValue(this.commonService.CCToFC(this.alloyMastereForm.controls.price2Lc.value,form.currencyRate));
         this.alloyMastereForm.controls.price2per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price2Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE3') {
@@ -587,7 +587,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price3Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price3Fc.setValue(
-          this.commonService.CCToFC(form.price3Lc,form.currencyRate)
+          this.commonService.CCToFC(this.alloyMastereForm.controls.price3Lc.value,form.currencyRate)
         );
         this.alloyMastereForm.controls.price3per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price3Lc))
       }
@@ -596,7 +596,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price4Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price4Fc.setValue(
-          this.commonService.CCToFC(form.price4Lc,form.currencyRate)
+          this.commonService.CCToFC(this.alloyMastereForm.controls.price4Lc.value,form.currencyRate)
         );
         this.alloyMastereForm.controls.price4per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price4Lc))
       }
@@ -605,7 +605,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price5Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price5Fc.setValue(
-          this.commonService.CCToFC(form.price4Lc,form.currencyRate)
+          this.commonService.CCToFC( this.alloyMastereForm.controls.price5Lc.value,form.currencyRate)
         );
         this.alloyMastereForm.controls.price5per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price5Lc))
       }
@@ -1586,55 +1586,105 @@ export class AlloyMasterComponent implements OnInit {
     }
   }
 
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'code') {
-      this.overlaycodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'costCenter' ) {
-      this.overlaycostCenterSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'type' ) {
-      this.overlaytypeSearch.showOverlayPanel(event)
-    }
-
-    if (formControlName == 'category' ) {
-      this.overlaycategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'subCategory' ) {
-      this.overlaysubCategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'brand' ) {
-      this.overlaybrandSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'color' ) {
-      this.overlaycolorSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'currency' ) {
-      this.overlaycurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'hsncode' ) {
-      this.overlayhsncodeSearch.showOverlayPanel(event)
-    }
-
-    if (formControlName == 'price1code' ) {
-      this.overlayprice1codeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'price2code' ) {
-      this.overlayprice2codeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'price3code' ) {
-      this.overlayprice3codeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'price4code' ) {
-      this.overlayprice4codeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'price5code' ) {
-      this.overlayprice5codeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'vendor' ) {
-      this.overlayvendorSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'code':
+        this.overlaycodeSearch.showOverlayPanel(event);
+        break;
+      case 'costCenter':
+        this.overlaycostCenterSearch.showOverlayPanel(event);
+        break;
+      case 'type':
+        this.overlaytypeSearch.showOverlayPanel(event);
+        break;
+      case 'category':
+        this.overlaycategorySearch.showOverlayPanel(event);
+        break;
+      case 'subCategory':
+        this.overlaysubCategorySearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.overlaybrandSearch.showOverlayPanel(event);
+        break;
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlaycurrencySearch.showOverlayPanel(event);
+        break;
+      case 'hsncode':
+        this.overlayhsncodeSearch.showOverlayPanel(event);
+        break;
+      case 'price1code':
+        this.overlayprice1codeSearch.showOverlayPanel(event);
+        break;
+      case 'price2code':
+        this.overlayprice2codeSearch.showOverlayPanel(event);
+        break;
+      case 'price3code':
+        this.overlayprice3codeSearch.showOverlayPanel(event);
+        break;
+      case 'price4code':
+        this.overlayprice4codeSearch.showOverlayPanel(event);
+        break;
+      case 'price5code':
+        this.overlayprice5codeSearch.showOverlayPanel(event);
+        break;
+      case 'vendor':
+        this.overlayvendorSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'code') {
+  //     this.overlaycodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'costCenter' ) {
+  //     this.overlaycostCenterSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'type' ) {
+  //     this.overlaytypeSearch.showOverlayPanel(event)
+  //   }
+
+  //   if (formControlName == 'category' ) {
+  //     this.overlaycategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'subCategory' ) {
+  //     this.overlaysubCategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'brand' ) {
+  //     this.overlaybrandSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'color' ) {
+  //     this.overlaycolorSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'currency' ) {
+  //     this.overlaycurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'hsncode' ) {
+  //     this.overlayhsncodeSearch.showOverlayPanel(event)
+  //   }
+
+  //   if (formControlName == 'price1code' ) {
+  //     this.overlayprice1codeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price2code' ) {
+  //     this.overlayprice2codeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price3code' ) {
+  //     this.overlayprice3codeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price4code' ) {
+  //     this.overlayprice4codeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'price5code' ) {
+  //     this.overlayprice5codeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'vendor' ) {
+  //     this.overlayvendorSearch.showOverlayPanel(event)
+  //   }
+  // }
 }

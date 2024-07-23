@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-metal-labourcharge-master',
@@ -429,7 +430,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+ this.setInitialValues();
+    console.log(this.content)
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -448,7 +450,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.setFormValues();
     this.grossWt = true;
     this.codeEnable1 = true;
-    this.setInitialValues();
+   
 
 
     this.metallabourMasterForm.controls['stock_code'].enable();
@@ -605,6 +607,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
     this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
     this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
+    this.metallabourMasterForm.controls.metalSelling.setValue(this.content.SELLING_PER);
     this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
     this.metallabourMasterForm.controls.forDesignOnly.setValue(this.viewchangeYorN(this.content.FOR_DESIGN));
     this.metallabourMasterForm.controls.onGrossWt.setValue(this.viewchangeYorN(this.content.ON_GROSSWT));
@@ -613,6 +616,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
     this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
     this.metallabourMasterForm.controls.variance.setValue(this.content.WASTAGE_AMT);
+
+    this.metallabourMasterForm.controls.metalSelling.setValue(this.content.SELLING_PER);
 
 
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
@@ -628,20 +633,20 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.WASTAGE_PER));
 
-        this.metallabourMasterForm.controls.wtFrom.setValue(
-          this.commonService.transformDecimalVB(
-            this.commonService.allbranchMaster?.BMQTYDECIMALS,
-            this.content.CARATWT_FROM));
-    
-        this.metallabourMasterForm.controls.wtTo.setValue(
-          this.commonService.transformDecimalVB(
-            this.commonService.allbranchMaster?.BMQTYDECIMALS,
-            this.content.CARATWT_TO));
-    
+    this.metallabourMasterForm.controls.wtFrom.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARATWT_FROM));
 
-    this.metallabourMasterForm.controls.metalselling_rate.setValue(
-      this.commonService.commaSeperation(this.content.SELLING_RATE)
-    )
+    this.metallabourMasterForm.controls.wtTo.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BMQTYDECIMALS,
+        this.content.CARATWT_TO));
+
+
+    // this.metallabourMasterForm.controls.metalselling_rate.setValue(
+    //   this.commonService.commaSeperation(this.content.SELLING_RATE)
+    // )
 
 
     this.metallabourMasterForm.controls.metalselling_rate.setValue(
@@ -658,15 +663,14 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.COST_RATE));
 
-    this.metallabourMasterForm.controls.metalselling.setValue(
-      this.commonService.commaSeperation(this.content.SELLING_PER)
-    )
+    // this.metallabourMasterForm.controls.metalSelling.setValue(
+    //   this.commonService.commaSeperation(this.content.SELLING_PER)
+    // )
 
-    this.metallabourMasterForm.controls.metalselling.setValue(
+    this.metallabourMasterForm.controls.metalSelling.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.SELLING_PER));
-
   }
 
   viewchangeYorN(e: any) {
@@ -1016,7 +1020,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
               }
             });
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1047,7 +1051,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
               }
             });
           }
-        }   else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1379,36 +1383,72 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'metalDivision') {
-      this.overlaymetalDivisionSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stock_code') {
-      this.overlaystockcodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'metalcurrency') {
-      this.overlaymetalcurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'karat') {
-      this.overlaykaratSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'labourAc') {
-      this.overlaylabourAcSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'color') {
-      this.overlaycolorSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'typecode') {
-      this.overlaytypeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'category') {
-      this.overlaycategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'subCategory') {
-      this.overlaysubCategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'brand') {
-      this.overlaybrandSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'metalDivision':
+        this.overlaymetalDivisionSearch.showOverlayPanel(event);
+        break;
+      case 'stock_code':
+        this.overlaystockcodeSearch.showOverlayPanel(event);
+        break;
+      case 'metalcurrency':
+        this.overlaymetalcurrencySearch.showOverlayPanel(event);
+        break;
+      case 'karat':
+        this.overlaykaratSearch.showOverlayPanel(event);
+        break;
+      case 'labourAc':
+        this.overlaylabourAcSearch.showOverlayPanel(event);
+        break;
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'typecode':
+        this.overlaytypeSearch.showOverlayPanel(event);
+        break;
+      case 'category':
+        this.overlaycategorySearch.showOverlayPanel(event);
+        break;
+      case 'subCategory':
+        this.overlaysubCategorySearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.overlaybrandSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'metalDivision') {
+  //     this.overlaymetalDivisionSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'stock_code') {
+  //     this.overlaystockcodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'metalcurrency') {
+  //     this.overlaymetalcurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'karat') {
+  //     this.overlaykaratSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'labourAc') {
+  //     this.overlaylabourAcSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'color') {
+  //     this.overlaycolorSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'typecode') {
+  //     this.overlaytypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'category') {
+  //     this.overlaycategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'subCategory') {
+  //     this.overlaysubCategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'brand') {
+  //     this.overlaybrandSearch.showOverlayPanel(event)
+  //   }
+  // }
 }

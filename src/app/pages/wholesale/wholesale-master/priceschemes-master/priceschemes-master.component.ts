@@ -387,6 +387,7 @@ export class PriceschemesMasterComponent implements OnInit {
           if (result.status == "Success") {
             this.priceSchemaMasterForm.controls.priceCode.setValue('')
             this.renderer.selectRootElement('#code')?.focus();
+            this.commonService.toastErrorByMsgId('Code Already Exsist')
           }
         }, err => {
           this.commonService.toastErrorByMsgId('MSG1531')
