@@ -1,17 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-process-transfer-new-detail',
   templateUrl: './process-transfer-new-detail.component.html',
   styleUrls: ['./process-transfer-new-detail.component.scss']
 })
 export class ProcessTransferNewDetailComponent implements OnInit {
+  @ViewChild('overlayjobno') public overlayjobno!: MasterSearchComponent;
+  @ViewChild('overlayprocessFrom') public overlayprocessFrom!: MasterSearchComponent;
+  @ViewChild('overlayprocessTo') public overlayprocessTo!: MasterSearchComponent;
+  @ViewChild('overlayworkerFrom') public overlayworkerFrom!: MasterSearchComponent;
+  @ViewChild('overlayworkerTo') public overlayworkerTo!: MasterSearchComponent;
+  @ViewChild('overlayMETAL_processFrom') public overlayMETAL_processFrom!: MasterSearchComponent;
+  @ViewChild('overlayMETAL_processTo') public overlayMETAL_processTo!: MasterSearchComponent;
+  @ViewChild('overlayMETAL_workerFrom') public overlayMETAL_workerFrom!: MasterSearchComponent;
+  @ViewChild('overlayMETAL_workerTo') public overlayMETAL_workerTo!: MasterSearchComponent;
   minEndDate: string = '';
   @Input() content!: any;
   divisionMS: any = 'ID';
@@ -23,6 +32,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
   branchCode: String = this.comService.branchCode;
   yearMonth: String = this.comService.yearSelected;
   MetalorProcessFlag: string = 'Process';
+  viewMode: boolean = false;
   designType: string = 'DIAMOND';
   private subscriptions: Subscription[] = [];
   jobNoSearch: MasterSearchModel = {
@@ -160,7 +170,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
     METAL_ToPureWt: [''],
     METAL_ScrapPureWt: [''],
     METAL_BalPureWt: [''],
-    
+
   });
 
 
@@ -222,12 +232,12 @@ export class ProcessTransferNewDetailComponent implements OnInit {
     if (startDateValue) {
       // Enable the end date control
       this.processTransferdetailsForm.controls['enddate'].enable();
-  
+
       // Set the minimum end date to the selected start date
       this.minEndDate = startDateValue;
     }
-  
-}
+
+  }
 
   setAllInitialValues() {
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
@@ -265,9 +275,10 @@ export class ProcessTransferNewDetailComponent implements OnInit {
     this.processTransferdetailsForm.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
     this.processTransferdetailsForm.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
   }
-  
+
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
+    this.showOverleyPanel(event,'jobno')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -299,9 +310,13 @@ export class ProcessTransferNewDetailComponent implements OnInit {
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.processTransferdetailsForm.controls.jobno.setValue('')
+            this.showOverleyPanel(event,'jobno')
             return
           }
         } else {
+          this.overlayjobno.closeOverlayPanel()
+          this.processTransferdetailsForm.controls.jobno.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -466,6 +481,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
   }
   /**USE: Process Master Validate */
   processMasterValidate(event: any, flag: string): void {
+    this.showOverleyPanel(event, 'processTo')
     if (event.target.value == '') return
     event.target.value = (event.target.value).toUpperCase()
     let API: string = `ProcessMasterDj/GetProcessMasterDjWithProcessCode/${event.target.value}`
@@ -476,9 +492,11 @@ export class ProcessTransferNewDetailComponent implements OnInit {
         if (result.status == "Success" && result.response) {
           let data = result.response
           this.setProcessCodeData(data.PROCESS_CODE, flag)
-        } else {
-          this.setProcessCodeData('', flag)
-          this.comService.toastErrorByMsgId('MSG1747')
+        }  else {
+          this.overlayprocessTo.showOverlayPanel(event)
+          this.showOverleyPanel(event, 'processTo')
+          this.processTransferdetailsForm.controls.processTo.setValue('')
+          this.comService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
@@ -498,12 +516,12 @@ export class ProcessTransferNewDetailComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.processFrom.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.PROCESSDESC.setValue(event.Description)
-   
+
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.processTo.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.processToDescription.setValue(event.Description)
-   
+
 
   }
 
@@ -527,7 +545,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
   metalworkerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_workerFrom.setValue(event.WORKER_CODE)
   }
-  
+
   metalworkerCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_workerTo.setValue(event.WORKER_CODE)
     this.processTransferdetailsForm.controls.METAL_workerToDescription.setValue(event.DESCRIPTION)
@@ -585,6 +603,74 @@ export class ProcessTransferNewDetailComponent implements OnInit {
   close(data?: any) {
     this.activeModal.close(data);
   }
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.processTransferdetailsForm.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'METAL_workerTo':
+        this.overlayMETAL_workerTo.showOverlayPanel(event);
+        break;
+      case 'METAL_workerFrom':
+        this.overlayMETAL_workerFrom.showOverlayPanel(event);
+        break;
+      case 'METAL_processTo':
+        this.overlayMETAL_processTo.showOverlayPanel(event);
+        break;
+      case 'METAL_processFrom':
+        this.overlayMETAL_processFrom.showOverlayPanel(event);
+        break;
+      case 'workerTo':
+        this.overlayworkerTo.showOverlayPanel(event);
+        break;
+      case 'workerFrom':
+        this.overlayworkerFrom.showOverlayPanel(event);
+        break;
+      case 'processTo':
+        this.overlayprocessTo.showOverlayPanel(event);
+        break;
+        case 'processFrom':
+          this.overlayprocessFrom.showOverlayPanel(event);
+          break;
+        case 'jobno':
+          this.overlayjobno.showOverlayPanel(event);
+          break;
+      default:
+
+    }
+  }
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.processTransferdetailsForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'METAL_workerTo' || FORMNAME === 'METAL_workerFrom' ||  FORMNAME === 'METAL_processTo' || FORMNAME === 'METAL_processFrom' || FORMNAME === 'workerTo' || FORMNAME === 'processTo' || FORMNAME === 'processFrom' || FORMNAME === 'jobno') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

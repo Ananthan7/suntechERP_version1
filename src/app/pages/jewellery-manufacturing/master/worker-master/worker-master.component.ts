@@ -661,22 +661,7 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
-  WorkerAcCodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'WorkerAcCode')
-      return
-    }
-  }
-  
-  NameOfSupervisorValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'NameOfSupervisor')
-      return
-    }
-  }
-  
+
   showOverleyPanel(event: any, formControlName: string) {
 
     if (formControlName == 'WorkerAcCode') {

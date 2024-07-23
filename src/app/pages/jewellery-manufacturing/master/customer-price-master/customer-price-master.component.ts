@@ -735,13 +735,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   }
 
-  codeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'customercode')
-      return
-    }
-  }
+ 
 
   showOverleyPanel(event: any, formControlName: string) {
 

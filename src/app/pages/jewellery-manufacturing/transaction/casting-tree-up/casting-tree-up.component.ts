@@ -385,9 +385,9 @@ export class CastingTreeUpComponent implements OnInit {
     console.log(e);
     this.castingTreeUpFrom.controls.karatCode.setValue(e['Karat Code']);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
   addTableData() {
@@ -767,31 +767,34 @@ calcualteBaseMode(event: any) {
   this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
 }
 showOverleyPanel(event: any, formControlName: string) {
-  if (this.castingTreeUpFrom.value[formControlName] != '') return
+  if (this.castingTreeUpFrom.value[formControlName] != '') return;
 
-  if (formControlName == 'processCode') {
-    this.overlayProcesscode.showOverlayPanel(event)
-  }
-  if (formControlName == 'cylinder') {
-    this.overlaycylinder.showOverlayPanel(event)
-  }
-  if (formControlName == 'worker') {
-    this.overlayworker.showOverlayPanel(event)
-  }
-  if (formControlName == 'enteredBy') {
-    this.overlayenteredBy.showOverlayPanel(event)
-  }
-  if (formControlName == 'karatCode') {
-    this.overlaykaratCode.showOverlayPanel(event)
-  }
-  if (formControlName == 'color') {
-    this.overlaycolor.showOverlayPanel(event)
+  switch (formControlName) {
+    case 'processCode':
+      this.overlayProcesscode.showOverlayPanel(event);
+      break;
+    case 'cylinder':
+      this.overlaycylinder.showOverlayPanel(event);
+      break;
+    case 'worker':
+      this.overlayworker.showOverlayPanel(event);
+      break;
+    case 'enteredBy':
+      this.overlayenteredBy.showOverlayPanel(event);
+      break;
+    case 'karatCode':
+      this.overlaykaratCode.showOverlayPanel(event);
+      break;
+    case 'color':
+      this.overlaycolor.showOverlayPanel(event);
+      break;
+    default:
   }
 }
 
+
 validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  this.showOverleyPanel(event, FORMNAME)
   if (event.target.value == '' || this.viewMode == true) return
   let param = {
     LOOKUPID: LOOKUPDATA.LOOKUPID,

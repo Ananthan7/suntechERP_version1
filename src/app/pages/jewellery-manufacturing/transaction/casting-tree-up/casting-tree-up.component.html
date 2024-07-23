@@ -77,7 +77,7 @@
                 <mat-form-field
                   style="width: 96%; margin-left:-22px; margin-top: -3px;">
                   <input type="text" matInput formControlName="processCode"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)"
+                    [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'processCode')"  
                     (focusout)="validateLookupField($event,processCodeData,'processCode')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"  #overlayProcesscode
@@ -94,7 +94,7 @@
                 <mat-form-field
                   style="width: 80%;margin-left: -9px; margin-top:-4px;">
                   <input type="text" matInput formControlName="cylinder"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" 
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'cylinder')"   
                     (focusout)="validateLookupField($event,cylinderCodeData,'cylinder')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="cylinderCodeData" #overlaycylinder
@@ -157,7 +157,7 @@
                 <mat-form-field
                   style="width: 96%; margin-left:-22px; margin-top: -3px;">
                   <input type="text" matInput formControlName="worker"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" 
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'worker')"  
                     (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="WorkerCodeData" #overlayworker
@@ -229,7 +229,7 @@
                 <mat-form-field
                   style="width: 93%; margin-left:-23px; margin-top: -6px;">
                   <input type="text" matInput formControlName="enteredBy"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" 
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'enteredBy')" 
                     (focusout)="validateLookupField($event,salesmanCodeData,'enteredBy')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="salesmanCodeData" #overlayenteredBy
@@ -247,7 +247,7 @@
                 <mat-form-field
                   style="width: 96%; margin-left:-22px; margin-top: -3px;">
                   <input type="text" matInput formControlName="karatCode"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)"
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'karatCode')" 
                     (focusout)="validateLookupField($event,karatCodeData,'karatCode')">
                 </mat-form-field>
                 <master-search [MasterSearchData]="karatCodeData" #overlaykaratCode
@@ -316,7 +316,7 @@
                 <mat-form-field
                   style="width:96%; margin-left:-22px; margin-top: -3px;">
                   <input type="text" matInput formControlName="color"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)" 
+                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'color')" 
                     (focusout)="validateLookupField($event,colorData,'color')"/>
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData" *ngIf="!viewMode" #overlaycolor

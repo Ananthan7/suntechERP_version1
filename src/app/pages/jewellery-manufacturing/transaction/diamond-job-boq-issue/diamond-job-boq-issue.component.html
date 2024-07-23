@@ -59,7 +59,7 @@
                                 <mat-form-field style="width: 85%;">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'enteredBy')"
                                         (focusout)="validateLookupField($event,user,'enteredBy')"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="user" #overlayenteredBy
@@ -85,7 +85,7 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         formControlName="kariggerType"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'kariggerType')"
                                         (focusout)="validateLookupField($event,locationCodeData,'kariggerType')"/>
                                 </mat-form-field>
                                 <master-search #overlaykariggerType> </master-search>
@@ -128,7 +128,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'location')"
                                         (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                                 </mat-form-field>
                                 <master-search
@@ -168,7 +168,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="metalRateType"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'metalRateType')"
                                         (focusout)="validateLookupField($event,rateTypeMasterData,'metalRateType')"/>
                                 </mat-form-field>
                                 <master-search

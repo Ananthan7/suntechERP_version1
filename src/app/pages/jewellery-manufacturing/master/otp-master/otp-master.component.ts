@@ -237,13 +237,6 @@ export class OtpMasterComponent implements OnInit {
     }
   }
 
-  branchValidate(event: any) {
-    
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'branch')
-      return
-    }
-  }
   showOverleyPanel(event: any, formControlName: string) {
 
     if (formControlName == 'branch') {

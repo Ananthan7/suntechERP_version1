@@ -128,7 +128,7 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode ||codeEnableDiamond" maxlength="6"
                 formControlName="size_from" (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')"
-                (change)="sizeFromToValidate('size_from')" class="text-right"  (keydown)="lookupKeyPress($event,'size_from')"/>
+                (change)="sizeFromToValidate('size_from')" (keydown)="lookupKeyPress($event,'size_from')"/>
                 <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"   #overlaysizefromSearch
                 *ngIf=" viewDisable == false" class="masterSearch"></master-search>
             </mat-form-field>
@@ -139,7 +139,7 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || codeEnableDiamond"
                 (focusout)="validateLookupField($event,labouracCodeData,'labour_ac')" maxlength="6"
-                formControlName="labour_ac" class="text-right"  (keydown)="lookupKeyPress($event,'labour_ac')"/>
+                formControlName="labour_ac" (keydown)="lookupKeyPress($event,'labour_ac')"/>
                 <master-search [MasterSearchData]="labouracCodeData" (newRowClick)="labouracSelected($event)" class="masterSearch"  #overlaylabouracSearch
                 *ngIf=" viewDisable == false"></master-search>
             </mat-form-field>
@@ -152,7 +152,7 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput  maxlength="6" oninput="this.value = this.value.toUpperCase()"
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
-                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode" class="text-right"  (keydown)="lookupKeyPress($event,'size_to')"/>
+                (change)="sizeFromToValidate('size_to')" [readonly]="viewMode" (keydown)="lookupKeyPress($event,'size_to')"/>
                 <master-search [MasterSearchData]="sizeToCodeData" (newRowClick)="sizeToCodeSelected($event)"   #overlaysizetoSearch
                 *ngIf="!viewDisable" class="masterSearch"></master-search>
             </mat-form-field>
@@ -186,7 +186,7 @@
               <input type="text" matInput [readonly]="viewMode" 
                 oninput="this.value = this.value.toUpperCase()"
                 (focusout)="validateLookupField($event, sieveCodeData, 'sieve')" maxlength="6"
-                formControlName="sieve" class="text-right" (keydown)="lookupKeyPress($event,'sieve')"/>
+                formControlName="sieve" (keydown)="lookupKeyPress($event,'sieve')"/>
                 <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)" class="masterSearch"  #overlaysieveSearch
                 *ngIf="!viewDisable"></master-search>
             </mat-form-field>
@@ -204,8 +204,7 @@
           <label for="input" class="col-sm-2 col-form-label" id="ID016">Sieve Desc :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" readonly formControlName="sieve_desc" 
-              class="text-right"/>
+              <input type="text" matInput  oninput="this.value = this.value.toUpperCase()" readonly formControlName="sieve_desc" />
             </mat-form-field>
           </div>
           <label for="input" id="ID017" class="col-sm-2 col-form-label">Selling % *:</label>

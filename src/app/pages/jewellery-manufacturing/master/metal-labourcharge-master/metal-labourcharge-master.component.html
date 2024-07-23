@@ -41,7 +41,7 @@
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
                                 formControlName="stock_code" appNoEmptySpace   (keydown)="lookupKeyPress($event,'stock_code')"/>
                                 <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"  #overlaystockcodeSearch
-                                *ngIf="viewDisable  == false || stockcodeDisable  == false" class="masterSearch"   ></master-search>
+                                *ngIf="viewDisable  == false " class="masterSearch"   ></master-search>
                         </mat-form-field>
                     </div>
                 </div>

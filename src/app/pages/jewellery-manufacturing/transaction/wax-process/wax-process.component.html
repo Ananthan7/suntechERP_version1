@@ -6,7 +6,9 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
+  [isViewPost]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="waxprocessFrom">
@@ -63,7 +65,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="processcode"
-                  (keydown)="lookupKeyPress($event,'processcode')" 
+                    (keydown)="lookupKeyPress($event,'processcode')"
                     (focusout)="validateLookupField($event,ProcessCodeData,'processcode')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="ProcessCodeData"
@@ -79,7 +81,7 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="workercode"
                     (focusout)="validateLookupField($event,WorkerCodeData,'workercode')"
-                    (keydown)="lookupKeyPress($event,'workercode')"  />
+                    (keydown)="lookupKeyPress($event,'workercode')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="WorkerCodeData"
                   #overlayworkercodeSearch
@@ -94,7 +96,7 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="enteredBy"
                     (focusout)="validateLookupField($event,user,'enteredBy')"
-                    (keydown)="lookupKeyPress($event,'enteredBy')" >
+                    (keydown)="lookupKeyPress($event,'enteredBy')">
                 </mat-form-field>
                 <master-search [MasterSearchData]="user" #overlayenteredBySearch
                   (newRowClick)="userDataSelected($event)">

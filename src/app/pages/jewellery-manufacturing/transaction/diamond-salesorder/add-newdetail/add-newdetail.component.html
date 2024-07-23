@@ -45,12 +45,13 @@
                             <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput readonly
-                                        (keypress)="lookupKeyPress($event)"
-                                        formControlName="designDescription" />
+                                    (keydown)="lookupKeyPress($event,'designDescription')"
+                                        formControlName="designDescription" 
+                                        (focusout)="validateLookupField($event,DesignCodeData,'designDescription')"/>
                                 </mat-form-field>
                                 <master-search
                                     *ngIf="codeSearchFlag == 'design'"
-                                    [MasterSearchData]="DesignCodeData"
+                                    [MasterSearchData]="DesignCodeData" #overlydesignDescription
                                     (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
                         </div>
@@ -89,10 +90,11 @@
                             <div class="col-md-5">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput readonly
-                                        (keypress)="lookupKeyPress($event)"
-                                        formControlName="StockCodeDesc" />
+                                    (keydown)="lookupKeyPress($event,'StockCodeDesc')"
+                                        formControlName="StockCodeDesc" 
+                                        (focusout)="validateLookupField($event,stockCodeData,'StockCodeDesc')" />
                                 </mat-form-field>
-                                <master-search *ngIf="codeSearchFlag == 'stock'"
+                                <master-search *ngIf="codeSearchFlag == 'stock'" #overlayStockCodeDesc
                                     [MasterSearchData]="stockCodeData"
                                     (newRowClick)="mainStockCodeSelected($event)">
                                 </master-search>
@@ -873,12 +875,13 @@
                                         <div class="d-flex col-md-3">
                                             <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
-                                                    (keypress)="lookupKeyPress($event)"
-                                                    ormControlName="COLOR" />
+                                                (keydown)="lookupKeyPress($event,'COLOR')"
+                                                    ormControlName="COLOR" 
+                                                    (focusout)="validateLookupField($event,colorCodeData,'COLOR')"/>
                                             </mat-form-field>
                                             <div class="pt-3">
                                                 <master-search
-                                                    [MasterSearchData]="colorCodeData"
+                                                    [MasterSearchData]="colorCodeData" #overlayCOLOR
                                                     (newRowClick)="metalColorCodeSelected($event)">
                                                 </master-search>
                                             </div>
@@ -899,12 +902,13 @@
                                         <div class="d-flex col-md-3">
                                             <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
-                                                    (keypress)="lookupKeyPress($event)"
-                                                    formControlName="KARAT_CODE" />
+                                                    (keypress)="lookupKeyPress($event)"  (keydown)="lookupKeyPress($event,'KARAT_CODE')"
+                                                    formControlName="KARAT_CODE" 
+                                                    (focusout)="validateLookupField($event,karatCodeData,'KARAT_CODE')"/>
                                             </mat-form-field>
                                             <div class="pt-3">
                                                 <master-search
-                                                    [MasterSearchData]="karatCodeData"
+                                                    [MasterSearchData]="karatCodeData" #overlaykaratcode
                                                     (newRowClick)="karatCodeSelected($event)">
                                                 </master-search>
                                             </div>
@@ -977,12 +981,13 @@
                                         <div class="d-flex col-md-3">
                                             <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
-                                                    (keypress)="lookupKeyPress($event)"
-                                                    formControlName="SIZE" />
+                                                (keydown)="lookupKeyPress($event,'SIZE')"
+                                                    formControlName="SIZE" 
+                                                    (focusout)="validateLookupField($event,sizeCodeData,'SIZE')"/>
                                             </mat-form-field>
                                             <div class="pt-3">
                                                 <master-search
-                                                    [MasterSearchData]="sizeCodeData"
+                                                    [MasterSearchData]="sizeCodeData" #overlaySIZE
                                                     (newRowClick)="sizeCodeSelected($event)">
                                                 </master-search>
                                             </div>

@@ -566,69 +566,7 @@ basesetCurrencyRate() {
     }
   }
 
-  stockcodedivValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'stockcodediv')
-      return
-    }
-  }
-
-  itemcurrencyValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, ' itemcurrency')
-      return
-    }
-  }
-
-  basecurrencyValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, ' basecurrency')
-      return
-    }
-  }
-
-  shapeValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'shape')
-      return
-    }
-  }
-  
-  sizeValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'size')
-      return
-    }
-  }
-    
-  sieveValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sieve')
-      return
-    }
-  }
-
-  sievesetValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sieve_set')
-      return
-    }
-  }
-    
-    
-  colorValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'color')
-      return
-    }
-  }
-      
-  clarityValidate(event: any) {
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'clarity')
-      return
-    }
-  }
+ 
 
   showOverleyPanel(event: any, formControlName: string) {
 
