@@ -729,7 +729,7 @@
                             </dxo-texts>
                           </dxo-editing>
 
-                          <dxo-selection mode="single"></dxo-selection>
+                          <!-- <dxo-selection mode="single"></dxo-selection> -->
                           <dxi-column dataField="sn_no" [width]="80" caption="SL No." [allowEditing]="false"
                             alignment="center">
                           </dxi-column>
@@ -830,7 +830,7 @@
                             <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
                             </dxo-texts>
                           </dxo-editing>
-                          <dxo-selection mode="single"></dxo-selection>
+                          <!-- <dxo-selection mode="single"></dxo-selection> -->
                           <dxi-column dataField="sn_no" [width]="70" caption="SL No." [allowEditing]="false">
                           </dxi-column>
                           <dxi-column dataField="stock_code" [width]="120" [allowEditing]="false">
@@ -916,7 +916,7 @@
                             <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
                             </dxo-texts>
                           </dxo-editing>
-                          <dxo-selection mode="single"></dxo-selection>
+                          <!-- <dxo-selection mode="single"></dxo-selection> -->
                           <dxi-column dataField="sn_no" [width]="100" caption="SL No." [allowEditing]="false">
                           </dxi-column>
                           <dxi-column dataField="stock_code" [width]="120" [allowEditing]="false">
@@ -1698,7 +1698,7 @@
                 <mat-form-field class="example-full-width">
                   <mat-label>Branch</mat-label>
                   <input type="text" matInput formControlName="giftBranch" id="giftBranch"
-                    (focusout)="changeBranch($event)" [readonly]="viewOnly" />
+                    (focusout)="changeBranch($event)" readonly />
                   <mat-error *ngIf="
                       giftReceiptForm.controls.giftBranch.hasError('required')
                     ">
@@ -1712,7 +1712,7 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Voc No.</mat-label>
+                  <mat-label>Gift No.</mat-label>
                   <input type="text" matInput formControlName="giftVocNo" id="giftVocNo"
                     (change)="changeGiftVocNo($event)" [readonly]="viewOnly" />
                   <mat-error *ngIf="
@@ -1726,7 +1726,7 @@
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
                   <input type="text" class="st_txt_right" matInput formControlName="giftAmtFC" id="giftAmtFC"
-                    [placeholder]="zeroAmtVal" [readonly]="viewOnly" AmountDecimalInput />
+                    [placeholder]="zeroAmtVal" (change)="changeGiftVoucherAmount($event)" [readonly]="viewOnly" AmountDecimalInput />
                   <mat-error *ngIf="
                       giftReceiptForm.controls.giftAmtFC.hasError('required')
                     ">
@@ -2515,7 +2515,7 @@
               <mat-form-field dateFormat3>
                 <mat-label>Date Of Birth</mat-label>
                 <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
-                  formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
+                  formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly"  DateValidation/>
                 <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
 
@@ -3084,7 +3084,7 @@
                     <textarea class="form-control" style="
                         height: 140px;
                         border: 2px solid #bebebe !important;
-                      " formControllName="fcn_tab_details" [readonly]="viewOnly"></textarea>
+                      " formControlName="fcn_tab_details" readonly></textarea>
                   </div>
                 </div>
 
