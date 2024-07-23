@@ -227,6 +227,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     GrossWeightTo: [''],
     Balance_WT: [''],
     stockCode: [''],
+    STOCK_DESCRIPTION: [''],
     scrapWeight: [''],
     location: [''],
     lossQty: [''],
@@ -259,6 +260,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     GAIN_WT: [''],
     GAIN_PURE_WT: [''],
     METAL_STOCK_CODE: [''],
+    METAL_STOCK_DESCRIPTION: [''],
     EXCLUDE_TRANSFER_WT: [false],
     //METAL DETAILS STARTS
     METAL_STD_LOSS: [''],
@@ -1616,6 +1618,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   metalStockCodeSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_ToStockCode.setValue(event.STOCK_CODE)
+    this.processTransferdetailsForm.controls.METAL_STOCK_DESCRIPTION.setValue(event.DESCRIPTION)
     if (event.STOCK_CODE) {
       this.locationSearchFlag = true;
     }
@@ -1623,6 +1626,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   stockCodeSelected(event: any) {
     this.processTransferdetailsForm.controls.stockCode.setValue(event.STOCK_CODE)
+    this.processTransferdetailsForm.controls.STOCK_DESCRIPTION.setValue(event.DESCRIPTION)
     if (event.STOCK_CODE) {
       this.locationSearchFlag = true;
     }
@@ -1943,7 +1947,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "METALSTONE": this.commonService.nullToString(element.METALSTONE),
         "DIVCODE": this.commonService.nullToString(element.DIVCODE),
         "STOCK_CODE": this.commonService.nullToString(element.STOCK_CODE),
-        "STOCK_DESCRIPTION": this.commonService.nullToString(element.STOCK_DESCRIPTION),
+        "STOCK_DESCRIPTION": this.commonService.nullToString(this.designType=='METAL'?element.METAL_STOCK_DESCRIPTION:element.STOCK_DESCRIPTION),
         "COLOR": this.commonService.nullToString(element.COLOR),
         "CLARITY": this.commonService.nullToString(element.CLARITY),
         "SHAPE": this.commonService.nullToString(element.SHAPE),

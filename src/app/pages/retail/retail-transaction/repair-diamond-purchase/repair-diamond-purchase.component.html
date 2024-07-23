@@ -6,7 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header 
+*ngIf="this.content?.FLAG != 'VIEW'"
+(saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid ">
     <form [formGroup]="repairdiapurchaseForm">
         <mat-tab-group [(selectedIndex)]="selectedTabIndex">
@@ -580,7 +582,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                        <dx-data-grid id="gridContainer" [dataSource]="tabledata2" [showBorders]="true"
                             [showColumnLines]="true" [showRowLines]="true" class="mt-3">
                             <dxo-editing mode="cell" [allowUpdating]="!viewMode">
                             </dxo-editing>
