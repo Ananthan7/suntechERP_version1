@@ -174,9 +174,9 @@ export class WaxProcessReturnComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -437,30 +437,34 @@ export class WaxProcessReturnComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.waxprocessFrom.value[formControlName] != '') return
-    if (formControlName == 'process') {
-      this.overlayprocessCodeSearch.showOverlayPanel(event)
+    if (this.waxprocessFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'process':
+        this.overlayprocessCodeSearch.showOverlayPanel(event);
+        break;
+      case 'toprocess':
+        this.overlaytoprocessSearch.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'toworker':
+        this.overlaytoworkerSearch.showOverlayPanel(event);
+        break;
+      case 'enteredBy':
+        this.overlayenteredBySearch.showOverlayPanel(event);
+        break;
+      case 'waxcode':
+        this.overlaywaxcodeSearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unexpected form control name: ${formControlName}`);
     }
-    if (formControlName == 'toprocess') {
-      this.overlaytoprocessSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'toworker') {
-      this.overlaytoworkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'waxcode') {
-      this.overlaywaxcodeSearch.showOverlayPanel(event)
-    }
-  }
+  }  
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

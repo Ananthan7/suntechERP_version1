@@ -59,9 +59,10 @@
                                 <mat-form-field style="width: 85%;">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'enteredBy')"
+                                        (focusout)="validateLookupField($event,user,'enteredBy')"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="user"
+                                <master-search [MasterSearchData]="user" #overlayenteredBy
                                     (newRowClick)="userDataSelected($event)">
                                 </master-search>
                             </div>
@@ -84,9 +85,10 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         formControlName="kariggerType"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'kariggerType')"
+                                        (focusout)="validateLookupField($event,locationCodeData,'kariggerType')"/>
                                 </mat-form-field>
-                                <master-search> </master-search>
+                                <master-search #overlaykariggerType> </master-search>
                             </div>
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
@@ -126,10 +128,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'location')"
+                                        (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="locationCodeData"
+                                    [MasterSearchData]="locationCodeData" #overlaylocation
                                     (newRowClick)="locationCodeSelected($event)">
                                 </master-search>
                             </div>
@@ -165,10 +168,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="metalRateType"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'metalRateType')"
+                                        (focusout)="validateLookupField($event,rateTypeMasterData,'metalRateType')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="rateTypeMasterData"
+                                    [MasterSearchData]="rateTypeMasterData" #overlaymetalRateType
                                     (newRowClick)="rateTypeSelected($event)">
                                 </master-search>
                             </div>

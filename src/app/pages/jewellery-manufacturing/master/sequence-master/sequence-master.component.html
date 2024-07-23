@@ -57,7 +57,7 @@
                                     (change)="PrefixCodeChange($event)"
                                     (focusout)="validateLookupField($event,sequenceMasterData,'sequencePrefixCode')"
                                     formControlName="sequencePrefixCode"
-                                    UpperCaseDirective  (keypress)="lookupKeyPress($event)"  (focusout)="sequencePrefixCodeValidate($event)"/>
+                                    UpperCaseDirective   (keydown)="lookupKeyPress($event,'sequencePrefixCode')"/>
                                     <master-search *ngIf="!viewMode" class="masterSearch"
                                         [MasterSearchData]="sequenceMasterData" #overlaysequencePrefixCodeSearch
                                         (newRowClick)="sequencePrefixCodeSelected($event)">
@@ -225,7 +225,7 @@
                                         [(ngModel)]="data['STD_TIME']"
                                         (change)="stdTimeChanged(data)"
                                         class="text-right"
-                                        [readonly]="calculateProcessDisable" />
+                                        [readonly]="calculateProcessDisable || viewMode" />
                                 </td>
                                 <td>
                                     <input type="number" style="width: 100%;"
@@ -233,7 +233,7 @@
                                         [(ngModel)]="data['MAX_TIME']"
                                         (change)="maxTimeChanged(data)"
                                         class="text-right"
-                                        [readonly]="calculateProcessDisable" />
+                                        [readonly]="calculateProcessDisable|| viewMode" />
                                 </td>
                                 <td>
                                     <input type="checkbox"

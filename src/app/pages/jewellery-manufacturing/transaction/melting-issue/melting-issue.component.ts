@@ -246,7 +246,7 @@ export class MeltingIssueComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-   this.showOverleyPanel(event,FORMNAME)
+  
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -331,20 +331,25 @@ export class MeltingIssueComponent implements OnInit {
     }
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.meltingIssueFrom.value[formControlName] != '')return
-    if (formControlName == 'meltingtype') {
-      this.overlayMeltingType.showOverlayPanel(event)
-    }
-    if (formControlName == 'jobno') {
-      this.overlayjobNoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'processcode') {
-      this.overlayprocesscode.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworkercode.showOverlayPanel(event)
+    if (this.meltingIssueFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'meltingtype':
+        this.overlayMeltingType.showOverlayPanel(event);
+        break;
+      case 'jobno':
+        this.overlayjobNoSearch.showOverlayPanel(event);
+        break;
+      case 'processcode':
+        this.overlayprocesscode.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkercode.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
   minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
@@ -480,9 +485,9 @@ export class MeltingIssueComponent implements OnInit {
   close1(data: any = null) {
     this.modalService.dismissAll(data);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -975,7 +980,7 @@ export class MeltingIssueComponent implements OnInit {
    this.showOverleyPanel(event,'meltingtype')
   
     if (!meltingTypeValue) {
-      this.commonService.toastErrorByMsgId('MSG1531');
+      // this.commonService.toastErrorByMsgId('MSG1531');
       return;
     }
 

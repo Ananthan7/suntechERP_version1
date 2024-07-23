@@ -1525,76 +1525,22 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
     }
 
   }
-
-  lookupKeyPress(event: KeyboardEvent) {
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
 
-  divisionsValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'divisions')
-      return
-    }
-  }
-
-  currencyValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'currency')
-      return
-    }
-  }
-
-  shapeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'shape')
-      return
-    }
-  }
-
-  processValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'process')
-      return
-    }
-  }
-
-  sizefromValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sizefrom')
-      return
-    }
-  }
-
-  labouracValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'labourac')
-      return
-    }
-  }
-
-  sizetoValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sizeto')
-      return
-    }
-  }
-  
-  sieveValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sieve')
-      return
-    }
-  }
+ 
 
   showOverleyPanel(event: any, formControlName: string) {
 

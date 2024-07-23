@@ -248,11 +248,12 @@ export class TreeDownComponent implements OnInit {
     console.log(e);
     this.treeDownFrom.controls.karatCode.setValue(e['Karat Code']);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
+
 
   addTableData() {
 
@@ -637,36 +638,40 @@ export class TreeDownComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.treeDownFrom.value[formControlName] != '') return
-    if (formControlName == 'processCode') {
-      this.overlayprocessCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'cylinder') {
-      this.overlaycylinderSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'toProcess') {
-      this.overlaytoProcessSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'karatCode') {
-      this.overlaykaratCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'toWorker') {
-      this.overlaytoWorkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'color') {
-      this.overlaycolorSearch.showOverlayPanel(event)
+    if (this.treeDownFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'processCode':
+        this.overlayprocessCodeSearch.showOverlayPanel(event);
+        break;
+      case 'cylinder':
+        this.overlaycylinderSearch.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'toProcess':
+        this.overlaytoProcessSearch.showOverlayPanel(event);
+        break;
+      case 'enteredBy':
+        this.overlayenteredBySearch.showOverlayPanel(event);
+        break;
+      case 'karatCode':
+        this.overlaykaratCodeSearch.showOverlayPanel(event);
+        break;
+      case 'toWorker':
+        this.overlaytoWorkerSearch.showOverlayPanel(event);
+        break;
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

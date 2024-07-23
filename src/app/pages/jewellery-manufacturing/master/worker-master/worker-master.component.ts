@@ -645,28 +645,23 @@ export class WorkerMasterComponent implements OnInit {
     printWindow.print();
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
 
-  WorkerAcCodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'WorkerAcCode')
-      return
-    }
-  }
-  
-  NameOfSupervisorValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'NameOfSupervisor')
-      return
-    }
-  }
-  
+
   showOverleyPanel(event: any, formControlName: string) {
 
     if (formControlName == 'WorkerAcCode') {

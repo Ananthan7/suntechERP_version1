@@ -513,17 +513,19 @@ export class JobcardComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.content = this.jobCardFrom.value.jobno;
+
   }
 
   openaddstickerprint() {
-
+console.log( this.content);
     const modalRef: NgbModalRef = this.modalService.open(JobStickerPrintComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = this.content;
+    modalRef.componentInstance.content = this.jobCardFrom.value.jobno;
   }
 
 
@@ -1634,173 +1636,7 @@ export class JobcardComponent implements OnInit {
     }
   }
 
-  orderTypeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'orderType')
-      return
-    }
-  }
-
-  designcodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'designcode')
-      return
-    }
-  }
-
-  customerValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'customer')
-      return
-    }
-  }
-
-  costcodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event && event.target.value == '') {
-      this.showOverleyPanel(event, 'costcode')
-      return
-    }
-  }
-  prefixValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'prefix')
-      return
-    }
-  }
-
-  karatValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'karat')
-      return
-    }
-  }
-
-  typeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'type')
-      return
-    }
-  }
-
-  categoryValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'category')
-      return
-    }
-  }
-
-  subcatValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'subcat')
-      return
-    }
-  }
-
-  colorValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'color')
-      return
-    }
-  }
-
-  brandValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'brand')
-      return
-    }
-  }
-
-  countryValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'country')
-      return
-    }
-  }
-
-
-  commentsValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'comments')
-      return
-    }
-  }
-
-  sizeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'size')
-      return
-    }
-  }
-  lengthValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'length')
-      return
-    }
-  }
-
-  salesmanValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'salesman')
-      return
-    }
-  }
-  currencyValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'currency')
-      return
-    }
-  }
-
-  mainmetalValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'mainmetal')
-      return
-    }
-  }
-
-  timeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'time')
-      return
-    }
-  }
-
-  rangeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'range')
-      return
-    }
-  }
-
-  seqcodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event && event.target.value == '') {
-      this.showOverleyPanel(event, 'seqcode')
-      return
-    }
-  }
-
-
+ 
   showOverleyPanel(event: any, formControlName: string) {
     if (event.target.value != '') return
 

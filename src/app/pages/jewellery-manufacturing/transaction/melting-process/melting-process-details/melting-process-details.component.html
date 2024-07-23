@@ -17,7 +17,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Job Number * :</label>
                             <div class="col-sm-9 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobno"   (keypress)="lookupKeyPress($event)"
+                                    <input type="text" matInput formControlName="jobno"   (keydown)="lookupKeyPress($event,'location')" 
                                     (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="jobnoCodeData" #overlayjobNoSearch
@@ -210,7 +210,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Location:</label>
                             <div class="col-sm-8 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="location"   (keypress)="lookupKeyPress($event)" 
+                                    <input type="text" matInput formControlName="location"      (keydown)="lookupKeyPress($event,'location')" 
                                     (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="locationCodeData"  #overlaylocation

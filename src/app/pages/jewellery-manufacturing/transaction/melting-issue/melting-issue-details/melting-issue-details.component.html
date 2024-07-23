@@ -25,7 +25,7 @@
                                         formControlName="jobno"
                                         class="text-right" NumberOnly
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'jobno')"
                                         (focusout)="jobNumberValidate($event)"/>
                                 </mat-form-field>
                                 <master-search
@@ -47,7 +47,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="jobpurity"
-                                        class="text-right" MetalDecimalInput
+                                        class="text-right" PurityDecimal
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -61,7 +61,7 @@
                                     <input type="text" matInput
                                         formControlName="process"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
                                 </mat-form-field>
                                 <master-search
@@ -83,7 +83,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="diffgrwt"
-                                        class="text-right" AmountDecimalInput
+                                        class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -100,7 +100,7 @@
                                     <input type="text" matInput
                                         formControlName="worker"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'worker')" 
                                         (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                                 </mat-form-field>
                                 <master-search
@@ -135,7 +135,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput
                                         formControlName="waxweight" [max]="13"
-                                        class="text-right" AmountDecimalInput
+                                        class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -147,7 +147,7 @@
                                     <input type="text" matInput
                                         formControlName="location"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'location')" 
                                         (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                                 </mat-form-field>
                                 <master-search
@@ -169,7 +169,7 @@
                                     <input type="text" matInput
                                         formControlName="stockcode"
                                         [readonly]="viewMode"
-                                        (keypress)="lookupKeyPress($event)" 
+                                        (keydown)="lookupKeyPress($event,'stockcode')" 
                                         (focusout)="validateLookupField($event,stockCodeData,'stockcode')"/>
                                 </mat-form-field>
                                 <master-search
@@ -221,7 +221,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="stoneweight"
-                                        class="text-right" StoneDecimalInput
+                                        class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" [max]="13" />
                                 </mat-form-field>
                             </div>
@@ -256,7 +256,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="topurity"
-                                        class="text-right" SixDecimalInput
+                                        class="text-right" AmountDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -280,7 +280,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="purity"
-                                        class="text-right" SixDecimalInput
+                                        class="text-right" PurityDecimal
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -304,7 +304,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="lossweight"
-                                        class="text-right" AmountDecimalInput
+                                        class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>

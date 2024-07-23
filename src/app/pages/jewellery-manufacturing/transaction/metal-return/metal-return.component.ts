@@ -220,11 +220,12 @@ this.setvoucherTypeMaster()
     this.subscriptions.push(Sub)
 
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -550,23 +551,26 @@ this.setvoucherTypeMaster()
     this.subscriptions.push(Sub)
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.metalReturnForm.value[formControlName] != '')return
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBy.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlayprocess.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworker.showOverlayPanel(event)
-    }
-    if (formControlName == 'location') {
-      this.overlaylocation.showOverlayPanel(event)
+    if(this.metalReturnForm.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayenteredBy.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocess.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworker.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocation.showOverlayPanel(event);
+        break;
+      default:
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    this.showOverleyPanel(event, FORMNAME);
   
     if (event.target.value == '' || this.viewMode) return;
   

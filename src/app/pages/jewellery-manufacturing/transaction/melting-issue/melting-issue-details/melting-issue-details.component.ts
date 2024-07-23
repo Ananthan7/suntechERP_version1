@@ -403,32 +403,34 @@ export class MeltingIssueDetailsComponent implements OnInit {
   //   });
   // }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.meltingIssuedetailsFrom.value[formControlName] != '') return
-
-    if (formControlName == 'jobno') {
-      this.overlayjobNoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlayprocess.showOverlayPanel(event)
-    }
-    if (formControlName == 'worker') {
-      this.overlayworkercode.showOverlayPanel(event)
-    }
-    if (formControlName == 'location') {
-      this.overlaylocationSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockcode') {
-      this.overlaystockcodeSearch.showOverlayPanel(event)
-    }
+    if (this.meltingIssuedetailsFrom.value[formControlName] != '') return;
+  switch (formControlName) {
+    case 'jobno':
+      this.overlayjobNoSearch.showOverlayPanel(event);
+      break;
+    case 'process':
+      this.overlayprocess.showOverlayPanel(event);
+      break;
+    case 'worker':
+      this.overlayworkercode.showOverlayPanel(event);
+      break;
+    case 'location':
+      this.overlaylocationSearch.showOverlayPanel(event);
+      break;
+    case 'stockcode':
+      this.overlaystockcodeSearch.showOverlayPanel(event);
+      break;
+    default:
+}
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

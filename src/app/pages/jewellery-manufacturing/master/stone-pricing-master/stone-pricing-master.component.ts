@@ -861,83 +861,23 @@ export class StonePricingMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
 
-  sizesetValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sieve_set')
-      return
-    }
-  }
-
-  shapeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'shape')
-      return
-    }
-  }
-  
-  sievefromValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sieve_form')
-      return
-    }
-  }
-    
-  sievetoValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'sieve_to')
-      return
-    }
-  }
-    
-  colorValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'color')
-      return
-    }
-  }
-      
-  clarityValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'clarity')
-      return
-    }
-  }
-      
-  sizefromValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'size_from')
-      return
-    }
-  }
-      
-  sizetoValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'size_to')
-      return
-    }
-  }
-  currencyValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'currency')
-      return
-    }
-  }
-
+ 
   showOverleyPanel(event: any, formControlName: string) {
 
     if (formControlName == 'sieve_set') {

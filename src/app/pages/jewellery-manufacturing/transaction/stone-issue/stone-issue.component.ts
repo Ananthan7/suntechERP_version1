@@ -401,9 +401,9 @@ export class StoneIssueComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
   setPostData(form: any) {
@@ -589,17 +589,22 @@ export class StoneIssueComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.stoneissueFrom.value[formControlName] != '')return
-    if (formControlName == 'worker') {
-      this.overlayworkerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBySearch.showOverlayPanel(event)
+    if (this.stoneissueFrom.value[formControlName] != '') return;
+  
+    switch (formControlName) {
+      case 'worker':
+        this.overlayworkerSearch.showOverlayPanel(event);
+        break;
+      case 'enteredBy':
+        this.overlayenteredBySearch.showOverlayPanel(event);
+        break;
+      default:
+       
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-   this.showOverleyPanel(event,FORMNAME)
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

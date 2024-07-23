@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DxDataGridComponent } from 'devextreme-angular';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 @Component({
   selector: 'app-job-allocation',
   templateUrl: './job-allocation.component.html',
@@ -17,11 +17,13 @@ import { DxDataGridComponent } from 'devextreme-angular';
 
 
 export class JobAllocationComponent implements OnInit {
+  @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
   gridData: any[] = [];
   @ViewChild('dataGrid', { static: false }) dataGrid!: DxDataGridComponent;
   branchCode?: String;
   yearMonth?: String;
   @Input() content!: any; 
+  viewMode:boolean = false;
   tableData: any[] = [];  
   columnheadItemDetails:any[] = ['Design','Order. No','Process','Worker','Doc. Attachment','Std. Time','Pirority','Customer','Job Number','Unq. Job. Id','Pcs'];
   columnheadOthers:any[]=['Design','Order No','Process','Worker','Doc Attachment','Std Time','Priority','Customer','Job Number','Unq Job Id','Pcs']
@@ -84,9 +86,9 @@ export class JobAllocationComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
 
@@ -325,6 +327,46 @@ export class JobAllocationComponent implements OnInit {
         }
       });
     }
+    showOverleyPanel(event: any, formControlName: string) {
+      if (this.jobalocationFrom.value[formControlName] != '') return;
+    
+      switch (formControlName) {
+        case 'userName':
+          this.overlayuserName.showOverlayPanel(event);
+          break;
+        default:
+      }
+    }
+    
+    
+    validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+      LOOKUPDATA.SEARCH_VALUE = event.target.value
+      if (event.target.value == '' || this.viewMode == true) return
+      let param = {
+        LOOKUPID: LOOKUPDATA.LOOKUPID,
+        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      }
+      this.commonService.showSnackBarMsg('MSG81447');
+      let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+      let Sub: Subscription = this.dataService.getDynamicAPI(API)
+        .subscribe((result) => {
+          this.commonService.closeSnackBarMsg()
+          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+          if (data.length == 0) {
+            this.commonService.toastErrorByMsgId('MSG1531')
+            this.jobalocationFrom.controls[FORMNAME].setValue('')
+            LOOKUPDATA.SEARCH_VALUE = ''
+            if (FORMNAME === 'userName') {
+              this.showOverleyPanel(event, FORMNAME);
+            }
+            return
+          }
+        }, err => {
+          this.commonService.toastErrorByMsgId('Error Something went wrong')
+        })
+      this.subscriptions.push(Sub)
+    }
+  
     
     ngOnDestroy() {
       if (this.subscriptions.length > 0) {

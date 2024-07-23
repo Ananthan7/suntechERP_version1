@@ -333,11 +333,12 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
     this.tableData[0].STOCK_CODE = ''
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
     }
   }
+
   setPostData() {
     let form = this.metalIssueDetailsForm.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
@@ -611,6 +612,41 @@ export class MetalIssueDetailsComponent implements OnInit {
   //   val += `@strWorker_Code='',@strStock_Code='',@strUserName='${this.comService.userName}'`
   //   this.stockCodeData.WHERECONDITION = val
   // }
+  
+  WorkerCodeValidate(event ?: any) {
+    this.showOverleyPanel(event, 'workerCodeDes')
+    let form = this.metalIssueDetailsForm.value;
+    let postData = {
+      "SPID": "103",
+      "parameter": {
+        strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
+        strJob_Number: '',
+        strUnq_Job_Id: '',
+        strMetalStone: '',
+        strProcess_Code: '',
+        strWorker_Code: '',
+        strStock_Code: '',
+        strUserName: '',
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+
+        } else {
+          this.overlayworkerCodeDes.showOverlayPanel(event)
+          this.metalIssueDetailsForm.controls.workerCodeDes.setValue('')
+          this.comService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1747')
+      })
+    this.subscriptions.push(Sub)
+  }
   stockCodeValidate(event: any) {
     this.showOverleyPanel(event, 'stockcode')
     if (event.target.value == '') return
@@ -636,16 +672,11 @@ export class MetalIssueDetailsComponent implements OnInit {
           if (data) {
             console.log(data, 'data');
 
-          } else {
-            this.comService.toastErrorByMsgId('MSG1531')
+          }else {
+            this.overlaystockcode.showOverlayPanel(event)
             this.metalIssueDetailsForm.controls.stockcode.setValue('')
-            this.showOverleyPanel(event, 'stockcode')
-            return
+            this.comService.toastErrorByMsgId('MSG1531')
           }
-        } else {
-          this.overlayjobNumDes.closeOverlayPanel()
-          this.metalIssueDetailsForm.controls.stockcode.setValue('')
-          this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
@@ -676,26 +707,31 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(this.metalIssueDetailsForm.value[formControlName] != '')return
-    if (formControlName == 'jobNumDes') {
-      this.overlayjobNumDes.showOverlayPanel(event)
-    }
-    if (formControlName == 'location') {
-      this.overlaylocation.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockcode') {
-      this.overlaystockcode.showOverlayPanel(event)
-    }
-    if (formControlName == 'workerCodeDes') {
-      this.overlayworkerCodeDes.showOverlayPanel(event)
-    }
-    if (formControlName == 'processCodeDesc') {
-      this.overlayprocessCodeDesc.showOverlayPanel(event)
+    if (this.metalIssueDetailsForm.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'jobNumDes':
+        this.overlayjobNumDes.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocation.showOverlayPanel(event);
+        break;
+      case 'stockcode':
+        this.overlaystockcode.showOverlayPanel(event);
+        break;
+      case 'workerCodeDes':
+        this.overlayworkerCodeDes.showOverlayPanel(event);
+        break;
+      case 'processCodeDesc':
+        this.overlayprocessCodeDesc.showOverlayPanel(event);
+        break;
+      default:
+        // Handle default case if necessary
+        break;
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    this.showOverleyPanel(event, FORMNAME);
   
     if (event.target.value == '' || this.viewMode) return;
   

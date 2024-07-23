@@ -56,7 +56,7 @@
                                     UpperCaseDirective
                                     (focusout)="validateLookupField($event,accountMasterData,'WorkerAcCode')"
                                     formControlName="WorkerAcCode" 
-                                    autocomplete="off"  (keypress)="lookupKeyPress($event)"  (focusout)="WorkerAcCodeValidate($event)"/>
+                                    autocomplete="off" (keydown)="lookupKeyPress($event,'WorkerAcCode')"/>
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="accountMasterData"
                                         *ngIf="viewMode == false"  #overlayWorkerAcCodeSearch
@@ -76,7 +76,7 @@
                                     (focusout)="validateLookupField($event,supervisorData,'NameOfSupervisor')"
                                     [readonly]="viewMode || codeEnable"
                                     formControlName="NameOfSupervisor" 
-                                    autocomplete="off"  (keypress)="lookupKeyPress($event)"  (focusout)="NameOfSupervisorValidate($event)"/>
+                                    autocomplete="off"  (keydown)="lookupKeyPress($event,'NameOfSupervisor')"/>
                                     <master-search [MasterSearchData]="supervisorData"
                                         *ngIf="viewMode == false" class="masterSearch"  #overlayNameOfSupervisorSearch
                                         (newRowClick)="supervisorSelected($event)">
@@ -242,7 +242,7 @@
                         </div>
                         <div class="col-md-6">
                             <!-- <button type="button" [disabled]="viewModeBtn" -->
-                            <button type="button" [disabled]="true" id="ID016"
+                            <button type="button"  id="ID016"
                                 mat-flat-button color="primary"
                                 (click)="printBarcode()">Print Barcode
                             </button>

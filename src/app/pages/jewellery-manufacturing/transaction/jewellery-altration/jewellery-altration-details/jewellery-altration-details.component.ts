@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,7 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-jewellery-altration-details',
@@ -17,6 +17,12 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class JewelleryAltrationDetailsComponent implements OnInit {
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
+  @ViewChild('overlaystockcode') overlaystockcode!: MasterSearchComponent;
+  @ViewChild('overlayprice1per') overlayprice1per!: MasterSearchComponent;
+  @ViewChild('overlayprice2per') overlayprice2per!: MasterSearchComponent;
+  @ViewChild('overlayprice3per') overlayprice3per!: MasterSearchComponent;
+  @ViewChild('overlayprice4per') overlayprice4per!: MasterSearchComponent;
+  @ViewChild('overlayprice5per') overlayprice5per!: MasterSearchComponent;
   @Input() content!: any;
   divisionMS: any = 'ID';
   columnheads: any[] = ['Sr', 'Div', 'Components', 'Location', 'Kt', 'Purity', 'Pcs', 'Weight ', 'Rate', 'Amount', 'Sieve', 'Shape'];
@@ -720,31 +726,31 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.remarks.setValue(this.content.REMARKS)
   }
   /**use: validate all lookups to check data exists in db */
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    }
-    this.commonService.toastInfoByMsgId('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.isDisableSaveBtn = false;
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
-          this.jewelleryaltrationdetailsFrom.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
-        }
-        this.alloyMasterFormChecks(FORMNAME)// for validations
-      }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
-  }
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.toastInfoByMsgId('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.jewelleryaltrationdetailsFrom.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //       this.alloyMasterFormChecks(FORMNAME)// for validations
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
   /**use: for checking form validations */
   alloyMasterFormChecks(FORMNAME: string) {
     if (FORMNAME == 'stockcode') { //for validating code
@@ -866,9 +872,9 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
 //     this.subscriptions.push(Sub)
 //   }
 // }
-lookupKeyPress(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
+lookupKeyPress(event: any, form?: any) {
+  if(event.key == 'Tab' && event.target.value == ''){
+    this.showOverleyPanel(event,form)
   }
 }
 onFileChangedimage(event: any) {
@@ -970,6 +976,60 @@ stockCodeValidate() {
     }, err => {
       this.comService.closeSnackBarMsg()
       this.comService.toastErrorByMsgId('MSG1531')
+    })
+  this.subscriptions.push(Sub)
+}
+showOverleyPanel(event: any, formControlName: string) {
+  if (this.jewelleryaltrationdetailsFrom.value[formControlName] != '') return;
+
+  switch (formControlName) {
+    case 'stockcode':
+      this.overlaystockcode.showOverlayPanel(event);
+      break;
+      case 'price1PER':
+      this.overlayprice1per.showOverlayPanel(event);
+      break;
+      case 'price2PER':
+      this.overlayprice2per.showOverlayPanel(event);
+      break;
+      case 'price3PER':
+      this.overlayprice3per.showOverlayPanel(event);
+      break;
+      case 'price4PER':
+        this.overlayprice4per.showOverlayPanel(event);
+        break;
+        case 'price5PER':
+          this.overlayprice5per.showOverlayPanel(event);
+          break;
+    default:
+  }
+}
+
+
+validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  LOOKUPDATA.SEARCH_VALUE = event.target.value
+  if (event.target.value == '' || this.viewMode == true) return
+  let param = {
+    LOOKUPID: LOOKUPDATA.LOOKUPID,
+    WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  }
+  this.commonService.showSnackBarMsg('MSG81447');
+  let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      this.commonService.closeSnackBarMsg()
+      let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+      if (data.length == 0) {
+        this.commonService.toastErrorByMsgId('MSG1531')
+        this.jewelleryaltrationdetailsFrom.controls[FORMNAME].setValue('')
+        LOOKUPDATA.SEARCH_VALUE = ''
+        if (FORMNAME === 'stockcode' || FORMNAME === 'price1PER' || FORMNAME === 'price2PER' || FORMNAME === 'price3PER'|| FORMNAME === 'price4PER'|| FORMNAME === 'price5PER') {
+          this.showOverleyPanel(event, FORMNAME);
+        }
+        return
+      }
+    }, err => {
+      this.commonService.toastErrorByMsgId('Error Something went wrong')
     })
   this.subscriptions.push(Sub)
 }

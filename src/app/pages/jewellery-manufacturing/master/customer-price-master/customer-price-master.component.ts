@@ -719,19 +719,23 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
 
-  codeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'customercode')
-      return
-    }
-  }
+ 
 
   showOverleyPanel(event: any, formControlName: string) {
 

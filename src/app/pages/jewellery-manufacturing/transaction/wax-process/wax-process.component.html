@@ -6,7 +6,9 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
+  [isViewPost]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="waxprocessFrom">
@@ -63,9 +65,11 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="processcode"
-                    (keypress)="lookupKeyPress($event)"  (focusout)="validateLookupField($event,ProcessCodeData,'processcode')"/>
+                    (keydown)="lookupKeyPress($event,'processcode')"
+                    (focusout)="validateLookupField($event,ProcessCodeData,'processcode')" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="ProcessCodeData"   #overlayprocessCodeSearch
+                <master-search [MasterSearchData]="ProcessCodeData"
+                  #overlayprocessCodeSearch
                   (newRowClick)="ProcessCodeSelected($event)">
                 </master-search>
               </div>
@@ -75,10 +79,12 @@
                 * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="workercode" (focusout)="validateLookupField($event,WorkerCodeData,'workercode')"
-                    (keypress)="lookupKeyPress($event)" />
+                  <input type="text" matInput formControlName="workercode"
+                    (focusout)="validateLookupField($event,WorkerCodeData,'workercode')"
+                    (keydown)="lookupKeyPress($event,'workercode')" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData"  #overlayworkercodeSearch
+                <master-search [MasterSearchData]="WorkerCodeData"
+                  #overlayworkercodeSearch
                   (newRowClick)="WorkerCodeSelected($event)">
                 </master-search>
               </div>
@@ -88,8 +94,9 @@
                 By:</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="enteredBy" (focusout)="validateLookupField($event,user,'enteredBy')"
-                    (keypress)="lookupKeyPress($event)">
+                  <input type="text" matInput formControlName="enteredBy"
+                    (focusout)="validateLookupField($event,user,'enteredBy')"
+                    (keydown)="lookupKeyPress($event,'enteredBy')">
                 </mat-form-field>
                 <master-search [MasterSearchData]="user" #overlayenteredBySearch
                   (newRowClick)="userDataSelected($event)">

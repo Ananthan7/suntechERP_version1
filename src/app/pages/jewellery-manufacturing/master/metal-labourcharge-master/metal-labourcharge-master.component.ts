@@ -727,7 +727,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   metaldivisionCodeSelected(e: any) {
-    this.stockcodeDisable = false
+    //this.stockcodeDisable = false
 
     this.metallabourMasterForm.controls.stock_code.setValue('');
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
@@ -1362,90 +1362,19 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   }
 
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
-    }
-  }
-
-  metalDivisionValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'metalDivision')
-      return
-    }
-  }
-
-  stockcodeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'stock_code')
-      return
-    }
-  }
-
-  metalcurrencyValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'metalcurrency')
-      return
-    }
-  }
-
-  karatValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'karat')
-      return
-    }
-  }
-  
-  labourAcValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'labourAc')
-      return
-    }
-  }
-
-  colorValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'color')
-      return
-    }
-  }
-
-  typeValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'typecode')
-      return
-    }
-  }
-
-  categoryValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'category')
-      return
-    }
-  }
-
-  subCategoryValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'subCategory')
-      return
-    }
-  }
-
-
-  brandValidate(event: any) {
-    if (this.viewMode) return
-    if (event.target.value == '') {
-      this.showOverleyPanel(event, 'brand')
-      return
     }
   }
 

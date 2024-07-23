@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -30,6 +30,7 @@ export class WaxProcessComponent implements OnInit {
   vocMaxDate = new Date();
   viewMode: boolean = false;
   currentDate = new Date();
+  isSaved: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   //waxprocessFrom!: FormGroup
 
@@ -158,9 +159,9 @@ export class WaxProcessComponent implements OnInit {
       // this.tableData[value.data.SRNO - 1].design = data.job_description;
       this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=${data.job_number}`).subscribe((result) => {
         console.log(result.dynamicData);
-        console.log(result.dynamicData[0]); 
-        let index = this.tableDataJob.length-1;
-        this.tableDataJob[index]=result.dynamicData[0][0];
+        console.log(result.dynamicData[0]);
+        let index = this.tableDataJob.length - 1;
+        this.tableDataJob[index] = result.dynamicData[0][0];
       });
     }
   }
@@ -227,7 +228,7 @@ export class WaxProcessComponent implements OnInit {
   //     if (data.status == 'Success') {
   //       // this.tableData = data.response.WaxProcessDetails;
   //       console.log(data.response.WaxProcessDetails);
-        
+
   //     }
   //   });
   // }
@@ -264,9 +265,9 @@ export class WaxProcessComponent implements OnInit {
   removedata() {
     this.tableDataJob.pop();
   }
-  lookupKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
@@ -328,23 +329,23 @@ export class WaxProcessComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.waxprocessFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.waxprocessFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -381,23 +382,23 @@ export class WaxProcessComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.waxprocessFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.waxprocessFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -468,21 +469,26 @@ export class WaxProcessComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.waxprocessFrom.value[formControlName] != '') return
-    if (formControlName == 'processcode') {
-      this.overlayprocessCodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'workercode') {
-      this.overlayworkercodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'enteredBy') {
-      this.overlayenteredBySearch.showOverlayPanel(event)
+    if (this.waxprocessFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'processcode':
+        this.overlayprocessCodeSearch.showOverlayPanel(event);
+        break;
+      case 'workercode':
+        this.overlayworkercodeSearch.showOverlayPanel(event);
+        break;
+      case 'enteredBy':
+        this.overlayenteredBySearch.showOverlayPanel(event);
+        break;
+      default:
+
     }
   }
 
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    this.showOverleyPanel(event, FORMNAME)
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

@@ -69,10 +69,11 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="salesman"
-                                        (keypress)="lookupKeyPress($event)" />
+                                        (keydown)="lookupKeyPress($event,'salesman')"
+                                        (focusout)="validateLookupField($event,salesCodeData,'salesman')"/>
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="salesCodeData"
+                                    [MasterSearchData]="salesCodeData" #overlaysalesman
                                     (newRowClick)="salesCodeSelected($event)">
                                 </master-search>
                             </div>

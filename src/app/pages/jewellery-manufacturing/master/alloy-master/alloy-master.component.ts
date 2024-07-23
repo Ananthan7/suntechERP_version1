@@ -1571,132 +1571,21 @@ export class AlloyMasterComponent implements OnInit {
       // }
     });
   }
-  lookupKeyPress(event: KeyboardEvent) {
+  // lookupKeyPress(event: KeyboardEvent) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //   }
+  // }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
     if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
 
-  codeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'code')
-        return
-      }
-    }
-
-    costcenterValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'costCenter')
-        return
-      }
-    }
-
-    typeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'type')
-        return
-      }
-    }
-
-    categoryValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'category')
-        return
-      }
-    }
-
-    subCategoryValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'subCategory')
-        return
-      }
-    }
-
-    brandValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'brand')
-        return
-      }
-    }
-
-    colorValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'color')
-        return
-      }
-    }
-
-    currencyValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'currency')
-        return
-      }
-    }
-
-    hsncodeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'hsncode')
-        return
-      }
-    }
-
-    vendorValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'type')
-        return
-      }
-    }
-
-
-    price1codeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'price1code')
-        return
-      }
-    }
-
-    price2codeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'price2code')
-        return
-      }
-    }
-
-    price3codeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'price3code')
-        return
-      }
-    }
-
-    price4codeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'price4code')
-        return
-      }
-    }
-
-    price5codeValidate(event: any) {
-      if (this.viewMode) return
-      if (event.target.value == '') {
-        this.showOverleyPanel(event, 'price5code')
-        return
-      }
-    }
 
   showOverleyPanel(event: any, formControlName: string) {
 
@@ -1743,6 +1632,9 @@ export class AlloyMasterComponent implements OnInit {
     }
     if (formControlName == 'price5code' ) {
       this.overlayprice5codeSearch.showOverlayPanel(event)
+    }
+    if (formControlName == 'vendor' ) {
+      this.overlayvendorSearch.showOverlayPanel(event)
     }
   }
 }

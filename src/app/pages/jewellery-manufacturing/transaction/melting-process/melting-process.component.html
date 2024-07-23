@@ -77,7 +77,7 @@
               <div class="col-sm-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="meltingType"
-                    [readonly]="viewMode" (keypress)="lookupKeyPress($event)"
+                    [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'meltingType')"
                     (focusout)="validateLookupField($event,MeltingCodeData,'meltingType')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="MeltingCodeData"
@@ -95,7 +95,7 @@
                 <mat-form-field style="width: 40%">
                   <input type="text" matInput maxlength="6"
                     formControlName="process" [readonly]="viewMode"
-                    (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'process')"
                     (focusout)="validateLookupField($event,processCodeData,'process')" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="processCodeData"
@@ -358,7 +358,7 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="stockcodeRet"
-                      (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'stockcodeRet')"
                       [readonly]="viewMode"
                       (focusout)="validateLookupField($event,stockCodeData,'stockcodeRet')" />
                   </mat-form-field>
@@ -405,7 +405,7 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="locationRet"
-                      (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'locationRet')"
                       [readonly]="viewMode"
                       (focusout)="validateLookupField($event,locationCodeData,'locationRet')" />
                   </mat-form-field>
@@ -423,7 +423,7 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="stockCodeScp"
-                      (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'stockCodeScp')"
                       [readonly]="viewMode"
                       (focusout)="validateLookupField($event,stockCodeData,'stockCodeScp')" />
                   </mat-form-field>
@@ -503,7 +503,7 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="locationScp"
-                      (keypress)="lookupKeyPress($event)"
+                    (keydown)="lookupKeyPress($event,'locationScp')"
                       [readonly]="viewMode"
                       (focusout)="validateLookupField($event,locationCodeData,'locationScp')" />
                   </mat-form-field>
