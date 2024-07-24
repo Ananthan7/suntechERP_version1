@@ -65,6 +65,19 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  // divisionCode: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 18,
+  //   SEARCH_FIELD: 'DIVISION_CODE',
+  //   SEARCH_HEADING: 'Division Code',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "DIVISION_CODE<>''",
+  //   // WHERECONDITION: "division='M'",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+
   divisionCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -72,11 +85,27 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<>''",
-    // WHERECONDITION: "division='M'",
+    WHERECONDITION: this.getDivisionCondition(),
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  };
+  
+  // Function to determine the WHERECONDITION based on some criteria
+  getDivisionCondition(): string {
+    // Example criteria; replace with actual logic as needed
+    const condition = 'L'; // This value would be dynamically determined
+  
+    if (condition === 'L') {
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z')";
+    } else if (condition === 'Z') {
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L')";
+    } else {
+      // Default condition if none of the specific conditions are met
+      return "DIVISION_CODE <> ''";
+    }
   }
+  
+
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -133,20 +162,22 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sizeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
-    SEARCH_HEADING: 'Size',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSIZE_CODE <>''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
+  // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 89,
+  //   SEARCH_FIELD: 'COMPSIZE_CODE',
+  //   SEARCH_HEADING: 'Size',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "COMPSIZE_CODE <>''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
 
 
+
+ 
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -211,11 +242,11 @@ export class ComponentMasterComponent implements OnInit {
   stocktypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "TYPE = 'STONE TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -229,7 +260,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'btnColor',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
+    WHERECONDITION: "Types = 'COLOR MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -241,7 +272,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "Types = 'CLARITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -398,6 +429,8 @@ export class ComponentMasterComponent implements OnInit {
 
   }
 
+
+
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
@@ -429,6 +462,19 @@ export class ComponentMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
+  }
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   checkCode(): boolean {
@@ -531,12 +577,12 @@ export class ComponentMasterComponent implements OnInit {
 
   clarityCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].CLARITY = value.CODE;
   }
 
   colorCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].COLOR = value.CODE;
   }
 
   shapegridCodeSelected(value: any, data: any, controlName: string) {
@@ -579,12 +625,31 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
 
+  // sizeSetCodeSelected(e: any) {
+  //   if (this.checkCode()) return
+  //   console.log(e);
+ 
+  //   this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
+  //   console.log(this.componentmasterForm.value.sizeSet);
+
+  //   //this.sizeCodeData.WHERECONDITION = `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`;
+  //  // this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
+  //  this.sizeCodeData.WHERECONDITION = COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')
+  // }
+
   sizeSetCodeSelected(e: any) {
-    if (this.checkCode()) return
+    if (this.checkCode()) return;
     console.log(e);
+  
+    // Set the sizeSet form control value
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
-    this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
+    console.log(this.componentmasterForm.value.sizeSet);
+
+    // Set the WHERECONDITION with the correct syntax and value
+    this.sizeCodeData.WHERECONDITION = `COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')`;
   }
+  
+
 
   sizeCodeSelected(e: any) {
     if (this.checkCode()) return
