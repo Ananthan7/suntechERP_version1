@@ -667,7 +667,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             }
             if (this.designType == 'METAL') { //metal data assigning
               this.setMetalSubJob_Details(this.subJobDetailData)
-            }else{
+            } else {
               this.setSubJob_Details(this.subJobDetailData)
             }
           }
@@ -742,7 +742,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (data && data.length > 0) {
       if (this.designType == 'METAL') { //metal data assigning
         this.setMetalSubJob_Details(data)
-      }else{
+      } else {
         this.setSubJob_Details(data)
       }
     } else {
@@ -1515,7 +1515,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(response.DESCRIPTION)
     }
   }
-  
+
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (FORMNAME == 'FRM_PROCESS_CODE') {
@@ -1577,7 +1577,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (data && data.length > 0) {
       if (this.designType == 'METAL') { //metal data assigning
         this.setMetalSubJob_Details(data)
-      }else{
+      } else {
         this.setSubJob_Details(data)
       }
     }
@@ -1699,9 +1699,43 @@ export class ProcessTransferDetailsComponent implements OnInit {
       return true;
     }
   }
+  submitValidateMetal(form: any): boolean {
+    try {
+      if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
+        this.commonService.toastErrorByMsgId('MSG1358')
+        return true;
+      }
+      if (this.commonService.nullToString(form.METAL_TO_WORKER_CODE) == '') {
+        this.commonService.toastErrorByMsgId('MSG1912')
+        return false;
+      }
+
+      if (this.commonService.nullToString(form.METAL_TO_PROCESS_CODE) == '') {
+        this.commonService.toastErrorByMsgId("MSG1680");
+        return false;
+      }
+      if (this.commonService.emptyToZero(form.METAL_LossBooked) != 0 && this.designType == "METAL") {
+        let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
+        if (processData.length != 0 && processData[0]["loss_accode"].toString() == "") {
+          let msg = this.commonService.getMsgByID("MSG3770") + " " + form.METAL_FRM_PROCESS_CODE
+          this.commonService.toastErrorByMsgId(msg)
+          return false;
+        }
+      }
+      return false;
+    }
+    catch (err) {
+      this.commonService.toastErrorByMsgId("MSG2100");
+      return true;
+    }
+  }
   /**USE: SUBMIT detail */
   formSubmit(flag: any) {
-    if (this.submitValidations(this.processTransferdetailsForm.value)) return;
+    if (this.designType == 'METAL') {
+      if (this.submitValidateMetal(this.processTransferdetailsForm.value)) return;
+    } else {
+      if (this.submitValidations(this.processTransferdetailsForm.value)) return;
+    }
     this.calculateGain()
     this.processTransferdetailsForm.controls.FLAG.setValue(flag)
 
@@ -1947,7 +1981,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "METALSTONE": this.commonService.nullToString(element.METALSTONE),
         "DIVCODE": this.commonService.nullToString(element.DIVCODE),
         "STOCK_CODE": this.commonService.nullToString(element.STOCK_CODE),
-        "STOCK_DESCRIPTION": this.commonService.nullToString(this.designType=='METAL'?element.METAL_STOCK_DESCRIPTION:element.STOCK_DESCRIPTION),
+        "STOCK_DESCRIPTION": this.commonService.nullToString(this.designType == 'METAL' ? element.METAL_STOCK_DESCRIPTION : element.STOCK_DESCRIPTION),
         "COLOR": this.commonService.nullToString(element.COLOR),
         "CLARITY": this.commonService.nullToString(element.CLARITY),
         "SHAPE": this.commonService.nullToString(element.SHAPE),
@@ -2411,7 +2445,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.metalDetailData[event.data.SRNO - 1].SETTED_FLAG = !event.data.SETTED_FLAG;
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(event.target.value != '') return
+    if (event.target.value != '') return
     switch (formControlName) {
       case 'JOB_NUMBER':
         this.overlayjobNoSearch.showOverlayPanel(event);
@@ -2439,12 +2473,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
         break;
     }
   }
-  lookupKeyPress(event: any,form?:any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
     if (event.key === 'Enter') {
-      if(event.target.value == '') this.showOverleyPanel(event,form)
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
