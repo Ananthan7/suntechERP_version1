@@ -28,7 +28,7 @@ export class JobcardComponent implements OnInit {
   @ViewChild('overlaytypeSearch') overlaytypeSearch!: MasterSearchComponent;
   @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
   @ViewChild('overlaysubcatSearch') overlaysubcatSearch!: MasterSearchComponent;
-  @ViewChild('overlaycolorearch') overlaycolorearch!: MasterSearchComponent;
+  @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
   @ViewChild('overlaybrandSearch') overlaybrandSearch!: MasterSearchComponent;
   @ViewChild('overlaycountrySearch') overlaycountrySearch!: MasterSearchComponent;
   @ViewChild('overlaycommentsSearch') overlaycommentsSearch!: MasterSearchComponent;
@@ -723,9 +723,10 @@ console.log( this.content);
     console.log(e);
     this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${e.KARAT_CODE}' and PURITY = '${e.STD_PURITY}'`;
     this.jobCardFrom.controls.karat.setValue(e.KARAT_CODE);
-    this.jobCardFrom.controls.purity.setValue(e.STD_PURITY);
+   // this.jobCardFrom.controls.purity.setValue(e.STD_PURITY);
 
-
+    this.jobCardFrom.controls.purity.setValue(
+      this.commonService.transformDecimalVB(6, e.STD_PURITY));
   }
 
   typeCodeSelected(e: any) {
@@ -1636,76 +1637,148 @@ console.log( this.content);
     }
   }
 
- 
   showOverleyPanel(event: any, formControlName: string) {
-    if (event.target.value != '') return
-
-    if (formControlName == 'orderType') {
-
-      this.overlayorderTypeSearch.showOverlayPanel(event)
+    if (event.target.value != '') return;
+  
+    switch (formControlName) {
+      case 'orderType':
+        this.overlayorderTypeSearch.showOverlayPanel(event);
+        break;
+      case 'designcode':
+        this.overlaydesigncodeSearch.showOverlayPanel(event);
+        break;
+      case 'customer':
+        this.overlaycustomerSearch.showOverlayPanel(event);
+        break;
+      case 'costcode':
+        this.overlaycostcodeSearch.showOverlayPanel(event);
+        break;
+      case 'prefix':
+        this.overlayprefixSearch.showOverlayPanel(event);
+        break;
+      case 'karat':
+        this.overlaykaratSearch.showOverlayPanel(event);
+        break;
+      case 'type':
+        this.overlaytypeSearch.showOverlayPanel(event);
+        break;
+      case 'category':
+        this.overlaycategorySearch.showOverlayPanel(event);
+        break;
+      case 'subcat':
+        this.overlaysubcatSearch.showOverlayPanel(event);
+        break;
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.overlaybrandSearch.showOverlayPanel(event);
+        break;
+      case 'country':
+        this.overlaycountrySearch.showOverlayPanel(event);
+        break;
+      case 'comments':
+        this.overlaycommentsSearch.showOverlayPanel(event);
+        break;
+      case 'size':
+        this.overlaysizeSearch.showOverlayPanel(event);
+        break;
+      case 'length':
+        this.overlaylengthSearch.showOverlayPanel(event);
+        break;
+      case 'salesman':
+        this.overlaysalesmanSearch.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlaycurrencySearch.showOverlayPanel(event);
+        break;
+      case 'mainmetal':
+        this.overlaymainmetalSearch.showOverlayPanel(event);
+        break;
+      case 'time':
+        this.overlaytimeSearch.showOverlayPanel(event);
+        break;
+      case 'range':
+        this.overlayrangeSearch.showOverlayPanel(event);
+        break;
+      case 'seqcode':
+        this.overlayseqcodeSearch.showOverlayPanel(event);
+        break;
+      default:
+      
     }
-    if (formControlName == 'designcode') {
-      this.overlaydesigncodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'customer') {
-      this.overlaycustomerSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'costcode') {
-      this.overlaycostcodeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'prefix') {
-      this.overlayprefixSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'karat') {
-      this.overlaykaratSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'type') {
-      this.overlaytypeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'category') {
-      this.overlaycategorySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'subcat') {
-      this.overlaysubcatSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'color') {
-      this.overlaycolorearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'brand') {
-      this.overlaybrandSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'country') {
-      this.overlaycountrySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'comments') {
-      this.overlaycommentsSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'size') {
-      this.overlaysizeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'length') {
-      this.overlaylengthSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'salesman') {
-      this.overlaysalesmanSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'currency') {
-      this.overlaycurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'mainmetal') {
-      this.overlaymainmetalSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'time') {
-      this.overlaytimeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'range') {
-      this.overlayrangeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'seqcode') {
-      this.overlayseqcodeSearch.showOverlayPanel(event)
-    }
-
   }
+  
+ 
+  // showOverleyPanel(event: any, formControlName: string) {
+  //   if (event.target.value != '') return
+
+  //   if (formControlName == 'orderType') {
+
+  //     this.overlayorderTypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'designcode') {
+  //     this.overlaydesigncodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'customer') {
+  //     this.overlaycustomerSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'costcode') {
+  //     this.overlaycostcodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'prefix') {
+  //     this.overlayprefixSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'karat') {
+  //     this.overlaykaratSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'type') {
+  //     this.overlaytypeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'category') {
+  //     this.overlaycategorySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'subcat') {
+  //     this.overlaysubcatSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'color') {
+  //     this.overlaycolorearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'brand') {
+  //     this.overlaybrandSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'country') {
+  //     this.overlaycountrySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'comments') {
+  //     this.overlaycommentsSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'size') {
+  //     this.overlaysizeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'length') {
+  //     this.overlaylengthSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'salesman') {
+  //     this.overlaysalesmanSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'currency') {
+  //     this.overlaycurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'mainmetal') {
+  //     this.overlaymainmetalSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'time') {
+  //     this.overlaytimeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'range') {
+  //     this.overlayrangeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'seqcode') {
+  //     this.overlayseqcodeSearch.showOverlayPanel(event)
+  //   }
+
+  // }
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

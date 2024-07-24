@@ -24,15 +24,15 @@ export class PricelistMasterComponent implements OnInit {
   codeEnable: boolean = true;
   round: boolean = true;
 
-  priceListMasterForm: FormGroup  = this.formBuilder.group({
+  priceListMasterForm: FormGroup = this.formBuilder.group({
     priceCode: ['', [Validators.required]],
     description: ['', [Validators.required]],
     priceMethod: [0, [Validators.required]],
-    priceSign: ['+'],
+    priceSign: [''],
     priceValue: ['', [Validators.required]],
-    finalPriceSign: ['*'],
+    finalPriceSign: [''],
     finalPriceValue: [''],
-    addlValueSign: ['*'],
+    addlValueSign: [''],
     addlValue: [''],
     priceRoundoff: [false],
     dontCalculate: [false],
@@ -85,14 +85,14 @@ export class PricelistMasterComponent implements OnInit {
 
     this.round = true;
     this.initializeForm();
-    console.log(this.content,'this.content');
-    
+    console.log(this.content, 'this.content');
+
     if (this.content?.FLAG) {
       this.setFormValues()
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
         this.editMode = true
-        
+
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.codeEnable = false;
@@ -106,6 +106,10 @@ export class PricelistMasterComponent implements OnInit {
         this.viewMode = true;
         this.deleteRecord()
       }
+    } else {
+      this.priceListMasterForm.controls.priceSign.setValue('+');
+      this.priceListMasterForm.controls.finalPriceSign.setValue('*');
+      this.priceListMasterForm.controls.addlValueSign.setValue('*');
     }
   }
 
@@ -156,7 +160,7 @@ export class PricelistMasterComponent implements OnInit {
       return false;
     }
   }
-  
+
 
   formSubmit() {
     console.log(this.priceListMasterForm.value.priceMethod);
@@ -197,14 +201,14 @@ export class PricelistMasterComponent implements OnInit {
         err => alert(err)
       );
   }
-  deleteCheckingPricList(){
+  deleteCheckingPricList() {
     if (!this.content.MID) {
       this.showInitialDeleteConfirmation();
       return;
     }
     let priceCondition = `PRICE1='${this.content.PRICE_CODE}' OR PRICE2='${this.content.PRICE_CODE}'`
-    priceCondition +=  `OR PRICE3='${this.content.PRICE_CODE}' OR PRICE4='${this.content.PRICE_CODE}'`
-    priceCondition +=  `OR PRICE5='${this.content.PRICE_CODE}'`
+    priceCondition += `OR PRICE3='${this.content.PRICE_CODE}' OR PRICE4='${this.content.PRICE_CODE}'`
+    priceCondition += `OR PRICE5='${this.content.PRICE_CODE}'`
     let param = {
       LOOKUPID: 177,
       WHERECOND: priceCondition || ''
@@ -215,8 +219,8 @@ export class PricelistMasterComponent implements OnInit {
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data.length == 0) {
-         this.deleteRecord()
-        }else{
+          this.deleteRecord()
+        } else {
           this.commonService.toastErrorByMsgId('Price already in use')
         }
       }, err => {
@@ -240,7 +244,7 @@ export class PricelistMasterComponent implements OnInit {
   private initializeForm() {
     this.priceListMasterForm.controls.finalPriceValue.setValue(
       this.commonService.decimalQuantityFormat(1, 'AMOUNT'
-    ))
+      ))
     this.priceListMasterForm.controls.addlValue.setValue(
       this.commonService.decimalQuantityFormat(1, 'AMOUNT')
     )
@@ -288,12 +292,12 @@ export class PricelistMasterComponent implements OnInit {
   }
   createPostData() {
     let form = this.priceListMasterForm.value
-    console.log(form,'form');
-    
+    console.log(form, 'form');
+
     let priceFormula = ''
-    if(form.priceMethod == 0){
+    if (form.priceMethod == 0) {
       priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`
-    } else if(form.priceMethod == 1){
+    } else if (form.priceMethod == 1) {
       priceFormula = form.priceValue
     }
     return {
@@ -377,7 +381,7 @@ export class PricelistMasterComponent implements OnInit {
 
   handleSuccessResponse(result: any) {
     Swal.fire({
-      title: this.content.PRICE_CODE +' Deleted Successfully',
+      title: this.content.PRICE_CODE + ' Deleted Successfully',
       text: '',
       icon: 'success',
       confirmButtonColor: '#336699',
@@ -435,7 +439,7 @@ export class PricelistMasterComponent implements OnInit {
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.required = false;
         this.viewMode = false;
-       
+
 
         this.priceListMasterForm.controls.priceSign.disable();
         //  this.priceListMasterForm.controls.priceValue.disable();
@@ -460,6 +464,9 @@ export class PricelistMasterComponent implements OnInit {
         this.priceListMasterForm.controls.finalPriceValue.enable();
         this.priceListMasterForm.controls.addlValueSign.enable();
         this.priceListMasterForm.controls.addlValue.enable();
+        this.priceListMasterForm.controls.priceSign.setValue('+');
+        this.priceListMasterForm.controls.finalPriceSign.setValue('*');
+        this.priceListMasterForm.controls.addlValueSign.setValue('*');
         // this.isDisabled = false;
       }
     }
@@ -477,14 +484,14 @@ export class PricelistMasterComponent implements OnInit {
   checkCodeExists(event: any) {
     // Exit the function if in edit mode or view mode
     if ((this.content && (this.content.FLAG === 'EDIT' || this.content.FLAG === 'VIEW')) || this.viewMode) {
-      return; 
+      return;
     }
-  
+
     // Exit the function if the input is empty
     if (event.target.value === '') {
-      return; 
+      return;
     }
-  
+
     const API = 'PriceMaster/CheckIfPriceCodeExists/' + event.target.value;
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -508,11 +515,11 @@ export class PricelistMasterComponent implements OnInit {
           this.priceListMasterForm.reset();
         }
       });
-  
+
     this.subscriptions.push(sub);
-  }  
-  
-  
+  }
+
+
   codeEnabled() {
     if (this.priceListMasterForm.value.priceCode == '') {
       this.codeEnable = true;

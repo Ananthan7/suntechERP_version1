@@ -105,15 +105,11 @@ export class MasterSearchComponent implements OnInit {
       this.isLoading = false;
       if (result.dynamicData && result.dynamicData[0].length > 0) {
         this.dataSource = result.dynamicData[0];
-        if (this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
+        this.setGridHeaders()
         let dataCount = result.dynamicData[1];
         if (dataCount) this.totalItems = this.commonService.emptyToZero(dataCount[0]?.COUNT)
-        // if(this.dataSource[0]) this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
       }
-      // else {
-      //   this.toastr.error('Data Not Available')
-      // }
     })
 
   }
@@ -150,12 +146,25 @@ export class MasterSearchComponent implements OnInit {
 
   }
   dataSourceAlteration() {
-    if (this.MasterSearchData.LOOKUPID == 8) {
-      this.dataSource.forEach((item: any) => {
-        item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE, 'RATE')
-      })
+    switch (this.MasterSearchData.LOOKUPID) {
+      case 8:
+        this.setCurrencyRateConv()
+        break;
+      case 176:
+        this.setCurrencyRateConv()
+        break;
+      //continue adding with conditions
+      default:
+        break;
     }
-    //continue adding with conditions
+  }
+  setCurrencyRateConv() {
+    this.dataSource.forEach((item: any) => {
+      item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE, 'RATE')
+    })
+    console.log(this.dataSource);
+    console.log('this.dataSource');
+
   }
   showOverlayPanel(event?: Event) {
     // if (this.MasterSearchData?.LOAD_ONCLICK) {
@@ -223,10 +232,10 @@ export class MasterSearchComponent implements OnInit {
       let data = result.dynamicData[0]
       if (data && data.length > 0) {
         this.dataSource = result.dynamicData[0]
-        this.dataSourceHead = Object.keys(this.dataSource[0]);
+        this.setGridHeaders()
         if (this.MasterSearchData.FRONTENDFILTER && this.MasterSearchData.SEARCH_VALUE != '') {
           this.dataSource = this.commonService.searchStartsWithItemsInArray(this.dataSource, this.MasterSearchData.SEARCH_VALUE)
-          this.dataSourceHead = Object.keys(this.dataSource[0]);
+          this.setGridHeaders()
           return
         }
       } else {
@@ -234,6 +243,12 @@ export class MasterSearchComponent implements OnInit {
         this.MasterSearchData.SEARCH_VALUE = ''
       }
     })
+  }
+  setGridHeaders() {
+    if (this.dataSource[0]) {
+      this.dataSourceHead = Object.keys(this.dataSource[0]);
+      this.dataSourceAlteration()
+    }
   }
   isNumber(value: string): boolean {
     let bol = /^\d+(\.\d+)?$/.test(value);
@@ -248,7 +263,7 @@ export class MasterSearchComponent implements OnInit {
 
   }
   f2Flag = false;
-  SearchPlaceholder:string = 'Search StartsWith';
+  SearchPlaceholder: string = 'Search StartsWith';
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // Check if the pressed key is Enter

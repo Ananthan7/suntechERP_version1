@@ -21,14 +21,16 @@ export class RepairDiamondPurchaseComponent implements OnInit {
   selectedTabIndexLineItem = 0;
   currentDate = new Date();
   tableData: any[] = [];
+  tabledata2:any[]=[];
   viewMode: boolean = false;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
-  columnheadItemDetails: any[] = ['Sr#', 'Stock Code', 'Description', 'Pcs', 'Purity', 'Gross Wt', 'Stone Wt', 'Net Wt', 'Pure Wt', 'Making Value', 'Metal Value', 'Net Value'];
+  columnheadItemDetails: any[] = ['Sr#', 'STOCK_CODE', 'Description', 'PCS', 'PURITY', 'GRWT', 'STONECARAT', 'METALNETWT', 'METAL_WT', 'Making Value', 'Metal Value', 'Net Value'];
   // setAllInitialValues: any;
   branchCode?: String;
   yearMonth?: String;
   repairDiaPurchaseDetailsData: any[] = [];
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -351,6 +353,7 @@ export class RepairDiamondPurchaseComponent implements OnInit {
     });
     modalRef.result.then((postData) => {
       if (postData) {
+        this.tabledata2.push(postData);
 
         console.log('Data from modal:', postData);
         if (postData?.isUpdate) {
@@ -371,6 +374,7 @@ export class RepairDiamondPurchaseComponent implements OnInit {
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
+      this.updateMeltingType();
       return
     }
     if (this.repairdiapurchaseForm.invalid) {

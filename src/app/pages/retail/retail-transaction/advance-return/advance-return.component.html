@@ -66,12 +66,9 @@
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID004">Party Code</label>
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-              <input
-                type="text"
-                [readonly]="viewOnly" matInput
-                formControlName="partyCode"
+              <input type="text" formControlName="partyCode" [readonly]="viewOnly" matInput
                 (change)="partyCodeChange($event)"/>
-                <master-search class="retailMasterSearch" (focusout)="openTab($event, 'partyCode')"
+                <master-search class="masterSearch" (focusout)="openTab($event, 'partyCode')"
                 #overlayPartyCode *ngIf="!viewOnly" [MasterSearchData]="partyCodeData"
                 (newRowClick)="partyCodeSelected($event)" ></master-search>
             </mat-form-field>
@@ -119,7 +116,7 @@
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" [readonly]="viewOnly" matInput
                 formControlName="enteredByCode" />
-                <master-search class="retailMasterSearch"
+                <master-search class="masterSearch"
                 (focusout)="openTab($event, 'enteredByCode')" #overlayEnteredCode
                 *ngIf="!viewOnly" [MasterSearchData]="enteredByCode"
                 (newRowClick)="enteredBySelected($event)" ></master-search>
@@ -173,7 +170,7 @@
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" [readonly]="viewOnly"
                 matInput formControlName="customerCode" />
-                <master-search class="retailMasterSearch"
+                <master-search class="masterSearch"
                 (focusout)="openTab($event, 'customerCode')"
                 #overlayCustomerCode *ngIf="!viewOnly"
                 [MasterSearchData]="customerCodeData"

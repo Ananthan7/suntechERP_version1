@@ -514,7 +514,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   onlabourtypeChange() {
     // this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
-    // this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
+    // this.diamondlabourMasterForm.controls.method.setValue('GEN');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
@@ -1540,35 +1540,64 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
   //   }
   // }
 
- 
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'divisions') {
-      this.overlaydivisionsSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'divisions':
+        this.overlaydivisionsSearch.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlaycurrencySearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.overlayshapeSearch.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocessSearch.showOverlayPanel(event);
+        break;
+      case 'sizefrom':
+        this.overlaysizefromSearch.showOverlayPanel(event);
+        break;
+      case 'labourac':
+        this.overlaylabouracSearch.showOverlayPanel(event);
+        break;
+      case 'sizeto':
+        this.overlaysizetoSearch.showOverlayPanel(event);
+        break;
+      case 'sieve':
+        this.overlaysieveSearch.showOverlayPanel(event);
+        break;
+      default:
     }
-    if (formControlName == 'currency') {
-      this.overlaycurrencySearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'shape') {
-      this.overlayshapeSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'process') {
-      this.overlayprocessSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sizefrom') {
-      this.overlaysizefromSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'labourac') {
-      this.overlaylabouracSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sizeto') {
-      this.overlaysizetoSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'sieve') {
-      this.overlaysieveSearch.showOverlayPanel(event)
-    }
-    
   }
+  
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'divisions') {
+  //     this.overlaydivisionsSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'currency') {
+  //     this.overlaycurrencySearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'shape') {
+  //     this.overlayshapeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'process') {
+  //     this.overlayprocessSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sizefrom') {
+  //     this.overlaysizefromSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'labourac') {
+  //     this.overlaylabouracSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sizeto') {
+  //     this.overlaysizetoSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'sieve') {
+  //     this.overlaysieveSearch.showOverlayPanel(event)
+  //   }
+    
+  // }
 
 }

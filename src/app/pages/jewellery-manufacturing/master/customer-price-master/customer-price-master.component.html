@@ -221,11 +221,6 @@
 
                 <dxi-column dataField="PRICE_CODE" width="auto" caption="PRICE_CODE" alignment="center">
                 </dxi-column>
-                <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code " [allowEditing]="true"
-                  alignment="center">
-                </dxi-column>
-                <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" [allowEditing]="true"
-                  alignment="center"> </dxi-column>
                 <dxi-column dataField="SIEVE" width="auto" caption="Sieve" [allowEditing]="true" alignment="center">
                 </dxi-column>
                 <dxi-column dataField="SIEVE_TO" width="auto" caption="Sieve_To" [allowEditing]="true"
@@ -289,21 +284,19 @@
               </dx-data-grid> -->
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer"  [height]="250" [showBorders]="true"
+              <!-- <dx-data-grid #dataGrid id="gridContainer"  [height]="250" [showBorders]="true"
                 [dataSource]="tableDatalabour" [height]="200" [allowColumnResizing]="true" [showRowLines]="true"
-                [disabled]="viewMode">
+                [disabled]="viewMode"> -->
+                <dx-data-grid #dataGrid id="gridContainer" width="100%" height="400px" [dataSource]="tableDatalabour"
+                [showRowLines]="true"  [allowColumnResizing]="true" [showBorders]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-editing mode="cell" [allowUpdating]="true">
-                </dxo-editing>
-          
-                <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                 <dxi-column width="auto" dataField="SELECT1" caption cellTemplate="limitTemplate"
-                alignment="right"></dxi-column>
-              <div *dxTemplate="let data of 'limitTemplate'">
-                <mat-checkbox [checked]="data.value" [disabled]="viewMode"
-                  (change)="changedCheckbox(data)"></mat-checkbox>
-              </div>
+                  alignment="right"></dxi-column>
+                <div *dxTemplate="let data of 'limitTemplate'">
+                  <mat-checkbox [checked]="data.value" [disabled]="viewMode"
+                    (change)="changedCheckbox(data)"></mat-checkbox>
+                </div>
 
               <dxi-column dataField="LABOUR_CODE" width="auto" caption="LABOUR_CODE" alignment="center">
               </dxi-column>

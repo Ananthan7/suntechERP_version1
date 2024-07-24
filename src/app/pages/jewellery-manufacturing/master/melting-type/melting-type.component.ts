@@ -640,18 +640,32 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   
-
-
   showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'color') {
-      this.overlaycolorSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'karat') {
-      this.overlaykaratSearch.showOverlayPanel(event)
-    }
-    if (formControlName == 'stockCode') {
-      this.overlaystockCodeSearch.showOverlayPanel(event)
+    switch (formControlName) {
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'karat':
+        this.overlaykaratSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaystockCodeSearch.showOverlayPanel(event);
+        break;
+      default:
     }
   }
+  
+
+  // showOverleyPanel(event: any, formControlName: string) {
+
+  //   if (formControlName == 'color') {
+  //     this.overlaycolorSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'karat') {
+  //     this.overlaykaratSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'stockCode') {
+  //     this.overlaystockCodeSearch.showOverlayPanel(event)
+  //   }
+  // }
 }

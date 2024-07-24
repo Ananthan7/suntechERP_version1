@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-  [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
+  [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved" [isViewDelete]="false"
   [isViewPost]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
@@ -24,7 +24,7 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput [maxLength]="3" UpperCaseDirective
-                    formControlName="voctype" />
+                    formControlName="voctype"  readonly/>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
@@ -53,8 +53,8 @@
                 Number * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput step="0.001" min="0"
-                    maxlength="4" formControlName="vocno"
+                  <input type="text" matInput 
+                 maxlength="6" formControlName="vocno" 
                     style="text-align: right;" />
                 </mat-form-field>
               </div>
@@ -95,10 +95,10 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="enteredBy"
-                    (focusout)="validateLookupField($event,user,'enteredBy')"
+                    (focusout)="validateLookupField($event,salesmanCodeData,'enteredBy')"
                     (keydown)="lookupKeyPress($event,'enteredBy')">
                 </mat-form-field>
-                <master-search [MasterSearchData]="user" #overlayenteredBySearch
+                <master-search [MasterSearchData]="salesmanCodeData" #overlayenteredBySearch
                   (newRowClick)="userDataSelected($event)">
                 </master-search>
               </div>
