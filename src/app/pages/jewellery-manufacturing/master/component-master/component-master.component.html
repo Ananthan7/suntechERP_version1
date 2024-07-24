@@ -73,7 +73,7 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="size"
                                         [readonly]="viewMode" UpperCaseDirective
-                                        (focusout)="validateLookupField($event,typeCodeData,'size')"
+                                        (focusout)="validateLookupField($event,sizeCodeData,'size')"
                                         (keydown)="lookupKeyPress($event,'size')" />
                                     <master-search [MasterSearchData]="sizeCodeData" class="mstrScrch"
                                         *ngIf="viewMode == false" #overlaysizeSearch
