@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
 
@@ -56,31 +55,19 @@ export class TouristVatRefundVerificationComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private snackBar: MatSnackBar,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService
   ) {}
 
   ngOnInit(): void {
-    this.generateVocNo();
-    this.touristVatRefundVerificationForm.controls.vocDate.setValue(
-      this.currentDate
-    );
-    this.touristVatRefundVerificationForm.controls.fromDate.setValue(
-      this.currentDate
-    );
-    this.touristVatRefundVerificationForm.controls.toDate.setValue(
-      this.currentDate
-    );
-    this.touristVatRefundVerificationForm.controls.vocType.setValue(
-      this.comService.getqueryParamVocType()
-    );
+    this.content?.FLAG === "VIEW" || this.content?.FLAG === "EDIT"
+      ? this.getDataToSet(this.content)
+      : this.generateVocNoAndDefaultSet();
   }
 
-  generateVocNo() {
+  generateVocNoAndDefaultSet() {
     let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
       this.branchCode
     }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
@@ -92,6 +79,18 @@ export class TouristVatRefundVerificationComponent implements OnInit {
 
           this.touristVatRefundVerificationForm.controls.vocNo.setValue(
             res.newvocno
+          );
+          this.touristVatRefundVerificationForm.controls.vocDate.setValue(
+            this.currentDate
+          );
+          this.touristVatRefundVerificationForm.controls.fromDate.setValue(
+            this.currentDate
+          );
+          this.touristVatRefundVerificationForm.controls.toDate.setValue(
+            this.currentDate
+          );
+          this.touristVatRefundVerificationForm.controls.vocType.setValue(
+            this.comService.getqueryParamVocType()
           );
         }
       });
@@ -142,9 +141,6 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.touristVatRefundVerificationForm.controls.partyCode.setValue(e.ACCODE);
-    // this.touristVatRefundVerificationForm.controls.partycodeName.setValue(
-    //   e["ACCOUNT HEAD"]
-    // );
   }
 
   partyCurrencyCodeData: MasterSearchModel = {
@@ -169,6 +165,10 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     this.touristVatRefundVerificationForm.controls.partyCurrencyRate.setValue(
       e["Conv Rate"]
     );
+  }
+
+  getDataToSet(data: any) {
+    console.log(data);
   }
 
   validateForm() {
@@ -379,7 +379,6 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 }
