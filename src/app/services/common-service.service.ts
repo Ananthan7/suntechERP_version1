@@ -77,9 +77,15 @@ export class CommonServiceService {
     private datePipe: DatePipe,
   ) {
   }
+  // FORM FEILD CALCULATIONS STARTS
+  balancePcsCalculate(METAL_FromPCS:any,METAL_ToPCS:any,METAL_ScrapPCS:any){
+    return (this.emptyToZero(METAL_FromPCS) - (this.emptyToZero(METAL_ToPCS) + this.emptyToZero(METAL_ScrapPCS)));
+  }
   grossWtCalculate(MetalWeight: any, stoneWeight: any) {
     return (this.emptyToZero(MetalWeight) + (this.emptyToZero(stoneWeight) / 5))
   }
+  // FORM FEILD CALCULATIONS ENDS
+
   getCurrecnyRate(currencyCode:string){
     let currdata = this.allBranchCurrency.filter((item:any)=> item.CURRENCY_CODE == currencyCode)
     return this.setCommaSerperatedNumber(currdata[0].CONV_RATE,'RATE')

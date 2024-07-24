@@ -840,13 +840,15 @@ export class StonePricingMasterComponent implements OnInit {
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    let param =  {
+      "SPID": "105",
+      "parameter": {
+        LOOKUPID: this.commonService.nullToString(LOOKUPDATA.LOOKUPID),
+        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      }
     }
     this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', param)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
