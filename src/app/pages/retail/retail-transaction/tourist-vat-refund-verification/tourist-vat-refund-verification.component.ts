@@ -168,7 +168,39 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   }
 
   getDataToSet(data: any) {
-    console.log(data);
+      this.touristVatRefundVerificationForm.controls['vocType'].setValue(data.VOCTYPE)
+      this.touristVatRefundVerificationForm.controls['vocNo'].setValue(data.VOCNO)
+      this.touristVatRefundVerificationForm.controls['vocDate'].setValue(data.VOCDATE)
+      this.touristVatRefundVerificationForm.controls['partyCode'].setValue(data.PARTYCODE)
+      this.touristVatRefundVerificationForm.controls['partyCurrency'].setValue(data.PARTY_CURRENCY)
+      this.touristVatRefundVerificationForm.controls['partyCurrencyRate'].setValue(data.PARTY_CURR_RATE)
+      this.touristVatRefundVerificationForm.controls['enteredBy'].setValue(data.SALESPERSON_CODE)
+      this.touristVatRefundVerificationForm.controls['narration'].setValue(data.REMARKS)
+      this.touristVatRefundVerificationForm.controls['fromDate'].setValue(data.DATEFROM)
+      this.touristVatRefundVerificationForm.controls['toDate'].setValue(data.DATETO)
+     this.touristVatRefundVerificationForm.controls['totalSale'].setValue(data.TOTALSALESAMOUNTCC)
+      this.touristVatRefundVerificationForm.controls['totalVat'].setValue(data.TOTALSALESVATAMOUNTCC)
+     Details: [
+        {
+          UNIQUEID: 0,
+          SRNO: 0,
+          INVOICE_DATE: new Date(),
+          TAGNO: "",
+          VOCTYPE: "",
+          VOCNO: 0,
+          SALESAMOUNT: 0,
+          PLANETAMOUNT: 0,
+          VATAMOUNT: 0,
+          PLANETVATAMOUNT: 0,
+          INVMID: 0,
+          TRABRANCHCODE: "",
+          DT_BRANCH_CODE: "",
+          DT_VOCNO: 0,
+          DT_VOCTYPE: "",
+          DT_YEARMONTH: "",
+        },
+      ]
+    
   }
 
   validateForm() {
