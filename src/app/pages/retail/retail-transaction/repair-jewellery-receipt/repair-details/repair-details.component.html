@@ -98,8 +98,26 @@
               </div>
 
               <label for="inputPassword" class="col-sm-2 col-form-label"
-                >Delivery Date
+                >Delivery Date :
               </label>
+              <div class="col-sm-2">
+                <mat-form-field style="width: 100%">
+                  <input
+                    [readonly]="viewOnly === true"
+                    matInput
+                    [matDatepicker]="delivery_date"
+                    formControlName="delivery_date"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                  />
+                  <mat-datepicker-toggle
+                    *ngIf="viewOnly === false"
+                    matSuffix
+                    [for]="delivery_date"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #delivery_date></mat-datepicker>
+                </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
@@ -146,24 +164,7 @@
                 </div>
               </div>
 
-              <div class="col-sm-2">
-                <mat-form-field style="width: 100%">
-                  <input
-                    [readonly]="viewOnly === true"
-                    matInput
-                    [matDatepicker]="delivery_date"
-                    formControlName="delivery_date"
-                    placeholder="DD/MM/YYYY"
-                    DateValidation
-                  />
-                  <mat-datepicker-toggle
-                    *ngIf="viewOnly === false"
-                    matSuffix
-                    [for]="delivery_date"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #delivery_date></mat-datepicker>
-                </mat-form-field>
-              </div>
+             
             </div>
           </div>
         </div>
@@ -272,12 +273,20 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
+
                       [readonly]="viewOnly === true"
                       type="text"
                       matInput
                       formControlName="own_stock"
                     />
                   </mat-form-field>
+
+                  <master-search
+                  *ngIf="viewOnly === false"
+                  [MasterSearchData]="stockCodeData"
+                  (newRowClick)="stockCodeSelected($event)"
+                ></master-search>
+
                 </div>
               </div>
             </div>
