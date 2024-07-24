@@ -79,9 +79,9 @@ export class MetalReturnDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 46,
     SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Job Number',
+    SEARCH_HEADING: 'Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: "job_number<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

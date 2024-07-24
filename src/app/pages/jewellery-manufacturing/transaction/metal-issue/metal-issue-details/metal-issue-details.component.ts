@@ -481,7 +481,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     return false;
   }
   jobNumberValidate(event: any) {
-    this.showOverleyPanel(event, 'jobNumDes')
+    this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
    
     // let postData = {
@@ -521,13 +521,13 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.setValueWithDecimal('jobPurity', data[0].JOB_PURITY, 'PURITY')
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
-            this.metalIssueDetailsForm.controls.jobNumDes.setValue('')
-            this.showOverleyPanel(event, 'jobNumDes')
+            this.metalIssueDetailsForm.controls.jobNumber.setValue('')
+            this.showOverleyPanel(event, 'jobNumber')
             return
           }
         } else {
           this.overlayjobNumDes.closeOverlayPanel()
-          this.metalIssueDetailsForm.controls.jobNumDes.setValue('')
+          this.metalIssueDetailsForm.controls.jobNumber.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -672,11 +672,16 @@ export class MetalIssueDetailsComponent implements OnInit {
           if (data) {
             console.log(data, 'data');
 
-          }else {
-            this.overlaystockcode.showOverlayPanel(event)
-            this.metalIssueDetailsForm.controls.stockcode.setValue('')
+          } else {
             this.comService.toastErrorByMsgId('MSG1531')
+            this.metalIssueDetailsForm.controls.stockCode.setValue('')
+            this.showOverleyPanel(event, 'stockCode')
+            return
           }
+        } else {
+          this.overlaystockcode.closeOverlayPanel()
+          this.metalIssueDetailsForm.controls.stockCode.setValue('')
+          this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
@@ -710,7 +715,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (this.metalIssueDetailsForm.value[formControlName] != '') return;
 
     switch (formControlName) {
-      case 'jobNumDes':
+      case 'jobNumber':
         this.overlayjobNumDes.showOverlayPanel(event);
         break;
       case 'location':

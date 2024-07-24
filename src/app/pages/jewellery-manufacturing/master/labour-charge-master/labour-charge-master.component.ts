@@ -514,7 +514,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   onlabourtypeChange() {
     // this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
-    // this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
+    // this.diamondlabourMasterForm.controls.method.setValue('GEN');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;

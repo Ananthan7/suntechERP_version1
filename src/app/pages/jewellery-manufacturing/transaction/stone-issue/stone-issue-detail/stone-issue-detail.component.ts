@@ -587,27 +587,28 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data,'data')
           this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-          this.stoneIssueDetailsFrom.controls.stockCode.setValue(this.tableData[0].STOCK_CODE)
-          this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(this.tableData[0].STOCK_DESCRIPTION)
-          this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.tableData[0].DIVCODE)
-          this.stoneIssueDetailsFrom.controls.carat.setValue(this.tableData[0].KARAT)
+          this.stoneIssueDetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
+          this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
+          this.stoneIssueDetailsFrom.controls.carat.setValue(data[0].KARAT)
 
-          this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(this.tableData[0].SIEVE_SET)
-          this.stoneIssueDetailsFrom.controls.size.setValue(this.tableData[0].SIZE)
-          this.stoneIssueDetailsFrom.controls.sieve.setValue(this.tableData[0].SIEVE)
-          this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(this.tableData[0].SIEVE_DESC)
-          this.stoneIssueDetailsFrom.controls.pieces.setValue(this.tableData[0].PCS)
-          this.stoneIssueDetailsFrom.controls.shape.setValue(this.tableData[0].SHAPE)
-          this.stoneIssueDetailsFrom.controls.remarks.setValue(this.tableData[0].D_REMARKS)
-          this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(this.tableData[0].LOCTYPE_CODE)
+          // this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(this.tableData[0].SIEVE_SET)
+          // this.stoneIssueDetailsFrom.controls.size.setValue(this.tableData[0].SIZE)
+          // this.stoneIssueDetailsFrom.controls.sieve.setValue(this.tableData[0].SIEVE)
+          // this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(this.tableData[0].SIEVE_DESC)
+          // this.stoneIssueDetailsFrom.controls.pieces.setValue(this.tableData[0].PCS)
+          // this.stoneIssueDetailsFrom.controls.shape.setValue(this.tableData[0].SHAPE)
+          // this.stoneIssueDetailsFrom.controls.remarks.setValue(this.tableData[0].D_REMARKS)
+          // this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(this.tableData[0].LOCTYPE_CODE)
           // this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].pieces)
 
           this.tableData = result.dynamicData[1] || []
-          this.columnhead1 = Object.keys(this.tableData[0])
+          // this.columnhead1 = Object.keys(this.tableData[0])
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -617,6 +618,7 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
@@ -636,18 +638,17 @@ export class StoneIssueDetailComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data && data[0]?.UNQ_JOB_ID != '') {
-            this.jobNumberDetailData = data
-            console.log(this.jobNumberDetailData )
-            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
-            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
-            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
-            this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
-            this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
-            if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
-              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            } else {
-              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
-            }
+            
+            // this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
+            // this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
+            // this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
+            // this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            // this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
+            // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
+            //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
+            // } else {
+            //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
+            // }
 
             this.subJobNumberValidate()
           } else {
