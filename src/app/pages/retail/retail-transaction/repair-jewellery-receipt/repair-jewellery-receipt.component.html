@@ -316,6 +316,7 @@
                   formControlName="customer_delivery_date"
                   placeholder="DD/MM/YYYY"
                   DateValidation
+                  (dateChange)="date($event)"
                 />
                 <mat-datepicker-toggle
                   matSuffix

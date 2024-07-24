@@ -200,6 +200,23 @@ export class RepairDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeSelected(value: any) {
+    console.log(value);
+    this.repairjewelleryreceiptdetailsFrom.controls.own_stock.setValue(value.STOCK_CODE);
+  }
+
   stoneTypeCodeSelected(e: any) {
     this.repairjewelleryreceiptdetailsFrom.controls.stone_type.setValue(e.CODE);
   }
@@ -287,7 +304,7 @@ export class RepairDetailsComponent implements OnInit {
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["total_amount"].setValue(
-        this.receiptData.AMOUNT
+        this.comService.decimalQuantityFormat(this.receiptData.AMOUNT, "THREE")
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["status"].setValue(
