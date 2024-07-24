@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-jewellery-altration-details',
   templateUrl: './jewellery-altration-details.component.html',
@@ -31,6 +31,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  selectedIndexes: any = [];
   summaryDetailData:any;
   viewMode: boolean = false;
   isSaved: boolean = false;
@@ -156,6 +157,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
@@ -174,6 +176,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       this.jewelleryaltrationdetailsFrom.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.isSaved = true;
       
       }
     
@@ -320,13 +323,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
   }
 
+ 
   addTableData() {
-
-
-
-
-    let srno = length + 1;
-    let data = {
+    const length = this.tableData.length;
+    const srno = length + 1;
+    const data = {
       "Div": "",
       "Components": "",
       "Location": "",
@@ -338,6 +339,8 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       "Amount": "",
       "Sieve": "",
       "Shape": "",
+      "SRNO": srno,
+      "isDisabled": true
     };
     this.tableData.push(data);
 
@@ -346,49 +349,55 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       item.SRNO = i + 1;
       item.isDisabled = true;
     });
-
   }
-  // reCalculateSRNO(): void {
-  //   this.tableData.forEach((element: any, index: any) => {
-  //     element.SRNO = index + 1
-  //     element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
-  //   })
-  // }
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
+
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+  }
 
   deleteTableData(): void {
-    if (this.selectRowIndex === null) {
+    console.log(this.selectedIndexes);
+
+    if (this.selectedIndexes.length > 0) {
       Swal.fire({
-        title: '',
-        text: 'Please select a row to remove from grid!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Simulate deletion without using an actual API call
+          if (this.tableData.length > 0) {
+            this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            this.tableData.forEach((item: any, i: any) => {
+              item.SRNO = i + 1;
+            });
+
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
+        }
       });
-      return;
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
     }
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.tableData = this.tableData.filter((item: any, index: any) => index !== this.selectRowIndex);
-        this.reCalculateSRNO();
-        this.selectRowIndex = null; // Reset the selected row index
-      }
-    });
   }
 
-  reCalculateSRNO(): void {
-    this.tableData.forEach((item, index) => {
-      item.SRNO = index + 1;
-    });
-  }
 
 
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
@@ -477,26 +486,60 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.tableData.pop();
   }
   submitValidations() {
-    let form = this.jewelleryaltrationdetailsFrom.value
-    if (form.jobNumber == '') {
-      this.toastr.error('Job Number required')
-      return
+    const form = this.jewelleryaltrationdetailsFrom.value;
+    if (!form.stockcode) {
+      this.toastr.error('Stockcode required');
+      return false;
     }
-    return false;
+    if (!form.description) {
+      this.toastr.error('Description required field is empty');
+      return false;
+    }
+    if (!form.costcode) {
+      this.toastr.error('Costcode required field is empty');
+      return false;
+    }
+    if (!form.metalcolor) {
+      this.toastr.error('Metalcolor required field is empty');
+      return false;
+    }
+    return true; 
   }
+  // formSubmit(flag: any) {
+  //   if (this.submitValidations()) return;
+  
+  //   let dataToparent = {
+  //     FLAG: flag,
+  //     POSTDATA: this.setPostData()
+  //   }
+  //   // this.close(postData);
+  //   this.saveDetail.emit(dataToparent);
+  //   if (flag == 'CONTINUE') {
+  //     this.resetStockDetails()
+  //   }
+  // }
   formSubmit(flag: any) {
-    if (this.submitValidations()) return;
-    let dataToparent = {
+    // Check if the form is valid
+    if (!this.submitValidations()) {
+      return;
+    }
+    const dataToParent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
-    }
-    // this.close(postData);
-    this.saveDetail.emit(dataToparent);
-    if (flag == 'CONTINUE') {
-      this.resetStockDetails()
+    };
+    this.saveDetail.emit(dataToParent);
+    if (flag === 'CONTINUE') {
+      this.resetStockDetails();
     }
   }
+  
   resetStockDetails() {
+    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue('')
+    this.jewelleryaltrationdetailsFrom.controls.description.setValue('')
+    this.jewelleryaltrationdetailsFrom.controls.refvoc.setValue('')
+    this.jewelleryaltrationdetailsFrom.controls.costcode.setValue('')
+    this.jewelleryaltrationdetailsFrom.controls.dated.setValue('')
+    this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue('')
     this.jewelleryaltrationdetailsFrom.controls.costFC.setValue('')
     this.jewelleryaltrationdetailsFrom.controls.costCC.setValue('')
     this.jewelleryaltrationdetailsFrom.controls.costFCNEW.setValue('')
@@ -917,15 +960,15 @@ stockCodeValidate() {
           this.jewelleryaltrationdetailsFrom.controls.dated.setValue(data[0].OPENED_ON)
           this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(
             this.commonService.decimalQuantityFormat(data[0].METAL_TOTALGROSSWT, 'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALAMOUNT,'METAL'))
           this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALGROSSWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALAMOUNT,'METAL'))
           this.jewelleryaltrationdetailsFrom.controls.diamondsWT.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.diamondsFC.setValue(data[0].LOOSE_TOTALAMOUNT)
+          this.jewelleryaltrationdetailsFrom.controls.diamondsFC.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALAMOUNT,'METAL'))
           this.jewelleryaltrationdetailsFrom.controls.diamondsNEW.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.diamondsCC.setValue(data[0].LOOSE_TOTALAMOUNT)
-          this.jewelleryaltrationdetailsFrom.controls.gross.setValue(data[0].POSGROSSWT)
-          this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(data[0].POSGROSSWT)
+          this.jewelleryaltrationdetailsFrom.controls.diamondsCC.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALAMOUNT,'METAL'))
+          this.jewelleryaltrationdetailsFrom.controls.gross.setValue(this.commonService.decimalQuantityFormat(data[0].POSGROSSWT,'METAL'))
+          this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(this.commonService.decimalQuantityFormat(data[0].POSGROSSWT,'METAL'))
           this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(data[0].STOCK_LCCOST)
           this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(data[0].STOCK_LCCOST)
           this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(data[0].PRICE1PER)
