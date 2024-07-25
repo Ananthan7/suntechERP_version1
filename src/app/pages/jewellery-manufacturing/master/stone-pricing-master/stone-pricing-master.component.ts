@@ -841,14 +841,12 @@ export class StonePricingMasterComponent implements OnInit {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param =  {
-      "SPID": "105",
-      "parameter": {
         LOOKUPID: this.commonService.nullToString(LOOKUPDATA.LOOKUPID),
         WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-      }
     }
     this.commonService.showSnackBarMsg('MSG81447');
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', param)
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
