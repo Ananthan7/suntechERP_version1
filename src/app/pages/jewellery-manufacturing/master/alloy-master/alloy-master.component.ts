@@ -482,6 +482,7 @@ export class AlloyMasterComponent implements OnInit {
       return false;
     }
   }
+
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
@@ -490,8 +491,8 @@ export class AlloyMasterComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.toastInfoByMsgId('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -506,11 +507,6 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
-
-    // if (event.target.value == '') {
-    //   this.showOverleyPanel(event, 'hsncode')
-    //   return
-    // }
   }
   /**use: for checking form validations */
   alloyMasterFormChecks(FORMNAME: string) {

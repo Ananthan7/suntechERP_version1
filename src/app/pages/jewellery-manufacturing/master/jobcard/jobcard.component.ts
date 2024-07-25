@@ -1655,32 +1655,94 @@ export class JobcardComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
 
-    // if (event && event.target.value == '') {
-    //   this.showOverleyPanel(event, FORMNAME)
-    //   return
-    // }
+  //   // if (event && event.target.value == '') {
+  //   //   this.showOverleyPanel(event, FORMNAME)
+  //   //   return
+  //   // }
 
-    // this.showOverleyPanel(event, FORMNAME)
+  //   // this.showOverleyPanel(event, FORMNAME)
 
 
+  //   const inputValue = event.target.value.toUpperCase();
+  //   //  this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       this.isDisableSaveBtn = false;
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531');
+  //         this.jobCardFrom.controls[FORMNAME].setValue('');
+  //         this.jobCardFrom.controls.customername.setValue('');
+  //         this.jobCardFrom.controls.designtype.setValue('');
+  //         this.renderer.selectRootElement(FORMNAME).focus();
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+
+  //       if (data == '') {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.jobCardFrom.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         if (FORMNAME === 'customer') {
+  //           if (FORMNAME === 'customer') {
+  //             console.log(FORMNAME)
+  //             this.jobCardFrom.controls.customername.setValue('');
+  //           }
+  //         }
+  //         return
+  //       }
+
+  //       const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
+  //       if (matchedItem2) {
+  //         this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
+  //         if (FORMNAME === 'designcode') {
+  //           this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
+  //           this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
+  //           this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
+  //           this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
+  //           this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
+  //           this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
+  //           this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
+  //           this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
+  //           this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+  //         }
+  //       } else {
+  //         this.handleLookupError(FORMNAME, LOOKUPDATA);
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
+
+   /**use: validate all lookups to check data exists in db */
+   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
-    //  this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531');
           this.jobCardFrom.controls[FORMNAME].setValue('');
@@ -1721,52 +1783,6 @@ export class JobcardComponent implements OnInit {
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
-
-
-        // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
-        // if (matchedItem) {
-        //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem.ACCODE);
-        //   if (FORMNAME === 'customer') {
-        //     this.jobCardFrom.controls.customername.setValue(matchedItem.ACCOUNT_HEAD);
-
-        //   }
-
-        // } else {
-        //   this.commonService.toastErrorByMsgId('MSG1531');
-        //   this.jobCardFrom.controls[FORMNAME].setValue('');
-        //   this.jobCardFrom.controls.customername.setValue('');
-
-        //   if (FORMNAME === 'customer') {
-        //     this.jobCardFrom.controls.customername.setValue('');
-        //   }
-
-        //   this.renderer.selectRootElement(FORMNAME).focus();
-        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-
-        // }
-
-        // const matchedItem1 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() == inputValue);
-        // if (matchedItem1) {
-        //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem1.DESIGN_CODE);
-        //   if (FORMNAME === 'designcode') {
-
-        //     this.jobCardFrom.controls.designtype.setValue(matchedItem1.DESIGN_DESCRIPTION);
-        //   }
-
-        // } else {
-        //   this.commonService.toastErrorByMsgId('MSG1531');
-        //   this.jobCardFrom.controls[FORMNAME].setValue('');
-        //   this.jobCardFrom.controls.designtype.setValue('');
-
-        //   if (FORMNAME === 'designcode') {
-        //     this.jobCardFrom.controls.designtype.setValue('');
-        //   }
-
-        //   this.renderer.selectRootElement(FORMNAME).focus();
-        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-
-        // }
-
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })

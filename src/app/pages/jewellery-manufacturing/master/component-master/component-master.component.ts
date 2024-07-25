@@ -89,12 +89,12 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  
+
   // Function to determine the WHERECONDITION based on some criteria
   getDivisionCondition(): string {
     // Example criteria; replace with actual logic as needed
     const condition = 'L'; // This value would be dynamically determined
-  
+
     if (condition === 'L') {
       return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z')";
     } else if (condition === 'Z') {
@@ -104,7 +104,7 @@ export class ComponentMasterComponent implements OnInit {
       return "DIVISION_CODE <> ''";
     }
   }
-  
+
 
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -138,7 +138,7 @@ export class ComponentMasterComponent implements OnInit {
     WHERECONDITION: "DIVISION='S' AND COMP_PREFIX='1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -177,7 +177,7 @@ export class ComponentMasterComponent implements OnInit {
 
 
 
- 
+
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -591,7 +591,7 @@ export class ComponentMasterComponent implements OnInit {
     this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
   }
 
-  
+
   sizegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
@@ -629,7 +629,7 @@ export class ComponentMasterComponent implements OnInit {
   // sizeSetCodeSelected(e: any) {
   //   if (this.checkCode()) return
   //   console.log(e);
- 
+
   //   this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
   //   console.log(this.componentmasterForm.value.sizeSet);
 
@@ -641,7 +641,7 @@ export class ComponentMasterComponent implements OnInit {
   sizeSetCodeSelected(e: any) {
     if (this.checkCode()) return;
     console.log(e);
-  
+
     // Set the sizeSet form control value
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
     console.log(this.componentmasterForm.value.sizeSet);
@@ -649,7 +649,7 @@ export class ComponentMasterComponent implements OnInit {
     // Set the WHERECONDITION with the correct syntax and value
     this.sizeCodeData.WHERECONDITION = `COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')`;
   }
-  
+
 
 
   sizeCodeSelected(e: any) {
@@ -854,7 +854,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.RADIUS));
 
-        this.PICTURE_NAME = this.content.PICTURE_NAME
+    this.PICTURE_NAME = this.content.PICTURE_NAME
 
   }
 
@@ -1173,7 +1173,7 @@ export class ComponentMasterComponent implements OnInit {
       "CHARGE10FC": 0,
       "CHARGE10LC": 0,
       "ADD_STEEL": false,
-       "DESIGN_STNMTL_DETAIL":this.tableData,
+      "DESIGN_STNMTL_DETAIL": this.tableData,
       //[
       //   {
       //     "UNIQUEID": 0,
@@ -1370,22 +1370,22 @@ export class ComponentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
 
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentmasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-         else {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.componentmasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1401,14 +1401,14 @@ export class ComponentMasterComponent implements OnInit {
     let postData = {
       "SPID": "104",
       "parameter": {
-        COMPCODE:  this.componentmasterForm.value.code
+        COMPCODE: this.componentmasterForm.value.code
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
           //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
-         // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
+          // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')
@@ -1499,8 +1499,10 @@ export class ComponentMasterComponent implements OnInit {
       this.close('reloadMainGrid')
     }
   }
+
+  /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
     if (this.editMode && FORMNAME === 'code') {
       return;
@@ -1509,14 +1511,14 @@ export class ComponentMasterComponent implements OnInit {
       return;
     }
 
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
@@ -1525,11 +1527,44 @@ export class ComponentMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+        //this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
+
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+  //   if (this.editMode && FORMNAME === 'code') {
+  //     return;
+  //   }
+  //   if (this.editMode && FORMNAME === 'codedes') {
+  //     return;
+  //   }
+
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.componentmasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1766,7 +1801,7 @@ export class ComponentMasterComponent implements OnInit {
       default:
     }
   }
-  
+
 
 
   // showOverleyPanel(event: any, formControlName: string) {
