@@ -865,35 +865,65 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       });
     this.subscriptions.push(Sub)
   }
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-
-    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-
-    this.stockcodeDisable = false;
-    if (event.target.value == '' || this.viewMode == true) return
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        this.isDisableSaveBtn = false;
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
-          this.metallabourMasterForm.controls[FORMNAME].setValue('')
-          this.renderer.selectRootElement(FORMNAME).focus();
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
+      /**use: validate all lookups to check data exists in db */
+      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+        this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+        LOOKUPDATA.SEARCH_VALUE = event.target.value
+        this.stockcodeDisable = false;
+        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+        let param = {
+          LOOKUPID: LOOKUPDATA.LOOKUPID,
+          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
         }
-      }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
-  }
+        this.commonService.toastInfoByMsgId('MSG81447');
+        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+          .subscribe((result) => {
+            this.isDisableSaveBtn = false;
+            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+            if (data.length == 0) {
+              this.commonService.toastErrorByMsgId('MSG1531')
+              this.metallabourMasterForm.controls[FORMNAME].setValue('')
+              this.renderer.selectRootElement(FORMNAME).focus();
+              LOOKUPDATA.SEARCH_VALUE = ''
+              return
+            }
+           
+          }, err => {
+            this.commonService.toastErrorByMsgId('network issue found')
+          })
+        this.subscriptions.push(Sub)
+      }
+
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+
+  //   this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+  //   this.stockcodeDisable = false;
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       this.isDisableSaveBtn = false;
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.metallabourMasterForm.controls[FORMNAME].setValue('')
+  //         this.renderer.selectRootElement(FORMNAME).focus();
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   close(data?: any) {
     //TODO reset forms and data before closing

@@ -652,72 +652,65 @@ export class CustomerPriceMasterComponent implements OnInit {
     });
   }
 
+  
+  /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.customerpricemasterForm.controls[FORMNAME].setValue('')
           this.customerpricemasterForm.controls.desc.setValue('');
-          // this.jobCardFrom.controls.designtype.setValue('');
           this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-
-        // if (data == '') {
-        //   this.commonService.toastErrorByMsgId('MSG1531')
-        //   this.customerpricemasterForm.controls[FORMNAME].setValue('')
-        //   LOOKUPDATA.SEARCH_VALUE = ''
-        //   if (FORMNAME === 'customercode') {
-        //     if (FORMNAME === 'customercode') {
-        //       console.log(FORMNAME)
-        //       this.customerpricemasterForm.controls.desc.setValue('');
-        //     }
-        //   }
-        //   return
-        // }
-
-        // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
-        // if (matchedItem) {
-        //   this.customerpricemasterForm.controls[FORMNAME].setValue(matchedItem.ACCODE);
-        //   if (FORMNAME === 'customercode') {
-        //     this.customerpricemasterForm.controls.desc.setValue(matchedItem.ACCOUNT_HEAD);
-
-        //   }
-
-        // } else {
-        //   this.commonService.toastErrorByMsgId('MSG1531');
-        //   this.customerpricemasterForm.controls[FORMNAME].setValue('');
-        //   this.customerpricemasterForm.controls.desc.setValue('');
-
-        //   if (FORMNAME === 'customercode') {
-        //     this.customerpricemasterForm.controls.desc.setValue('');
-        //   }
-
-        //   this.renderer.selectRootElement(FORMNAME).focus();
-        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-
-        // }
-
-
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
+
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   const inputValue = event.target.value.toUpperCase();
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg()
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.customerpricemasterForm.controls[FORMNAME].setValue('')
+  //         this.customerpricemasterForm.controls.desc.setValue('');
+  //         // this.jobCardFrom.controls.designtype.setValue('');
+  //         this.renderer.selectRootElement(FORMNAME).focus();
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   // lookupKeyPress(event: KeyboardEvent) {
   //   if (event.key === 'Enter') {

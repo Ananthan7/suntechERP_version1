@@ -444,25 +444,57 @@ export class CommonServiceService {
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
     return result.length > 0 ? result[0]?.CONV_RATE : 0;
   }
+  // CCToFC(currency: any, amount: any, rate: any = null) {
+  //   console.log(this.allBranchCurrency);
+  //   rate = rate || this.getCurrRate(currency);
+  //   currency = currency;
+  //   rate = typeof (rate) == 'number' ? this.emptyToZero(rate) : this.emptyToZero(rate);
+  //   amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
+  //   let convertedAmount = 0;
+  //   const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+  //   console.log('=====cctofc===============================');
+  //   console.log(result);
+  //   console.log('====================================');
+  //   if (result[0].MUL_DIV == 'M') {
+  //     convertedAmount = amount / rate;
+  //     return convertedAmount;
+  //   } else {
+  //     convertedAmount = amount * rate;
+  //     return convertedAmount;
+  //   }
+  // }
   CCToFC(currency: any, amount: any, rate: any = null) {
     console.log(this.allBranchCurrency);
-    rate = rate || this.getCurrRate(currency);
-    currency = currency;
-    rate = typeof (rate) == 'number' ? this.emptyToZero(rate) : this.emptyToZero(rate);
-    amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
+  
+    // Ensure rate is set, either from the argument or by fetching it
+    rate = rate !== null ? rate : this.getCurrRate(currency);
+  
+    // Ensure amount and rate are numbers and convert empty values to zero
+    rate = typeof rate === 'number' ? this.emptyToZero(rate) : 0;
+    amount = typeof amount === 'number' ? this.emptyToZero(amount) : 0;
+  
     let convertedAmount = 0;
-    const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+  
+    // Filter the currency data for the given currency code
+    const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE === currency);
     console.log('=====cctofc===============================');
     console.log(result);
     console.log('====================================');
-    if (result[0].MUL_DIV == 'M') {
-      convertedAmount = amount / rate;
-      return convertedAmount;
+  
+    // Check if the currency data was found and perform the conversion
+    if (result.length > 0) {
+      if (result[0].MUL_DIV === 'M') {
+        convertedAmount = amount / rate;
+      } else {
+        convertedAmount = amount * rate;
+      }
     } else {
-      convertedAmount = amount * rate;
-      return convertedAmount;
+      console.error('Currency not found');
     }
+  
+    return convertedAmount;
   }
+  
   // CCToFC(currency: any, amount: any) {
 
   //   let rate = this.getCurrRate(currency);

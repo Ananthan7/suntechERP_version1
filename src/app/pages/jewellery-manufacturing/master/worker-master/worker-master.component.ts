@@ -541,32 +541,57 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
-    }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        this.isDisableSaveBtn = false;
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
-          this.workerMasterForm.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
+      /**use: validate all lookups to check data exists in db */
+      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+        LOOKUPDATA.SEARCH_VALUE = event.target.value
+        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+        let param = {
+          LOOKUPID: LOOKUPDATA.LOOKUPID,
+          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
         }
-      }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
-      })
-    this.subscriptions.push(Sub)
-  }
+        this.commonService.toastInfoByMsgId('MSG81447');
+        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+          .subscribe((result) => {
+            this.isDisableSaveBtn = false;
+            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+            if (data.length == 0) {
+              this.commonService.toastErrorByMsgId('MSG1531')
+              this.workerMasterForm.controls[FORMNAME].setValue('')
+              LOOKUPDATA.SEARCH_VALUE = ''
+              return
+            }
+           
+          }, err => {
+            this.commonService.toastErrorByMsgId('network issue found')
+          })
+        this.subscriptions.push(Sub)
+      }
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg()
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.workerMasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   setwithFormControl(status: any, code: any) {
     if (status == "Failed") {
