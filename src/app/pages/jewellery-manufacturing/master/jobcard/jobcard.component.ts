@@ -74,6 +74,7 @@ export class JobcardComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   selectedValue: string = 'singleMetal';
   currencyDt: any;
+ jobMaterialBOQ:any= [];
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
@@ -665,12 +666,47 @@ console.log( this.content);
   }
 
 
-  getDesigncode() {
+  // getDesigncode() {
 
+  //   let API = 'DesignMaster/GetDesignMasterDetails/' + this.jobCardFrom.value.designcode;
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+
+  //       let formattedPurity = parseFloat(result.response.PURITY).toFixed(6);
+  //       this.jobCardFrom.controls['purity'].setValue(formattedPurity);
+  //       this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
+  //       this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
+  //       this.jobCardFrom.controls['subcat'].setValue(result.response.SUBCATEGORY_CODE);
+  //       this.jobCardFrom.controls['prefix'].setValue(result.response.JOB_PREFIX);
+  //       this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
+  //       this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
+  //       this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
+  //       this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
+  //       this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
+
+
+
+  //       this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
+
+  //       this.tableData[0].Pcs = result.response.PCS
+  //       this.tableData[0].metal_color = result.response.COLOR
+  //       this.tableData[0].metal_wt = result.response.METAL_WT
+  //       this.tableData[0].stone_wt = result.response.STONE_WT
+  //       this.tableData[0].gross_wt = result.response.GROSS_WT
+
+
+
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('Server Error')
+  //     })
+  //   this.subscriptions.push(Sub)
+
+  // }
+
+  getDesigncode() {
     let API = 'DesignMaster/GetDesignMasterDetails/' + this.jobCardFrom.value.designcode;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-
         let formattedPurity = parseFloat(result.response.PURITY).toFixed(6);
         this.jobCardFrom.controls['purity'].setValue(formattedPurity);
         this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
@@ -682,26 +718,69 @@ console.log( this.content);
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
         this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
         this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
-
-
-
+  
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
+  
+        this.tableData[0].Pcs = result.response.PCS;
+        this.tableData[0].metal_color = result.response.COLOR;
+        this.tableData[0].metal_wt = result.response.METAL_WT;
+        this.tableData[0].stone_wt = result.response.STONE_WT;
+        this.tableData[0].gross_wt = result.response.GROSS_WT;
+  
+        // Get the first object from DESIGN_STNMTL_DETAIL array
+      
+        const firstDetail = result.response.DESIGN_STNMTL_DETAIL;
+        if (firstDetail) {
+          firstDetail.forEach((element:any)=>{
+            let obj = 
+            {
+              SRNO: element.SRNO,
+              JOB_NUMBER: String(this.jobCardFrom.value.jobno),
+              JOB_DATE: new Date().toISOString(),
+              JOB_SO_NUMBER: 0, // Adjust as necessary
+              UNQ_JOB_ID: "", // Provide a unique ID if available
+              JOB_SO_MID: 0, // Adjust as necessary
+              BRANCH_CODE: "DMCC", // Adjust if needed
+              DESIGN_CODE: element.DESIGN_CODE,
+              METALSTONE: element.METALSTONE,
+              DIVCODE: element.DIVCODE,
+              PRICEID: element.PRICEID || "", // Adjust if PRICEID is available
+              KARAT_CODE: element.KARAT_CODE,
+              CARAT: element.CARAT,
+              GROSS_WT: element.GROSS_WT,
+              PCS: element.PCS,
+              RATE_TYPE: element.RATE_TYPE,
+              CURRENCY_CODE: element.CURRENCY_CODE,
+              RATE: element.RATE,
+              AMOUNTFC: element.AMOUNTFC,
+              AMOUNTLC: element.AMOUNTLC,
+              MAKINGRATE: element.MAKINGRATE,
+              MAKINGAMOUNT: element.MAKINGAMOUNT,
+              SIEVE: element.SIEVE,
+              COLOR: element.COLOR,
+              CLARITY: element.CLARITY,
+              SHAPE: element.SHAPE,
+              SIZE_FROM: element.SIZE_FROM,
+              SIZE_TO: element.SIZE_TO,
+              UNQ_DESIGN_ID: "", // Provide a unique ID if available
+              UNIQUEID: element.UNIQUEID,
+              STOCK_CODE: element.STOCK_CODE,
+              SIEVE_SET: element.SIEVE_SET,
+              PROCESS_TYPE: element.PROCESS_TYPE,
+              PURITY: element.PURITY
+            }
+            this.jobMaterialBOQ.push(obj)
+          })
 
-        this.tableData[0].Pcs = result.response.PCS
-        this.tableData[0].metal_color = result.response.COLOR
-        this.tableData[0].metal_wt = result.response.METAL_WT
-        this.tableData[0].stone_wt = result.response.STONE_WT
-        this.tableData[0].gross_wt = result.response.GROSS_WT
-
-
-
+        }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
-      })
-    this.subscriptions.push(Sub)
-
+        this.commonService.toastErrorByMsgId('Server Error');
+      });
+    this.subscriptions.push(Sub);
   }
+  
 
+  
 
   customerCodeSelected(e: any) {
     console.log(e);
@@ -954,45 +1033,9 @@ console.log( this.content);
       "LENGTH_DESC": "",
       "TIME_DESC": "",
       "RANGE_DESC": "",
-      "JOB_MATERIAL_BOQ_DJ": [
-        {
-          "SRNO": 0,
-          "JOB_NUMBER": "",
-          "JOB_DATE": "2023-10-26T05:59:21.735Z",
-          "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "string",
-          "JOB_SO_MID": 0,
-          "BRANCH_CODE": "",
-          "DESIGN_CODE": "",
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "PRICEID": "",
-          "KARAT_CODE": "",
-          "CARAT": 0,
-          "GROSS_WT": 0,
-          "PCS": 0,
-          "RATE_TYPE": "",
-          "CURRENCY_CODE": "",
-          "RATE": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "MAKINGRATE": 0,
-          "MAKINGAMOUNT": 0,
-          "SIEVE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SHAPE": "",
-          "SIZE_FROM": "",
-          "SIZE_TO": "",
-          "UNQ_DESIGN_ID": "",
-          "UNIQUEID": 0,
-          "STOCK_CODE": "",
-          "SIEVE_SET": "",
-          "PROCESS_TYPE": "",
-          "PURITY": 0
-        }
-      ],
+      "JOB_MATERIAL_BOQ_DJ":this.jobMaterialBOQ,
       "JOB_SALESORDER_DETAIL_DJ": [
+//grid
         {
           "SRNO": 0,
           "JOB_NUMBER": "",
