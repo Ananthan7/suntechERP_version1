@@ -648,47 +648,59 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   stockCodeValidate(event: any) {
-    this.showOverleyPanel(event, 'stockcode')
-    if (event.target.value == '') return
+    this.showOverleyPanel(event, 'stockCode');
+    if (event.target.value === '') return;
+
     let postData = {
-      "SPID": "046",
-      "parameter": {
-        strStockCode: event.target.value,
-        strBranchCode: this.comService.nullToString(this.branchCode),
-        strVocType: this.content.HEADERDETAILS.VOCTYPE,
-        strUserName: this.comService.nullToString(this.userName),
-        strLocation: '',
-        strPartyCode: '',
-        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
-      }
-    }
-
-    this.comService.showSnackBarMsg('MSG81447')
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          if (data) {
-            console.log(data, 'data');
-
-          } else {
-            this.comService.toastErrorByMsgId('MSG1531')
-            this.metalIssueDetailsForm.controls.stockCode.setValue('')
-            this.showOverleyPanel(event, 'stockCode')
-            return
-          }
-        } else {
-          this.overlaystockcode.closeOverlayPanel()
-          this.metalIssueDetailsForm.controls.stockCode.setValue('')
-          this.comService.toastErrorByMsgId('MSG1747')
+        "SPID": "046",
+        "parameter": {
+            strStockCode: event.target.value,
+            strBranchCode: this.comService.nullToString(this.branchCode),
+            strVocType: this.content.HEADERDETAILS.VOCTYPE,
+            strUserName: this.comService.nullToString(this.userName),
+            strLocation: '',
+            strPartyCode: '',
+            strVocDate: this.comService.formatDateTime(this.comService.currentDate)
         }
-      }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            if (result.status === "Success" && result.dynamicData[0]) {
+                let data = result.dynamicData[0];
+                if (data) {
+                    console.log(data, 'data');
+                    if (data[0].VALID_STOCK) {
+                        // Handle the valid stock case
+                        // You can set other form values or perform other actions here if needed
+                        this.overlaystockcode.closeOverlayPanel();
+                    } else {
+                        this.comService.toastErrorByMsgId('MSG1531');
+                        this.metalIssueDetailsForm.controls.stockCode.setValue('');
+                        this.showOverleyPanel(event, 'stockCode');
+                    }
+                } else {
+                    this.comService.toastErrorByMsgId('MSG1531');
+                    this.metalIssueDetailsForm.controls.stockCode.setValue('');
+                    this.showOverleyPanel(event, 'stockCode');
+                }
+            } else {
+                this.comService.toastErrorByMsgId('MSG1747');
+                this.metalIssueDetailsForm.controls.stockCode.setValue('');
+                this.overlaystockcode.closeOverlayPanel();
+            }
+        }, err => {
+            this.comService.closeSnackBarMsg();
+            this.comService.toastErrorByMsgId('MSG1531');
+            this.metalIssueDetailsForm.controls.stockCode.setValue('');
+            this.showOverleyPanel(event, 'stockCode');
+        });
+
+    this.subscriptions.push(Sub);
+}
+
   FillMtlRequiredDetail() {
     let postData = {
       "SPID": "056",
@@ -721,7 +733,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       case 'location':
         this.overlaylocation.showOverlayPanel(event);
         break;
-      case 'stockcode':
+      case 'stockCode':
         this.overlaystockcode.showOverlayPanel(event);
         break;
       case 'workerCodeDes':

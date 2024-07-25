@@ -522,11 +522,12 @@ export class MetalReturnDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
 
         } else {
-          this.overlayprocessCodeSearch.showOverlayPanel(event)
+          this.overlayprocessCodeSearch.closeOverlayPanel()
           this.showOverleyPanel(event, 'processCode')
           this.metalReturnDetailsForm.controls.processCode.setValue('')
           this.comService.toastErrorByMsgId('MSG1531')
         }
+        
       }, err => {
         this.comService.closeSnackBarMsg()
         this.comService.toastErrorByMsgId('MSG1747')
