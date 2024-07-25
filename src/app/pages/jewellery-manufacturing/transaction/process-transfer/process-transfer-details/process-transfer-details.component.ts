@@ -2704,42 +2704,48 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
       this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
       this.setValueWithDecimal('METAL_LossPureWt', txtLossPureWt, 'METAL')
+      this.CalculateMetalBalance()
     } catch (err) {
       this.commonService.showSnackBarMsg("MSG2100");
     }
   }
-  // private CalculateMetalBalance(): void {
-  //   try {
-  //     if ((this.emptyToZero(txtMFromGrossWeight.Text) - objFormControl.Flc_Round(this.emptyToZero(txtMToGrossWt.Text) + this.emptyToZero(txtMScrapGrWt.Text), StaticValues.pubintMqtyDecimal)) < 0) {
-  //       txtGainGrWt.Text = (this.emptyToZero(txtMFromGrossWeight.Text) - objFormControl.Flc_Round(this.emptyToZero(txtMToGrossWt.Text) + this.emptyToZero(txtMScrapGrWt.Text), StaticValues.pubintMqtyDecimal)).ToString();
-  //       txtGainPureWt.Text = (this.emptyToZero(txtMFromPureWt.Text) - objFormControl.Flc_Round(this.emptyToZero(txtMToPureWt.Text) + this.emptyToZero(txtMScrapPureWt.Text), StaticValues.pubintMqtyDecimal)).ToString();
-  //       txtGainGrWt.Text = (this.emptyToZero(txtGainGrWt.Text) * -1).ToString();
-  //       txtGainPureWt.Text = (this.emptyToZero(txtGainPureWt.Text) * -1).ToString();
-  //       txtLossBooked.Text = 0.ToString();
-  //       txtLossPureWt.Text = 0.ToString();
-  //       txtBalPCS.Text = 0.ToString();
-  //       txtBalGrWt.Text = 0.ToString();
-  //       txtBalStoneWt.Text = 0.ToString();
-  //       txtBalNetWt.Text = 0.ToString();
-  //       txtBalPureWt.Text = 0.ToString();
-  //     }
-  //     else {
-  //       txtGainGrWt.Text = 0.ToString();
-  //       txtGainPureWt.Text = 0.ToString();
-
-  //       txtBalPCS.Text = (objSqlObjectTrans.Empty2zero(txtMFromPCS.Text) - (objSqlObjectTrans.Empty2zero(txtMToPCS.Text) + objSqlObjectTrans.Empty2zero(txtMScrapPCS.Text))).ToString();
-  //       txtBalGrWt.Text = (objSqlObjectTrans.Empty2zero(txtMFromGrossWeight.Text) - objFormControl.Flc_Round(objSqlObjectTrans.Empty2zero(txtMToGrossWt.Text) + objSqlObjectTrans.Empty2zero(txtMScrapGrWt.Text) + objSqlObjectTrans.Empty2zero(txtLossBooked.Text.Trim()), StaticValues.pubintMqtyDecimal)).ToString();
-  //       txtBalStoneWt.Text = (objSqlObjectTrans.Empty2zero(txtMFromStoneWt.Text) - (objSqlObjectTrans.Empty2zero(txtMToStoneWt.Text) + objSqlObjectTrans.Empty2zero(txtMScrapStoneWt.Text))).ToString();
-  //       txtBalNetWt.Text = (objSqlObjectTrans.Empty2zero(txtMFromNetWeight.Text) - objFormControl.Flc_Round(objSqlObjectTrans.Empty2zero(txtMToNetWt.Text) + objSqlObjectTrans.Empty2zero(txtMScrapNetWt.Text) + objSqlObjectTrans.Empty2zero(txtLossBooked.Text.Trim()), StaticValues.pubintMqtyDecimal)).ToString();
-  //       txtBalPureWt.Text = (objSqlObjectTrans.Empty2zero(txtMFromPureWt.Text) - objFormControl.Flc_Round(objSqlObjectTrans.Empty2zero(txtMToPureWt.Text) + objSqlObjectTrans.Empty2zero(txtMScrapPureWt.Text) + objSqlObjectTrans.Empty2zero(txtLossPureWt.Text.Trim()), StaticValues.pubintMqtyDecimal)).ToString();
-  //       txtBalIronWt.Text = (objSqlObjectTrans.Empty2zero(txtFromIronWeight.Text) - objFormControl.Flc_Round(objSqlObjectTrans.Empty2zero(txtToIronWt.Text) + objSqlObjectTrans.Empty2zero(txtToIronScrapWt.Text), StaticValues.pubintMqtyDecimal)).ToString();
-  //     }
-  //   }
-  //   catch (Exception ex)
-  //   {
-  //     MessageBox.Show(ex.Message, objCommonFunctions.GetMessage("MSG2100"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-  //   }
-  // }
+  private CalculateMetalBalance(): void {
+    try {
+      let form = this.processTransferdetailsForm.value;
+      if (this.emptyToZero(form.METAL_GrossWeightFrom) - ((this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt))) < 0) {
+        let txtGainGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt)));
+        let txtGainPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt)));
+        txtGainGrWt = (this.emptyToZero(txtGainGrWt) * -1);
+        txtGainPureWt = (this.emptyToZero(txtGainPureWt) * -1);
+        this.setValueWithDecimal('METAL_GainGrWt', txtGainGrWt, 'METAL')
+        this.setValueWithDecimal('METAL_GainPureWt', txtGainPureWt, 'METAL')
+        this.setValueWithDecimal('METAL_LossBooked', 0, 'METAL')
+        this.setValueWithDecimal('METAL_LossPureWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalPCS', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalGrWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalStoneWt', 0, 'STONE')
+        this.setValueWithDecimal('METAL_BalNetWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalPureWt', 0, 'METAL')
+      } else {
+        let txtBalPCS = (this.emptyToZero(form.METAL_FromPCS) - (this.emptyToZero(form.METAL_ToPCS) + this.emptyToZero(form.METAL_ScrapPCS)));
+        let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
+        let txtBalStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(form.txtMScrapStoneWt)));
+        let txtBalNetWt = (this.emptyToZero(form.METAL_FromNetWeight) - (this.emptyToZero(form.METAL_ToNetWt) + this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked)));
+        let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
+        let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
+        this.setValueWithDecimal('METAL_BalPCS', txtBalPCS, 'METAL')
+        this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
+        this.setValueWithDecimal('METAL_BalStoneWt', txtBalStoneWt, 'STONE')
+        this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
+        this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
+        this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
+        this.setValueWithDecimal('METAL_GainGrWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_GainPureWt', 0, 'METAL')
+      }
+    } catch (err) {
+      this.commonService.toastErrorByMsgId("MSG2100");
+    }
+  }
   emptyToZero(val: any) {
     return this.commonService.emptyToZero(val)
   }
