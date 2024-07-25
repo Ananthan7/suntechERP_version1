@@ -396,6 +396,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     METAL_ToPureWt: [''],
     METAL_ScrapPureWt: [''],
     METAL_BalPureWt: [''],
+    METAL_LossPureWt: [''],
   });
   constructor(
     private formBuilder: FormBuilder,
@@ -564,11 +565,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     // this.processTransferdetailsForm.controls.toggleSwitchtIssue.setValue(this.content.toggleSwitchtIssue)
   }
-  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-    this.processTransferdetailsForm.controls[formControlName].setValue(
-      this.commonService.setCommaSerperatedNumber(value, Decimal)
-    )
-  }
 
 
   getImageData() {
@@ -659,12 +655,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
   consumedInMinutes(event: any) {
     this.processTransferdetailsForm.controls.consumedInMinutes.setValue(event)
   }
-  nullToStringSetValue(formcontrol: string, value: any) {
-    this.processTransferdetailsForm.controls[formcontrol].setValue(
+  nullToStringSetValue(formControlName: string, value: any) {
+    this.processTransferdetailsForm.controls[formControlName].setValue(
       this.commonService.nullToString(value)
     )
-    this.FORM_VALIDATER[formcontrol] = this.commonService.nullToString(value)
+    this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
   }
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    let val = this.commonService.setCommaSerperatedNumber(value, Decimal)
+    this.processTransferdetailsForm.controls[formControlName].setValue(val)
+    this.FORM_VALIDATER[formControlName] = val
+  }
+
   /**USE: jobnumber validate API call */
   jobNumberValidate(event?: any) {
     if (this.viewMode) return
@@ -2594,6 +2596,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
   }
   /** METAL SECTION VALIDATIONS */
+  /**USE: METAL TAB TO PCS CHANGE VALIDATION */
   MToPCS_Validating() {
     let form = this.processTransferdetailsForm.value;
     let metalScrapTotal = this.commonService.emptyToZero(form.METAL_ToPCS) + this.commonService.emptyToZero(form.METAL_ScrapPCS)
@@ -2603,9 +2606,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       return;
     }
     this.nullToStringSetValue('METAL_ToPCS', form.METAL_FromPCS)
-    let txtBalPCS = this.commonService.balancePcsCalculate(form.METAL_FromPCS,form.METAL_ToPCS,form.METAL_ScrapPCS);
+    let txtBalPCS = this.commonService.balancePcsCalculate(form.METAL_FromPCS, form.METAL_ToPCS, form.METAL_ScrapPCS);
     this.nullToStringSetValue('METAL_BalPCS', txtBalPCS)
   }
+  /**USE: METAL TAB SCRAP PCS CHANGE VALIDATION */
   MScrapPCS_Validating() {
     try {
       let form = this.processTransferdetailsForm.value;
@@ -2616,18 +2620,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
       if ((this.emptyToZero(form.METAL_ToPCS) + this.emptyToZero(form.METAL_ScrapPCS)) > this.emptyToZero(form.METAL_FromPCS)) {
         form.METAL_ScrapPCS = this.FORM_VALIDATER.METAL_ScrapPCS
+        this.nullToStringSetValue('METAL_ScrapPCS', this.FORM_VALIDATER.METAL_ScrapPCS)
         this.commonService.toastErrorByMsgId("MSG7863");
         return;
       }
       this.nullToStringSetValue('METAL_ScrapPCS', form.METAL_ScrapPCS)
-      let txtBalPCS = this.commonService.balancePcsCalculate(form.METAL_FromPCS,form.METAL_ToPCS,form.METAL_ScrapPCS);
+      let txtBalPCS = this.commonService.balancePcsCalculate(form.METAL_FromPCS, form.METAL_ToPCS, form.METAL_ScrapPCS);
       this.nullToStringSetValue('METAL_BalPCS', txtBalPCS)
-    }
-    catch (Exception)
-    {
+    } catch (Exception) {
       this.commonService.toastInfoByMsgId("MSG2100");
     }
   }
+  /**USE: METAL TAB TO GROSS WT CHANGE VALIDATION */
   MToGrossWt_Validating() {
     try {
       let form = this.processTransferdetailsForm.value;
@@ -2654,13 +2658,94 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
       this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
 
-
+      this.CalculateNetAndPureWt()
     } catch (Exception) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
     }
   }
-  
+  /**USE: to calculate all net and pure wt fields */
+  private CalculateNetAndPureWt(): void {
+    try {
+      let form = this.processTransferdetailsForm.value;
+      let txtToIronWt = 0
+      let txtBalIronWt = 0
+      if (this.emptyToZero(form.METAL_FromIronWeight) != 0 && this.emptyToZero(form.METAL_ToIronWt) == 0) {
+        txtToIronWt = this.emptyToZero(form.METAL_FromIronWeight) / (this.emptyToZero(form.METAL_FromIronWeight) + this.emptyToZero(form.METAL_FromNetWeight)) * this.emptyToZero(form.METAL_GrossWeightTo);
+        txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
+      }
+
+      let txtMToNetWt = (this.emptyToZero(form.METAL_GrossWeightTo) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(txtToIronWt)));
+      let txtMToPureWt = (this.emptyToZero(txtMToNetWt) * this.emptyToZero(form.PURITY));
+
+      let txtMScrapNetWt = (this.emptyToZero(form.METAL_ScrapGrWt) - (this.emptyToZero(form.METAL_ScrapStoneWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
+      let txtMScrapPureWt = (this.emptyToZero(txtMScrapNetWt) * this.emptyToZero(form.PURITY));
+
+      let txtBalNetWt = (this.emptyToZero(form.METAL_FromNetWeight) - (this.emptyToZero(txtMToNetWt) + this.emptyToZero(txtMScrapNetWt) + this.emptyToZero(form.METAL_LossBooked)));
+      let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(txtMToPureWt) + this.emptyToZero(txtMScrapPureWt) + this.emptyToZero(form.METAL_LossBooked)));
+
+      let txtLossPureWt = form.METAL_LossPureWt
+      if (this.emptyToZero(txtBalNetWt) == 0 && this.commonService.nullToString(txtBalPureWt) == '0.001') {
+        if (this.emptyToZero(form.METAL_LossPureWt) != 0) {
+          txtLossPureWt = (this.emptyToZero(form.METAL_LossPureWt) + txtBalPureWt);
+          txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(txtMToPureWt) + this.emptyToZero(txtMScrapPureWt) + this.emptyToZero(txtLossPureWt)));
+
+        } else if (this.emptyToZero(txtMScrapPureWt) != 0) {
+          txtMScrapPureWt = (this.emptyToZero(txtMScrapPureWt) + this.emptyToZero(txtBalPureWt));
+          txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(txtMToPureWt) + this.emptyToZero(txtMScrapPureWt) + this.emptyToZero(txtLossPureWt)));
+        }
+      }
+      this.setValueWithDecimal('METAL_ToIronWt', txtToIronWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
+      this.setValueWithDecimal('METAL_ToNetWt', txtMToNetWt, 'METAL')
+      this.setValueWithDecimal('METAL_ToPureWt', txtMToPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_ScrapNetWt', txtMScrapNetWt, 'METAL')
+      this.setValueWithDecimal('METAL_ScrapPureWt', txtMScrapPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_LossPureWt', txtLossPureWt, 'METAL')
+      this.CalculateMetalBalance()
+    } catch (err) {
+      this.commonService.showSnackBarMsg("MSG2100");
+    }
+  }
+  private CalculateMetalBalance(): void {
+    try {
+      let form = this.processTransferdetailsForm.value;
+      if (this.emptyToZero(form.METAL_GrossWeightFrom) - ((this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt))) < 0) {
+        let txtGainGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt)));
+        let txtGainPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt)));
+        txtGainGrWt = (this.emptyToZero(txtGainGrWt) * -1);
+        txtGainPureWt = (this.emptyToZero(txtGainPureWt) * -1);
+        this.setValueWithDecimal('METAL_GainGrWt', txtGainGrWt, 'METAL')
+        this.setValueWithDecimal('METAL_GainPureWt', txtGainPureWt, 'METAL')
+        this.setValueWithDecimal('METAL_LossBooked', 0, 'METAL')
+        this.setValueWithDecimal('METAL_LossPureWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalPCS', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalGrWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalStoneWt', 0, 'STONE')
+        this.setValueWithDecimal('METAL_BalNetWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_BalPureWt', 0, 'METAL')
+      } else {
+        let txtBalPCS = (this.emptyToZero(form.METAL_FromPCS) - (this.emptyToZero(form.METAL_ToPCS) + this.emptyToZero(form.METAL_ScrapPCS)));
+        let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
+        let txtBalStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(form.txtMScrapStoneWt)));
+        let txtBalNetWt = (this.emptyToZero(form.METAL_FromNetWeight) - (this.emptyToZero(form.METAL_ToNetWt) + this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked)));
+        let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
+        let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
+        this.setValueWithDecimal('METAL_BalPCS', txtBalPCS, 'METAL')
+        this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
+        this.setValueWithDecimal('METAL_BalStoneWt', txtBalStoneWt, 'STONE')
+        this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
+        this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
+        this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
+        this.setValueWithDecimal('METAL_GainGrWt', 0, 'METAL')
+        this.setValueWithDecimal('METAL_GainPureWt', 0, 'METAL')
+      }
+    } catch (err) {
+      this.commonService.toastErrorByMsgId("MSG2100");
+    }
+  }
   emptyToZero(val: any) {
     return this.commonService.emptyToZero(val)
   }
