@@ -444,12 +444,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
           TEL2: this.posCustomerMasterMainForm.value.tel0number || '',
           MOBILE: `${this.posCustomerMasterMainForm.value.moblieNumber}` || '',
           FAX: this.posCustomerMasterMainForm.value.faxNo || '',
-          MARITAL_ST: this.posCustomerMasterMainForm.value.maritalSt || 'Unknown',
+          MARITAL_ST: this.posCustomerMasterMainForm.value.maritalSt || 'Unknown', //CHINNU - IS THIS VALUE HARDCODED
           WED_DATE: this.posCustomerMasterMainForm.value.weddate || this.dummyDate,
           SPOUSE_NAME: this.posCustomerMasterMainForm.value.spouse || '',
           REMARKS: this.posCustomerMasterMainForm.value.remarks || '',
           DATE_OF_BIRTH: this.posCustomerMasterMainForm.value.dob || this.dummyDate,
-          OPENING_ON: this.posCustomerMasterMainForm.value.openedOn ?? "1900-01-01T00:00:00",
+          OPENING_ON: this.posCustomerMasterMainForm.value.openedOn ?? "1900-01-01T00:00:00",//CHINNU - THIS SHOULD BE CURRENT DATE RIGHT?
           GENDER: this.posCustomerMasterMainForm.value.gender || '',
           REGION: '',
           NATIONALITY: this.posCustomerMasterMainForm.value.nationality || '',
@@ -499,7 +499,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           DESIGNATION: '',
           LEVELFLAG: 0,
           INCOMERANGE: '',
-          LAST_UPDATED_DATE: "1900-01-01T00:00:00",
+          LAST_UPDATED_DATE: "1900-01-01T00:00:00",//CHINNU - SHOULD BE CURRENT DATE?
 
           TAXOFFICENO: '',
           SALESMANNAME: '',
@@ -529,7 +529,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NAME_3: '',
           NAME_4: '',
           NAME_5: '',
-          DOB_2: "1900-01-01T00:00:00",
+          DOB_2: "1900-01-01T00:00:00",//CHINNU - NO DATA FROM API? CHECK BELOW FIELDS ALSO
           DOB_3: "1900-01-01T00:00:00",
           DOB_4: "1900-01-01T00:00:00",
           DOB_5: "1900-01-01T00:00:00",
@@ -557,7 +557,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CHILDNAME2: '',
           CHILDNAME3: '',
           CHILDNAME4: '',
-          CHILDDATEOFBIRTH1: "1900-01-01T00:00:00",
+          CHILDDATEOFBIRTH1: "1900-01-01T00:00:00",//CHINNU - NO DATA FROM API?
           CHILDDATEOFBIRTH2: "1900-01-01T00:00:00",
           CHILDDATEOFBIRTH3: "1900-01-01T00:00:00",
           CHILDDATEOFBIRTH4: "1900-01-01T00:00:00",
@@ -689,7 +689,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
               this.customerDetails.GENDER
             );
             this.posCustomerMasterMainForm.controls.fcn_cust_detail_marital_status.setValue(
-              this.customerDetails.MARITAL_ST
+              this.customerDetails.MARITAL_ST//CHINNU - BELOW LINE IS ALSO FOR MARITAL STATUS
             );
             this.posCustomerMasterMainForm.controls.fcn_cust_detail_marital_status.setValue(
               this.customerDetails.MARITAL_ST
@@ -701,7 +701,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             // this.snackBar.dismiss();
             this.snackBar.open('Customer details saved successfully', '', {
               duration: 1000 // time in milliseconds
-            });
+            });//CHINNU - NO MESSAGE ID FOR THE ABOVE MESSAGE?
 
             // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
             if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
@@ -825,7 +825,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
                         // this.customerDetails = resp.response;
                         this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
                       } else {
-                        this.snackBar.open('Digiscreen Failed');
+                        this.snackBar.open('Digiscreen Failed');//CHINNU - NO MESSAGE ID
                       }
 
                       console.log('====================================');
@@ -838,7 +838,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
                     if (data.response.isMatched.toUpperCase() == 'YES') {
                       // if (data.response == 'yes') {
-                      this.openDialog('Warning', 'We cannot proceed', true);
+                      this.openDialog('Warning', 'We cannot proceed', true);//CHINNU - NO MESSAGE ID
                       this.dialogBox.afterClosed().subscribe((data: any) => {
                         if (data == 'OK') {
                           // this.modalReference.close();

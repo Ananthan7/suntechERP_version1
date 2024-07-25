@@ -157,7 +157,7 @@ export class SchemeMasterComponent implements OnInit {
     }
 
     if (this.schemeMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU - CAMEL CASING
       return
     }
 
@@ -167,7 +167,7 @@ export class SchemeMasterComponent implements OnInit {
           "BRANCH_CODE": this.comService.nullToString(this.branchCode),
           "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
           "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
-          "SCHEME_UNIT": 0,
+          "SCHEME_UNIT": 0,//CHINNU - HARDCODING? CHECK BELOW VALUES ALSO
           "SCHEME_BONUS": 1,
           "SCHEME_PERIOD": 0,
           "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
@@ -177,7 +177,7 @@ export class SchemeMasterComponent implements OnInit {
           "SCHEME_FREQUENCY": this.comService.nullToString(this.schemeMasterForm.value.frequency),
           "STATUS": true,
           "START_DATE": this.schemeMasterForm.value.startDate,
-          "SCHEME_CURRENCY_CODE": "stri",
+          "SCHEME_CURRENCY_CODE": "stri",//CHINNU - HARDCODING?
           "PREFIX_CODE": this.comService.nullToString(this.schemeMasterForm.value.prefix),
           "BONUS_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeTwo),
           "CANCEL_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeThree),
@@ -192,7 +192,7 @@ export class SchemeMasterComponent implements OnInit {
             title: result.message || 'Success',
             text: '',
             icon: 'success',
-            confirmButtonColor: '#336699',
+            confirmButtonColor: '#336699',//CHINNU - HEX CODE?
             confirmButtonText: 'Ok'
           }).then((result: any) => {
             if (result.value) {
@@ -234,11 +234,11 @@ update(){
 
   let API = 'SchemeMaster/UpdateSchemeMaster/' + this.branchCode +"/"+ this.schemeMasterForm.value.code
   let postData ={
-    "MID": 0,
+    "MID": 0,//CHINNU - HARDCODING?
     "BRANCH_CODE": this.branchCode,
     "SCHEME_CODE": this.schemeMasterForm.value.code,
     "SCHEME_NAME": this.schemeMasterForm.value.description,
-    "SCHEME_UNIT": 0,
+    "SCHEME_UNIT": 0,//CHINNU - HARDCODING?
     "SCHEME_BONUS": 1,
     "SCHEME_PERIOD": 0,
     "SCHEME_REMARKS": this.schemeMasterForm.value.remarks,
@@ -248,7 +248,7 @@ update(){
     "SCHEME_FREQUENCY": this.schemeMasterForm.value.frequency,
     "STATUS": true,
     "START_DATE": this.schemeMasterForm.value.startDate,
-    "SCHEME_CURRENCY_CODE": "stri",
+    "SCHEME_CURRENCY_CODE": "stri",//CHINNU - HARDCODING?
     "PREFIX_CODE": this.schemeMasterForm.value.prefix,
     "BONUS_RECTYPE": this.schemeMasterForm.value.receiptModeTwo,
     "CANCEL_RECTYPE": this.schemeMasterForm.value.receiptModeThree,

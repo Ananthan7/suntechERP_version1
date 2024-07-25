@@ -83,7 +83,7 @@ export class PosWalkinCustomerComponent implements OnInit {
       return
     }
     if (this.poswalkincustomersForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU - NO MESSAGE ID ,  DO WE HAVE ONE, ELSE ATLEAST KEEP CAMEL CASING
       return
     }
     let API = 'POSWalkinCustomers/InsertPOSWalkinCustomers'
@@ -117,7 +117,7 @@ export class PosWalkinCustomerComponent implements OnInit {
               title: result.message || 'Success',
               text: '',
               icon: 'success',
-              confirmButtonColor: '#336699',
+              confirmButtonColor: '#336699',//CHINNU - WHY HEX CODE IS HARDCODED HERE, ALSO THIS CODE WE ARE NOT USING NOW
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
@@ -128,7 +128,7 @@ export class PosWalkinCustomerComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Not saved')//CHINNU - CAMEL CASING
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -136,7 +136,7 @@ export class PosWalkinCustomerComponent implements OnInit {
 
   update() {
     if (this.poswalkincustomersForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU - CAMEL CASING
       return
     }
     
@@ -153,7 +153,7 @@ export class PosWalkinCustomerComponent implements OnInit {
   "EMAILID": "",
   "BRANCH_CODE": "",
   "MID": 0,
-  "VOCDATE": "2024-03-05T10:50:45.297Z",
+  "VOCDATE": "2024-03-05T10:50:45.297Z",//CHINNU - HARDCODING? CHECK BELOW FIELDS ALSO
   "FEEDBACK": "",
   "MOBILECODE": 0,
   "YEARMONTH": "",
@@ -171,7 +171,7 @@ export class PosWalkinCustomerComponent implements OnInit {
               title: result.message || 'Success',
               text: '',
               icon: 'success',
-              confirmButtonColor: '#336699',
+              confirmButtonColor: '#336699',//CHINNU - CHECK HEX CODE
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
@@ -192,9 +192,9 @@ export class PosWalkinCustomerComponent implements OnInit {
     if (!this.content.MID) {
       Swal.fire({
         title: '',
-        text: 'Please Select data to delete!',
+        text: 'Please Select data to delete!',//CHINNU - CAMEL CASING
         icon: 'error',
-        confirmButtonColor: '#336699',
+        confirmButtonColor: '#336699',//CHINNU - CHECK HEX CODE
         confirmButtonText: 'Ok'
       }).then((result: any) => {
         if (result.value) {
@@ -232,7 +232,7 @@ export class PosWalkinCustomerComponent implements OnInit {
                 });
               } else {
                 Swal.fire({
-                  title: result.message || 'Error please try again',
+                  title: result.message || 'Error please try again',//CHINNU - NO MSG ID?
                   text: '',
                   icon: 'error',
                   confirmButtonColor: '#336699',
