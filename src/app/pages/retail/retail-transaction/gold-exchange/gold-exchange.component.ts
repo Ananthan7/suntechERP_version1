@@ -1,3 +1,11 @@
+/*
+MODULE : RETAIL(POS)
+MENU_SCREEN_NAME : Gold Exchange
+DEVELOPER : LINUS ELIAS JOSE
+*/
+
+
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -244,11 +252,11 @@ export class GoldExchangeComponent implements OnInit {
               this.goldExchangeForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE);
 
               this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.comService.decimalQuantityFormat(
-                this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));
+                this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));//CHINNU - ARE WE USING CORRECT COLUMN
 
 
               this.goldExchangeForm.controls.itemCurrCode.setValue(this.comService.decimalQuantityFormat(
-                this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));
+                this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));//CHINNU - ARE WE USING CORRECT COLUMN
 
               this.partyCurrencyCodeData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${event.target.value}'`;
 
@@ -258,7 +266,7 @@ export class GoldExchangeComponent implements OnInit {
 
         } else {
           this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
-            timeOut: 3000,
+            timeOut: 3000,//CHINNU - MESSAGE IS HARD CODED?
           })
         }
       }, err => {
@@ -400,12 +408,12 @@ export class GoldExchangeComponent implements OnInit {
 
         this.goldExchangeForm.controls.partyCode.setValue(data.PARTYCODE);
         this.goldExchangeForm.controls.partyCurrCode.setValue(data.PARTY_CURRENCY);
-        this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(data.PARTY_CURR_RATE);
+        this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(data.PARTY_CURR_RATE);//CHINNU - CORRECT COLUMN?
 
         this.goldExchangeForm.controls.customer.setValue(data.MHCUSTIDNO);
         this.goldExchangeForm.controls.moblie.setValue(data.CUSTOMER_MOBILE);
         this.goldExchangeForm.controls.itemCurr.setValue(data.ITEM_CURRENCY);
-        this.goldExchangeForm.controls.itemCurrCode.setValue(data.ITEM_CURR_RATE);
+        this.goldExchangeForm.controls.itemCurrCode.setValue(data.ITEM_CURR_RATE);//CHINNU - CORRECT COLUMN?
 
         this.goldExchangeForm.controls.creditDaysCode.setValue(data.CREDITDAY);
         this.goldExchangeForm.controls.salesMan.setValue(data.SALESPERSON_CODE);
@@ -414,31 +422,31 @@ export class GoldExchangeComponent implements OnInit {
         this.goldExchangeForm.controls.supInvNo.setValue(data.SUPINVNO);
         this.goldExchangeForm.controls.custName.setValue(data.HTUSERNAME);
         this.goldExchangeForm.controls.narration.setValue(data.REMARKS);
-        this.goldExchangeForm.controls.custId.setValue(data.HLOCTYPE_CODE);
+        this.goldExchangeForm.controls.custId.setValue(data.HLOCTYPE_CODE);//CHINNU - CORRECT COLUMN?
 
 
         this.goldExchangeForm.controls.amount.setValue(this.comService.decimalQuantityFormat(
           this.comService.emptyToZero(data.TOTSTAMP_AMTFC), 'AMOUNT'));
         this.goldExchangeForm.controls.amountDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.TOTSTAMP_AMTCC), 'AMOUNT'));
+          this.comService.emptyToZero(data.TOTSTAMP_AMTCC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
         this.goldExchangeForm.controls.rndOfAmt.setValue(this.comService.decimalQuantityFormat(
           this.comService.emptyToZero(data.ITEM_VALUE_FC), 'AMOUNT'));
         this.goldExchangeForm.controls.rndOfAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.ITEM_VALUE_CC), 'AMOUNT'));
+          this.comService.emptyToZero(data.ITEM_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
 
 
         this.goldExchangeForm.controls.rndNetAmt.setValue(this.comService.decimalQuantityFormat(
           this.comService.emptyToZero(data.NET_VALUE_FC), 'AMOUNT'));
         this.goldExchangeForm.controls.rndNetAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.NET_VALUE_CC), 'AMOUNT'));
+          this.comService.emptyToZero(data.NET_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
         this.goldExchangeForm.controls.otherAmt.setValue(this.comService.decimalQuantityFormat(
           this.comService.emptyToZero(data.ADDL_VALUE_FC), 'AMOUNT'));
         this.goldExchangeForm.controls.otherAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.ADDL_VALUE_CC), 'AMOUNT'));
+          this.comService.emptyToZero(data.ADDL_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
         this.goldExchangeForm.controls.grossAmt.setValue(this.comService.decimalQuantityFormat(
           this.comService.emptyToZero(data.GROSS_VALUE_FC), 'AMOUNT'));
         this.goldExchangeForm.controls.grossAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.GROSS_VALUE_CC), 'AMOUNT'));
+          this.comService.emptyToZero(data.GROSS_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
 
         this.goldExchangeForm.controls.partyCode1.setValue(data.PARTYADDRESS);
 
@@ -487,7 +495,7 @@ export class GoldExchangeComponent implements OnInit {
 
     this.customerData = e;
     this.goldExchangeForm.controls.customer.setValue(e.CODE);
-    this.goldExchangeForm.controls.custId.setValue(e.CODE);
+    this.goldExchangeForm.controls.custId.setValue(e.CODE);//CHINNU - CORRECT COLUMN?
     this.goldExchangeForm.controls.custName.setValue(e.NAME);
     this.goldExchangeForm.controls.email.setValue(e.EMAIL);
     this.goldExchangeForm.controls.moblie.setValue(e.MOBILE);
@@ -524,12 +532,12 @@ export class GoldExchangeComponent implements OnInit {
     this.goldExchangeForm.controls.vocDate.setValue(this.content.VOCDATE);
     this.goldExchangeForm.controls.partyCode.setValue(this.content.PARTYCODE);
     this.goldExchangeForm.controls.partyCurrCode.setValue(this.content.PARTY_CURRENCY);
-    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.content.PARTY_CURR_RATE);
+    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.content.PARTY_CURR_RATE);//CHINNU - CORRECT COLUMN?
     this.goldExchangeForm.controls.itemCurr.setValue(this.content.ITEM_CURRENCY);
     this.goldExchangeForm.controls.itemCurrCode.setValue(this.content.ITEM_CURR_RATE);
     this.goldExchangeForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
     this.goldExchangeForm.controls.partyCurrency.setValue(this.content.PARTY_VALUE_FC);
-    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
+    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);//CHINNU - CODE REPEAT
     this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
     this.goldExchangeForm.controls.rndNetAmt.setValue(this.content.NET_VALUE_FC);
 
@@ -590,7 +598,7 @@ export class GoldExchangeComponent implements OnInit {
       "VALUE_DATE": "2024-02-08T12:18:43.101Z",
       "SALESPERSON_CODE": this.goldExchangeForm.value.salesMan,
       "RATE_TYPE": "",
-      "METAL_RATE": 0,
+      "METAL_RATE": 0,//CHINNU - WHY BELOW COLUMNS HAVE HARDED VALUES AS ZERO
       "FIXED": 0,
       "TOTAL_PCS": 0,
       "TOTAL_GRWT": 0,
@@ -614,7 +622,7 @@ export class GoldExchangeComponent implements OnInit {
       "GROSS_VALUE_FC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.grossAmt, 'AMOUNT'),
       "GROSS_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.grossAmtDes, 'AMOUNT'),
       "REMARKS": this.goldExchangeForm.value.narration,
-      "SYSTEM_DATE": "2024-02-08T12:18:43.101Z",
+      "SYSTEM_DATE": "2024-02-08T12:18:43.101Z",//CHINNU - HARD CODED?
       "FLAG_EDIT_ALLOW": "",
       "TOTAL_OZWT": 0,
       "ROUND_VALUE_CC": 0,
@@ -698,7 +706,7 @@ export class GoldExchangeComponent implements OnInit {
       "TDS_TOTALCC": 0,
       "H_DECLARATIONNO": "",
       "H_ORIGINCOUNTRY": "",
-      "H_DECLARATIONDATE": "2024-02-08T12:18:43.101Z",
+      "H_DECLARATIONDATE": "2024-02-08T12:18:43.101Z",//CHINNU - HARD CODED
       "H_PACKETNO": 0,
       "SHIPPER_CODE": "",
       "SHIPPER_NAME": "",
@@ -708,7 +716,7 @@ export class GoldExchangeComponent implements OnInit {
       "MINING_COMP_CODE": "",
       "MINING_COMP_NAME": "",
       "AIRWAY_BILLNO": "",
-      "AIRWAY_BILLDATE": "2024-02-08T12:18:43.101Z",
+      "AIRWAY_BILLDATE": "2024-02-08T12:18:43.101Z",//CHINNU CHECK ALL DATE FIELD HARD CODINGS
       "AIRWAY_WEIGHT": 0,
       "ARIVAL_DATE": "2024-02-08T12:18:43.101Z",
       "CLEARENCE_DATE": "2024-02-08T12:18:43.101Z",
@@ -1106,7 +1114,7 @@ export class GoldExchangeComponent implements OnInit {
               title: result.message || 'Success',
               text: '',
               icon: 'success',
-              confirmButtonColor: '#336699',
+              confirmButtonColor: '#336699',//CHINNU - HEX CODE?
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
