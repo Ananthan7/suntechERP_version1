@@ -246,7 +246,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'STONE TYPE MASTER'",
+    WHERECONDITION: "TYPES = 'STONE TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -415,6 +415,7 @@ export class ComponentMasterComponent implements OnInit {
         this.viewMode = true;
         this.viewDisable = true;
       } else if (this.content.FLAG == 'EDIT') {
+        this.maindesigndetails()
         this.editableMode = true;
         this.editMode = true;
       } else if (this.content?.FLAG == 'DELETE') {
@@ -598,7 +599,7 @@ export class ComponentMasterComponent implements OnInit {
 
   stocktypeCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.CODE;
   }
 
   categoryCodeSelected(e: any) {
@@ -758,7 +759,7 @@ export class ComponentMasterComponent implements OnInit {
       "DSIZE": "",
       "PROCESS_TYPE": "",
       "D_REMARKS": "",
-      "POINTER_WT": "",
+      "POINTER_WT": 0,
       "EXT_Color": "",
       "EXT_CLARITY": "",
       "SIEVE_FROM": "",
@@ -1172,59 +1173,60 @@ export class ComponentMasterComponent implements OnInit {
       "CHARGE10FC": 0,
       "CHARGE10LC": 0,
       "ADD_STEEL": false,
-      "DESIGN_STNMTL_DETAIL": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "METALSTONE": "5",
-          "DIVCODE": "c",
-          "KARAT_CODE": "",
-          "CARAT": 0,
-          "GROSS_WT": 0,
-          "PCS": 0,
-          "RATE_TYPE": "",
-          "CURRENCY_CODE": form.currencyCode,
-          "RATE": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "MAKINGRATE": 0,
-          "MAKINGAMOUNT": 0,
-          "SIEVE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SHAPE": "",
-          "STOCK_CODE": "",
-          "DESIGN_CODE": "",
-          "KARAT": "",
-          "PRICEID": "",
-          "SIZE_FROM": form.sizeSet,
-          "SIZE_TO": "",
-          "RATEFC": 0,
-          "PART_CODE": "",
-          "DSIZE": "",
-          "LABCHGCODE": "",
-          "PRICECODE": "",
-          "DMMETALPERCENTAGE": 0,
-          "DLABCHGCODE": "",
-          "DPRICECODE": "",
-          "METALPER": 0,
-          "METALRATE": 0,
-          "CURR_RATE": 0,
-          "LABOURCODE": "",
-          "DETLINEREMARKS": "",
-          "PROCESS_TYPE": "",
-          "SIEVE_SET": "",
-          "STONE_TYPE": "",
-          "EXT_COLOR": "",
-          "EXT_CLARITY": "",
-          "D_REMARKS": form.remarks,
-          "POINTER_WT": 0,
-          "SIEVE_FROM": "",
-          "SIEVE_TO": "",
-          "PURITY": 0,
-          "OTHER_ATTR": ""
-        }
-      ],
+       "DESIGN_STNMTL_DETAIL":this.tableData,
+      //[
+      //   {
+      //     "UNIQUEID": 0,
+      //     "SRNO": 0,
+      //     "METALSTONE": "5",
+      //     "DIVCODE": "c",
+      //     "KARAT_CODE": "",
+      //     "CARAT": 0,
+      //     "GROSS_WT": 0,
+      //     "PCS": 0,
+      //     "RATE_TYPE": "",
+      //     "CURRENCY_CODE": form.currencyCode,
+      //     "RATE": 0,
+      //     "AMOUNTFC": 0,
+      //     "AMOUNTLC": 0,
+      //     "MAKINGRATE": 0,
+      //     "MAKINGAMOUNT": 0,
+      //     "SIEVE": "",
+      //     "COLOR": "",
+      //     "CLARITY": "",
+      //     "SHAPE": "",
+      //     "STOCK_CODE": "",
+      //     "DESIGN_CODE": "",
+      //     "KARAT": "",
+      //     "PRICEID": "",
+      //     "SIZE_FROM": form.sizeSet,
+      //     "SIZE_TO": "",
+      //     "RATEFC": 0,
+      //     "PART_CODE": "",
+      //     "DSIZE": "",
+      //     "LABCHGCODE": "",
+      //     "PRICECODE": "",
+      //     "DMMETALPERCENTAGE": 0,
+      //     "DLABCHGCODE": "",
+      //     "DPRICECODE": "",
+      //     "METALPER": 0,
+      //     "METALRATE": 0,
+      //     "CURR_RATE": 0,
+      //     "LABOURCODE": "",
+      //     "DETLINEREMARKS": "",
+      //     "PROCESS_TYPE": "",
+      //     "SIEVE_SET": "",
+      //     "STONE_TYPE": "",
+      //     "EXT_COLOR": "",
+      //     "EXT_CLARITY": "",
+      //     "D_REMARKS": form.remarks,
+      //     "POINTER_WT": 0,
+      //     "SIEVE_FROM": "",
+      //     "SIEVE_TO": "",
+      //     "PURITY": 0,
+      //     "OTHER_ATTR": ""
+      //   }
+      // ]
       "DESIGN_SEQUENCE_DETAILS_DJ": [
         {
           "DESIGN_CODE": "",
@@ -1392,6 +1394,28 @@ export class ComponentMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
+
+  maindesigndetails() {
+
+    // this.jobCardFrom.controls.jobCardFrom.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "104",
+      "parameter": {
+        COMPCODE:  this.componentmasterForm.value.code
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+         // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
