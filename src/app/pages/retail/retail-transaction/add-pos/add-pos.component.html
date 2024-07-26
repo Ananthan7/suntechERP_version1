@@ -2789,7 +2789,7 @@
                   <!-- <mat-form-field style="width: 100%; display:inline-block !important;"> -->
                   <mat-form-field>
                     <mat-label>Division </mat-label>
-                    <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" readonly />
+                    <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division"  />
                   </mat-form-field>
                   <!-- <master-search [MasterSearchData]="divisionCodeData"
                         (newRowClick)="divisionCodeSelected($event)">>
@@ -2841,7 +2841,7 @@
                       <mat-label>PCs</mat-label>
                       <input class="st_txt_right" type="number" [min]="0" autocomplete="off" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                        formControlName="fcn_li_pcs" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
+                        formControlName="fcn_li_pcs"  (focus)="setValToLocalStorage($event, 'fcn_li_pcs')" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
                       <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                               (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                               value="{{li_pcs_val}}"> -->
@@ -2864,7 +2864,7 @@
                       <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
                       <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
-                        id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()" (change)="changeGrossWt($event)"
+                        id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()" (focus)="setValToLocalStorage($event, 'fcn_li_gwt')" (change)="changeGrossWt($event)"
                         [readonly]="viewOnly" MetalDecimalInput />
                       <mat-error *ngIf="
                           lineItemForm.controls.fcn_li_gross_wt.hasError(
