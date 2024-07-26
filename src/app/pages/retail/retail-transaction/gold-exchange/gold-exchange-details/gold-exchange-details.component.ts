@@ -422,6 +422,14 @@ export class GoldExchangeDetailsComponent implements OnInit {
   changeMakingRate(event: any) {
     console.log(event.target.value);
 
+    console.log(this.goldExchangeDetailsForm.controls.unitAmount.setValue(
+      this.comService.emptyToZero(
+        event.target.value * this.goldExchangeDetailsForm.value.grossWeight
+      )
+    )
+  );
+    
+
     this.goldExchangeDetailsForm.controls.unitAmount.setValue(
       this.comService.emptyToZero(
         event.target.value * this.goldExchangeDetailsForm.value.grossWeight
@@ -467,6 +475,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
   changeMetalRate(event: any) {
     console.log(event.target.value);
     this.checkMetalRateLimit(event.target.value, "RATE", event.target.value);
+    console.log(this.checkMetalRateLimit);
+    
 
     // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.emptyToZero(
     //   event.target.value * this.goldExchangeDetailsForm.value.grossWeight));
@@ -583,6 +593,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   checkMetalRateLimit(event: any, object: string, metalRate: any) {
     const defaultMetalRate = localStorage.getItem("defaultMetalRate") || 0;
+    
 
     if (object == "RATE") {
       if (

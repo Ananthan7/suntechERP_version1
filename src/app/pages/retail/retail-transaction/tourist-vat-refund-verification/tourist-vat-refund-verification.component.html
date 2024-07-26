@@ -77,7 +77,6 @@
             >Party Currency</label
           >
           <div class="col-md-4">
-            `
             <mat-form-field style="width: 100%">
               <input type="text" matInput formControlName="partyCurrency" />
             </mat-form-field>
@@ -92,6 +91,26 @@
             ></master-search>
           </div>
         </div>
+        <!-- <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-4 col-form-label"
+            >Party Currency</label
+          >
+          <div class="col-md-4">
+            `
+            <mat-form-field style="width: 100%">
+              <input type="text" matInput formControlName="partyCurrency" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field style="width: 70%">
+              <input type="text" matInput formControlName="partyCurrencyRate" />
+            </mat-form-field>
+            <master-search
+              [MasterSearchData]="partyCurrencyCodeData"
+              (newRowClick)="partyCurrencyCodeSelected($event)"
+            ></master-search>
+          </div>
+        </div> -->
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
             >Entered By</label
@@ -139,7 +158,11 @@
           </div>
           <div class="col-md-4 text-center">
             <div class="p-1 bd-highlight">
-              <button type="button" class="btn btn-primary add-btn">
+              <button
+                (click)="pullInvoices()"
+                type="button"
+                class="btn btn-primary add-btn"
+              >
                 Pull Invoices
               </button>
             </div>
@@ -169,7 +192,7 @@
         <div class="row mb-1 align-items-center">
           <div class="col-md-6">
             <mat-form-field style="width: 100%">
-              <input type="text" matInput formControlName="JournalRef" />
+              <input type="text" matInput formControlName="partyCodeHead" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-6 col-form-label"
@@ -195,6 +218,8 @@
     <div class="row my-3">
       <div class="col-md-12">
         <dx-data-grid
+        (onSelectionChanged)="onSelectionChanged($event)"
+          [dataSource]="pulledInvoice"
           #dataGrid
           id="gridContainer"
           keyExpr="ID"
