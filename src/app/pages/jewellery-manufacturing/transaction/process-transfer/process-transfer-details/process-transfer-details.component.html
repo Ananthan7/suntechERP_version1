@@ -796,11 +796,11 @@
                           <input type="text" matInput class="text-right"
                             UpperCaseDirective 
                              (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
-                            (focusout)="stockCodeScrapValidate($event)"
+                            (focusout)="MToStockCode_Validating()"
                             formControlName="METAL_ToStockCode" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
-                              [MasterSearchData]="stockCodeSearch"
+                              [MasterSearchData]="metalScrapStockCode"
                               (newRowClick)="metalworkerCodeToSelected($event)">
                             </master-search>
                         </mat-form-field>

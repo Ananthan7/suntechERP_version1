@@ -32,6 +32,8 @@ export class CastingTreeUpComponent implements OnInit {
   currentDate = new Date();
   viewMode: boolean = false;
   isSaved: boolean = false;
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   isloading: boolean = false;
   // columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
   // columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
@@ -792,19 +794,18 @@ showOverleyPanel(event: any, formControlName: string) {
   }
 }
 
-
 validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  if (event.target.value == '' || this.viewMode == true) return
+  if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
   let param = {
     LOOKUPID: LOOKUPDATA.LOOKUPID,
     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
   }
-  this.commonService.showSnackBarMsg('MSG81447');
-  let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  this.commonService.toastInfoByMsgId('MSG81447');
+  let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+  let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
     .subscribe((result) => {
-      this.commonService.closeSnackBarMsg()
+      this.isDisableSaveBtn = false;
       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
       if (data.length == 0) {
         this.commonService.toastErrorByMsgId('MSG1531')
@@ -815,8 +816,9 @@ validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string)
         }
         return
       }
+
     }, err => {
-      this.commonService.toastErrorByMsgId('Error Something went wrong')
+      this.commonService.toastErrorByMsgId('network issue found')
     })
   this.subscriptions.push(Sub)
 }

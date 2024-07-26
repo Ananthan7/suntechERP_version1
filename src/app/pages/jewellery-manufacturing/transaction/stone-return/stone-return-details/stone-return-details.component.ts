@@ -14,12 +14,12 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
   styleUrls: ['./stone-return-details.component.scss']
 })
 export class StoneReturnDetailsComponent implements OnInit {
-  @ViewChild('overlayjobNumberSearch') overlayjobNumberSearch! : MasterSearchComponent;
-  @ViewChild('overlaysubjobnoSearch') overlaysubjobnoSearch! : MasterSearchComponent;
-  @ViewChild('overlaydesigncodeSearch') overlaydesigncodeSearch! : MasterSearchComponent;
-  @ViewChild('overlayprocessSearch') overlayprocessSearch! : MasterSearchComponent;
-  @ViewChild('overlayworkerSearch') overlayworkerSearch! : MasterSearchComponent;
-  @ViewChild('overlaywstockCodeSearch') overlaywstockCodeSearch! : MasterSearchComponent;
+  @ViewChild('overlayjobNumberSearch') overlayjobNumberSearch!: MasterSearchComponent;
+  @ViewChild('overlaysubjobnoSearch') overlaysubjobnoSearch!: MasterSearchComponent;
+  @ViewChild('overlaydesigncodeSearch') overlaydesigncodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
+  @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlaywstockCodeSearch') overlaywstockCodeSearch!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() data!: any;
@@ -31,6 +31,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   jobDate = new Date();
   jobNumberDetailData: any[] = [];
   viewMode: boolean = false;
+  userName = localStorage.getItem('username');
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -282,8 +283,8 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.closeDetail.emit()
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
@@ -470,13 +471,13 @@ export class StoneReturnDetailsComponent implements OnInit {
             this.comService.toastErrorByMsgId('MSG1531')
             this.stonereturndetailsFrom.controls.jobNumber.setValue('')
             this.showOverleyPanel(event, 'jobNumber')
-          
+
           }
         } else {
           this.overlayjobNumberSearch.closeOverlayPanel()
           this.stonereturndetailsFrom.controls.jobNumber.setValue('')
           this.comService.toastErrorByMsgId('MSG1747')
-        }  return
+        } return
       }, err => {
         this.comService.closeSnackBarMsg()
         this.comService.toastErrorByMsgId('MSG1531')
@@ -543,7 +544,7 @@ export class StoneReturnDetailsComponent implements OnInit {
 
         } else {
           this.overlayprocessSearch.showOverlayPanel(event)
-         
+
           this.stonereturndetailsFrom.controls.process.setValue('')
           // this.showOverleyPanel(event, 'process')
           this.comService.toastErrorByMsgId('MSG1747')
@@ -555,8 +556,9 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.stonereturndetailsFrom.value[formControlName] != '') return;
-  
+    let value = this.stonereturndetailsFrom.value[formControlName]
+    if (this.comService.nullToString(value) != '') return;
+
     switch (formControlName) {
       case 'jobNumber':
         this.overlayjobNumberSearch.showOverlayPanel(event);
@@ -578,33 +580,90 @@ export class StoneReturnDetailsComponent implements OnInit {
         break;
       default:
     }
-  }  
+  }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    if (event.target.value === '' || this.viewMode === true) return;
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    }
+    };
+
     this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${encodeURIComponent(param.WHERECOND)}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.comService.toastErrorByMsgId('MSG1531')
-          this.stonereturndetailsFrom.controls[FORMNAME].setValue('')
-         
-          LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'subjobno' || FORMNAME === 'designcode' || FORMNAME === 'stockCode') {
+        this.comService.closeSnackBarMsg();
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);
+
+        if (data.length === 0) {
+          this.comService.toastErrorByMsgId('MSG1531');
+          this.stonereturndetailsFrom.controls[FORMNAME].setValue('');
+
+          LOOKUPDATA.SEARCH_VALUE = '';
+          if (FORMNAME === 'subjobno' || FORMNAME === 'designcode') {
             this.showOverleyPanel(event, FORMNAME);
           }
-          return
+          return;
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
-      })
-    this.subscriptions.push(Sub)
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('Error Something went wrong');
+      });
+
+    this.subscriptions.push(Sub);
   }
+  stockCodeValidate(event: any) {
+    this.showOverleyPanel(event, 'stockCode')
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "046",
+      "parameter": {
+        strStockCode: event.target.value,
+        strBranchCode: this.comService.nullToString(this.branchCode),
+        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strUserName: this.comService.nullToString(this.userName),
+        strLocation: '',
+        strPartyCode: '',
+        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+    }
+};
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            if (result.status === "Success" && result.dynamicData[0]) {
+                let data = result.dynamicData[0];
+                if (data) {
+                    console.log(data, 'data');
+                    if (data[0].VALID_STOCK) {
+                        // Handle the valid stock case
+                        // You can set other form values or perform other actions here if needed
+                        this.overlaywstockCodeSearch.closeOverlayPanel();
+                    } else {
+                        this.comService.toastErrorByMsgId('MSG1531');
+                        this.stonereturndetailsFrom.controls.stockCode.setValue('');
+                        this.showOverleyPanel(event, 'stockCode');
+                    }
+                } else {
+                    this.comService.toastErrorByMsgId('MSG1531');
+                    this.stonereturndetailsFrom.controls.stockCode.setValue('');
+                    this.showOverleyPanel(event, 'stockCode');
+                }
+            } else {
+                this.comService.toastErrorByMsgId('MSG1747');
+                this.stonereturndetailsFrom.controls.stockCode.setValue('');
+                this.overlaywstockCodeSearch.closeOverlayPanel();
+            }
+        }, err => {
+            this.comService.closeSnackBarMsg();
+            this.comService.toastErrorByMsgId('MSG1531');
+            this.stonereturndetailsFrom.controls.stockCode.setValue('');
+            this.showOverleyPanel(event, 'stockCode');
+        });
+
+    this.subscriptions.push(Sub);
+}
+
 }
