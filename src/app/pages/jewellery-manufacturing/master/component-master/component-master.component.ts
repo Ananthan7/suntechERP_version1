@@ -55,7 +55,7 @@ export class ComponentMasterComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 51,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
@@ -434,7 +434,7 @@ export class ComponentMasterComponent implements OnInit {
 
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
+    this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
 
     console.log(value.DIVISION)
     if (value.DIVISION === 'M') {
@@ -1090,7 +1090,7 @@ export class ComponentMasterComponent implements OnInit {
       "STYLEMASTER": "",
       "PARENT_DSNG_CODE": "",
       "FAULT_DETAILS": "",
-      "DESIGN_TYPE": form.settingType,
+      "DESIGN_TYPE": "COMP",
       "JEWELLERY_UNIT": "",
       "UDF1": "",
       "UDF2": "",
@@ -1111,7 +1111,7 @@ export class ComponentMasterComponent implements OnInit {
       "FINALAPPROVALDATE": "2023-11-27T06:54:03.761Z",
       "PRINT_COUNT": 0,
       "EXPIRY_DATE": "2023-11-27T06:54:03.761Z",
-      "PROCESS_TYPE": "",
+      "PROCESS_TYPE": form.settingType,
       "DYE_STRIP": false,
       "CASTING_REQ": 0,
       "WAXING_REQ": 0,
@@ -1695,7 +1695,7 @@ export class ComponentMasterComponent implements OnInit {
     let postData = {
       "SPID": "082",
       "parameter": {
-        "strDivision": this.componentmasterForm.value.divisionCode || '',
+        "strDivision": event.DIVCODE || '',
         "StockCode": event.STOCK_CODE,
 
       }
