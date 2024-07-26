@@ -876,6 +876,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput
+                            (focusout)="txtMScrapGrWt_Validating()"
                             formControlName="METAL_ScrapGrWt" />
                         </mat-form-field>
                       </td>
