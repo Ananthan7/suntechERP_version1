@@ -25,7 +25,6 @@ export class GoldExchangeComponent implements OnInit {
   @ViewChild("overlayPartyCode") overlayPartyCode!: MasterSearchComponent;
   @ViewChild("overlayCustomerCode") overlayCustomerCode!: MasterSearchComponent;
   @ViewChild("overlaySalesmanCode") overlaySalesmanCode!: MasterSearchComponent;
-  
 
   @Input() content!: any;
 
@@ -250,6 +249,12 @@ export class GoldExchangeComponent implements OnInit {
 
                 this.goldExchangeForm.controls.partyCurrency.setValue(
                   data[0].CURRENCY_CODE
+                );
+                this.goldExchangeForm.controls.partyCurrencyCode.setValue(
+                  this.comService.decimalQuantityFormat(
+                    this.comService.emptyToZero(data[0].CONV_RATE),
+                    "RATE"
+                  )
                 );
 
                 this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(
@@ -531,11 +536,11 @@ export class GoldExchangeComponent implements OnInit {
     this.partyCodeChange({ target: { value: e.ACCODE } });
   }
 
-  partyCurrencyCodeSelected(e: any) {
-    console.log(e);
-    this.goldExchangeForm.controls.partyCurrencyCode.setValue(e.CURRENCY_CODE);
-    this.goldExchangeForm.controls.partyCurrency.setValue(e.CURRENCY_CODE);
-  }
+  // partyCurrencyCodeSelected(e: any) {
+  //   console.log(e);
+  //   this.goldExchangeForm.controls.partyCurrencyCode.setValue(e.CURRENCY_CODE);
+  //   this.goldExchangeForm.controls.partyCurrency.setValue(e.CURRENCY_CODE);
+  // }
 
   itemCurrencyCodeSelected(e: any) {
     this.goldExchangeForm.controls.itemCurr.setValue(e["Currency"]);
@@ -577,8 +582,30 @@ export class GoldExchangeComponent implements OnInit {
       if (postData) {
         console.log("Data from modal:", postData);
         this.goldExchangeDetailsData.push(postData);
+        this.handleHeaderAmounts(this.goldExchangeDetailsData);
       }
     });
+  }
+
+  handleHeaderAmounts(detailsData: any) {
+    console.log(detailsData);
+    console.log(detailsData.TOTAL_AMOUNTFC);
+
+    this.goldExchangeForm.controls["amountDes"].setValue(
+      detailsData[0].TOTAL_AMOUNTFC
+    );
+    this.goldExchangeForm.controls["rndOfAmtDes"].setValue(
+      detailsData[0].TOTAL_AMOUNTFC
+    );
+    this.goldExchangeForm.controls["rndNetAmtDes"].setValue(
+      detailsData[0].TOTAL_AMOUNTFC
+    );
+    this.goldExchangeForm.controls["otherAmtDes"].setValue(
+      detailsData[0].TOTAL_AMOUNTFC
+    );
+    this.goldExchangeForm.controls["grossAmtDes"].setValue(
+      detailsData[0].TOTAL_AMOUNTFC
+    );
   }
 
   close(data?: any) {
@@ -1344,7 +1371,7 @@ export class GoldExchangeComponent implements OnInit {
     }
   }
   creditDate(event: any) {
-    const creditDays =+event.target.value;
+    const creditDays = +event.target.value;
     const newDate = new Date(this.currentDate);
     newDate.setDate(newDate.getDate() + creditDays);
 
