@@ -74,7 +74,9 @@ export class JobcardComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   selectedValue: string = 'singleMetal';
   currencyDt: any;
- jobMaterialBOQ:any= [];
+  jobMaterialBOQ: any = [];
+  jobsalesorderdetailDJ: any = [];
+
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
 
@@ -519,7 +521,7 @@ export class JobcardComponent implements OnInit {
   }
 
   openaddstickerprint() {
-console.log( this.content);
+    console.log(this.content);
     const modalRef: NgbModalRef = this.modalService.open(JobStickerPrintComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -718,24 +720,24 @@ console.log( this.content);
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
         this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
         this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
-  
+
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
-  
+
         this.tableData[0].Pcs = result.response.PCS;
         this.tableData[0].metal_color = result.response.COLOR;
         this.tableData[0].metal_wt = result.response.METAL_WT;
         this.tableData[0].stone_wt = result.response.STONE_WT;
         this.tableData[0].gross_wt = result.response.GROSS_WT;
-  
+
         // Get the first object from DESIGN_STNMTL_DETAIL array
-      
+
         const firstDetail = result.response.DESIGN_STNMTL_DETAIL;
         if (firstDetail) {
-          firstDetail.forEach((element:any)=>{
-            let obj = 
+          firstDetail.forEach((element: any) => {
+            let obj =
             {
               SRNO: element.SRNO,
-              JOB_NUMBER: String(this.jobCardFrom.value.jobno),
+              JOB_NUMBER: String(this.jobCardFrom.value.jobno) + '/' + element.SRNO,
               JOB_DATE: new Date().toISOString(),
               JOB_SO_NUMBER: 0, // Adjust as necessary
               UNQ_JOB_ID: "", // Provide a unique ID if available
@@ -770,17 +772,132 @@ console.log( this.content);
               PURITY: element.PURITY
             }
             this.jobMaterialBOQ.push(obj)
+            //this.tableData.push(obj)
           })
-
         }
+
+        // Get the first object from DESIGN_STNMTL_DETAIL array
+
+        //  const firstDetail1 = result.response.DESIGN_STNMTL_DETAIL;
+        //  if (firstDetail1) {
+        //    firstDetail1.forEach((element:any)=>{
+        //      let obj = 
+        //      {
+        //        SRNO: element.SRNO,
+        //        JOB_NUMBER: String(this.jobCardFrom.value.jobno) + '/' + element.SRNO,
+        //        JOB_DATE: new Date().toISOString(),
+        //        JOB_SO_NUMBER: 0, // Adjust as necessary
+        //        UNQ_JOB_ID: result.NewUnqDesignId, // Provide a unique ID if available
+        //        JOB_SO_MID: 0, // Adjust as necessary
+        //        BRANCH_CODE: "DMCC", // Adjust if needed
+        //        DESIGN_CODE: element.DESIGN_CODE,
+        //        METALSTONE: element.METALSTONE,
+        //        DIVCODE: element.DIVCODE,
+        //        PRICEID: element.PRICEID || "", // Adjust if PRICEID is available
+        //        KARAT_CODE: element.KARAT_CODE,
+        //        CARAT: element.CARAT,
+        //        GROSS_WT: element.GROSS_WT,
+        //        PCS: element.PCS,
+        //        RATE_TYPE: element.RATE_TYPE,
+        //        CURRENCY_CODE: element.CURRENCY_CODE,
+        //        RATE: element.RATE,
+        //        AMOUNTFC: element.AMOUNTFC,
+        //        AMOUNTLC: element.AMOUNTLC,
+        //        MAKINGRATE: element.MAKINGRATE,
+        //        MAKINGAMOUNT: element.MAKINGAMOUNT,
+        //        SIEVE: element.SIEVE,
+        //        COLOR: element.COLOR,
+        //        CLARITY: element.CLARITY,
+        //        SHAPE: element.SHAPE,
+        //        SIZE_FROM: element.SIZE_FROM,
+        //        SIZE_TO: element.SIZE_TO,
+        //        UNQ_DESIGN_ID: "", // Provide a unique ID if available
+        //        UNIQUEID: element.UNIQUEID,
+        //        STOCK_CODE: element.STOCK_CODE,
+        //        SIEVE_SET: element.SIEVE_SET,
+        //        PROCESS_TYPE: element.PROCESS_TYPE,
+        //        PURITY: element.PURITY
+        //      }
+        //      this.jobsalesorderdetailDJ.push(obj)
+        //      //this.tableData.push(obj)
+        //    })
+        //  }
+
+        const firstDetail1 = result.response.DESIGN_STNMTL_DETAIL;
+        if (firstDetail1) {
+          firstDetail1.forEach((element: any, index: number) => {
+
+            let metalWt = 0;
+            let stoneWt = 0;
+            if (element.METALSTONE === 'M') {
+              metalWt = parseFloat(element.GROSS_WT) || 0;
+            } else {
+              stoneWt = parseFloat(element.GROSS_WT) || 0;
+            }
+
+
+            let obj = {
+              SRNO: index + 1,
+              JOB_NUMBER: `${this.jobCardFrom.value.jobno}/${index + 1}`,
+              JOB_DATE: new Date().toISOString(),
+              JOB_SO_NUMBER: 0,
+              UNQ_JOB_ID: String(this.jobCardFrom.value.jobno),
+              JOB_SO_MID: 0,
+              BRANCH_CODE: "DMCC",
+              DESIGN_CODE: element.DESIGN_CODE,
+              METALSTONE: element.METALSTONE,
+              DIVCODE: element.DIVCODE,
+              PRICEID: element.PRICEID || "",
+              KARAT_CODE: element.KARAT_CODE,
+              CARAT: element.CARAT,
+              GROSS_WT: element.GROSS_WT,
+              PCS: element.PCS,
+              RATE_TYPE: element.RATE_TYPE,
+              CURRENCY_CODE: element.CURRENCY_CODE,
+              RATE: element.RATE,
+              AMOUNTFC: element.AMOUNTFC,
+              AMOUNTLC: element.AMOUNTLC,
+              MAKINGRATE: element.MAKINGRATE,
+              MAKINGAMOUNT: element.MAKINGAMOUNT,
+              SIEVE: element.SIEVE,
+              COLOR: element.COLOR,
+              CLARITY: element.CLARITY,
+              SHAPE: element.SHAPE,
+              SIZE_FROM: element.SIZE_FROM,
+              SIZE_TO: element.SIZE_TO,
+              UNQ_DESIGN_ID:result.NewUnqDesignId , // Assign as needed
+              UNIQUEID: element.UNIQUEID,
+              STOCK_CODE: element.STOCK_CODE,
+              SIEVE_SET: element.SIEVE_SET,
+              PROCESS_TYPE: element.PROCESS_TYPE,
+              PURITY: element.PURITY,
+              metal_wt: metalWt.toString(),
+              stone_wt: stoneWt.toString(),
+              part_code: result.response.DESIGN_CODE,
+              Description: result.response.DESIGN_DESCRIPTION,
+              SIZE: result.response.SIZE || "", 
+              LENGTH: result.response.LENGTH || "", 
+              CLOSE_TYPE: element.CLOSE_TYPE || "",
+              ORDER_TYPE: element.ORDER_TYPE || "", 
+              WAX_STATUS: element.WAX_STATUS || "", 
+              DESIGN_TYPE: element.DESIGN_TYPE || "", 
+              SCREW_FIELD: element.SCREW_FIELD || "", 
+            };
+
+            this.jobsalesorderdetailDJ.push(obj);
+          });
+        }
+
+
+
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error');
       });
     this.subscriptions.push(Sub);
   }
-  
 
-  
+
+
 
   customerCodeSelected(e: any) {
     console.log(e);
@@ -802,7 +919,7 @@ console.log( this.content);
     console.log(e);
     this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${e.KARAT_CODE}' and PURITY = '${e.STD_PURITY}'`;
     this.jobCardFrom.controls.karat.setValue(e.KARAT_CODE);
-   // this.jobCardFrom.controls.purity.setValue(e.STD_PURITY);
+    // this.jobCardFrom.controls.purity.setValue(e.STD_PURITY);
 
     this.jobCardFrom.controls.purity.setValue(
       this.commonService.transformDecimalVB(6, e.STD_PURITY));
@@ -1033,77 +1150,78 @@ console.log( this.content);
       "LENGTH_DESC": "",
       "TIME_DESC": "",
       "RANGE_DESC": "",
-      "JOB_MATERIAL_BOQ_DJ":this.jobMaterialBOQ,
-      "JOB_SALESORDER_DETAIL_DJ": [
-//grid
-        {
-          "SRNO": 0,
-          "JOB_NUMBER": "",
-          "JOB_DATE": "2023-10-26T05:59:21.735Z",
-          "JOB_SO_NUMBER": 0,
-          "JOB_SO_DATE": "2023-10-26T05:59:21.735Z",
-          "DELIVERY_DATE": "2023-10-26T05:59:21.735Z",
-          "PARTYCODE": "",
-          "PARTYNAME": "",
-          "DESIGN_CODE": "",
-          "KARAT": "",
-          "METAL_COLOR": "",
-          "PCS": 0,
-          "METAL_WT": 0,
-          "STONE_WT": 0,
-          "GROSS_WT": 0,
-          "METAL_WT_PCS": 0,
-          "STONE_PC_PCS": 0,
-          "STONE_WT_PCS": 0,
-          "RATEFC": 0,
-          "RATECC": 0,
-          "VALUEFC": 0,
-          "VALUECC": 0,
-          "SEQ_CODE": "",
-          "STD_TIME": 0,
-          "MAX_TIME": 0,
-          "ACT_TIME": 0,
-          "DESCRIPTION": "",
-          "UNQ_DESIGN_ID": "",
-          "UNQ_JOB_ID": "",
-          "JOB_SO_MID": 0,
-          "UNIQUEID": 0,
-          "PROD_DATE": "2023-10-26T05:59:21.735Z",
-          "PROD_REF": 0,
-          "PROD_STOCK_CODE": "",
-          "PROD_PCS": 0,
-          "LOCTYPE_CODE": "",
-          "PICTURE_PATH": "",
-          "PART_CODE": "",
+      "JOB_MATERIAL_BOQ_DJ": this.jobMaterialBOQ,
+      "JOB_SALESORDER_DETAIL_DJ": this.jobsalesorderdetailDJ,
+      // [
+      // //grid
+      //         {
+      //           "SRNO": 0,
+      //           "JOB_NUMBER": "",
+      //           "JOB_DATE": "2023-10-26T05:59:21.735Z",
+      //           "JOB_SO_NUMBER": 0,
+      //           "JOB_SO_DATE": "2023-10-26T05:59:21.735Z",
+      //           "DELIVERY_DATE": "2023-10-26T05:59:21.735Z",
+      //           "PARTYCODE": "",
+      //           "PARTYNAME": "",
+      //           "DESIGN_CODE": "",
+      //           "KARAT": "",
+      //           "METAL_COLOR": "",
+      //           "PCS": 0,
+      //           "METAL_WT": 0,
+      //           "STONE_WT": 0,
+      //           "GROSS_WT": 0,
+      //           "METAL_WT_PCS": 0,
+      //           "STONE_PC_PCS": 0,
+      //           "STONE_WT_PCS": 0,
+      //           "RATEFC": 0,
+      //           "RATECC": 0,
+      //           "VALUEFC": 0,
+      //           "VALUECC": 0,
+      //           "SEQ_CODE": "",
+      //           "STD_TIME": 0,
+      //           "MAX_TIME": 0,
+      //           "ACT_TIME": 0,
+      //           "DESCRIPTION": "",
+      //           "UNQ_DESIGN_ID": "",
+      //           "UNQ_JOB_ID": "",
+      //           "JOB_SO_MID": 0,
+      //           "UNIQUEID": 0,
+      //           "PROD_DATE": "2023-10-26T05:59:21.735Z",
+      //           "PROD_REF": 0,
+      //           "PROD_STOCK_CODE": "",
+      //           "PROD_PCS": 0,
+      //           "LOCTYPE_CODE": "",
+      //           "PICTURE_PATH": "",
+      //           "PART_CODE": "",
 
-          // "SINO": sn,
-          // "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
-          // "part_code": e.Design_Code,
-          // "Description": e.Design_Description,
-          // "Pcs": "",
-          // "metal_color": "",
-          // "metal_wt": "",
-          // "stone_wt": "",
-          // "gross_wt": "",
+      //           // "SINO": sn,
+      //           // "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
+      //           // "part_code": e.Design_Code,
+      //           // "Description": e.Design_Description,
+      //           // "Pcs": "",
+      //           // "metal_color": "",
+      //           // "metal_wt": "",
+      //           // "stone_wt": "",
+      //           // "gross_wt": "",
 
 
-          "TREE_NO": "",
-          "VOCTYPE": "",
-          "VOCNO": 0,
-          "YEARMONTH": "",
-          "BRANCH_CODE": "",
-          "KARIGAR_CODE": "",
-          "WAX_STATUS": "",
-          "SIZE": "",
-          "LENGTH": "",
-          "SCREW_FIELD": "",
-          "ORDER_TYPE": "",
-          "DESIGN_TYPE": "",
-          "CLOSE_TYPE": "",
-          "JOB_PURITY": 0,
-          "ADD_STEEL": true
-        }
-      ],
+      //           "TREE_NO": "",
+      //           "VOCTYPE": "",
+      //           "VOCNO": 0,
+      //           "YEARMONTH": "",
+      //           "BRANCH_CODE": "",
+      //           "KARIGAR_CODE": "",
+      //           "WAX_STATUS": "",
+      //           "SIZE": "",
+      //           "LENGTH": "",
+      //           "SCREW_FIELD": "",
+      //           "ORDER_TYPE": "",
+      //           "DESIGN_TYPE": "",
+      //           "CLOSE_TYPE": "",
+      //           "JOB_PURITY": 0,
+      //           "ADD_STEEL": true
+      //         }
+      //       ],
       "JOB_SALESORDER_DJ": [
         {
           "SRNO": 0,
@@ -1537,32 +1655,94 @@ console.log( this.content);
     this.subscriptions.push(Sub)
   }
 
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
 
-    // if (event && event.target.value == '') {
-    //   this.showOverleyPanel(event, FORMNAME)
-    //   return
-    // }
+  //   // if (event && event.target.value == '') {
+  //   //   this.showOverleyPanel(event, FORMNAME)
+  //   //   return
+  //   // }
 
-    // this.showOverleyPanel(event, FORMNAME)
+  //   // this.showOverleyPanel(event, FORMNAME)
 
 
+  //   const inputValue = event.target.value.toUpperCase();
+  //   //  this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       this.isDisableSaveBtn = false;
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531');
+  //         this.jobCardFrom.controls[FORMNAME].setValue('');
+  //         this.jobCardFrom.controls.customername.setValue('');
+  //         this.jobCardFrom.controls.designtype.setValue('');
+  //         this.renderer.selectRootElement(FORMNAME).focus();
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+
+  //       if (data == '') {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.jobCardFrom.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         if (FORMNAME === 'customer') {
+  //           if (FORMNAME === 'customer') {
+  //             console.log(FORMNAME)
+  //             this.jobCardFrom.controls.customername.setValue('');
+  //           }
+  //         }
+  //         return
+  //       }
+
+  //       const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
+  //       if (matchedItem2) {
+  //         this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
+  //         if (FORMNAME === 'designcode') {
+  //           this.jobCardFrom.controls.designtype.setValue(matchedItem2.DESIGN_DESCRIPTION);
+  //           this.jobCardFrom.controls.color.setValue(matchedItem2.COLOR);
+  //           this.jobCardFrom.controls.karat.setValue(matchedItem2.KARAT_CODE);
+  //           this.jobCardFrom.controls.subcat.setValue(matchedItem2.SUBCATEGORY_CODE);
+  //           this.jobCardFrom.controls.prefix.setValue(matchedItem2.JOB_PREFIX);
+  //           this.jobCardFrom.controls.brand.setValue(matchedItem2.BRAND_CODE);
+  //           this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
+  //           this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
+  //           this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+  //         }
+  //       } else {
+  //         this.handleLookupError(FORMNAME, LOOKUPDATA);
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
+
+   /**use: validate all lookups to check data exists in db */
+   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
-    //  this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531');
           this.jobCardFrom.controls[FORMNAME].setValue('');
@@ -1603,52 +1783,6 @@ console.log( this.content);
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
-
-
-        // const matchedItem = data.find((item: any) => item.ACCODE.toUpperCase() == inputValue);
-        // if (matchedItem) {
-        //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem.ACCODE);
-        //   if (FORMNAME === 'customer') {
-        //     this.jobCardFrom.controls.customername.setValue(matchedItem.ACCOUNT_HEAD);
-
-        //   }
-
-        // } else {
-        //   this.commonService.toastErrorByMsgId('MSG1531');
-        //   this.jobCardFrom.controls[FORMNAME].setValue('');
-        //   this.jobCardFrom.controls.customername.setValue('');
-
-        //   if (FORMNAME === 'customer') {
-        //     this.jobCardFrom.controls.customername.setValue('');
-        //   }
-
-        //   this.renderer.selectRootElement(FORMNAME).focus();
-        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-
-        // }
-
-        // const matchedItem1 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() == inputValue);
-        // if (matchedItem1) {
-        //   this.jobCardFrom.controls[FORMNAME].setValue(matchedItem1.DESIGN_CODE);
-        //   if (FORMNAME === 'designcode') {
-
-        //     this.jobCardFrom.controls.designtype.setValue(matchedItem1.DESIGN_DESCRIPTION);
-        //   }
-
-        // } else {
-        //   this.commonService.toastErrorByMsgId('MSG1531');
-        //   this.jobCardFrom.controls[FORMNAME].setValue('');
-        //   this.jobCardFrom.controls.designtype.setValue('');
-
-        //   if (FORMNAME === 'designcode') {
-        //     this.jobCardFrom.controls.designtype.setValue('');
-        //   }
-
-        //   this.renderer.selectRootElement(FORMNAME).focus();
-        //   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-
-        // }
-
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
@@ -1682,7 +1816,7 @@ console.log( this.content);
 
   showOverleyPanel(event: any, formControlName: string) {
     if (event.target.value != '') return;
-  
+
     switch (formControlName) {
       case 'orderType':
         this.overlayorderTypeSearch.showOverlayPanel(event);
@@ -1748,11 +1882,11 @@ console.log( this.content);
         this.overlayseqcodeSearch.showOverlayPanel(event);
         break;
       default:
-      
+
     }
   }
-  
- 
+
+
   // showOverleyPanel(event: any, formControlName: string) {
   //   if (event.target.value != '') return
 

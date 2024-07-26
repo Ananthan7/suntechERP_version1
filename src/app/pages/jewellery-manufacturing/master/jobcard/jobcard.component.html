@@ -542,27 +542,27 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                        <dx-data-grid id="gridContainer" [dataSource]="jobsalesorderdetailDJ" [showBorders]="true"
                             [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3">
                             <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
 
                             <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode"
                                 mode="single"></dxo-selection>
-                            <dxi-column dataField="SINO" caption="SI NO"> </dxi-column>
-                            <dxi-column dataField="job_reference" caption="Job Reference "
+                            <dxi-column dataField="SRNO" caption="SI NO"> </dxi-column>
+                            <dxi-column dataField="JOB_NUMBER" caption="Job Reference "
                                 cellTemplate="job_referencetemp"></dxi-column>
                             <dxi-column dataField="part_code" caption="Part Code"
                                 cellTemplate="part_codetemp"></dxi-column>
                             <dxi-column dataField="Description" caption="Description"
                                 cellTemplate="descriptiontemp"></dxi-column>
-                            <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcstemp"></dxi-column>
-                            <dxi-column dataField="metal_color" caption="Metal Color"
+                            <dxi-column dataField="PCS" caption="Pcs" cellTemplate="Pcstemp"></dxi-column>
+                            <dxi-column dataField="COLOR" caption="Metal Color"
                                 cellTemplate="metal_colortemp"></dxi-column>
                             <dxi-column dataField="metal_wt" caption="Metal Wt"
                                 cellTemplate="metal_wttemp"></dxi-column>
                             <dxi-column dataField="stone_wt" caption="Stone Wt"
                                 cellTemplate="stone_wttemp"></dxi-column>
-                            <dxi-column dataField="gross_wt" caption="Gross Wt"
+                            <dxi-column dataField="GROSS_WT" caption="Gross Wt"
                                 cellTemplate="gross_wttemp"></dxi-column>
 
 
