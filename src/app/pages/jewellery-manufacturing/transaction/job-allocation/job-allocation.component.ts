@@ -22,11 +22,14 @@ export class JobAllocationComponent implements OnInit {
   @ViewChild('dataGrid', { static: false }) dataGrid!: DxDataGridComponent;
   branchCode?: String;
   yearMonth?: String;
-  @Input() content!: any; 
-  viewMode:boolean = false;
-  tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['Design','Order. No','Process','Worker','Doc. Attachment','Std. Time','Pirority','Customer','Job Number','Unq. Job. Id','Pcs'];
-  columnheadOthers:any[]=['Design','Order No','Process','Worker','Doc Attachment','Std Time','Priority','Customer','Job Number','Unq Job Id','Pcs']
+  @Input() content!: any;
+  viewMode: boolean = false;
+  tableData: any[] = [];
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
+
+  columnheadItemDetails: any[] = ['Design', 'Order. No', 'Process', 'Worker', 'Doc. Attachment', 'Std. Time', 'Pirority', 'Customer', 'Job Number', 'Unq. Job. Id', 'Pcs'];
+  columnheadOthers: any[] = ['Design', 'Order No', 'Process', 'Worker', 'Doc Attachment', 'Std Time', 'Priority', 'Customer', 'Job Number', 'Unq Job Id', 'Pcs']
   divisionMS: any = 'ID';
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
@@ -40,7 +43,7 @@ export class JobAllocationComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,    
+    VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
 
@@ -50,19 +53,19 @@ export class JobAllocationComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    ) {
-      this.dataGrid = {} as DxDataGridComponent;
+  ) {
+    this.dataGrid = {} as DxDataGridComponent;
 
-     }
+  }
 
-     jobalocationFrom: FormGroup = this.formBuilder.group({
-      vocType: ['', [Validators.required]],
-      vocNum: [1, [Validators.required]],
-      vocDate:[new Date()],
-      userName:[''],
-      date:[new Date()],
-      remarks:[''],
-      job:['']
+  jobalocationFrom: FormGroup = this.formBuilder.group({
+    vocType: ['', [Validators.required]],
+    vocNum: [1, [Validators.required]],
+    vocDate: [new Date()],
+    userName: [''],
+    date: [new Date()],
+    remarks: [''],
+    job: ['']
   });
 
   ngOnInit(): void {
@@ -73,11 +76,11 @@ export class JobAllocationComponent implements OnInit {
 
     console.log(this.content);
     console.log(Object.keys(this.content));
-    
-    if(Object.keys(this.content)?.length != 0){
+
+    if (Object.keys(this.content)?.length != 0) {
       this.setFormValues()
     }
-       
+
   }
 
 
@@ -87,14 +90,14 @@ export class JobAllocationComponent implements OnInit {
     this.activeModal.close(data);
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
 
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     this.jobalocationFrom.controls.voctype.setValue(this.content.VOCTYPE)
     this.jobalocationFrom.controls.vocno.setValue(this.content.VOCNO)
     this.jobalocationFrom.controls.vocDate.setValue(this.content.VOCDATE)
@@ -105,16 +108,16 @@ export class JobAllocationComponent implements OnInit {
   }
 
 
-  userNameCodeSelected(e:any){
+  userNameCodeSelected(e: any) {
     console.log(e);
     this.jobalocationFrom.controls.userName.setValue(e.UsersName);
   }
 
- 
 
-  formSubmit(){
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -122,276 +125,276 @@ export class JobAllocationComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'JobAllocationMaster/InsertJobAllocationMaster' 
+
+    let API = 'JobAllocationMaster/InsertJobAllocationMaster'
     let postData = {
-        "VOCTYPE":  this.jobalocationFrom.value.vocType || "",
-        "BRANCH_CODE": this.branchCode,
-        "VOCNO": 0,
-        "VOCDATE": this.jobalocationFrom.value.vocDate || "",
-        "YEARMONTH": this.yearMonth,
-        "DOCTIME": "2024-01-18T12:26:27.661Z",
-        "SMAN": "string",
-        "REMARKS": this.jobalocationFrom.value.remarks || "",
-        "NAVSEQNO": 0,
-        "MID": 0,
-        "AUTOPOSTING": true,
-        "POSTDATE": "string",
-        "PRINT_COUNT": 0,
-        "SYSTEM_DATE": "2024-01-18T10:29:30.742Z",
-        "HTUSERNAME": "string",
-        "jobAllocationDetails": [
-          {
-            "DT_BRANCH_CODE": "string",
-            "DT_VOCTYPE": "string",
-            "DT_VOCNO": 0,
-            "DT_YEARMONTH": "string",
-            "SLNO": 0,
-            "JOB_NUMBER": "string",
-            "JOB_SO_NUMBER": 0,
-            "UNQ_JOB_ID": "string",
-            "DESIGN_CODE": "string",
-            "UNQ_DESIGN_ID": "string",
-            "ACCODE": "string",
-            "TOT_PCS": 0,
-            "PCS": 0,
-            "RATEFC": 0,
-            "RATELC": 0,
-            "AMOUNTFC": 0,
-            "AMOUNTLC": 0,
-            "LOCTYPE_CODE": "string",
-            "DEL_DATE": "2024-01-18T10:29:30.742Z"
-          }
-        ]
-      };
-      
-      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-        .subscribe((result) => {
-            if(result && result.status == "Success"){
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.jobalocationFrom.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
+      "VOCTYPE": this.jobalocationFrom.value.vocType || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": 0,
+      "VOCDATE": this.jobalocationFrom.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2024-01-18T12:26:27.661Z",
+      "SMAN": "string",
+      "REMARKS": this.jobalocationFrom.value.remarks || "",
+      "NAVSEQNO": 0,
+      "MID": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "PRINT_COUNT": 0,
+      "SYSTEM_DATE": "2024-01-18T10:29:30.742Z",
+      "HTUSERNAME": "string",
+      "jobAllocationDetails": [
+        {
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "string",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string",
+          "SLNO": 0,
+          "JOB_NUMBER": "string",
+          "JOB_SO_NUMBER": 0,
+          "UNQ_JOB_ID": "string",
+          "DESIGN_CODE": "string",
+          "UNQ_DESIGN_ID": "string",
+          "ACCODE": "string",
+          "TOT_PCS": 0,
+          "PCS": 0,
+          "RATEFC": 0,
+          "RATELC": 0,
+          "AMOUNTFC": 0,
+          "AMOUNTLC": 0,
+          "LOCTYPE_CODE": "string",
+          "DEL_DATE": "2024-01-18T10:29:30.742Z"
+        }
+      ]
+    };
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jobalocationFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
             }
-            else {
-              this.commonService.toastErrorByMsgId('MSG3577')
-            }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
+          });
+        }
+        else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  update() {
+    if (this.jobalocationFrom.invalid) {
+      this.toastr.error('select all required fields')
+      return
     }
 
-    update(){
-      if (this.jobalocationFrom.invalid) {
-        this.toastr.error('select all required fields')
-        return
-      }
-    
-      let API = 'JobAllocationMaster/UpdateJobAllocationMaster/' + this.jobalocationFrom.value.branchCode + this.jobalocationFrom.value.vocType  + this.jobalocationFrom.value.yearMonth + this.jobalocationFrom.value.vocNo;
-      let postData = 
-      {
-        "VOCTYPE":  this.jobalocationFrom.value.vocType || "",
-        "BRANCH_CODE": this.branchCode,
-        "VOCNO":0,
-        "VOCDATE": this.jobalocationFrom.value.vocDate || "",
-        "YEARMONTH": this.yearMonth,
-        "DOCTIME": "2024-01-18T12:26:27.661Z",
-        "SMAN": "string",
-        "REMARKS": this.jobalocationFrom.value.remarks || "",
-        "NAVSEQNO": 0,
-        "MID": 0,
-        "AUTOPOSTING": true,
-        "POSTDATE": "string",
-        "PRINT_COUNT": 0,
-        "SYSTEM_DATE": "2024-01-18T10:29:30.742Z",
-        "HTUSERNAME": "string",
-        "jobAllocationDetails": [
-          {
-            "DT_BRANCH_CODE": "string",
-            "DT_VOCTYPE": "string",
-            "DT_VOCNO": 0,
-            "DT_YEARMONTH": "string",
-            "SLNO": 0,
-            "JOB_NUMBER": "string",
-            "JOB_SO_NUMBER": 0,
-            "UNQ_JOB_ID": "string",
-            "DESIGN_CODE": "string",
-            "UNQ_DESIGN_ID": "string",
-            "ACCODE": "string",
-            "TOT_PCS": 0,
-            "PCS": 0,
-            "RATEFC": 0,
-            "RATELC": 0,
-            "AMOUNTFC": 0,
-            "AMOUNTLC": 0,
-            "LOCTYPE_CODE": "string",
-            "DEL_DATE": "2024-01-18T10:29:30.742Z"
-          }
-        ]
-      };
-      
-      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-        .subscribe((result) => {
-            if(result && result.status == "Success"){
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.jobalocationFrom.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-            else {
-              this.commonService.toastErrorByMsgId('MSG3577')
-            }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
+    let API = 'JobAllocationMaster/UpdateJobAllocationMaster/' + this.jobalocationFrom.value.branchCode + this.jobalocationFrom.value.vocType + this.jobalocationFrom.value.yearMonth + this.jobalocationFrom.value.vocNo;
+    let postData =
+    {
+      "VOCTYPE": this.jobalocationFrom.value.vocType || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": 0,
+      "VOCDATE": this.jobalocationFrom.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2024-01-18T12:26:27.661Z",
+      "SMAN": "string",
+      "REMARKS": this.jobalocationFrom.value.remarks || "",
+      "NAVSEQNO": 0,
+      "MID": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "PRINT_COUNT": 0,
+      "SYSTEM_DATE": "2024-01-18T10:29:30.742Z",
+      "HTUSERNAME": "string",
+      "jobAllocationDetails": [
+        {
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "string",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string",
+          "SLNO": 0,
+          "JOB_NUMBER": "string",
+          "JOB_SO_NUMBER": 0,
+          "UNQ_JOB_ID": "string",
+          "DESIGN_CODE": "string",
+          "UNQ_DESIGN_ID": "string",
+          "ACCODE": "string",
+          "TOT_PCS": 0,
+          "PCS": 0,
+          "RATEFC": 0,
+          "RATELC": 0,
+          "AMOUNTFC": 0,
+          "AMOUNTLC": 0,
+          "LOCTYPE_CODE": "string",
+          "DEL_DATE": "2024-01-18T10:29:30.742Z"
+        }
+      ]
+    };
 
-    deleteRecord() {
-      if (!this.content.VOCTYPE) {
-        Swal.fire({
-          title: '',
-          text: 'Please Select data to delete!',
-          icon: 'error',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        }).then((result: any) => {
-          if (result.value) {
-          }
-        });
-        return
-      }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jobalocationFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  deleteRecord() {
+    if (!this.content.VOCTYPE) {
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let API = 'JobAllocationMaster/DeleteJobAllocationeMaster/'+ this.jobalocationFrom.value.branchCode + this.jobalocationFrom.value.voctype + this.jobalocationFrom.value.vocno + this.jobalocationFrom.value.yearMonth;
-          let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-            .subscribe((result) => {
-              if (result) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: result.message || 'Success',
-                    text: '',
-                    icon: 'success',
-                    confirmButtonColor: '#336699',
-                    confirmButtonText: 'Ok'
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.jobalocationFrom.reset()
-                      this.tableData = []
-                      this.close('reloadMainGrid')
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: result.message || 'Error please try again',
-                    text: '',
-                    icon: 'error',
-                    confirmButtonColor: '#336699',
-                    confirmButtonText: 'Ok'
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.jobalocationFrom.reset()
-                      this.tableData = []
-                      this.close()
-                    }
-                  });
-                }
-              } else {
-                this.toastr.error('Not deleted')
-              }
-            }, err => alert(err))
-          this.subscriptions.push(Sub)
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
         }
       });
+      return
     }
-    showOverleyPanel(event: any, formControlName: string) {
-      if (this.jobalocationFrom.value[formControlName] != '') return;
-    
-      switch (formControlName) {
-        case 'userName':
-          this.overlayuserName.showOverlayPanel(event);
-          break;
-        default:
-      }
-    }
-    
-    
-    validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-      LOOKUPDATA.SEARCH_VALUE = event.target.value
-      if (event.target.value == '' || this.viewMode == true) return
-      let param = {
-        LOOKUPID: LOOKUPDATA.LOOKUPID,
-        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-      }
-      this.commonService.showSnackBarMsg('MSG81447');
-      let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-      let Sub: Subscription = this.dataService.getDynamicAPI(API)
-        .subscribe((result) => {
-          this.commonService.closeSnackBarMsg()
-          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-          if (data.length == 0) {
-            this.commonService.toastErrorByMsgId('MSG1531')
-            this.jobalocationFrom.controls[FORMNAME].setValue('')
-            LOOKUPDATA.SEARCH_VALUE = ''
-            if (FORMNAME === 'userName') {
-              this.showOverleyPanel(event, FORMNAME);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'JobAllocationMaster/DeleteJobAllocationeMaster/' + this.jobalocationFrom.value.branchCode + this.jobalocationFrom.value.voctype + this.jobalocationFrom.value.vocno + this.jobalocationFrom.value.yearMonth;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.jobalocationFrom.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.jobalocationFrom.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
             }
-            return
-          }
-        }, err => {
-          this.commonService.toastErrorByMsgId('Error Something went wrong')
-        })
-      this.subscriptions.push(Sub)
-    }
-  
-    
-    ngOnDestroy() {
-      if (this.subscriptions.length > 0) {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-        this.subscriptions = []; // Clear the array
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
       }
+    });
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.jobalocationFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'userName':
+        this.overlayuserName.showOverlayPanel(event);
+        break;
+      default:
     }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.jobalocationFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'userName') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
 
 
-  refreshGridData(){
-    
-// console.log(this.jobalocationFrom.value.job);
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
+  }
 
-    if(this.jobalocationFrom.value.job == 1){
+
+  refreshGridData() {
+
+    // console.log(this.jobalocationFrom.value.job);
+
+    if (this.jobalocationFrom.value.job == 1) {
       const apiUrl = 'DaimondSalesOrder/GetDaimondSalesOrderList/DMCC/DSO/2023';
-  
+
       let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-          this.gridData = resp.response;        
+          this.gridData = resp.response;
         }
-       
+
       });
-  }else{
-    this.gridData = [];
+    } else {
+      this.gridData = [];
+    }
   }
-}
 
 }

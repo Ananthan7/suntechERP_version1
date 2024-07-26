@@ -283,8 +283,12 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.setLookup201WhereCondition()
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
     }
   }
 
@@ -475,7 +479,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.PREFIX_CODE);
   }
     WorkerCodeValidate(event ?: any) {
-      this.showOverleyPanel(event, 'workerCode')
+      // this.showOverleyPanel(event, 'workerCode')
       let form = this.metalReturnDetailsForm.value;
       let postData = {
         "SPID": "103",
@@ -496,12 +500,11 @@ export class MetalReturnDetailsComponent implements OnInit {
         .subscribe((result) => {
           this.comService.closeSnackBarMsg()
           if (result.dynamicData && result.dynamicData[0].length > 0) {
-
+            this.overlayworkerCodeSearch.closeOverlayPanel()
           } else {
-            this.overlayworkerCodeSearch.showOverlayPanel(event)
-            this.showOverleyPanel(event, 'workerCode')
             this.metalReturnDetailsForm.controls.workerCode.setValue('')
-            this.comService.toastErrorByMsgId('MSG1531')
+            this.showOverleyPanel(event, 'workerCode')
+            return
           }
         }, err => {
           this.comService.closeSnackBarMsg()
@@ -511,7 +514,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
   
   processCodeValidate(event?: any) {
-    this.showOverleyPanel(event, 'processCode')// this
+    // this.showOverleyPanel(event, 'processCode')// this
     let form = this.metalReturnDetailsForm.value;
     let postData = {
       "SPID": "103",
@@ -531,21 +534,20 @@ export class MetalReturnDetailsComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
-        if (result.dynamicData && result.dynamicData[0].length > 0) {
-
-        } else {
+        if (result.dynamicData && result.dynamicData[0].length > 0) {``
           this.overlayprocessCodeSearch.closeOverlayPanel()
-          this.showOverleyPanel(event, 'processCode')
+        } else {
+          // this.comService.toastErrorByMsgId('MSG1531')
           this.metalReturnDetailsForm.controls.processCode.setValue('')
-          this.comService.toastErrorByMsgId('MSG1531')
+          this.showOverleyPanel(event, 'processCode')
+          return
         }
-        
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1747')
-      })
-    this.subscriptions.push(Sub)
-  }
+      this.comService.closeSnackBarMsg()
+      this.comService.toastErrorByMsgId('MSG1531')
+    })
+  this.subscriptions.push(Sub)
+}
   subJobNumberValidate(event?: any) {
     let postData = {
       "SPID": "040",
@@ -596,7 +598,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   jobNumberValidate(event: any) {
-    this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
     // let postData = {
     //   "SPID": "064",
@@ -621,6 +622,7 @@ export class MetalReturnDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.overlayjobNumberSearch.closeOverlayPanel()
             this.jobNumberDetailData = data
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
@@ -634,8 +636,9 @@ export class MetalReturnDetailsComponent implements OnInit {
             return
           }
         } else {
-          this.overlayjobNumberSearch.closeOverlayPanel()
+          
           this.metalReturnDetailsForm.controls.jobNumber.setValue('')
+          this.showOverleyPanel(event, 'jobNumber')
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -700,7 +703,8 @@ export class MetalReturnDetailsComponent implements OnInit {
 }
   
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.metalReturnDetailsForm.value[formControlName] != '') return;
+    let value= this.metalReturnDetailsForm.value[formControlName]
+    if (this.comService.nullToString(value) != '') return;
   
     switch (formControlName) {
       case 'jobNumber':
@@ -743,7 +747,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'processCode' || FORMNAME === 'workerCode' || FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
+          if ( FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
