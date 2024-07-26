@@ -619,6 +619,9 @@ allowDescription:boolean=false;
   isInvalidRecNo: boolean = false;
   isInvalidGIftVocNo: boolean = false;
 
+  maxGiftAmount:number=0;
+  giftVocNo:string="";
+
   posPlanetIssuing: boolean = false;
   userwiseDiscount: boolean = false;
   // quaggaConfig: any = Quagga.init({
@@ -805,7 +808,7 @@ allowDescription:boolean=false;
     this.lineItemForm = this.formBuilder.group({
       fcn_li_item_code: ['', { autofocus: true }, Validators.required],
       fcn_li_item_desc: ['', Validators.required],
-      fcn_li_division: ['', Validators.required],
+      fcn_li_division: [{ value: '', disabled: true }, Validators.required],
       fcn_li_location: [''],
       fcn_li_gift_type: [''],
       // fcn_li_location: ['', Validators.required],
@@ -2251,7 +2254,7 @@ allowDescription:boolean=false;
         ARECMID = 0;
       } else if (this.selectedTabIndex == 4) {
         RECEIPT_MODE = this.giftReceiptForm.value.paymentsCreditGIftVoc.toString();
-        ARECVOCNO = '';
+        ARECVOCNO = this.giftReceiptForm.value.giftVocNo||"";
         this.isCCTransaction = false;
         AMOUNT_FC = this.comFunc.emptyToZero(this.giftReceiptForm.value.giftAmtFC);
         AMOUNT_CC = this.comFunc.FCToCC(
@@ -7440,7 +7443,14 @@ allowDescription:boolean=false;
                   this.comFunc.getMsgByID('MSG1464'),
                   true
                 );
-                this.lineItemForm.controls['fcn_li_item_code'].setValue('');
+                this.dialogBox.afterClosed().subscribe((data: any) => {
+                  if (data == 'OK') {
+                    this.lineItemForm.controls['fcn_li_item_code'].setValue('');
+                    this.renderer.selectRootElement('#fcn_li_item_code').focus();
+                  }
+      
+                });
+               
 
               }
             }
@@ -8310,8 +8320,14 @@ allowDescription:boolean=false;
         "additionalInfo": {
           "giftInfo": [
             {
-              "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type || '',
-              "GIFT_CODE": this.giftTypeOptions.find((e: any) => e.value == this.lineItemForm.value.fcn_li_gift_type)
+              "GIFT_TYPE": this.giftReceiptForm.value.paymentsCreditGIftVoc || '',
+              "GIFT_CODE":  this.giftReceiptForm.value.giftVocNo || '',
+              "REDEEMAMOUNTCC":  this.giftReceiptForm.value.giftAmtFC || '',
+              "TOTALSALESAMOUNT": this.order_items_total_net_amount.toString() || '',
+
+
+              // "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type || '',
+              // "GIFT_CODE": this.giftTypeOptions.find((e: any) => e.value == this.lineItemForm.value.fcn_li_gift_type)
             }
           ]
         },
@@ -8798,6 +8814,7 @@ printReceiptDetailsWeb() {
   }
  
   changePCS(event: any,divisionBasedAutoUpdation:boolean=false) {
+    const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_pcs'));
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
@@ -8842,7 +8859,7 @@ printReceiptDetailsWeb() {
             if (data == 'No') {
               // this.checkDivisionForPcs(value)
             this.lineItemForm.controls['fcn_li_pcs'].setValue(
-            this.lineItemPcs
+              preVal
           );
 
               this.manageCalculations();
@@ -8901,12 +8918,24 @@ printReceiptDetailsWeb() {
 
   }
 
+  checkItemCode(){
+
+    if(!this.lineItemForm.value.fcn_li_item_code){
+      this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+        this.zeroMQtyVal
+      );
+      this.renderer.selectRootElement('#fcn_li_item_code').focus();
+    }
+
+  }
+
   changeGrossWt(event: any) {
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
-
+    const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_gwt'));
+   this.checkItemCode();
     this.setGrossWtFocus();
-    if (event.target.value != '') {
+    if (event.target.value != '' && this.lineItemForm.value.fcn_li_item_code) {
       if (this.blockNegativeStock == 'B') {
         if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
@@ -8938,7 +8967,7 @@ printReceiptDetailsWeb() {
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'No') {
               this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-                this.lineItemGrossWt
+                preVal
               );
               // this.setNettWeight();
               this.manageCalculations();
@@ -12156,16 +12185,23 @@ console.log(this.blockMinimumPriceValue)
     }
 
     if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
+      this.giftReceiptForm.controls.giftVocNo.setValue(
+        '');
+        
+        this.giftReceiptForm.controls.giftAmtFC.setValue(
+         '');
+     
+
       if (data != null && data != undefined) {
 
         this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
-          this.comFunc.emptyToZero(data?.RECEIPT_MODE).toString());
+         data?.RECEIPT_MODE);
 
-        this.advanceReceiptForm.controls.giftBranch.setValue(
-          data['REC_BRANCHCODE'].toString());
+        this.giftReceiptForm.controls.giftBranch.setValue(
+          data['REC_BRANCHCODE']);
 
-        this.advanceReceiptForm.controls.advanceRecNo.setValue(
-          this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+        this.giftReceiptForm.controls.giftVocNo.setValue(
+          data['ARECVOCNO']);
 
         this.giftReceiptForm.controls.giftAmtFC.setValue(
           this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
@@ -12382,6 +12418,20 @@ checkAdvanceReciept(vocNo: any) {
 changeGiftVoucherAmount(data:any){
 
   console.log(data.target.value);
+
+  if(data.target.value > this.comFunc.emptyToZero(this.maxGiftAmount)){
+
+    this.openDialog('Warning', `Amount Exceed than Gift Voucher Amount ${this.maxGiftAmount} in ${this.giftVocNo}`, true);
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+      if (data == 'OK') {
+        this.giftReceiptForm.controls.giftAmtFC.setValue(
+          this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(this.maxGiftAmount).toString()));
+
+      }
+    });
+
+  }
   
 
 }
@@ -12389,21 +12439,46 @@ changeGiftVoucherAmount(data:any){
   changeGiftVocNo(event: any) {
     const value = event.target.value;
     const vocType = this.giftReceiptForm.value.paymentsCreditGIftVoc;
+    console.log(this.ordered_items);
+    let concatenatedCodes = this.currentLineItems.map((item:any) => `${item.DIVISION_CODE},`).join('');
+
     if (value != '') {
       this.snackBar.open('Loading...');
-      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}/${vocType}`
+     let API= `ValidateGiftVocNo/ValidateGiftVocNo/${value}/${concatenatedCodes}/${parseFloat(this.order_items_total_net_amount)}/${this.strBranchcode}`;
+            // let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}/${vocType}`
       this.suntechApi.getDynamicAPI(API)
         .subscribe((res) => {
           this.snackBar.dismiss();
           if (res['status'].toString().trim() == 'Success') {
             this.isInvalidGIftVocNo = false;
-            const result = res.response;
+            if(res.dynamicData[0][0].RESULT_STATUS=='FAILED'){
 
-            this.giftReceiptForm.controls.giftAmtFC.setValue(
-              this.comFunc.transformDecimalVB(
-                this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(res.VoucherAmountFc).toString()));
+              this.openDialog('Warning', this.comFunc.getMsgByID(res.dynamicData[0][0].MESSAGE_ID), true);
+              this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'OK') {
+                  this.giftReceiptForm.controls.giftVocNo.setValue(
+                    '');
+                    
+                    this.giftReceiptForm.controls.giftAmtFC.setValue(
+                     '');
+                }
+              });
 
-            this.giftReceiptForm.controls.giftBranch.setValue(result.BRANCH_CODE);
+            }
+            else{
+             
+              const result = res.dynamicData[1][0];
+  
+              this.maxGiftAmount=res.dynamicData[1][0].VoucherAmountCC;
+              this.giftVocNo=res.dynamicData[1][0].GIFTVOUCHERNO;
+  
+              this.giftReceiptForm.controls.giftAmtFC.setValue(
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(res.dynamicData[1][0].VoucherAmountCC).toString()));
+  
+              this.giftReceiptForm.controls.giftBranch.setValue(result.BRANCH_CODE);
+            }
+           
 
           } else {
             this.isInvalidGIftVocNo = true;
@@ -13256,6 +13331,9 @@ changeGiftVoucherAmount(data:any){
       this.snackBar.open('Gross Wt should not 0', 'OK', {
         duration: 2000
       });
+    }
+    else{
+      this.checkItemCode();
     }
   }
 
