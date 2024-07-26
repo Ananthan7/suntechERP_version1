@@ -118,7 +118,9 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="credit_days_LC" />
+                                            <input type="number" matInput formControlName="credit_days_LC" 
+                                            (change)="credit_Date($event)" />
+                                            
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-5">
@@ -135,13 +137,14 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="credit_days_Mtl" />
+                                            <input type="number" matInput formControlName="credit_days_Mtl"
+                                            (change)="credit_Date2($event)"/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
                                             <input matInput [matDatepicker]="credit_days_Mtl"
-                                                formControlName="credit_days_Mtl" placeholder="DD/MM/YYYY"
+                                                formControlName="credit_days_Mtl_Date" placeholder="DD/MM/YYYY"
                                                 DateValidation />
                                             <mat-datepicker-toggle matSuffix
                                                 [for]="credit_days_Mtl"></mat-datepicker-toggle>
