@@ -23,11 +23,12 @@ export class TouristVatRefundVerificationComponent implements OnInit {
 
   vocMaxDate = new Date();
   currentDate = new Date();
+  pulledInvoice: any;
   columnhead: any[] = [
     "Sr.No",
     "VOCDATE",
-    " TRS No",
-    " VOC TYPE",
+    "TRS No",
+    "VOC TYPE",
     "VOC NO",
     "Sales Amt",
     "Planet Amt",
@@ -40,7 +41,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     vocNo: [""],
     vocDate: [this.currentDate],
     partyCode: [""],
-    partycodeName: [""],
+    partyCodeHead: [""],
     partyCurrency: [""],
     partyCurrencyRate: [""],
     enteredBy: [""],
@@ -65,6 +66,31 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     this.content?.FLAG === "VIEW" || this.content?.FLAG === "EDIT"
       ? this.getDataToSet(this.content)
       : this.generateVocNoAndDefaultSet();
+  }
+
+  onSelectionChanged(selectionInfo: any) {
+    console.log(selectionInfo);
+    const selectedData = selectionInfo.selectedRowsData;
+    selectedData.forEach((rowData: any) => {
+      console.log(rowData);
+    });
+  }
+
+  pullInvoices() {
+    let postData = {
+      FromDate: this.touristVatRefundVerificationForm.value.fromDate,
+      ToDate: this.touristVatRefundVerificationForm.value.toDate,
+      BranchCode: this.branchCode,
+      DefBranchCode: this.branchCode,
+    };
+    let API = `VATRefund/GetUspPullInvoicesWeb`;
+    let sub: Subscription = this.dataService
+      .postDynamicAPI(API, postData)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res);
+        }
+      });
   }
 
   generateVocNoAndDefaultSet() {
@@ -141,6 +167,9 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.touristVatRefundVerificationForm.controls.partyCode.setValue(e.ACCODE);
+    this.touristVatRefundVerificationForm.controls.partyCodeHead.setValue(
+      e.ACCOUNT_HEAD
+    );
   }
 
   partyCurrencyCodeData: MasterSearchModel = {
@@ -168,39 +197,62 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   }
 
   getDataToSet(data: any) {
-      this.touristVatRefundVerificationForm.controls['vocType'].setValue(data.VOCTYPE)
-      this.touristVatRefundVerificationForm.controls['vocNo'].setValue(data.VOCNO)
-      this.touristVatRefundVerificationForm.controls['vocDate'].setValue(data.VOCDATE)
-      this.touristVatRefundVerificationForm.controls['partyCode'].setValue(data.PARTYCODE)
-      this.touristVatRefundVerificationForm.controls['partyCurrency'].setValue(data.PARTY_CURRENCY)
-      this.touristVatRefundVerificationForm.controls['partyCurrencyRate'].setValue(data.PARTY_CURR_RATE)
-      this.touristVatRefundVerificationForm.controls['enteredBy'].setValue(data.SALESPERSON_CODE)
-      this.touristVatRefundVerificationForm.controls['narration'].setValue(data.REMARKS)
-      this.touristVatRefundVerificationForm.controls['fromDate'].setValue(data.DATEFROM)
-      this.touristVatRefundVerificationForm.controls['toDate'].setValue(data.DATETO)
-     this.touristVatRefundVerificationForm.controls['totalSale'].setValue(data.TOTALSALESAMOUNTCC)
-      this.touristVatRefundVerificationForm.controls['totalVat'].setValue(data.TOTALSALESVATAMOUNTCC)
-     Details: [
-        {
-          UNIQUEID: 0,
-          SRNO: 0,
-          INVOICE_DATE: new Date(),
-          TAGNO: "",
-          VOCTYPE: "",
-          VOCNO: 0,
-          SALESAMOUNT: 0,
-          PLANETAMOUNT: 0,
-          VATAMOUNT: 0,
-          PLANETVATAMOUNT: 0,
-          INVMID: 0,
-          TRABRANCHCODE: "",
-          DT_BRANCH_CODE: "",
-          DT_VOCNO: 0,
-          DT_VOCTYPE: "",
-          DT_YEARMONTH: "",
-        },
-      ]
-    
+    this.touristVatRefundVerificationForm.controls["vocType"].setValue(
+      data.VOCTYPE
+    );
+    this.touristVatRefundVerificationForm.controls["vocNo"].setValue(
+      data.VOCNO
+    );
+    this.touristVatRefundVerificationForm.controls["vocDate"].setValue(
+      data.VOCDATE
+    );
+    this.touristVatRefundVerificationForm.controls["partyCode"].setValue(
+      data.PARTYCODE
+    );
+    this.touristVatRefundVerificationForm.controls["partyCurrency"].setValue(
+      data.PARTY_CURRENCY
+    );
+    this.touristVatRefundVerificationForm.controls[
+      "partyCurrencyRate"
+    ].setValue(data.PARTY_CURR_RATE);
+    this.touristVatRefundVerificationForm.controls["enteredBy"].setValue(
+      data.SALESPERSON_CODE
+    );
+    this.touristVatRefundVerificationForm.controls["narration"].setValue(
+      data.REMARKS
+    );
+    this.touristVatRefundVerificationForm.controls["fromDate"].setValue(
+      data.DATEFROM
+    );
+    this.touristVatRefundVerificationForm.controls["toDate"].setValue(
+      data.DATETO
+    );
+    this.touristVatRefundVerificationForm.controls["totalSale"].setValue(
+      data.TOTALSALESAMOUNTCC
+    );
+    this.touristVatRefundVerificationForm.controls["totalVat"].setValue(
+      data.TOTALSALESVATAMOUNTCC
+    );
+    // Details: [
+    //   {
+    //     UNIQUEID: 0,
+    //     SRNO: 0,
+    //     INVOICE_DATE: new Date(),
+    //     TAGNO: "",
+    //     VOCTYPE: "",
+    //     VOCNO: 0,
+    //     SALESAMOUNT: 0,
+    //     PLANETAMOUNT: 0,
+    //     VATAMOUNT: 0,
+    //     PLANETVATAMOUNT: 0,
+    //     INVMID: 0,
+    //     TRABRANCHCODE: "",
+    //     DT_BRANCH_CODE: "",
+    //     DT_VOCNO: 0,
+    //     DT_VOCTYPE: "",
+    //     DT_YEARMONTH: "",
+    //   },
+    // ];
   }
 
   validateForm() {
