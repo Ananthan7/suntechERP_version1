@@ -33,10 +33,10 @@ export class AlloyMasterComponent implements OnInit {
   @ViewChild('overlayprice3codeSearch') overlayprice3codeSearch!: MasterSearchComponent;
   @ViewChild('overlayprice4codeSearch') overlayprice4codeSearch!: MasterSearchComponent;
   @ViewChild('overlayprice5codeSearch') overlayprice5codeSearch!: MasterSearchComponent;
-  
 
-  
-  
+
+
+
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
 
@@ -152,7 +152,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
-    WHERECONDITION: "BRANCH_CODE = '"+ this.branchCode +"' AND AC_OnHold = 0 ",
+    WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -319,7 +319,7 @@ export class AlloyMasterComponent implements OnInit {
         this.viewMode = true;
         this.deleteAlloyMaster()
       }
-    }else{
+    } else {
       this.renderer.selectRootElement('#code')?.focus();
     }
     this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
@@ -340,8 +340,8 @@ export class AlloyMasterComponent implements OnInit {
     });
   }
 
-  
-  
+
+
   setupFormSubscription(): void {
     if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
       this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
@@ -396,7 +396,7 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
-    this.alloyMastereForm.controls.PRICE1.setValue(this.content.PRICE1PER)
+    this.alloyMastereForm.controls.price1code.setValue(this.content.PRICE1PER)
     this.alloyMastereForm.controls.price2code.setValue(this.content.PRICE2PER)
     this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
     this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
@@ -455,8 +455,8 @@ export class AlloyMasterComponent implements OnInit {
     let weightAvgCostFC = this.commonService.CCToFC(form.currency, event.target.value);
     this.setValueWithDecimal('weightAvgCostFC', weightAvgCostFC, 'AMOUNT')
 
-      this.fillPriceSchemeDetails1()
-    
+    this.fillPriceSchemeDetails()
+
   }
 
   codeEnabled() {
@@ -482,6 +482,7 @@ export class AlloyMasterComponent implements OnInit {
       return false;
     }
   }
+
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
@@ -490,8 +491,8 @@ export class AlloyMasterComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.toastInfoByMsgId('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -506,11 +507,6 @@ export class AlloyMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
-
-    // if (event.target.value == '') {
-    //   this.showOverleyPanel(event, 'hsncode')
-    //   return
-    // }
   }
   /**use: for checking form validations */
   alloyMasterFormChecks(FORMNAME: string) {
@@ -518,22 +514,22 @@ export class AlloyMasterComponent implements OnInit {
       this.prefixCodeValidate()
     }
   }
-  resetAllPriceDetails(){
-      this.alloyMastereForm.controls.price1code.setValue('')
-      this.alloyMastereForm.controls.price1Lc.setValue('')
-      this.alloyMastereForm.controls.price1per.setValue('')
-      this.alloyMastereForm.controls.price2code.setValue('')
-      this.alloyMastereForm.controls.price2Lc.setValue('')
-      this.alloyMastereForm.controls.price2per.setValue('')
-      this.alloyMastereForm.controls.price3code.setValue('')
-      this.alloyMastereForm.controls.price3Lc.setValue('')
-      this.alloyMastereForm.controls.price3per.setValue('')
-      this.alloyMastereForm.controls.price4code.setValue('')
-      this.alloyMastereForm.controls.price4Lc.setValue('')
-      this.alloyMastereForm.controls.price4per.setValue('')
-      this.alloyMastereForm.controls.price5code.setValue('')
-      this.alloyMastereForm.controls.price5Lc.setValue('')
-      this.alloyMastereForm.controls.price5per.setValue('')
+  resetAllPriceDetails() {
+    this.alloyMastereForm.controls.price1code.setValue('')
+    this.alloyMastereForm.controls.price1Lc.setValue('')
+    this.alloyMastereForm.controls.price1per.setValue('')
+    this.alloyMastereForm.controls.price2code.setValue('')
+    this.alloyMastereForm.controls.price2Lc.setValue('')
+    this.alloyMastereForm.controls.price2per.setValue('')
+    this.alloyMastereForm.controls.price3code.setValue('')
+    this.alloyMastereForm.controls.price3Lc.setValue('')
+    this.alloyMastereForm.controls.price3per.setValue('')
+    this.alloyMastereForm.controls.price4code.setValue('')
+    this.alloyMastereForm.controls.price4Lc.setValue('')
+    this.alloyMastereForm.controls.price4per.setValue('')
+    this.alloyMastereForm.controls.price5code.setValue('')
+    this.alloyMastereForm.controls.price5Lc.setValue('')
+    this.alloyMastereForm.controls.price5per.setValue('')
   }
   priceSchemeValidate(e: any) {
     if (this.checkStockCode()) return
@@ -560,7 +556,7 @@ export class AlloyMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  
+
   fillPriceSchemeDetails() {
     this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
@@ -572,14 +568,14 @@ export class AlloyMasterComponent implements OnInit {
         console.log('Setting values for PRICE1');
         this.alloyMastereForm.controls.price1code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
-        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(this.alloyMastereForm.controls.price1Lc.value,form.currencyRate));
+        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(this.alloyMastereForm.controls.price1Lc.value, form.currencyRate));
         this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(form.price1Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE2') {
         console.log('Setting values for PRICE2');
         this.alloyMastereForm.controls.price2code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price2Lc.setValue(this.TagPrice_Calculation(item));
-        this.alloyMastereForm.controls.price2Fc.setValue(this.commonService.CCToFC(this.alloyMastereForm.controls.price2Lc.value,form.currencyRate));
+        this.alloyMastereForm.controls.price2Fc.setValue(this.commonService.CCToFC(this.alloyMastereForm.controls.price2Lc.value, form.currencyRate));
         this.alloyMastereForm.controls.price2per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price2Lc))
       }
       if (item.PRICE_NUMBER == 'PRICE3') {
@@ -587,7 +583,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price3code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price3Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price3Fc.setValue(
-          this.commonService.CCToFC(this.alloyMastereForm.controls.price3Lc.value,form.currencyRate)
+          this.commonService.CCToFC(this.alloyMastereForm.controls.price3Lc.value, form.currencyRate)
         );
         this.alloyMastereForm.controls.price3per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price3Lc))
       }
@@ -596,7 +592,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price4code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price4Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price4Fc.setValue(
-          this.commonService.CCToFC(this.alloyMastereForm.controls.price4Lc.value,form.currencyRate)
+          this.commonService.CCToFC(this.alloyMastereForm.controls.price4Lc.value, form.currencyRate)
         );
         this.alloyMastereForm.controls.price4per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price4Lc))
       }
@@ -605,7 +601,7 @@ export class AlloyMasterComponent implements OnInit {
         this.alloyMastereForm.controls.price5code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price5Lc.setValue(this.TagPrice_Calculation(item));
         this.alloyMastereForm.controls.price5Fc.setValue(
-          this.commonService.CCToFC( this.alloyMastereForm.controls.price5Lc.value,form.currencyRate)
+          this.commonService.CCToFC(this.alloyMastereForm.controls.price5Lc.value, form.currencyRate)
         );
         this.alloyMastereForm.controls.price5per.setValue(this.percentageCalculate(this.alloyMastereForm.value.price5Lc))
       }
@@ -613,12 +609,12 @@ export class AlloyMasterComponent implements OnInit {
   }
 
 
-  
 
 
-  percentageCalculate(strpriceLC:any) {
+
+  percentageCalculate(strpriceLC: any) {
     let weightAvgCostLC = this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC)
-    let avgPercentage = ((parseInt(strpriceLC)-weightAvgCostLC)/weightAvgCostLC)*100
+    let avgPercentage = ((parseInt(strpriceLC) - weightAvgCostLC) / weightAvgCostLC) * 100
     return avgPercentage.toFixed(1)
   }
   /** price calculation */
@@ -772,7 +768,7 @@ export class AlloyMasterComponent implements OnInit {
           this.alloyMastereForm.controls.subCategory.setValue(this.prefixMasterDetail.SUBCATEGORY_CODE)
           this.alloyMastereForm.controls.brand.setValue(this.prefixMasterDetail.BRAND_CODE)
           this.alloyMastereForm.controls.description.setValue(this.prefixMasterDetail.DESCRIPTION)
-          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO,1)
+          this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
           this.alloyMastereForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
@@ -785,27 +781,27 @@ export class AlloyMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-   incrementAndPadNumber(input:any, incrementBy:any) {
+  incrementAndPadNumber(input: any, incrementBy: any) {
     // Convert the input to an integer and increment it
     let incrementedValue = parseInt(input, 10) + incrementBy;
-  
+
     // Convert the incremented value back to a string and pad with leading zeros
     let paddedValue = incrementedValue.toString().padStart(input.length, '0');
-  
+
     return paddedValue;
   }
   updatePrefixMaster() {
     if (!this.prefixMasterDetail) {
     }
     let API = 'PrefixMaster/UpdatePrefixMaster/' + this.prefixMasterDetail.PREFIX_CODE
-    let postData =this.prefixMasterDetail
+    let postData = this.prefixMasterDetail
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-         this.commonService.toastSuccessByText('Last number updated')
-        
+            this.commonService.toastSuccessByText('Last number updated')
+
           }
         } else {
           this.toastr.error('Not saved')
@@ -813,7 +809,7 @@ export class AlloyMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   checkStockCode(): boolean {
     // if(this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT'){
     //   return true;
@@ -923,7 +919,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.priceSchemeDetails?.length > 0) {
       this.fillPriceSchemeDetails()
     }
-   // this.fillPriceSchemeDetails1()
+    // this.fillPriceSchemeDetails1()
   }
 
   priceTwoCodeSelected(e: any) {
@@ -1407,7 +1403,7 @@ export class AlloyMasterComponent implements OnInit {
         } else if (result.status == "Failed") {
           this.showErrorDialog('Code Already Exists')
         }
-        else{
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1425,7 +1421,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1434,7 +1430,7 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  afterSave(value:any){
+  afterSave(value: any) {
     if (value) {
       this.alloyMastereForm.reset()
       this.tableData = []
@@ -1448,7 +1444,7 @@ export class AlloyMasterComponent implements OnInit {
       this.showDeleteErrorDialog('Please Select data to delete!');
       return;
     }
-  
+
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let API = 'DiamondStockMaster/DeleteDiamondStockMaster/' + this.alloyMastereForm.value.code;
@@ -1456,7 +1452,7 @@ export class AlloyMasterComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog(this.content?.STOCK_CODE +' Deleted successfully');
+                this.showSuccessDialog(this.content?.STOCK_CODE + ' Deleted successfully');
               } else {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
@@ -1470,7 +1466,7 @@ export class AlloyMasterComponent implements OnInit {
       }
     });
   }
-  
+
   showConfirmationDialog(): Promise<any> {
     return Swal.fire({
       title: 'Are you sure?',
@@ -1482,7 +1478,7 @@ export class AlloyMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     });
   }
-  
+
   showDeleteErrorDialog(message: string): void {
     Swal.fire({
       title: '',
@@ -1492,7 +1488,7 @@ export class AlloyMasterComponent implements OnInit {
       confirmButtonText: 'Ok'
     });
   }
-  
+
   showSuccessDialog(message: string): void {
     Swal.fire({
       title: message,
@@ -1504,7 +1500,7 @@ export class AlloyMasterComponent implements OnInit {
       this.afterSave(result.value)
     });
   }
-  
+
   showErrorDialog(message: string): void {
     Swal.fire({
       title: message,
@@ -1525,16 +1521,16 @@ export class AlloyMasterComponent implements OnInit {
 
   fillPriceSchemeDetails1() {
     console.log('hiii')
-   // this.resetAllPriceDetails()
+    // this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
-    this.priceSchemeDetails.forEach((item: any, i: any, strpriceLC:any) => {
+    this.priceSchemeDetails.forEach((item: any, i: any, strpriceLC: any) => {
       //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
       if (item.PRICE_NUMBER == 'PRICE1') {
         console.log('hello')
         console.log(item.PRICE_NUMBER)
         //this.alloyMastereForm.controls.price1code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
-        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(form.price1Lc,form.currencyRate));
+        this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.CCToFC(form.price1Lc, form.currencyRate));
         this.alloyMastereForm.controls.price1per.setValue(this.percentageCalculate(strpriceLC))
       }
       // if (item.PRICE_NUMBER == 'PRICE2') {
@@ -1636,7 +1632,7 @@ export class AlloyMasterComponent implements OnInit {
       default:
     }
   }
-  
+
   // showOverleyPanel(event: any, formControlName: string) {
 
   //   if (formControlName == 'code') {
