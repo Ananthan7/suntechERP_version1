@@ -98,6 +98,18 @@ export class MetalReturnDetailsComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
   }
+  // stockCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 51,
+  //   SEARCH_FIELD: 'STOCK_CODE',
+  //   SEARCH_HEADING: 'Stock Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "DIVISION='G' AND SUBCODE=0 ",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true
+  // }
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber: ['', [Validators.required]],
@@ -646,35 +658,47 @@ export class MetalReturnDetailsComponent implements OnInit {
         strUserName: this.comService.nullToString(this.userName),
         strLocation: '',
         strPartyCode: '',
-        strVocDate: this.comService.formatDDMMYY(this.comService.currentDate)
-      }
+        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
     }
+};
 
-    this.comService.showSnackBarMsg('MSG81447')
+    this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          if (data) {
-            console.log(data, 'data');
-          } else {
-            this.comService.toastErrorByMsgId('MSG1531')
-            this.metalReturnDetailsForm.controls.stockCode.setValue('')
-            this.showOverleyPanel(event, 'stockCode')
-            return
-          }
-        } else {
-          this.overlaystockCodeSearch.closeOverlayPanel()
-          this.metalReturnDetailsForm.controls.stockCode.setValue('')
-          this.comService.toastErrorByMsgId('MSG1747')
-        }
-      }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            if (result.status === "Success" && result.dynamicData[0]) {
+                let data = result.dynamicData[0];
+                if (data) {
+                    console.log(data, 'data');
+                    if (data[0].VALID_STOCK) {
+                        // Handle the valid stock case
+                        // You can set other form values or perform other actions here if needed
+                        this.overlaystockCodeSearch.closeOverlayPanel();
+                    } else {
+                        this.comService.toastErrorByMsgId('MSG1531');
+                        this.metalReturnDetailsForm.controls.stockCode.setValue('');
+                        this.showOverleyPanel(event, 'stockCode');
+                    }
+                } else {
+                    this.comService.toastErrorByMsgId('MSG1531');
+                    this.metalReturnDetailsForm.controls.stockCode.setValue('');
+                    this.showOverleyPanel(event, 'stockCode');
+                }
+            } else {
+                this.comService.toastErrorByMsgId('MSG1747');
+                this.metalReturnDetailsForm.controls.stockCode.setValue('');
+                this.overlaystockCodeSearch.closeOverlayPanel();
+            }
+        }, err => {
+            this.comService.closeSnackBarMsg();
+            this.comService.toastErrorByMsgId('MSG1531');
+            this.metalReturnDetailsForm.controls.stockCode.setValue('');
+            this.showOverleyPanel(event, 'stockCode');
+        });
+
+    this.subscriptions.push(Sub);
+}
+  
   showOverleyPanel(event: any, formControlName: string) {
     if (this.metalReturnDetailsForm.value[formControlName] != '') return;
   

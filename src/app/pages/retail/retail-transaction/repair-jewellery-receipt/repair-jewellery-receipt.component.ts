@@ -51,7 +51,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   filteredData: any;
   hideCurrecnySearch: boolean = false;
   voucherNo: any;
-  formatteddate:any;
+  formatteddate: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -325,8 +325,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       TOTAL_GRWT: 0,
       SYSTEM_DATE: new Date().toISOString(),
       NAVSEQNO: 0,
-      DELIVERYDATE:this.formatteddate,
-        // this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+      DELIVERYDATE: this.formatteddate,
+      // this.repairjewelleryreceiptFrom.value.customer_delivery_date,
       SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
@@ -636,10 +636,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
     console.log("Updated repairDetailsData", this.repairDetailsData);
     // this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(this.repairDetailsData[0].AMOUNT);
-    var add_value=0;
-     this.repairDetailsData.forEach(value => {
+    var add_value = 0;
+    this.repairDetailsData.forEach(value => {
       // console.log(value);
-      add_value+=value.AMOUNT;
+      add_value += value.AMOUNT;
     });
     // console.log(add_value);
     this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(add_value);
