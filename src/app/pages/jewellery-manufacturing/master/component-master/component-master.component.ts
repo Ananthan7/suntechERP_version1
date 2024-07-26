@@ -28,6 +28,7 @@ export class ComponentMasterComponent implements OnInit {
   @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
 
   @Input() content!: any;
+  currentDate: any = new Date();
   isPCSDisabled: boolean = false;
   iskaratDisabled: boolean = false;
   tableData: any[] = [];
@@ -464,6 +465,7 @@ export class ComponentMasterComponent implements OnInit {
       this.codeEnable = false;
     }
   }
+
 
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -941,7 +943,7 @@ export class ComponentMasterComponent implements OnInit {
       "GW": 0,
       "MODEL_NO": "",
       "MODEL_YEAR": 0,
-      "OPENED_ON": "2023-11-27T06:54:03.761Z",
+      "OPENED_ON": this.commonService.formatDateTime(this.currentDate),
       "OPENED_BY": "",
       "FIRST_TRN": "",
       "LAST_TRN": "",
@@ -1108,9 +1110,9 @@ export class ComponentMasterComponent implements OnInit {
       "UDF14": "",
       "UDF15": "",
       "CUSTOMERSKU": "",
-      "FINALAPPROVALDATE": "2023-11-27T06:54:03.761Z",
+      "FINALAPPROVALDATE": this.commonService.formatDateTime(this.currentDate),
       "PRINT_COUNT": 0,
-      "EXPIRY_DATE": "2023-11-27T06:54:03.761Z",
+      "EXPIRY_DATE": this.commonService.formatDateTime(this.currentDate),
       "PROCESS_TYPE": form.settingType,
       "DYE_STRIP": false,
       "CASTING_REQ": 0,
@@ -1334,10 +1336,10 @@ export class ComponentMasterComponent implements OnInit {
       this.update()
       return
     }
-    // if (this.componentmasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+    if (this.componentmasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
@@ -1762,6 +1764,7 @@ export class ComponentMasterComponent implements OnInit {
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
+      this.prefixCodeValidate()
     }
     if (event.key === 'Enter') {
       if (event.target.value == '') this.showOverleyPanel(event, form)
@@ -1771,6 +1774,10 @@ export class ComponentMasterComponent implements OnInit {
 
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
+      case 'code':
+        this.overlaycodedescSearch.showOverlayPanel(event);
+       
+        break;
       case 'codedes':
         this.overlaycodedescSearch.showOverlayPanel(event);
         break;
