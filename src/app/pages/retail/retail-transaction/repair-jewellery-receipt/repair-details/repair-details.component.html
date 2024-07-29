@@ -118,7 +118,7 @@
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="number" AmountDecimalInput matInput
+                    <input [readonly]="viewOnly === true" type="number" (change)="total_amount_change($event)" matInput
                       formControlName="total_amount" />
                   </mat-form-field>
                 </div>
