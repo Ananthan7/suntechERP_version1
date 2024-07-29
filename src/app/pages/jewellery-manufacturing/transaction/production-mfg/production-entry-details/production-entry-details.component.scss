@@ -33,25 +33,51 @@
   .mat-tab-body-content {
     overflow: hidden !important;
   }
-  .upload-btn-wrapper 
-.btnnew {
-    color: white;
-    border-radius: 5px;
-    font-size: 14px;
-    background: #34a4dc;
-    border-color: transparent;
-    padding: 2px 15px;
-    margin-left: 45px;
-    width: 150px;
+//   .upload-btn-wrapper 
+// .btnnew {
+//     color: white;
+//     border-radius: 5px;
+//     font-size: 14px;
+//     background: #34a4dc;
+//     border-color: transparent;
+//     padding: 2px 15px;
+//     margin-left: 45px;
+//     width: 150px;
+// }
+// .upload-btn-wrapper 
+// .uploadproduct {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     opacity: 0;
+//     font-size: 100px;
+//     cursor: pointer;
+// }
+
 }
-.upload-btn-wrapper 
-.uploadproduct {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    font-size: 100px;
-    cursor: pointer;
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
 }
+
+.upload-btn-wrapper .btnnew {
+  color: white;
+  border-radius: 5px;
+  font-size: 14px;
+  background: #34a4dc;
+  border-color: transparent;
+  padding: 2px 15px;
+  margin-left: 45px;
+  width: 150px;
+  cursor: pointer;
+}
+
+.upload-btn-wrapper input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
