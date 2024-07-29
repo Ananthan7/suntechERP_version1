@@ -1,3 +1,9 @@
+/*
+MODULE : RETAIL(POS)
+MENU_SCREEN_NAME :POS Advance Return
+DEVELOPER : LINUS ELIAS JOSE
+*/
+
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   NgbActiveModal,
@@ -341,7 +347,7 @@ export class AdvanceReturnComponent implements OnInit {
             }
           } else {
             this.toastr.error(
-              "PartyCode not found",
+              "PartyCode not found", //CHINNU - MSG HARD CODED?
               result.Message ? result.Message : "",
               {
                 timeOut: 3000,
@@ -508,7 +514,7 @@ export class AdvanceReturnComponent implements OnInit {
     if (this.advanceReturnForm.invalid) {
       this.toastr.error("Select all required fields");
       return false;
-    }
+    }//CHINNU - MSG HARD CODED?
 
     if (
       this.isCustomerRequired &&
