@@ -534,8 +534,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
-    this.setValueWithDecimal('SCRAP_WT', parentDetail.SCRAP_WT, 'METAL')
-    if (parentDetail.APPROVED_USER != '') {
+    this.setValueWithDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
+    if (this.commonService.nullToString(parentDetail.APPROVED_USER) != '') {
       this.nullToStringSetValue('APPROVED_USER', parentDetail.APPROVED_USER)
       this.approvalReqFlag = true
       this.processTransferdetailsForm.controls.approveddate.setValue(
