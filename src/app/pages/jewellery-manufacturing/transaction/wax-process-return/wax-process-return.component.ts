@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -22,19 +22,21 @@ export class WaxProcessReturnComponent implements OnInit {
   @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
   @ViewChild('overlaywaxcodeSearch') overlaywaxcodeSearch!: MasterSearchComponent;
 
-  columnhead:any[] = ['Sr No','Job No','Design','Party','S.O','S.O Date', 'Del Date','Gross Weight','Metal Weight','Stone Weight','Wax Weight','Issue Pcs','Return Pcs','Karat'];
-  @Input() content!: any; 
+  columnhead: any[] = ['Sr No', 'Job No', 'Design', 'Party', 'S.O', 'S.O Date', 'Del Date', 'Gross Weight', 'Metal Weight', 'Stone Weight', 'Wax Weight', 'Issue Pcs', 'Return Pcs', 'Karat'];
+  @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
   viewMode: boolean = false;
   vocMaxDate = new Date();
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
-  
+
   private subscriptions: Subscription[] = [];
-    user: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
@@ -70,7 +72,7 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -96,12 +98,12 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
- 
+
 
   WaxCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID:  3,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Wax Code',
     SEARCH_VALUE: '',
@@ -111,17 +113,17 @@ export class WaxProcessReturnComponent implements OnInit {
   }
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocDate : [new Date()],
-    vocno: [1,[Validators.required]],
-    enteredBy : [''],
-    process:['',[Validators.required]],
-    worker:['',[Validators.required]],
-    toworker:[''],
-    toprocess:[''],
-    waxcode:[''],
-    remark:[''],
-   });
+    voctype: ['', [Validators.required]],
+    vocDate: [new Date()],
+    vocno: [1, [Validators.required]],
+    enteredBy: [''],
+    process: ['', [Validators.required]],
+    worker: ['', [Validators.required]],
+    toworker: [''],
+    toprocess: [''],
+    waxcode: [''],
+    remark: [''],
+  });
 
 
   constructor(
@@ -142,30 +144,30 @@ export class WaxProcessReturnComponent implements OnInit {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.waxprocessFrom.controls.enteredBy.setValue(value.UsersName);
+    this.waxprocessFrom.controls.enteredBy.setValue(value.UsersName);
   }
 
-  WorkerCodeSelected(e:any){
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
   }
 
-  ToWorkerCodeSelected(e:any){
+  ToWorkerCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.toworker.setValue(e.WORKER_CODE);
   }
 
-  WaxCodeSelected(e:any){
+  WaxCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.waxcode.setValue(e.CODE);
   }
 
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.process.setValue(e.Process_Code);
   }
 
-  ToProcessCodeSelected(e:any){
+  ToProcessCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.toprocess.setValue(e.Process_Code);
   }
@@ -175,18 +177,18 @@ export class WaxProcessReturnComponent implements OnInit {
     this.activeModal.close(data);
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
-    removedata(){
-      this.tableData.pop();
-    }
+  removedata() {
+    this.tableData.pop();
+  }
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -194,100 +196,100 @@ export class WaxProcessReturnComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'JobWaxReturn/InsertJobWaxReturn'
     let postData = {
-        "MID": 0,
-        "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-        "BRANCH_CODE": this.branchCode,
-        "VOCNO": this.waxprocessFrom.value.vocno || "",
-        "VOCDATE": this.waxprocessFrom.value.vocDate || "",
-        "YEARMONTH": this.yearMonth,
-        "DOCTIME": "2023-10-19T05:34:05.288Z",
-        "PROCESS_CODE": this.waxprocessFrom.value.process || "",
-        "WORKER_CODE": this.waxprocessFrom.value.worker || "",
-        "SMAN": "",
-        "REMARKS": this.waxprocessFrom.value.remark || "",
-        "NAVSEQNO": 0,
-        "AUTOPOSTING": true,
-        "POSTDATE": "",
-        "PRINT_COUNT": 0,
-        "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-        "TO_WORKER_CODE": this.waxprocessFrom.value.toworker || "",
-        "DIVISION_CODE": "",
-        "STOCK_CODE": "",
-        "SYSTEM_DATE": "2023-10-19T05:34:05.288Z",
-        "HTUSERNAME": this.waxprocessFrom.value.enteredBy,
-        "Details": [
-          {
-            "UNIQUEID": 0,
-            "DT_VOCTYPE": "JWA",
-            "DT_BRANCH_CODE": this.branchCode,
-            "DT_VOCNO": 10,
-            "DT_YEARMONTH": this.yearMonth,
-            "SRNO": 0,
-            "JOB_NUMBER": "12",
-            "UNQ_JOB_ID": "",
-            "PROCESS_CODE": "",
-            "WORKER_CODE": "",
-            "DESIGN_CODE": "",
-            "PARTYCODE": "",
-            "ISSUE_PCS": 0,
-            "RETURN_PCS": 0,
-            "ISSUE_VOCTYPE": "",
-            "ISSUE_BRANCH_CODE": "",
-            "ISSUE_VOCNO": 0,
-            "ISSUE_YEARMONTH": "",
-            "TO_PROCESS_CODE": "",
-            "TO_WORKER_CODE": "",
-            "IS_AUTHORISE": true,
-            "GROSS_WT": 0,
-            "METAL_WT": 0,
-            "STONE_WT": 0,
-            "WAX_WT": 0,
-            "JOB_PCS": 0,
-            "AUTHORIZE_TIME": "2023-10-19T05:34:05.288Z",
-            "IS_REJECT": true,
-            "REASON": "",
-            "REJ_REMARKS": "",
-            "ATTACHMENT_FILE": ""
-          }
-        ]
+      "MID": 0,
+      "VOCTYPE": this.waxprocessFrom.value.voctype || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.waxprocessFrom.value.vocno || "",
+      "VOCDATE": this.waxprocessFrom.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2023-10-19T05:34:05.288Z",
+      "PROCESS_CODE": this.waxprocessFrom.value.process || "",
+      "WORKER_CODE": this.waxprocessFrom.value.worker || "",
+      "SMAN": "",
+      "REMARKS": this.waxprocessFrom.value.remark || "",
+      "NAVSEQNO": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "PRINT_COUNT": 0,
+      "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
+      "TO_WORKER_CODE": this.waxprocessFrom.value.toworker || "",
+      "DIVISION_CODE": "",
+      "STOCK_CODE": "",
+      "SYSTEM_DATE": "2023-10-19T05:34:05.288Z",
+      "HTUSERNAME": this.waxprocessFrom.value.enteredBy,
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "DT_VOCTYPE": "JWA",
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": 10,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": 0,
+          "JOB_NUMBER": "12",
+          "UNQ_JOB_ID": "",
+          "PROCESS_CODE": "",
+          "WORKER_CODE": "",
+          "DESIGN_CODE": "",
+          "PARTYCODE": "",
+          "ISSUE_PCS": 0,
+          "RETURN_PCS": 0,
+          "ISSUE_VOCTYPE": "",
+          "ISSUE_BRANCH_CODE": "",
+          "ISSUE_VOCNO": 0,
+          "ISSUE_YEARMONTH": "",
+          "TO_PROCESS_CODE": "",
+          "TO_WORKER_CODE": "",
+          "IS_AUTHORISE": true,
+          "GROSS_WT": 0,
+          "METAL_WT": 0,
+          "STONE_WT": 0,
+          "WAX_WT": 0,
+          "JOB_PCS": 0,
+          "AUTHORIZE_TIME": "2023-10-19T05:34:05.288Z",
+          "IS_REJECT": true,
+          "REASON": "",
+          "REJ_REMARKS": "",
+          "ATTACHMENT_FILE": ""
+        }
+      ]
     }
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-          if(result && result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.waxprocessFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.waxprocessFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
 
- 
 
 
-  update(){
+
+  update() {
     if (this.waxprocessFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.waxprocessFrom.value.branchCode + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.yearMonth
+
+    let API = 'JobWaxReturn/UpdateJobWaxReturn/' + this.waxprocessFrom.value.branchCode + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.yearMonth
     let postData = {
       "MID": 0,
       "VOCTYPE": this.waxprocessFrom.value.voctype || "",
@@ -345,32 +347,32 @@ export class WaxProcessReturnComponent implements OnInit {
           "ATTACHMENT_FILE": ""
         }
       ]
-  }
-  
+    }
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-          if(result && result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.waxprocessFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
-        
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.waxprocessFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
+
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -438,7 +440,7 @@ export class WaxProcessReturnComponent implements OnInit {
   }
   showOverleyPanel(event: any, formControlName: string) {
     if (this.waxprocessFrom.value[formControlName] != '') return;
-  
+
     switch (formControlName) {
       case 'process':
         this.overlayprocessCodeSearch.showOverlayPanel(event);
@@ -461,33 +463,33 @@ export class WaxProcessReturnComponent implements OnInit {
       default:
         console.warn(`Unexpected form control name: ${formControlName}`);
     }
-  }  
+  }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.waxprocessFrom.controls[FORMNAME].setValue('')
-
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'process' || FORMNAME === 'toprocess' || FORMNAME === 'worker' || FORMNAME === 'toworker' || FORMNAME === 'enteredBy' || FORMNAME === 'waxcode') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }

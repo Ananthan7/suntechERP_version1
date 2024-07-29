@@ -36,6 +36,8 @@ export class TreeDownComponent implements OnInit {
   tableData: any[] = [];
   currentDate = new Date();
   viewMode: boolean = false;
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   isloading: boolean = false;
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
@@ -249,8 +251,8 @@ export class TreeDownComponent implements OnInit {
     this.treeDownFrom.controls.karatCode.setValue(e['Karat Code']);
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
@@ -639,7 +641,7 @@ export class TreeDownComponent implements OnInit {
   }
   showOverleyPanel(event: any, formControlName: string) {
     if (this.treeDownFrom.value[formControlName] != '') return;
-  
+
     switch (formControlName) {
       case 'processCode':
         this.overlayprocessCodeSearch.showOverlayPanel(event);
@@ -668,37 +670,34 @@ export class TreeDownComponent implements OnInit {
       default:
     }
   }
-  
-
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.treeDownFrom.controls[FORMNAME].setValue('')
-
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'processCode' || FORMNAME === 'cylinder' || FORMNAME === 'worker' || FORMNAME === 'toProcess' || FORMNAME === 'enteredBy' || FORMNAME === 'karatCode' || FORMNAME === 'toWorker' || FORMNAME === 'color') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
-
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
@@ -706,4 +705,6 @@ export class TreeDownComponent implements OnInit {
     }
   }
 
+
 }
+

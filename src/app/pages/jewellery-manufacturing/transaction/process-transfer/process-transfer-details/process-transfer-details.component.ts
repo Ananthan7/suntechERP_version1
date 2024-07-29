@@ -2668,7 +2668,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
   }
   /** METAL SECTION VALIDATIONS */
+  MToStockCode_Validating() {
 
+  }
   /**USE: SCRAP STOCK CODE CHANGE VALIDATION */
   txtMScrapStockCode_Validating() {
     try {
@@ -2678,31 +2680,47 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.CalculateNetAndPureWt();
         this.CalculateMetalBalance();
       }
+      this.commonService.showSnackBarMsg('MSG81447');
+      let API = `MetalStockMaster/GetMetalStockMasterHeaderAndDetail/${form.METAL_ScrapStockCode}`
+      let Sub: Subscription = this.dataService.getDynamicAPI(API)
+        .subscribe((result) => {
+          this.commonService.closeSnackBarMsg()
+          let data = result.dynamicData[0] || []
+          if (data.length>0) {
+              let txtMScrapPurity = data[0]["PURITY"];
+              this.setValueWithDecimal('METAL_ScrapPurity', txtMScrapPurity, 'PURITY')
+              if (this.commonService.Null2BitValue(data[0]["EXCLUDE_TRANSFER_WT"]) == true) {
+                this.blnScrapIronItem = true;
 
-      // dtMaster = objDbTrans.SelectData("SELECT STOCK_CODE, PURITY, EXCLUDE_TRANSFER_WT FROM METAL_STOCK_MASTER WHERE SUBCODE = 0 AND STOCK_CODE = '" + txtMScrapStockCode.Text.Trim() + "'");
-      // if (dtMaster.Rows.Count > 0) {
-      //   txtMScrapPurity.Text = dtMaster.Rows[0]["PURITY"].ToString();
-      //   if (objFormControl.Null2BitValue(dtMaster.Rows[0]["EXCLUDE_TRANSFER_WT"].ToString()) == true) {
-      //     blnScrapIronItem = true;
+                let txtMScrapGrWt = (this.emptyToZero(form.METAL_FromIronWeight) - this.emptyToZero(form.METAL_ToIronWt));
+                let txtToIronScrapWt = (this.emptyToZero(form.METAL_FromIronWeight) - this.emptyToZero(form.METAL_ToIronWt));
 
-      //     let txtMScrapGrWt = (objSqlObjectTrans.Empty2zero(txtFromIronWeight.Text.Trim()) - objSqlObjectTrans.Empty2zero(txtToIronWt.Text.Trim())).ToString();
-      //     let txtToIronScrapWt = (objSqlObjectTrans.Empty2zero(txtFromIronWeight.Text.Trim()) - objSqlObjectTrans.Empty2zero(txtToIronWt.Text.Trim())).ToString();
+                let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(txtToIronScrapWt)));
+                let txtMToNetWt = (this.emptyToZero(form.METAL_GrossWeightTo) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(form.METAL_ToIronWt)));
+                let txtMToPureWt = (this.emptyToZero(txtMToNetWt) * form.PURITY);
+                let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(txtMScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
+                let txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
+                let txtBalPureWt = (this.emptyToZero(txtBalNetWt) * form.PURITY);
+                this.setValueWithDecimal('METAL_ScrapGrWt', txtMScrapGrWt, 'METAL')
+                this.setValueWithDecimal('METAL_ToIronScrapWt', txtToIronScrapWt, 'METAL')
+                this.setValueWithDecimal('METAL_ToNetWt', txtMToNetWt, 'METAL')
+                this.setValueWithDecimal('METAL_ToPureWt', txtMToPureWt, 'METAL')
+                this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
+                this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
+                this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
+                this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
+                this.Split_MetalLoss();
+                this.processTransferdetailsForm.controls.METAL_ScrapGrWt.disable()
+              }
+              else {
+                this.processTransferdetailsForm.controls.METAL_ScrapGrWt.enable()
+              }
+            }
+        }, err => {
+          this.commonService.toastErrorByMsgId('Error something went wrong')
+        })
+      this.subscriptions.push(Sub)
 
-      //     let txtBalIronWt = (objSqlObjectTrans.Empty2zero(txtFromIronWeight.Text.Trim()) - (objSqlObjectTrans.Empty2zero(txtToIronWt.Text.Trim()) + objSqlObjectTrans.Empty2zero(txtToIronScrapWt.Text))).ToString();
-      //     let txtMToNetWt = (objSqlObjectTrans.Empty2zero(txtMToGrossWt.Text.Trim()) - (objSqlObjectTrans.Empty2zero(txtMToStoneWt.Text.Trim()) + objSqlObjectTrans.Empty2zero(txtToIronWt.Text))).ToString();
-      //     let txtMToPureWt = (objSqlObjectTrans.Empty2zero(txtMToNetWt.Text.Trim()) * dblJobPurity).ToString();
-      //     let txtBalGrWt = (objSqlObjectTrans.Empty2zero(txtMFromGrossWeight.Text.Trim()) - (objSqlObjectTrans.Empty2zero(txtMToGrossWt.Text.Trim()) + objSqlObjectTrans.Empty2zero(txtMScrapGrWt.Text.Trim()) + objSqlObjectTrans.Empty2zero(txtLossBooked.Text.Trim()))).ToString();
-      //     let txtBalNetWt = (objSqlObjectTrans.Empty2zero(txtBalGrWt.Text.Trim()) - (objSqlObjectTrans.Empty2zero(txtBalStoneWt.Text.Trim()) + objSqlObjectTrans.Empty2zero(txtBalIronWt.Text))).ToString();
-      //     let txtBalPureWt = (objSqlObjectTrans.Empty2zero(txtBalNetWt.Text.Trim()) * dblJobPurity).ToString();
-          
-      //     this.Split_MetalLoss();
-      //     txtMScrapGrWt.ReadOnly = true;
-      //     this.processTransferdetailsForm.controls.METAL_ScrapGrWt.disable()
-      //   }
-      //   else {
-      //     this.processTransferdetailsForm.controls.METAL_ScrapGrWt.enable()
-      //   }
-      // }
     } catch (Exception) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
