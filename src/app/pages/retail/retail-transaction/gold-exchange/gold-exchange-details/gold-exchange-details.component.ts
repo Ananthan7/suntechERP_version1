@@ -324,11 +324,12 @@ export class GoldExchangeDetailsComponent implements OnInit {
     console.log(this.goldExchangeDetailsForm.value.stoneWeight);
     console.log(
       this.comService.decimalQuantityFormat(
-         this.comService.CCToFC(this.partyCurrency,
+        this.comService.CCToFC(
+          this.partyCurrency,
           this.comService.emptyToZero(
             this.goldExchangeDetailsForm.value.grossWeight
           )
-         ) ,
+        ),
         "METAL"
       )
     );
