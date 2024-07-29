@@ -1688,7 +1688,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -2616,7 +2616,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.stockCodeScrapValidate()
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -2736,7 +2736,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
               }
             }
         }, err => {
-          this.commonService.toastErrorByMsgId('Error something went wrong')
+          this.commonService.toastErrorByMsgId('MSG1531')
         })
       this.subscriptions.push(Sub)
 
