@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : APPROVAL MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { Input, OnInit, Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -134,7 +140,7 @@ export class ApprovalMasterComponent implements OnInit {
         if (result.checkifExists) {
           Swal.fire({
             title: '',
-            text: result.message || 'Approval Already Exists!',
+            text: result.message || 'Approval Already Exists!',//CHINNU - MESSAGE HARD CODED
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
@@ -168,7 +174,7 @@ export class ApprovalMasterComponent implements OnInit {
     let userData = [];
     userData = this.tableData.filter((item: any) => item.USER_CODE == data.UsersName)
     if (userData.length > 0) {
-      this.toastr.error('Same User cannot be added.')
+      this.toastr.error('Same User cannot be added.')//CHINNU - MESSAGE HARD CODED
     }
     else {
       console.log(value);
@@ -212,7 +218,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   emailid(data: any, value: any) {
     if (!this.commonService.validateEmail(data.target.value)) {
-      this.commonService.toastErrorByMsgId('Invalid Email Address')
+      this.commonService.toastErrorByMsgId('Invalid Email Address')//CHINNU - MESSAGE HARD CODED
       return
     }
 
@@ -228,7 +234,7 @@ export class ApprovalMasterComponent implements OnInit {
         dataField: 'USER_CODE',
         caption: 'User Id',
         cellTemplate: 'usertemp',
-        validationRules: [{ type: 'required', message: 'User Id is required' }]
+        validationRules: [{ type: 'required', message: 'User Id is required' }]//CHINNU - MESSAGE HARD CODED
       },
       // Other columns in your DataGrid
     ],
@@ -239,11 +245,11 @@ export class ApprovalMasterComponent implements OnInit {
 
 
     if (this.approvalMasterForm.value.code == '') {
-      this.toastr.error("Code Cannot be empty")
+      this.toastr.error("Code Cannot be empty")//CHINNU - MESSAGE HARD CODED
     }
 
     if (this.approvalMasterForm.value.description == '') {
-      this.toastr.error("Description cannot be empty")
+      this.toastr.error("Description cannot be empty")//CHINNU - MESSAGE HARD CODED
     }
 
 
@@ -356,7 +362,7 @@ export class ApprovalMasterComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('network issue found')//CHINNU - MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -412,7 +418,7 @@ export class ApprovalMasterComponent implements OnInit {
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
           console.log("Condition met: mobile number must be filled for Message Checked");
-          this.toastr.error("Mobile number must be filled for Message Checked");
+          this.toastr.error("Mobile number must be filled for Message Checked");//CHINNU - MESSAGE HARD CODED
           conditionMet = true;
           return; // Prevent further execution for the current item
         }
@@ -421,7 +427,7 @@ export class ApprovalMasterComponent implements OnInit {
       if (emailChecked != '') {
         if (!emailId.trim()) {
           console.log("Condition met: emailId must be filled for email Checked");
-          this.toastr.error("Email ID must be filled for email Checked");
+          this.toastr.error("Email ID must be filled for email Checked");//CHINNU - MESSAGE HARD CODED
           conditionMet = true;
           return; // Prevent further execution for the current item
         }
@@ -430,17 +436,17 @@ export class ApprovalMasterComponent implements OnInit {
 
 
     if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Code Cannot be empty")
+      this.toastr.error("Code Cannot be empty")//CHINNU - MESSAGE HARD CODED
       return;
     }
 
     else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")
+      this.toastr.error("Description cannot be empty")//CHINNU - MESSAGE HARD CODED
       return;
     }
     //  Continue with the rest of your code for submission
     else if (this.checkFinalApproval()) {
-      this.toastr.error('Final option should be selected');
+      this.toastr.error('Final option should be selected');//CHINNU - MESSAGE HARD CODED
       return;
     }
 
@@ -590,7 +596,7 @@ export class ApprovalMasterComponent implements OnInit {
   update() {
 
     if (this.approvalMasterForm.invalid) {
-      this.toastr.error('Please select all required fields');
+      this.toastr.error('Please select all required fields');//CHINNU - MESSAGE HARD CODED
       return;
     }
 
@@ -613,7 +619,7 @@ export class ApprovalMasterComponent implements OnInit {
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
           console.log("Condition met: mobile number must be filled for Message Checked");
-          this.toastr.error("Mobile number must be filled for Message Checked");
+          this.toastr.error("Mobile number must be filled for Message Checked");//CHINNU - MESSAGE HARD CODED
           conditionMet = true;
           return; // Prevent further execution for the current item
         }
@@ -622,7 +628,7 @@ export class ApprovalMasterComponent implements OnInit {
       if (emailChecked != '') {
         if (!emailId.trim()) {
           console.log("Condition met: emailId must be filled for email Checked");
-          this.toastr.error("Email ID must be filled for email Checked");
+          this.toastr.error("Email ID must be filled for email Checked");//CHINNU - MESSAGE HARD CODED
           conditionMet = true;
           return; // Prevent further execution for the current item
         }
@@ -631,17 +637,17 @@ export class ApprovalMasterComponent implements OnInit {
 
 
     if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Code Cannot be empty")
+      this.toastr.error("Code Cannot be empty")//CHINNU - MESSAGE HARD CODED
       return;
     }
 
     else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")
+      this.toastr.error("Description cannot be empty")//CHINNU - MESSAGE HARD CODED
       return;
     }
     //  Continue with the rest of your code for submission
     else if (this.checkFinalApproval()) {
-      this.toastr.error('Final option should be selected');
+      this.toastr.error('Final option should be selected');//CHINNU - MESSAGE HARD CODED
       return;
     }
 
