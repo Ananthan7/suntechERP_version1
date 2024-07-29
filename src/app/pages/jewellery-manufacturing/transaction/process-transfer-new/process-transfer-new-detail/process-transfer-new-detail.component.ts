@@ -35,6 +35,8 @@ export class ProcessTransferNewDetailComponent implements OnInit {
   viewMode: boolean = false;
   designType: string = 'DIAMOND';
   private subscriptions: Subscription[] = [];
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   jobNoSearch: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -278,7 +280,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
 
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
-    this.showOverleyPanel(event,'jobno')
+    this.showOverleyPanel(event, 'jobno')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -311,7 +313,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.processTransferdetailsForm.controls.jobno.setValue('')
-            this.showOverleyPanel(event,'jobno')
+            this.showOverleyPanel(event, 'jobno')
             return
           }
         } else {
@@ -492,7 +494,7 @@ export class ProcessTransferNewDetailComponent implements OnInit {
         if (result.status == "Success" && result.response) {
           let data = result.response
           this.setProcessCodeData(data.PROCESS_CODE, flag)
-        }  else {
+        } else {
           this.overlayprocessTo.showOverlayPanel(event)
           this.showOverleyPanel(event, 'processTo')
           this.processTransferdetailsForm.controls.processTo.setValue('')
@@ -604,8 +606,8 @@ export class ProcessTransferNewDetailComponent implements OnInit {
     this.activeModal.close(data);
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
   showOverleyPanel(event: any, formControlName: string) {
@@ -633,40 +635,43 @@ export class ProcessTransferNewDetailComponent implements OnInit {
       case 'processTo':
         this.overlayprocessTo.showOverlayPanel(event);
         break;
-        case 'processFrom':
-          this.overlayprocessFrom.showOverlayPanel(event);
-          break;
-        case 'jobno':
-          this.overlayjobno.showOverlayPanel(event);
-          break;
+      case 'processFrom':
+        this.overlayprocessFrom.showOverlayPanel(event);
+        break;
+      case 'jobno':
+        this.overlayjobno.showOverlayPanel(event);
+        break;
       default:
 
     }
   }
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.processTransferdetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'METAL_workerTo' || FORMNAME === 'METAL_workerFrom' ||  FORMNAME === 'METAL_processTo' || FORMNAME === 'METAL_processFrom' || FORMNAME === 'workerTo' || FORMNAME === 'processTo' || FORMNAME === 'processFrom' || FORMNAME === 'jobno') {
+
+          if (FORMNAME === 'METAL_workerTo' || FORMNAME === 'METAL_workerFrom' || FORMNAME === 'METAL_processTo' || FORMNAME === 'METAL_processFrom' || FORMNAME === 'workerTo' || FORMNAME === 'processTo' || FORMNAME === 'processFrom' || FORMNAME === 'jobno') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
