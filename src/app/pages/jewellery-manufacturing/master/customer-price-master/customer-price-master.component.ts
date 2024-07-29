@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : CUSTOMER PRICE MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -164,12 +170,12 @@ export class CustomerPriceMasterComponent implements OnInit {
           if (this.tableDatastone?.length > 0) {
            // this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('price sheme not found')//CHINNU -  MESSAGE HARD CODED
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -194,12 +200,12 @@ export class CustomerPriceMasterComponent implements OnInit {
             console.log(result.dynamicData[0]);
            // this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('price sheme not found')//CHINNU -  MESSAGE HARD CODED
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -222,12 +228,12 @@ export class CustomerPriceMasterComponent implements OnInit {
           if (this.designChanges?.length > 0) {
            // this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('price sheme not found')//CHINNU -  MESSAGE HARD CODED
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -502,11 +508,11 @@ export class CustomerPriceMasterComponent implements OnInit {
     console.log(form.labourType);
     
     if (this.commonService.nullToString(form.pricecode) == '') {
-      this.toastr.error('pricecode required')
+      this.toastr.error('pricecode required')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     if (this.commonService.nullToString(form.customercode) == '') {
-      this.toastr.error('customercode required')
+      this.toastr.error('customercode required')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     // if (this.commonService.nullToString(form.labourType) == '') {
@@ -548,7 +554,7 @@ export class CustomerPriceMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Not saved')//CHINNU -  MESSAGE HARD CODED
         }
       }, err => alert(err))
     // this.subscriptions.push(Sub)
@@ -677,7 +683,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('network issue found')//CHINNU - MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
