@@ -78,7 +78,7 @@ export class CommonServiceService {
   ) {
   }
   // FORM FEILD CALCULATIONS STARTS
-  balancePcsCalculate(METAL_FromPCS:any,METAL_ToPCS:any,METAL_ScrapPCS:any){
+  balancePcsCalculate(METAL_FromPCS: any, METAL_ToPCS: any, METAL_ScrapPCS: any) {
     return (this.emptyToZero(METAL_FromPCS) - (this.emptyToZero(METAL_ToPCS) + this.emptyToZero(METAL_ScrapPCS)));
   }
   grossWtCalculate(MetalWeight: any, stoneWeight: any) {
@@ -86,15 +86,15 @@ export class CommonServiceService {
   }
   // FORM FEILD CALCULATIONS ENDS
 
-  getCurrecnyRate(currencyCode:string){
-    let currdata = this.allBranchCurrency.filter((item:any)=> item.CURRENCY_CODE == currencyCode)
-    return this.setCommaSerperatedNumber(currdata[0].CONV_RATE,'RATE')
+  getCurrecnyRate(currencyCode: string) {
+    let currdata = this.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == currencyCode)
+    return this.setCommaSerperatedNumber(currdata[0].CONV_RATE, 'RATE')
   }
-  searchStartsWithItemsInArray(array:any, searchValue: any) {
+  searchStartsWithItemsInArray(array: any, searchValue: any) {
     // Convert the search value to lowercase for a case-insensitive search
     const lowerSearchValue = this.nullToString(searchValue).toLowerCase();
-    
-    return array.filter((item:any) => {
+
+    return array.filter((item: any) => {
       // Iterate over all the keys of the object
       for (const key in item) {
         // Check if the property value startsWith the search value
@@ -105,11 +105,11 @@ export class CommonServiceService {
       return false; // If not found, return false
     });
   }
-  searchAllItemsInArray(array:any, searchValue: any) {
+  searchAllItemsInArray(array: any, searchValue: any) {
     // Convert the search value to lowercase for a case-insensitive search
     const lowerSearchValue = this.nullToString(searchValue).toLowerCase();
-    
-    return array.filter((item:any) => {
+
+    return array.filter((item: any) => {
       // Iterate over all the keys of the object
       for (const key in item) {
         // Check if the property value includes the search value
@@ -315,9 +315,9 @@ export class CommonServiceService {
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
     let value = this.allCompanyParameters ? this.allCompanyParameters[parameter] : ''
-    if(value.toString().toUpperCase() == 'TRUE') value = true;
-    if(value.toString().toUpperCase() == 'FALSE') value = false;
-    if(value.toString() == '0') value = false;
+    if (value.toString().toUpperCase() == 'TRUE') value = true;
+    if (value.toString().toUpperCase() == 'FALSE') value = false;
+    if (value.toString() == '0') value = false;
     return value
   }
   setCommaSerperatedNumber(value: any, decimal: any) {
@@ -334,7 +334,8 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
       'THREE': 3,
-      'METAL_RATE': Number(this.allCompanyParameters?.MRATEDECIMALS) || 0    };
+      'METAL_RATE': Number(this.allCompanyParameters?.MRATEDECIMALS) || 0
+    };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string) {
@@ -353,7 +354,7 @@ export class CommonServiceService {
     if (value == '' || value == 0) {
       value = `${0}.${str}`;
     }
-    
+
     // Split the value into integer and fractional parts
     const parts = value.toString().split('.');
     let integerPart = parts[0];
@@ -388,7 +389,7 @@ export class CommonServiceService {
     const daysTime = Math.floor(time / 24 / 60);
     const hoursTime = Math.floor(time / 60 % 24);
     const minutesTime = Math.floor(time % 60);
-    return daysTime.toString().padStart(2, '0')+":" +hoursTime.toString().padStart(2, '0')+':' +minutesTime.toString().padStart(2, '0');
+    return daysTime.toString().padStart(2, '0') + ":" + hoursTime.toString().padStart(2, '0') + ':' + minutesTime.toString().padStart(2, '0');
   }
   getTime() {
     // Get the current time components
@@ -465,22 +466,22 @@ export class CommonServiceService {
   // }
   CCToFC(currency: any, amount: any, rate: any = null) {
     console.log(this.allBranchCurrency);
-  
+
     // Ensure rate is set, either from the argument or by fetching it
     rate = rate !== null ? rate : this.getCurrRate(currency);
-  
+
     // Ensure amount and rate are numbers and convert empty values to zero
     // rate = this.emptyToZero(rate);
     // amount = this.emptyToZero(amount);
   
     let convertedAmount = 0;
-  
+
     // Filter the currency data for the given currency code
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE === currency);
     console.log('=====cctofc===============================');
     console.log(result);
     console.log('====================================');
-  
+
     // Check if the currency data was found and perform the conversion
     if (result.length > 0) {
       if (result[0].MUL_DIV === 'M') {
@@ -491,10 +492,10 @@ export class CommonServiceService {
     } else {
       console.error('Currency not found');
     }
-  
+
     return convertedAmount;
   }
-  
+
   // CCToFC(currency: any, amount: any) {
 
   //   let rate = this.getCurrRate(currency);
@@ -805,7 +806,7 @@ export class CommonServiceService {
       autoPostingFlag = data.autoPosting;
     });
     // return false; // hardcoded for discussion on 07-05-2024
-   return this.Null2BitValue(autoPostingFlag)
+    return this.Null2BitValue(autoPostingFlag)
   }
   generateNumber() {
     return Math.floor(1000 + Math.random() * 9000)
@@ -1025,10 +1026,10 @@ export class CommonServiceService {
     if (data === null || data === undefined) {
       data = 0;
     }
-  
+
     let number = '';
     data = data.toString().replace(/,/g, '');
-  
+
     if (data.includes('.')) {
       let parts = data.split('.');
       data = parts[0];
@@ -1037,10 +1038,10 @@ export class CommonServiceService {
     } else {
       number = Number(data).toLocaleString('en-US', { style: 'decimal' });
     }
-  
+
     return number;
   }
-  
+
   calculateDateDifference(userDateValue: any) {
     const userDate: any = new Date(userDateValue);
     const currentDate: any = new Date();
