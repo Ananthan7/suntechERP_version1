@@ -14,6 +14,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
+  @ViewChild('MetaloverlayToWorker') MetaloverlayToWorker!: MasterSearchComponent;
+  @ViewChild('MetaloverlayjobNoSearch') MetaloverlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('MetalfromProcessMasterOverlay') MetalfromProcessMasterOverlay!: MasterSearchComponent;
+  @ViewChild('MetaltoProcessMasterOverlay') MetaltoProcessMasterOverlay!: MasterSearchComponent;
+  @ViewChild('MetalfromWorkerMasterOverley') MetalfromWorkerMasterOverley!: MasterSearchComponent;
+  @ViewChild('MetalstockCodeOverlay') MetalstockCodeOverlay!: MasterSearchComponent;
+  @ViewChild('MetaloverleyLocation') MetaloverleyLocation!: MasterSearchComponent;
   @ViewChild('overlayToWorker') overlayToWorker!: MasterSearchComponent;
   @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
   @ViewChild('fromProcessMasterOverlay') fromProcessMasterOverlay!: MasterSearchComponent;
@@ -1681,7 +1688,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -2609,7 +2616,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.stockCodeScrapValidate()
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -2642,6 +2649,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
         break;
       case 'location':
         this.overleyLocation.showOverlayPanel(event);
+        break;
+      case 'METAL_FRM_PROCESS_CODE':
+        this.MetalfromProcessMasterOverlay.showOverlayPanel(event);
+        break;
+      case 'METAL_TO_PROCESS_CODE':
+        this.MetaltoProcessMasterOverlay.showOverlayPanel(event);
+        break;
+      case 'METAL_FRM_WORKER_CODE':
+        this.MetalfromWorkerMasterOverley.showOverlayPanel(event);
+        break;
+      case 'METAL_TO_WORKER_CODE':
+        this.MetaloverlayToWorker.showOverlayPanel(event);
         break;
       default:
         // Optionally handle the default case if needed
@@ -2717,7 +2736,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
               }
             }
         }, err => {
-          this.commonService.toastErrorByMsgId('Error something went wrong')
+          this.commonService.toastErrorByMsgId('MSG1531')
         })
       this.subscriptions.push(Sub)
 
