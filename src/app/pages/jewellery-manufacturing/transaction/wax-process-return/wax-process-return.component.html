@@ -38,7 +38,8 @@
                 <mat-form-field style="width: 100%">
                   <input matInput [matDatepicker]="vocDate" name="vocDate"
                     formControlName="vocDate"
-                    placeholder="DD/MM/YYYY" DateValidation />
+                    placeholder="DD/MM/YYYY" DateValidation [min]="minDate"
+                    [max]="maxDate"/>
                   <mat-datepicker-toggle matSuffix
                     [for]="vocDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate"
@@ -51,7 +52,7 @@
                 No * :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="vocno" />
+                  <input type="text" matInput formControlName="vocno"  style="text-align: right;"/>
                 </mat-form-field>
               </div>
             </div>
