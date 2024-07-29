@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false">
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false"  [isViewContinue]="true" (continueClick)="continue()">
 </modal-header>
 
 <div class="container-fluid">
@@ -17,7 +17,7 @@
           <label for="input" class="col-sm-3 col-form-label">Job No :</label>
           <div class="col-sm-3">
             <mat-form-field style="width: 70%;">
-              <input type="text" matInput (focusout)="jobNumberValidate($event)" formControlName="jobno" />
+              <input type="text" matInput (focusout)="jobNumberValidate($event)" formControlName="jobno" UpperCaseDirective (focusout)="validateLookupField($event,jobnoCodeData,'jobno')"/>
             </mat-form-field>
             <master-search [MasterSearchData]="jobnoCodeData" (newRowClick)="jobnoCodeSelected($event)"></master-search>
           </div>
@@ -52,7 +52,7 @@
           <label for="input" class="col-sm-3 col-form-label">Customer :</label>
           <div class="col-sm-3">
             <mat-form-field style="width: 70%;">
-              <input type="text" matInput formControlName="customer" />
+              <input type="text" matInput formControlName="customer" UpperCaseDirective  (focusout)="validateLookupField($event,customerCodeData,'customer')"/>
             </mat-form-field>
             <master-search [MasterSearchData]="customerCodeData"
               (newRowClick)="customerCodeScpSelected($event)"></master-search>
@@ -105,13 +105,6 @@
           </div>
         </div>
       </div>
-      <div class="col-md-2">
-        <div class="p-1">
-          <button type="button" class="btn btn-primary add-btn" (click)="opennewdetails()">
-            Stock
-          </button>
-        </div>
-      </div>
     </div>
 
     <div class="p-2">
@@ -124,7 +117,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="DESIGN_CODE" />
+                    <input type="text" matInput formControlName="DESIGN_CODE" UpperCaseDirective   (focusout)="validateLookupField($event,designCodeData,'DESIGN_CODE')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="designCodeData"
                     (newRowClick)="designSelected($event)"></master-search>
@@ -155,7 +148,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput formControlName="location" />
+                    <input type="text" matInput formControlName="location" UpperCaseDirective   (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="locationCodeData"
                     (newRowClick)="locationCodeSelected($event)"></master-search>
@@ -215,7 +208,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price1" NumberOnly />
+                    <input type="text" matInput class="text-right" formControlName="price1" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price1CodeData,'price1')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="price1CodeData" (newRowClick)="price1CodeSelected($event)">
                   </master-search>
@@ -226,7 +219,7 @@
                   :</label>
                 <div class="col-sm-2 d-flex">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput formControlName="PREFIX" />
+                    <input type="text" matInput formControlName="PREFIX" UpperCaseDirective    (focusout)="validateLookupField($event,prefixCodeData,'PREFIX')"/>
                   </mat-form-field>&nbsp;
                   <master-search [MasterSearchData]="prefixCodeData"
                     (newRowClick)="prefixCodeSelected($event)"></master-search>
@@ -248,7 +241,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price2" NumberOnly />
+                    <input type="text" matInput class="text-right" formControlName="price2" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price2CodeData,'price2')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="price2CodeData" (newRowClick)="price2CodeSelected($event)">
                   </master-search>
@@ -259,7 +252,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput formControlName="costcode" />
+                    <input type="text" matInput formControlName="costcode" UpperCaseDirective   (focusout)="validateLookupField($event,costCodeData,'costcode')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="costCodeData"
                     (newRowClick)="costCodeSelected($event)"></master-search>
@@ -275,7 +268,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price3" NumberOnly />
+                    <input type="text" matInput class="text-right" formControlName="price3" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price3CodeData,'price3')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="price3CodeData"
                     (newRowClick)="price3CodeSelected($event)"></master-search>
@@ -286,7 +279,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput formControlName="KARAT" />
+                    <input type="text" matInput formControlName="KARAT" UpperCaseDirective    (focusout)="validateLookupField($event,karatCodeData,'KARAT')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="karatCodeData"
                     (newRowClick)="karatCodeSelected($event)"></master-search>
@@ -302,7 +295,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput formControlName="price4" class="text-right" NumberOnly />
+                    <input type="text" matInput formControlName="price4" class="text-right" NumberOnly UpperCaseDirective     (focusout)="validateLookupField($event,price4CodeData,'price4')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="price4CodeData"
                     (newRowClick)="price4CodeSelected($event)"></master-search>
@@ -329,7 +322,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price5" NumberOnly />
+                    <input type="text" matInput class="text-right" formControlName="price5" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price5CodeData,'price5')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="price5CodeData"
                     (newRowClick)="price5CodeSelected($event)"></master-search>
@@ -378,12 +371,20 @@
               <div class="row mb-2">
                 <label for="input" class="col-sm-2 col-form-label">Remarks
                   :</label>
-                <div class="col-sm-10">
+                <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput formControlName="remarks" />
                   </mat-form-field>
                 </div>
+                <div class="col-sm-2">
+                  <div class="p-2">
+                    <button type="button" class="btn btn-primary add-btn" (click)="opennewdetails()">
+                      Stock
+                    </button>
+                  </div>
+                </div>
               </div>
+       
             </div>
             <div class="col-md-4">
               <div class="row mb-2">
@@ -453,7 +454,7 @@
                       Item Image
                     </button> -->
                     <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct"
-                      [disabled]="viewMode" (change)="onFileChanged($event)" readonly/>
+                      [disabled]="viewMode" (change)="onFileChanged($event)" readonly />
                   </div>
                   <div class="image_box">
                     <div class="img_box">
@@ -462,6 +463,7 @@
                   </div>
                 </div>
               </div>
+             
             </div>
           </div>
         </mat-tab>
@@ -653,7 +655,7 @@
                   :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="location" />
+                    <input type="text" matInput formControlName="location" UpperCaseDirective    (focusout)="validateLookupField($event,locationCodeData,'location')"/>
                   </mat-form-field>
                   <master-search [MasterSearchData]="locationCodeData"
                     (newRowClick)="locationCodeSelected($event)"></master-search>
@@ -677,29 +679,28 @@
             </div>
             <div class="col-md-4">
               <div class="mt-2">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="true">
-                  </dxo-editing>
-                  <dxo-selection mode="multiple"></dxo-selection>
-                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [allowColumnResizing]="true">
+                  <dxo-selection mode="single"></dxo-selection>
 
-                  <dxi-column *ngFor="let data of columnheadTop" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                  </dxi-column>
-                </dx-data-grid>
-              </div>
-              <div class="mt-2">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="true">
-                  </dxo-editing>
-                  <dxo-selection mode="multiple"></dxo-selection>
-                  <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column *ngFor="let data of columnheadBottom" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                  </dxi-column>
+                  <dxi-column dataField="SRNO" caption="SRNO"></dxi-column>
+                  <dxi-column dataField="DIVCODE" caption="DIVCODE"></dxi-column>
+                  <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
+                  <dxi-column dataField="PCS" caption="PCS"></dxi-column>
+                  <dxi-column dataField="GROSS_WT" caption="GROSS_WT"></dxi-column>
+                  <dxi-column dataField="AMOUNTLC" caption="AMOUNTLC"></dxi-column>
+                  <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
+                  <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
+                  <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
+
+                  <dxo-summary>
+                    <dxi-total-item column="PCS">
+                    </dxi-total-item>
+                    <dxi-total-item column="GROSS_WT">
+                    </dxi-total-item>
+                    <dxi-total-item column="AMOUNTLC">
+                    </dxi-total-item>
+                  </dxo-summary>
                 </dx-data-grid>
               </div>
             </div>
@@ -720,7 +721,7 @@
               </div>
               <div class="col-md-4">
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="form-check p-1">
+                  <!-- <div class="form-check p-1">
                     <input class="form-check-input" type="radio">
                     <label class="form-check-label">
                       Own
@@ -731,7 +732,20 @@
                     <label class="form-check-label">
                       Vendor
                     </label>
+                  </div> -->
+                  <div class="form-check p-1">
+                    <input class="form-check-input" type="radio" name="ownership" id="own" value="own">
+                    <label class="form-check-label" for="own">
+                      Own
+                    </label>
                   </div>
+                  <div class="form-check p-1">
+                    <input class="form-check-input" type="radio" name="ownership" id="vendor" value="vendor">
+                    <label class="form-check-label" for="vendor">
+                      Vendor
+                    </label>
+                  </div>
+                  
                   <div class="p-1">
                     <button type="button" class="btn btn-primary add-btn">
                       Attachment
