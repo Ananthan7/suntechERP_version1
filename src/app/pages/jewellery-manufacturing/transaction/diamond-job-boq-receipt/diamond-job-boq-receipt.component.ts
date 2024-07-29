@@ -32,6 +32,8 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+  isDisableSaveBtn: boolean = false;
+  editMode: boolean = false;
 
 
   CurrencyCodeData: MasterSearchModel = {
@@ -698,16 +700,16 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
@@ -718,10 +720,10 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
           }
           return
         }
+  
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
-
-}
+  }

@@ -796,11 +796,11 @@
                           <input type="text" matInput class="text-right"
                             UpperCaseDirective 
                              (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
-                            (focusout)="stockCodeScrapValidate($event)"
+                            (focusout)="MToStockCode_Validating()"
                             formControlName="METAL_ToStockCode" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
-                              [MasterSearchData]="stockCodeSearch"
+                              [MasterSearchData]="metalScrapStockCode"
                               (newRowClick)="metalworkerCodeToSelected($event)">
                             </master-search>
                         </mat-form-field>
@@ -809,8 +809,14 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            (focusout)="txtMScrapStockCode_Validating()"
+                            (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
                             formControlName="METAL_ScrapStockCode" />
+                            <master-search class="masterSearch"
+                              *ngIf="!viewMode"
+                              [MasterSearchData]="metalScrapStockCode"
+                              (newRowClick)="metalworkerCodeToSelected($event)">
+                            </master-search>
                         </mat-form-field>
                       </td>
                       <td colspan="2">Balance</td>
@@ -820,16 +826,18 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             NumberOnly readonly
                             formControlName="METAL_FromPCS" />
                         </mat-form-field>
                       </td>
                       <td>
+                        <!-- metal to pcs -->
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             NumberOnly
+                            (focusout)="MToPCS_Validating()"
                             formControlName="METAL_ToPCS" />
                         </mat-form-field>
                       </td>
@@ -837,15 +845,16 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             NumberOnly
+                            (focusout)="MScrapPCS_Validating()"
                             formControlName="METAL_ScrapPCS" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             NumberOnly
                             formControlName="METAL_BalPCS" />
                         </mat-form-field>
@@ -856,7 +865,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             MetalDecimalInput readonly
                             formControlName="METAL_GrossWeightFrom" />
                         </mat-form-field>
@@ -864,23 +873,24 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          <input type="text" matInput class="text-right"
+                            MetalDecimalInput (focusout)="MToGrossWt_Validating()"
                             formControlName="METAL_GrossWeightTo" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput
+                            (focusout)="txtMScrapGrWt_Validating()"
                             formControlName="METAL_ScrapGrWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          <input type="text" matInput class="text-right"
+                            readonly
                             formControlName="METAL_BalGrWt" />
                         </mat-form-field>
                       </td>
@@ -890,7 +900,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             StoneDecimalInput readonly
                             formControlName="METAL_FRM_STONE_WT" />
                         </mat-form-field>
@@ -898,8 +908,9 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             StoneDecimalInput
+                            (focusout)="MToStoneWt_Validating()"
                             formControlName="METAL_TO_STONE_WT" />
                         </mat-form-field>
                       </td>
@@ -907,7 +918,8 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput
+                            (focusout)="txtMScrapStoneWt_Validating()"
                             formControlName="METAL_ScrapStoneWt" />
                         </mat-form-field>
                       </td>
@@ -915,7 +927,7 @@
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput readonly
                             formControlName="METAL_BalStoneWt" />
                         </mat-form-field>
                       </td>
@@ -925,7 +937,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             formControlName="METAL_FromIronWeight"
                             MetalDecimalInput readonly/>
                         </mat-form-field>
@@ -933,8 +945,9 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             formControlName="METAL_ToIronWt"
+                            (focusout)="txtToIronWt_Validating()"
                             MetalDecimalInput />
                         </mat-form-field>
                       </td>
@@ -942,7 +955,8 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput
+                            (focusout)="txtToIronScrapWt_Validating()"
                             formControlName="METAL_ToIronScrapWt"
                             MetalDecimalInput />
                         </mat-form-field>
@@ -951,9 +965,9 @@
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput
                             formControlName="METAL_BalIronWt"
-                            MetalDecimalInput />
+                            readonly />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -962,16 +976,16 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
-                            MetalDecimalInput readonly
+                          <input type="text" matInput class="text-right"
+                            readonly
                             formControlName="METAL_FromNetWeight" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          <input type="text" matInput class="text-right"
+                            readonly
                             formControlName="METAL_ToNetWt" />
                         </mat-form-field>
                       </td>
@@ -979,7 +993,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput readonly
                             formControlName="METAL_ScrapNetWt" />
                         </mat-form-field>
                       </td>
@@ -987,7 +1001,7 @@
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput readonly
                             formControlName="METAL_BalNetWt" />
                         </mat-form-field>
                       </td>
@@ -997,7 +1011,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
+                          <input type="text" matInput class="text-right"
                             MetalDecimalInput readonly
                             formControlName="METAL_FromPureWt" />
                         </mat-form-field>
@@ -1005,8 +1019,8 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput class="text-right"
-                            MetalDecimalInput
+                          <input type="text" matInput class="text-right"
+                            readonly
                             formControlName="METAL_ToPureWt" />
                         </mat-form-field>
                       </td>
@@ -1014,14 +1028,14 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput readonly
                             formControlName="METAL_ScrapPureWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="number" matInput
+                          <input type="text" matInput readonly
                             formControlName="METAL_BalPureWt" />
                         </mat-form-field>
                       </td>

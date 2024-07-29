@@ -25,7 +25,7 @@ export class LabourChargeMasterComponent implements OnInit {
   @ViewChild('overlaylabouracSearch') overlaylabouracSearch!: MasterSearchComponent;
   @ViewChild('overlaysizetoSearch') overlaysizetoSearch!: MasterSearchComponent;
   @ViewChild('overlaysieveSearch') overlaysieveSearch!: MasterSearchComponent;
-  
+
   @Input() content!: any;
   viewMode: boolean = false;
   buttonField: boolean = true;
@@ -455,7 +455,7 @@ export class LabourChargeMasterComponent implements OnInit {
         this.codeEnableMetal = false;
         this.editMode = true;
         this.onlabourtypeChange()
-       
+
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMeltingType()
@@ -514,12 +514,12 @@ export class LabourChargeMasterComponent implements OnInit {
 
   onlabourtypeChange() {
     // this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
-    // this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
+    // this.diamondlabourMasterForm.controls.method.setValue('GEN');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
-       
+
       } else {
         this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
         this.viewModeSetting = true;
@@ -553,29 +553,29 @@ export class LabourChargeMasterComponent implements OnInit {
     }
   }
 
-    onSievetto(event: any, data: string) {
-      // Retrieve the values of Ct Wt From and Ct Wt To from the form
-      const sizefrom: number = parseFloat(this.diamondlabourMasterForm.value.size_from);
-      const sizeto: number = parseFloat(this.diamondlabourMasterForm.value.size_to);
-  
-      // Check if the data parameter is not 'Ctwtfrom'
-      if (data == 'size_to') {
-        // Check if Ct Wt From is greater than Ct Wt To
-        if (sizefrom > sizeto) {
-          // Display an error message
-          Swal.fire({
-            title: event.message || 'Size From should be lesser than Size To',
-            text: '',
-            icon: 'error',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          });
-  
-          // Clear the value of Ct Wt To input field
-          this.diamondlabourMasterForm.controls.size_to.setValue('');
-        }
+  onSievetto(event: any, data: string) {
+    // Retrieve the values of Ct Wt From and Ct Wt To from the form
+    const sizefrom: number = parseFloat(this.diamondlabourMasterForm.value.size_from);
+    const sizeto: number = parseFloat(this.diamondlabourMasterForm.value.size_to);
+
+    // Check if the data parameter is not 'Ctwtfrom'
+    if (data == 'size_to') {
+      // Check if Ct Wt From is greater than Ct Wt To
+      if (sizefrom > sizeto) {
+        // Display an error message
+        Swal.fire({
+          title: event.message || 'Size From should be lesser than Size To',
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        });
+
+        // Clear the value of Ct Wt To input field
+        this.diamondlabourMasterForm.controls.size_to.setValue('');
       }
-    } 
+    }
+  }
 
   setFormValues() {
     if (!this.content) return
@@ -622,7 +622,7 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.CARATWT_TO));
 
-  
+
 
     this.diamondlabourMasterForm.controls.cost_rate.setValue(
       this.commonService.transformDecimalVB(
@@ -799,7 +799,7 @@ export class LabourChargeMasterComponent implements OnInit {
     let size_to: any;
     console.log(form.size_from);
     console.log(form.size_to);
-    
+
     if (form.size_from.includes('-')) {
       let val: any = form.size_from.split('-')
       size_from = val[1]
@@ -859,154 +859,137 @@ export class LabourChargeMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   const inputValue = event.target.value.toUpperCase();
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value.toUpperCase()}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         if (FORMNAME === 'sieve') {
-  //           if (FORMNAME === 'sieve') {
-  //             console.log(FORMNAME)
-  //             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');  
-  //           }
-  //         }
-  //         return
-  //       }
-  //       if (data == '') {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         if (FORMNAME === 'sieve') {
-  //           if (FORMNAME === 'sieve') {
-  //             console.log(FORMNAME)
-  //             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');  
-  //           }
-  //         }
-  //         return
-  //       }
-  //       const matchedItem = data.find((item: any) => item.CODE.toUpperCase() == inputValue);
-  //             if (matchedItem) {
-  //               this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-  //               if (FORMNAME === 'sieve') {
-  //                 this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
-      
-  //               }
-  //             } else {
-  //               this.commonService.toastErrorByMsgId('MSG1531');
-  //               this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
-      
-  //                   this.renderer.selectRootElement(FORMNAME).focus();
-  //                   //this.diamondlabourMasterForm.controls(FORMNAME).focus();
-      
-  //               if (FORMNAME === 'sieve') {
-  //                 this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
-  //               }
-  //             }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
+  /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    // if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     if (event.target.value === '' || this.viewMode === true) {
-        if (FORMNAME === 'sieve') {
-            this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
-        }
-        return;
+      if (FORMNAME === 'sieve') {
+        this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+      }
+      return;
     }
-
     let param = {
-        LOOKUPID: LOOKUPDATA.LOOKUPID,
-        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    };
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
+          return
+        }
+        const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
+        if (matchedItem) {
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+          if (FORMNAME === 'sieve') {
+            this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+          }
+        } else {
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found')
+      })
+    this.subscriptions.push(Sub)
+  }
 
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
-    this.commonService.showSnackBarMsg('MSG81447');
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-        .subscribe((result) => {
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
-            if (data.length === 0) {
-                this.handleLookupError(FORMNAME, LOOKUPDATA);
-                return;
-            }
+  //   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //     const inputValue = event.target.value.toUpperCase();
+  //     LOOKUPDATA.SEARCH_VALUE = event.target.value;
+  //     if (event.target.value === '' || this.viewMode === true) {
+  //         if (FORMNAME === 'sieve') {
+  //             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+  //         }
+  //         return;
+  //     }
 
-            const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
-            if (matchedItem) {
-                this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-                if (FORMNAME === 'sieve') {
-                    this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
-                }
-            } else {
-                this.handleLookupError(FORMNAME, LOOKUPDATA);
-            }
-        }, err => {
-            this.commonService.toastErrorByMsgId('network issue found');
-        });
+  //     let param = {
+  //         LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //         WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //     };
 
-    this.subscriptions.push(Sub);
-}
+  //     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
+  //     this.commonService.showSnackBarMsg('MSG81447');
+  //     let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //         .subscribe((result) => {
+  //             let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+  //             if (data.length === 0) {
+  //                 this.handleLookupError(FORMNAME, LOOKUPDATA);
+  //                 return;
+  //             }
 
-handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+  //             const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
+  //             if (matchedItem) {
+  //                 this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+  //                 if (FORMNAME === 'sieve') {
+  //                     this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+  //                 }
+  //             } else {
+  //                 this.handleLookupError(FORMNAME, LOOKUPDATA);
+  //             }
+  //         }, err => {
+  //             this.commonService.toastErrorByMsgId('network issue found');
+  //         });
+
+  //     this.subscriptions.push(Sub);
+  // }
+
+  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
     this.commonService.toastErrorByMsgId('MSG1531');
     this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
     LOOKUPDATA.SEARCH_VALUE = '';
     if (FORMNAME === 'sieve') {
-        this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+      this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
     }
-}
-validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  LOOKUPDATA.SEARCH_VALUE = event.target.value;
-
-  // Check if the input value is empty or in view mode
-  if (event.target.value === '' || this.viewMode === true) return;
-
-  // Check if the input value is numeric using regex
-  if (/^\d+$/.test(event.target.value)) {
-    // Show error message and clear the input field
-    this.commonService.toastErrorByMsgId('MSG1531'); // Display an appropriate error message for numeric values
-    this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
-    LOOKUPDATA.SEARCH_VALUE = '';
-    return;
   }
+  validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
-  let param = {
-    LOOKUPID: LOOKUPDATA.LOOKUPID,
-    WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  };
+    // Check if the input value is empty or in view mode
+    if (event.target.value === '' || this.viewMode === true) return;
 
-  this.commonService.showSnackBarMsg('MSG81447');
-  let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
-  let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      this.commonService.closeSnackBarMsg();
-      this.isDisableSaveBtn = false;
-      let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
-      if (data.length === 0) {
-        this.commonService.toastErrorByMsgId('MSG1531');
-        this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
-        LOOKUPDATA.SEARCH_VALUE = '';
-        return;
-      }
-    }, err => {
-      this.commonService.toastErrorByMsgId('network issue found');
-    });
+    // Check if the input value is numeric using regex
+    if (/^\d+$/.test(event.target.value)) {
+      // Show error message and clear the input field
+      this.commonService.toastErrorByMsgId('MSG1531'); // Display an appropriate error message for numeric values
+      this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+      LOOKUPDATA.SEARCH_VALUE = '';
+      return;
+    }
 
-  this.subscriptions.push(Sub);
-}
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg();
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+        if (data.length === 0) {
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.diamondlabourMasterForm.controls[FORMNAME].setValue('');
+          LOOKUPDATA.SEARCH_VALUE = '';
+          return;
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('network issue found');
+      });
+
+    this.subscriptions.push(Sub);
+  }
 
 
 
@@ -1078,7 +1061,7 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
       this.updatelabourChargeMaster()
       return true
     }
-    
+
     if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
       this.toastr.error('Select all required fields')
       return true
@@ -1162,7 +1145,7 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
   }
   formSubmit() {
     if (this.submitValidation()) return
-    
+
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData = this.setPostData();
@@ -1196,7 +1179,7 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
   }
 
   updatelabourChargeMaster() {
-  //  if (this.submitValidation()) return
+    //  if (this.submitValidation()) return
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
       return
@@ -1226,7 +1209,7 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
               }
             });
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1569,7 +1552,7 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
       default:
     }
   }
-  
+
 
   // showOverleyPanel(event: any, formControlName: string) {
 
@@ -1597,7 +1580,7 @@ validateLookupFieldSize(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: str
   //   if (formControlName == 'sieve') {
   //     this.overlaysieveSearch.showOverlayPanel(event)
   //   }
-    
+
   // }
 
 }

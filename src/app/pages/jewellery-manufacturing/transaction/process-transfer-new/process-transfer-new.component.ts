@@ -31,6 +31,8 @@ export class ProcessTransferNewComponent implements OnInit {
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
   private subscriptions: Subscription[] = [];
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   selectRowIndex: any;
 
   user: MasterSearchModel = {
@@ -209,8 +211,8 @@ export class ProcessTransferNewComponent implements OnInit {
     this.tableData.pop();
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
@@ -580,7 +582,7 @@ export class ProcessTransferNewComponent implements OnInit {
     let value = detailScreenData.stdLoss * detailScreenData.PURITY
     return this.commonService.emptyToZero(value)
   }
-  setPostData(form: any){
+  setPostData(form: any) {
     let detailScreenData = this.detailData[0].DATA;
     detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
     return {
@@ -618,7 +620,7 @@ export class ProcessTransferNewComponent implements OnInit {
       this.commonService.toastErrorByMsgId('select all required fields')
       return
     }
-    
+
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
@@ -645,7 +647,7 @@ export class ProcessTransferNewComponent implements OnInit {
       this.commonService.toastErrorByMsgId('select all required fields')
       return
     }
-    
+
     let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/1/1/1/1';
     let postData = this.setPostData(this.processTransferFrom.value)
     this.commonService.showSnackBarMsg('MSG81447');
@@ -676,7 +678,7 @@ export class ProcessTransferNewComponent implements OnInit {
 
   deleteTableData(): void {
     if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
-     this.commonService.toastErrorByMsgId('Please select row to remove from grid!')
+      this.commonService.toastErrorByMsgId('Please select row to remove from grid!')
       return
     }
     Swal.fire({
@@ -760,40 +762,43 @@ export class ProcessTransferNewComponent implements OnInit {
   }
   showOverleyPanel(event: any, formControlName: string) {
     if (this.processTransferFrom.value[formControlName] != '') return;
-  
+
     switch (formControlName) {
       case 'salesman':
         this.overlaysalesman.showOverlayPanel(event);
         break;
       default:
-      
+
     }
   }
-  
+
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processTransferFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+
           if (FORMNAME === 'salesman') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }

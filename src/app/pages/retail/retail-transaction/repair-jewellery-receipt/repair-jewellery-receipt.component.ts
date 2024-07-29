@@ -39,7 +39,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   branchCode?: any = localStorage.getItem("userbranch");
   vocMaxDate = new Date();
-    currentDate = new Date();
+  currentDate = new Date();
   repairDetailsData: any[] = [];
   companyName = this.comService.allbranchMaster["BRANCH_NAME"];
   private subscriptions: Subscription[] = [];
@@ -51,6 +51,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   filteredData: any;
   hideCurrecnySearch: boolean = false;
   voucherNo: any;
+  formatteddate: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -60,7 +61,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.content?.MID != null) this.getArgsData();
@@ -76,9 +77,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   generateVocNo() {
-    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
-      this.branchCode
-    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
     let sub: Subscription = this.dataService
       .getDynamicAPI(API)
       .subscribe((res) => {
@@ -189,8 +189,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
     let headerSub: Subscription = this.dataService
       .getDynamicAPI(
-        `Repair/GetRepairHeaderList/${
-          this.branchCode
+        `Repair/GetRepairHeaderList/${this.branchCode
         }/${this.comService.getqueryParamVocType()}/${this.yearMonth}`
       )
       .subscribe((result) => {
@@ -260,11 +259,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
         this.repairjewelleryreceiptFrom.controls["remark"].setValue(
           this.filteredData[0].REMARKS
         );
-        let API = `Repair/GetRepairDetailList/${
-          this.branchCode
-        }/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${
-          this.yearMonth
-        }`;
+        let API = `Repair/GetRepairDetailList/${this.branchCode
+          }/${this.comService.getqueryParamVocType()}/${this.voucherNo}/${this.yearMonth
+          }`;
 
         let detailSub: Subscription = this.dataService
           .getDynamicAPI(API)
@@ -284,7 +281,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  removedata() {}
+  removedata() { }
 
   validateForm() {
     if (this.repairjewelleryreceiptFrom.invalid) {
@@ -328,8 +325,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       TOTAL_GRWT: 0,
       SYSTEM_DATE: new Date().toISOString(),
       NAVSEQNO: 0,
-      DELIVERYDATE:
-        this.repairjewelleryreceiptFrom.value.customer_delivery_date._d.toISOString(),
+      DELIVERYDATE: this.formatteddate,
+      // this.repairjewelleryreceiptFrom.value.customer_delivery_date,
       SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
@@ -393,6 +390,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       return;
     }
 
+    console.log(this.formatteddate);
+
+
     let API = `Repair/UpdateRepair/${this.branchCode}/${this.repairjewelleryreceiptFrom.value.vocType}/${this.repairjewelleryreceiptFrom.value.vocno}/${this.yearMonth}`;
     let postData = {
       MID: 0,
@@ -416,8 +416,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       TOTAL_GRWT: 0,
       SYSTEM_DATE: new Date().toISOString(),
       NAVSEQNO: 0,
-      DELIVERYDATE:
-        this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+      DELIVERYDATE: this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+
+      // this.formatteddate,
       SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
@@ -554,7 +555,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  onRowDoubleClicked(e: any) {    
+  onRowDoubleClicked(e: any) {
     e.cancel = true;
     this.openRepairdetails(e.data);
   }
@@ -634,6 +635,14 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     }
 
     console.log("Updated repairDetailsData", this.repairDetailsData);
+    // this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(this.repairDetailsData[0].AMOUNT);
+    var add_value = 0;
+    this.repairDetailsData.forEach(value => {
+      // console.log(value);
+      add_value += value.AMOUNT;
+    });
+    // console.log(add_value);
+    this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(add_value);
     this.updateFormValuesAndSRNO();
   }
 
@@ -670,5 +679,13 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       return acc;
     }, indexes);
     this.selectedIndexes = indexes;
+  }
+  date(e: any) {
+    console.log(e.value._d.toString());
+    // const delivaryDate = new Date(e.value._d);
+    // this.formatteddate = delivaryDate.toISOString();
+    // this.repairjewelleryreceiptFrom.controls['customer_delivery_date'].setValue(this.formatteddate)
+    // console.log(this.repairjewelleryreceiptFrom.controls['customer_delivery_date'].setValue(this.formatteddate));
+
   }
 }

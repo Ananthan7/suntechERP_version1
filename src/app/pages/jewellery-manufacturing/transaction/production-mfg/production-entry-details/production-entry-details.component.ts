@@ -188,6 +188,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
+
+
   onFileChanged(event: any) {
     this.url = event.target.files[0].name
     console.log(this.url)
@@ -293,6 +295,22 @@ export class ProductionEntryDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.setInitialLoadValue()
   }
+
+  getDesignimagecode() {
+
+    let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+
+        this.urls = result.response[0].imagepath;
+        console.log(this.urls)
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+
+  }
+
   setInitialLoadValue(){
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
@@ -396,9 +414,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
+            this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
+            this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
             // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
             // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
+            this.getDesignimagecode()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
             return

@@ -102,17 +102,24 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     this.repairCustomerDeliveryForm.controls.voctype.setValue(this.comService.getqueryParamVocType());
     this.repairCustomerDeliveryForm.controls.currency.setValue(this.comService.compCurrency);
     this.repairCustomerDeliveryForm.controls.currencyDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
-    // if (this.content.FLAG == 'VIEW') {
-    //   this.viewMode = true;
-    //   this.setFormValues();
-    // } else if (this.content.FLAG == 'EDIT') {
-    //   this.viewMode = false;
-    //   this.setFormValues();
-    // }
-    if (this.content?.MID != null){
+    console.log(this.content);
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      console.log("1");
+      console.log(this.viewMode);
       this.setFormValues();
+    } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
+      console.log("2");
+      console.log(this.viewMode);
+      this.setFormValues();
     }
+
+    
+    // if (this.content?.MID != null){
+    //   this.setFormValues();
+    //   this.viewMode = false;
+    // }
   }
   
   // setFormValues() {
@@ -368,7 +375,7 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'RepairDelivery/DeleteRepairDelivery/' + this.repairCustomerDeliveryForm.value.brnachCode + this.repairCustomerDeliveryForm.value.voctype + this.repairCustomerDeliveryForm.value.vocNo + this.repairCustomerDeliveryForm.value.yearMoth;
+        let API = 'RepairDelivery/DeleteRepairDelivery/' +  this.branchCode+"/" + this.repairCustomerDeliveryForm.value.voctype+"/"  + this.repairCustomerDeliveryForm.value.vocNo+"/"  + this.yearMonth;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

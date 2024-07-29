@@ -28,6 +28,7 @@ export class ComponentMasterComponent implements OnInit {
   @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
 
   @Input() content!: any;
+  currentDate: any = new Date();
   isPCSDisabled: boolean = false;
   iskaratDisabled: boolean = false;
   tableData: any[] = [];
@@ -55,7 +56,7 @@ export class ComponentMasterComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 51,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
@@ -65,6 +66,19 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  // divisionCode: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 18,
+  //   SEARCH_FIELD: 'DIVISION_CODE',
+  //   SEARCH_HEADING: 'Division Code',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "DIVISION_CODE<>''",
+  //   // WHERECONDITION: "division='M'",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+
   divisionCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -72,11 +86,27 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<>''",
-    // WHERECONDITION: "division='M'",
+    WHERECONDITION: this.getDivisionCondition(),
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  };
+
+  // Function to determine the WHERECONDITION based on some criteria
+  getDivisionCondition(): string {
+    // Example criteria; replace with actual logic as needed
+    const condition = 'L'; // This value would be dynamically determined
+
+    if (condition === 'L') {
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z')";
+    } else if (condition === 'Z') {
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L')";
+    } else {
+      // Default condition if none of the specific conditions are met
+      return "DIVISION_CODE <> ''";
+    }
   }
+
+
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -109,7 +139,7 @@ export class ComponentMasterComponent implements OnInit {
     WHERECONDITION: "DIVISION='S' AND COMP_PREFIX='1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK:true,
+    LOAD_ONCLICK: true,
   }
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -133,18 +163,20 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sizeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
-    SEARCH_HEADING: 'Size',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSIZE_CODE <>''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
+  // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 89,
+  //   SEARCH_FIELD: 'COMPSIZE_CODE',
+  //   SEARCH_HEADING: 'Size',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "COMPSIZE_CODE <>''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+
+
 
 
   shapeCodeData: MasterSearchModel = {
@@ -211,11 +243,11 @@ export class ComponentMasterComponent implements OnInit {
   stocktypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "TYPES = 'STONE TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -229,7 +261,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'btnColor',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR MASTER' AND DIV_Y=1",
+    WHERECONDITION: "Types = 'COLOR MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -241,7 +273,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "Types = 'CLARITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -384,6 +416,7 @@ export class ComponentMasterComponent implements OnInit {
         this.viewMode = true;
         this.viewDisable = true;
       } else if (this.content.FLAG == 'EDIT') {
+        this.maindesigndetails()
         this.editableMode = true;
         this.editMode = true;
       } else if (this.content?.FLAG == 'DELETE') {
@@ -398,9 +431,11 @@ export class ComponentMasterComponent implements OnInit {
 
   }
 
+
+
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
+    this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
 
     console.log(value.DIVISION)
     if (value.DIVISION === 'M') {
@@ -429,6 +464,20 @@ export class ComponentMasterComponent implements OnInit {
     else {
       this.codeEnable = false;
     }
+  }
+
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   checkCode(): boolean {
@@ -531,12 +580,12 @@ export class ComponentMasterComponent implements OnInit {
 
   clarityCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].CLARITY = value.CODE;
   }
 
   colorCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].COLOR = value.CODE;
   }
 
   shapegridCodeSelected(value: any, data: any, controlName: string) {
@@ -544,7 +593,7 @@ export class ComponentMasterComponent implements OnInit {
     this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
   }
 
-  
+
   sizegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
@@ -552,7 +601,7 @@ export class ComponentMasterComponent implements OnInit {
 
   stocktypeCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.CODE;
   }
 
   categoryCodeSelected(e: any) {
@@ -579,12 +628,31 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
 
+  // sizeSetCodeSelected(e: any) {
+  //   if (this.checkCode()) return
+  //   console.log(e);
+
+  //   this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
+  //   console.log(this.componentmasterForm.value.sizeSet);
+
+  //   //this.sizeCodeData.WHERECONDITION = `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`;
+  //  // this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
+  //  this.sizeCodeData.WHERECONDITION = COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')
+  // }
+
   sizeSetCodeSelected(e: any) {
-    if (this.checkCode()) return
+    if (this.checkCode()) return;
     console.log(e);
+
+    // Set the sizeSet form control value
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
-    this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
+    console.log(this.componentmasterForm.value.sizeSet);
+
+    // Set the WHERECONDITION with the correct syntax and value
+    this.sizeCodeData.WHERECONDITION = `COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')`;
   }
+
+
 
   sizeCodeSelected(e: any) {
     if (this.checkCode()) return
@@ -693,7 +761,7 @@ export class ComponentMasterComponent implements OnInit {
       "DSIZE": "",
       "PROCESS_TYPE": "",
       "D_REMARKS": "",
-      "POINTER_WT": "",
+      "POINTER_WT": 0,
       "EXT_Color": "",
       "EXT_CLARITY": "",
       "SIEVE_FROM": "",
@@ -788,7 +856,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.RADIUS));
 
-        this.PICTURE_NAME = this.content.PICTURE_NAME
+    this.PICTURE_NAME = this.content.PICTURE_NAME
 
   }
 
@@ -875,7 +943,7 @@ export class ComponentMasterComponent implements OnInit {
       "GW": 0,
       "MODEL_NO": "",
       "MODEL_YEAR": 0,
-      "OPENED_ON": "2023-11-27T06:54:03.761Z",
+      "OPENED_ON": this.commonService.formatDateTime(this.currentDate),
       "OPENED_BY": "",
       "FIRST_TRN": "",
       "LAST_TRN": "",
@@ -1024,7 +1092,7 @@ export class ComponentMasterComponent implements OnInit {
       "STYLEMASTER": "",
       "PARENT_DSNG_CODE": "",
       "FAULT_DETAILS": "",
-      "DESIGN_TYPE": form.settingType,
+      "DESIGN_TYPE": "COMP",
       "JEWELLERY_UNIT": "",
       "UDF1": "",
       "UDF2": "",
@@ -1042,10 +1110,10 @@ export class ComponentMasterComponent implements OnInit {
       "UDF14": "",
       "UDF15": "",
       "CUSTOMERSKU": "",
-      "FINALAPPROVALDATE": "2023-11-27T06:54:03.761Z",
+      "FINALAPPROVALDATE": this.commonService.formatDateTime(this.currentDate),
       "PRINT_COUNT": 0,
-      "EXPIRY_DATE": "2023-11-27T06:54:03.761Z",
-      "PROCESS_TYPE": "",
+      "EXPIRY_DATE": this.commonService.formatDateTime(this.currentDate),
+      "PROCESS_TYPE": form.settingType,
       "DYE_STRIP": false,
       "CASTING_REQ": 0,
       "WAXING_REQ": 0,
@@ -1107,59 +1175,60 @@ export class ComponentMasterComponent implements OnInit {
       "CHARGE10FC": 0,
       "CHARGE10LC": 0,
       "ADD_STEEL": false,
-      "DESIGN_STNMTL_DETAIL": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "METALSTONE": "5",
-          "DIVCODE": "c",
-          "KARAT_CODE": "",
-          "CARAT": 0,
-          "GROSS_WT": 0,
-          "PCS": 0,
-          "RATE_TYPE": "",
-          "CURRENCY_CODE": form.currencyCode,
-          "RATE": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "MAKINGRATE": 0,
-          "MAKINGAMOUNT": 0,
-          "SIEVE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SHAPE": "",
-          "STOCK_CODE": "",
-          "DESIGN_CODE": "",
-          "KARAT": "",
-          "PRICEID": "",
-          "SIZE_FROM": form.sizeSet,
-          "SIZE_TO": "",
-          "RATEFC": 0,
-          "PART_CODE": "",
-          "DSIZE": "",
-          "LABCHGCODE": "",
-          "PRICECODE": "",
-          "DMMETALPERCENTAGE": 0,
-          "DLABCHGCODE": "",
-          "DPRICECODE": "",
-          "METALPER": 0,
-          "METALRATE": 0,
-          "CURR_RATE": 0,
-          "LABOURCODE": "",
-          "DETLINEREMARKS": "",
-          "PROCESS_TYPE": "",
-          "SIEVE_SET": "",
-          "STONE_TYPE": "",
-          "EXT_COLOR": "",
-          "EXT_CLARITY": "",
-          "D_REMARKS": form.remarks,
-          "POINTER_WT": 0,
-          "SIEVE_FROM": "",
-          "SIEVE_TO": "",
-          "PURITY": 0,
-          "OTHER_ATTR": ""
-        }
-      ],
+      "DESIGN_STNMTL_DETAIL": this.tableData,
+      //[
+      //   {
+      //     "UNIQUEID": 0,
+      //     "SRNO": 0,
+      //     "METALSTONE": "5",
+      //     "DIVCODE": "c",
+      //     "KARAT_CODE": "",
+      //     "CARAT": 0,
+      //     "GROSS_WT": 0,
+      //     "PCS": 0,
+      //     "RATE_TYPE": "",
+      //     "CURRENCY_CODE": form.currencyCode,
+      //     "RATE": 0,
+      //     "AMOUNTFC": 0,
+      //     "AMOUNTLC": 0,
+      //     "MAKINGRATE": 0,
+      //     "MAKINGAMOUNT": 0,
+      //     "SIEVE": "",
+      //     "COLOR": "",
+      //     "CLARITY": "",
+      //     "SHAPE": "",
+      //     "STOCK_CODE": "",
+      //     "DESIGN_CODE": "",
+      //     "KARAT": "",
+      //     "PRICEID": "",
+      //     "SIZE_FROM": form.sizeSet,
+      //     "SIZE_TO": "",
+      //     "RATEFC": 0,
+      //     "PART_CODE": "",
+      //     "DSIZE": "",
+      //     "LABCHGCODE": "",
+      //     "PRICECODE": "",
+      //     "DMMETALPERCENTAGE": 0,
+      //     "DLABCHGCODE": "",
+      //     "DPRICECODE": "",
+      //     "METALPER": 0,
+      //     "METALRATE": 0,
+      //     "CURR_RATE": 0,
+      //     "LABOURCODE": "",
+      //     "DETLINEREMARKS": "",
+      //     "PROCESS_TYPE": "",
+      //     "SIEVE_SET": "",
+      //     "STONE_TYPE": "",
+      //     "EXT_COLOR": "",
+      //     "EXT_CLARITY": "",
+      //     "D_REMARKS": form.remarks,
+      //     "POINTER_WT": 0,
+      //     "SIEVE_FROM": "",
+      //     "SIEVE_TO": "",
+      //     "PURITY": 0,
+      //     "OTHER_ATTR": ""
+      //   }
+      // ]
       "DESIGN_SEQUENCE_DETAILS_DJ": [
         {
           "DESIGN_CODE": "",
@@ -1267,10 +1336,10 @@ export class ComponentMasterComponent implements OnInit {
       this.update()
       return
     }
-    // if (this.componentmasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+    if (this.componentmasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
@@ -1303,22 +1372,22 @@ export class ComponentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
 
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentmasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-         else {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.componentmasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -1327,6 +1396,28 @@ export class ComponentMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
+
+  maindesigndetails() {
+
+    // this.jobCardFrom.controls.jobCardFrom.setValue(e.PRICE_CODE)
+    let postData = {
+      "SPID": "104",
+      "parameter": {
+        COMPCODE: this.componentmasterForm.value.code
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+          // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -1410,8 +1501,10 @@ export class ComponentMasterComponent implements OnInit {
       this.close('reloadMainGrid')
     }
   }
+
+  /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
     if (this.editMode && FORMNAME === 'code') {
       return;
@@ -1420,14 +1513,14 @@ export class ComponentMasterComponent implements OnInit {
       return;
     }
 
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
@@ -1436,11 +1529,44 @@ export class ComponentMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+        //this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
       })
     this.subscriptions.push(Sub)
   }
+
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+  //   if (this.editMode && FORMNAME === 'code') {
+  //     return;
+  //   }
+  //   if (this.editMode && FORMNAME === 'codedes') {
+  //     return;
+  //   }
+
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.componentmasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('network issue found')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1571,7 +1697,7 @@ export class ComponentMasterComponent implements OnInit {
     let postData = {
       "SPID": "082",
       "parameter": {
-        "strDivision": this.componentmasterForm.value.divisionCode || '',
+        "strDivision": event.DIVCODE || '',
         "StockCode": event.STOCK_CODE,
 
       }
@@ -1638,6 +1764,7 @@ export class ComponentMasterComponent implements OnInit {
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
+      this.prefixCodeValidate()
     }
     if (event.key === 'Enter') {
       if (event.target.value == '') this.showOverleyPanel(event, form)
@@ -1647,6 +1774,10 @@ export class ComponentMasterComponent implements OnInit {
 
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
+      case 'code':
+        this.overlaycodedescSearch.showOverlayPanel(event);
+       
+        break;
       case 'codedes':
         this.overlaycodedescSearch.showOverlayPanel(event);
         break;
@@ -1677,7 +1808,7 @@ export class ComponentMasterComponent implements OnInit {
       default:
     }
   }
-  
+
 
 
   // showOverleyPanel(event: any, formControlName: string) {

@@ -38,8 +38,8 @@
                                             style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumDes"
-                                                (keydown)="lookupKeyPress($event,'jobNumDes')" 
-                                                readonly  (focusout)="jobNumberValidate($event)" />
+                                                (keydown)="lookupKeyPress($event,'jobNumber')" 
+                                                readonly  />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="jobNumberCodeData" #overlayjobNumDes
@@ -265,10 +265,10 @@
                                             style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="stockCode"
-                                                placeholder="stockcode"
+                                                placeholder="stockCode"
                                                 (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"
-                                                (keydown)="lookupKeyPress($event,'stockcode')" 
+                                                (keydown)="lookupKeyPress($event,'stockCode')" 
                                                />
                                         </mat-form-field>
                                         <master-search
