@@ -470,8 +470,8 @@ export class CommonServiceService {
     rate = rate !== null ? rate : this.getCurrRate(currency);
   
     // Ensure amount and rate are numbers and convert empty values to zero
-    rate = typeof rate === 'number' ? this.emptyToZero(rate) : 0;
-    amount = typeof amount === 'number' ? this.emptyToZero(amount) : 0;
+    // rate = this.emptyToZero(rate);
+    // amount = this.emptyToZero(amount);
   
     let convertedAmount = 0;
   
@@ -484,9 +484,9 @@ export class CommonServiceService {
     // Check if the currency data was found and perform the conversion
     if (result.length > 0) {
       if (result[0].MUL_DIV === 'M') {
-        convertedAmount = amount / rate;
+        convertedAmount = this.emptyToZero(amount) / this.emptyToZero(rate);
       } else {
-        convertedAmount = amount * rate;
+        convertedAmount =this.emptyToZero(amount) * this.emptyToZero(rate);
       }
     } else {
       console.error('Currency not found');
