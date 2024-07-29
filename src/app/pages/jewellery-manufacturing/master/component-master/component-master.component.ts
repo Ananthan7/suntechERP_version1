@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : COMPONENT MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -482,7 +488,7 @@ export class ComponentMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.componentmasterForm.value.code == '') {
-      this.commonService.toastErrorByMsgId('please enter code')
+      this.commonService.toastErrorByMsgId('please enter code')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false
@@ -528,11 +534,11 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-            this.commonService.toastSuccessByText('Last number updated')
+            this.commonService.toastSuccessByText('Last number updated')//CHINNU -  MESSAGE HARD CODED
 
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Not saved')//CHINNU -  MESSAGE HARD CODED
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -1337,7 +1343,7 @@ export class ComponentMasterComponent implements OnInit {
       return
     }
     if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
     let postData = this.setPostData()
@@ -1348,7 +1354,7 @@ export class ComponentMasterComponent implements OnInit {
           this.updatePrefixMaster()
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
-          this.showErrorDialog('Code Already Exists')
+          this.showErrorDialog('Code Already Exists')//CHINNU -  MESSAGE HARD CODED
         }
         else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -1361,7 +1367,7 @@ export class ComponentMasterComponent implements OnInit {
 
   update() {
     if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -1413,7 +1419,7 @@ export class ComponentMasterComponent implements OnInit {
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -1422,7 +1428,7 @@ export class ComponentMasterComponent implements OnInit {
   deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.DESIGN_CODE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
+      this.showDeleteErrorDialog('Please Select data to delete!');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
@@ -1434,15 +1440,15 @@ export class ComponentMasterComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog('Deleted Successfully');
+                this.showSuccessDialog('Deleted Successfully');//CHINNU -  MESSAGE HARD CODED
               } else {
-                this.showErrorDialog(result.message || 'Error please try again');
+                this.showErrorDialog(result.message || 'Error please try again');//CHINNU -  MESSAGE HARD CODED
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.toastr.error('Not deleted');//CHINNU -  MESSAGE HARD CODED
             }
           }, err => {
-            this.commonService.toastErrorByMsgId('network error')
+            this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
           });
         this.subscriptions.push(Sub);
       }
@@ -1531,7 +1537,7 @@ export class ComponentMasterComponent implements OnInit {
         }
         //this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
