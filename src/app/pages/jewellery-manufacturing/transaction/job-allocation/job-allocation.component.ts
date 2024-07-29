@@ -341,6 +341,7 @@ export class JobAllocationComponent implements OnInit {
     }
   }
 
+  
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
