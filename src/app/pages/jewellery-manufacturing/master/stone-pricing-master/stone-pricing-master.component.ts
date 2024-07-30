@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : STONE PRICING MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -542,17 +548,17 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
     if (this.stonePrizeMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
     if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
+      this.toastr.error('Enter values either Selling % or Selling Rate');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
-      this.toastr.error('Sieve From Should not be Greater than Sieve To');
+      this.toastr.error('Sieve From Should not be Greater than Sieve To');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
@@ -607,7 +613,7 @@ export class StonePricingMasterComponent implements OnInit {
     let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe(
       (result) => {
         if (result.status == 'Success') {
-          this.commonService.toastErrorByMsgId('Code already exists')
+          this.commonService.toastErrorByMsgId('Code already exists')//CHINNU -  MESSAGE HARD CODED
           // Reset the form control value
           this.stonePrizeMasterForm.controls.price_code.setValue('');
         }
@@ -624,12 +630,12 @@ export class StonePricingMasterComponent implements OnInit {
   update() {
     console.log(this.stonePrizeMasterForm.value);
     if (this.stonePrizeMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
-      this.toastr.error('Sieve From Should not be Greater than Sieve To');
+      this.toastr.error('Sieve From Should not be Greater than Sieve To');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
@@ -858,7 +864,7 @@ export class StonePricingMasterComponent implements OnInit {
           }
          
         }, err => {
-          this.commonService.toastErrorByMsgId('network issue found')
+          this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
         })
       this.subscriptions.push(Sub)
     }
