@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : WORKER MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -143,7 +149,7 @@ export class WorkerMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('please enter Worker code')
+      this.commonService.toastErrorByMsgId('please enter Worker code')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false
@@ -239,11 +245,11 @@ export class WorkerMasterComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.WorkerCode) == '') {
-      this.toastr.error("Worker Code cannot be empty")
+      this.toastr.error("Worker Code cannot be empty")//CHINNU -  MESSAGE HARD CODED
       return true
     }
     else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
-      this.toastr.error("Description cannot be empty")
+      this.toastr.error("Description cannot be empty")//CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false;
@@ -336,7 +342,7 @@ export class WorkerMasterComponent implements OnInit {
               this.toastr.error('Not deleted');
             }
           }, err => {
-            this.commonService.toastErrorByMsgId('network error')
+            this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
           });
         this.subscriptions.push(Sub);
       }
@@ -429,7 +435,7 @@ export class WorkerMasterComponent implements OnInit {
   CheckWorkerwiseMetalBalanceBoth(event: any) {
     // if(event.checked) return
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('please select workercode')
+      this.commonService.toastErrorByMsgId('please select workercode')//CHINNU -  MESSAGE HARD CODED
       return
     }
     let postData = {
@@ -444,13 +450,13 @@ export class WorkerMasterComponent implements OnInit {
         if (result.status == "Success") { //
           let data = result.dynamicData[0]
           if (data.length > 0) {
-            this.commonService.toastErrorByMsgId('worker cannot be inactive')
+            this.commonService.toastErrorByMsgId('worker cannot be inactive')//CHINNU -  MESSAGE HARD CODED
             this.workerMasterForm.controls.Active.setValue(true)
             this.workerMasterForm.controls.Active.disable();
           }
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -459,7 +465,7 @@ export class WorkerMasterComponent implements OnInit {
     this.btndisable = true;
     if (this.content && this.content.FLAG == 'EDIT') return;
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('Worker Code Required');
+      this.commonService.toastErrorByMsgId('Worker Code Required');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
@@ -563,7 +569,7 @@ export class WorkerMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
           })
         this.subscriptions.push(Sub)
       }
