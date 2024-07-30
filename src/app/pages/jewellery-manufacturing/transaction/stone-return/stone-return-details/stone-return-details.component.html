@@ -143,7 +143,7 @@
                 <input type="text" matInput formControlName="stockCode"
                 (keydown)="lookupKeyPress($event,'stockCode')" 
                   [readonly]="viewMode" 
-                  (focusout)="validateLookupField($event,stockCodeData,'stockCode')"/>
+                  (focusout)="stockCodeValidate($event)">
               </mat-form-field>
               <master-search [MasterSearchData]="stockCodeData" #overlaywstockCodeSearch
                 (newRowClick)="stockCodeSelected($event)"

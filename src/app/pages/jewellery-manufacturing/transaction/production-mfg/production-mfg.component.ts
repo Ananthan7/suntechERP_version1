@@ -55,6 +55,7 @@ export class ProductionMfgComponent implements OnInit {
   currentDate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME']
   private subscriptions: Subscription[] = [];
+  editMode: boolean = false;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -405,7 +406,7 @@ export class ProductionMfgComponent implements OnInit {
     this.DetailScreenDataToSave.push({
       "UNIQUEID": 0,
       "SRNO": this.formDetailCount,
-      "DT_VOCNO": this.commonService.nullToString(this.productionFrom.value.VOCNO),
+      "DT_VOCNO": this.commonService.emptyToZero(this.productionFrom.value.VOCNO),
       "DT_VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
       "DT_VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.vocDate),
       "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
@@ -414,17 +415,17 @@ export class ProductionMfgComponent implements OnInit {
       "JOB_NUMBER": this.commonService.nullToString(DETAIL_FORM_DATA.jobno),
       "JOB_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.JOB_DATE),
       "JOB_SO_NUMBER": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_SO_NUMBER),
-      "UNQ_JOB_ID": this.commonService.emptyToZero(DETAIL_FORM_DATA.subjobno),
+      "UNQ_JOB_ID": this.commonService.nullToString(DETAIL_FORM_DATA.subjobno),
       "JOB_DESCRIPTION": this.commonService.emptyToZero(DETAIL_FORM_DATA.jobnoDesc),
       "UNQ_DESIGN_ID": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
       "DESIGN_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
       "PART_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.PART_CODE),
       "DIVCODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DIVCODE),
-      "PREFIX": this.commonService.emptyToZero(DETAIL_FORM_DATA.PREFIX),
-      "STOCK_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.STOCK_CODE),
-      "STOCK_DESCRIPTION": this.commonService.emptyToZero(DETAIL_FORM_DATA.STOCK_DESCRIPTION),
-      "SET_REF": this.commonService.emptyToZero(DETAIL_FORM_DATA.SETREF),
-      "KARAT_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.KARAT),
+      "PREFIX": this.commonService.nullToString(DETAIL_FORM_DATA.PREFIX),
+      "STOCK_CODE": this.commonService.nullToString(DETAIL_FORM_DATA.STOCK_CODE),
+      "STOCK_DESCRIPTION": this.commonService.nullToString(DETAIL_FORM_DATA.STOCK_DESCRIPTION),
+      "SET_REF": this.commonService.nullToString(DETAIL_FORM_DATA.SETREF),
+      "KARAT_CODE": this.commonService.nullToString(DETAIL_FORM_DATA.KARAT),
       "MULTI_STOCK_CODE": true,
       "JOB_PCS": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_PCS),
       "GROSS_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.GROSS_WT),
@@ -436,7 +437,7 @@ export class ProductionMfgComponent implements OnInit {
       "NET_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.GROSS_WT),
       "PURITY": this.commonService.emptyToZero(DETAIL_FORM_DATA.PURITY),
       "PURE_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.PURE_WT),
-      "RATE_TYPE": this.commonService.emptyToZero(this.productionFrom.value.metalratetype),
+      "RATE_TYPE": this.commonService.nullToString(this.productionFrom.value.metalratetype),
       "METAL_RATE": this.commonService.emptyToZero(this.productionFrom.value.metalrate),
       "CURRENCY_CODE": this.commonService.nullToString(this.productionFrom.value.currency),
       "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.currencyrate),
@@ -462,8 +463,8 @@ export class ProductionMfgComponent implements OnInit {
       "PROCESS_NAME": this.commonService.emptyToZero(DETAIL_FORM_DATA.processname),
       "WORKER_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.worker),
       "WORKER_NAME": this.commonService.emptyToZero(DETAIL_FORM_DATA.workername),
-      "IN_DATE": this.commonService.formatDate(DETAIL_FORM_DATA.START_DATE),
-      "OUT_DATE": this.commonService.formatDate(DETAIL_FORM_DATA.END_DATE),
+      "IN_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.START_DATE),
+      "OUT_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.END_DATE),
       "TIME_TAKEN_HRS": 0,
       "COST_CODE": "",
       "WIP_ACCODE": "",
@@ -583,12 +584,18 @@ export class ProductionMfgComponent implements OnInit {
   }
 
   formSubmit() {
+    console.log(this.DetailScreenDataToSave)
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
     }
     if (this.productionFrom.invalid) {
       this.toastr.error("select all required fields");
+      return;
+    }
+
+    if(this.DetailScreenDataToSave.length == 0){
+      this.toastr.error("Enter the Production Entry Details");
       return;
     }
 
@@ -761,6 +768,34 @@ export class ProductionMfgComponent implements OnInit {
       );
     this.subscriptions.push(Sub);
   }
+
+      /**use: validate all lookups to check data exists in db */
+      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+        LOOKUPDATA.SEARCH_VALUE = event.target.value
+        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+        let param = {
+          LOOKUPID: LOOKUPDATA.LOOKUPID,
+          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+        }
+        this.commonService.toastInfoByMsgId('MSG81447');
+        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+          .subscribe((result) => {
+            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+            if (data.length == 0) {
+              this.commonService.toastErrorByMsgId('MSG1531')
+              this.productionFrom.controls[FORMNAME].setValue('')
+              LOOKUPDATA.SEARCH_VALUE = ''
+              return
+            }
+           
+          }, err => {
+            this.commonService.toastErrorByMsgId('network issue found')
+          })
+        this.subscriptions.push(Sub)
+      }
+
+      
 
   close(data?: any) {
     //TODO reset forms and data before closing

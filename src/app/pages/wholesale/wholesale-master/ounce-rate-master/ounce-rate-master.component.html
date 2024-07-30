@@ -10,9 +10,9 @@
             <div class="col-md-5 d-flex flex-column justify-content-between" style="white-space: nowrap">
                 <div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Date</label>
-                        <div class="col-md-5">
-                            <mat-form-field style="width: 72%">
+                        <label for="inputPassword" class="col-sm-4 col-form-label" id="ID001">Date</label>
+                        <div class="col-md-8">
+                            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                 <input matInput  [matDatepicker]="vocDate" [max]="vocDate"
                                 formControlName="date" placeholder="DD/MM/YYYY" DateValidation />
                             <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
@@ -24,56 +24,57 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Division Code</label>
-                        <div class="col-md-4">
-                            <mat-form-field style="width: 100%">
+                        <label for="inputPassword" class="col-sm-4 col-form-label" id="ID002">Division Code</label>
+                        <div class="col-md-8">
+                            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                 <input type="text" readonly formControlName="division" matInput />
                             </mat-form-field>
                             <!-- <master-search [MasterSearchData]="divisionCodeData" (newRowClick)="divisionCodeSelected($event)"></master-search> -->
                         </div>
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Base Rate Type</label>
-                        <div class="col-md-4">
-                            <mat-form-field style="width: 100%">
+                        <label for="inputPassword" class="col-sm-4 col-form-label" id="ID003">Base Rate Type</label>
+                        <div class="col-md-8">
+                            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                 <input type="text" readonly formControlName="rateType" matInput />
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="row">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Currency :</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 100%">
+                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID004">Currency :</label>
+                            <div class="col-md-4">
+                                <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" readonly matInput formControlName="currency" />
                                 </mat-form-field>
                                 <!-- <master-search [MasterSearchData]="currencyData" (newRowClick)="CurrencySelected($event)"></master-search> -->
                             </div>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 100%">
-                                    <input type="text" readonly class="st_txt_right" matInput formControlName="currencyRate" />
+                            <div class="col-md-4">
+                                <mat-form-field style="width: 115%" appearance="outline">
+                                    <input type="text" readonly class="st_txt_right text-right" matInput formControlName="currencyRate" />
                                 </mat-form-field>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label">Ounce Rate</label>
+                        <label for="inputPassword" class="col-sm-4 col-form-label" id="ID005">Ounce Rate</label>
                         <div class="col-md-3">
-                            <mat-form-field style="width: 100%;">
+                            <mat-form-field style="width: 100%;" appearance="outline">
                                 <input type="text"   (change)="onOunceRateChange($event)"   SixDecimalInput matInput formControlName="ounceRate" />
                             </mat-form-field>
                         </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Gram Rate</label>
+                        <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Gram Rate</label>
                         <div class="col-md-3">
-                            <mat-form-field style="width: 100%;">
+                            <mat-form-field style="width: 100%;" appearance="outline">
                                 <input type="text" readonly matInput  formControlName="gramRate" />
                             </mat-form-field>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-auto">
-                    <label for="inputPassword" class="col-sm-12 col-form-label border mb-2 p-3">POP Purchase Rate</label>
-                    <label for="inputPassword" class="col-sm-12 col-form-label border mb-2 p-3 pop-selling-rate">POP Selling Rate</label>
+                    <label for="inputPassword" class="col-sm-12 col-form-label border mb-2 p-3" id="ID007">POP Purchase Rate</label>
+                    <label for="inputPassword" class="col-sm-12 col-form-label border mb-2 p-3 pop-selling-rate"
+                    id="ID008">POP Selling Rate</label>
                 </div>
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-between">
@@ -85,7 +86,7 @@
                     <dxi-column dataField="BoardPrice"  [customizeText]="customizeText" caption="Board Price" alignment="center"></dxi-column>
                 </dx-data-grid>
                 <div class="btn_wrap py-3 text-end">
-                    <button class="btn btn-primary mx-2" (click)="insertExchangeRate()">Save</button>
+                    <button class="btn btn-primary mx-2" (click)="insertExchangeRate()" id="ID009">Save</button>
                 </div>
             </div>
         </div>

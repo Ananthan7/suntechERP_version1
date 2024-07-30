@@ -20,10 +20,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
+  tableData: any[] = [];
   viewMode: boolean = false;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   HEADERDETAILS: any;
+  editMode: boolean = false;
   StockDetailData: SavedataModel = {
     DETAIL_FORM_DATA: {},
     DETAIL_METAL_DATA: [],
@@ -224,6 +226,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     location: [''],
     LOSS_WT: [''],
     GROSS_WT: [''],
+    grossWt: [''],
     STONE_PCS: [''],
     timetaken: [''],
     METAL_WT: [''],
@@ -406,7 +409,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.productiondetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.productiondetailsFrom.controls.subjobnoDesc.setValue(data[0].JOB_DESCRIPTION)
-            // this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+             this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.productiondetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(data[0].DESCRIPTION)
             this.productiondetailsFrom.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
@@ -457,7 +460,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
           this.productiondetailsFrom.controls.METAL_WT.setValue(
             this.commonService.decimalQuantityFormat(data[0].METAL, 'METAL'))
-          this.productiondetailsFrom.controls.stonewt.setValue(
+          this.productiondetailsFrom.controls.STONE_WT.setValue(
             this.commonService.decimalQuantityFormat(data[0].STONE, 'STONE'))
           this.productiondetailsFrom.controls.GROSS_WT.setValue(
             this.commonService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
@@ -655,6 +658,33 @@ export class ProductionEntryDetailsComponent implements OnInit {
     });
   }
 
+        /**use: validate all lookups to check data exists in db */
+        validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+          LOOKUPDATA.SEARCH_VALUE = event.target.value
+          if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+          let param = {
+            LOOKUPID: LOOKUPDATA.LOOKUPID,
+            WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+          }
+          this.commonService.toastInfoByMsgId('MSG81447');
+          let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+          let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+            .subscribe((result) => {
+              let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+              if (data.length == 0) {
+                this.commonService.toastErrorByMsgId('MSG1531')
+                this.productiondetailsFrom.controls[FORMNAME].setValue('')
+                LOOKUPDATA.SEARCH_VALUE = ''
+                return
+              }
+             
+            }, err => {
+              this.commonService.toastErrorByMsgId('network issue found')
+            })
+          this.subscriptions.push(Sub)
+        }
+
+  continue(){}
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
