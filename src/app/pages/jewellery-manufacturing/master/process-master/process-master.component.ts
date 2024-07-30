@@ -1,3 +1,10 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : PROCESS MASTER
+DEVELOPER : AKHIL / BESKEY / ANANTHA
+*/
+
+
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild, } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -369,7 +376,7 @@ export class ProcessMasterComponent implements OnInit {
 
   showMaxContentAlert(): void {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
+      this.commonService.toastErrorByMsgId('Process Code cannot be empty')//CHINNU -  MESSAGE HARD CODED
     }
   }
 
@@ -448,15 +455,15 @@ export class ProcessMasterComponent implements OnInit {
     let form = this.processMasterForm.value
     if (this.commonService.emptyToZero(form.loss_standard) < this.commonService.emptyToZero(form.loss_min)) {
       this.lossData = true;
-      this.toastr.error('Standard % should be Greater than Minimum %');
+      this.toastr.error('Standard % should be Greater than Minimum %');//CHINNU -  MESSAGE HARD CODED
     }
     if (this.commonService.emptyToZero(form.loss_standard) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
-      this.toastr.error('Standard % should be Lesser than Maximum %');
+      this.toastr.error('Standard % should be Lesser than Maximum %');//CHINNU -  MESSAGE HARD CODED
     }
     if (this.commonService.emptyToZero(form.loss_min) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
-      this.toastr.error('Minimum % should be Lesser than Maximum %');
+      this.toastr.error('Minimum % should be Lesser than Maximum %');//CHINNU -  MESSAGE HARD CODED
     }
     return this.lossData
   }
@@ -473,7 +480,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.commonService.emptyToZero(recLoss) < this.commonService.emptyToZero(minRec)) {
       console.log("a")
       this.recoveryData = true;
-      this.toastr.error('Standard % should be Greater than Minimum %');
+      this.toastr.error('Standard % should be Greater than Minimum %');//CHINNU -  MESSAGE HARD CODED
 
     }
     return this.recoveryData
@@ -534,45 +541,45 @@ export class ProcessMasterComponent implements OnInit {
     if (form.ApprovalRequired == true && this.commonService.nullToString(form.approvalProcess) == '') {
       this.processMasterForm.controls.approvalProcess.setValidators(Validators.required)
       this.approvalProcessInput.nativeElement.focus();
-      this.commonService.toastErrorByMsgId('Approval Process must be Required');
+      this.commonService.toastErrorByMsgId('Approval Process must be Required');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
 
     if (form.TimeCalculateonProcess == true && this.formattedTime == 0 && this.formattedMaxTime == 0) {
-      this.commonService.toastErrorByMsgId('Standard Time  and  Maximum Time must be Required');
+      this.commonService.toastErrorByMsgId('Standard Time  and  Maximum Time must be Required');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
 
     if (this.formattedTime > this.formattedMaxTime) {
-      this.commonService.toastErrorByMsgId('Standard Time  should not be Greater than Maximum Time');
+      this.commonService.toastErrorByMsgId('Standard Time  should not be Greater than Maximum Time');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
-        this.commonService.toastErrorByMsgId('Loss Standard % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('Loss Standard % Cannot Be Zero');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
       else if (this.commonService.emptyToZero(form.loss_min) == 0) {
-        this.commonService.toastErrorByMsgId('Loss Minimum % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('Loss Minimum % Cannot Be Zero');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
       else if (this.commonService.emptyToZero(form.loss_max) == 0) {
-        this.commonService.toastErrorByMsgId('Loss Maximum % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('Loss Maximum % Cannot Be Zero');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
       else if (form.LOSS_ACCODE == '') {
-        this.commonService.toastErrorByMsgId('Loss Account Code Cannot Be Empty');
+        this.commonService.toastErrorByMsgId('Loss Account Code Cannot Be Empty');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
     }
 
     if (form.recovery == true) {
       if (this.commonService.emptyToZero(form.standard_end) == 0) {
-        this.commonService.toastErrorByMsgId('Recovery Standard % Cannot be Zero');
+        this.commonService.toastErrorByMsgId('Recovery Standard % Cannot be Zero');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
       else if (form.min_end == '') {
-        this.commonService.toastErrorByMsgId(' Recovery Minimum % Cannot be Zero');
+        this.commonService.toastErrorByMsgId(' Recovery Minimum % Cannot be Zero');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
       // else if (form.RECOV_ACCODE == '') {
@@ -583,30 +590,30 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.allowGain == true) {
       if (form.GAIN_ACCODE == '') {
-        this.commonService.toastErrorByMsgId('Gain Account Code Cannot be Empty');
+        this.commonService.toastErrorByMsgId('Gain Account Code Cannot be Empty');//CHINNU -  MESSAGE HARD CODED
         return true;
       }
     }
 
     if (form.RecoveryProcess == true && form.recovery == false) {
-      this.commonService.toastErrorByMsgId('Recovery details Must be Filled');
+      this.commonService.toastErrorByMsgId('Recovery details Must be Filled');//CHINNU -  MESSAGE HARD CODED
       return true
     }
 
     if (!form.processCode) {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty');
+      this.commonService.toastErrorByMsgId('Process Code cannot be empty');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
     if (!form.processDesc) {
-      this.commonService.toastErrorByMsgId('Description cannot be empty');
+      this.commonService.toastErrorByMsgId('Description cannot be empty');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
     if (form.processType == null) {
-      this.commonService.toastErrorByMsgId('Process Type cannot be empty');
+      this.commonService.toastErrorByMsgId('Process Type cannot be empty');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
     if (this.commonService.nullToString(form.WIPaccount) == '') {
-      this.commonService.toastErrorByMsgId('WIPaccount cannot be empty');
+      this.commonService.toastErrorByMsgId('WIPaccount cannot be empty');//CHINNU -  MESSAGE HARD CODED
       return true;
     }
     return false;
@@ -746,7 +753,7 @@ export class ProcessMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
+      this.commonService.toastErrorByMsgId('Process Code cannot be empty')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false
@@ -755,7 +762,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.checkCode()) return
 
     if (this.processMasterForm.value.processCode == e.Process_Code) {
-      this.commonService.toastErrorByMsgId('Cannot select the Same Process Code');
+      this.commonService.toastErrorByMsgId('Cannot select the Same Process Code');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
@@ -814,7 +821,7 @@ export class ProcessMasterComponent implements OnInit {
         return flag;
     }
 
-  }
+  }//CHINNU -  BELOW ALL MESSAGES ARE HARD CODED
   WIPaccountSelected(e: any) {
     if (this.checkCode()) return
     if (this.isSameAccountCodeSelected(e.ACCODE, 'WIPaccount')) {
@@ -882,13 +889,13 @@ export class ProcessMasterComponent implements OnInit {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length > 0) {
-          this.commonService.toastErrorByMsgId('Accode already exists in other process')
+          this.commonService.toastErrorByMsgId('Accode already exists in other process')//CHINNU -  MESSAGE HARD CODED
           this.processMasterForm.controls[formControlName].setValue('')
           return
         }
 
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -914,7 +921,7 @@ export class ProcessMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
           })
         this.subscriptions.push(Sub)
       }
@@ -1154,7 +1161,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   showAlertIfCodeIsEmpty(): void {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
+      this.commonService.toastErrorByMsgId('Process Code cannot be empty')//CHINNU -  MESSAGE HARD CODED
     }
   }
 
