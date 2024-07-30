@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : LABOUR CHARGE MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -498,6 +504,7 @@ export class LabourChargeMasterComponent implements OnInit {
   checkCodeDia(): boolean {
     if (this.diamondlabourMasterForm.value.labour_code == '') {
       this.commonService.toastErrorByMsgId('Please Enter the Code')
+      //CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false
@@ -821,6 +828,7 @@ export class LabourChargeMasterComponent implements OnInit {
     if (size_from > size_to) {
       // Display an error message
       this.commonService.toastErrorByMsgId('Size From should be lesser than Size To');
+      //CHINNU -  MESSAGE HARD CODED
       // Clear the value of Ct Wt To input field
       this.diamondlabourMasterForm.controls.size_to.setValue('');
     }
@@ -898,6 +906,7 @@ export class LabourChargeMasterComponent implements OnInit {
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found')
+        //CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -986,6 +995,7 @@ export class LabourChargeMasterComponent implements OnInit {
         }
       }, err => {
         this.commonService.toastErrorByMsgId('network issue found');
+        //CHINNU -  MESSAGE HARD CODED
       });
 
     this.subscriptions.push(Sub);
@@ -1062,6 +1072,7 @@ export class LabourChargeMasterComponent implements OnInit {
       return true
     }
 
+//CHINNU -  MESSAGES BELOW ARE  HARD CODED
     if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
       this.toastr.error('Select all required fields')
       return true
@@ -1182,10 +1193,12 @@ export class LabourChargeMasterComponent implements OnInit {
     //  if (this.submitValidation()) return
     if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
       this.toastr.error('Weight From should be lesser than Weight To')
+      //CHINNU -  MESSAGE HARD CODED
       return
     }
     if (this.diamondlabourMasterForm.invalid) {
       this.toastr.error('select all required fields')
+      //CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -1254,6 +1267,7 @@ export class LabourChargeMasterComponent implements OnInit {
               } else {
                 Swal.fire({
                   title: result.message || 'Error please try again',
+                  //CHINNU -  MESSAGE HARD CODED
                   text: '',
                   icon: 'error',
                   confirmButtonColor: '#336699',
@@ -1269,6 +1283,7 @@ export class LabourChargeMasterComponent implements OnInit {
               }
             } else {
               this.toastr.error('Not deleted')
+              //CHINNU -  MESSAGE HARD CODED
             }
           }, err => alert('delete ' + err))
         this.subscriptions.push(Sub)
