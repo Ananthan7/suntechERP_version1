@@ -800,11 +800,10 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-            this.commonService.toastSuccessByText('Last number updated')
-
+          console.log('Last number updated')
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -859,7 +858,7 @@ export class AlloyMasterComponent implements OnInit {
   /** checking for same account code selection */
   private isSamepriceCodeSelected(PRICE_CODE: any): boolean {
     return (
-      this.alloyMastereForm.value.PRICE1 === PRICE_CODE ||
+      this.alloyMastereForm.value.price1code === PRICE_CODE ||
       this.alloyMastereForm.value.price2code === PRICE_CODE ||
       this.alloyMastereForm.value.price3code === PRICE_CODE ||
       this.alloyMastereForm.value.price4code === PRICE_CODE ||
@@ -1411,10 +1410,6 @@ export class AlloyMasterComponent implements OnInit {
       return
     }
     if (this.submitValidations(this.alloyMastereForm.value)) return;
-    // if (this.alloyMastereForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData = this.setPostData()
 
@@ -1477,7 +1472,7 @@ export class AlloyMasterComponent implements OnInit {
               if (result.status == "Success") {
                 this.showSuccessDialog(this.content?.STOCK_CODE + ' Deleted successfully');
               } else {
-                this.showErrorDialog(result.message || 'Error please try again');
+                this.commonService.toastErrorByMsgId('MSG2272');
               }
             } else {
               this.commonService.toastErrorByMsgId('MSG1880');
@@ -1543,13 +1538,11 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   fillPriceSchemeDetails1() {
-    console.log('hiii')
     // this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
     this.priceSchemeDetails.forEach((item: any, i: any, strpriceLC: any) => {
       //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
       if (item.PRICE_NUMBER == 'PRICE1') {
-        console.log('hello')
         console.log(item.PRICE_NUMBER)
         //this.alloyMastereForm.controls.price1code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));
