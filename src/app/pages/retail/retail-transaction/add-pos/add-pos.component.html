@@ -802,7 +802,7 @@
                         <!-- <button type="submit" [disabled]="this.viewOnly" (click)="open(mymodal)" -->
                         <!-- <button type="submit" (click)="open(mymodal)" [disabled]="this.viewOnly " -->
                         <button class="btn btn-secondary" type="submit" [disabled]="this.viewOnly"
-                          (click)="open(mymodal)" style="
+                          (click)="open(mymodal,false, null, false,false,false,true)" style="
                             border: none;
                             margin: 10px;
                             width: 20px !important;
@@ -2839,9 +2839,9 @@
                   <div class="col-md-3">
                     <mat-form-field aria-readonly="true">
                       <mat-label>PCs</mat-label>
-                      <input class="st_txt_right" type="number" [min]="0" autocomplete="off" [maxLength]="14"
+                      <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                        formControlName="fcn_li_pcs"  (focus)="setValToLocalStorage($event, 'fcn_li_pcs')" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
+                        formControlName="fcn_li_pcs"   (focus)="setValToLocalStorage($event, 'fcn_li_pcs')" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
                       <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                               (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                               value="{{li_pcs_val}}"> -->
