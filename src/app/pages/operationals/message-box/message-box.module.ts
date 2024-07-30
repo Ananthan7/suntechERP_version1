@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { OperationalsRoutingModule } from './operationals.routing';
-import { OperationalsComponent } from './operationals.component';
+import { MessageBoxRoutingModule } from './message-box.routing';
+import { MessageBoxComponent } from './message-box.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+
+
 @NgModule({
   declarations: [
-    OperationalsComponent,
+    MessageBoxComponent
   ],
   imports: [
     CommonModule,
-    OperationalsRoutingModule,
+    MessageBoxRoutingModule,
     SharedModule
   ]
 })
-export class OperationalsModule { }
+export class MessageBoxModule { }
