@@ -28,8 +28,10 @@ export class GoldExchangeComponent implements OnInit {
 
   @Input() content!: any;
 
-  branchCode?: String;
-  yearMonth?: String;
+  yearMonth?: any =
+    localStorage.getItem("YEAR") || this.comService.yearSelected;
+  branchCode?: any =
+    localStorage.getItem("userbranch") || this.comService.branchCode;
   companyCurrency?: String;
   isCurrencyUpdate: boolean = false;
   private subscriptions: Subscription[] = [];
