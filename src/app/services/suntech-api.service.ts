@@ -125,5 +125,17 @@ export class SuntechAPIService {
       })
     );
   }
+
+  // use: dynamic function for get API data without branch 
+  getDynamicAPIWithoutBranch(apiName: string): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap((config:any) => {
+        const apiUrl = config.baseUrl;
+         // Add the DBBranch query parameter
+        const response = this.http.get(apiUrl+apiName);
+        return response
+      })
+    );
+  }
   
 }

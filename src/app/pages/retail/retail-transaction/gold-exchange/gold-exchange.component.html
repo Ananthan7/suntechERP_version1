@@ -113,7 +113,7 @@
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID005"
             >Party Curr</label
           >
-          <div class="col-md-4">
+          <div class="col-md-3">
             <mat-form-field style="width: 100%" appearance="outline">
               <input
                 appNextInput
@@ -124,7 +124,7 @@
               />
             </mat-form-field>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-5">
             <mat-form-field
               style="width: -webkit-fill-available"
               appearance="outline"
@@ -133,16 +133,17 @@
                 appNextInput
                 type="number"
                 [readonly]="true"
-                class="text-end"
+                class="text"
                 matInput
                 formControlName="partyCurrCodeDesc"
               />
+              <master-search
+              class="masterSearch"
+                *ngIf="!viewOnly"
+                [MasterSearchData]="partyCurrencyCodeData"
+                (newRowClick)="partyCurrencyCodeSelected($event)"
+              ></master-search>
             </mat-form-field>
-            <!-- <master-search
-              *ngIf="!viewOnly"
-              [MasterSearchData]="partyCurrencyCodeData"
-              (newRowClick)="partyCurrencyCodeSelected($event)"
-            ></master-search> -->
           </div>
         </div>
         <div class="row align-items-baseline">
@@ -543,7 +544,7 @@
               <input
                 appNextInput
                 type="number"
-                class="text-end"
+                class="text-center"
                 [readonly]="viewOnly"
                 matInput
                 AmountDecimalInput
