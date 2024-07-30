@@ -113,7 +113,7 @@ export class JobStickerPrintComponent implements OnInit {
         // this.jobCardFrom.controls['purity'].setValue(result.response.PURITY);
 
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
       })
     this.subscriptions.push(Sub)
 

@@ -143,7 +143,7 @@ export class WorkerMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('please enter Worker code')
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return true
     }
     return false
@@ -239,11 +239,11 @@ export class WorkerMasterComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.WorkerCode) == '') {
-      this.toastr.error("Worker Code cannot be empty")
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return true
     }
     else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
-      this.toastr.error("Description cannot be empty")
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
       return true
     }
     return false;
@@ -274,7 +274,7 @@ export class WorkerMasterComponent implements OnInit {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
-            this.showErrorDialog('Error please try again');
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
         }else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -298,7 +298,7 @@ export class WorkerMasterComponent implements OnInit {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
-            this.showErrorDialog('Error please try again');
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
         }else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -333,10 +333,10 @@ export class WorkerMasterComponent implements OnInit {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => {
-            this.commonService.toastErrorByMsgId('network error')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           });
         this.subscriptions.push(Sub);
       }
@@ -420,7 +420,8 @@ export class WorkerMasterComponent implements OnInit {
           })
         }
       }, err => {
-        this.toastr.error('Server Error', '', {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+        this.toastr.error('MSG2272', '', {
           timeOut: 3000,
         })
       })
@@ -429,7 +430,7 @@ export class WorkerMasterComponent implements OnInit {
   CheckWorkerwiseMetalBalanceBoth(event: any) {
     // if(event.checked) return
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('please select workercode')
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return
     }
     let postData = {
@@ -450,7 +451,7 @@ export class WorkerMasterComponent implements OnInit {
           }
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -459,7 +460,8 @@ export class WorkerMasterComponent implements OnInit {
     this.btndisable = true;
     if (this.content && this.content.FLAG == 'EDIT') return;
     if (this.workerMasterForm.value.WorkerCode == '') {
-      this.commonService.toastErrorByMsgId('Worker Code Required');
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
+      // this.commonService.toastErrorByMsgId('Worker Code Required');
       return;
     }
 
@@ -563,7 +565,7 @@ export class WorkerMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           })
         this.subscriptions.push(Sub)
       }
