@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : JOB CARD MASTER
+DEVELOPER : AKHIL / BESKEY
+*/
+
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -661,7 +667,7 @@ export class JobcardComponent implements OnInit {
         this.urls = result.response[0].imagepath;
         console.log(this.urls)
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
 
@@ -843,7 +849,7 @@ export class JobcardComponent implements OnInit {
               JOB_SO_NUMBER: 0,
               UNQ_JOB_ID: String(this.jobCardFrom.value.jobno),
               JOB_SO_MID: 0,
-              BRANCH_CODE: "DMCC",
+              BRANCH_CODE: "DMCC",//CHINNU -  WHY HARD CODED
               DESIGN_CODE: element.DESIGN_CODE,
               METALSTONE: element.METALSTONE,
               DIVCODE: element.DIVCODE,
@@ -891,7 +897,7 @@ export class JobcardComponent implements OnInit {
 
 
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error');
+        this.commonService.toastErrorByMsgId('Server Error');//CHINNU -  MESSAGE HARD CODED
       });
     this.subscriptions.push(Sub);
   }
@@ -1056,7 +1062,7 @@ export class JobcardComponent implements OnInit {
       return
     }
     if (this.jobCardFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -1295,7 +1301,7 @@ export class JobcardComponent implements OnInit {
 
   update() {
     if (this.jobCardFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -1612,7 +1618,7 @@ export class JobcardComponent implements OnInit {
                 });
               } else {
                 Swal.fire({
-                  title: result.message || 'Error please try again',
+                  title: result.message || 'Error please try again',//CHINNU -  MESSAGE HARD CODED
                   text: '',
                   icon: 'error',
                   confirmButtonColor: '#336699',
@@ -1650,7 +1656,7 @@ export class JobcardComponent implements OnInit {
           this.jobCardFrom.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -1784,7 +1790,7 @@ export class JobcardComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
