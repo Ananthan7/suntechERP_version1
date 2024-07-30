@@ -108,7 +108,7 @@ export class SequenceMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.sequenceMasterForm.value.sequenceCode == '') {
-      this.commonService.toastErrorByMsgId('please enter code')
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
       return true
     }
     return false
@@ -185,7 +185,7 @@ export class SequenceMasterComponent implements OnInit {
             this.checkSequenceExists()
           }
         } else {
-          this.toastr.error('No Data Found')
+          this.commonService.toastInfoByMsgId('MSG1452')//No Data Found
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -319,10 +319,22 @@ export class SequenceMasterComponent implements OnInit {
     return daysTime + ":" + hoursTime + ':' + minutesTime;
   }
   submitValidation() {
-    if (this.sequenceMasterForm.invalid && this.selectedSequence) {
-      this.toastr.error('Select all required fields & Process')
-      return true;
+    if (this.selectedSequence) {
+      this.commonService.toastErrorByMsgId('MSG1777') 
+      //this.toastr.error('Select all required fields & Process')Select atleast one option
+      return true;  
     }
+    if (this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode) =='') {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(this.sequenceMasterForm.value.sequenceDESCRIPTION) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+
+    this.commonService.toastInfoByMsgId
+
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
         this.checkCondtion = true;
@@ -340,7 +352,8 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
         this.checkTimeCondtion = true;
-        this.toastr.error('Max Time must be Greater than the Standard Time')
+        this.commonService.toastErrorByMsgId('MSG7901')//Max Time cannot be less than Std Time
+        // this.toastr.error('Max Time must be Greater than the Standard Time')
       }
 
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
@@ -455,7 +468,7 @@ export class SequenceMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           })
         this.subscriptions.push(Sub)
       }
@@ -541,7 +554,7 @@ export class SequenceMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -721,7 +734,7 @@ export class SequenceMasterComponent implements OnInit {
     let max: number = parseFloat(data['MAX_TIME'])
     let std: number = parseFloat(data['STD_TIME'])
     if (max < std) {
-      this.commonService.toastErrorByMsgId('Max Time cannot be less than Std Time')
+      this.commonService.toastErrorByMsgId('MSG7901')//Max Time cannot be less than Std Time
       this.dataSource[data.SRNO].MAX_TIME = 0
       return false;
     }
