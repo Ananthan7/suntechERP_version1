@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : SEQUENCE MASTER
+DEVELOPER : AKHIL / BESKEY / ANANTHA
+*/
+
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -108,7 +114,7 @@ export class SequenceMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.sequenceMasterForm.value.sequenceCode == '') {
-      this.commonService.toastErrorByMsgId('please enter code')
+      this.commonService.toastErrorByMsgId('please enter code')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false
@@ -185,7 +191,7 @@ export class SequenceMasterComponent implements OnInit {
             this.checkSequenceExists()
           }
         } else {
-          this.toastr.error('No Data Found')
+          this.toastr.error('No Data Found')//CHINNU -  MESSAGE HARD CODED
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -320,13 +326,13 @@ export class SequenceMasterComponent implements OnInit {
   }
   submitValidation() {
     if (this.sequenceMasterForm.invalid && this.selectedSequence) {
-      this.toastr.error('Select all required fields & Process')
+      this.toastr.error('Select all required fields & Process')//CHINNU -  MESSAGE HARD CODED
       return true;
     }
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
         this.checkCondtion = true;
-        this.toastr.error('Max loss must be Greater than the Standard Loss')
+        this.toastr.error('Max loss must be Greater than the Standard Loss')//CHINNU -  MESSAGE HARD CODED
       }
       if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
         this.checkCondtion = false
@@ -340,7 +346,7 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
         this.checkTimeCondtion = true;
-        this.toastr.error('Max Time must be Greater than the Standard Time')
+        this.toastr.error('Max Time must be Greater than the Standard Time')//CHINNU -  MESSAGE HARD CODED
       }
 
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
@@ -455,7 +461,7 @@ export class SequenceMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
           })
         this.subscriptions.push(Sub)
       }
@@ -688,7 +694,7 @@ export class SequenceMasterComponent implements OnInit {
     let max: number = parseFloat(data['MAX_LOSS'])
     let std: number = parseFloat(data['STD_LOSS'])
     if (max < std) {
-      this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')
+      this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')//CHINNU -  MESSAGE HARD CODED
       this.dataSource[data.SRNO].MAX_LOSS = 0
       return false;
     }
@@ -721,7 +727,7 @@ export class SequenceMasterComponent implements OnInit {
     let max: number = parseFloat(data['MAX_TIME'])
     let std: number = parseFloat(data['STD_TIME'])
     if (max < std) {
-      this.commonService.toastErrorByMsgId('Max Time cannot be less than Std Time')
+      this.commonService.toastErrorByMsgId('Max Time cannot be less than Std Time')//CHINNU -  MESSAGE HARD CODED
       this.dataSource[data.SRNO].MAX_TIME = 0
       return false;
     }
