@@ -623,8 +623,8 @@ export class MetalIssueDetailsComponent implements OnInit {
         strJob_Number: '',
         strUnq_Job_Id: '',
         strMetalStone: '',
-        strProcess_Code: '',
-        strWorker_Code: '',
+        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
+        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
         strStock_Code: '',
         strUserName: '',
       }

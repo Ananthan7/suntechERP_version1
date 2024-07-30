@@ -251,8 +251,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
   });
   submitValidations() {
     let form = this.meltingIssuedetailsFrom.value
-    if (form.jobNumber == '') {
-      this.toastr.error('Job Number required')
+    if (this.comService.nullToString(form.jobNumber)== '') {
+      this.toastr.error('JMSG1601')
       return
     }
     return false;

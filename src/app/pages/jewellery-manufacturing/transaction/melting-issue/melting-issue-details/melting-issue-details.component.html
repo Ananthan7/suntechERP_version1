@@ -23,7 +23,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="jobno"
-                                        class="text-right" NumberOnly
+                                        class="text-right" maxlength="12"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'jobno')"
                                         (focusout)="jobNumberValidate($event)"/>

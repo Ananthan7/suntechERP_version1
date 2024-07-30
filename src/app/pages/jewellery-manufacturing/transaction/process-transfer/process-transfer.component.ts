@@ -333,7 +333,7 @@ export class ProcessTransferComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.commonService.toastErrorByMsgId('MSG2007')
           this.generateVocNo()
           return
         }
