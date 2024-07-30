@@ -233,13 +233,14 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   changeStandardPurity(event: any) {
     // const currentPurity=this.goldExchangeDetailsForm.value.purity;
+
     if (
-      this.comService.emptyToZero(event.target.value) <
+      this.comService.emptyToZero(event.target.value) >
       this.comService.emptyToZero(this.maxPurity)
     ) {
-      console.log(this.comService.emptyToZero(this.maxPurity));
+      console.log(this.maxPurity);
+      const baseMessage = "Purity cannot be more then range";
 
-      const baseMessage = "Mud Wt should not be greater than Gross Wt";
       this.openDialog("Warning", `${baseMessage}`, true);
 
       this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -264,7 +265,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
       this.comService.emptyToZero(event.target.value) <
       this.comService.emptyToZero(this.minPurity)
     ) {
-      const baseMessage = "Mud Wt should not be greater than Gross Wt";
+      const baseMessage =
+        "Purity cannot be less then range it will take least value";
       this.openDialog("Warning", `${baseMessage}`, true);
 
       this.dialogBox.afterClosed().subscribe((data: any) => {
