@@ -26,7 +26,8 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
   columnheadItemDetails2:any[] = ['Repair Narration']
   branchCode?: String;
   yearMonth?: String;
-  currentDate = new FormControl(new Date());
+  // currentDate = new FormControl(new Date());
+  currentDate = new Date();
   viewMode: boolean = false;
   selectedTabIndex = 0;
   selectedTabIndex1 = 1;
@@ -43,8 +44,34 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+    this.metalBranchTransferinAutoRepairForm.controls.voctype.setValue(this.comService.getqueryParamVocType());
+    this.metalBranchTransferinAutoRepairForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
+
+    this.generateVocNo();
+
   
-  
+  }
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.metalBranchTransferinAutoRepairForm.controls.vocNo.setValue(res.newvocno);
+          this.metalBranchTransferinAutoRepairForm.controls.voc_NO.setValue(res.newvocno);
+
+        }
+      });
   }
 
 
@@ -52,7 +79,7 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
 
     voctype:[''],
     vocNo:[''],
-    vocDate:[''],
+    vocDate:[new Date()],
     enteredBy:[''],
     itemCurrency:[''],
     itemCurrencyDesc:[''],
@@ -98,6 +125,7 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
     netAmountLC:[''],
     Driver:[''],
     DriverDesc:[''],
+    credit_days_LC:[new Date()]
 
   });
 
@@ -131,7 +159,9 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
   }
   branchToCodeSelected(e: any) {
     console.log(e);
-    this.metalBranchTransferinAutoRepairForm.controls.enteredBy.setValue(e.BRANCH_CODE);
+    this.metalBranchTransferinAutoRepairForm.controls.branchTo.setValue(e.BRANCH_CODE);
+    this.metalBranchTransferinAutoRepairForm.controls.branchToDesc.setValue(e.BRANCH_NAME);
+
   }
 
   locationToCodeData: MasterSearchModel = {
@@ -180,6 +210,8 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
   shipToCodeSelected(e: any) {
     console.log(e);
     this.metalBranchTransferinAutoRepairForm.controls.shipTo.setValue(e.CODE);
+    this.metalBranchTransferinAutoRepairForm.controls.shipToDesc.setValue(e.DESCRIPTION);
+
   }
 
   stateCodeData: MasterSearchModel = {
@@ -267,8 +299,8 @@ removedata(){
       "TOTAL_STONEVALUE_CC": 0,
       "TOTAL_MKGVALUE_FC": 0,
       "TOTAL_MKGVALUE_CC": 0,
-      "TOTAL_PUDIFF": 0,
-      "TOTAL_STONEDIFF": 0,
+      "TOTAL_PUDIFF": this.metalBranchTransferinAutoRepairForm.value.PurityDiff,
+      "TOTAL_STONEDIFF": this.metalBranchTransferinAutoRepairForm.value.StoneDiff,
       "SYSTEM_DATE": "2024-03-08T11:16:45.948Z",
       "ITEM_CURRENCY": this.metalBranchTransferinAutoRepairForm.value.itemCurrency,
       "ITEM_CURR_RATE": this.metalBranchTransferinAutoRepairForm.value.itemCurrencyDesc,
@@ -314,14 +346,14 @@ removedata(){
       "GST_REGISTERED": true,
       "GST_STATE_CODE":   this.metalBranchTransferinAutoRepairForm.value.stateCode,
       "GST_NUMBER": "string",
-      "GST_TYPE": "stri",
-      "GST_TOTALFC": 0,
+      "GST_TYPE": this.metalBranchTransferinAutoRepairForm.value.type,
+      "GST_TOTALFC": this.metalBranchTransferinAutoRepairForm.value.totalGST,
       "GST_TOTALCC": 0,
       "INCLUSIVE": 0,
       "TOTAL_WASTQTY": 0,
       "SHIPCODE":  this.metalBranchTransferinAutoRepairForm.value.shipTo,
       "SHIPDESC": this.metalBranchTransferinAutoRepairForm.value.shipToDesc,
-      "ROUND_VALUE_CC": 0,
+      "ROUND_VALUE_CC": this.metalBranchTransferinAutoRepairForm.value.roundTo,
       "TRANSPORTER_CODE": "string",
       "VEHICLE_NO":  this.metalBranchTransferinAutoRepairForm.value.vehicle,
       "LR_NO": this.metalBranchTransferinAutoRepairForm.value.lrno,
@@ -330,7 +362,7 @@ removedata(){
       "TEST_VOCNO": 0,
       "TEST_YEARMONTH": "string",
       "TCS_ACCODE": "string",
-      "TCS_AMOUNT": 0,
+      "TCS_AMOUNT":  this.metalBranchTransferinAutoRepairForm.value.tcsAmount,
       "TCS_AMOUNTCC": 0,
       "TCS_APPLICABLE": true,
       "TOTSTAMP_AMTFC": 0,
@@ -868,5 +900,17 @@ removedata(){
     });
     
   }
+
+  credit_Date2(event: any) {
+    const credit_days = +event.target.value;
+    console.log("days"+credit_days);
+    const newDate = new Date(this.currentDate);
+    newDate.setDate(newDate.getDate() + credit_days);
+
+    this.metalBranchTransferinAutoRepairForm.patchValue({
+      credit_days_LC: newDate,
+    });
+  }
+
 
 }
