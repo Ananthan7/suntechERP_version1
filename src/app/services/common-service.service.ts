@@ -78,11 +78,20 @@ export class CommonServiceService {
   ) {
   }
   // FORM FEILD CALCULATIONS STARTS
-  balancePcsCalculate(METAL_FromPCS: any, METAL_ToPCS: any, METAL_ScrapPCS: any) {
-    return (this.emptyToZero(METAL_FromPCS) - (this.emptyToZero(METAL_ToPCS) + this.emptyToZero(METAL_ScrapPCS)));
+  purityDiffCalculate(actualPureWt: any, newPureWt: any) {
+    return (this.emptyToZero(actualPureWt) - (this.emptyToZero(newPureWt)))
+  }
+  pureWeightCalculate(netWeight: any, purity: any) {
+    return (this.emptyToZero(netWeight) * (this.emptyToZero(purity)))
+  }
+  netWeightCalculate(grossWeight: any, stoneWeight: any) {
+    return (this.emptyToZero(grossWeight) - (this.emptyToZero(stoneWeight)))
   }
   grossWtCalculate(MetalWeight: any, stoneWeight: any) {
     return (this.emptyToZero(MetalWeight) + (this.emptyToZero(stoneWeight) / 5))
+  }
+  balancePcsCalculate(METAL_FromPCS: any, METAL_ToPCS: any, METAL_ScrapPCS: any) {
+    return (this.emptyToZero(METAL_FromPCS) - (this.emptyToZero(METAL_ToPCS) + this.emptyToZero(METAL_ScrapPCS)));
   }
   // FORM FEILD CALCULATIONS ENDS
 
